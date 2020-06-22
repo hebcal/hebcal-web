@@ -1,0 +1,39 @@
+{
+  "name": "hebcal-download-web",
+  "version": "1.0.0",
+  "description": "Web server for download.hebcal.com to export iCalendar, PDF and CSV",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "test": "echo \"OK: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjradwin/hebcal-download-web.git"
+  },
+  "keywords": [
+    "hebcal"
+  ],
+  "author": "Michael J. Radwin (https://github.com/mjradwin)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/mjradwin/hebcal-download-web/issues"
+  },
+  "homepage": "https://github.com/mjradwin/hebcal-download-web#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/register": "^7.10.1",
+    "eslint": "^7.3.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "dependencies": {
+    "@hebcal/core": "^1.2.2",
+    "@hebcal/icalendar": "^1.0.5",
+    "@hebcal/leyning": "^1.1.2",
+    "better-sqlite3": "^7.1.0",
+    "core-js": "^3.6.5",
+    "koa": "^2.13.0"
+  }
+}
