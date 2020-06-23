@@ -25,7 +25,7 @@
     "@babel/core": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
     "@babel/register": "^7.10.1",
-    "eslint": "^7.3.0",
+    "eslint": "^7.3.1",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
@@ -34,6 +34,7 @@
     "@hebcal/leyning": "^1.1.2",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
-    "koa": "^2.13.0"
+    "koa": "^2.13.0",
+    "pino": "^6.3.2"
   }
 }
