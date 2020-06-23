@@ -3,6 +3,7 @@ import fs from 'fs';
 import util from 'util';
 import path from 'path';
 import pino from 'pino';
+import {yahrzeit} from './yahrzeit';
 
 const stat = util.promisify(fs.stat);
 const logger = pino();
@@ -41,7 +42,9 @@ app.use(async (ctx, next) => {
       ctx.body = fs.createReadStream(fpath);
     }
   } else if (ctx.request.path.startsWith('/export')) {
-    console.log(ctx.request.query);
+    if (ctx.request.query.v == 'yahrzeit') {
+      yahrzeit(ctx);
+    }
   }
   return next();
 });
@@ -51,6 +54,8 @@ app.use(async (ctx) => {
     ip: ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.url,
+    ua: ctx.request.header['user-agent'],
+    cookie: ctx.request.header['cookie'],
     status: ctx.response.status,
     length: ctx.response.length,
   });
