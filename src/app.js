@@ -3,6 +3,7 @@ import fs from 'fs';
 import util from 'util';
 import path from 'path';
 import pino from 'pino';
+import compress from 'koa-compress';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 
@@ -24,6 +25,13 @@ app.use(async (ctx, next) => {
 app.on('error', (err, ctx) => {
   logger.error(err);
 });
+
+app.use(compress({
+  threshold: 2048,
+  gzip: true,
+  deflate: true,
+  br: true,
+}));
 
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
@@ -57,6 +65,7 @@ app.use(async (ctx, next) => {
       ctx.body = fs.createReadStream(fpath);
     }
   } else if (ctx.request.path.startsWith('/export')) {
+    ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
       await yahrzeitDownload(ctx);
     } else if (ctx.request.query.v == '1') {
