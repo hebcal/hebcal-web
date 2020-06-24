@@ -1,7 +1,8 @@
 import {hebcal, Location} from '@hebcal/core';
-import {eventsToIcalendar, eventsToCsv, getEventCategories} from '@hebcal/icalendar';
+import {eventsToIcalendar, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
 import {GeoDb} from './geo';
+import {renderPdf} from './pdf';
 import pino from 'pino';
 
 const logger = pino();
@@ -164,13 +165,20 @@ export async function hebcalDownload(ctx) {
       return true;
     });
   }
-  if (ctx.request.path.endsWith('.ics')) {
+  const path = ctx.request.path;
+  if (path.endsWith('.ics')) {
     const ical = eventsToIcalendar(events, options);
     ctx.response.type = 'text/calendar; charset=utf-8';
     ctx.body = ical;
-  } else if (ctx.request.path.endsWith('.csv')) {
+  } else if (path.endsWith('.csv')) {
     const ical = eventsToCsv(events, options);
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = ical;
+  } else if (path.endsWith('.pdf')) {
+    ctx.response.type = 'application/pdf';
+    const title = getCalendarTitle(events, options);
+    const doc = renderPdf(events, options, title);
+    ctx.body = doc;
+    doc.end();
   }
 }
