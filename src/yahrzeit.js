@@ -1,4 +1,4 @@
-import {hebcal, HDate, Event, flags, HebrewDateEvent} from '@hebcal/core';
+import {hebcal, HDate, Event, flags, HebrewDateEvent, common} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 
@@ -47,7 +47,7 @@ export async function yahrzeit(ctx) {
     }
   }
   if (yizkor) {
-    const holidays = getYizkorEvents(startYear, years);
+    const holidays = makeYizkorEvents(startYear, endYear);
     events = events.concat(holidays);
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
@@ -65,32 +65,18 @@ export async function yahrzeit(ctx) {
 
 /**
  * @param {number} startYear
- * @param {number} years
+ * @param {number} endYear
  * @return {Event[]}
  */
-function getYizkorEvents(startYear, years) {
-  const options = {
-    year: startYear,
-    isHebrewYear: true,
-    numYears: years,
-    noMinorFast: true,
-    noModern: true,
-    noRoshChodesh: true,
-    noSpecialShabbat: true,
-    shabbatMevarchim: false,
-  };
-  const holidays = hebcal.hebrewCalendar(options).filter((ev) => {
-    const desc = ev.getDesc();
-    if (desc == 'Pesach VIII' ||
-      desc == 'Shavuot II' ||
-      desc == 'Yom Kippur' ||
-      desc == 'Shmini Atzeret') {
-      return true;
-    } else {
-      return false;
-    }
-  });
-  return holidays.map((ev) => {
-    return new Event(ev.getDate(), `Yizkor (${ev.getDesc()})`, flags.USER_EVENT);
-  });
+function makeYizkorEvents(startYear, endYear) {
+  const holidays = [];
+  for (let hyear = startYear; hyear <= endYear; hyear++) {
+    holidays.push(
+        new Event(new HDate(22, common.months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT),
+        new Event(new HDate(7, common.months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT),
+        new Event(new HDate(10, common.months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT),
+        new Event(new HDate(22, common.months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT),
+    );
+  }
+  return holidays;
 }
