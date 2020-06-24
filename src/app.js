@@ -11,6 +11,20 @@ const logger = pino();
 
 const app = new Koa();
 
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    ctx.status = err.status || 500;
+    ctx.body = err.message;
+    ctx.app.emit('error', err, ctx);
+  }
+});
+
+app.on('error', (err, ctx) => {
+  logger.error(err);
+});
+
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
   if (ctx.request.path.startsWith('/export')) {
@@ -44,9 +58,9 @@ app.use(async (ctx, next) => {
     }
   } else if (ctx.request.path.startsWith('/export')) {
     if (ctx.request.query.v == 'yahrzeit') {
-      yahrzeitDownload(ctx);
+      await yahrzeitDownload(ctx);
     } else if (ctx.request.query.v == '1') {
-      hebcalDownload(ctx);
+      await hebcalDownload(ctx);
     }
   }
   return next();

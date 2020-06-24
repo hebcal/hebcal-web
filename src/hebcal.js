@@ -1,5 +1,6 @@
 import {hebcal, Location} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv, getEventCategories} from '@hebcal/icalendar';
+import '@hebcal/locales';
 import {GeoDb} from './geo';
 import pino from 'pino';
 

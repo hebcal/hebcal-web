@@ -32,6 +32,7 @@
     "@hebcal/core": "^1.2.3",
     "@hebcal/icalendar": "^1.0.6",
     "@hebcal/leyning": "^1.1.2",
+    "@hebcal/locales": "^1.0.2",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.28",
