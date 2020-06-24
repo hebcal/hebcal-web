@@ -29,8 +29,8 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^1.2.2",
-    "@hebcal/icalendar": "^1.0.5",
+    "@hebcal/core": "^1.2.3",
+    "@hebcal/icalendar": "^1.0.6",
     "@hebcal/leyning": "^1.1.2",
     "better-sqlite3": "^7.1.0",
     "core-js": "^3.6.5",
