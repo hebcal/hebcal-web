@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
-export async function yahrzeit(ctx) {
+export async function yahrzeitDownload(ctx) {
   if (ctx.request.query.v !== 'yahrzeit') {
     return;
   }

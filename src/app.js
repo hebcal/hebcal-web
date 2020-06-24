@@ -3,7 +3,8 @@ import fs from 'fs';
 import util from 'util';
 import path from 'path';
 import pino from 'pino';
-import {yahrzeit} from './yahrzeit';
+import {yahrzeitDownload} from './yahrzeit';
+import {hebcalDownload} from './hebcal';
 
 const stat = util.promisify(fs.stat);
 const logger = pino();
@@ -43,7 +44,9 @@ app.use(async (ctx, next) => {
     }
   } else if (ctx.request.path.startsWith('/export')) {
     if (ctx.request.query.v == 'yahrzeit') {
-      yahrzeit(ctx);
+      yahrzeitDownload(ctx);
+    } else if (ctx.request.query.v == '1') {
+      hebcalDownload(ctx);
     }
   }
   return next();
