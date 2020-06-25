@@ -1,31 +1,39 @@
-import {hebcal, Location} from '@hebcal/core';
+import {hebcal, Location, HDate} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
 import {renderPdf} from './pdf';
 
 const negativeOpts = {
-  'nx': 'noRoshChodesh',
-  'mod': 'noModern',
-  'mf': 'noMinorFast',
-  'ss': 'noSpecialShabbat',
+  nx: 'noRoshChodesh',
+  mod: 'noModern',
+  mf: 'noMinorFast',
+  ss: 'noSpecialShabbat',
 };
 
 const booleanOpts = {
-  'd': 'addHebrewDates',
-  'D': 'addHebrewDatesForEvents',
-  'o': 'omer',
-  'a': 'ashkenazi',
-  'c': 'candlelighting',
-  'i': 'il',
-  's': 'sedrot',
-  'F': 'dafyomi',
-  'euro': 'euro',
+  d: 'addHebrewDates',
+  D: 'addHebrewDatesForEvents',
+  o: 'omer',
+  a: 'ashkenazi',
+  c: 'candlelighting',
+  i: 'il',
+  s: 'sedrot',
+  F: 'dafyomi',
+  euro: 'euro',
 };
 
 const numberOpts = {
-  'm': 'havdalahMins',
-  'b': 'candleLightingMins',
-  'ny': 'numYears',
+  m: 'havdalahMins',
+  b: 'candleLightingMins',
+  ny: 'numYears',
+};
+
+const maxNumYear = {
+  candlelighting: 4,
+  omer: 4,
+  addHebrewDatesForEvents: 3,
+  addHebrewDates: 2,
+  dafyomi: 2,
 };
 
 /**
@@ -84,11 +92,15 @@ function makeHebcalOptions(db, query) {
       options[val] = +query[key];
     }
   }
-  if (!empty(query.year) && query.year != 'now') {
-    options.year = +query.year;
-  }
   if (!empty(query.yt)) {
-    options.isHebrewDate = Boolean(query.yt == 'H');
+    options.isHebrewYear = Boolean(query.yt == 'H');
+  }
+  if (!empty(query.year)) {
+    if (query.year == 'now') {
+      options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
+    } else {
+      options.year = +query.year;
+    }
   }
   if (!empty(query.month)) {
     const month = +query.month;
@@ -152,6 +164,39 @@ function makeHebcalOptions(db, query) {
 }
 
 /**
+ * Parse HebcalOptions to determine ideal numYears
+ * @param {hebcal.HebcalOptions} options
+ * @return {number}
+ */
+function getNumYears(options) {
+  if (options.numYears) {
+    return options.numYears;
+  }
+
+  if ((!options.isHebrewYear && options.year < 2016) ||
+      (options.isHebrewYear && options.year < 5776)) {
+    return 1;
+  }
+
+  let numYears = 5;
+  for (const [key, ny] of Object.entries(maxNumYear)) {
+    if (options[key] && ny < numYears) {
+      numYears = ny;
+    }
+  }
+  // Shabbat plus Hebrew Event every day can get very big
+  const hebrewDates = options.addHebrewDates || options.addHebrewDatesForEvents;
+  if (options.candlelighting && hebrewDates) {
+    numYears = 2;
+  }
+  // reduce size of file for truly crazy people who specify both Daf Yomi and Hebrew Date every day
+  if (options.dafyomi && hebrewDates) {
+    numYears = 1;
+  }
+  return numYears;
+}
+
+/**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebcalDownload(ctx) {
@@ -165,6 +210,11 @@ export async function hebcalDownload(ctx) {
   } catch (err) {
     ctx.throw(400, err.message);
   }
+  const path = ctx.request.path;
+  const extension = path.substring(path.length - 4);
+  if (extension == '.ics' || extension == '.csv') {
+    options.numYears = getNumYears(options);
+  }
   ctx.logger.info(options);
   let events = hebcal.hebrewCalendar(options);
   if (options.noMinorHolidays) {
@@ -176,16 +226,15 @@ export async function hebcalDownload(ctx) {
       return true;
     });
   }
-  const path = ctx.request.path;
-  if (path.endsWith('.ics')) {
+  if (extension == '.ics') {
     const ical = eventsToIcalendar(events, options);
     ctx.response.type = 'text/calendar; charset=utf-8';
     ctx.body = ical;
-  } else if (path.endsWith('.csv')) {
+  } else if (extension == '.csv') {
     const ical = eventsToCsv(events, options);
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = ical;
-  } else if (path.endsWith('.pdf')) {
+  } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
     const doc = renderPdf(events, options, title);
