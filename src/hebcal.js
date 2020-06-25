@@ -60,13 +60,11 @@ const lgToLocale = {
 };
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * Read Koa request parameters and create HebcalOptions
+ * @param {any} query
+ * @return {hebcal.HebcalOptions}
  */
-export async function hebcalDownload(ctx) {
-  const query = ctx.request.query;
-  if (query.v !== '1') {
-    return;
-  }
+function makeHebcalOptions(query) {
   const options = {};
   for (const [key, val] of Object.entries(booleanOpts)) {
     if (typeof query[key] == 'string' &&
@@ -76,7 +74,7 @@ export async function hebcalDownload(ctx) {
   }
   for (const [key, val] of Object.entries(negativeOpts)) {
     if (typeof query[key] == 'undefined' ||
-        query[key] == 'off' || query[key] == '0') {
+      query[key] == 'off' || query[key] == '0') {
       options[val] = true;
     }
   }
@@ -154,6 +152,18 @@ export async function hebcalDownload(ctx) {
   if (location) {
     options.location = location;
   }
+  return options;
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
+export async function hebcalDownload(ctx) {
+  const query = ctx.request.query;
+  if (query.v !== '1') {
+    return;
+  }
+  const options = makeHebcalOptions(query);
   logger.info(options);
   let events = hebcal.hebrewCalendar(options);
   if (options.noMinorHolidays) {
