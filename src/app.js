@@ -21,6 +21,10 @@ app.context.logger = logger;
 
 app.use(async (ctx, next) => {
   try {
+    // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
+    if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
+      ctx.request.header['accept-encoding'] = 'identity';
+    }
     await next();
   } catch (err) {
     ctx.status = err.status || 500;
