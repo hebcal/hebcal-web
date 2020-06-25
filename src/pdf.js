@@ -172,6 +172,8 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   if (rtl) {
     fontStyle = 'hebrew';
     // nonsense required for pdfkit
+    subj = subj.replace('(', '\u0001').replace(')', '\u0002');
+    subj = subj.replace('\u0001', ')').replace('\u0002', '(');
     subj = subj.split(' ').reverse().join('  ');
   }
   doc.font(fontStyle);
