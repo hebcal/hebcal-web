@@ -1,5 +1,6 @@
 import {hebcal, greg, flags} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
+import dayjs from 'dayjs';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -44,8 +45,7 @@ const hebrewGregMoy = [
  * @return {string}
  */
 function calId(d) {
-  return String(d.getFullYear()).padStart(4, '0') +
-      String(d.getMonth() + 1).padStart(2, '0');
+  return dayjs(d).format('YYYYMM');
 }
 
 /**
@@ -63,12 +63,11 @@ function eventsToCells(events) {
     cells[yearMonth][mday].push(e);
   }
   // add blank months in the middle, even if there are no events
-  const startDate = events[0].getDate().greg();
-  const endDate = events[events.length - 1].getDate().greg();
-  const start = (startDate.getFullYear() * 100) + (startDate.getMonth() + 1);
-  const end = (endDate.getFullYear() * 100) + (endDate.getMonth() + 1);
-  for (let i = start; i < end; i++) {
-    const yearMonth = String(i).padStart(6, '0');
+  const startDate = dayjs(events[0].getDate().greg());
+  const endDate = dayjs(events[events.length - 1].getDate().greg());
+  const start = startDate.set('date', 1);
+  for (let i = start; i.isBefore(endDate); i = i.add(1, 'month')) {
+    const yearMonth = calId(i);
     if (!cells[yearMonth]) {
       cells[yearMonth] = {dummy: []};
     }
