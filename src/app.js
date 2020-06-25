@@ -4,13 +4,20 @@ import util from 'util';
 import path from 'path';
 import pino from 'pino';
 import compress from 'koa-compress';
+import {GeoDb} from './geo';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 
 const stat = util.promisify(fs.stat);
-const logger = pino();
+const dest = pino.destination('hebcal-download-web.log');
+const logger = pino(dest);
 
 const app = new Koa();
+
+const zipsFilename = 'zips.sqlite3';
+const geonamesFilename = 'geonames.sqlite3';
+app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+app.context.logger = logger;
 
 app.use(async (ctx, next) => {
   try {
@@ -54,7 +61,6 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  console.log(ctx.request.url);
   if (ctx.request.path == '/robots.txt') {
     ctx.body = 'User-agent: BadBot\nDisallow: /\n';
   } else if (ctx.request.path == '/favicon.ico' || ctx.request.path.startsWith('/ical')) {

@@ -1,11 +1,7 @@
 import {hebcal, Location} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
-import {GeoDb} from './geo';
 import {renderPdf} from './pdf';
-import pino from 'pino';
-
-const logger = pino();
 
 const negativeOpts = {
   'nx': 'noRoshChodesh',
@@ -32,10 +28,6 @@ const numberOpts = {
   'ny': 'numYears',
 };
 
-const zipsFilename = 'zips.sqlite3';
-const geonamesFilename = 'geonames.sqlite3';
-const db = new GeoDb(zipsFilename, geonamesFilename);
-
 /**
  * @param {string} val
  * @return {boolean}
@@ -61,10 +53,11 @@ const lgToLocale = {
 
 /**
  * Read Koa request parameters and create HebcalOptions
+ * @param {any} db
  * @param {any} query
  * @return {hebcal.HebcalOptions}
  */
-function makeHebcalOptions(query) {
+function makeHebcalOptions(db, query) {
   const options = {};
   for (const [key, val] of Object.entries(booleanOpts)) {
     if (typeof query[key] == 'string' &&
@@ -109,10 +102,13 @@ function makeHebcalOptions(query) {
   let location;
   if (!empty(query.zip)) {
     location = db.lookupZip(query.zip);
+    if (location == null) throw new Error(`Invalid ZIP code ${query.zip}`);
   } else if (!empty(query.city)) {
     location = db.lookupLegacyCity(query.city);
+    if (location == null) throw new Error(`Invalid legacy city ${query.city}`);
   } else if (!empty(query.geonameid)) {
     location = db.lookupGeoname(+query.geonameid);
+    if (location == null) throw new Error(`Invalid geonameid ${query.geonameid}`);
   } else if (query.geo == 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
@@ -163,8 +159,13 @@ export async function hebcalDownload(ctx) {
   if (query.v !== '1') {
     return;
   }
-  const options = makeHebcalOptions(query);
-  logger.info(options);
+  let options;
+  try {
+    options = makeHebcalOptions(ctx.db, query);
+  } catch (err) {
+    ctx.throw(400, err.message);
+  }
+  ctx.logger.info(options);
   let events = hebcal.hebrewCalendar(options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
