@@ -4,7 +4,7 @@ import util from 'util';
 import path from 'path';
 import pino from 'pino';
 import compress from 'koa-compress';
-import {GeoDb} from './geo';
+import {GeoDb} from '@hebcal/geo-sqlite';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 
