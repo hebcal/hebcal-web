@@ -1,4 +1,4 @@
-import {hebcal, greg, flags} from '@hebcal/core';
+import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 
@@ -151,7 +151,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const attrs = evt.getAttrs();
   const timed = Boolean(attrs && attrs.eventTime);
   if (timed) {
-    const str = hebcal.reformatTimeStr(attrs.eventTimeStr, 'p', options) + ' ';
+    const str = HebrewCalendar.reformatTimeStr(attrs.eventTimeStr, 'p', options) + ' ';
     doc.font('bold');
     const width = doc.widthOfString(str);
     doc.text(str, x, y);

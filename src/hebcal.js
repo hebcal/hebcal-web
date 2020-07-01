@@ -1,4 +1,4 @@
-import {hebcal, Location, HDate} from '@hebcal/core';
+import {HebrewCalendar, Location, HDate} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
 import {renderPdf} from './pdf';
@@ -63,7 +63,7 @@ const lgToLocale = {
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {any} query
- * @return {hebcal.HebcalOptions}
+ * @return {HebcalOptions}
  */
 function makeHebcalOptions(db, query) {
   const options = {};
@@ -165,7 +165,7 @@ function makeHebcalOptions(db, query) {
 
 /**
  * Parse HebcalOptions to determine ideal numYears
- * @param {hebcal.HebcalOptions} options
+ * @param {HebcalOptions} options
  * @return {number}
  */
 function getNumYears(options) {
@@ -216,7 +216,7 @@ export async function hebcalDownload(ctx) {
     options.numYears = getNumYears(options);
   }
   ctx.logger.info(options);
-  let events = hebcal.hebrewCalendar(options);
+  let events = new HebrewCalendar(options).events();
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);

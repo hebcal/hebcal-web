@@ -1,4 +1,4 @@
-import {hebcal, HDate, Event, flags, HebrewDateEvent, common} from '@hebcal/core';
+import {HebrewCalendar, HDate, Event, flags, months} from '@hebcal/core';
 import {eventsToIcalendar, eventsToCsv} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 
@@ -63,8 +63,8 @@ function getEventsForId(query, id, startYear, endYear) {
   }
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const hd = (type == 'Yahrzeit') ?
-        hebcal.getYahrzeit(hyear, day.toDate()) :
-        hebcal.getBirthdayOrAnniversary(hyear, day.toDate());
+      HebrewCalendar.getYahrzeit(hyear, day.toDate()) :
+      HebrewCalendar.getBirthdayOrAnniversary(hyear, day.toDate());
     if (hd) {
       const typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
       let subj = `${name}'s ${typeStr}`;
@@ -86,10 +86,10 @@ function makeYizkorEvents(startYear, endYear) {
   const holidays = [];
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     holidays.push(
-        new Event(new HDate(22, common.months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT),
-        new Event(new HDate(7, common.months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT),
-        new Event(new HDate(10, common.months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT),
-        new Event(new HDate(22, common.months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT),
+        new Event(new HDate(22, months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT),
+        new Event(new HDate(7, months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT),
+        new Event(new HDate(10, months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT),
+        new Event(new HDate(22, months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT),
     );
   }
   return holidays;
