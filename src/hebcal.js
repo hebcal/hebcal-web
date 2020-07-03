@@ -216,7 +216,7 @@ export async function hebcalDownload(ctx) {
     options.numYears = getNumYears(options);
   }
   ctx.logger.info(options);
-  let events = new HebrewCalendar(options).events();
+  let events = HebrewCalendar.calendar(options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);

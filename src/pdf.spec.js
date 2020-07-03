@@ -17,7 +17,7 @@ test('pdf', (t) => {
     //  addHebrewDates: true,
     locale: 'ashkenazi',
   };
-  const events = new HebrewCalendar(options).events();
+  const events = HebrewCalendar.calendar(options);
 
   renderPdf(events, String(year), options);
   t.pass('message');
