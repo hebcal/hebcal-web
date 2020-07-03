@@ -20,6 +20,7 @@ app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 app.context.logger = logger;
 
 app.use(async (ctx, next) => {
+  ctx.startTime = Date.now();
   try {
     // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
     if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
@@ -86,6 +87,7 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx) => {
+  const duration = Date.now() - ctx.startTime;
   logger.info({
     ip: ctx.request.ip,
     method: ctx.request.method,
@@ -94,7 +96,10 @@ app.use(async (ctx) => {
     cookie: ctx.request.header['cookie'],
     status: ctx.response.status,
     length: ctx.response.length,
+    duration,
   });
 });
 
-app.listen(3000);
+const port = process.env.NODE_PORT || 8080;
+app.listen(port);
+console.log('Koa server listening on port ' + port);

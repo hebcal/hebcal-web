@@ -212,7 +212,7 @@ export function renderPdf(events, options, title) {
   for (const yearMonth of Object.keys(cells)) {
     const year = Math.floor(Number(yearMonth) / 100);
     const month = Number(yearMonth) % 100;
-    const daysInMonth = greg.daysInGregMonth(month, year);
+    const daysInMonth = greg.daysInMonth(month, year);
     const firstDayOfMonth = new Date(year, month - 1, 1);
     const startDayOfWeek = firstDayOfMonth.getDay();
     const rows = (daysInMonth == 31 && startDayOfWeek >= 5) ||
