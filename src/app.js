@@ -47,16 +47,20 @@ app.use(compress({
 
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
-  if (ctx.request.path.startsWith('/export')) {
+  const path = ctx.request.path;
+  if (path.startsWith('/export')) {
+    if (ctx.request.querystring.startsWith('subscribe=1%3B')) {
+      ctx.request.querystring = decodeURIComponent(ctx.request.querystring);
+    }
     const semi = ctx.request.querystring.indexOf(';');
     if (semi != -1) {
       ctx.request.querystring = ctx.request.querystring.replace(/;/g, '&');
     }
-  } else if (ctx.request.path.startsWith('/v2')) {
-    const slash = ctx.request.path.indexOf('/', 6);
+  } else if (path.startsWith('/v2')) {
+    const slash = path.indexOf('/', 6);
     if (slash != -1) {
-      const data = ctx.request.path.substring(6, slash);
-      const filename = ctx.request.path.substring(slash + 1);
+      const data = path.substring(6, slash);
+      const filename = path.substring(slash + 1);
       const buff = Buffer.from(data, 'base64');
       const qs = buff.toString('ascii');
       ctx.request.url = '/export/' + filename + '?' + qs;
