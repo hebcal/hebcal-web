@@ -71,16 +71,21 @@ app.use(async (ctx, next) => {
 });
 
 app.use(async (ctx, next) => {
-  if (ctx.request.path == '/robots.txt') {
-    ctx.body = 'User-agent: BadBot\nDisallow: /\n';
-  } else if (ctx.request.path == '/favicon.ico' || ctx.request.path.startsWith('/ical')) {
-    const fpath = path.join('/var/www/html', ctx.request.path);
+  const rpath = ctx.request.path;
+  if (rpath == '/') {
+    ctx.redirect('https://www.hebcal.com/');
+  } else if (rpath == '/robots.txt') {
+    ctx.body = 'User-agent: *\nAllow: /\n';
+  } else if (rpath == '/favicon.ico' || rpath.startsWith('/ical')) {
+    const fpath = path.join('/var/www/html', rpath);
     const fstat = await stat(fpath);
     if (fstat.isFile()) {
       ctx.type = path.extname(fpath);
+      ctx.length = fstat.size;
+      ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
-  } else if (ctx.request.path.startsWith('/export')) {
+  } else if (rpath.startsWith('/export')) {
     ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
       await yahrzeitDownload(ctx);

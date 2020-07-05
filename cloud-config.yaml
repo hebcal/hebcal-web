@@ -59,9 +59,9 @@ write_files:
       [Service]
       Type=simple
       # set the working directory to have consistent relative paths
-      WorkingDirectory=/home/hebcal/hebcal-download-web
+      WorkingDirectory=/var/www/html
       # start the server file (file is relative to WorkingDirectory here)
-      ExecStart=/usr/bin/node dist/app.js
+      ExecStart=/usr/bin/node /home/hebcal/hebcal-download-web/dist/app.js
       # if process crashes, always try to restart
       Restart=always
       # let 500ms between the crash and the restart
@@ -115,36 +115,12 @@ write_files:
     content: |
       CREATE TABLE ZIPCodes_Primary (
       ZipCode char(5) NOT NULL PRIMARY KEY,
-      City varchar(35) NULL,
+      CityMixedCase varchar(35) NULL,
       State char(2),
-      County varchar(45) NULL,
-      AreaCode varchar(55) NULL,
-      CityType char(1) NULL,
-      CityAliasAbbreviation varchar(13) NULL,
-      CityAliasName varchar(35) NULL,
       Latitude decimal(12, 6),
       Longitude decimal(12, 6),
       TimeZone char(2) NULL,
-      Elevation int,
-      CountyFIPS char(5) NULL,
-      DayLightSaving char(1) NULL,
-      PreferredLastLineKey varchar(10) NULL,
-      ClassificationCode char(1) NULL,
-      MultiCounty char(1) NULL,
-      StateFIPS char(2) NULL,
-      CityStateKey char(6) NULL,
-      CityAliasCode varchar(5) NULL,
-      PrimaryRecord char(1),
-      CityMixedCase varchar(35) NULL,
-      CityAliasMixedCase varchar(35) NULL,
-      StateANSI varchar(2) NULL,
-      CountyANSI varchar(3) NULL,
-      FacilityCode varchar(1) NULL,
-      CityDeliveryIndicator varchar(1) NULL,
-      CarrierRouteRateSortation varchar(1) NULL,
-      FinanceNumber varchar(6) NULL,
-      UniqueZIPName varchar(1) NULL,
-      CountyMixedCase varchar(45) NULL
+      DayLightSaving char(1) NULL
       );
 
 runcmd:
@@ -186,8 +162,8 @@ runcmd:
   - curl -o /tmp/IL.zip http://download.geonames.org/export/dump/IL.zip
   - cd /tmp && unzip cities5000.zip
   - cd /tmp && unzip IL.zip
-  - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
-  - sqlite3 -echo /home/hebcal/hebcal-download-web/zips.sqlite3 < /tmp/zips-dummy.sql
+  - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite /var/www/html/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - sqlite3 -echo /var/www/html/zips.sqlite3 < /tmp/zips-dummy.sql
   - chown -R hebcal:hebcal /home/hebcal
   - systemctl enable koa.service
   - systemctl start koa.service
@@ -195,3 +171,10 @@ runcmd:
   - sleep 10
   - mkdir -p /var/www/html/ical
   - cd /var/www/html/ical && /home/hebcal/hebcal-download-web/gen-static-ical.sh
+  - mkdir /tmp/zoneinfo
+  - cd /tmp/zoneinfo
+  - nice wget --mirror --no-parent --limit-rate=40k http://tzurl.sgp1.cdn.digitaloceanspaces.com/zoneinfo/index.html
+  - find /tmp/zoneinfo -name 'index.html*' -delete
+  - mkdir -p /var/www/html/zoneinfo
+  - rsync -av /tmp/zoneinfo/tzurl.sgp1.cdn.digitaloceanspaces.com/zoneinfo/ /var/www/html/zoneinfo/
+  - curl -v -o /var/www/html/favicon.ico https://www.hebcal.com/favicon.ico
