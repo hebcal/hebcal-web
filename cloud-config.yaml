@@ -76,7 +76,7 @@ write_files:
       # user and group starting the app
       User=www-data
       Group=www-data
-      # set the environement (dev, prod…)
+      # set the environement (dev, prod)
       Environment=NODE_ENV=production
       [Install]
       # start node at multi user system level (= sysVinit runlevel 3) 
