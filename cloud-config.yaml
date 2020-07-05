@@ -191,5 +191,7 @@ runcmd:
   - chown -R hebcal:hebcal /home/hebcal
   - systemctl enable koa.service
   - systemctl start koa.service
+  - echo 'Waiting for web server to start up'
+  - sleep 10
   - mkdir -p /var/www/html/ical
   - cd /var/www/html/ical && /home/hebcal/hebcal-download-web/gen-static-ical.sh

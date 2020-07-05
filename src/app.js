@@ -74,7 +74,7 @@ app.use(async (ctx, next) => {
   if (ctx.request.path == '/robots.txt') {
     ctx.body = 'User-agent: BadBot\nDisallow: /\n';
   } else if (ctx.request.path == '/favicon.ico' || ctx.request.path.startsWith('/ical')) {
-    const fpath = path.join(__dirname, ctx.request.path);
+    const fpath = path.join('/var/www/html', ctx.request.path);
     const fstat = await stat(fpath);
     if (fstat.isFile()) {
       ctx.type = path.extname(fpath);

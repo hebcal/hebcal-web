@@ -34,7 +34,6 @@
     "@hebcal/icalendar": "^2.0.1",
     "@hebcal/leyning": "^2.0.0",
     "@hebcal/locales": "^2.0.0",
-    "core-js": "^3.6.5",
     "dayjs": "^1.8.29",
     "koa": "^2.13.0",
     "koa-compress": "^4.0.1",
