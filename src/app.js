@@ -36,7 +36,10 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err, ctx) => {
-  logger.error(err);
+  logger.error(Object.assign({
+    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    url: ctx.request.originalUrl,
+  }, err));
 });
 
 app.use(compress({
@@ -49,9 +52,17 @@ app.use(compress({
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
   const path = ctx.request.path;
-  if (path.startsWith('/export')) {
+  if (path.startsWith('/export') ||
+      path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
+      path.startsWith('/hebcal/index.cgi/')) {
     if (ctx.request.querystring.startsWith('subscribe=1%3B')) {
       ctx.request.querystring = decodeURIComponent(ctx.request.querystring);
+    } else {
+      const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');
+      if (encQuery != -1) {
+        ctx.request.querystring = decodeURIComponent(path.substring(encQuery + 7));
+        ctx.request.path = path.substring(0, encQuery + 4);
+      }
     }
     const semi = ctx.request.querystring.indexOf(';');
     if (semi != -1) {
@@ -85,7 +96,9 @@ app.use(async (ctx, next) => {
       ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
-  } else if (rpath.startsWith('/export')) {
+  } else if (rpath.startsWith('/export') ||
+             rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
+             rpath.startsWith('/hebcal/index.cgi/')) {
     ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
       await yahrzeitDownload(ctx);
