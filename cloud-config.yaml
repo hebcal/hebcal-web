@@ -34,10 +34,8 @@ packages:
   - libsasl2-modules
   - make
   - monitoring-plugins-basic
-  - mysql-client
   - netfilter-persistent
   - postfix
-  - rcs
   - sqlite3
   - sysstat
   - unattended-upgrades
@@ -72,7 +70,7 @@ write_files:
       StandardOutput=syslog
       StandardError=syslog
       # nodejs process name in syslog
-      SyslogIdentifier=nodejs
+      SyslogIdentifier=koa
       # user and group starting the app
       User=www-data
       Group=www-data
@@ -112,6 +110,42 @@ write_files:
       smtp_sasl_auth_enable = yes
       smtp_sasl_security_options = noanonymous
       smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+  - path: /tmp/zips-dummy.sql
+    permissions: '0644'
+    content: |
+      CREATE TABLE ZIPCodes_Primary (
+      ZipCode char(5) NOT NULL PRIMARY KEY,
+      City varchar(35) NULL,
+      State char(2),
+      County varchar(45) NULL,
+      AreaCode varchar(55) NULL,
+      CityType char(1) NULL,
+      CityAliasAbbreviation varchar(13) NULL,
+      CityAliasName varchar(35) NULL,
+      Latitude decimal(12, 6),
+      Longitude decimal(12, 6),
+      TimeZone char(2) NULL,
+      Elevation int,
+      CountyFIPS char(5) NULL,
+      DayLightSaving char(1) NULL,
+      PreferredLastLineKey varchar(10) NULL,
+      ClassificationCode char(1) NULL,
+      MultiCounty char(1) NULL,
+      StateFIPS char(2) NULL,
+      CityStateKey char(6) NULL,
+      CityAliasCode varchar(5) NULL,
+      PrimaryRecord char(1),
+      CityMixedCase varchar(35) NULL,
+      CityAliasMixedCase varchar(35) NULL,
+      StateANSI varchar(2) NULL,
+      CountyANSI varchar(3) NULL,
+      FacilityCode varchar(1) NULL,
+      CityDeliveryIndicator varchar(1) NULL,
+      CarrierRouteRateSortation varchar(1) NULL,
+      FinanceNumber varchar(6) NULL,
+      UniqueZIPName varchar(1) NULL,
+      CountyMixedCase varchar(45) NULL
+      );
 
 runcmd:
   - service netfilter-persistent flush
@@ -153,6 +187,7 @@ runcmd:
   - cd /tmp && unzip cities5000.zip
   - cd /tmp && unzip IL.zip
   - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - sqlite3 -echo /home/hebcal/hebcal-download-web/zips.sqlite3 < /tmp/zips-dummy.sql
   - chown -R hebcal:hebcal /home/hebcal
   - systemctl enable koa.service
   - systemctl start koa.service
