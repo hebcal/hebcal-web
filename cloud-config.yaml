@@ -31,7 +31,6 @@ packages:
   - gcc
   - git
   - iptables-persistent
-  - libdbd-sqlite3-perl
   - libsasl2-modules
   - make
   - monitoring-plugins-basic
@@ -146,19 +145,16 @@ runcmd:
   - cd /home/hebcal/hebcal-download-web && npm install
   - cd /home/hebcal/hebcal-download-web && npm run build
   - mkdir --mode=0775 /var/log/hebcal
-  - chown www-data:syslog /var/log/hebcal
+  - chown www-data:hebcal /var/log/hebcal
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
   - curl -o /tmp/admin1CodesASCII.txt http://download.geonames.org/export/dump/admin1CodesASCII.txt
   - curl -o /tmp/cities5000.zip http://download.geonames.org/export/dump/cities5000.zip
   - curl -o /tmp/IL.zip http://download.geonames.org/export/dump/IL.zip
   - cd /tmp && unzip cities5000.zip
   - cd /tmp && unzip IL.zip
-  - mkdir -p /home/hebcal/local
-  - cd /home/hebcal/local
-  - mkdir -p bin etc var/log
+  - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
   - chown -R hebcal:hebcal /home/hebcal
-  - curl -o /tmp/geonames_cities_sqlite.pl https://raw.githubusercontent.com/hebcal/dotcom/master/local/bin/geonames_cities_sqlite.pl
-  - chmod 0755 /tmp/geonames_cities_sqlite.pl
-  - /tmp/geonames_cities_sqlite.pl /home/hebcal/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
   - systemctl enable koa.service
   - systemctl start koa.service
+  - mkdir -p /var/www/html/ical
+  - cd /var/www/html/ical && /home/hebcal/hebcal-download-web/gen-static-ical.sh
