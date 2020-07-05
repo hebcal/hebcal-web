@@ -99,9 +99,9 @@ app.use(async (ctx, next) => {
 app.use(async (ctx) => {
   const duration = Date.now() - ctx.startTime;
   logger.info({
-    ip: ctx.request.ip,
+    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     method: ctx.request.method,
-    url: ctx.request.url,
+    url: ctx.request.originalUrl,
     ua: ctx.request.header['user-agent'],
     cookie: ctx.request.header['cookie'],
     status: ctx.response.status,
