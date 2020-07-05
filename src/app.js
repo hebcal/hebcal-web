@@ -9,7 +9,8 @@ import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 
 const stat = util.promisify(fs.stat);
-const dest = pino.destination('/var/log/hebcal/download-web.log');
+const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
+const dest = pino.destination(logDir + '/download-web.log');
 const logger = pino(dest);
 
 const app = new Koa();

@@ -85,7 +85,7 @@ function makeHebcalOptions(db, query) {
   // legacy: before we had maj/min/mod/ss/mf, we only had nh/nx.
   // disable minor holidays only if we are sure it's not an old URL
   if (query.nh != 'on' || query.nx != 'on') {
-    options.noMinorHolidays = (typeof query.min == 'undefined');
+    options.noMinorHolidays = (typeof query.min == 'undefined' || query.min == 'off' || query.min == '0');
   }
   for (const [key, val] of Object.entries(numberOpts)) {
     if (typeof query[key] == 'string' && query[key].length) {
