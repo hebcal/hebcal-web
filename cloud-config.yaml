@@ -122,6 +122,29 @@ write_files:
       TimeZone char(2) NULL,
       DayLightSaving char(1) NULL
       );
+  - path: /etc/logrotate.d/hebcal-koa
+    permissions: '0644'
+    content: |
+      /var/log/hebcal/download-web.log {
+        su root
+        daily
+        rotate 7
+        delaycompress
+        compress
+        notifempty
+        missingok
+        copytruncate
+      }
+      /var/log/hebcal/options-debug.log {
+        su root
+        daily
+        rotate 7
+        delaycompress
+        compress
+        notifempty
+        missingok
+        copytruncate
+      }
 
 runcmd:
   - service netfilter-persistent flush

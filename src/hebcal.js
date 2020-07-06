@@ -3,6 +3,11 @@ import {eventsToIcalendarStream, eventsToCsv, getCalendarTitle, getEventCategori
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
+import pino from 'pino';
+
+const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
+const dest = pino.destination(logDir + '/options-debug.log');
+const logger = pino(dest);
 
 const negativeOpts = {
   nx: 'noRoshChodesh',
@@ -252,7 +257,10 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
-  ctx.logger.info(options);
+  logger.info(Object.assign({
+    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    url: ctx.request.originalUrl,
+  }, options));
   let events = HebrewCalendar.calendar(options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {

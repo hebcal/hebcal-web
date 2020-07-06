@@ -18,7 +18,6 @@ const app = new Koa();
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
-app.context.logger = logger;
 
 app.use(async (ctx, next) => {
   ctx.startTime = Date.now();
