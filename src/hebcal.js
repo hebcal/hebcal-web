@@ -45,6 +45,14 @@ function empty(val) {
   return typeof val == 'undefined' || !val.length;
 }
 
+/**
+ * @param {string} val
+ * @return {boolean}
+ */
+function off(val) {
+  return typeof val == 'undefined' || val == 'off' || val == '0';
+}
+
 const geoposLegacy = {
   ladeg: 90,
   lamin: 60,
@@ -75,8 +83,7 @@ function makeHebcalOptions(db, query) {
     }
   }
   for (const [key, val] of Object.entries(negativeOpts)) {
-    if (typeof query[key] == 'undefined' ||
-      query[key] == 'off' || query[key] == '0') {
+    if (off(query[key])) {
       options[val] = true;
     }
   }
@@ -85,8 +92,8 @@ function makeHebcalOptions(db, query) {
   }
   // legacy: before we had maj/min/mod/ss/mf, we only had nh/nx.
   // disable minor holidays only if we are sure it's not an old URL
-  if (query.nh != 'on' || query.nx != 'on') {
-    options.noMinorHolidays = (typeof query.min == 'undefined' || query.min == 'off' || query.min == '0');
+  if ((query.nh != 'on' || query.nx != 'on') && off(query.min)) {
+    options.noMinorHolidays = true;
   }
   for (const [key, val] of Object.entries(numberOpts)) {
     if (typeof query[key] == 'string' && query[key].length) {
@@ -112,25 +119,52 @@ function makeHebcalOptions(db, query) {
   if (!empty(query.lg)) {
     options.locale = lgToLocale[query.lg] || query.lg;
   }
+  if (options.candlelighting) {
+    const location = getLocationFromQuery(db, query, options.il);
+    if (location) {
+      options.location = location;
+      if (location.getIsrael()) {
+        options.il = true;
+      }
+    } else {
+      delete options.candlelighting;
+    }
+  }
+  return options;
+}
+
+/**
+ * @param {any} db
+ * @param {any} query
+ * @param {boolean} il
+ * @return {Location}
+ */
+function getLocationFromQuery(db, query, il) {
   let location;
   if (!empty(query.zip)) {
     location = db.lookupZip(query.zip);
-    if (location == null) throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
+    if (location == null) {
+      throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
+    }
   } else if (!empty(query.city)) {
     location = db.lookupLegacyCity(query.city);
-    if (location == null) throw new Error(`Invalid legacy city ${query.city}`);
+    if (location == null) {
+      throw new Error(`Invalid legacy city ${query.city}`);
+    }
   } else if (!empty(query.geonameid)) {
     location = db.lookupGeoname(+query.geonameid);
-    if (location == null) throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
+    if (location == null) {
+      throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
+    }
   } else if (query.geo == 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
         throw new Error('Timezone required');
       }
       if (query.tzid == 'Asia/Jerusalem') {
-        options.il = true;
+        il = true;
       }
-      location = new Location(+query.latitude, +query.longitude, options.il, query.tzid);
+      location = new Location(+query.latitude, +query.longitude, il, query.tzid);
     } else {
       let tzid = query.tzid;
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
@@ -158,17 +192,12 @@ function makeHebcalOptions(db, query) {
         longitude *= -1;
       }
       if (tzid == 'Asia/Jerusalem') {
-        options.il = true;
+        il = true;
       }
-      location = new Location(latitude, longitude, options.il, tzid);
+      location = new Location(latitude, longitude, il, tzid);
     }
   }
-  if (location) {
-    options.location = location;
-  } else {
-    delete options.candlelighting;
-  }
-  return options;
+  return location;
 }
 
 /**
