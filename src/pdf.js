@@ -185,13 +185,11 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
 }
 
 /**
- * Renders a list of Hebcal holidays as PDF
- * @param {Event[]} events
- * @param {Object} options
+ * Creates an empty PDF doc so we can start streaming
  * @param {string} title
  * @return {PDFDocument}
  */
-export function renderPdf(events, options, title) {
+export function createPdfDoc(title) {
   const doc = new PDFDocument({
     autoFirstPage: false,
     layout: 'landscape',
@@ -205,6 +203,17 @@ export function renderPdf(events, options, title) {
   doc.registerFont('bold', './fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
   doc.registerFont('hebrew', './fonts/SBL_Hebrew/SBL_Hbrw.ttf');
 
+  return doc;
+}
+
+/**
+ * Renders a list of Hebcal holidays as PDF
+ * @param {PDFDocument} doc
+ * @param {Event[]} events
+ * @param {Object} options
+ * @return {PDFDocument}
+ */
+export function renderPdf(doc, events, options) {
   const cells = eventsToCells(events);
   const rtl = Boolean(options && options.locale && options.locale == 'he');
   const xposNewRow = rtl ? (PDF_WIDTH - PDF_RMARGIN - 4) : (PDF_LMARGIN + PDF_COLWIDTH - 4);

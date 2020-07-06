@@ -1,7 +1,7 @@
 import {HebrewCalendar, Location, HDate} from '@hebcal/core';
 import {eventsToIcalendarStream, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
-import {renderPdf} from './pdf';
+import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
 
 const negativeOpts = {
@@ -246,8 +246,8 @@ export async function hebcalDownload(ctx) {
   } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
-    const doc = renderPdf(events, options, title);
-    ctx.body = doc;
+    const doc = ctx.body = createPdfDoc(title);
+    renderPdf(doc, events, options);
     doc.end();
   }
 }
