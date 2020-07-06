@@ -135,6 +135,11 @@ function makeHebcalOptions(db, query) {
       let tzid = query.tzid;
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
         tzid = Location.legacyTzToTzid(query.tz, query.dst);
+        if (!tzid && query.dst == 'none') {
+          const tz = +query.tz;
+          const plus = tz > 0 ? '+' : '';
+          tzid = `Etc/GMT${plus}${tz}`;
+        }
       }
       if (!tzid) {
         throw new Error('Timezone required');
