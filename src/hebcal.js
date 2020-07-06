@@ -165,6 +165,8 @@ function makeHebcalOptions(db, query) {
   }
   if (location) {
     options.location = location;
+  } else {
+    delete options.candlelighting;
   }
   return options;
 }
