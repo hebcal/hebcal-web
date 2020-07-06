@@ -1,7 +1,8 @@
 import {HebrewCalendar, Location, HDate} from '@hebcal/core';
-import {eventsToIcalendar, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
+import {eventsToIcalendarStream, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
 import '@hebcal/locales';
 import {renderPdf} from './pdf';
+import {Readable} from 'stream';
 
 const negativeOpts = {
   nx: 'noRoshChodesh',
@@ -114,13 +115,13 @@ function makeHebcalOptions(db, query) {
   let location;
   if (!empty(query.zip)) {
     location = db.lookupZip(query.zip);
-    if (location == null) throw new Error(`Invalid ZIP code ${query.zip}`);
+    if (location == null) throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
   } else if (!empty(query.city)) {
     location = db.lookupLegacyCity(query.city);
     if (location == null) throw new Error(`Invalid legacy city ${query.city}`);
   } else if (!empty(query.geonameid)) {
     location = db.lookupGeoname(+query.geonameid);
-    if (location == null) throw new Error(`Invalid geonameid ${query.geonameid}`);
+    if (location == null) throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
   } else if (query.geo == 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
@@ -230,9 +231,9 @@ export async function hebcalDownload(ctx) {
     ctx.throw(400, 'Please select at least one event option');
   }
   if (extension == '.ics') {
-    const ical = eventsToIcalendar(events, options);
     ctx.response.type = 'text/calendar; charset=utf-8';
-    ctx.body = ical;
+    const readable = ctx.body = new Readable();
+    eventsToIcalendarStream(readable, events, options);
   } else if (extension == '.csv') {
     const ical = eventsToCsv(events, options);
     ctx.response.type = 'text/x-csv; charset=utf-8';
