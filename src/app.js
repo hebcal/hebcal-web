@@ -36,10 +36,10 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err, ctx) => {
-  logger.error(Object.assign({
+  logger.error(Object.assign(err, {
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     url: ctx.request.originalUrl,
-  }, err));
+  }));
 });
 
 app.use(compress({
@@ -55,7 +55,7 @@ app.use(async (ctx, next) => {
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
       path.startsWith('/hebcal/index.cgi/')) {
-    if (ctx.request.querystring.startsWith('subscribe=1%3B')) {
+    if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
       ctx.request.querystring = decodeURIComponent(ctx.request.querystring);
     } else {
       const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');

@@ -226,6 +226,9 @@ export async function hebcalDownload(ctx) {
       return true;
     });
   }
+  if (!events.length) {
+    ctx.throw(400, 'Please select at least one event option');
+  }
   if (extension == '.ics') {
     const ical = eventsToIcalendar(events, options);
     ctx.response.type = 'text/calendar; charset=utf-8';
