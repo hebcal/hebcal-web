@@ -165,7 +165,7 @@ runcmd:
   - mkdir -p /var/www/html
   - rsync -av /home/hebcal/hebcal-download-web/fonts/ /var/www/html/fonts/
   - sqlite3 -echo /var/www/html/zips.sqlite3 < /tmp/zips-dummy.sql
-  - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite /var/www/html/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - cd /home/hebcal/hebcal-download-web && npx build-geonames-sqlite /var/www/html/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /home/hebcal/hebcal-download-web/node_modules/@hebcal/geo-sqlite/cities-patch.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
   - chown -R hebcal:hebcal /home/hebcal
   - systemctl enable koa.service
   - systemctl start koa.service
