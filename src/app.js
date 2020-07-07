@@ -91,12 +91,13 @@ app.use(async (ctx, next) => {
     ctx.redirect('https://www.hebcal.com/');
   } else if (rpath == '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
-  } else if (rpath == '/ical/') {
+  } else if (rpath == '/ical' || rpath == '/ical/') {
     ctx.redirect('https://www.hebcal.com/ical/');
   } else if (rpath == '/favicon.ico' || rpath.startsWith('/ical')) {
     const fpath = path.join('/var/www/html', rpath);
     const fstat = await stat(fpath);
     if (fstat.isFile()) {
+      ctx.set('Cache-Control', 'max-age=5184000');
       ctx.type = path.extname(fpath);
       ctx.length = fstat.size;
       ctx.lastModified = fstat.mtime;
