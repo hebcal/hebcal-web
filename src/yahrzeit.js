@@ -1,6 +1,8 @@
 import {HebrewCalendar, HDate, Event, flags, months} from '@hebcal/core';
-import {eventsToIcalendar, eventsToCsv} from '@hebcal/icalendar';
+import {eventsToIcalendarStream} from '@hebcal/icalendar';
+import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
+import {Readable} from 'stream';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -26,9 +28,9 @@ export async function yahrzeitDownload(ctx) {
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   if (ctx.request.path.endsWith('.ics')) {
-    const ical = eventsToIcalendar(events, {yahrzeit: true});
     ctx.response.type = 'text/calendar; charset=utf-8';
-    ctx.body = ical;
+    const readable = ctx.body = new Readable();
+    eventsToIcalendarStream(readable, events, {yahrzeit: true});
   } else if (ctx.request.path.endsWith('.csv')) {
     const euro = Boolean(query.euro);
     const ical = eventsToCsv(events, {euro});

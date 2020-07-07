@@ -1,9 +1,11 @@
 import {HebrewCalendar, Location, HDate} from '@hebcal/core';
-import {eventsToIcalendarStream, eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/icalendar';
+import {eventsToIcalendarStream} from '@hebcal/icalendar';
+import {eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
 import pino from 'pino';
+import etag from 'etag';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/options-debug.log');
@@ -284,6 +286,7 @@ export async function hebcalDownload(ctx) {
     ctx.body = ical;
   } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
+    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
     const title = getCalendarTitle(events, options);
     const doc = ctx.body = createPdfDoc(title);
     renderPdf(doc, events, options);
