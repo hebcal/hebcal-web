@@ -125,17 +125,7 @@ write_files:
   - path: /etc/logrotate.d/hebcal-koa
     permissions: '0644'
     content: |
-      /var/log/hebcal/download-web.log {
-        su root
-        daily
-        rotate 7
-        delaycompress
-        compress
-        notifempty
-        missingok
-        copytruncate
-      }
-      /var/log/hebcal/options-debug.log {
+      /var/log/hebcal/*.log {
         su root
         daily
         rotate 7

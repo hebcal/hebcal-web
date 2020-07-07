@@ -4,6 +4,8 @@ import util from 'util';
 import path from 'path';
 import pino from 'pino';
 import compress from 'koa-compress';
+import conditional from 'koa-conditional-get';
+import etag from 'koa-etag';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
@@ -41,6 +43,8 @@ app.on('error', (err, ctx) => {
   }));
 });
 
+app.use(conditional());
+app.use(etag());
 app.use(compress({
   threshold: 2048,
   gzip: true,
@@ -80,12 +84,15 @@ app.use(async (ctx, next) => {
   return next();
 });
 
+// request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
   if (rpath == '/') {
     ctx.redirect('https://www.hebcal.com/');
   } else if (rpath == '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
+  } else if (rpath == '/ical/') {
+    ctx.redirect('https://www.hebcal.com/ical/');
   } else if (rpath == '/favicon.ico' || rpath.startsWith('/ical')) {
     const fpath = path.join('/var/www/html', rpath);
     const fstat = await stat(fpath);
@@ -108,6 +115,7 @@ app.use(async (ctx, next) => {
   return next();
 });
 
+// logger
 app.use(async (ctx) => {
   const duration = Date.now() - ctx.startTime;
   logger.info({
