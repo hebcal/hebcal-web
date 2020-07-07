@@ -3,6 +3,7 @@ import {eventsToIcalendarStream} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {Readable} from 'stream';
+import {basename} from 'path';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -27,11 +28,16 @@ export async function yahrzeitDownload(ctx) {
     events = events.concat(holidays);
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
-  if (ctx.request.path.endsWith('.ics')) {
+  const path = ctx.request.path;
+  const extension = path.substring(path.length - 4);
+  if (!query.subscribe) {
+    ctx.response.attachment(basename(path));
+  }
+  if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
     const readable = ctx.body = new Readable();
     eventsToIcalendarStream(readable, events, {yahrzeit: true});
-  } else if (ctx.request.path.endsWith('.csv')) {
+  } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
     const ical = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';

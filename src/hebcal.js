@@ -6,6 +6,7 @@ import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
 import pino from 'pino';
 import etag from 'etag';
+import {basename} from 'path';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/options-debug.log');
@@ -275,6 +276,9 @@ export async function hebcalDownload(ctx) {
   }
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
+  }
+  if (!query.subscribe) {
+    ctx.response.attachment(basename(path));
   }
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
