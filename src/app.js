@@ -10,6 +10,7 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 import {fridgeShabbat} from './fridge';
+import {geoLookup} from './geolookup';
 
 const stat = util.promisify(fs.stat);
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
@@ -115,6 +116,8 @@ app.use(async (ctx, next) => {
     }
   } else if (rpath.startsWith('/fridge')) {
     await fridgeShabbat(ctx);
+  } else if (rpath.startsWith('/geo')) {
+    geoLookup(ctx);
   }
   return next();
 });
