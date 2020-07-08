@@ -1,4 +1,4 @@
-import {HebrewCalendar, Locale, HDate, flags, months, Event} from '@hebcal/core';
+import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
 import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -26,18 +26,25 @@ export async function fridgeShabbat(ctx) {
     return desc != 'Havdalah' && !desc.startsWith('Chanukah');
   });
   const items = makeContents(events, options);
-  const cityDescr = location.getName();
-  const title = `Refrigerator Shabbos Times for ${cityDescr} - ${hyear} | Hebcal`;
+  const itemsHtml = formatItemsAsTable(items, options);
   let fontFamily = 'Open Sans';
   let fontList = 'Open+Sans:300,600|Open+Sans+Condensed:300';
   if (Locale.getLocaleName() == 'he') {
     fontFamily = 'Alef';
     fontList += '|Alef|Alef:700';
   }
-  let html = `<!DOCTYPE html>
+  const gregYear1 = events[0].getDate().greg().getFullYear();
+  const gregYear2 = events[events.length - 1].getDate().greg().getFullYear();
+  let url = '/fridge?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
+  for (const opt of ['a', 'i', 'm', 'lg']) {
+    if (query[opt]) {
+      url += `&amp;${opt}=${query[opt]}`;
+    }
+  }
+  ctx.body = `<!DOCTYPE html>
 <html><head>
 <meta charset="UTF-8">
-<title>${title}</title>
+<title>Refrigerator Shabbos Times for ${location.getName()} - ${hyear} | Hebcal</title>
 <link href='https://www.hebcal.com/i/normalize-8.0.1.min.css' rel='stylesheet' type='text/css'>
 <link href='//fonts.googleapis.com/css?family=${fontList}' rel='stylesheet' type='text/css'>
 <script>
@@ -67,12 +74,7 @@ table {border-spacing: 0; border-collapse: collapse;}
 </head>
 <body>
 <div align="center">
-`;
-  const gregYear1 = events[0].getDate().greg().getFullYear();
-  const gregYear2 = events[events.length - 1].getDate().greg().getFullYear();
-  const shortCity = location.getShortName();
-  const candleLighting = Locale.gettext('Candle lighting');
-  html += `<h3>${candleLighting} times for ${shortCity}
+<h3>${Locale.gettext('Candle lighting')} times for ${location.getShortName()}
 <br>Hebrew Year ${hyear} (${gregYear1} - ${gregYear2})</h3>
 <p style="margin:0 0 4px">www.hebcal.com</p>
 <table style="width:524px" id="fridge-table">
@@ -82,18 +84,16 @@ table {border-spacing: 0; border-collapse: collapse;}
 <col style="border-left:1px solid #999"><col><col><col>
 </colgroup>
 <tbody>
+${itemsHtml}
+</tbody></table>
+<p><a class="goto" title="Previous" rel="nofollow"
+href="${url}&amp;year=${hyear - 1}">&larr;&nbsp;${hyear - 1}</a>&nbsp;&nbsp;&nbsp;Times
+in <strong>bold</strong> indicate holidays.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
+href="${url}&amp;year=${hyear + 1}" rel="nofollow">${hyear + 1}&nbsp;&rarr;</a></p>
+</div><!-- align=center -->
+</body>
+</html>
 `;
-  html += formatItemsAsTable(items, options);
-  html += '</tbody></table>\n';
-  let url = '/fridge?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
-  for (const opt of ['a', 'i', 'm', 'lg']) {
-    if (query[opt]) {
-      url += `&amp;${opt}=${query[opt]}`;
-    }
-  }
-  html += `<p><a class="goto" title="Previous" href="${url}&amp;year=${hyear - 1}" rel="nofollow">&larr;&nbsp;${hyear - 1}</a>&nbsp;&nbsp;&nbsp;Times in <strong>bold</strong> indicate holidays.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next" href="${url}&amp;year=${hyear + 1}" rel="nofollow">${hyear + 1}&nbsp;&rarr;</a></p>\n`;
-  html += '</div><!-- align=center -->\n</body>\n</html>\n';
-  ctx.body = html;
 }
 
 /**
