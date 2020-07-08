@@ -71,7 +71,8 @@ table {border-spacing: 0; border-collapse: collapse;}
   const gregYear1 = events[0].getDate().greg().getFullYear();
   const gregYear2 = events[events.length - 1].getDate().greg().getFullYear();
   const shortCity = location.getShortName();
-  html += `<h3>Candle Lighting Times for ${shortCity}
+  const candleLighting = Locale.gettext('Candle lighting');
+  html += `<h3>${candleLighting} times for ${shortCity}
 <br>Hebrew Year ${hyear} (${gregYear1} - ${gregYear2})</h3>
 <p style="margin:0 0 4px">www.hebcal.com</p>
 <table style="width:524px" id="fridge-table">
@@ -83,7 +84,15 @@ table {border-spacing: 0; border-collapse: collapse;}
 <tbody>
 `;
   html += formatItemsAsTable(items, options);
-  html += '</tbody></table>\n</div><!-- align=center -->\n</body>\n</html>\n';
+  html += '</tbody></table>\n';
+  let url = '/fridge?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
+  for (const opt of ['a', 'i', 'm', 'lg']) {
+    if (query[opt]) {
+      url += `&amp;${opt}=${query[opt]}`;
+    }
+  }
+  html += `<p><a class="goto" title="Previous" href="${url}&amp;year=${hyear - 1}" rel="nofollow">&larr;&nbsp;${hyear - 1}</a>&nbsp;&nbsp;&nbsp;Times in <strong>bold</strong> indicate holidays.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next" href="${url}&amp;year=${hyear + 1}" rel="nofollow">${hyear + 1}&nbsp;&rarr;</a></p>\n`;
+  html += '</div><!-- align=center -->\n</body>\n</html>\n';
   ctx.body = html;
 }
 
