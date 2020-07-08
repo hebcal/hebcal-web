@@ -29,7 +29,7 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.0.1",
+    "@hebcal/core": "^2.0.3",
     "@hebcal/geo-sqlite": "^2.1.1",
     "@hebcal/icalendar": "^2.1.0",
     "@hebcal/leyning": "^2.0.0",
