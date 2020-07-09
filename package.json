@@ -29,12 +29,12 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.0.3",
+    "@hebcal/core": "^2.1.1",
     "@hebcal/geo-sqlite": "^2.1.1",
     "@hebcal/icalendar": "^2.1.0",
-    "@hebcal/leyning": "^2.0.0",
-    "@hebcal/locales": "^2.0.0",
-    "@hebcal/rest-api": "^2.1.0",
+    "@hebcal/leyning": "^2.1.1",
+    "@hebcal/locales": "^2.1.0",
+    "@hebcal/rest-api": "^2.1.2",
     "dayjs": "^1.8.29",
     "etag": "^1.8.1",
     "koa": "^2.13.0",
