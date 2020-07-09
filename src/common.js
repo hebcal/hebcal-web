@@ -1,4 +1,4 @@
-import {HDate} from '@hebcal/core';
+import {HDate, Location} from '@hebcal/core';
 
 const lgToLocale = {
   h: 'he',
