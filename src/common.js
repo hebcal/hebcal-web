@@ -105,7 +105,11 @@ export function makeHebcalOptions(db, query) {
     }
   }
   if (!empty(query.lg)) {
-    options.locale = lgToLocale[query.lg] || query.lg;
+    const lg = query.lg;
+    options.locale = lgToLocale[lg] || lg;
+    if (lg == 'ah' || lg == 'sh') {
+      options.appendHebrewToSubject = true;
+    }
   }
   if (options.candlelighting) {
     const location = getLocationFromQuery(db, query, options.il);
