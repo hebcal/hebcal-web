@@ -20,6 +20,7 @@ const app = new Koa();
 app.use(async (ctx, next) => {
   ctx.state = ctx.state || {};
   ctx.state.ip = ctx.request.ip;
+  ctx.state.rpath = ctx.request.path;
   ctx.state.startTime = Date.now();
   try {
     // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
@@ -81,8 +82,6 @@ app.use(async (ctx, next) => {
       xtra_html: '',
       xtra_stylesheet: '',
       xtra_head: '',
-      logo: '',
-      menu: '',
     });
   }
   return next();

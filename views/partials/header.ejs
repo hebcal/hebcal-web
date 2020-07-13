@@ -54,15 +54,51 @@
 }
 @font-face{font-family:'Glyphicons Regular';src:url('https://www.hebcal.com/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot');src:url('https://www.hebcal.com/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.eot?#iefix')format('embedded-opentype'),url('https://www.hebcal.com/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.woff')format('woff'),url('https://www.hebcal.com/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.ttf')format('truetype'),url('https://www.hebcal.com/i/glyphicons_pro_1.9.2/fonts/glyphicons-regular.svg#glyphiconsregular')format('svg');font-weight:normal;font-style:normal;}.glyphicons{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Regular';font-style:normal;font-weight:400;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}.glyphicons.glyphicons-copy:before{content:"\E512";}.glyphicons.glyphicons-volume-up:before{content:"\E185";}.glyphicons.glyphicons-pencil:before{content:"\E031";}.glyphicons.glyphicons-list:before{content:"\E115";}.glyphicons.glyphicons-cog:before{content:"\E137";}.glyphicons.glyphicons-info-sign:before{content:"\E196";}.glyphicons.glyphicons-wrench:before{content:"\E440";}.glyphicons.glyphicons-print:before{content:"\E016";}.glyphicons.glyphicons-calendar:before{content:"\E046";}.glyphicons.glyphicons-download-alt:before{content:"\E182";}.glyphicons.glyphicons-envelope:before{content:"\E011";}.glyphicons.glyphicons-refresh:before{content:"\E082";}.glyphicons.glyphicons-candle:before{content:"\E335";}.glyphicons.glyphicons-book_open:before{content:"\E352";}.glyphicons.glyphicons-parents:before{content:"\E025";}.glyphicons.glyphicons-cogwheels:before{content:"\E138";}.glyphicons.glyphicons-settings:before{content:"\E281";}.glyphicons.glyphicons-embed-close:before{content:"\E119";}.glyphicons.glyphicons-git-branch:before{content:"\E423";}
 </style>
-<%- xtra_head %></head>
+<%- xtra_head -%></head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <%- logo %>
+<%
+const MENU_ITEMS = [
+  ['/holidays/', 'Holidays', 'Jewish Holidays'],
+  ['/converter/', 'Date Converter', 'Hebrew Da]e Converter'],
+  ['/shabbat/', 'Shabbat', 'Shabbat Times'],
+  ['/sedrot/', 'Torah', 'Torah Readings'],
+  ['/home/about', 'About', 'About'],
+  ['/home/help', 'Help', 'Help'],
+];
+
+// eslint-disable-next-line require-jsdoc
+function menuItem(path, title, tooltip, selected) {
+  const active = (path != '/' && path == selected) ? ' active' : '';
+  return `<li class="nav-item${active}"><a class="nav-link" href="${path}" title="${tooltip}">${title}</a>`;
+}
+
+// eslint-disable-next-line require-jsdoc
+function htmlMenu(selected) {
+  let str = '<ul class="navbar-nav mr-auto">';
+  for (const item of MENU_ITEMS) {
+    str += menuItem(item[0], item[1], item[2], selected);
+    str += '</li>';
+  }
+  str += '</ul>';
+  return str;
+}
+
+const logoImage = '<img src="https://www.hebcal.com/i/hebcal-logo-1.2.svg" width="77" height="21" alt="Hebcal">';
+const logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
+if (rpath === '/') {
+    logoHtml = '<span ' + logoIdClassTitle + '>' + logoImage + '</span>';
+} else {
+    logoHtml = '<a href="/" ' + logoIdClassTitle + '>' + logoImage + '</a>';
+}
+menuHtml = htmlMenu(rpath);
+%>
+  <%- logoHtml -%>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <%- menu %>
+    <%- menuHtml %>
     <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
      <input name="s" id="sitesearch" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
     </form>
