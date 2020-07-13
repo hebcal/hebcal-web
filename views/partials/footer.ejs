@@ -1,4 +1,51 @@
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    </body>
+<footer class="hebcal-footer d-print-none">
+<div class="row">
+<div class="col-sm-12">
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="https://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.</small></p>
+<p><small>Some location data comes from <a href="https://www.geonames.org/">GeoNames</a>,
+also under a cc-by license.</small></p>
+<ul class="bullet-list-inline">
+<% last_updated_text %>
+<li><a href="/home/about">About</a></li>
+<li><a href="/home/about/privacy-policy">Privacy</a></li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+</footer>
+</div> <!-- .container -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://www.hebcal.com/i/bootstrap-4.2.1/js/bootstrap.bundle.min.js"></script>
+<%- xtra_html %>
+<script>
+$(document).ready(function(){
+  $('a.amzn').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','outbound-amzn',x);
+    }
+  });
+  $('a.outbound').click(function(){
+    var c=$(this).attr('href');
+    if (c&&c.length) {
+      var ss=c.indexOf('//');
+      if(ss!=-1) {
+        var d=c.indexOf('/',ss+2),d2=d!=-1?d:c.length;
+        ga('send','event','outbound-article',c.substring(ss+2,d2));
+      }
+    }
+  });
+  $('a.download').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','download',x);
+    }
+  });
+});
+</script>
+</body>
 </html>

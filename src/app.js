@@ -5,6 +5,8 @@ import etag from 'koa-etag';
 import render from 'koa-ejs';
 import path from 'path';
 import pino from 'pino';
+import fs from 'fs';
+import util from 'util';
 
 /*
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
@@ -17,6 +19,7 @@ const app = new Koa();
 
 app.use(async (ctx, next) => {
   ctx.state = ctx.state || {};
+  ctx.state.ip = ctx.request.ip;
   ctx.state.startTime = Date.now();
   try {
     // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
@@ -51,15 +54,38 @@ render(app, {
   root: path.join(__dirname, 'views'),
   layout: 'layout',
   viewExt: 'ejs',
-  cache: false,
-  debug: true,
+  debug: false,
+  async: true,
 });
 
-app.use(async function(ctx) {
-  const users = [{name: 'Dead Horse'}, {name: 'Jack'}, {name: 'Tom'}];
-  await ctx.render('content', {
-    users,
-  });
+const stat = util.promisify(fs.stat);
+
+app.use(async (ctx, next) => {
+  const rpath = ctx.request.path;
+  if (rpath == '/favicon.ico' || rpath == '/robots.txt') {
+    const fpath = path.join('/var/www/html', rpath);
+    const fstat = await stat(fpath);
+    if (fstat.isFile()) {
+      ctx.set('Cache-Control', 'max-age=5184000');
+      ctx.type = path.extname(fpath);
+      ctx.length = fstat.size;
+      ctx.lastModified = fstat.mtime;
+      ctx.body = fs.createReadStream(fpath);
+    }
+  } else {
+    const users = [{name: 'Dead Horse'}, {name: 'Jack'}, {name: 'Tom'}];
+    await ctx.render('content', {
+      users,
+      title: 'foo ' + new Date(),
+      last_updated_text: '',
+      xtra_html: '',
+      xtra_stylesheet: '',
+      xtra_head: '',
+      logo: '',
+      menu: '',
+    });
+  }
+  return next();
 });
 
 // logger
