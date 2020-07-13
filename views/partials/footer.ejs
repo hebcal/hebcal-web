@@ -6,7 +6,8 @@ rel="license" href="https://creativecommons.org/licenses/by/3.0/deed.en_US">Crea
 <p><small>Some location data comes from <a href="https://www.geonames.org/">GeoNames</a>,
 also under a cc-by license.</small></p>
 <ul class="bullet-list-inline">
-<% last_updated_text %>
+<li><time datetime="<%= new Date().toISOString() %>"><%= new Intl.DateTimeFormat('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric' }).format(new Date())%></time></li>
 <li><a href="/home/about">About</a></li>
 <li><a href="/home/about/privacy-policy">Privacy</a></li>
 <li><a href="/home/help">Help</a></li>
@@ -20,7 +21,9 @@ also under a cc-by license.</small></p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://www.hebcal.com/i/bootstrap-4.2.1/js/bootstrap.bundle.min.js"></script>
-<%- xtra_html %>
+<% if (typeof xtra_html !== 'undefined') { -%>
+<%- xtra_html -%>
+<% } -%>
 <script>
 $(document).ready(function(){
   $('a.amzn').click(function(){

@@ -78,10 +78,6 @@ app.use(async (ctx, next) => {
     await ctx.render('content', {
       users,
       title: 'foo ' + new Date(),
-      last_updated_text: '',
-      xtra_html: '',
-      xtra_stylesheet: '',
-      xtra_head: '',
     });
   }
   return next();
