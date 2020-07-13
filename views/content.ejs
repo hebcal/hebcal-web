@@ -1,4 +1,12 @@
-<div>
-  <p>request ip is: <%= ip %></p>
-  <% include user.ejs %>
-</div>
+<% include partials/header.ejs %>
+
+<div id="content">
+  <div class="row">
+    <div class="col-md-12">
+      <p>request ip is: <%= ip %></p>
+      <% include user.ejs %>
+    </div>
+  </div>
+</div><!-- #content -->
+
+<% include partials/footer.ejs %>

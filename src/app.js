@@ -53,7 +53,7 @@ app.use(compress({
 
 render(app, {
   root: path.join(__dirname, 'views'),
-  layout: 'layout',
+  layout: false,
   viewExt: 'ejs',
   debug: false,
   async: true,
