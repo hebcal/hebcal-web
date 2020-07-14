@@ -76,7 +76,6 @@ app.use(async (ctx, next) => {
     }
   } else if (rpath.startsWith('/converter')) {
     const properties = parseConverterQuery(ctx);
-    properties.gsChk = properties.gs ? ' checked' : '';
     properties.title = 'foo ' + new Date();
     console.log(properties);
     await ctx.render('converter', properties);
