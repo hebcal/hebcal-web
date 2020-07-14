@@ -1,7 +1,7 @@
 <%
 const MENU_ITEMS = [
     ['/holidays/', 'Holidays', 'Jewish Holidays'],
-    ['/converter/', 'Date Converter', 'Hebrew Da]e Converter'],
+    ['/converter/', 'Date Converter', 'Hebrew Date Converter'],
     ['/shabbat/', 'Shabbat', 'Shabbat Times'],
     ['/sedrot/', 'Torah', 'Torah Readings'],
     ['/home/about', 'About', 'About'],
@@ -10,13 +10,13 @@ const MENU_ITEMS = [
 
 // eslint-disable-next-line require-jsdoc
 function menuItem(path, title, tooltip, selected) {
-  const active = (path != '/' && path == selected) ? ' active' : '';
-  return `<li class="nav-item${active}"><a class="nav-link" href="${path}" title="${tooltip}">${title}</a>`;
+  const active = (path != '/' && path == selected) ? ' active" aria-current="page' : '';
+  return `<li class="nav-item"><a class="nav-link${active}" href="${path}" title="${tooltip}">${title}</a>`;
 }
 
 // eslint-disable-next-line require-jsdoc
 function htmlMenu(selected) {
-  let str = '<ul class="navbar-nav mr-auto">';
+  let str = '<ul class="navbar-nav mr-auto mb-2 mb-lg-0">';
   for (const item of MENU_ITEMS) {
     str += menuItem(item[0], item[1], item[2], selected);
     str += '</li>';
@@ -34,14 +34,16 @@ if (rpath === '/') {
 menuHtml = htmlMenu(rpath);
 %>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="container-fluid">
   <%- logoHtml -%>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <%- menuHtml %>
-    <form class="form-inline my-2 my-lg-0" role="search" method="get" id="searchform" action="/home/">
-        <input name="s" id="sitesearch" type="text" class="form-control mr-sm-2" placeholder="Search" aria-label="Search">
+    <form class="d-flex" role="search" method="get" id="searchform" action="/home/">
+        <input name="s" id="sitesearch" type="text" class="form-control mr-2" placeholder="Search" aria-label="Search">
     </form>
-  </div><!--/.navbar-collapse -->
+  </div><!-- .navbar-collapse -->
+</div><!-- .container-fluid -->
 </nav>
