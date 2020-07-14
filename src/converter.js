@@ -14,7 +14,19 @@ function empty(val) {
  * @return {Object}
  */
 export function hebrewDateConverterProperties(ctx) {
-  const props = parseConverterQuery(ctx);
+  let props;
+  try {
+    props = parseConverterQuery(ctx);
+  } catch (err) {
+    const tmpDt = new Date();
+    props = {
+      type: 'g2h',
+      dt: tmpDt,
+      hdate: new HDate(tmpDt),
+      gs: false,
+      message: err.message,
+    };
+  }
   const dt = props.dt;
   const d = dayjs(dt);
   const dateStr = d.format('ddd, D MMMM YYYY');
@@ -27,6 +39,7 @@ export function hebrewDateConverterProperties(ctx) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
   const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
   return {
+    message: props.message,
     events,
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
     first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
@@ -52,17 +65,18 @@ export function parseConverterQuery(ctx) {
   if (!empty(query.h2g) && !empty(query.hy) && !empty(query.hm) && !empty(query.hd)) {
     const hy = +query.hy;
     const hd = +query.hd;
+    if (isNaN(hd)) {
+      throw new Error('Hebrew day must be numeric');
+    } else if (isNaN(hy)) {
+      throw new Error('Hebrew year must be numeric');
+    } else if (hy <= 3761) {
+      throw new RangeError('Hebrew year must be in the common era (3762 and above)');
+    }
     const hm = HDate.monthFromName(query.hm);
-    if (!hd) {
-      ctx.throw(400, 'Hebrew day must be numeric');
-    } else if (!hy) {
-      ctx.throw(400, 'Hebrew year must be numeric');
-    } else if (hy <= 3760) {
-      ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
-    } else if (hd > 30 || hd < 1) {
-      ctx.throw(400, 'Hebrew day out of valid range 1-30');
-    } else if (hd > HDate.daysInMonth(hm, hy)) {
-      ctx.throw(400, `Hebrew day out of valid range 1-29 for ${hm}`);
+    const maxDay = HDate.daysInMonth(hm, hy);
+    if (hd < 1 || hd > maxDay) {
+      const monthName = HDate.getMonthName(hm, hy);
+      throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
     }
     const hdate = new HDate(hd, hm, hy);
     const dt = hdate.greg();
@@ -81,22 +95,25 @@ export function parseConverterQuery(ctx) {
       const gy = +query.gy;
       const gd = +query.gd;
       const gm = +query.gm;
-      if (!gd) {
-        ctx.throw(400, 'Gregorian day must be numeric');
-      } else if (!gm) {
-        ctx.throw(400, 'Gregorian month must be numeric');
-      } else if (!gy) {
-        ctx.throw(400, 'Gregorian year must be numeric');
-      } else if (gd > 31 || gd < 1) {
-        ctx.throw(400, 'Gregorian day out of valid range 1-31');
+      if (isNaN(gd)) {
+        throw new Error('Gregorian day must be numeric');
+      } else if (isNaN(gm)) {
+        throw new Error('Gregorian month must be numeric');
+      } else if (isNaN(gy)) {
+        throw new Error('Gregorian year must be numeric');
       } else if (gm > 12 || gm < 1) {
-        ctx.throw(400, 'Gregorian month out of valid range 1-12');
+        throw new Error('Gregorian month out of valid range 1-12');
       } else if (gy > 9999 || gy < 1) {
-        ctx.throw(400, 'Gregorian year out of valid range 0001-9999');
-      } else if (gd > greg.daysInMonth(gm, gy)) {
-        ctx.throw(400, `Gregorian day ${gd} out of valid range for ${gm}/${gy}`);
+        throw new Error('Gregorian year out of valid range 0001-9999');
+      }
+      const maxDay = greg.daysInMonth(gm, gy);
+      if (gd < 1 || gd > maxDay) {
+        throw new Error(`Gregorian day ${gd} out of valid range for ${gm}/${gy}`);
       }
       const dt = new Date(gy, gm - 1, gd);
+      if (gy < 100) {
+        dt.setFullYear(gy);
+      }
       let hdate = new HDate(dt);
       if (gs) {
         hdate = hdate.next();
