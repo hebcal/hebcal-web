@@ -7,6 +7,7 @@ import path from 'path';
 import pino from 'pino';
 import fs from 'fs';
 import util from 'util';
+import {parseConverterQuery} from './converter';
 
 /*
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
@@ -73,12 +74,12 @@ app.use(async (ctx, next) => {
       ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
-  } else {
-    const users = [{name: 'Dead Horse'}, {name: 'Jack'}, {name: 'Tom'}];
-    await ctx.render('content', {
-      users,
-      title: 'foo ' + new Date(),
-    });
+  } else if (rpath.startsWith('/converter')) {
+    const properties = parseConverterQuery(ctx);
+    properties.gsChk = properties.gs ? ' checked' : '';
+    properties.title = 'foo ' + new Date();
+    console.log(properties);
+    await ctx.render('converter', properties);
   }
   return next();
 });

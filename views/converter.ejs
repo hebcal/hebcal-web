@@ -1,0 +1,117 @@
+<% include partials/header.ejs %>
+<div id="content">
+<div class="row">
+<div class="col-sm-12">
+<% if (typeof message !== 'undefined') { -%>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <%= message %>
+  <% if (typeof help !== 'undefined') { %>
+    <%= help %>   
+  <% } %>
+</div><!-- .alert -->
+<% } -%>
+
+<div id="converter-form" class="d-print-none">
+<div class="row">
+<div class="col-sm-6">
+<h5>Convert from Gregorian to Hebrew date</h5>
+<form method="get" action="/converter/">
+<div class="form-row">
+<div class="form-group mr-1">
+<input type="date" class="form-control" name="gx" value="<%= gx %>" id="gx">
+</div><!-- .form-group -->
+<div class="form-group">
+<div class="form-check">
+  <input type="checkbox" name="gs" value="on" <%= gsChk %> id="gs">
+  <label class="checkbox" for="gs">After sunset</label>
+</div><!-- .form-check -->
+</div><!-- .form-group -->
+</div><!-- .form-row -->
+<div class="form-group">
+<button type="submit" name="g2h" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Hebrew</button>
+</div><!-- .form-group -->
+</form>
+</div><!-- .col-sm-6 -->
+
+<div class="col-sm-6">
+<h5>Convert from Hebrew to Gregorian date</h5>
+<form method="get" action="/converter/">
+<div class="form-row">
+<div class="form-group mr-1">
+<input type="text" class="form-control" style="width:48px" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">
+</div><!-- .form-group -->
+<div class="form-group mr-1">
+<select name="hm" class="form-control" style="width:120px">
+  <option <%- (hm == 1) ? 'selected' : '' %> value="Nisan">Nisan</option>
+  <option <%- (hm == 2) ? 'selected' : '' %> value="Iyyar">Iyyar</option>
+  <option <%- (hm == 3) ? 'selected' : '' %> value="Sivan">Sivan</option>
+  <option <%- (hm == 4) ? 'selected' : '' %> value="Tamuz">Tamuz</option>
+  <option <%- (hm == 5) ? 'selected' : '' %> value="Av">Av</option>
+  <option <%- (hm == 6) ? 'selected' : '' %> value="Elul">Elul</option>
+  <option <%- (hm == 7) ? 'selected' : '' %> value="Tishrei">Tishrei</option>
+  <option <%- (hm == 8) ? 'selected' : '' %> value="Cheshvan">Cheshvan</option>
+  <option <%- (hm == 9) ? 'selected' : '' %> value="Kislev">Kislev</option>
+  <option <%- (hm == 10) ? 'selected' : '' %> value="Tevet">Tevet</option>
+  <option <%- (hm == 11) ? 'selected' : '' %> value="Shvat">Sh'vat</option>
+  <option <%- (hm == 12 && !hleap) ? 'selected' : '' %> value="Adar">Adar</option>
+  <option <%- (hm == 12 && hleap) ? 'selected' : '' %> value="Adar1">Adar I</option>
+  <option <%- (hm == 13) ? 'selected' : '' %> value="Adar2">Adar II</option>
+</select>
+</div><!-- .form-group -->
+<div class="form-group mr-1">
+<input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
+</div><!-- .form-group -->
+<div class="form-group">
+<button type="submit" name="h2g" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Gregorian</button>
+</div><!-- .form-group -->
+</div><!-- .form-row -->
+</form>
+</div><!-- .col-sm-6 -->
+</div><!-- .row -->
+</div><!-- #converter-form -->
+
+<hr class="d-print-none">
+<div class="row d-print-none">
+<div class="col-sm-6 col-sm-offset-3">
+<h4 style="font-size:14px;margin-bottom:4px">Advertisement</h4>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- banner-320x100 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:320px;height:100px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1867606375"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-6 -->
+</div><!-- .row -->
+<hr class="d-print-none">
+<div class="row d-print-none">
+<div class="col-sm-6">
+<h5>Yahrzeit + Anniversary Calendar</h5>
+<p>Calculate anniversaries on the Hebrew calendar ten years into the
+future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
+<p><a class="btn btn-secondary" href="/yahrzeit/" role="button"><i class="glyphicons glyphicons-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+</div><!-- .col-sm-6 -->
+<div class="col-sm-6">
+<h5>Hebrew Date Feeds</h5>
+<p>Today's Hebrew date for your RSS reader.</p>
+<p><a class="btn btn-secondary" href="/etc/hdate-en.xml"
+title="Today's Hebrew Date in English Transliteration RSS"><img
+src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
+alt="Today's Hebrew Date in English Transliteration RSS">
+English transliteration feed &raquo;</a></p>
+<p><a class="btn btn-secondary" href="/etc/hdate-he.xml"
+title="Today's Hebrew Date in Hebrew RSS"><img
+src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
+alt="Today's Hebrew Date in Hebrew RSS">
+Hebrew feed &raquo;</a></p>
+</div><!-- .col-sm-6 -->
+</div><!-- .row -->
+
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+</div><!-- #content -->
+
+<% include partials/footer.ejs %>
