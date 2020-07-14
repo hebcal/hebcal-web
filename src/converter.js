@@ -18,6 +18,7 @@ export function hebrewDateConverterProperties(ctx) {
   const dt = props.dt;
   const d = dayjs(dt);
   const dateStr = d.format('ddd, D MMMM YYYY');
+  const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render();
   const sedra = new Sedra(hdate.getFullYear(), false);
@@ -28,8 +29,8 @@ export function hebrewDateConverterProperties(ctx) {
   return {
     events,
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
-    first: (props.type === 'g2h') ? dateStr : hdateStr,
-    second: (props.type === 'g2h') ? hdateStr : dateStr,
+    first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
+    second: (props.type === 'g2h') ? hdateStr : dateStr + afterSunset,
     hebrew: hdate.renderGematriya(),
     gs: props.gs,
     gy: dt.getFullYear(),

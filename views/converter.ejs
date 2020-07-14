@@ -56,14 +56,14 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 </div><!-- #converter-results -->
 <div id="converter-form" class="d-print-none">
 <div class="row">
-<div class="col col-sm-6">
+<div class="col-sm">
 <h5>Convert from Gregorian to Hebrew date</h5>
 <form method="get" action="/converter/">
 <div class="row">
-<div class="col col-sm-auto mr-1">
-<input type="text" class="form-control" style="width:48px" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
+<div class="col-auto mb-3">
+<input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
 </div><!-- .col -->
-<div class="col col-sm-auto mr-1">
+<div class="col-auto mb-3">
 <select name="gm" class="form-select">
   <option <%- (gm === 1) ? 'selected' : '' %> value="1">January</option>
   <option <%- (gm === 2) ? 'selected' : '' %> value="2">February</option>
@@ -79,18 +79,19 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
   <option <%- (gm === 12) ? 'selected' : '' %>  value="12">December</option>
 </select>
 </div><!-- .col -->
-<div class="col col-sm-auto mr-1">
-<input type="text" class="form-control" style="width:66px" name="gy" placeholder="year" value="<%= gy %>" size="4" maxlength="4" id="gy" pattern="\d*">
+<div class="col-auto mb-3">
+<input type="text" class="form-control" name="gy" placeholder="year" value="<%= gy %>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .col -->
-<div class="col col-sm-auto">
+<div class="col-auto mb-3">
 <div class="form-check">
   <input class="form-check-input" type="checkbox" name="gs" value="on" <%= gs ? ' checked' : '' %> id="gs">
   <label class="form-check-label" for="gs">After sunset</label>
 </div><!-- .form-check -->
 </div><!-- .col -->
 </div><!-- .row -->
-<div class="col">
-<button type="submit" name="g2h" value="1" class="btn btn-primary">
+<div class="row">
+<div class="col mb-3">
+<button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
     <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
@@ -98,17 +99,18 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
   Convert to Hebrew
 </button>
 </div><!-- .col -->
+</div><!-- .row -->
 </form>
-</div><!-- .col col-sm-6 -->
+</div><!-- .col-sm -->
 
-<div class="col col-sm-6">
+<div class="col-sm">
 <h5>Convert from Hebrew to Gregorian date</h5>
 <form method="get" action="/converter/">
 <div class="row">
-<div class="col col-sm-auto mr-1">
+<div class="col-auto mb-3">
 <input type="text" class="form-control" style="width:48px" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">
 </div><!-- .col -->
-<div class="col col-sm-auto mr-1">
+<div class="col-auto mb-3">
 <select name="hm" class="form-select">
   <option <%- (hm === 1) ? 'selected' : '' %> value="Nisan">Nisan</option>
   <option <%- (hm === 2) ? 'selected' : '' %> value="Iyyar">Iyyar</option>
@@ -126,11 +128,11 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
   <option <%- (hm === 13) ? 'selected' : '' %> value="Adar2">Adar II</option>
 </select>
 </div><!-- .col -->
-<div class="col col-sm-auto mr-1">
+<div class="col-auto mb-3">
 <input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .col -->
 <div class="col">
-<button type="submit" name="h2g" value="1" class="btn btn-primary">
+<button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
     <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
     <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
@@ -140,7 +142,7 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 </div><!-- .col -->
 </div><!-- .row -->
 </form>
-</div><!-- .col col-sm-6 -->
+</div><!-- .col-sm -->
 </div><!-- .row -->
 </div><!-- #converter-form -->
 
