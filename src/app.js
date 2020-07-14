@@ -9,12 +9,9 @@ import fs from 'fs';
 import util from 'util';
 import {hebrewDateConverterProperties} from './converter';
 
-/*
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
 const logger = pino(dest);
-*/
-const logger = pino();
 
 const app = new Koa();
 
