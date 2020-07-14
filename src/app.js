@@ -76,23 +76,42 @@ app.use(async (ctx, next) => {
     }
   } else if (rpath.startsWith('/converter')) {
     const prop = hebrewDateConverterProperties(ctx);
+    if (prop.message) {
+      ctx.status = 400;
+    }
     if (ctx.request.query.cfg === 'json') {
       ctx.set('Access-Control-Allow-Origin', '*');
       ctx.type = 'json';
-      ctx.body = {
-        gy: prop.gy,
-        gm: prop.gm,
-        gd: prop.gd,
-        hy: prop.hy,
-        hm: prop.hmStr,
-        hd: prop.hd,
-        hebrew: prop.hebrew,
-      };
+      if (prop.message) {
+        ctx.body = {error: prop.message};
+      } else {
+        let result = {
+          gy: prop.gy,
+          gm: prop.gm,
+          gd: prop.gd,
+          hy: prop.hy,
+          hm: prop.hmStr,
+          hd: prop.hd,
+          hebrew: prop.hebrew,
+        };
+        if (prop.events.length) {
+          result.events = prop.events.map((ev) => ev.render());
+        }
+        const cb = ctx.request.query.callback;
+        if (typeof cb === 'string' && cb.length) {
+          result = cb + '(' + JSON.stringify(result) + ')\n';
+        }
+        ctx.body = result;
+      }
     } else if (ctx.request.query.cfg === 'xml') {
       ctx.set('Access-Control-Allow-Origin', '*');
       ctx.type = 'text/xml';
-      prop.writeResp = false;
-      ctx.body = await ctx.render('converter-xml', prop);
+      if (prop.message) {
+        ctx.body = `<?xml version="1.0" ?>\n<error message="${prop.message}" />\n`;
+      } else {
+        prop.writeResp = false;
+        ctx.body = await ctx.render('converter-xml', prop);
+      }
     } else {
       await ctx.render('converter', prop);
     }

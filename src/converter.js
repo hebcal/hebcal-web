@@ -1,12 +1,15 @@
 import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
+import pino from 'pino';
+
+const logger = pino();
 
 /**
  * @param {string} val
  * @return {boolean}
  */
-function empty(val) {
-  return typeof val === 'undefined' || !val.length;
+function isset(val) {
+  return typeof val === 'string';
 }
 
 /**
@@ -18,6 +21,7 @@ export function hebrewDateConverterProperties(ctx) {
   try {
     props = parseConverterQuery(ctx);
   } catch (err) {
+    logger.warn(err);
     const tmpDt = new Date();
     props = {
       type: 'g2h',
@@ -63,7 +67,7 @@ export function hebrewDateConverterProperties(ctx) {
  */
 export function parseConverterQuery(ctx) {
   const query = ctx.request.query;
-  if (!empty(query.h2g) && !empty(query.hy) && !empty(query.hm) && !empty(query.hd)) {
+  if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
     const hy = +query.hy;
     const hd = +query.hd;
     if (isNaN(hd)) {
@@ -83,7 +87,7 @@ export function parseConverterQuery(ctx) {
     const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
   } else {
-    const gs = query.gs == 'on' || query.gs == '1';
+    const gs = query.gs === 'on' || query.gs === '1';
     if (typeof query.gx === 'string' && query.gx.length === 10) {
       const gx = query.gx;
       const dt = new Date(gx);
@@ -92,7 +96,7 @@ export function parseConverterQuery(ctx) {
         hdate = hdate.next();
       }
       return {type: 'g2h', dt, hdate, gs, gx};
-    } else if (!empty(query.gy) && !empty(query.gm) && !empty(query.gd)) {
+    } else if (isset(query.gy) && isset(query.gm) && isset(query.gd)) {
       const gy = +query.gy;
       const gd = +query.gd;
       const gm = +query.gm;
@@ -122,7 +126,7 @@ export function parseConverterQuery(ctx) {
       return {type: 'g2h', dt, hdate, gs};
     } else {
       let dt;
-      if (!empty(query.t) && query.t.month.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) {
+      if (isset(query.t) && query.t.length && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) {
         dt = new Date(+query.t * 1000);
       } else {
         dt = new Date();
