@@ -75,9 +75,27 @@ app.use(async (ctx, next) => {
       ctx.body = fs.createReadStream(fpath);
     }
   } else if (rpath.startsWith('/converter')) {
-    const properties = hebrewDateConverterProperties(ctx);
-    console.log(properties);
-    await ctx.render('converter', properties);
+    const prop = hebrewDateConverterProperties(ctx);
+    if (ctx.request.query.cfg === 'json') {
+      ctx.set('Access-Control-Allow-Origin', '*');
+      ctx.type = 'json';
+      ctx.body = {
+        gy: prop.gy,
+        gm: prop.gm,
+        gd: prop.gd,
+        hy: prop.hy,
+        hm: prop.hmStr,
+        hd: prop.hd,
+        hebrew: prop.hebrew,
+      };
+    } else if (ctx.request.query.cfg === 'xml') {
+      ctx.set('Access-Control-Allow-Origin', '*');
+      ctx.type = 'text/xml';
+      prop.writeResp = false;
+      ctx.body = await ctx.render('converter-xml', prop);
+    } else {
+      await ctx.render('converter', prop);
+    }
   }
   return next();
 });

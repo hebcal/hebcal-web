@@ -51,6 +51,7 @@ export function hebrewDateConverterProperties(ctx) {
     gd: dt.getDate(),
     hy: hdate.getFullYear(),
     hm: hdate.getMonth(),
+    hmStr: hdate.getMonthName(),
     hd: hdate.getDate(),
     hleap: hdate.isLeapYear(),
   };
