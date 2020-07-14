@@ -1,8 +1,5 @@
 import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
-import pino from 'pino';
-
-const logger = pino();
 
 /**
  * @param {string} val
@@ -21,7 +18,6 @@ export function hebrewDateConverterProperties(ctx) {
   try {
     props = parseConverterQuery(ctx);
   } catch (err) {
-    logger.warn(err);
     const tmpDt = new Date();
     props = {
       type: 'g2h',
