@@ -25,6 +25,7 @@ export function hebrewDateConverterProperties(ctx) {
       hdate: new HDate(tmpDt),
       gs: false,
       message: err.message,
+      noCache: true,
     };
   }
   const dt = props.dt;
@@ -40,6 +41,7 @@ export function hebrewDateConverterProperties(ctx) {
   const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
   return {
     message: props.message,
+    noCache: Boolean(props.noCache),
     events,
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
     first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
@@ -128,7 +130,7 @@ export function parseConverterQuery(ctx) {
         dt = new Date();
       }
       const hdate = new HDate(dt);
-      return {type: 'g2h', dt, hdate, gs: false};
+      return {type: 'g2h', dt, hdate, gs: false, noCache: true};
     }
   }
 }

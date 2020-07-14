@@ -82,6 +82,9 @@ app.use(async (ctx, next) => {
       if (prop.message) {
         ctx.body = {error: prop.message};
       } else {
+        if (!prop.noCache) {
+          ctx.set('Cache-Control', 'max-age=63072000');
+        }
         let result = {
           gy: prop.gy,
           gm: prop.gm,
