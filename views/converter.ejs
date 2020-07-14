@@ -1,4 +1,27 @@
-<% include partials/header.ejs %>
+<% include partials/header-noclose.ejs %>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
+<meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
+<style>
+#converter-results {
+ margin-top: 32px;
+ margin-bottom: 32px;
+ text-align: center;
+}
+#converter-results .big-list {
+  margin-bottom: 6px;
+  font-size: 29px;
+  font-weight: 200;
+  line-height: normal;
+}
+#converter-results .jumbo {
+  font-size: 37px;
+}
+.nobr { white-space: nowrap }
+</style>
+</head>
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
@@ -11,7 +34,26 @@
   <% } %>
 </div><!-- .alert -->
 <% } -%>
-
+<% if (gy < 1752) { -%>
+<div class="alert alert-warning alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<strong>Warning!</strong>
+Results for year 1752 C.E. and earlier may be inaccurate.
+<p>Hebcal does not take into account a correction of ten days that
+was introduced by Pope Gregory XIII known as the Gregorian
+Reformation.<sup><a
+href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a></sup></p>
+</div><!-- .alert -->
+<% } -%>
+<div id="converter-results">
+<ul class="list-unstyled">
+<li class="big-list"><span class="nobr"><%= first %></span> = <strong class="nobr"><%= second %></strong></li>
+<li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
+<% events.forEach((ev) => {%>
+  <li><a href="<%= ev.url() %>"><%= ev.render() %></a></li>
+<% })%>
+</ul>
+</div><!-- #converter-results -->
 <div id="converter-form" class="d-print-none">
 <div class="row">
 <div class="col col-sm-6">
@@ -48,7 +90,13 @@
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="col">
-<button type="submit" name="g2h" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Hebrew</button>
+<button type="submit" name="g2h" value="1" class="btn btn-primary">
+  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
+    <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
+  </svg>
+  Convert to Hebrew
+</button>
 </div><!-- .col -->
 </form>
 </div><!-- .col col-sm-6 -->
@@ -82,7 +130,13 @@
 <input type="text" class="form-control" style="width:66px" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .col -->
 <div class="col">
-<button type="submit" name="h2g" value="1" class="btn btn-primary"><i class="glyphicons glyphicons-refresh"></i> Convert to Gregorian</button>
+<button type="submit" name="h2g" value="1" class="btn btn-primary">
+  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
+    <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
+  </svg>
+  Convert to Gregorian
+</button>
 </div><!-- .col -->
 </div><!-- .row -->
 </form>
@@ -111,20 +165,26 @@
 <h5>Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
-<p><a class="btn btn-secondary" href="/yahrzeit/" role="button"><i class="glyphicons glyphicons-parents"></i> Yahrzeit + Anniversary Calendar &raquo;</a></p>
+<p><a class="btn btn-secondary" href="/yahrzeit/" role="button">
+  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
+  </svg>
+  Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col col-sm-6 -->
 <div class="col col-sm-6">
 <h5>Hebrew Date Feeds</h5>
 <p>Today's Hebrew date for your RSS reader.</p>
 <p><a class="btn btn-secondary" href="/etc/hdate-en.xml"
-title="Today's Hebrew Date in English Transliteration RSS"><img
-src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="Today's Hebrew Date in English Transliteration RSS">
+title="Today's Hebrew Date in English Transliteration RSS">
+<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-rss-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm1.5 2.5a1 1 0 0 0 0 2 8 8 0 0 1 8 8 1 1 0 1 0 2 0c0-5.523-4.477-10-10-10zm0 4a1 1 0 0 0 0 2 4 4 0 0 1 4 4 1 1 0 1 0 2 0 6 6 0 0 0-6-6zm.5 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+</svg>
 English transliteration feed &raquo;</a></p>
 <p><a class="btn btn-secondary" href="/etc/hdate-he.xml"
-title="Today's Hebrew Date in Hebrew RSS"><img
-src="/i/feed-icon-14x14.png" style="border:none" width="14" height="14"
-alt="Today's Hebrew Date in Hebrew RSS">
+title="Today's Hebrew Date in Hebrew RSS">
+<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-rss-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm1.5 2.5a1 1 0 0 0 0 2 8 8 0 0 1 8 8 1 1 0 1 0 2 0c0-5.523-4.477-10-10-10zm0 4a1 1 0 0 0 0 2 4 4 0 0 1 4 4 1 1 0 1 0 2 0 6 6 0 0 0-6-6zm.5 7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+</svg>
 Hebrew feed &raquo;</a></p>
 </div><!-- .col col-sm-6 -->
 </div><!-- .row -->

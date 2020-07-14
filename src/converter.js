@@ -1,4 +1,5 @@
-import {HDate, greg} from '@hebcal/core';
+import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent} from '@hebcal/core';
+import dayjs from 'dayjs';
 
 /**
  * @param {string} val
@@ -6,6 +7,39 @@ import {HDate, greg} from '@hebcal/core';
  */
 function empty(val) {
   return typeof val === 'undefined' || !val.length;
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @return {Object}
+ */
+export function hebrewDateConverterProperties(ctx) {
+  const props = parseConverterQuery(ctx);
+  const dt = props.dt;
+  const d = dayjs(dt);
+  const dateStr = d.format('ddd, D MMMM YYYY');
+  const hdate = props.hdate;
+  const hdateStr = hdate.render();
+  const sedra = new Sedra(hdate.getFullYear(), false);
+  const parsha = sedra.get(hdate);
+  const pe = new ParshaEvent(hdate, parsha);
+  const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
+  const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
+  return {
+    events,
+    title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
+    first: (props.type === 'g2h') ? dateStr : hdateStr,
+    second: (props.type === 'g2h') ? hdateStr : dateStr,
+    hebrew: hdate.renderGematriya(),
+    gs: props.gs,
+    gy: dt.getFullYear(),
+    gm: dt.getMonth() + 1,
+    gd: dt.getDate(),
+    hy: hdate.getFullYear(),
+    hm: hdate.getMonth(),
+    hd: hdate.getDate(),
+    hleap: hdate.isLeapYear(),
+  };
 }
 
 /**
@@ -31,16 +65,7 @@ export function parseConverterQuery(ctx) {
     }
     const hdate = new HDate(hd, hm, hy);
     const dt = hdate.greg();
-    return {
-      gy: dt.getFullYear(),
-      gm: dt.getMonth() + 1,
-      gd: dt.getDate(),
-      gs: false,
-      hy,
-      hm,
-      hd,
-      hleap: hdate.isLeapYear(),
-    };
+    return {type: 'h2g', dt, hdate, gs: false};
   } else {
     const gs = query.gs == 'on' || query.gs == '1';
     if (typeof query.gx === 'string' && query.gx.length === 10) {
@@ -50,17 +75,7 @@ export function parseConverterQuery(ctx) {
       if (gs) {
         hdate = hdate.next();
       }
-      return {
-        gx,
-        gy: dt.getFullYear(),
-        gm: dt.getMonth() + 1,
-        gd: dt.getDate(),
-        gs,
-        hy: hdate.getFullYear(),
-        hm: hdate.getMonth(),
-        hd: hdate.getDate(),
-        hleap: hdate.isLeapYear(),
-      };
+      return {type: 'g2h', dt, hdate, gs, gx};
     } else if (!empty(query.gy) && !empty(query.gm) && !empty(query.gd)) {
       const gy = +query.gy;
       const gd = +query.gd;
@@ -80,20 +95,12 @@ export function parseConverterQuery(ctx) {
       } else if (gd > greg.daysInMonth(gm, gy)) {
         ctx.throw(400, `Gregorian day ${gd} out of valid range for ${gm}/${gy}`);
       }
-      let hdate = new HDate(new Date(gy, gm - 1, gd));
+      const dt = new Date(gy, gm - 1, gd);
+      let hdate = new HDate(dt);
       if (gs) {
         hdate = hdate.next();
       }
-      return {
-        gy,
-        gm,
-        gd,
-        gs,
-        hy: hdate.getFullYear(),
-        hm: hdate.getMonth(),
-        hd: hdate.getDate(),
-        hleap: hdate.isLeapYear(),
-      };
+      return {type: 'g2h', dt, hdate, gs};
     } else {
       let dt;
       if (!empty(query.t) && query.t.month.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) {
@@ -102,16 +109,7 @@ export function parseConverterQuery(ctx) {
         dt = new Date();
       }
       const hdate = new HDate(dt);
-      return {
-        gy: dt.getFullYear(),
-        gm: dt.getMonth() + 1,
-        gd: dt.getDate(),
-        gs: false,
-        hy: hdate.getFullYear(),
-        hm: hdate.getMonth(),
-        hd: hdate.getDate(),
-        hleap: hdate.isLeapYear(),
-      };
+      return {type: 'g2h', dt, hdate, gs: false};
     }
   }
 }

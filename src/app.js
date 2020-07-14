@@ -7,7 +7,7 @@ import path from 'path';
 import pino from 'pino';
 import fs from 'fs';
 import util from 'util';
-import {parseConverterQuery} from './converter';
+import {hebrewDateConverterProperties} from './converter';
 
 /*
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
@@ -75,8 +75,7 @@ app.use(async (ctx, next) => {
       ctx.body = fs.createReadStream(fpath);
     }
   } else if (rpath.startsWith('/converter')) {
-    const properties = parseConverterQuery(ctx);
-    properties.title = 'foo ' + new Date();
+    const properties = hebrewDateConverterProperties(ctx);
     console.log(properties);
     await ctx.render('converter', properties);
   }
