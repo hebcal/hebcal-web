@@ -7,7 +7,7 @@ import path from 'path';
 import pino from 'pino';
 import fs from 'fs';
 import util from 'util';
-import {hebrewDateConverterProperties} from './converter';
+import {hebrewDateConverter} from './converter';
 import {fridgeShabbat} from './fridge';
 import {GeoDb} from '@hebcal/geo-sqlite';
 
@@ -23,7 +23,6 @@ app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 app.use(async (ctx, next) => {
   ctx.state = ctx.state || {};
-  ctx.state.ip = ctx.request.ip;
   ctx.state.rpath = ctx.request.path;
   ctx.state.startTime = Date.now();
   try {
@@ -78,53 +77,9 @@ app.use(async (ctx, next) => {
       ctx.body = fs.createReadStream(fpath);
     }
   } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
-    const prop = fridgeShabbat(ctx);
-    await ctx.render('fridge', prop);
+    await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
-    const prop = hebrewDateConverterProperties(ctx);
-    if (prop.message) {
-      ctx.status = 400;
-    }
-    if (ctx.request.query.cfg === 'json') {
-      ctx.set('Access-Control-Allow-Origin', '*');
-      ctx.type = 'json';
-      if (prop.message) {
-        ctx.body = {error: prop.message};
-      } else {
-        if (!prop.noCache) {
-          ctx.set('Cache-Control', 'max-age=63072000');
-        }
-        let result = {
-          gy: prop.gy,
-          gm: prop.gm,
-          gd: prop.gd,
-          afterSunset: Boolean(prop.gs),
-          hy: prop.hy,
-          hm: prop.hmStr,
-          hd: prop.hd,
-          hebrew: prop.hebrew,
-        };
-        if (prop.events.length) {
-          result.events = prop.events.map((ev) => ev.render());
-        }
-        const cb = ctx.request.query.callback;
-        if (typeof cb === 'string' && cb.length) {
-          result = cb + '(' + JSON.stringify(result) + ')\n';
-        }
-        ctx.body = result;
-      }
-    } else if (ctx.request.query.cfg === 'xml') {
-      ctx.set('Access-Control-Allow-Origin', '*');
-      ctx.type = 'text/xml';
-      if (prop.message) {
-        ctx.body = `<?xml version="1.0" ?>\n<error message="${prop.message}" />\n`;
-      } else {
-        prop.writeResp = false;
-        ctx.body = await ctx.render('converter-xml', prop);
-      }
-    } else {
-      await ctx.render('converter', prop);
-    }
+    await hebrewDateConverter(ctx);
   }
   return next();
 });

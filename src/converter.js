@@ -36,9 +36,60 @@ function isset(val) {
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
+export async function hebrewDateConverter(ctx) {
+  const p = makeProperties(ctx);
+  if (p.message) {
+    ctx.status = 400;
+  }
+  const q = ctx.request.query;
+  if (q.cfg === 'json') {
+    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.type = 'json';
+    if (p.message) {
+      ctx.body = {error: p.message};
+    } else {
+      if (!p.noCache) {
+        ctx.set('Cache-Control', 'max-age=63072000');
+      }
+      let result = {
+        gy: p.gy,
+        gm: p.gm,
+        gd: p.gd,
+        afterSunset: Boolean(p.gs),
+        hy: p.hy,
+        hm: p.hmStr,
+        hd: p.hd,
+        hebrew: p.hebrew,
+      };
+      if (p.events.length) {
+        result.events = p.events.map((ev) => ev.render());
+      }
+      const cb = q.callback;
+      if (typeof cb === 'string' && cb.length) {
+        result = cb + '(' + JSON.stringify(result) + ')\n';
+      }
+      ctx.body = result;
+    }
+  } else if (q.cfg === 'xml') {
+    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.type = 'text/xml';
+    if (p.message) {
+      ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
+    } else {
+      p.writeResp = false;
+      ctx.body = await ctx.render('converter-xml', p);
+    }
+  } else {
+    return ctx.render('converter', p);
+  }
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
-export function hebrewDateConverterProperties(ctx) {
+function makeProperties(ctx) {
   let props;
   try {
     props = parseConverterQuery(ctx);
@@ -92,7 +143,7 @@ export function hebrewDateConverterProperties(ctx) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
-export function parseConverterQuery(ctx) {
+function parseConverterQuery(ctx) {
   const query = ctx.request.query;
   if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
     const hy = +query.hy;

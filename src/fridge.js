@@ -3,11 +3,17 @@ import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 
+// eslint-disable-next-line require-jsdoc
+export async function fridgeShabbat(ctx) {
+  const p = makeProperties(ctx);
+  return ctx.render('fridge', p);
+}
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
-export function fridgeShabbat(ctx) {
+function makeProperties(ctx) {
   const query = Object.assign({c: 'on', maj: 'on', s: 'on'}, ctx.request.query);
   let options;
   try {
