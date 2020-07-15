@@ -1,0 +1,113 @@
+<% include partials/header-noclose.ejs %>
+<link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rss_href %>">
+<link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
+<style>
+ul.hebcal-results {
+  list-style-type:none;
+  padding-left: 0;
+}
+ul.hebcal-results li {
+  margin-bottom: 11px;
+  font-size: 1.15rem;
+  font-weight: 300;
+  line-height: normal;
+}
+ul.list-unstyled.nav-list li {
+  margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
+<div id="content">
+<div class="row">
+  <div class="col-sm-9">
+  <h2>Shabbat <span class="d-none d-sm-inline">Times</span>
+    <span class="h4 small text-muted"><%= location.getName() %></span></h2>
+    
+<% if (typeof message !== 'undefined') { -%>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <%= message %>
+<% } -%>
+
+<hr>
+<form action="/shabbat/" method="get" id="shabbat-form">
+<input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
+<input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
+<input type="hidden" name="city" value="<%= q.city %>" id="city">
+<input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
+  <div class="form-group">
+    <label for="city-typeahead">City</label>
+    <div class="city-typeahead" style="margin-bottom:12px">
+      <input type="text" name="city-typeahead" value="<%= q.cityTypeahead %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="m1">
+      Havdalah minutes past sundown
+      <a href="#" id="havdalahInfo" data-toggle="tooltip" data-placement="top" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times"><span class="glyphicons glyphicons-info-sign"></span></a>
+    </label>
+    <input type="text" name="m" value="<%= q.m %>" size="2" maxlength="2" class="form-control" id="m1" pattern="\d*" style="width:60px">
+  </div>
+  <input type="submit" value="Get Shabbat Times" class="btn btn-primary">
+</form>
+<hr>
+<p>Shabbat times for world cities</p>
+<ul class="bullet-list-inline">
+<li><a href="/shabbat/?city=IL-Jerusalem">Jerusalem</a></li>
+<li><a href="/shabbat/?city=IL-Tel%20Aviv">Tel Aviv</a></li>
+<li><a href="/shabbat/?city=US-New%20York-NY">New York</a></li>
+<li><a href="/shabbat/?city=US-Los%20Angeles-CA">Los Angeles</a></li>
+<li><a href="/shabbat/?city=GB-London">London</a></li>
+<li><a href="/shabbat/?city=US-Miami-FL">Miami</a></li>
+<li><a href="/shabbat/?city=CA-Montreal">Montreal</a></li>
+<li><a href="/shabbat/?city=US-Baltimore-MD">Baltimore</a></li>
+<li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
+<li><a href="/shabbat/?geonameid=5100280">Lakewood, NJ</a></li>
+<li><a href="/shabbat/?city=US-Chicago-IL">Chicago</a></li>
+<li><a href="/shabbat/?geonameid=5110302">Brooklyn</a></li>
+<li><a href="/shabbat/?city=US-San%20Francisco-CA">San Francisco</a></li>
+<li><a href="/shabbat/?geonameid=4148411">Boca Raton</a></li>
+<li><a href="/shabbat/?city=US-Washington-DC">Washington, DC</a></li>
+<li><a href="/shabbat/?geonameid=5809844">Seattle</a></li>
+<li><a href="/shabbat/?city=AU-Melbourne">Melbourne</a></li>
+<li><a href="/shabbat/?city=US-Boston-MA">Boston</a></li>
+<li><a href="/shabbat/?city=CA-Toronto">Toronto</a></li>
+<li><a href="/shabbat/browse/">More ...</a></li>
+</ul>
+</div><!-- .col-sm-9 -->
+<div class="col-sm-3" role="complementary">
+<div style="padding-bottom:16px">
+<h5>Minsk</h5>
+<ul class="list-unstyled nav-list">
+  <li>
+    <span class="glyphicons glyphicons-print"></span>
+    <a title="Compact candle-lighting times for 5780" href="/shabbat/fridge.cgi?geonameid=625144&amp;m=50&amp;lg=s&amp;year=5780"> Print 5780</a>
+  </li>
+  <li><span class="glyphicons glyphicons-calendar"></span> <a href="/hebcal/?v=1&amp;geo=geoname&amp;geonameid=625144&amp;m=50&amp;lg=s&amp;month=x&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a></li>
+  <li><span class="glyphicons glyphicons-envelope"></span> <a href="https://www.hebcal.com/email/?geo=geoname&amp;geonameid=625144&amp;m=50">Email weekly Shabbat times</a></li>
+  <li>
+  <img alt="RSS feed" src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij4KPGc+CjxwYXRoIGQ9Ik0yMS41LDAgTDIuNSwwIEMxLjEyNSwwIDAsMS4xMjUgMCwyLjUgTDAsMjEuNSBDMCwyMi44NzUgMS4xMjUsMjQgMi41LDI0IEwyMS41LDI0IEMyMi44NzUsMjQgMjQsMjIuODc1IDI0LDIxLjUgTDI0LDIuNSBDMjQsMS4xMjUgMjIuODc1LDAgMjEuNSwwIE02LjE4MiwxOS45OCBDNC45NzcsMTkuOTggNCwxOS4wMDUgNCwxNy44IEM0LDE2LjU5NiA0Ljk3NywxNS42MTkgNi4xODIsMTUuNjE5IEM3LjM4NSwxNS42MTkgOC4zNjQsMTYuNTk2IDguMzY0LDE3LjggQzguMzYzLDE5LjAwNSA3LjM4NSwxOS45OCA2LjE4MiwxOS45OCBNMTEuNjUzLDIwIEMxMS42NTMsMTcuOTQzIDEwLjg1NSwxNi4wMDYgOS40MSwxNC41NTMgQzcuOTY3LDEzLjEwMiA2LjA1NiwxMi4zMDIgNCwxMi4zMDIgTDQsOS4xNTMgQzkuODI2LDkuMTUzIDE0LjgwMywxNC4xNzQgMTQuODAzLDIwLjAwMSBMMTEuNjUzLDIwLjAwMSBMMTEuNjUzLDIwIE0xNy4yMTcsMjAgQzE3LjIxNywxMi42NzcgMTEuMTk4LDYuNzE5IDQsNi43MTkgTDQsMy41NyBDMTIuOTEsMy41NyAyMC4zNjUsMTAuOTQgMjAuMzY1LDIwIEwxNy4yMTcsMjAgWiIvPgo8L2c+Cjwvc3ZnPgo=" width="14" height="14">
+  <a title="RSS feed of candle lighting times" href="/shabbat/?cfg=r&amp;geonameid=625144&amp;m=50&amp;lg=s&amp;pubDate=0">RSS feed</a></li>
+  <li><span class="glyphicons glyphicons-wrench"></span> <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="/link/?geonameid=625144&amp;m=50&amp;lg=s">Developer API</a></li>
+</ul>
+</div>
+<h6 class="mb-4">Advertisement</h6>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- responsive textonly -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-7687563417622459"
+     data-ad-slot="5981467974"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-3 -->
+</div><!-- .row -->
+
+</div><!-- #content -->
+
+<% include partials/footer.ejs %>

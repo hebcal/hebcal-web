@@ -10,6 +10,7 @@ import util from 'util';
 import {hebrewDateConverter} from './converter';
 import {fridgeShabbat} from './fridge';
 import {GeoDb} from '@hebcal/geo-sqlite';
+import {shabbatApp} from './shabbat';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
@@ -80,6 +81,8 @@ app.use(async (ctx, next) => {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
     await hebrewDateConverter(ctx);
+  } else if (rpath.startsWith('/shabbat')) {
+    await shabbatApp(ctx);
   }
   return next();
 });
