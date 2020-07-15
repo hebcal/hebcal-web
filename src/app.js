@@ -9,7 +9,6 @@ import etag from 'koa-etag';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
-import {fridgeShabbat} from './fridge';
 import {geoLookup} from './geolookup';
 
 const stat = util.promisify(fs.stat);
@@ -114,8 +113,6 @@ app.use(async (ctx, next) => {
     } else if (ctx.request.query.v == '1') {
       await hebcalDownload(ctx);
     }
-  } else if (rpath.startsWith('/fridge')) {
-    await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/geo')) {
     geoLookup(ctx);
   }
