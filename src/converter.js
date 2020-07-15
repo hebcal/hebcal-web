@@ -1,5 +1,30 @@
-import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent} from '@hebcal/core';
+import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent, Locale} from '@hebcal/core';
 import dayjs from 'dayjs';
+import gematriya from 'gematriya';
+
+const heInStr = 'בְּ';
+const monthInPrefix = {
+  'Tamuz': 'בְּתַמּוּז',
+  'Elul': 'בֶּאֱלוּל',
+  'Tishrei': 'בְּתִשְׁרֵי',
+  'Kislev': 'בְּכִסְלֵו',
+  'Sh\'vat': 'בִּשְׁבָט',
+  'Adar': 'בַּאֲדָר',
+  'Adar I': 'בַּאֲדָר א׳',
+  'Adar II': 'בַּאֲדָר ב׳',
+};
+
+/**
+ * @param {HDate} hdate
+ * @return {string}
+ */
+function gematriyaDate(hdate) {
+  const d = hdate.getDate();
+  const monthName = hdate.getMonthName();
+  const m = monthInPrefix[monthName] || heInStr + Locale.gettext(monthName, 'he');
+  const y = hdate.getFullYear();
+  return gematriya(d) + ' ' + m + ' ' + gematriya(y, {limit: 3});
+}
 
 /**
  * @param {string} val
@@ -30,13 +55,17 @@ export function hebrewDateConverterProperties(ctx) {
   }
   const dt = props.dt;
   const d = dayjs(dt);
-  const dateStr = d.format('ddd, D MMMM YYYY');
+  const dateStr = d.format('ddd, D MMMM ') + String(dt.getFullYear()).padStart(4, '0');
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render();
-  const sedra = new Sedra(hdate.getFullYear(), false);
-  const parsha = sedra.get(hdate);
-  const pe = new ParshaEvent(hdate, parsha);
+  const hy = hdate.getFullYear();
+  let pe = [];
+  if (hy >= 3762) {
+    const sedra = new Sedra(hy, false);
+    const parsha = sedra.get(hdate);
+    pe = new ParshaEvent(hdate, parsha);
+  }
   const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
   const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
   return {
@@ -46,12 +75,12 @@ export function hebrewDateConverterProperties(ctx) {
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
     first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
     second: (props.type === 'g2h') ? hdateStr : dateStr + afterSunset,
-    hebrew: hdate.renderGematriya(),
+    hebrew: gematriyaDate(hdate),
     gs: props.gs,
     gy: dt.getFullYear(),
     gm: dt.getMonth() + 1,
     gd: dt.getDate(),
-    hy: hdate.getFullYear(),
+    hy,
     hm: hdate.getMonth(),
     hmStr: hdate.getMonthName(),
     hd: hdate.getDate(),
@@ -72,8 +101,8 @@ export function parseConverterQuery(ctx) {
       throw new Error('Hebrew day must be numeric');
     } else if (isNaN(hy)) {
       throw new Error('Hebrew year must be numeric');
-    } else if (hy <= 3761) {
-      throw new RangeError('Hebrew year must be in the common era (3762 and above)');
+    } else if (hy < 3761) {
+      throw new RangeError('Hebrew year must be in the common era (3761 and above)');
     }
     const hm = HDate.monthFromName(query.hm);
     const maxDay = HDate.daysInMonth(hm, hy);
@@ -82,6 +111,9 @@ export function parseConverterQuery(ctx) {
       throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
     }
     const hdate = new HDate(hd, hm, hy);
+    if (hdate.abs() < 1) {
+      throw new RangeError('Hebrew date must be in the common era');
+    }
     const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
   } else {

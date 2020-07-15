@@ -98,6 +98,7 @@ app.use(async (ctx, next) => {
           gy: prop.gy,
           gm: prop.gm,
           gd: prop.gd,
+          afterSunset: Boolean(prop.gs),
           hy: prop.hy,
           hm: prop.hmStr,
           hd: prop.hd,
@@ -132,13 +133,14 @@ app.use(async (ctx, next) => {
 app.use(async (ctx) => {
   const duration = Date.now() - ctx.state.startTime;
   logger.info({
+    status: ctx.response.status,
+    length: ctx.response.length,
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
     ua: ctx.request.header['user-agent'],
+    ref: ctx.request.header['referer'],
     cookie: ctx.request.header['cookie'],
-    status: ctx.response.status,
-    length: ctx.response.length,
     duration,
   });
 });
