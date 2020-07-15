@@ -138,16 +138,19 @@ export function getLocationFromQuery(db, query, il) {
     if (location == null) {
       throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
     }
+    query.geo = 'zip';
   } else if (!empty(query.city)) {
     location = db.lookupLegacyCity(query.city);
     if (location == null) {
       throw new Error(`Invalid legacy city ${query.city}`);
     }
+    query.geo = 'geoname';
   } else if (!empty(query.geonameid)) {
     location = db.lookupGeoname(+query.geonameid);
     if (location == null) {
       throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
     }
+    query.geo = 'geoname';
   } else if (query.geo == 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {

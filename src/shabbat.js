@@ -2,6 +2,7 @@ import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
 import {getLocationFromQuery} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
+import querystring from 'querystring';
 
 // eslint-disable-next-line require-jsdoc
 export async function shabbatApp(ctx) {
@@ -28,8 +29,7 @@ function getStartAndEnd(now) {
  * @return {Object}
  */
 function makeProperties(ctx) {
-  console.log(ctx.cookies.get('C'));
-  const q = ctx.request.query;
+  const q = Object.assign(querystring.parse(ctx.cookies.get('C') || ''), ctx.request.query);
   let location;
   try {
     location = getLocationFromQuery(ctx.db, q, q.i === 'on');
