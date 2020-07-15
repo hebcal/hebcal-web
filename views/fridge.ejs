@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="UTF-8">
+<title>Refrigerator Shabbos Times for <%= location.getName() %> - <%= hyear %> | Hebcal</title>
+<style>
+/*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}  
+</style>
+<link href='//fonts.googleapis.com/css?family=<%= fontList %>' rel='stylesheet' type='text/css'>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-967247-1', 'auto');
+  ga('set', 'anonymizeIp', true);
+  ga('send', 'pageview');
+</script>
+<style>
+body {font-family: '<%= fontFamily %>', sans-serif;}
+h3 {font-weight: 600; margin:24px 0 0;}
+table {border-spacing: 0; border-collapse: collapse;}
+#fridge-table td {padding: 0px 4px;}
+#fridge-table td.leftpad {padding: 0 0 0 12px;}
+.text-right {text-align: right;}
+.yomtov { font-weight:600 }
+.narrow { font-family: 'Open Sans Condensed', sans-serif }
+@media print{
+ a[href]:after{content:""}
+ .sidebar-nav{display:none}
+ .goto {display:none}
+}
+</style>
+</head>
+<body>
+<div align="center">
+<h3><%= candleLightingStr %> times for <%= location.getShortName() %>  
+<br>Hebrew Year <%= hyear %> (<%= gregYear1 %> - <%= gregYear2 %>)</h3>
+<p style="margin:0 0 4px">www.hebcal.com</p>
+<table style="width:524px" id="fridge-table">
+<colgroup>
+<col><col><col><col>
+<col>
+<col style="border-left:1px solid #999"><col><col><col>
+</colgroup>
+<tbody>
+<%- itemsHtml %>  
+</tbody></table>
+<p><a class="goto" title="Previous" rel="nofollow"
+href="<%= url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Times
+in <strong>bold</strong> indicate holidays.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
+href="<%= url %>&amp;year=<%= hyear + 1 %>" rel="nofollow"><%= hyear + 1 %>&nbsp;&rarr;</a></p>
+</div><!-- align=center -->
+</body>
+</html>

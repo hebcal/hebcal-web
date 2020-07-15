@@ -8,12 +8,18 @@ import pino from 'pino';
 import fs from 'fs';
 import util from 'util';
 import {hebrewDateConverterProperties} from './converter';
+import {fridgeShabbat} from './fridge';
+import {GeoDb} from '@hebcal/geo-sqlite';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
 const logger = pino(dest);
 
 const app = new Koa();
+
+const zipsFilename = 'zips.sqlite3';
+const geonamesFilename = 'geonames.sqlite3';
+app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 app.use(async (ctx, next) => {
   ctx.state = ctx.state || {};
@@ -71,6 +77,9 @@ app.use(async (ctx, next) => {
       ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
+  } else if (rpath.startsWith('/fridge')) {
+    const prop = fridgeShabbat(ctx);
+    await ctx.render('fridge', prop);
   } else if (rpath.startsWith('/converter')) {
     const prop = hebrewDateConverterProperties(ctx);
     if (prop.message) {

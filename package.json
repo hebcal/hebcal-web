@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@hebcal/core": "^2.1.3",
+    "@hebcal/geo-sqlite": "^2.1.1",
+    "@hebcal/locales": "^2.1.0",
     "dayjs": "^1.8.29",
     "etag": "^1.8.1",
     "koa": "^2.13.0",
