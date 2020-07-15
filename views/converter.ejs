@@ -56,9 +56,9 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 <ul class="list-unstyled">
 <li class="big-list"><span class="nobr"><%= first %></span> = <strong class="nobr"><%= second %></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
-<% events.forEach((ev) => {%>
+<% events.forEach((ev) => { %>
   <li><a href="<%= ev.url() %>"><%= ev.render() %></a></li>
-<% })%>
+<% }); %>
 </ul>
 </div><!-- #converter-results -->
 <div id="converter-form" class="d-print-none">

@@ -104,6 +104,9 @@ export function makeHebcalOptions(db, query) {
       options.month = month;
     }
   }
+  if (options.ashkenazi && empty(query.lg)) {
+    query.lg = 'a';
+  }
   if (!empty(query.lg)) {
     const lg = query.lg;
     options.locale = lgToLocale[lg] || lg;
@@ -145,6 +148,7 @@ export function getLocationFromQuery(db, query, il) {
       throw new Error(`Invalid legacy city ${query.city}`);
     }
     query.geo = 'geoname';
+    query.geonameid = location.getGeoId();
   } else if (!empty(query.geonameid)) {
     location = db.lookupGeoname(+query.geonameid);
     if (location == null) {
