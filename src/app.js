@@ -77,7 +77,7 @@ app.use(async (ctx, next) => {
       ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
-  } else if (rpath.startsWith('/fridge')) {
+  } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
     const prop = fridgeShabbat(ctx);
     await ctx.render('fridge', prop);
   } else if (rpath.startsWith('/converter')) {

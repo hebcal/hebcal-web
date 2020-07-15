@@ -28,12 +28,6 @@ export function fridgeShabbat(ctx) {
   });
   const items = makeContents(events, options);
   const itemsHtml = formatItemsAsTable(items, options);
-  let fontFamily = 'Open Sans';
-  let fontList = 'Open+Sans:300,600|Open+Sans+Condensed:300';
-  if (Locale.getLocaleName() == 'he') {
-    fontFamily = 'Alef';
-    fontList += '|Alef|Alef:700';
-  }
   let url = '/fridge?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
   for (const opt of ['a', 'i', 'm', 'lg']) {
     if (query[opt]) {
@@ -42,11 +36,10 @@ export function fridgeShabbat(ctx) {
   }
   return {
     location,
+    locale: Locale.getLocaleName(),
     hyear,
     gregYear1: events[0].getDate().greg().getFullYear(),
     gregYear2: events[events.length - 1].getDate().greg().getFullYear(),
-    fontList,
-    fontFamily,
     itemsHtml,
     url,
     candleLightingStr: Locale.gettext('Candle lighting'),
