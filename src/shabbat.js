@@ -1,4 +1,4 @@
-import {HebrewCalendar, Locale, Location, flags} from '@hebcal/core';
+import {HebrewCalendar, Locale, Location} from '@hebcal/core';
 import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -61,7 +61,6 @@ function makeProperties(ctx) {
   };
   const events = HebrewCalendar.calendar(options);
   const items = events.map((ev) => eventToHtml(ev, options));
-  console.log(items);
   return {
     location,
     locationName: location.getName(),
