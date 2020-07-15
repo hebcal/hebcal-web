@@ -28,7 +28,7 @@ export function fridgeShabbat(ctx) {
   });
   const items = makeContents(events, options);
   const itemsHtml = formatItemsAsTable(items, options);
-  let url = '/fridge?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
+  let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
   for (const opt of ['a', 'i', 'm', 'lg']) {
     if (query[opt]) {
       url += `&amp;${opt}=${query[opt]}`;
