@@ -7,7 +7,11 @@ import {getEventCategories, makeAnchor} from '@hebcal/rest-api';
 
 // eslint-disable-next-line require-jsdoc
 export async function shabbatApp(ctx) {
+  const q = ctx.request.query;
   const p = makeProperties(ctx);
+  if (q.cfg === 'i') {
+    return ctx.render('shabbat-iframe', p);
+  }
   return ctx.render('shabbat', p);
 }
 
