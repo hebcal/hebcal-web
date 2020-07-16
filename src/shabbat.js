@@ -4,10 +4,10 @@ import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
-import {countryNames, getEventCategories, makeAnchor} from '@hebcal/rest-api';
+import {countryNames, getEventCategories, makeAnchor, eventsToRss} from '@hebcal/rest-api';
 
 export async function shabbatApp(ctx) {
-  makeItems(ctx);
+  const events = makeItems(ctx);
   const q = ctx.request.query;
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe', {});
@@ -19,6 +19,10 @@ export async function shabbatApp(ctx) {
     ctx.body = html.split('\n').map((line) => {
       return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';
     }).join('');
+  } else if (q.cfg === 'r') {
+    ctx.set('Cache-Control', 'max-age=86400');
+    ctx.type = 'text/xml';
+    ctx.body = eventsToRss(events, ctx.state.location);
   } else {
     const p = makePropsForFullHtml(ctx);
     return ctx.render('shabbat', p);
@@ -81,6 +85,8 @@ function makeItems(ctx) {
   }
   geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
   ctx.state.geoUrlArgs = geoUrlArgs;
+
+  return events;
 }
 
 function makePropsForFullHtml(ctx) {
