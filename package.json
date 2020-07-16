@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^2.1.4",
-    "@hebcal/geo-sqlite": "^2.1.1",
+    "@hebcal/geo-sqlite": "^2.1.2",
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.1.5",
     "dayjs": "^1.8.29",
@@ -33,6 +33,6 @@
     "koa-conditional-get": "^2.0.0",
     "koa-ejs": "^4.3.0",
     "koa-etag": "^3.0.0",
-    "pino": "^6.3.2"
+    "pino": "^6.4.0"
   }
 }

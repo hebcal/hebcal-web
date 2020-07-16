@@ -67,7 +67,7 @@ const stat = util.promisify(fs.stat);
 
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath == '/favicon.ico' || rpath == '/robots.txt') {
+  if (rpath == '/favicon.ico' || rpath == '/robots.txt' || rpath.startsWith('/i/')) {
     const fpath = path.join('/var/www/html', rpath);
     const fstat = await stat(fpath);
     if (fstat.isFile()) {

@@ -41,24 +41,27 @@ function makeProperties(ctx) {
   } catch (err) {
     ctx.throw(400, err.message);
   }
+  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
   const location = opts0.location || Location.lookup('New York');
   let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
   if (typeof opts0.havdalahMins !== 'undefined') {
     geoUrlArgs += '&m=' + opts0.havdalahMins;
   }
-  geoUrlArgs += '&lg=' + (q.lg || 's');
+  geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
   q.cityTypeahead = location.getName();
   const [midnight, endOfWeek] = getStartAndEnd(new Date());
   const options = {
     start: midnight.toDate(),
     end: endOfWeek.toDate(),
     candlelighting: true,
-    havdalahMins: opts0.havdalahMins,
     location,
     locale: opts0.locale,
     il: opts0.il,
     sedrot: true,
   };
+  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
+    options.havdalahMins = opts0.havdalahMins;
+  }
   const events = HebrewCalendar.calendar(options);
   const items = events.map((ev) => eventToHtml(ev, options));
   return {

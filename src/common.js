@@ -25,6 +25,7 @@ const booleanOpts = {
   s: 'sedrot',
   F: 'dafyomi',
   euro: 'euro',
+  M: 'havdalahTzeit',
 };
 
 const numberOpts = {
@@ -82,6 +83,10 @@ export function makeHebcalOptions(db, query) {
   // disable minor holidays only if we are sure it's not an old URL
   if ((query.nh != 'on' || query.nx != 'on') && off(query.min)) {
     options.noMinorHolidays = true;
+  }
+  // Before we parse numberOpts, check for tzeit preference
+  if (options.havdalahTzeit) {
+    delete query.m;
   }
   for (const [key, val] of Object.entries(numberOpts)) {
     if (typeof query[key] == 'string' && query[key].length) {
