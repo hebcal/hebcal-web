@@ -11,6 +11,7 @@ import {hebrewDateConverter} from './converter';
 import {fridgeShabbat} from './fridge';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {shabbatApp} from './shabbat';
+import {geoAutoComplete} from './complete';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
@@ -77,6 +78,8 @@ app.use(async (ctx, next) => {
       ctx.lastModified = fstat.mtime;
       ctx.body = fs.createReadStream(fpath);
     }
+  } else if (rpath.startsWith('/complete')) {
+    await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
