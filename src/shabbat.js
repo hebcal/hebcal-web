@@ -3,7 +3,7 @@ import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
-import {getEventCategories, makeAnchor} from '@hebcal/rest-api';
+import {countryNames, getEventCategories, makeAnchor} from '@hebcal/rest-api';
 
 // eslint-disable-next-line require-jsdoc
 export async function shabbatApp(ctx) {
@@ -68,6 +68,17 @@ function makeProperties(ctx) {
   }
   const events = HebrewCalendar.calendar(options);
   const items = events.map((ev) => eventToHtml(ev, options));
+  const briefText = items.map((i) => {
+    const date = i.d.format('MMM D');
+    if (i.fmtTime) {
+      return `${i.desc} at ${i.fmtTime} on ${date}`;
+    } else if (i.cat === 'parashat') {
+      return i.desc;
+    } else {
+      return `${i.desc} on ${date}`;
+    }
+  });
+  const firstCandles = items.find((i) => i.desc === 'Candle lighting');
   return {
     location,
     locationName: location.getName(),
@@ -78,7 +89,37 @@ function makeProperties(ctx) {
     locale: Locale.getLocaleName(),
     Shabbat: Locale.gettext('Shabbat'),
     title: Locale.gettext('Shabbat') + ' Times for ' + location.getName(),
+    summary: briefText.join('. '),
+    jsonLD: JSON.stringify(getJsonLD(firstCandles, location)),
     rss_href: '',
+  };
+}
+
+// eslint-disable-next-line require-jsdoc
+function getJsonLD(item, location) {
+  const admin1 = location.admin1 || '';
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': `Candle Lighting for ${location.getShortName()} at ${item.fmtTime}`,
+    'startDate': `${item.isoDate}T${item.isoTime}:00`,
+    'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+    'eventStatus': 'https://schema.org/EventScheduled',
+    'location': {
+      '@type': 'Place',
+      'name': location.getName(),
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': location.getShortName(),
+        'addressRegion': admin1,
+        'addressCountry': countryNames[location.getCountryCode()],
+      },
+      'geo': {
+        '@type': 'GeoCoordinates',
+        'latitude': location.getLatitude(),
+        'longitude': location.getLongitude(),
+      },
+    },
   };
 }
 
@@ -105,6 +146,7 @@ function eventToHtml(ev, options) {
       id,
       desc: shortDesc,
       cat: cat0,
+      d,
       isoDate,
       isoTime: attrs.eventTimeStr,
       fmtDate,
@@ -115,6 +157,7 @@ function eventToHtml(ev, options) {
       id,
       desc: ev.render(),
       cat: cat0,
+      d,
       isoDate,
       fmtDate,
       url: ev.url(),

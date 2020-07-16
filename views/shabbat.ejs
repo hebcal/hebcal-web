@@ -1,4 +1,6 @@
 <% include partials/header-noclose.ejs %>
+<meta name="description" content="<%= summary %>">
+<script type="application/ld+json"><%- jsonLD %></script>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rss_href %>">
 <link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 <style>
