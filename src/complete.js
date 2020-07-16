@@ -77,7 +77,7 @@ export async function geoAutoComplete(ctx) {
       if (admin1) {
         obj.admin1 = admin1;
       }
-      obj.tokens = res.asciiname.split(' ').concat(admin1.split(' '), country.split(' '));
+      obj.tokens = Array.from(new Set(res.asciiname.split(' ').concat(admin1.split(' '), country.split(' '))));
       return obj;
     });
     if (items.length) {
