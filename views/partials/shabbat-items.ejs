@@ -1,11 +1,11 @@
 <ul class="hebcal-results">
-  <% items.forEach((i) => { %>
-    <% if (i.isoTime) { %>
-    <li class="<%= i.cat %>" id="<%= i.id %>"><%= i.desc %>: <time datetime="<%= i.isoDate %>T<%= i.isoTime %>:00"><strong><%= i.fmtTime %></strong> on <%= i.fmtDate %></time></li>
-    <% } else if (i.cat === 'parashat') { %>
-    <li class="<%= i.cat %>" id="<%= i.id %>">This week's Torah portion is <a target="_top" href="<%= i.url %>"><%= i.desc %></a></li>
-    <% } else { %>
-    <li class="<%= i.cat %>" id="<%= i.id %>"><a target="_top" href="<%= i.url %>"><%= i.desc %></a> occurs on <time datetime="<%= i.isoDate %>"><%= i.fmtDate %></time></li>
-    <% } %>
-  <% }); %>
+<% items.forEach((i) => { -%>
+<% if (i.isoTime) { -%>
+<li class="<%= i.cat %>" id="<%= i.id %>"><%= i.desc %>: <time datetime="<%= i.isoDate %>T<%= i.isoTime %>:00"><strong><%= i.fmtTime %></strong> on <%= i.fmtDate %></time></li>
+<% } else if (i.cat === 'parashat') { -%>
+<li class="<%= i.cat %>" id="<%= i.id %>">This week's Torah portion is <a target="<%= q.tgt %>" href="<%= i.url %>"><%= i.desc %></a></li>
+<% } else { -%>
+<li class="<%= i.cat %>" id="<%= i.id %>"><a target="<%= q.tgt %>" href="<%= i.url %>"><%= i.desc %></a> occurs on <time datetime="<%= i.isoDate %>"><%= i.fmtDate %></time></li>
+<% } -%>
+<% }); -%>
 </ul>

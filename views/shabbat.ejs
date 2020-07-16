@@ -1,7 +1,7 @@
 <% include partials/header-noclose.ejs %>
 <meta name="description" content="<%= summary %>">
 <script type="application/ld+json"><%- jsonLD %></script>
-<link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rss_href %>">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.hebcal.com/shabbat/?cfg=r&amp;<%= geoUrlArgs %>&amp;pubDate=0">
 <link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 <style>
 ul.hebcal-results {
@@ -103,7 +103,7 @@ local halachic authority for correct candle-lighting times.
   <div class="mb-3">
     <label class="form-label" for="city-typeahead">City</label>
     <div class="city-typeahead" style="margin-bottom:12px">
-      <input type="text" name="city-typeahead" value="<%= q.cityTypeahead %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
+      <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
     </div>
   </div>
   <div class="mb-1">Havdalah</div>

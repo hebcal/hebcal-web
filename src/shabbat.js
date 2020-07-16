@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Location} from '@hebcal/core';
 import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
@@ -5,14 +6,23 @@ import dayjs from 'dayjs';
 import querystring from 'querystring';
 import {countryNames, getEventCategories, makeAnchor} from '@hebcal/rest-api';
 
-// eslint-disable-next-line require-jsdoc
 export async function shabbatApp(ctx) {
+  makeItems(ctx);
   const q = ctx.request.query;
-  const p = makeProperties(ctx);
   if (q.cfg === 'i') {
-    return ctx.render('shabbat-iframe', p);
+    return ctx.render('shabbat-iframe', {});
+  } else if (q.cfg === 'j') {
+    const html = await ctx.render('shabbat-js', {writeResp: false});
+    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.set('Cache-Control', 'max-age=86400');
+    ctx.type = 'text/javascript';
+    ctx.body = html.split('\n').map((line) => {
+      return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';
+    }).join('');
+  } else {
+    const p = makePropsForFullHtml(ctx);
+    return ctx.render('shabbat', p);
   }
-  return ctx.render('shabbat', p);
 }
 
 /**
@@ -29,15 +39,11 @@ function getStartAndEnd(now) {
   return [midnight, endOfWeek];
 }
 
-/**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
- * @return {Object}
- */
-function makeProperties(ctx) {
+function makeItems(ctx) {
   const q = Object.assign(
       querystring.parse(ctx.cookies.get('C') || ''),
+      {c: 'on', tgt: '_top'},
       ctx.request.query,
-      {c: 'on'},
   );
   let opts0;
   try {
@@ -45,14 +51,8 @@ function makeProperties(ctx) {
   } catch (err) {
     ctx.throw(400, err.message);
   }
-  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
   const location = opts0.location || Location.lookup('New York');
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
-  if (typeof opts0.havdalahMins !== 'undefined') {
-    geoUrlArgs += '&m=' + opts0.havdalahMins;
-  }
-  geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
-  q.cityTypeahead = location.getName();
+  q['city-typeahead'] = location.getName();
   const [midnight, endOfWeek] = getStartAndEnd(new Date());
   const options = {
     start: midnight.toDate(),
@@ -63,11 +63,29 @@ function makeProperties(ctx) {
     il: opts0.il,
     sedrot: true,
   };
+  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
   if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
     options.havdalahMins = opts0.havdalahMins;
   }
   const events = HebrewCalendar.calendar(options);
-  const items = events.map((ev) => eventToHtml(ev, options));
+  ctx.state.q = q;
+  ctx.state.hyear = events[0].getDate().getFullYear();
+  ctx.state.items = events.map((ev) => eventToItem(ev, options));
+  ctx.state.location = location;
+  ctx.state.title = Locale.gettext('Shabbat') + ' Times for ' + location.getName();
+  ctx.state.Shabbat = Locale.gettext('Shabbat');
+
+  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  if (typeof options.havdalahMins !== 'undefined') {
+    geoUrlArgs += '&m=' + options.havdalahMins;
+  }
+  geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
+  ctx.state.geoUrlArgs = geoUrlArgs;
+}
+
+function makePropsForFullHtml(ctx) {
+  const items = ctx.state.items;
+  const location = ctx.state.location;
   const briefText = items.map((i) => {
     const date = i.d.format('MMM D');
     if (i.fmtTime) {
@@ -80,22 +98,12 @@ function makeProperties(ctx) {
   });
   const firstCandles = items.find((i) => i.desc === 'Candle lighting');
   return {
-    location,
-    locationName: location.getName(),
-    q,
-    items,
-    hyear: events[0].getDate().getFullYear(),
-    geoUrlArgs,
-    locale: Locale.getLocaleName(),
-    Shabbat: Locale.gettext('Shabbat'),
-    title: Locale.gettext('Shabbat') + ' Times for ' + location.getName(),
     summary: briefText.join('. '),
     jsonLD: JSON.stringify(getJsonLD(firstCandles, location)),
-    rss_href: '',
+    locationName: location.getName(),
   };
 }
 
-// eslint-disable-next-line require-jsdoc
 function getJsonLD(item, location) {
   const admin1 = location.admin1 || '';
   return {
@@ -128,7 +136,7 @@ function getJsonLD(item, location) {
  * @param {HebrewCalendar.Options} options
  * @return {Object}
  */
-function eventToHtml(ev, options) {
+function eventToItem(ev, options) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());

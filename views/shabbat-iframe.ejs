@@ -7,11 +7,5 @@ ul.hebcal-results{list-style-type:none}
 </style>
 </head>
 <body>
-<div id="hebcal" class="hebcal-container">
-<h3><%= title %></h3>
-<% include partials/shabbat-items.ejs %>
-<div class="copyright">
-<small>Powered by <a target="_top" href="https://www.hebcal.com/shabbat/?geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;utm_source=shabbat1c&amp;utm_medium=js">Hebcal <%= Shabbat %> Times</a></small>
-</div><!-- .copyright -->
-</div><!-- .hebcal-container -->
+<% include shabbat-js.ejs %>
 </body></html>
