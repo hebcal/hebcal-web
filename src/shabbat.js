@@ -4,10 +4,10 @@ import {makeHebcalOptions} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
-import {countryNames, getEventCategories, makeAnchor, eventsToRss} from '@hebcal/rest-api';
+import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
 
 export async function shabbatApp(ctx) {
-  const events = makeItems(ctx);
+  makeItems(ctx);
   const q = ctx.request.query;
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe', {});
@@ -22,7 +22,10 @@ export async function shabbatApp(ctx) {
   } else if (q.cfg === 'r') {
     ctx.set('Cache-Control', 'max-age=86400');
     ctx.type = 'text/xml';
-    ctx.body = eventsToRss(events, ctx.state.location);
+    ctx.body = eventsToRss(ctx.state.events, ctx.state.location);
+  } else if (q.cfg === 'json') {
+    ctx.set('Cache-Control', 'max-age=86400');
+    ctx.body = eventsToClassicApi(ctx.state.events, ctx.state.options);
   } else {
     const p = makePropsForFullHtml(ctx);
     return ctx.render('shabbat', p);
@@ -72,6 +75,8 @@ function makeItems(ctx) {
     options.havdalahMins = opts0.havdalahMins;
   }
   const events = HebrewCalendar.calendar(options);
+  ctx.state.events = events;
+  ctx.state.options = options;
   ctx.state.q = q;
   ctx.state.hyear = events[0].getDate().getFullYear();
   ctx.state.items = events.map((ev) => eventToItem(ev, options));
@@ -85,8 +90,6 @@ function makeItems(ctx) {
   }
   geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
   ctx.state.geoUrlArgs = geoUrlArgs;
-
-  return events;
 }
 
 function makePropsForFullHtml(ctx) {
