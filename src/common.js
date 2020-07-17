@@ -58,6 +58,35 @@ export function off(val) {
 }
 
 /**
+ * @param {any} query
+ * @return {string}
+ */
+export function makeCookie(query) {
+  let ck = 't=' + Math.floor(Date.now() / 1000);
+  for (const key of Object.keys(booleanOpts)) {
+    if (typeof query[key] == 'string' && (query[key] == 'on' || query[key] == '1')) {
+      ck += '&' + key + '=on';
+    }
+  }
+  for (const key of Object.keys(negativeOpts)) {
+    if (off(query[key])) {
+      ck += '&' + key + '=off';
+    }
+  }
+  for (const key of Object.keys(numberOpts)) {
+    if (typeof query[key] == 'string' && query[key].length) {
+      ck += '&' + key + '=' + query[key];
+    }
+  }
+  for (const key of 'geo zip geonameid lg'.split(' ')) {
+    if (typeof query[key] == 'string' && query[key].length) {
+      ck += '&' + key + '=' + query[key];
+    }
+  }
+  return ck;
+}
+
+/**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {any} query

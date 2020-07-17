@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Location} from '@hebcal/core';
-import {makeHebcalOptions} from './common';
+import {makeHebcalOptions, makeCookie} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
@@ -8,7 +8,7 @@ import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClass
 
 export async function shabbatApp(ctx) {
   makeItems(ctx);
-  const q = ctx.request.query;
+  const q = ctx.state.q;
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe', {});
   } else if (q.cfg === 'j') {
@@ -22,14 +22,32 @@ export async function shabbatApp(ctx) {
   } else if (q.cfg === 'r') {
     ctx.set('Cache-Control', 'max-age=86400');
     ctx.type = 'text/xml';
-    ctx.body = eventsToRss(ctx.state.events, ctx.state.location);
+    ctx.body = eventsToRss(ctx.state.events, ctx.state.location, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
     ctx.set('Cache-Control', 'max-age=86400');
     ctx.body = eventsToClassicApi(ctx.state.events, ctx.state.options);
   } else {
     const p = makePropsForFullHtml(ctx);
+    possiblySetCookie(ctx);
     return ctx.render('shabbat', p);
   }
+}
+
+function possiblySetCookie(ctx) {
+  const newCookie = makeCookie(ctx.state.q);
+  const prevCookie = ctx.cookies.get('C');
+  if (prevCookie) {
+    const prev = prevCookie.substring(prevCookie.indexOf('&'));
+    const current = newCookie.substring(newCookie.indexOf('&'));
+    if (prev === current) {
+      return false;
+    }
+  }
+  ctx.cookies.set('C', newCookie, {
+    expires: dayjs().add(1, 'year').toDate(),
+    overwrite: true,
+  });
+  return true;
 }
 
 /**
@@ -78,6 +96,7 @@ function makeItems(ctx) {
   ctx.state.events = events;
   ctx.state.options = options;
   ctx.state.q = q;
+  ctx.state.locale = Locale.getLocaleName();
   ctx.state.hyear = events[0].getDate().getFullYear();
   ctx.state.items = events.map((ev) => eventToItem(ev, options));
   ctx.state.location = location;
@@ -105,7 +124,7 @@ function makePropsForFullHtml(ctx) {
       return `${i.desc} on ${date}`;
     }
   });
-  const firstCandles = items.find((i) => i.desc === 'Candle lighting');
+  const firstCandles = items.find((i) => i.cat === 'candles');
   return {
     summary: briefText.join('. '),
     jsonLD: JSON.stringify(getJsonLD(firstCandles, location)),
