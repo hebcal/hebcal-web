@@ -2,6 +2,14 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert between Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
 <style>
+.icon {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
 #converter-results {
  margin-top: 32px;
  margin-bottom: 32px;
@@ -33,6 +41,16 @@
 <body>
 <% include partials/navbar.ejs %>
 <div class="container">
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="gi-refresh" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M27.99908,15.83618A12.00008,12.00008,0,0,1,16.71484,27.97852c-.24414.01464-.48828.022-.73046.022a11.89341,11.89341,0,0,1-7.17121-2.39478L7.42542,27.16956a.5.5,0,0,1-.85975-.21326L5.08826,20.90479a.5.5,0,0,1,.54571-.615l6.18421.74732a.5.5,0,0,1,.314.82825L10.81372,23.3512A8.998,8.998,0,0,0,24.99817,15.798a1.07162,1.07162,0,0,1,.31824-.8341,1.03419,1.03419,0,0,1,.80731-.26123l1.00909.12207a1.08451,1.08451,0,0,1,.61676.3247A.93076.93076,0,0,1,27.99908,15.83618ZM6.68359,17.03613a1.07162,1.07162,0,0,0,.31824-.8341A8.99623,8.99623,0,0,1,21.18628,8.6488L19.8678,10.13464a.5.5,0,0,0,.314.82825l6.18421.74732a.5.5,0,0,0,.54571-.615L25.43433,5.0437a.5.5,0,0,0-.85975-.21326L23.18683,6.39429a11.89341,11.89341,0,0,0-7.17121-2.39478c-.24218,0-.48632.00733-.73046.022A12.00008,12.00008,0,0,0,4.00092,16.16382a.93076.93076,0,0,0,.24951.68677,1.08451,1.08451,0,0,0,.61676.3247l1.00909.12207A1.03419,1.03419,0,0,0,6.68359,17.03613Z"/>
+</symbol>
+<symbol id="gi-user-parents" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M28.17047,24.67822A2.15727,2.15727,0,0,1,29,26.23669V27.5a.5.5,0,0,1-.5.5H20.94946A2.50046,2.50046,0,0,0,21,27.5V26.23682a3.48694,3.48694,0,0,0-.77911-2.35193A4.26757,4.26757,0,0,0,21.15723,24h.68554a4.88334,4.88334,0,0,0,3.80713-1.978C26.556,22.98669,27.81232,24.32007,28.17047,24.67822Zm1.08563-6.97461C26.5224,13.75513,29.56964,6,24,6a5.1588,5.1588,0,0,0-7.15405.00391A7.04129,7.04129,0,0,1,18,10v1.6709a3.35379,3.35379,0,0,1,.50879,3.40137l-.27832.75a4.72611,4.72611,0,0,1-1.39453,1.94091L16.38385,19.833a20.40837,20.40837,0,0,0,2.238.3855A2.89327,2.89327,0,0,0,21.157,22H21.843a2.89317,2.89317,0,0,0,2.53631-1.78418,16.84319,16.84319,0,0,0,4.39606-1.05469A.99171.99171,0,0,0,29.2561,17.70361ZM18.17047,24.67822c-.43512-.32959-1.82849-1.47961-2.95166-2.41211A5.01529,5.01529,0,0,1,11.44775,24H9.55225a5.01415,5.01415,0,0,1-3.77674-1.7417c-1.1488.947-2.57312,2.11963-2.946,2.41992A1.85972,1.85972,0,0,0,2,26.23669V27.5a.5.5,0,0,0,.5.5h16a.5.5,0,0,0,.5-.5V26.23669A1.65805,1.65805,0,0,0,18.17047,24.67822ZM4.64478,15.12573a2.99143,2.99143,0,0,0,1.31073,1.462l.66583,3.05176A2.99994,2.99994,0,0,0,9.55237,22h1.89526a2.99994,2.99994,0,0,0,2.931-2.36047l.66583-3.05176a2.99115,2.99115,0,0,0,1.31073-1.462l.28-.75146A1.2749,1.2749,0,0,0,16,12.62988V10c0-3-2-5-5.5-5S5,7,5,10v2.62988a1.2749,1.2749,0,0,0-.63519,1.74439Z"/>
+</symbol>
+</defs>
+</svg>
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
@@ -99,10 +117,7 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 <div class="row">
 <div class="col mb-3">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
-    <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
-  </svg>
+  <svg width="1em" height="1em" class="icon"><use xlink:href="#gi-refresh"></use></svg>
   Convert to Hebrew
 </button>
 </div><!-- .col -->
@@ -140,10 +155,7 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 </div><!-- .col -->
 <div class="col mb-3">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-repeat" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M2.854 7.146a.5.5 0 0 0-.708 0l-2 2a.5.5 0 1 0 .708.708L2.5 8.207l1.646 1.647a.5.5 0 0 0 .708-.708l-2-2zm13-1a.5.5 0 0 0-.708 0L13.5 7.793l-1.646-1.647a.5.5 0 0 0-.708.708l2 2a.5.5 0 0 0 .708 0l2-2a.5.5 0 0 0 0-.708z"/>
-    <path fill-rule="evenodd" d="M8 3a4.995 4.995 0 0 0-4.192 2.273.5.5 0 0 1-.837-.546A6 6 0 0 1 14 8a.5.5 0 0 1-1.001 0 5 5 0 0 0-5-5zM2.5 7.5A.5.5 0 0 1 3 8a5 5 0 0 0 9.192 2.727.5.5 0 1 1 .837.546A6 6 0 0 1 2 8a.5.5 0 0 1 .501-.5z"/>
-  </svg>
+  <svg width="1em" height="1em" class="icon"><use xlink:href="#gi-refresh"></use></svg>
   Convert to Gregorian
 </button>
 </div><!-- .col -->
@@ -174,9 +186,7 @@ href="https://en.wikipedia.org/wiki/Adoption_of_the_Gregorian_calendar">[1]</a><
 <p>Calculate anniversaries on the Hebrew calendar ten years into the
 future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
 <p><a class="btn btn-secondary" href="/yahrzeit/" role="button">
-  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-people-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <path fill-rule="evenodd" d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5.784 6A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216zM4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
-  </svg>
+  <svg width="1em" height="1em" class="icon"><use xlink:href="#gi-user-parents"></use></svg>
   Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
