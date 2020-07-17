@@ -26,6 +26,9 @@ function makeProperties(ctx) {
     ctx.throw(400, 'Location required: geonameid, zip, city');
   }
   const hyear = +query.year || new HDate().getFullYear();
+  if (hyear < 3761) {
+    ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
+  }
   options.start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   options.end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
   const events = HebrewCalendar.calendar(options).filter((ev) => {
