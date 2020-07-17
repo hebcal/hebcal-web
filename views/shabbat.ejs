@@ -1,7 +1,7 @@
 <% include partials/header-noclose.ejs %>
 <meta name="description" content="<%= summary %>">
 <script type="application/ld+json"><%- jsonLD %></script>
-<link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.hebcal.com/shabbat/?cfg=r&amp;<%= geoUrlArgs %>&amp;pubDate=0">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rssUrl %>">
 <link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 <style>
 ul.hebcal-results {
@@ -163,7 +163,7 @@ local halachic authority for correct candle-lighting times.
   </li>
   <li>
   <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="#bi-rss-fill"></use></svg>
-    <a title="RSS feed of candle lighting times" href="/shabbat/?cfg=r&amp;<%= geoUrlArgs %>&amp;pubDate=0">RSS feed</a>
+    <a title="RSS feed of candle lighting times" href="<%= rssUrl %>">RSS feed</a>
   </li>
   <li><svg class="icon"><use xlink:href="#gis-wrench"></use></svg>
     <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="/link/?<%= geoUrlArgs %>">Developer API</a>
