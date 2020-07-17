@@ -1,5 +1,6 @@
 import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent, Locale} from '@hebcal/core';
 import dayjs from 'dayjs';
+import {empty} from './common';
 import gematriya from 'gematriya';
 
 const heInStr = 'בְּ';
@@ -94,15 +95,7 @@ function makeProperties(ctx) {
   try {
     props = parseConverterQuery(ctx);
   } catch (err) {
-    const tmpDt = new Date();
-    props = {
-      type: 'g2h',
-      dt: tmpDt,
-      hdate: new HDate(tmpDt),
-      gs: false,
-      message: err.message,
-      noCache: true,
-    };
+    props = Object.assign(g2h(new Date(), false, true), {message: err.message});
   }
   const dt = props.dt;
   const d = dayjs(dt);
@@ -170,14 +163,11 @@ function parseConverterQuery(ctx) {
   } else {
     const gs = query.gs === 'on' || query.gs === '1';
     if (typeof query.gx === 'string' && query.gx.length === 10) {
-      const gx = query.gx;
-      const dt = new Date(gx);
-      let hdate = new HDate(dt);
-      if (gs) {
-        hdate = hdate.next();
-      }
-      return {type: 'g2h', dt, hdate, gs, gx};
+      return g2h(new Date(query.gx), gs, false);
     } else if (isset(query.gy) && isset(query.gm) && isset(query.gd)) {
+      if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
+        return g2h(new Date(), gs, true);
+      }
       const gy = +query.gy;
       const gd = +query.gd;
       const gm = +query.gm;
@@ -200,20 +190,20 @@ function parseConverterQuery(ctx) {
       if (gy < 100) {
         dt.setFullYear(gy);
       }
-      let hdate = new HDate(dt);
-      if (gs) {
-        hdate = hdate.next();
-      }
-      return {type: 'g2h', dt, hdate, gs};
+      return g2h(dt, gs, false);
     } else {
-      let dt;
-      if (isset(query.t) && query.t.length && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) {
-        dt = new Date(+query.t * 1000);
-      } else {
-        dt = new Date();
-      }
-      const hdate = new HDate(dt);
-      return {type: 'g2h', dt, hdate, gs: false, noCache: true};
+      const dt = (!empty(query.t) && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) ?
+        new Date(+query.t * 1000) : new Date();
+      return g2h(dt, gs, true);
     }
   }
+}
+
+// eslint-disable-next-line require-jsdoc
+function g2h(dt, gs, noCache) {
+  let hdate = new HDate(dt);
+  if (gs) {
+    hdate = hdate.next();
+  }
+  return {type: 'g2h', dt, hdate, gs, noCache};
 }
