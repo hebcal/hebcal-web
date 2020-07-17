@@ -81,7 +81,7 @@ function makeItems(ctx) {
   } catch (err) {
     ctx.throw(400, err.message);
   }
-  const location = opts0.location || Location.lookup('New York');
+  const location = opts0.location || ctx.db.lookupLegacyCity('New York');
   q['city-typeahead'] = location.getName();
   const [midnight, endOfWeek] = getStartAndEnd(new Date());
   const options = {
