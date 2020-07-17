@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale, Location} from '@hebcal/core';
+import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, makeCookie} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
