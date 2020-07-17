@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
-import {makeHebcalOptions, makeCookie} from './common';
+import {makeHebcalOptions, makeCookie, empty} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
@@ -21,13 +21,19 @@ export async function shabbatApp(ctx) {
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.set('Cache-Control', 'max-age=86400');
-    ctx.type = 'application/rss+xml';
+    ctx.type = 'application/rss+xml; charset=utf-8';
     const selfUrl = `https://www.hebcal.com/shabbat/?${ctx.state.geoUrlArgs}`;
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
     ctx.set('Cache-Control', 'max-age=86400');
-    ctx.body = eventsToClassicApi(ctx.state.events, ctx.state.options);
+    const obj = eventsToClassicApi(ctx.state.events, ctx.state.options);
+    if (q.leyning === 'off') {
+      for (const item of obj.items) {
+        delete item.leyning;
+      }
+    }
+    ctx.body = obj;
   } else {
     const p = makePropsForFullHtml(ctx);
     possiblySetCookie(ctx);
@@ -83,7 +89,9 @@ function makeItems(ctx) {
   }
   const location = opts0.location || ctx.db.lookupLegacyCity('New York');
   q['city-typeahead'] = location.getName();
-  const [midnight, endOfWeek] = getStartAndEnd(new Date());
+  const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
+      new Date(+q.gy, +q.gm - 1, +q.gd) : new Date();
+  const [midnight, endOfWeek] = getStartAndEnd(dt);
   const options = {
     start: midnight.toDate(),
     end: endOfWeek.toDate(),
