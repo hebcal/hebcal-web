@@ -66,6 +66,19 @@ render(app, {
 
 const stat = util.promisify(fs.stat);
 
+// Fix up querystring so we can later use ctx.request.query
+app.use(async (ctx, next) => {
+  const qs = ctx.request.querystring;
+  if (qs && qs.length) {
+    const semi = qs.indexOf(';');
+    if (semi != -1) {
+      ctx.request.querystring = qs.replace(/;/g, '&');
+    }
+  }
+  return next();
+});
+
+// request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
   if (rpath == '/favicon.ico' || rpath == '/robots.txt' || rpath.startsWith('/i/')) {
