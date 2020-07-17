@@ -36,6 +36,9 @@ export async function shabbatApp(ctx) {
 }
 
 function possiblySetCookie(ctx) {
+  if (ctx.request.querystring.length === 0) {
+    return false;
+  }
   const newCookie = makeCookie(ctx.state.q);
   const prevCookie = ctx.cookies.get('C');
   if (prevCookie) {

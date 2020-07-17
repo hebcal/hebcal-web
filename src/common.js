@@ -41,6 +41,9 @@ const geoposLegacy = {
   lomin: 60,
 };
 
+const cookieOpts = ['geo', 'zip', 'geonameid', 'lg'].concat(
+    Object.keys(numberOpts), Object.keys(booleanOpts));
+
 /**
  * @param {string} val
  * @return {boolean}
@@ -63,23 +66,8 @@ export function off(val) {
  */
 export function makeCookie(query) {
   let ck = 't=' + Math.floor(Date.now() / 1000);
-  for (const key of Object.keys(booleanOpts)) {
-    if (typeof query[key] == 'string' && (query[key] == 'on' || query[key] == '1')) {
-      ck += '&' + key + '=on';
-    }
-  }
-  for (const key of Object.keys(negativeOpts)) {
-    if (off(query[key])) {
-      ck += '&' + key + '=off';
-    }
-  }
-  for (const key of Object.keys(numberOpts)) {
-    if (typeof query[key] == 'string' && query[key].length) {
-      ck += '&' + key + '=' + query[key];
-    }
-  }
-  for (const key of 'geo zip geonameid lg'.split(' ')) {
-    if (typeof query[key] == 'string' && query[key].length) {
+  for (const key of cookieOpts) {
+    if (typeof query[key] === 'string' && query[key].length !== 0) {
       ck += '&' + key + '=' + query[key];
     }
   }
