@@ -3,9 +3,6 @@
 <meta charset="utf-8">
 <title><%= title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--
-<link rel="stylesheet" href="/i/bootstrap-5.0.0-alpha1-dist/css/bootstrap.min.css">
--->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
 <% if (typeof xtra_stylesheet !== 'undefined') { -%>
 <%- xtra_stylesheet -%>
@@ -20,6 +17,26 @@
   ga('send', 'pageview');
 </script>
 <style>
+a {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+}
+a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+a:not([href]):not([tabindex]) {
+  color: inherit;
+  text-decoration: none;
+}
+a:not([href]):not([tabindex]):hover, a:not([href]):not([tabindex]):focus {
+  color: inherit;
+  text-decoration: none;
+}
+a:not([href]):not([tabindex]):focus {
+  outline: 0;
+}
 .hebcal-footer {
   padding-top: 40px;
   padding-bottom: 40px;
