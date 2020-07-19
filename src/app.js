@@ -13,6 +13,7 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {shabbatApp} from './shabbat';
 import {geoAutoComplete} from './complete';
 import {homepage} from './homepage';
+import maxmind from 'maxmind';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
@@ -25,7 +26,15 @@ const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 app.use(async (ctx, next) => {
-  ctx.state = ctx.state || {};
+  if (!ctx.lookup) {
+    const mmdbPath = 'GeoLite2-Country.mmdb';
+    logger.info(`Opening ${mmdbPath}`);
+    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
+  }
+  return next();
+});
+
+app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path;
   ctx.state.startTime = Date.now();
   try {

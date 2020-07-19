@@ -1,29 +1,104 @@
+/* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 
-// eslint-disable-next-line require-jsdoc
+const langTzDefaults = {
+  US: ['s', 'America/New_York'],
+  IL: ['h', 'Asia/Jerusalem'],
+  GB: ['s', 'Europe/London'],
+  CA: ['s', 'America/Toronto'],
+  AU: ['s', 'Australia/Sydney'],
+  ZA: ['s', 'Africa/Johannesburg'],
+  BR: ['s', 'America/Sao_Paulo'],
+  FR: ['fr', 'Europe/Paris'],
+  RU: ['ru', 'Europe/Moscow'],
+  PL: ['pl', 'Europe/Warsaw'],
+  FI: ['fi', 'Europe/Helsinki'],
+};
+
 export async function homepage(ctx) {
   const dt = new Date();
+  const hd = new HDate(dt);
+  ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
+  setDefaultYear(ctx, dt, hd);
+  setDefautLangTz(ctx);
+  const items = ctx.state.items = [];
+  mastheadDates(items, dt, hd);
+  mastheadHolidays(items, hd);
+  mastheadParsha(items, hd);
+  ctx.state.holidayGreeting = '';
+  return ctx.render('homepage');
+}
+
+function mastheadDates(items, dt, hd) {
   const d = dayjs(dt);
   const isoDt = d.format('YYYY-MM-DD');
   const fmtDt = d.format('ddd, D MMMM YYYY');
-  const hd = new HDate(dt);
+  items.push(
+      `<time datetime="${isoDt}">${fmtDt}</time>`,
+      hd.render(),
+  );
+}
+
+function mastheadParsha(items, hd) {
   const sedra = new Sedra(hd.getFullYear(), false);
   const parsha = sedra.get(hd);
   const pe = new ParshaEvent(hd, parsha);
+  items.push(`<a href="${pe.url()}">${pe.render()}</a>`);
+}
+
+function mastheadHolidays(items, hd) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hd) || [];
-  const events = holidays.filter((ev) => ev.observedInDiaspora()).map((ev) => {
-    const url = ev.url();
-    const desc = ev.render();
-    return url ? `<a href="${url}">${desc}</a>` : desc;
+  holidays
+      .filter((ev) => ev.observedInDiaspora())
+      .map((ev) => {
+        const url = ev.url();
+        const desc = ev.render();
+        return url ? `<a href="${url}">${desc}</a>` : desc;
+      }).forEach((str) => items.push(str));
+}
+
+/**
+ * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * @param {any} ctx
+ */
+function setDefautLangTz(ctx) {
+  const ip = ctx.request.header['x-client-ip'] || ctx.request.ip;
+  const geoip = ctx.lookup.get(ip);
+  const cc = ctx.state.countryCode = geoip ? ctx.state.countryCode : 'US';
+  if (langTzDefaults[cc]) {
+    ctx.state.lang = langTzDefaults[cc][0];
+    ctx.state.timezone = langTzDefaults[cc][1];
+  } else {
+    ctx.state.lang = langTzDefaults['US'][0];
+    ctx.state.timezone = langTzDefaults['US'][1];
+  }
+}
+
+function setDefaultYear(ctx, dt, hdate) {
+  const hm = hdate.getMonth();
+  const hy = hdate.getFullYear();
+  // default to next year if it's past Tish'a B'Av or anytime in Elul
+  const hyear = (hm == months.ELUL || (hm == months.AV && hdate.getDate() >= 10)) ? hy + 1 : hy;
+  const gregYr1 = hyear - 3761;
+  const gregYr2 = gregYr1 + 1;
+  let gregRange = gregYr1 + '-' + gregYr2;
+  let yearArgs = `&yt=H&year=${hyear}&month=x`;
+  const gd = dt.getDate();
+  const gm = dt.getMonth() + 1;
+  const gy = dt.getFullYear();
+  // for the first 7 months of the year, just show the current Gregorian year
+  if (gm < 8 || gm == 12 && gd >= 10) {
+    const gytmp = (gm == 12) ? gy + 1 : gy;
+    yearArgs = `&yt=G&year=${gytmp}&month=x`;
+    gregRange = gytmp;
+  }
+  Object.assign(ctx.state, {
+    gregRange,
+    yearArgs,
+    gregYr1,
+    gregYr2,
   });
-  ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
-  ctx.state.items = [
-    `<time datetime="${isoDt}">${fmtDt}</time>`,
-    hd.render(),
-    `<a href="${pe.url()}">${pe.render()}</a>`,
-  ].concat(events);
-  return ctx.render('homepage');
 }
 
 /**
@@ -45,9 +120,9 @@ function getSpecialNote(cfg, shortLocation) {
     const fridgeLoc = cfg.zip ? `zip=${cfg.zip}` : `geonameid=${cfg.geonameid}`;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
-    let url = `https://www.hebcal.com/shabbat/fridge.cgi?${fridgeLoc}&amp;year=${nextYear}`;
-    if (cfg.m) url += `&amp;m=${cfg.m}`;
-    url += `&amp;${UTM_PARAM}`;
+    let url = `https://www.hebcal.com/shabbat/fridge.cgi?${fridgeLoc}&year=${nextYear}`;
+    if (cfg.m) url += `&m=${cfg.m}`;
+    url += `&${UTM_PARAM}`;
     note = `Shana Tova! We wish you a happy and healthy New Year.
 Rosh Hashana ${nextYear} begins at sundown on ${strtime}. Print your <a
 style="color:#356635" href="${url}">${shortLocation} virtual refrigerator magnet</a>

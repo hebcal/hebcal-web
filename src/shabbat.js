@@ -110,23 +110,27 @@ function makeItems(ctx) {
     options.havdalahMins = opts0.havdalahMins;
   }
   const events = HebrewCalendar.calendar(options);
-  ctx.state.events = events;
-  ctx.state.options = options;
-  ctx.state.q = q;
-  ctx.state.locale = Locale.getLocaleName();
-  ctx.state.hyear = events[0].getDate().getFullYear();
-  ctx.state.items = events.map((ev) => eventToItem(ev, options));
-  ctx.state.location = location;
-  ctx.state.title = Locale.gettext('Shabbat') + ' Times for ' + location.getName();
-  ctx.state.Shabbat = Locale.gettext('Shabbat');
+  Object.assign(ctx.state, {
+    events,
+    options,
+    q,
+    location,
+    locale: Locale.getLocaleName(),
+    hyear: events[0].getDate().getFullYear(),
+    items: events.map((ev) => eventToItem(ev, options)),
+    title: Locale.gettext('Shabbat') + ' Times for ' + location.getName(),
+    Shabbat: Locale.gettext('Shabbat'),
+  });
 
   let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
   if (typeof options.havdalahMins !== 'undefined') {
     geoUrlArgs += '&m=' + options.havdalahMins;
   }
   geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
-  ctx.state.geoUrlArgs = geoUrlArgs;
-  ctx.state.rssUrl = `https://www.hebcal.com/shabbat/?cfg=r&${geoUrlArgs}&pubDate=0`;
+  Object.assign(ctx.state, {
+    geoUrlArgs,
+    rssUrl: `https://www.hebcal.com/shabbat/?cfg=r&${geoUrlArgs}&pubDate=0`,
+  });
 }
 
 function makePropsForFullHtml(ctx) {
