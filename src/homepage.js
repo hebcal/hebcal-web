@@ -129,12 +129,12 @@ function getHolidayGreeting(hd) {
     return ['Chodesh Tov',
       `We wish you a good new month of <a href="${url}">${monthName}</a>`];
   }
-  if (mm == months.KISLEV && dd >= 24) {
+  if (holidays[0] && holidays[0].getFlags() & flags.CHANUKAH_CANDLES) {
     return ['Chag Urim Sameach',
       'We wish you a happy <a href="/holidays/chanukah">Chanukah</a>'];
   }
-  if (mm == months.KISLEV && dd >= 1 && dd <= 13) {
-    // for the first 2 weeks of Kislev, show Chanukah greeting
+  if (mm == months.KISLEV && dd < 24) {
+    // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg());
     const dow = erevChanukah.day();
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
@@ -155,13 +155,16 @@ function getHolidayGreeting(hd) {
     return ['Shana Tova', `We wish you a happy and healthy New Year.
 <br>Rosh Hashana ${nextYear} begins at sundown on ${strtime}`];
   }
-  if (mm == months.TISHREI && dd >= 3 && dd <= 9) {
+  if (mm == months.TISHREI && dd >= 3 && dd <= 10) {
     // between RH & YK
-    const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
-    const strtime = erevYK.format(FORMAT_DOW_MONTH_DAY);
-    return [`G'mar Chatima Tova`, `We wish you a good inscription in the Book of Life.
-<br><a href="https://www.hebcal.com/holidays/yom-kippur">Yom Kippur</a>
-begins at sundown on ${strtime}`];
+    let longText = 'We wish you a good inscription in the Book of Life';
+    if (dd < 10) {
+      const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
+      const strtime = erevYK.format(FORMAT_DOW_MONTH_DAY);
+      longText += `.\n<br><a href="https://www.hebcal.com/holidays/yom-kippur">Yom Kippur</a>
+begins at sundown on ${strtime}`;
+    }
+    return ['G\'mar Chatima Tova', longText];
   }
   if (mm == purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
