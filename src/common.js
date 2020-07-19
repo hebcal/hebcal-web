@@ -1,5 +1,19 @@
 import {HDate, Location} from '@hebcal/core';
 
+export const langTzDefaults = {
+  US: ['s', 'America/New_York'],
+  IL: ['h', 'Asia/Jerusalem'],
+  GB: ['s', 'Europe/London'],
+  CA: ['s', 'America/Toronto'],
+  AU: ['s', 'Australia/Sydney'],
+  ZA: ['s', 'Africa/Johannesburg'],
+  BR: ['s', 'America/Sao_Paulo'],
+  FR: ['fr', 'Europe/Paris'],
+  RU: ['ru', 'Europe/Moscow'],
+  PL: ['pl', 'Europe/Warsaw'],
+  FI: ['fi', 'Europe/Helsinki'],
+};
+
 const lgToLocale = {
   h: 'he',
   a: 'ashkenazi',

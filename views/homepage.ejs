@@ -74,12 +74,12 @@ a.icon-block {
 <% }); %>
 </ul>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
-<% if (holidayGreeting) { -%>
+<% if (holidayBlurb) { -%>
 <div class="row">
 <div class="col-sm-8 offset-sm-2">
  <div class="alert alert-success">
   <strong><%= holidayBlurb %>!</strong>
-  <%= holidayLongText %>.
+  <%- holidayLongText %>.
  </div><!-- .alert -->
 </div><!-- .col-sm-8 -->
 </div><!-- .row -->

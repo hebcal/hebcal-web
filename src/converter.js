@@ -107,8 +107,9 @@ function makeProperties(ctx) {
   let pe = [];
   if (hy >= 3762) {
     const sedra = new Sedra(hy, false);
-    const parsha = sedra.get(hdate);
-    pe = new ParshaEvent(hdate, parsha);
+    if (sedra.isParsha(hdate)) {
+      pe = new ParshaEvent(hdate, sedra.get(hdate));
+    }
   }
   const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
   const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
