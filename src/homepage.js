@@ -121,12 +121,13 @@ function getHolidayGreeting(hd) {
   const yy = hd.getFullYear();
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
   const holidays = HebrewCalendar.getHolidaysOnDate(hd) || [];
+  const roshChodesh = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
 
-  if (mm != months.TISHREI && (dd === 1 || dd === 30)) {
-    const ev = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
-    const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
+  if (roshChodesh) {
+    const monthName = roshChodesh.getDesc().substring(13); // 'Rosh Chodesh '
+    const url = roshChodesh.url();
     return ['Chodesh Tov',
-      `We wish you a good new month of <a href="${ev.url()}">${monthName}</a>`];
+      `We wish you a good new month of <a href="${url}">${monthName}</a>`];
   }
   if (mm == months.KISLEV && dd >= 24) {
     return ['Chag Urim Sameach',
