@@ -67,8 +67,12 @@ function possiblySetCookie(ctx) {
  * @return {dayjs.Dayjs[]}
  */
 function getStartAndEnd(now) {
-  const midnight = dayjs(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+  let midnight = dayjs(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
   const dow = midnight.day();
+  // back up to Friday if today is Saturday (include last night's candle-lighting times)
+  if (dow == 6) {
+    midnight = midnight.subtract(1, 'day');
+  }
   const saturday = midnight.add(6 - dow, 'day');
   const fiveDaysAhead = midnight.add(5, 'day');
   const endOfWeek = fiveDaysAhead.isAfter(saturday) ? fiveDaysAhead : saturday;
@@ -141,7 +145,7 @@ function makePropsForFullHtml(ctx) {
   const firstCandles = items.find((i) => i.cat === 'candles');
   return {
     summary: briefText.join('. '),
-    jsonLD: JSON.stringify(getJsonLD(firstCandles, location)),
+    jsonLD: firstCandles ? JSON.stringify(getJsonLD(firstCandles, location)) : '',
     locationName: location.getName(),
   };
 }
