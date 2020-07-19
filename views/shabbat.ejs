@@ -189,17 +189,4 @@ local halachic authority for correct candle-lighting times.
 </symbol>
 </defs>
 </svg>
-<%
-xtra_html = `
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
-<script>
-[].slice.call(document.querySelectorAll('[data-toggle="tooltip"]')).map(function (el) {
-  return new bootstrap.Tooltip(el);
-});
-window['hebcal'].createCityTypeahead(false);
-</script>
-`;
-%>
 <% include partials/footer.ejs %>
