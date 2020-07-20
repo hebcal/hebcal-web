@@ -14,6 +14,7 @@ import {shabbatApp} from './shabbat';
 import {geoAutoComplete} from './complete';
 import {homepage} from './homepage';
 import maxmind from 'maxmind';
+import querystring from 'querystring';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
@@ -91,7 +92,8 @@ app.use(async (ctx, next) => {
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath == '/favicon.ico' || rpath == '/robots.txt' || rpath.startsWith('/i/')) {
+  if (rpath == '/favicon.ico' || rpath == '/robots.txt' ||
+      rpath.startsWith('/i/') || rpath.startsWith('/shabbat/browse')) {
     const fpath = path.join('/var/www/html', rpath);
     const fstat = await stat(fpath);
     if (fstat.isFile()) {
@@ -111,6 +113,12 @@ app.use(async (ctx, next) => {
     await hebrewDateConverter(ctx);
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
+  } else if (rpath.startsWith('/hebcal/')) {
+    await ctx.render('hebcal-form', {
+      q: Object.assign(querystring.parse(ctx.cookies.get('C') || ''),
+          ctx.request.query),
+      title: 'Custom Calendar | Hebcal Jewish Calendar',
+    });
   }
   return next();
 });
