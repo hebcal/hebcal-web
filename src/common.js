@@ -105,6 +105,7 @@ export function processCookieAndQuery(cookieString, defaults, query) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
       for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
         delete ck[key];
+        delete query[key];
       }
       found = true;
       break;
@@ -114,11 +115,11 @@ export function processCookieAndQuery(cookieString, defaults, query) {
       !empty(query.latitude) && !empty(query.longitude) && !empty(query.tzid)) {
     for (const key of primaryGeoKeys) {
       delete ck[key];
+      delete query[key];
     }
   }
   return Object.assign(ck, defaults, query);
 }
-
 
 /**
  * Read Koa request parameters and create HebcalOptions

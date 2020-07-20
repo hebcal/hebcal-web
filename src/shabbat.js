@@ -3,7 +3,6 @@ import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, makeCookie, empty} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
-import querystring from 'querystring';
 import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
 
 export async function shabbatApp(ctx) {
@@ -61,6 +60,7 @@ function possiblySetCookie(ctx) {
   ctx.cookies.set('C', newCookie, {
     expires: dayjs().add(1, 'year').toDate(),
     overwrite: true,
+    httpOnly: false,
   });
   return true;
 }

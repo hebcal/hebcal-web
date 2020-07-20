@@ -1,7 +1,9 @@
 <% include partials/header-noclose.ejs %>
+<!-- <% { let __s = ''; for (const [k,v] of Object.entries(q)) {
+    __s += '&' + k + '=' + encodeURIComponent(v); } -%><%- __s %> <% } -%> -->
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,Torah,parsha">
 <meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
-<link rel="stylesheet" type="text/css" href="/i/hyspace-typeahead.css">
+<link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 </head>
 <body>
 <% include partials/navbar.ejs %>
@@ -11,64 +13,60 @@
 <div class="col-sm-12">
 <p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
 <form id="f1" name="f1" action="/hebcal/">
-<input type="hidden" name="v" value="1" >
+<input type="hidden" name="v" value="1">
 <div class="row">
 <div class="col-sm-6">
 <fieldset>
 <div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="maj" value="on" checked id="maj" >
+<input class="form-check-input" type="checkbox" name="maj" value="on" <%= q.maj === 'on' ? 'checked' : '' -%> id="maj">
 <label class="form-check-label" for="maj">Major Holidays</label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="min" value="on" checked id="min" >
+<input class="form-check-input" type="checkbox" name="min" value="on" <%= q.min === 'on' ? 'checked' : '' -%> id="min">
 <label class="form-check-label" for="min">Minor Holidays <small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small></label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="nx" value="on" checked id="nx" >
+<input class="form-check-input" type="checkbox" name="nx" value="on" <%= q.nx === 'on' ? 'checked' : '' -%> id="nx">
 <label class="form-check-label" for="nx">Rosh Chodesh</label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="mf" value="on" id="mf" >
+<input class="form-check-input" type="checkbox" name="mf" value="on" <%= q.mf === 'on' ? 'checked' : '' -%> id="mf">
 <label class="form-check-label" for="mf">Minor Fasts <small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="ss" value="on" id="ss" >
+<input class="form-check-input" type="checkbox" name="ss" value="on" <%= q.ss === 'on' ? 'checked' : '' -%> id="ss">
 <label class="form-check-label" for="ss">Special Shabbatot <small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small></label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="mod" value="on" id="mod" >
+<input class="form-check-input" type="checkbox" name="mod" value="on" <%= q.mod === 'on' ? 'checked' : '' -%> id="mod">
 <label class="form-check-label" for="mod">Modern Holidays <small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="o" value="on" id="o" >
+<input class="form-check-input" type="checkbox" name="o" value="on" <%= q.o === 'on' ? 'checked' : '' -%> id="o">
 <label class="form-check-label" for="o">Days of the Omer</label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="F" value="on" id="F" >
+<input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
 <label class="form-check-label" for="F">Daf Yomi</label>
 </div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="s" value="on" id="s" >
+<input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' -%> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
-<div class="mt-2">
-  <div class="form-check">
-    <label >
-      <input class="form-check-input" type="radio" name="i" value="off" checked >
-      Diaspora holiday schedule </label>
+<div class="mt-3">
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i === 'off' ? 'checked' : '' -%> value="off">
+    <label class="form-check-label" for="i0">Diaspora holiday schedule</label>
   </div>
-  <div class="form-check">
-      <label>
-        <input class="form-check-input" type="radio" name="i" value="on" >
-        Israel holiday schedule</label>
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' -%> value="on">
+    <label class="form-check-label" for="i1">Israel holiday schedule</label>
   </div>
 </div>
-<div class="form-group mt-3">
+<div class="form-group mb-2">
   <label for="year" class="sr-only">Year</label>
-  <input type="text" name="year" value="2020" size="4" maxlength="4" class="form-control" id="year" pattern="\d*" placeholder="Year" style="width: 80px">
+  <input type="text" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="\d*" placeholder="Year" style="width: 80px">
 </div>
 <input type="hidden" name="month" value="x" id="month">
-<div class="form-check">
-  <label>
-    <input class="form-check-input" type="radio" name="yt" value="G" checked onclick="s6(this.value)">
-    Gregorian year (common era)</label>
+<div class="form-check mb-1">
+  <input class="form-check-input" type="radio" name="yt" value="G" id="ytG" <%- q.yt === 'G' ? 'checked' : '' %> onclick="s6(this.value)">
+  <label class="form-check-label" for="ytG">Gregorian year (common era)</label>
   </div>
-<div class="form-check">
-  <label>
-    <input class="form-check-input" type="radio" name="yt" value="H" onclick="s6(this.value)">
-    Hebrew year</label>
+<div class="form-check mb-1">
+  <input class="form-check-input" type="radio" name="yt" value="H" id="ytH" <%- q.yt === 'H' ? 'checked' : '' %> onclick="s6(this.value)">
+  <label class="form-check-label" for="ytH">Hebrew year</label>
 </div>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-6">
@@ -76,58 +74,66 @@
 <div class="form-group">
 <label for="lg">Event titles</label>
 <select name="lg" class="form-select mb-2" id="lg">
-<option selected value="s">Sephardic transliterations</option>
-<option value="a">Ashkenazis transliterations</option>
-<option value="h">Hebrew - עברית</option>
-<option value="fr">French - français</option>
-<option value="ru">Russian - ру́сский язы́к</option>
-<option value="pl">Polish - język polski</option>
-<option value="fi">Finnish - Suomalainen</option>
-<option value="hu">Hungarian - Magyar nyelv</option>
-<option value="sh">Sephardic translit. + Hebrew</option>
-<option value="ah">Ashkenazis translit. + Hebrew</option>
+<option <%- (q.lg === 's') ? 'selected' : '' -%> value="s">Sephardic transliterations</option>
+<option <%- (q.lg === 'a') ? 'selected' : '' -%> value="a">Ashkenazis transliterations</option>
+<option <%- (q.lg === 'h') ? 'selected' : '' -%> value="h">Hebrew - עברית</option>
+<option <%- (q.lg === 'fr') ? 'selected' : '' -%> value="fr">French - français</option>
+<option <%- (q.lg === 'ru') ? 'selected' : '' -%> value="ru">Russian - ру́сский язы́к</option>
+<option <%- (q.lg === 'pl') ? 'selected' : '' -%> value="pl">Polish - język polski</option>
+<option <%- (q.lg === 'fi') ? 'selected' : '' -%> value="fi">Finnish - Suomalainen</option>
+<option <%- (q.lg === 'hu') ? 'selected' : '' -%> value="hu">Hungarian - Magyar nyelv</option>
+<option <%- (q.lg === 'sh') ? 'selected' : '' -%> value="sh">Sephardic translit. + Hebrew</option>
+<option <%- (q.lg === 'ah') ? 'selected' : '' -%> value="ah">Ashkenazis translit. + Hebrew</option>
 </select>
 </div>
 <div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="D" value="on" id="d1" >
+<input class="form-check-input" type="checkbox" name="D" value="on" <%= q.D === 'on' ? 'checked' : '' -%> id="d1">
 <label class="form-check-label" for="d1">Show Hebrew date for dates with some event</label>
-</div><div class="form-check mb-2">
-<input class="form-check-input"  type="checkbox" name="d" value="on" id="d2" >
+</div>
+<div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="d" value="on" <%= q.d === 'on' ? 'checked' : '' -%> id="d2">
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
 </div>
 </fieldset>
-<fieldset>
-<input type="hidden" name="c" value="off" id="c">
-<input type="hidden" name="geo" value="geoname" id="geo">
-<input type="hidden" name="zip" value="" id="zip">
-<input type="hidden" name="city" value="" id="city">
-<input type="hidden" name="geonameid" value="" id="geonameid">
-<div class="form-group mt-2"><label for="city-typeahead">Candle lighting times</label>
-<div class="city-typeahead" style="margin-bottom:12px"><input type="text" name=""  class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code"></div></div>
+<fieldset class="mt-2">
+<input type="hidden" name="c" value="<%= q.c || 'off' %>" id="c">
+<input type="hidden" name="geo" value="<%= q.geo || '' %>" id="geo">
+<input type="hidden" name="zip" value="<%= q.zip || '' %>" id="zip">
+<input type="hidden" name="city" value="<%= q.city || '' %>" id="city">
+<input type="hidden" name="geonameid" value="<%= q.geonameid || '' %>" id="geonameid">
+<div class="mb-3">
+  <label class="form-label" for="city-typeahead">Candle lighting times</label>
+  <div class="city-typeahead" style="margin-bottom:12px">
+    <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
+  </div>
+</div>
 <div class="mb-3">
   <label class="form-label" for="b1">Candle-lighting minutes before sundown</label>
-  <input class="form-control" type="text" name="b" value="18" size="2" maxlength="2"  id="b1" pattern="\d*">
+  <input class="form-control" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
 </div>
 <div class="mb-1">Havdalah</div>
-<div class="form-check mb-3">
-  <input class="form-check-input" type="radio" name="M" id="M1" <%- (q.M === 'on') ? 'checked' : '' %> value="on">
+<div class="form-check mb-2">
+  <input class="form-check-input" type="radio" name="M" id="M1" <%- q.M === 'on' ? 'checked' : '' %> value="on">
   <label class="form-check-label" for="M1">
     nightfall (tzeit hakochavim)
     <span id="M1t" title="the point when 3 small stars are observable in the night time sky with the naked eye" data-toggle="tooltip" data-placement="top">ℹ️</span>
   </label>
 </div><!-- .form-check -->
-<div class="form-check mb-3">
-  <input class="form-check-input" type="radio" name="M" id="M2" <%- (q.M === 'off') ? 'checked' : '' %> value="off">
-  <label class="form-check-label" for="M2">
+<div class="form-check mb-2">
+  <input class="form-check-input" type="radio" name="M" id="M0" <%- q.M === 'off' ? 'checked' : '' %> value="off">
+  <label class="form-check-label" for="M0">
     minutes past sundown
     <span id="M2t" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-toggle="tooltip" data-placement="top">ℹ️</span>
   </label>
 </div><!-- .form-check -->
+<div class="mb-3">
+  <input type="text" class="form-control" id="m1" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" placeholder="minutes" pattern="\d*">
+</div><!-- .mb-3 -->
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
 <div class="clearfix" style="margin-top:10px">
-<input type="submit" name=".s" value="Create Calendar" class="btn btn-primary" >
+<input type="submit" name=".s" value="Create Calendar" class="btn btn-primary">
 </div><!-- .clearfix -->
 </form>
 </div><!-- .col-sm-12 -->
