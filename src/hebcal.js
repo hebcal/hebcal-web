@@ -30,11 +30,12 @@ export async function hebcalApp(ctx) {
     ctx.request.query.v === '1' ? ctx.request.query :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
   let error;
-  let options;
+  let options = {};
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
     error = err;
+    delete q.v;
   }
   if (options.il) {
     q.i = 'on';
@@ -100,9 +101,11 @@ HEBCAL.jec2events=HEBCAL.eraw.map(function(e){
 `;
     }
   } else {
+    const message = error ? error.message : undefined;
     return ctx.render('hebcal-form', {
       q,
       location: options.location,
+      message,
       title: 'Custom Calendar | Hebcal Jewish Calendar',
       xtra_html: `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
