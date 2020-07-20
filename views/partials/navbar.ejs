@@ -31,19 +31,17 @@ if (rpath === '/') {
 } else {
     logoHtml = '<a href="/" ' + logoIdClassTitle + '>' + logoImage + '</a>';
 }
-menuHtml = htmlMenu(rpath);
-%>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+%><nav class="navbar navbar-expand-lg navbar-light bg-light">
 <div class="container-fluid">
-  <%- logoHtml -%>
+  <%- logoHtml %>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <%- menuHtml %>
+    <%- htmlMenu(rpath) %>
     <form class="d-flex" role="search" method="get" id="searchform" action="/home/">
-        <input name="s" id="sitesearch" type="text" class="form-control mr-2" placeholder="Search" aria-label="Search">
+      <input name="s" id="sitesearch" type="text" class="form-control mr-2" placeholder="Search" aria-label="Search">
     </form>
-  </div><!-- .navbar-collapse -->
-</div><!-- .container-fluid -->
+  </div>
+</div>
 </nav>

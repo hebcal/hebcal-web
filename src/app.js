@@ -14,7 +14,7 @@ import {shabbatApp} from './shabbat';
 import {geoAutoComplete} from './complete';
 import {homepage} from './homepage';
 import maxmind from 'maxmind';
-import {processCookieAndQuery, getLocationFromQuery} from './common';
+import {hebcalApp} from './hebcal';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
@@ -89,26 +89,6 @@ app.use(async (ctx, next) => {
   return next();
 });
 
-const hebcalFormDefaults = {
-  maj: 'on',
-  min: 'on',
-  nx: 'on',
-  mf: 'on',
-  ss: 'on',
-  mod: 'on',
-  i: 'off',
-  F: 'off',
-  d: 'off',
-  D: 'off',
-  s: 'off',
-  year: new Date().getFullYear(),
-  yt: 'G',
-  lg: 's',
-  geo: 'geoname',
-  b: 18,
-  M: 'on',
-};
-
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
@@ -134,33 +114,7 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
   } else if (rpath.startsWith('/hebcal/')) {
-    const cookie = ctx.cookies.get('C');
-    const q = (ctx.request.querystring.length === 0 && !cookie) ? hebcalFormDefaults :
-      ctx.request.query.v === '1' ? ctx.request.query :
-      processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
-    let location;
-    try {
-      location = getLocationFromQuery(ctx.db, q, q.i === 'on');
-      if (location) {
-        q['city-typeahead'] = location.getName();
-      }
-    } catch (err) {
-    }
-    await ctx.render('hebcal-form', {
-      q,
-      location,
-      title: 'Custom Calendar | Hebcal Jewish Calendar',
-      xtra_html: `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
-<script>
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (el) {
-  return new bootstrap.Tooltip(el);
-});
-window['hebcal'].createCityTypeahead(false);
-</script>`,
-    });
+    await hebcalApp(ctx);
   }
   return next();
 });
