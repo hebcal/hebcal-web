@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
-import {makeHebcalOptions, makeCookie, empty} from './common';
+import {makeHebcalOptions, processCookieAndQuery, makeCookie, empty} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
@@ -27,11 +27,15 @@ export async function shabbatApp(ctx) {
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
     ctx.set('Cache-Control', 'max-age=86400');
-    const obj = eventsToClassicApi(ctx.state.events, ctx.state.options);
+    let obj = eventsToClassicApi(ctx.state.events, ctx.state.options);
     if (q.leyning === 'off') {
       for (const item of obj.items) {
         delete item.leyning;
       }
+    }
+    const cb = q.callback;
+    if (typeof cb === 'string' && cb.length) {
+      obj = cb + '(' + JSON.stringify(obj) + ')\n';
     }
     ctx.body = obj;
   } else {
@@ -80,8 +84,8 @@ function getStartAndEnd(now) {
 }
 
 function makeItems(ctx) {
-  const q = Object.assign(
-      querystring.parse(ctx.cookies.get('C') || ''),
+  const q = processCookieAndQuery(
+      ctx.cookies.get('C'),
       {c: 'on', tgt: '_top'},
       ctx.request.query,
   );
@@ -149,7 +153,7 @@ function makePropsForFullHtml(ctx) {
   const firstCandles = items.find((i) => i.cat === 'candles');
   return {
     summary: briefText.join('. '),
-    jsonLD: firstCandles ? JSON.stringify(getJsonLD(firstCandles, location)) : '',
+    jsonLD: firstCandles && location.getGeoId() ? JSON.stringify(getJsonLD(firstCandles, location)) : '',
     locationName: location.getName(),
     xtra_html:
 `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

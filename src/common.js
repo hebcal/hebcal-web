@@ -1,4 +1,5 @@
 import {HDate, Location} from '@hebcal/core';
+import querystring from 'querystring';
 
 export const langTzDefaults = {
   US: ['s', 'America/New_York'],
@@ -55,7 +56,9 @@ const geoposLegacy = {
   lomin: 60,
 };
 
-const cookieOpts = ['geo', 'zip', 'geonameid', 'lg'].concat(
+const primaryGeoKeys = ['geonameid', 'zip', 'city'];
+const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'tzid']);
+const cookieOpts = geoKeys.concat(['geo', 'lg'],
     Object.keys(numberOpts), Object.keys(booleanOpts));
 
 /**
@@ -81,12 +84,41 @@ export function off(val) {
 export function makeCookie(query) {
   let ck = 't=' + Math.floor(Date.now() / 1000);
   for (const key of cookieOpts) {
-    if (typeof query[key] === 'string' && query[key].length !== 0) {
-      ck += '&' + key + '=' + query[key];
+    if (typeof query[key] !== 'undefined' && query[key].length !== 0) {
+      ck += '&' + key + '=' + encodeURIComponent(query[key]);
     }
   }
   return ck;
 }
+
+/**
+ * @param {string} cookieString
+ * @param {any} defaults
+ * @param {any} query
+ * @return {any}
+ */
+export function processCookieAndQuery(cookieString, defaults, query) {
+  const ck = querystring.parse(cookieString || '');
+  let found = false;
+  const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy));
+  for (const geoKey of primaryGeoKeys) {
+    if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
+      for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
+        delete ck[key];
+      }
+      found = true;
+      break;
+    }
+  }
+  if (!found && query.geo === 'pos' &&
+      !empty(query.latitude) && !empty(query.longitude) && !empty(query.tzid)) {
+    for (const key of primaryGeoKeys) {
+      delete ck[key];
+    }
+  }
+  return Object.assign(ck, defaults, query);
+}
+
 
 /**
  * Read Koa request parameters and create HebcalOptions
@@ -171,26 +203,28 @@ export function makeHebcalOptions(db, query) {
  * @return {Location}
  */
 export function getLocationFromQuery(db, query, il) {
-  let location;
-  if (!empty(query.zip)) {
-    location = db.lookupZip(query.zip);
+  if (!empty(query.geonameid)) {
+    const location = db.lookupGeoname(+query.geonameid);
+    if (location == null) {
+      throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
+    }
+    query.geo = 'geoname';
+    return location;
+  } else if (!empty(query.zip)) {
+    const location = db.lookupZip(query.zip);
     if (location == null) {
       throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
     }
     query.geo = 'zip';
+    return location;
   } else if (!empty(query.city)) {
-    location = db.lookupLegacyCity(query.city);
+    const location = db.lookupLegacyCity(query.city);
     if (location == null) {
       throw new Error(`Invalid legacy city ${query.city}`);
     }
     query.geo = 'geoname';
     query.geonameid = location.getGeoId();
-  } else if (!empty(query.geonameid)) {
-    location = db.lookupGeoname(+query.geonameid);
-    if (location == null) {
-      throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
-    }
-    query.geo = 'geoname';
+    return location;
   } else if (query.geo == 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
@@ -199,7 +233,8 @@ export function getLocationFromQuery(db, query, il) {
       if (query.tzid == 'Asia/Jerusalem') {
         il = true;
       }
-      location = new Location(+query.latitude, +query.longitude, il, query.tzid);
+      const cityName = query['city-typeahead'] || `Location ${query.latitude},${query.longitude}`;
+      return new Location(+query.latitude, +query.longitude, il, query.tzid, cityName);
     } else {
       let tzid = query.tzid;
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
@@ -229,8 +264,9 @@ export function getLocationFromQuery(db, query, il) {
       if (tzid == 'Asia/Jerusalem') {
         il = true;
       }
-      location = new Location(latitude, longitude, il, tzid);
+      const cityName = query['city-typeahead'] || `Location ${latitude},${longitude}`;
+      return new Location(latitude, longitude, il, tzid, cityName);
     }
   }
-  return location;
+  return null;
 }
