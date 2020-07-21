@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty, urlArgs} from './common';
-import {HebrewCalendar, Locale, greg, flags} from '@hebcal/core';
+import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
+import {basename} from 'path';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/fi';
@@ -76,6 +77,8 @@ function renderForm(ctx, error) {
     // private cache only if we're tailoring results by cookie
     ctx.set('Cache-Control', 'private');
   }
+  const defaultYear = new Date().getFullYear();
+  const defaultYearHeb = new HDate().getFullYear();
   return ctx.render('hebcal-form', {
     message,
     title: 'Custom Calendar | Hebcal Jewish Calendar',
@@ -83,6 +86,32 @@ function renderForm(ctx, error) {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
 <script>
+var d=document;
+function s6(val){
+d.f1.month.value='x';
+if(val=='G'){d.f1.year.value=${defaultYear};}
+if(val=='H'){d.f1.year.value=${defaultYearHeb};}
+return false;}
+d.getElementById("maj").onclick=function(){
+ if (this.checked == false) {
+  ["nx","mf","ss","min","mod"].forEach(function(x){
+   d.f1[x].checked = false;
+  });
+ }
+};
+["nx","mf","ss","min","mod"].forEach(function(x){
+ d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
+});
+d.getElementById("d1").onclick=function(){
+ if (this.checked) {
+  d.getElementById("d2").checked = false;
+ }
+}
+d.getElementById("d2").onclick=function(){
+ if (this.checked) {
+  d.getElementById("d1").checked = false;
+ }
+}
 var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
 var tooltipList = tooltipTriggerList.map(function (el) {
 return new bootstrap.Tooltip(el);
@@ -125,11 +154,25 @@ function renderHtml(ctx) {
   }
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const localeData = dayjs().locale(locale).localeData();
+  const dlhref = downloadHref(q, options);
+  const subical = downloadHref(q, options, {year: 'now', subscribe: 1}) + '.ics';
   const url = {
     settings: '/hebcal/?' + urlArgs(q, {v: 0}),
     prev: '/hebcal/?' + urlArgs(q, {year: options.year - 1}),
     next: '/hebcal/?' + urlArgs(q, {year: options.year + 1}),
-    pdf: downloadHref(q, options) + '.pdf',
+    pdf: dlhref + '.pdf',
+    ics: dlhref + '.ics',
+    subical: subical,
+    webcal: subical.replace(/^https/, 'webcal'),
+    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    csv_usa: dlhref + '_usa.csv',
+    csv_eur: downloadHref(q, options, {euro: 1}) + '_eur.csv',
+  };
+  const filename = {
+    ics: basename(url.ics),
+    pdf: basename(url.pdf),
+    csv_usa: basename(url.csv_usa),
+    csv_eur: basename(url.csv_eur),
   };
   if (options.candlelighting) {
     const location = ctx.state.location;
@@ -151,18 +194,21 @@ function renderHtml(ctx) {
     prevTitle: options.year - 1,
     nextTitle: options.year + 1,
     url,
+    filename,
+    dltitle: shortTitle,
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
 }
 
-function downloadHref(q, options) {
+function downloadHref(q, options, override={}) {
   const filename = getDownloadFilename(options);
-  const encoded = Buffer.from(urlArgs(q))
+  const encoded = Buffer.from(urlArgs(q, override))
       .toString('base64')
       .replace(/\+/g, '-')
-      .replace(/\//g, '_');
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
   return 'https://download.hebcal.com/v2/h/' + encoded + '/' + filename;
 }
 

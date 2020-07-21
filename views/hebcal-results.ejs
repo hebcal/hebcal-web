@@ -202,7 +202,7 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <div id="ios-body" class="tab-pane active">
 <p>Apple iOS, iPhone &amp; iPad</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-ios-sub" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to iPhone/iPad</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ios-sub" href="<%= url.webcal %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to iPhone/iPad</a></p>
 <p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
 href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
 
@@ -214,11 +214,11 @@ href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p
 <p><small>To keep the imported calendar up-to-date, subscribe to the
 Hebcal calendar in Outlook. Our calendar subscription feeds include
 2+ years of events.</small></p>
-<p><a class="btn btn-secondary download mb-1" id="dl-ol-ics" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download Outlook Internet Calendar Subscription</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-ics" title="<%= filename.ics %>" href="<%= url.webcal %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download Outlook Internet Calendar Subscription</a></p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
-<p>Alternate option: <a class="download" id="dl-ol-ics-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+<p>Alternate option: <a class="download" id="dl-ol-ics-alt" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
 and then import manually into Microsoft Outlook.</p>
 
 </div>
@@ -226,12 +226,12 @@ and then import manually into Microsoft Outlook.</p>
 <div id="gcal-body" class="tab-pane">
 <p>Google Calendar</p>
 <div>
-<p><a title="Add Jewish Calendar 2020-2024.ics to Google Calendar"
+<p><a title="Add <%= filename.ics %> to Google Calendar"
 class="download" id="dl-gcal-sub" rel="nofollow"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fv2%2Fh%2FYz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE%2Fhebcal_2020.ics"><img
-src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
+href="https://www.google.com/calendar/render?cid=<%= url.gcal %>"><img
+src="https://www.hebcal.com/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
 <p>Alternate option:
-<a class="download" id="dl-gcal-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+<a class="download" id="dl-gcal-alt" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
 and then <a
 title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
 href="/home/59/google-calendar-alternative-instructions">follow
@@ -242,10 +242,10 @@ our Google Calendar import instructions</a>.</p>
 <div id="ical-body" class="tab-pane">
 <p>Apple macOS Calendar (desktop)</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-ical-sub" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to macOS Calendar.app</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ical-sub" title="<%= filename.ics %>" href="<%= url.webcal %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to macOS Calendar.app</a></p>
 <p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple macOS desktop Calendar</a></p>
-<p>Alternate option: <a class="download" id="dl-ical-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+<p>Alternate option: <a class="download" id="dl-ical-alt" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
 and then import manually into Apple macOS Calendar.app.</p>
 
 </div>
@@ -253,7 +253,7 @@ and then import manually into Apple macOS Calendar.app.</p>
 <div id="ol-mac-body" class="tab-pane">
 <p>Outlook for Mac</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-ol-mac" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to Outlook for Mac</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-mac" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to Outlook for Mac</a></p>
 <p>Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
 href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
 Outlook for Mac</a></p>
@@ -270,7 +270,7 @@ many desktop and web calendar applications.</small></p>
 <!--
 <div class="btn-group">
 <button type="button" class="btn btn-light btn-copy js-tooltip js-copy" 
-data-toggle="tooltip" data-placement="bottom" data-copy="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics"
+data-toggle="tooltip" data-placement="bottom" data-copy="<%= url.subical %>"
 title="Copy to clipboard">
 <i class="glyphicons glyphicons-copy"></i>
 </button>
@@ -278,7 +278,7 @@ title="Copy to clipboard">
 <div class="input-group input-group-sm mb-3">
 <input type="text" class="form-control" size="60" id="iCalUrl" name="iCalUrl"
 onfocus="this.select();" onKeyPress="return false;"
-value="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics">
+value="<%= url.subical %>">
 </div>
 </form>
 <p>Follow additional instructions for 
@@ -292,8 +292,8 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 <div>
 Select one of:
 <ul class="list-unstyled">
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="hebcal_2020_usa.csv" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020_usa.csv" download="hebcal_2020_usa.csv"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - USA (month/day/year)</a></li>
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="hebcal_2020_eur.csv" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1HJmV1cm89MQ/hebcal_2020_eur.csv" download="hebcal_2020_eur.csv"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - Europe (day/month/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="<%= filename.csv_usa %>" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - USA (month/day/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="<%= filename.csv_eur %>" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - Europe (day/month/year)</a></li>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
@@ -303,7 +303,7 @@ href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 <div id="pdf-body" class="tab-pane">
 <p>Print PDF (formatted for 8.5"x11" paper)</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="hebcal_2020.pdf" href="https://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.pdf" download="hebcal_2020.pdf"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download PDF Calendar</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download PDF Calendar</a></p>
 
 </div>
 </div><!-- #pdf-body -->
