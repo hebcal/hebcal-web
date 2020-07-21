@@ -2,6 +2,7 @@
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
 import {langTzDefaults, empty} from './common';
 import dayjs from 'dayjs';
+import querystring from 'querystring';
 
 export async function homepage(ctx) {
   const q = ctx.request.query;
@@ -59,6 +60,8 @@ function mastheadHolidays(items, hd) {
  * @param {any} ctx
  */
 function setDefautLangTz(ctx) {
+  const cookieStr = ctx.state.cookieStr = ctx.cookies.get('C') || '';
+  const cookie = ctx.state.cookie = querystring.parse(cookieStr);
   const ip = ctx.request.header['x-client-ip'] || ctx.request.ip;
   const geoip = ctx.lookup.get(ip);
   const cc = ctx.state.countryCode = geoip ? ctx.state.countryCode : 'US';
@@ -66,7 +69,7 @@ function setDefautLangTz(ctx) {
     ctx.state.lang = langTzDefaults[cc][0];
     ctx.state.timezone = langTzDefaults[cc][1];
   } else {
-    ctx.state.lang = langTzDefaults['US'][0];
+    ctx.state.lang = cookie.lg || langTzDefaults['US'][0];
     ctx.state.timezone = langTzDefaults['US'][1];
   }
 }
