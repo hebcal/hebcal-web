@@ -4,6 +4,22 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+import 'dayjs/locale/fi';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/he';
+import 'dayjs/locale/hu';
+import 'dayjs/locale/pl';
+import 'dayjs/locale/ru';
+
+const localeMap = {
+  'fi': 'fi',
+  'fr': 'fr',
+  'he': 'he',
+  'hu': 'hu',
+  'h': 'he',
+  'pl': 'pl',
+  'ru': 'ru',
+};
 
 export async function shabbatApp(ctx) {
   makeItems(ctx);
@@ -104,14 +120,15 @@ function makeItems(ctx) {
     options.havdalahMins = opts0.havdalahMins;
   }
   const events = HebrewCalendar.calendar(options);
+  const locale = localeMap[Locale.getLocaleName()] || 'en';
   Object.assign(ctx.state, {
     events,
     options,
     q,
     location,
-    locale: Locale.getLocaleName(),
+    locale,
     hyear: events[0].getDate().getFullYear(),
-    items: events.map((ev) => eventToItem(ev, options)),
+    items: events.map((ev) => eventToItem(ev, options, locale)),
     title: Locale.gettext('Shabbat') + ' Times for ' + location.getName(),
     Shabbat: Locale.gettext('Shabbat'),
   });
@@ -189,14 +206,15 @@ function getJsonLD(item, location) {
 /**
  * @param {Event} ev
  * @param {HebrewCalendar.Options} options
+ * @param {string} locale
  * @return {Object}
  */
-function eventToItem(ev, options) {
+function eventToItem(ev, options, locale) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
   const attrs = ev.getAttrs();
-  const fmtDate = d.format('dddd, D MMMM YYYY');
+  const fmtDate = d.locale(locale).format('dddd, D MMMM YYYY');
   const isoDate = d.format('YYYY-MM-DD');
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
