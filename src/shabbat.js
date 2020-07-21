@@ -38,8 +38,13 @@ export async function shabbatApp(ctx) {
     }
     ctx.body = obj;
   } else {
+    const cookie = ctx.cookies.get('C');
     const p = makePropsForFullHtml(ctx);
-    possiblySetCookie(ctx, q);
+    if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
+      ctx.set('Cache-Control', 'private');
+    } else {
+      possiblySetCookie(ctx, q);
+    }
     return ctx.render('shabbat', p);
   }
 }
@@ -76,6 +81,14 @@ function makeItems(ctx) {
   }
   const location = opts0.location || ctx.db.lookupLegacyCity('New York');
   q['city-typeahead'] = location.getName();
+  if (!opts0.location) {
+    q.geonameid = location.getGeoId();
+    q.geo = 'geoname';
+  }
+  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
+  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
+    options.havdalahMins = opts0.havdalahMins;
+  }
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
       new Date(+q.gy, +q.gm - 1, +q.gd) : new Date();
   const [midnight, endOfWeek] = getStartAndEnd(dt);
@@ -88,10 +101,6 @@ function makeItems(ctx) {
     il: opts0.il,
     sedrot: true,
   };
-  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
-  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
-    options.havdalahMins = opts0.havdalahMins;
-  }
   const events = HebrewCalendar.calendar(options);
   Object.assign(ctx.state, {
     events,

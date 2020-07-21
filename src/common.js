@@ -110,6 +110,7 @@ export function possiblySetCookie(ctx, query) {
       return false;
     }
   }
+  ctx.set('Cache-Control', 'private');
   ctx.cookies.set('C', newCookie, {
     expires: dayjs().add(1, 'year').toDate(),
     overwrite: true,
