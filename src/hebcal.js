@@ -65,6 +65,11 @@ export async function hebcalApp(ctx) {
 
 function renderForm(error, ctx) {
   const message = error ? error.message : undefined;
+  const cookie = ctx.cookies.get('C');
+  if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
+    // private cache only if we're tailoring results by cookie
+    ctx.set('Cache-Control', 'private');
+  }
   return ctx.render('hebcal-form', {
     message,
     title: 'Custom Calendar | Hebcal Jewish Calendar',
