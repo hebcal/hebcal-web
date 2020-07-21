@@ -87,10 +87,6 @@ function makeItems(ctx) {
     q.geonameid = location.getGeoId();
     q.geo = 'geoname';
   }
-  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
-  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
-    options.havdalahMins = opts0.havdalahMins;
-  }
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
       new Date(+q.gy, +q.gm - 1, +q.gd) : new Date();
   const [midnight, endOfWeek] = getStartAndEnd(dt);
@@ -103,6 +99,10 @@ function makeItems(ctx) {
     il: opts0.il,
     sedrot: true,
   };
+  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
+  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
+    options.havdalahMins = opts0.havdalahMins;
+  }
   const events = HebrewCalendar.calendar(options);
   Object.assign(ctx.state, {
     events,
