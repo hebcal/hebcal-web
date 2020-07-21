@@ -184,6 +184,8 @@ function renderHtml(ctx) {
     const hyear = events[0].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
+  const endYear = options.year + getNumYears(options) - 1;
+  const yearRange = `${options.year}-${endYear}`;
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
@@ -195,11 +197,29 @@ function renderHtml(ctx) {
     nextTitle: options.year + 1,
     url,
     filename,
-    dltitle: shortTitle,
+    yearRange,
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
+}
+
+const maxNumYear = {
+  candlelighting: 4,
+  omer: 4,
+  addHebrewDatesForEvents: 3,
+  addHebrewDates: 2,
+  dafyomi: 2,
+};
+
+function getNumYears(options) {
+  let numYears = 5;
+  for (const [key, ny] of Object.entries(maxNumYear)) {
+    if (options[key] && ny < numYears) {
+      numYears = ny;
+    }
+  }
+  return numYears;
 }
 
 function downloadHref(q, options, override={}) {
