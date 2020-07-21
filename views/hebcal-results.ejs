@@ -121,7 +121,21 @@ div.pbba { page-break-before: always }
    </label>
   </div><!-- .btn-group -->
 <div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
-<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="https://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.pdf"><svg class="icon"><use xlink:href="#gi-print"></use></svg> Print</a></div>  <a class="btn btn-secondary btn-sm mb-1" href="/hebcal/?v=0&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2020&amp;month=x" title="Change calendar options"><svg class="icon"><use xlink:href="#gi-cogwheel"></use></svg> Settings</a>
+<% if (q.c === 'on') { %>
+<div class="btn-group mr-1" role="group">
+  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon"><use xlink:href="#gi-print"></use></svg> Print</a></div>
+  <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-toggle="dropdown" aria-expanded="false">
+   <span class="sr-only">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+  <li><a class="dropdown-item download" id="pdf" href="<%= url.pdf %>">Monthly calendar</a></li>
+  <li><a class="dropdown-item" href="<%= url.fridge %>">Candle-lighting times only</a></li>
+  </ul>
+</div>
+<% } else { %>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon"><use xlink:href="#gi-print"></use></svg> Print</a></div>
+<% } %>
+<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon"><use xlink:href="#gi-cogwheel"></use></svg> Settings</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">

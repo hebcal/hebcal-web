@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from './common';
+import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty, urlArgs} from './common';
 import {HebrewCalendar, Locale, greg, flags} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -22,10 +22,6 @@ const hebcalFormDefaults = {
   ss: 'on',
   mod: 'on',
   i: 'off',
-  F: 'off',
-  d: 'off',
-  D: 'off',
-  s: 'off',
   year: 'now',
   yt: 'G',
   lg: 's',
@@ -68,12 +64,12 @@ export async function hebcalApp(ctx) {
     if (q.v === '1') {
       return renderHtml(ctx);
     } else {
-      return renderForm(error, ctx);
+      return renderForm(ctx, error);
     }
   }
 }
 
-function renderForm(error, ctx) {
+function renderForm(ctx, error) {
   const message = error ? error.message : undefined;
   const cookie = ctx.cookies.get('C');
   if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
@@ -115,6 +111,9 @@ function renderHtml(ctx) {
   }
   shortTitle += options.year;
   const events = HebrewCalendar.calendar(options);
+  if (events.length === 0) {
+    return renderForm(ctx, {message: 'Please check options; no Hebrew Calendar events found'});
+  }
   const months = makeMonthlyDates(events);
   const result = eventsToClassicApi(events, options);
   for (const item of result.items) {
@@ -126,6 +125,22 @@ function renderHtml(ctx) {
   }
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const localeData = dayjs().locale(locale).localeData();
+  const url = {
+    settings: '/hebcal/?' + urlArgs(q, {v: 0}),
+    prev: '/hebcal/?' + urlArgs(q, {year: options.year - 1}),
+    next: '/hebcal/?' + urlArgs(q, {year: options.year + 1}),
+    pdf: '',
+  };
+  if (options.candlelighting) {
+    const location = ctx.state.location;
+    let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+    if (typeof options.havdalahMins !== 'undefined') {
+      geoUrlArgs += '&m=' + options.havdalahMins;
+    }
+    geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
+    const hyear = events[0].getDate().getFullYear();
+    url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
+  }
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
@@ -133,10 +148,9 @@ function renderHtml(ctx) {
     tableBodies: makeTableBodies(events, months, options),
     locale,
     weekdaysShort: localeData.weekdaysShort(),
-    prevUrl: '',
     prevTitle: options.year - 1,
-    nextUrl: '',
     nextTitle: options.year + 1,
+    url,
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',

@@ -71,11 +71,30 @@ export function empty(val) {
 }
 
 /**
-   * @param {string} val
-   * @return {boolean}
-   */
+ * @param {string} val
+ * @return {boolean}
+ */
 export function off(val) {
   return typeof val == 'undefined' || val == 'off' || val == '0';
+}
+
+/**
+ * @param {any} query
+ * @param {any} override
+ * @return {string}
+ */
+export function urlArgs(query, override) {
+  const s = [];
+  for (const [key, val0] of Object.entries(query)) {
+    const val = typeof override[key] === 'undefined' ? val0 : override[key];
+    s.push(key + '=' + encodeURIComponent(val));
+  }
+  for (const [key, val] of Object.entries(override)) {
+    if (typeof query[key] === 'undefined') {
+      s.push(key + '=' + encodeURIComponent(val));
+    }
+  }
+  return s.join('&');
 }
 
 /**
@@ -85,7 +104,8 @@ export function off(val) {
 export function makeCookie(query) {
   let ck = 't=' + Math.floor(Date.now() / 1000);
   for (const key of cookieOpts) {
-    if (typeof query[key] !== 'undefined' && query[key].length !== 0) {
+    if (typeof query[key] === 'number' ||
+       (typeof query[key] === 'string' && query[key].length > 0)) {
       ck += '&' + key + '=' + encodeURIComponent(query[key]);
     }
   }
