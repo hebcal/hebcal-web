@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from './common';
-import {HebrewCalendar, Locale, greg} from '@hebcal/core';
+import {HebrewCalendar, Locale, greg, flags} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -130,7 +130,7 @@ function renderHtml(ctx) {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
     dates: months,
-    tableBodies: makeTableBodies(events, months),
+    tableBodies: makeTableBodies(events, months, options),
     locale,
     weekdaysShort: localeData.weekdaysShort(),
     prevUrl: '',
@@ -143,7 +143,7 @@ function renderHtml(ctx) {
   });
 }
 
-function makeTableBodies(events, months) {
+function makeTableBodies(events, months, options) {
   const eventMap = new Map();
   for (const ev of events) {
     const key = dayjs(ev.date.greg()).format('YYYY-MM-DD');
@@ -167,14 +167,7 @@ function makeTableBodies(events, months) {
       html += `<td><p><b>${i}</b></p>`;
       const evs = eventMap.get(yearMonth + '-' + pad2(i)) || [];
       for (const ev of evs) {
-        const categories = getEventCategories(ev).join(' ');
-        const memo0 = getHolidayDescription(ev, true);
-        const memo = memo0 ? ` title="${memo0}"` : '';
-        const url = ev.url();
-        const ahref = url ? `<a href="${url}">` : '';
-        const aclose = url ? '</a>' : '';
-        // eslint-disable-next-line max-len
-        html += `<div class="fc-event ${categories}">${ahref}<span class="fc-title"${memo}>${ev.render()}</span>${aclose}</div>\n`;
+        html += renderEventHtml(ev, options);
       }
       html += '</td>\n';
       n++;
@@ -186,6 +179,39 @@ function makeTableBodies(events, months) {
     tableBodies[yearMonth] = html;
   }
   return tableBodies;
+}
+
+/**
+ * @param {Event} ev
+ * @param {HebrewCalendar.Options} options
+ * @return {string}
+ */
+function renderEventHtml(ev, options) {
+  const categories = getEventCategories(ev);
+  if (categories[0] == 'holiday' && ev.getFlags() & flags.CHAG) {
+    categories.push('yomtov');
+  }
+  let title = ev.render();
+  const desc = ev.getDesc();
+  if (desc == 'Havdalah' || desc == 'Candle lighting') {
+    const colon = title.indexOf(':');
+    if (colon != -1) {
+      const time = HebrewCalendar.reformatTimeStr(ev.getAttrs().eventTimeStr, 'p', options);
+      title = '<b>' + time + '</b> ' + title.substring(0, colon);
+    }
+  } else if (ev.getFlags() & flags.DAF_YOMI) {
+    const colon = title.indexOf(':');
+    if (colon != -1) {
+      title = title.substring(colon + 1);
+    }
+  }
+  const classes = categories.join(' ');
+  const memo0 = getHolidayDescription(ev, true);
+  const memo = memo0 ? ` title="${memo0}"` : '';
+  const url = ev.url();
+  const ahref = url ? `<a href="${url}">` : '';
+  const aclose = url ? '</a>' : '';
+  return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}</span>${aclose}</div>\n`;
 }
 
 /**
