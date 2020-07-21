@@ -106,10 +106,31 @@ function renderHtml(ctx) {
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
+    dates: makeMonthlyDates(events),
+    prevUrl: '',
+    prevTitle: options.year - 1,
+    nextUrl: '',
+    nextTitle: options.year + 1,
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
+}
+
+/**
+ * Returns an array of dayjs objects for every month (including blanks) in the range
+ * @param {Event[]} events
+ * @return {dayjs.Dayjs[]}
+ */
+function makeMonthlyDates(events) {
+  const startDate = dayjs(events[0].getDate().greg());
+  const endDate = dayjs(events[events.length - 1].getDate().greg());
+  const start = startDate.set('date', 1);
+  const result = [];
+  for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
+    result.push(d);
+  }
+  return result;
 }
 
 function renderFullCalendar(ctx) {

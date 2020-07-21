@@ -1,0 +1,9 @@
+<nav class="text-center d-print-none">
+<ul class="pagination pagination-sm">
+<li class="page-item"><a class="page-link" href="<%= prevUrl %>" rel="prev nofollow">&laquo; <%= prevTitle %></a></li>
+<% dates.forEach((d) => { -%>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="<%= d.format('MMMM') %> <%= d.format('YYYY') %>" href="#cal-<%= d.format('YYYY') %>-<%= d.format('MM') %>"><%= d.format('MMM') %></a></li>
+<% }); -%>
+<li class="page-item"><a class="page-link" href="<%= nextUrl %>" rel="next nofollow"><%= nextTitle %> &raquo;</a></li>
+</ul>
+</nav>

@@ -138,45 +138,24 @@ div.pbba { page-break-before: always }
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
 <div id="hebcal-results">
-<nav class="text-center d-print-none">
-<ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2019&amp;month=x" rel="prev">&laquo; 2019</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="January 2020" href="#cal-2020-01">Jan</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="February 2020" href="#cal-2020-02">Feb</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="March 2020" href="#cal-2020-03">Mar</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="April 2020" href="#cal-2020-04">Apr</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="May 2020" href="#cal-2020-05">May</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="June 2020" href="#cal-2020-06">Jun</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="July 2020" href="#cal-2020-07">Jul</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="August 2020" href="#cal-2020-08">Aug</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="September 2020" href="#cal-2020-09">Sep</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="October 2020" href="#cal-2020-10">Oct</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="November 2020" href="#cal-2020-11">Nov</a></li>
-<li class="page-item d-none d-md-inline"><a class="page-link" title="December 2020" href="#cal-2020-12">Dec</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2021&amp;month=x" rel="next">2021 &raquo;</a></li>
-</ul><!-- .pagination -->
-</nav>
-<div id="cal-2020-01">
+<%_ include partials/pagination.ejs _%>
+<div id="cal-<%= dates[0].format('YYYY') %>-<%= dates[0].format('MM') %>">
 <div class="cal">
+<h3><%= dates[0].format('MMMM') %> <%= dates[0].format('YYYY') %></h3>
 </div><!-- .cal -->
 <div class="agenda">
 </div><!-- .agenda -->
-</div><!-- #cal-2020-01 -->
-<div id="cal-2020-02">
+</div><!-- #cal-<%= dates[0].format('YYYY') %>-<%= dates[0].format('MM') %> -->
+<% dates.slice(1).forEach((d) => { -%>
+<div id="cal-<%= d.format('YYYY') %>-<%= d.format('MM') %>">
 <div class="cal pbba" style="page-break-before:always">
+<h3><%= d.format('MMMM') %> <%= d.format('YYYY') %></h3>
 </div><!-- .cal -->
 <div class="agenda">
 </div><!-- .agenda -->
-</div><!-- #cal-2020-02 -->
-<div id="cal-2020-03">
-<div class="cal pbba" style="page-break-before:always">
-</div><!-- .cal -->
-<div class="agenda">
-</div><!-- .agenda -->
-</div><!-- #cal-2020-03 -->
-
-<!-- pagination repeat -->
-
+</div><!-- #cal-<%= d.format('YYYY') %>-<%= d.format('MM') %> -->
+<% }); -%>
+<%_ include partials/pagination.ejs _%>
 </div><!-- #hebcal-results -->
 <script>
 window['hebcal']=window['hebcal']||{};
