@@ -139,19 +139,10 @@ div.pbba { page-break-before: always }
 </div><!-- .row -->
 <div id="hebcal-results">
 <%_ include partials/pagination.ejs _%>
-<div id="cal-<%= dates[0].format('YYYY-MM') %>">
-<div class="cal">
-<h3><%= dates[0].locale(locale).format('MMMM YYYY') %></h3>
-<table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
-<tr><% weekdaysShort.forEach((s) => { -%><th><%= s %></th><% }); -%></tr>
-</table>
-</div><!-- .cal -->
-<div class="agenda">
-</div><!-- .agenda -->
-</div><!-- #cal-<%= dates[0].format('YYYY-MM') %> -->
-<% dates.slice(1).forEach((d) => { -%>
+<% let first = true; %>
+<% dates.forEach((d) => { -%>
 <div id="cal-<%= d.format('YYYY-MM') %>">
-<div class="cal pbba" style="page-break-before:always">
+<div class="cal<%if(first){first=false;%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
 <h3><%= d.locale(locale).format('MMMM YYYY') %></h3>
 <table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
 <tbody><tr><% weekdaysShort.forEach((s) => { -%><th><%= s %></th><% }); -%></tr>
