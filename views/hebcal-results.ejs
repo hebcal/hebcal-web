@@ -1,0 +1,393 @@
+<% include partials/header-noclose.ejs %>
+<style>
+div.cal { margin-bottom: 18px }
+div.pbba { page-break-before: always }
+@media print { div.pbba { page-break-before: always } }
+.fc-emulated-table {
+  table-layout: fixed;
+}
+.fc-emulated-table tr th, .fc-emulated-table tr td {
+  padding: 4px;
+}
+.fc-emulated-table tr th {
+  text-align: center;
+}
+.fc-emulated-table tr td {
+  height: 90px;
+}
+.fc-event {
+    display: block; /* make the <a> tag block */
+    font-size: .85em;
+    line-height: 1.3;
+    border-radius: 3px;
+    border: 1px solid #3a87ad; /* default BORDER color */
+    background-color: #3a87ad; /* default BACKGROUND color */
+    margin: 1px 2px 0; /* spacing between events and edges */
+    padding: 0 1px;
+}
+.fc-time {
+  font-weight: bold;
+}
+.fc-event a {
+    color: #fff;
+}
+.fc-event a:hover,
+.fc-event a:focus {
+    color: #fff;
+}
+.fc-event.hebdate, .fc-event.omer {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#999;
+}
+.fc-event.dafyomi,
+.fc-event.dafyomi a {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#08c;
+}
+.fc-event.dafyomi a:hover,
+.fc-event.dafyomi a:focus {
+    color: #005580;
+}
+.fc-event.candles, .fc-event.havdalah {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#333;
+}
+.fc-event.holiday {
+  background-color:#3a87ad;
+  border-color:#3a87ad;
+  color:#FFF;
+}
+.fc-event.holiday.yomtov,
+.fc-event.holiday.yomtov a {
+  background-color:#ffd446;
+  border-color:#ffd446;
+  color:#333;
+}
+.fc-event.parashat {
+  background-color:#257e4a;
+  border-color:#257e4a;
+  color:#FFF;
+}
+.fc-event.hebrew .fc-title {
+  font-family:'Alef Hebrew','SBL Hebrew',David;
+  font-size:110%;
+  font-weight:normal;
+  direction:rtl;
+}
+.fc-event.hebrew .fc-time {
+  direction:ltr;
+  unicode-bidi: bidi-override;
+}
+.label-lightgrey {
+  background-color: #e7e7e7;
+  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
+  background-image: linear-gradient(#fefefe, #e7e7e7);
+  border: 1px solid #cfcfcf;
+  border-radius: 2px;
+}
+.table-event.yomtov {
+  background:#ff9;
+}
+.icon {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style>
+</head>
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm-8">
+<h2><%= shortTitle %>
+<% if (q.c === 'on') { %><br><% } %><small class="text-muted"><%= locationName %></small></h2>
+<div class="d-print-none">
+  <div class="btn-group mr-1" role="group" data-toggle="buttons">
+   <label class="btn btn-secondary btn-sm active mb-1">
+    <input type="radio" name="view" id="toggle-month" checked>
+    <svg class="icon"><use xlink:href="#gi-calendar"></use></svg> Month
+   </label>
+   <label class="btn btn-secondary btn-sm mb-1">
+    <input type="radio" name="view" id="toggle-list">
+    <svg class="icon"><use xlink:href="#gi-list"></use></svg> List
+   </label>
+  </div><!-- .btn-group -->
+<div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="https://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.pdf"><svg class="icon"><use xlink:href="#gi-print"></use></svg> Print</a></div>  <a class="btn btn-secondary btn-sm mb-1" href="/hebcal/?v=0&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2020&amp;month=x" title="Change calendar options"><svg class="icon"><use xlink:href="#gi-cogwheel"></use></svg> Settings</a>
+</div><!-- .btn-toolbar -->
+</div><!-- .col-sm-8 -->
+<div class="col-sm-4 d-print-none">
+<h5 class="mb-4">Advertisement</h5>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- banner-320x100 -->
+<ins class="adsbygoogle"
+ style="display:inline-block;width:320px;height:100px"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="1867606375"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
+<div id="hebcal-results">
+<nav class="text-center d-print-none">
+<ul class="pagination pagination-sm">
+<li class="page-item"><a class="page-link" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2019&amp;month=x" rel="prev">&laquo; 2019</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="January 2020" href="#cal-2020-01">Jan</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="February 2020" href="#cal-2020-02">Feb</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="March 2020" href="#cal-2020-03">Mar</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="April 2020" href="#cal-2020-04">Apr</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="May 2020" href="#cal-2020-05">May</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="June 2020" href="#cal-2020-06">Jun</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="July 2020" href="#cal-2020-07">Jul</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="August 2020" href="#cal-2020-08">Aug</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="September 2020" href="#cal-2020-09">Sep</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="October 2020" href="#cal-2020-10">Oct</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="November 2020" href="#cal-2020-11">Nov</a></li>
+<li class="page-item d-none d-md-inline"><a class="page-link" title="December 2020" href="#cal-2020-12">Dec</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal/?v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;i=off&amp;lg=s&amp;c=off&amp;set=off&amp;yt=G&amp;year=2021&amp;month=x" rel="next">2021 &raquo;</a></li>
+</ul><!-- .pagination -->
+</nav>
+<div id="cal-2020-01">
+<div class="cal">
+</div><!-- .cal -->
+<div class="agenda">
+</div><!-- .agenda -->
+</div><!-- #cal-2020-01 -->
+<div id="cal-2020-02">
+<div class="cal pbba" style="page-break-before:always">
+</div><!-- .cal -->
+<div class="agenda">
+</div><!-- .agenda -->
+</div><!-- #cal-2020-02 -->
+<div id="cal-2020-03">
+<div class="cal pbba" style="page-break-before:always">
+</div><!-- .cal -->
+<div class="agenda">
+</div><!-- .agenda -->
+</div><!-- #cal-2020-03 -->
+
+<!-- pagination repeat -->
+
+</div><!-- #hebcal-results -->
+<script>
+window['hebcal']=window['hebcal']||{};
+window['hebcal'].lang='<%= q.lg || 's' %>';
+window['hebcal'].events=<%- JSON.stringify(items) %>;
+window['hebcal'].cconfig=<%- cconfig %>;
+</script>
+</div><!-- #content -->
+
+<div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-hidden="true">
+ <div class="modal-dialog" role="document">
+  <div class="modal-content">
+ <div class="modal-header">
+  <h5 class="modal-title">Download 2020-2024 calendar</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+ </div>
+ <div class="modal-body">
+<p>First, select your calendar app:</p>
+<ul class="nav nav-pills" id="download-tabs">
+<li class="nav-item"><a class="nav-link active" href="#ios-body" data-toggle="tab">iPhone</a></li>
+<li class="nav-item"><a class="nav-link" href="#ol-ics-body" data-toggle="tab">Outlook</a></li>
+<li class="nav-item"><a class="nav-link" href="#gcal-body" data-toggle="tab">Google</a></li>
+<li class="nav-item"><a class="nav-link" href="#ical-body" data-toggle="tab">macOS</a></li>
+<li class="nav-item"><a class="nav-link" href="#ol-mac-body" data-toggle="tab">Outlook Mac</a></li>
+<li class="nav-item"><a class="nav-link" href="#ycal-body" data-toggle="tab">iCalendar</a></li>
+<li class="nav-item"><a class="nav-link" href="#ol-csv-body" data-toggle="tab">CSV</a></li>
+<li class="nav-item"><a class="nav-link" href="#pdf-body" data-toggle="tab">PDF</a></li>
+</ul><!-- #download-tabs -->
+<div class="tab-content mt-2">
+<div id="ios-body" class="tab-pane active">
+<p>Apple iOS, iPhone &amp; iPad</p>
+<div>
+<p><a class="btn btn-secondary download mb-1" id="dl-ios-sub" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to iPhone/iPad</a></p>
+<p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
+href="/home/77/iphone-ipad-jewish-calendar">Import into iPhone &amp; iPad</a></p>
+
+</div>
+</div><!-- #ios-body -->
+<div id="ol-ics-body" class="tab-pane">
+<p>Outlook 365 Internet Calendar Subscription (Windows)</p>
+<div>
+<p><small>To keep the imported calendar up-to-date, subscribe to the
+Hebcal calendar in Outlook. Our calendar subscription feeds include
+2+ years of events.</small></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-ics" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download Outlook Internet Calendar Subscription</a></p>
+<p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
+ICS (Internet Calendar Subscription) file into Outlook</a></p>
+<p>Alternate option: <a class="download" id="dl-ol-ics-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+and then import manually into Microsoft Outlook.</p>
+
+</div>
+</div><!-- #ol-ics-body -->
+<div id="gcal-body" class="tab-pane">
+<p>Google Calendar</p>
+<div>
+<p><a title="Add Jewish Calendar 2020-2024.ics to Google Calendar"
+class="download" id="dl-gcal-sub" rel="nofollow"
+href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fv2%2Fh%2FYz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE%2Fhebcal_2020.ics"><img
+src="/i/gc_button6.gif" width="114" height="36" style="border:none" alt="Add to Google Calendar"></a></p>
+<p>Alternate option:
+<a class="download" id="dl-gcal-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+and then <a
+title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
+href="/home/59/google-calendar-alternative-instructions">follow
+our Google Calendar import instructions</a>.</p>
+
+</div>
+</div><!-- #gcal-body -->
+<div id="ical-body" class="tab-pane">
+<p>Apple macOS Calendar (desktop)</p>
+<div>
+<p><a class="btn btn-secondary download mb-1" id="dl-ical-sub" title="Jewish Calendar 2020-2024.ics" href="webcal://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to macOS Calendar.app</a></p>
+<p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">Import ICS file into Apple macOS desktop Calendar</a></p>
+<p>Alternate option: <a class="download" id="dl-ical-alt" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics">Download Jewish Calendar 2020-2024.ics</a>
+and then import manually into Apple macOS Calendar.app.</p>
+
+</div>
+</div><!-- #ical-body -->
+<div id="ol-mac-body" class="tab-pane">
+<p>Outlook for Mac</p>
+<div>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-mac" title="Jewish Calendar 2020-2024.ics" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.ics" download="Jewish Calendar 2020-2024.ics"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download to Outlook for Mac</a></p>
+<p>Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
+href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
+Outlook for Mac</a></p>
+
+</div>
+</div><!-- #ol-mac-body -->
+<div id="ycal-body" class="tab-pane">
+<p>iCalendar feed URL</p>
+<div>
+<p><small>The iCalendar format is used by Outlook 365, Yahoo!, Blackbaud, and
+many desktop and web calendar applications.</small></p>
+<p>Copy the entire iCalendar URL here:</p>
+<form class="form-inline" id="GrabLinkForm" action="#">
+<!--
+<div class="btn-group">
+<button type="button" class="btn btn-light btn-copy js-tooltip js-copy" 
+data-toggle="tooltip" data-placement="bottom" data-copy="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics"
+title="Copy to clipboard">
+<i class="glyphicons glyphicons-copy"></i>
+</button>
+-->
+<div class="input-group input-group-sm mb-3">
+<input type="text" class="form-control" size="60" id="iCalUrl" name="iCalUrl"
+onfocus="this.select();" onKeyPress="return false;"
+value="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9bm93Jnl0PUcmc3Vic2NyaWJlPTE/hebcal_2020.ics">
+</div>
+</form>
+<p>Follow additional instructions for 
+<a href="home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
+or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
+
+</div>
+</div><!-- #ycal-body -->
+<div id="ol-csv-body" class="tab-pane">
+<p>Outlook 97, 98, 2000, 2002, 2003 (Windows)</p>
+<div>
+Select one of:
+<ul class="list-unstyled">
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="hebcal_2020_usa.csv" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020_usa.csv" download="hebcal_2020_usa.csv"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - USA (month/day/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="hebcal_2020_eur.csv" href="http://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1HJmV1cm89MQ/hebcal_2020_eur.csv" download="hebcal_2020_eur.csv"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download CSV - Europe (day/month/year)</a></li>
+</ul>
+Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
+
+</div>
+</div><!-- #ol-csv-body -->
+<div id="pdf-body" class="tab-pane">
+<p>Print PDF (formatted for 8.5"x11" paper)</p>
+<div>
+<p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="hebcal_2020.pdf" href="https://download.hebcal.com/v2/h/Yz1vZmYmaT1vZmYmbGc9cyZtYWo9b24mbWluPW9uJm1vbnRoPXgmbng9b24mdj0xJnllYXI9MjAyMCZ5dD1H/hebcal_2020.pdf" download="hebcal_2020.pdf"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download PDF Calendar</a></p>
+
+</div>
+</div><!-- #pdf-body -->
+</div><!-- .tab-content -->
+
+ </div><!-- .modal-body -->
+ <div class="modal-footer">
+   <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">Close</button>
+ </div>
+  </div><!-- .modal-content -->
+ </div><!-- .modal-dialog -->
+</div><!-- .modal -->
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="gi-print" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M10,22H22v5a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1ZM23,5a1,1,0,0,0-1-1H10A1,1,0,0,0,9,5V9H23Zm5,8V23a2.00591,2.00591,0,0,1-2,2H24V21a1.00291,1.00291,0,0,0-1-1H9a1.00291,1.00291,0,0,0-1,1v4H6a2.00591,2.00591,0,0,1-2-2V13a2.00591,2.00591,0,0,1,2-2H26A2.00591,2.00591,0,0,1,28,13Zm-2,.5a.5.5,0,0,0-.5-.5H23.49872a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5H25.5a.5.5,0,0,0,.5-.5Z"/>
+</symbol>
+<symbol id="gi-calendar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M15,18.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5h1A.5.5,0,0,1,15,18.5ZM14.5,22h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,14.5,22Zm0-8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,14.5,14Zm4,8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,22Zm-8-4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,10.5,18Zm0,4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,10.5,22Zm12-8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,22.5,14Zm0,4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,22.5,18Zm-4,0h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,18Zm0-4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,14ZM27,7V26a2.00006,2.00006,0,0,1-2,2H7a2.00006,2.00006,0,0,1-2-2V7A2.002,2.002,0,0,1,7,5V6.5a.5.5,0,0,0,.5.5h1A.5.5,0,0,0,9,6.5v-1A.5.5,0,0,1,9.5,5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5V5A2.002,2.002,0,0,1,27,7ZM25.00146,26l-.00109-14H7V26Z"/>
+</symbol>
+<symbol viewBox="0 0 16 16" id="bi-cloud-download" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+<path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+</symbol>
+<symbol id="gi-cogwheel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M27.83521,14.75977a.50437.50437,0,0,0-.3808-.43165l-2.81769-.70507a8.94342,8.94342,0,0,0-.89551-2.167l1.49121-2.48449a.50672.50672,0,0,0-.038-.57923A11.97611,11.97611,0,0,0,23.512,6.71a.50681.50681,0,0,0-.57922-.03808L20.44818,8.16309a8.94053,8.94053,0,0,0-2.16687-.89551L17.57617,4.45a.50438.50438,0,0,0-.43164-.38086,10.32381,10.32381,0,0,0-2.38476,0,.5044.5044,0,0,0-.43165.38086L13.623,7.26758a8.92589,8.92589,0,0,0-2.165.89551L8.97253,6.6709a.5068.5068,0,0,0-.57922.03808A11.96918,11.96918,0,0,0,6.71088,8.39136a.507.507,0,0,0-.038.57934l1.49121,2.48438a8.89783,8.89783,0,0,0-.89648,2.168l-2.81769.70507a.50448.50448,0,0,0-.38086.43165,10.33272,10.33272,0,0,0,0,2.38476.50446.50446,0,0,0,.38086.43164l2.81769.70508a8.89087,8.89087,0,0,0,.89648,2.167l-1.49212,2.4845a.50658.50658,0,0,0,.038.57922,11.97622,11.97622,0,0,0,1.68237,1.68238.50673.50673,0,0,0,.57917.03808l2.48462-1.49121a8.93994,8.93994,0,0,0,2.16687.89551l.70513,2.81763a.50442.50442,0,0,0,.43165.38086,10.32381,10.32381,0,0,0,2.38476,0,.50441.50441,0,0,0,.43164-.38086l.70514-2.81763a8.93493,8.93493,0,0,0,2.16791-.89649l2.48535,1.49122a.50663.50663,0,0,0,.57922-.03821A12.00092,12.00092,0,0,0,25.19525,23.511a.5066.5066,0,0,0,.038-.57923l-1.49207-2.48449a8.93642,8.93642,0,0,0,.89551-2.166l2.81769-.70508a.50434.50434,0,0,0,.3808-.43164,10.32381,10.32381,0,0,0,0-2.38476Zm-11.88312,5.373a4.18067,4.18067,0,1,1,4.18072-4.18066A4.18111,4.18111,0,0,1,15.95209,20.13281Z"/>
+</symbol>
+<symbol id="gi-list" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M28,24v1a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1V24a1,1,0,0,1,1-1H27A1,1,0,0,1,28,24Zm-1-7H11a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V18A1,1,0,0,0,27,17Zm0-6H11a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V12A1,1,0,0,0,27,11Zm0-6H11a1,1,0,0,0-1,1V7a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V6A1,1,0,0,0,27,5ZM6,23H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V24A1,1,0,0,0,6,23Zm0-6H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V18A1,1,0,0,0,6,17Zm0-6H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V12A1,1,0,0,0,6,11ZM6,5H5A1,1,0,0,0,4,6V7A1,1,0,0,0,5,8H6A1,1,0,0,0,7,7V6A1,1,0,0,0,6,5Z"/>
+</symbol>
+</defs>
+</svg>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('a.amzn').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','outbound-amzn',x);
+    }
+  });
+  $('a.outbound').click(function(){
+    var c=$(this).attr('href');
+    if (c&&c.length) {
+      var ss=c.indexOf('//');
+      if(ss!=-1) {
+        var d=c.indexOf('/',ss+2),d2=d!=-1?d:c.length;
+        ga('send','event','outbound-article',c.substring(ss+2,d2));
+      }
+    }
+  });
+  $('a.download').click(function(){
+    var x = $(this).attr('id');
+    if (x) {
+      ga('send','event','download',x);
+    }
+  });
+});
+</script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#toggle-month').on('change', function() {
+        $('div.agenda').hide();
+        $('div.cal').show();
+    });
+    $('#toggle-list').on('change', function() {
+        $('div.cal').hide();
+        window['hebcal'].renderMonthTables();
+        $('div.agenda').show();
+    });
+    if ($(window).width() < 768) {
+        $('#toggle-list').click();
+    }
+});
+</script>
+<%_ include partials/footer.ejs _%>

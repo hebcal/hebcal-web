@@ -1,5 +1,6 @@
 import {HDate, Location} from '@hebcal/core';
 import querystring from 'querystring';
+import dayjs from 'dayjs';
 
 export const langTzDefaults = {
   US: ['s', 'America/New_York'],
@@ -92,6 +93,32 @@ export function makeCookie(query) {
 }
 
 /**
+ * @param {any} ctx
+ * @param {any} query
+ * @return {boolean}
+ */
+export function possiblySetCookie(ctx, query) {
+  if (ctx.request.querystring.length === 0) {
+    return false;
+  }
+  const newCookie = makeCookie(query);
+  const prevCookie = ctx.cookies.get('C');
+  if (prevCookie) {
+    const prev = prevCookie.substring(prevCookie.indexOf('&'));
+    const current = newCookie.substring(newCookie.indexOf('&'));
+    if (prev === current) {
+      return false;
+    }
+  }
+  ctx.cookies.set('C', newCookie, {
+    expires: dayjs().add(1, 'year').toDate(),
+    overwrite: true,
+    httpOnly: false,
+  });
+  return true;
+}
+
+/**
  * @param {string} cookieString
  * @param {any} defaults
  * @param {any} query
@@ -113,7 +140,14 @@ export function processCookieAndQuery(cookieString, defaults, query) {
   }
   if (!found && query.geo === 'pos' &&
       !empty(query.latitude) && !empty(query.longitude) && !empty(query.tzid)) {
+    found = true;
     for (const key of primaryGeoKeys) {
+      delete ck[key];
+      delete query[key];
+    }
+  }
+  if (!found && query.geo === 'none') {
+    for (const key of allGeoKeys) {
       delete ck[key];
       delete query[key];
     }

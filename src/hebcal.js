@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {makeHebcalOptions, processCookieAndQuery, empty} from './common';
-import {HebrewCalendar} from '@hebcal/core';
+import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from './common';
+import {HebrewCalendar, greg} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 
@@ -19,7 +19,6 @@ const hebcalFormDefaults = {
   year: 'now',
   yt: 'G',
   lg: 's',
-  geo: 'geoname',
   b: 18,
   M: 'on',
 };
@@ -83,8 +82,28 @@ window['hebcal'].createCityTypeahead(false);
 }
 
 function renderHtml(ctx) {
+  const options = ctx.state.options;
+  const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
+  let shortTitle = 'Jewish Calendar ';
+  if (options.month) {
+    shortTitle += greg.monthNames[options.month] + ' ';
+  }
+  shortTitle += options.year;
+  const events = HebrewCalendar.calendar(options);
+  const result = eventsToClassicApi(events, options);
+  for (const item of result.items) {
+    delete item.leyning;
+  }
+  const q = ctx.state.q;
+  if (q.set !== 'off') {
+    possiblySetCookie(ctx, q);
+  }
   return ctx.render('hebcal-results', {
-    title: 'Jewish Calendar 2020 | Hebcal Jewish Calendar',
+    items: result.items,
+    cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
+    shortTitle,
+    locationName,
+    title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
 }
 

@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
-import {makeHebcalOptions, processCookieAndQuery, makeCookie, empty} from './common';
+import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
@@ -39,30 +39,9 @@ export async function shabbatApp(ctx) {
     ctx.body = obj;
   } else {
     const p = makePropsForFullHtml(ctx);
-    possiblySetCookie(ctx);
+    possiblySetCookie(ctx, q);
     return ctx.render('shabbat', p);
   }
-}
-
-function possiblySetCookie(ctx) {
-  if (ctx.request.querystring.length === 0) {
-    return false;
-  }
-  const newCookie = makeCookie(ctx.state.q);
-  const prevCookie = ctx.cookies.get('C');
-  if (prevCookie) {
-    const prev = prevCookie.substring(prevCookie.indexOf('&'));
-    const current = newCookie.substring(newCookie.indexOf('&'));
-    if (prev === current) {
-      return false;
-    }
-  }
-  ctx.cookies.set('C', newCookie, {
-    expires: dayjs().add(1, 'year').toDate(),
-    overwrite: true,
-    httpOnly: false,
-  });
-  return true;
 }
 
 /**
