@@ -80,10 +80,10 @@ export function off(val) {
 
 /**
  * @param {any} query
- * @param {any} override
+ * @param {any} [override]
  * @return {string}
  */
-export function urlArgs(query, override) {
+export function urlArgs(query, override={}) {
   const s = [];
   for (const [key, val0] of Object.entries(query)) {
     const val = typeof override[key] === 'undefined' ? val0 : override[key];

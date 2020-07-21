@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty, urlArgs} from './common';
 import {HebrewCalendar, Locale, greg, flags} from '@hebcal/core';
-import {eventsToClassicApi, eventToFullCalendar, pad2,
+import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -129,7 +129,7 @@ function renderHtml(ctx) {
     settings: '/hebcal/?' + urlArgs(q, {v: 0}),
     prev: '/hebcal/?' + urlArgs(q, {year: options.year - 1}),
     next: '/hebcal/?' + urlArgs(q, {year: options.year + 1}),
-    pdf: '',
+    pdf: downloadHref(q, options) + '.pdf',
   };
   if (options.candlelighting) {
     const location = ctx.state.location;
@@ -155,6 +155,15 @@ function renderHtml(ctx) {
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
+}
+
+function downloadHref(q, options) {
+  const filename = getDownloadFilename(options);
+  const encoded = Buffer.from(urlArgs(q))
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_');
+  return 'https://download.hebcal.com/v2/h/' + encoded + '/' + filename;
 }
 
 function makeTableBodies(events, months, options) {
