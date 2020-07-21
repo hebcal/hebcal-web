@@ -7,25 +7,26 @@ import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClass
 
 export async function shabbatApp(ctx) {
   makeItems(ctx);
+  // only set expiry if there are CGI arguments
+  if (ctx.request.querystring.length > 0) {
+    ctx.set('Cache-Control', 'max-age=86400');
+  }
   const q = ctx.state.q;
   if (q.cfg === 'i') {
-    return ctx.render('shabbat-iframe', {});
+    return ctx.render('shabbat-iframe');
   } else if (q.cfg === 'j') {
     const html = await ctx.render('shabbat-js', {writeResp: false});
     ctx.set('Access-Control-Allow-Origin', '*');
-    ctx.set('Cache-Control', 'max-age=86400');
     ctx.type = 'text/javascript';
     ctx.body = html.split('\n').map((line) => {
       return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';
     }).join('');
   } else if (q.cfg === 'r') {
-    ctx.set('Cache-Control', 'max-age=86400');
     ctx.type = 'application/rss+xml; charset=utf-8';
     const selfUrl = `https://www.hebcal.com/shabbat/?${ctx.state.geoUrlArgs}`;
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
-    ctx.set('Cache-Control', 'max-age=86400');
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options);
     if (q.leyning === 'off') {
       for (const item of obj.items) {
@@ -41,6 +42,7 @@ export async function shabbatApp(ctx) {
     const cookie = ctx.cookies.get('C');
     const p = makePropsForFullHtml(ctx);
     if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
+      // private cache only if we're tailoring results by cookie
       ctx.set('Cache-Control', 'private');
     } else {
       possiblySetCookie(ctx, q);
