@@ -3,6 +3,15 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from
 import {HebrewCalendar, greg} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
+import localeData from 'dayjs/plugin/localeData';
+import 'dayjs/locale/fi';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/he';
+import 'dayjs/locale/hu';
+import 'dayjs/locale/pl';
+import 'dayjs/locale/ru';
+
+dayjs.extend(localeData);
 
 const hebcalFormDefaults = {
   maj: 'on',
@@ -86,6 +95,16 @@ window['hebcal'].createCityTypeahead(false);
   });
 }
 
+const localeMap = {
+  'fi': 'fi',
+  'fr': 'fr',
+  'he': 'he',
+  'hu': 'hu',
+  'h': 'he',
+  'pl': 'pl',
+  'ru': 'ru',
+};
+
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
@@ -103,10 +122,14 @@ function renderHtml(ctx) {
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
   }
+  const locale = localeMap[options.locale] || 'en';
+  const localeData = dayjs().locale(locale).localeData();
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
     dates: makeMonthlyDates(events),
+    locale,
+    weekdaysShort: localeData.weekdaysShort(),
     prevUrl: '',
     prevTitle: options.year - 1,
     nextUrl: '',

@@ -141,7 +141,10 @@ div.pbba { page-break-before: always }
 <%_ include partials/pagination.ejs _%>
 <div id="cal-<%= dates[0].format('YYYY') %>-<%= dates[0].format('MM') %>">
 <div class="cal">
-<h3><%= dates[0].format('MMMM') %> <%= dates[0].format('YYYY') %></h3>
+<h3><%= dates[0].locale(locale).format('MMMM') %> <%= dates[0].format('YYYY') %></h3>
+<table <%- q.lg === 'h' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
+<tr><% weekdaysShort.forEach((s) => { -%><th><%= s %></th><% }); -%></tr>
+</table>
 </div><!-- .cal -->
 <div class="agenda">
 </div><!-- .agenda -->
@@ -149,7 +152,10 @@ div.pbba { page-break-before: always }
 <% dates.slice(1).forEach((d) => { -%>
 <div id="cal-<%= d.format('YYYY') %>-<%= d.format('MM') %>">
 <div class="cal pbba" style="page-break-before:always">
-<h3><%= d.format('MMMM') %> <%= d.format('YYYY') %></h3>
+<h3><%= d.locale(locale).format('MMMM') %> <%= d.format('YYYY') %></h3>
+<table <%- q.lg === 'h' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
+<tr><% weekdaysShort.forEach((s) => { -%><th><%= s %></th><% }); -%></tr>
+</table>
 </div><!-- .cal -->
 <div class="agenda">
 </div><!-- .agenda -->
