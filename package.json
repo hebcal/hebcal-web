@@ -21,20 +21,20 @@
   },
   "homepage": "https://github.com/mjradwin/hebcal-download-web#readme",
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
-    "@babel/register": "^7.10.4",
-    "eslint": "^7.4.0",
+    "@babel/register": "^7.10.5",
+    "eslint": "^7.5.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.1.2",
-    "@hebcal/geo-sqlite": "^2.1.1",
+    "@hebcal/core": "^2.1.4",
+    "@hebcal/geo-sqlite": "^2.2.4",
     "@hebcal/icalendar": "^2.1.1",
     "@hebcal/leyning": "^2.1.1",
     "@hebcal/locales": "^2.1.0",
-    "@hebcal/rest-api": "^2.1.4",
+    "@hebcal/rest-api": "^2.2.4",
     "dayjs": "^1.8.29",
     "etag": "^1.8.1",
     "koa": "^2.13.0",
@@ -42,6 +42,6 @@
     "koa-conditional-get": "^2.0.0",
     "koa-etag": "^3.0.0",
     "pdfkit": "^0.11.0",
-    "pino": "^6.3.2"
+    "pino": "^6.4.1"
   }
 }

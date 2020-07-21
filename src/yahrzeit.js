@@ -14,7 +14,7 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
   const ids = Object.keys(query)
-      .filter((k) => k[0] == 't').map((k) => +(k.substring(1)));
+      .filter((k) => k[0] == 'y').map((k) => +(k.substring(1)));
   const maxId = Math.max(...ids);
   const years = +query.years || 20;
   const startYear = new HDate().getFullYear();
@@ -26,6 +26,9 @@ export async function yahrzeitDownload(ctx) {
   if (query.yizkor == 'on') {
     const holidays = makeYizkorEvents(startYear, endYear);
     events = events.concat(holidays);
+  }
+  if (events.length === 0) {
+    ctx.throw(400, 'No events');
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   const path = ctx.request.path;
@@ -54,19 +57,19 @@ export async function yahrzeitDownload(ctx) {
  */
 function getEventsForId(query, id, startYear, endYear) {
   const events = [];
-  const [type, dd, mm, yy] = [
-    query[`t${id}`],
+  const [dd, mm, yy] = [
     query[`d${id}`],
     query[`m${id}`],
     query[`y${id}`],
   ];
-  if (!type || !dd || !mm || !yy) {
+  if (!dd || !mm || !yy) {
     return events;
   }
+  const type = query[`t${id}`] || 'Yahrzeit';
   const sunset = query[`s${id}`];
   const name = query[`n${id}`] || `Person${id}`;
   let day = dayjs(new Date(yy, mm - 1, dd));
-  if (sunset == 'on') {
+  if (sunset === 'on') {
     day = day.add(1, 'day');
   }
   for (let hyear = startYear; hyear <= endYear; hyear++) {
