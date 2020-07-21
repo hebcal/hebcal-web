@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty} from './common';
-import {HebrewCalendar, greg} from '@hebcal/core';
-import {eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
+import {HebrewCalendar, Locale, greg} from '@hebcal/core';
+import {eventsToClassicApi, eventToFullCalendar, pad2,
+  getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import 'dayjs/locale/fi';
@@ -114,6 +115,7 @@ function renderHtml(ctx) {
   }
   shortTitle += options.year;
   const events = HebrewCalendar.calendar(options);
+  const months = makeMonthlyDates(events);
   const result = eventsToClassicApi(events, options);
   for (const item of result.items) {
     delete item.leyning;
@@ -122,12 +124,13 @@ function renderHtml(ctx) {
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
   }
-  const locale = localeMap[options.locale] || 'en';
+  const locale = localeMap[Locale.getLocaleName()] || 'en';
   const localeData = dayjs().locale(locale).localeData();
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
-    dates: makeMonthlyDates(events),
+    dates: months,
+    tableBodies: makeTableBodies(events, months),
     locale,
     weekdaysShort: localeData.weekdaysShort(),
     prevUrl: '',
@@ -138,6 +141,51 @@ function renderHtml(ctx) {
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
   });
+}
+
+function makeTableBodies(events, months) {
+  const eventMap = new Map();
+  for (const ev of events) {
+    const key = dayjs(ev.date.greg()).format('YYYY-MM-DD');
+    if (eventMap.has(key)) {
+      eventMap.get(key).push(ev);
+    } else {
+      eventMap.set(key, [ev]);
+    }
+  }
+  const tableBodies = {};
+  for (const d of months) {
+    let html = '<tr>';
+    const dow = d.day();
+    for (let i = 0; i < dow; i++) {
+      html += '<td>&nbsp;</td>';
+    }
+    let n = dow;
+    const daysInMonth = greg.daysInMonth(d.month() + 1, d.year());
+    const yearMonth = d.format('YYYY-MM');
+    for (let i = 1; i <= daysInMonth; i++) {
+      html += `<td><p><b>${i}</b></p>`;
+      const evs = eventMap.get(yearMonth + '-' + pad2(i)) || [];
+      for (const ev of evs) {
+        const categories = getEventCategories(ev).join(' ');
+        const memo0 = getHolidayDescription(ev, true);
+        const memo = memo0 ? ` title="${memo0}"` : '';
+        const url = ev.url();
+        const ahref = url ? `<a href="${url}">` : '';
+        const aclose = url ? '</a>' : '';
+        // eslint-disable-next-line max-len
+        html += `<div class="fc-event ${categories}">${ahref}<span class="fc-title"${memo}>${ev.render()}</span>${aclose}</div>\n`;
+      }
+      html += '</td>\n';
+      n++;
+      if (n % 7 === 0) {
+        html += '</tr>\n<tr>';
+      }
+    }
+    html += '</tr>\n';
+    tableBodies[yearMonth] = html;
+  }
+  return tableBodies;
 }
 
 /**
