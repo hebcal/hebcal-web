@@ -206,7 +206,7 @@ function renderHtml(ctx) {
       geoUrlArgs += '&m=' + options.havdalahMins;
     }
     geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
-    const hyear = events[0].getDate().getFullYear();
+    const hyear = events[events.length - 1].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
   const endYear = options.year + getNumYears(options) - 1;
@@ -368,8 +368,8 @@ function renderFullCalendar(ctx) {
 function renderJson(ctx) {
   ctx.set('Cache-Control', 'max-age=86400');
   const events = HebrewCalendar.calendar(ctx.state.options);
-  let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
   const q = ctx.state.q;
+  let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
   const cb = q.callback;
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
