@@ -314,6 +314,9 @@ export function getLocationFromQuery(db, query, il) {
       if (tzid == 'Asia/Jerusalem') {
         il = true;
       }
+      query.latitude = latitude;
+      query.longitude = longitude;
+      query.tzid = tzid;
       const cityName = query['city-typeahead'] || `Location ${latitude},${longitude}`;
       return new Location(latitude, longitude, il, tzid, cityName);
     }

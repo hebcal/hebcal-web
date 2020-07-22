@@ -42,7 +42,9 @@ export async function hebcalApp(ctx) {
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
-    error = err;
+    if (q.v === '1') {
+      error = err;
+    }
     delete q.v;
   }
   if (options.il) {
@@ -50,13 +52,13 @@ export async function hebcalApp(ctx) {
   }
   if (options.location) {
     q['city-typeahead'] = options.location.getName();
-    ctx.state.location = options.location;
   }
   if (q.year === 'now') {
     q.year = options.year;
   }
   ctx.state.q = q;
   ctx.state.options = options;
+  ctx.state.location = options.location;
   if (q.cfg === 'json') {
     renderJson(ctx);
   } else if (q.cfg === 'fc') {
@@ -170,10 +172,7 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please check options; no Hebrew Calendar events found'});
   }
   const months = makeMonthlyDates(events);
-  const result = eventsToClassicApi(events, options);
-  for (const item of result.items) {
-    delete item.leyning;
-  }
+  const result = eventsToClassicApi(events, options, false);
   const q = ctx.state.q;
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
@@ -216,6 +215,7 @@ function renderHtml(ctx) {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
     dates: months,
+    gy: months[0].year(),
     tableBodies: makeTableBodies(events, months, options),
     locale,
     weekdaysShort: localeData.weekdaysShort(),
@@ -368,13 +368,8 @@ function renderFullCalendar(ctx) {
 function renderJson(ctx) {
   ctx.set('Cache-Control', 'max-age=86400');
   const events = HebrewCalendar.calendar(ctx.state.options);
-  let obj = eventsToClassicApi(events, ctx.state.options);
+  let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
   const q = ctx.state.q;
-  if (q.leyning === 'off') {
-    for (const item of obj.items) {
-      delete item.leyning;
-    }
-  }
   const cb = q.callback;
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';

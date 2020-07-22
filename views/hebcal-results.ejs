@@ -107,6 +107,10 @@ div.pbba { page-break-before: always }
 <div id="content">
 <div class="row">
 <div class="col-sm-8">
+<% if (gy < 1752) { -%>
+<% include partials/warning-1752.ejs %>
+<% } -%>
+<% include partials/location-warnings.ejs %>
 <h2><%= shortTitle %>
 <% if (q.c === 'on') { %><br><% } %><small class="text-muted"><%= locationName %></small></h2>
 <div class="d-print-none">

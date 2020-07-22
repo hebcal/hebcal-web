@@ -7,8 +7,6 @@ import serve from 'koa-static';
 import error from 'koa-error';
 import path from 'path';
 import pino from 'pino';
-import fs from 'fs';
-import util from 'util';
 import {hebrewDateConverter} from './converter';
 import {fridgeShabbat} from './fridge';
 import {GeoDb} from '@hebcal/geo-sqlite';
@@ -18,11 +16,11 @@ import {homepage} from './homepage';
 import maxmind from 'maxmind';
 import {hebcalApp} from './hebcal';
 
+const app = new Koa();
+
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
-const logger = pino(dest);
-
-const app = new Koa();
+const logger = app.context.logger = pino(dest);
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
@@ -72,8 +70,6 @@ render(app, {
   async: true,
 });
 
-const stat = util.promisify(fs.stat);
-
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
   const qs = ctx.request.querystring;
@@ -108,6 +104,8 @@ app.use(async (ctx, next) => {
   if (rpath == '/favicon.ico' || rpath.startsWith('/i/')) {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
+  } else if (rpath == '/robots.txt') {
+    ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath == '/') {
     await homepage(ctx);
   } else if (rpath.startsWith('/complete')) {
@@ -124,7 +122,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-app.use(serve('/var/www/html'));
+app.use(serve('/var/www/html', {defer: true}));
 
 // logger
 app.use(async (ctx) => {

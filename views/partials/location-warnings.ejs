@@ -1,0 +1,13 @@
+<% if (typeof location === 'object') { -%>
+<% if (location.getCountryCode() == 'US' &&
+      (locationName.indexOf(' IN ') != -1 || locationName.indexOf(' Indiana') != -1)) { -%>
+<% include warning-indiana.ejs %>
+<% } -%>
+<% if (location.getCountryCode() == 'US' && location.getTzid() == 'America/Denver' &&
+      (locationName.indexOf(' AZ ') != -1 || locationName.indexOf(' Arizona') != -1)) { -%>
+<% include warning-arizona.ejs %>
+<% } -%>
+<% if (location.getLatitude() >= 60.0 || location.getLatitude() <= -60.0) { -%>
+<% include warning-latitude.ejs %>
+<% } -%>
+<% } -%>
