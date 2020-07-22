@@ -35,7 +35,7 @@
     "@hebcal/leyning": "^2.1.1",
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.2.4",
-    "dayjs": "^1.8.29",
+    "dayjs": "^1.8.30",
     "etag": "^1.8.1",
     "koa": "^2.13.0",
     "koa-compress": "^4.0.1",

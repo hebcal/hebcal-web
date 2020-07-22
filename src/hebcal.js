@@ -4,14 +4,9 @@ import {eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/rest-ap
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
-import pino from 'pino';
 import etag from 'etag';
 import {basename} from 'path';
 import {makeHebcalOptions} from './common';
-
-const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
-const dest = pino.destination(logDir + '/options-debug.log');
-const logger = pino(dest);
 
 const maxNumYear = {
   candlelighting: 4,
@@ -73,7 +68,7 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
-  logger.info(Object.assign({
+  ctx.logger.debug(Object.assign({
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     url: ctx.request.originalUrl,
   }, options));

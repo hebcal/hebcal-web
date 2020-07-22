@@ -14,7 +14,13 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
   const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y').map((k) => +(k.substring(1)));
+      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
+      .map((k) => +(k.substring(1)));
+  ctx.logger.debug(Object.assign({
+    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    url: ctx.request.originalUrl,
+    ids,
+  }, query));
   const maxId = Math.max(...ids);
   const years = +query.years || 20;
   const startYear = new HDate().getFullYear();

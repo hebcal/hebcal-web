@@ -11,19 +11,21 @@ import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal';
 import {geoLookup} from './geolookup';
 
+const app = new Koa();
+
 const stat = util.promisify(fs.stat);
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
-const dest = pino.destination(logDir + '/download-web.log');
-const logger = pino(dest);
-
-const app = new Koa();
+const dest = pino.destination(logDir + '/access.log');
+const logger = app.context.logger = pino({
+  level: process.env.NODE_ENV == 'production' ? 'info' : 'debug',
+}, dest);
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 app.use(async (ctx, next) => {
-  ctx.startTime = Date.now();
+  ctx.state.startTime = Date.now();
   try {
     // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
     if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
@@ -82,7 +84,7 @@ app.use(async (ctx, next) => {
       ctx.request.url = '/export/' + filename + '?' + qs;
     }
   }
-  return next();
+  await next();
 });
 
 // request dispatcher
@@ -116,12 +118,12 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/geo')) {
     geoLookup(ctx);
   }
-  return next();
+  await next();
 });
 
 // logger
 app.use(async (ctx) => {
-  const duration = Date.now() - ctx.startTime;
+  const duration = Date.now() - ctx.state.startTime;
   logger.info({
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     method: ctx.request.method,
