@@ -12,6 +12,8 @@ import 'dayjs/locale/he';
 import 'dayjs/locale/hu';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
+import fs from 'fs';
+import readline from 'readline';
 
 dayjs.extend(localeData);
 
@@ -70,7 +72,7 @@ export async function hebcalApp(ctx) {
   }
 }
 
-function renderForm(ctx, error) {
+async function renderForm(ctx, error) {
   const message = error ? error.message : undefined;
   const cookie = ctx.cookies.get('C');
   if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
@@ -79,9 +81,11 @@ function renderForm(ctx, error) {
   }
   const defaultYear = new Date().getFullYear();
   const defaultYearHeb = new HDate().getFullYear();
+  const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
   return ctx.render('hebcal-form', {
     message,
     title: 'Custom Calendar | Hebcal Jewish Calendar',
+    tzids,
     xtra_html: `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
@@ -118,6 +122,28 @@ return new bootstrap.Tooltip(el);
 });
 window['hebcal'].createCityTypeahead(false);
 </script>`,
+  });
+}
+
+async function getTzids() {
+  return new Promise((resolve, reject) => {
+    const infile = '/usr/share/zoneinfo/zone.tab';
+    const result = [];
+    try {
+      const rl = readline.createInterface({
+        input: fs.createReadStream(infile),
+        crlfDelay: Infinity,
+      });
+      rl.on('line', (line) => {
+        if (line[0] !== '#') {
+          result.push(line.split('\t')[2]);
+        }
+      });
+      rl.on('close', () => resolve(result.sort()));
+      rl.on('error', (err) => reject(err));
+    } catch (err) {
+      return reject(err);
+    }
   });
 }
 

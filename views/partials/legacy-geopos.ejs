@@ -1,0 +1,23 @@
+<div class="form-group form-inline">
+<input type="text" name="ladeg"  size="3" maxlength="2" class="form-control" id="ladeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="ladeg">degrees</label>
+<input type="text" name="lamin"  size="2" maxlength="2" class="form-control" id="lamin" pattern="\d*" placeholder="min"> <label class="form-label" for="lamin">minutes</label>
+<select name="ladir" class="form-select mb-2" id="ladir">
+<option selected value="n">North Latitude</option>
+<option value="s">South Latitude</option>
+</select></div><!-- .form-group -->
+<div class="form-group form-inline">
+<input type="text" name="lodeg"  size="3" maxlength="3" class="form-control" id="lodeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="lodeg">degrees</label>
+<input type="text" name="lomin"  size="2" maxlength="2" class="form-control" id="lomin" pattern="\d*" placeholder="min"> <label class="form-label" for="lomin">minutes</label>
+<select name="lodir" class="form-select mb-2" id="lodir">
+<option selected value="w">West Longitude</option>
+<option value="e">East Longitude</option>
+</select></div><!-- .form-group -->
+<div class="form-group">
+<label for="tzid">Time zone</label>
+<select name="tzid" class="form-select mb-2" id="tzid">
+<option selected>UTC</option>
+<% tzids.forEach((tzid) => { -%>
+<option><%= tzid %></option>
+<% }); -%>
+</select>
+</div><!-- .form-group -->

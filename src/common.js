@@ -159,16 +159,10 @@ export function processCookieAndQuery(cookieString, defaults, query) {
       break;
     }
   }
-  if (!found && query.geo === 'pos' &&
-      !empty(query.latitude) && !empty(query.longitude) && !empty(query.tzid)) {
-    found = true;
-    for (const key of primaryGeoKeys) {
-      delete ck[key];
-      delete query[key];
-    }
-  }
-  if (!found && query.geo === 'none') {
-    for (const key of allGeoKeys) {
+  if (!found) {
+    const geo = query.geo;
+    const toRemove = (geo === 'pos') ? primaryGeoKeys : (geo === 'none') ? allGeoKeys : [];
+    for (const key of toRemove) {
       delete ck[key];
       delete query[key];
     }

@@ -3,6 +3,8 @@ import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
 import render from 'koa-ejs';
+import serve from 'koa-static';
+import error from 'koa-error';
 import path from 'path';
 import pino from 'pino';
 import fs from 'fs';
@@ -32,23 +34,18 @@ app.use(async (ctx, next) => {
     logger.info(`Opening ${mmdbPath}`);
     ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
   }
-  return next();
+  await next();
 });
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path;
   ctx.state.startTime = Date.now();
-  try {
-    // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
-    if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
-      ctx.request.header['accept-encoding'] = 'identity';
-    }
-    await next();
-  } catch (err) {
-    ctx.status = err.status || 500;
-    ctx.body = err.message;
-    ctx.app.emit('error', err, ctx);
+  // don't allow compress middleware to assume that a missing
+  // accept-encoding header implies 'accept-encoding: *'
+  if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
+    ctx.request.header['accept-encoding'] = 'identity';
   }
+  await next();
 });
 
 app.on('error', (err, ctx) => {
@@ -86,23 +83,31 @@ app.use(async (ctx, next) => {
       ctx.request.querystring = qs.replace(/;/g, '&');
     }
   }
-  return next();
+  // force error middleware to use proper json response type
+  const accept = ctx.request.header['accept'];
+  if (ctx.request.query.cfg === 'json' && (!accept || accept === '*' || accept === '*/*')) {
+    ctx.request.header['accept'] = 'application/json';
+  }
+  try {
+    await next();
+  } catch (err) {
+    ctx.status = err.status || 500;
+    ctx.body = err.message;
+    ctx.app.emit('error', err, ctx);
+  }
 });
+
+app.use(error({
+  engine: 'ejs',
+  template: path.join(__dirname, 'views', 'error.ejs'),
+}));
 
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath == '/favicon.ico' || rpath == '/robots.txt' ||
-      rpath.startsWith('/i/') || rpath.startsWith('/shabbat/browse')) {
-    const fpath = path.join('/var/www/html', rpath);
-    const fstat = await stat(fpath);
-    if (fstat.isFile()) {
-      ctx.set('Cache-Control', 'max-age=5184000');
-      ctx.type = path.extname(fpath);
-      ctx.length = fstat.size;
-      ctx.lastModified = fstat.mtime;
-      ctx.body = fs.createReadStream(fpath);
-    }
+  if (rpath == '/favicon.ico' || rpath.startsWith('/i/')) {
+    ctx.set('Cache-Control', 'max-age=5184000');
+    // let serve() handle this file
   } else if (rpath == '/') {
     await homepage(ctx);
   } else if (rpath.startsWith('/complete')) {
@@ -116,8 +121,10 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/hebcal/')) {
     await hebcalApp(ctx);
   }
-  return next();
+  await next();
 });
+
+app.use(serve('/var/www/html'));
 
 // logger
 app.use(async (ctx) => {

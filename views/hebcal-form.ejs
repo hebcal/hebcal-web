@@ -107,9 +107,13 @@
 <input type="hidden" name="geonameid" value="<%= q.geonameid || '' %>" id="geonameid">
 <div class="mb-3">
   <label class="form-label" for="city-typeahead">Candle lighting times</label>
+<% if (q.geo === 'pos') { -%>
+<%_ include partials/legacy-geopos.ejs _%>
+<% } else { -%>
   <div class="city-typeahead" style="margin-bottom:12px">
     <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
   </div>
+<% } -%>
 </div>
 <div class="mb-3">
   <label class="form-label" for="b1">Candle-lighting minutes before sundown</label>
