@@ -81,7 +81,8 @@ app.use(async (ctx, next) => {
   }
   // force error middleware to use proper json response type
   const accept = ctx.request.header['accept'];
-  if (ctx.request.query.cfg === 'json' && (!accept || accept === '*' || accept === '*/*')) {
+  const cfg = ctx.request.query.cfg;
+  if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
     ctx.request.header['accept'] = 'application/json';
   }
   try {

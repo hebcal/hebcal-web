@@ -338,6 +338,9 @@ function makeMonthlyDates(events) {
   const startDate = dayjs(events[0].getDate().greg());
   const endDate = dayjs(events[events.length - 1].getDate().greg());
   const start = startDate.set('date', 1);
+  if (events.length === 1) {
+    return [start];
+  }
   const result = [];
   for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
     result.push(d);
