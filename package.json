@@ -33,6 +33,7 @@
     "dayjs": "^1.8.29",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
+    "geolite2-redist": "^1.0.7",
     "koa": "^2.13.0",
     "koa-compress": "^4.0.1",
     "koa-conditional-get": "^2.0.0",
