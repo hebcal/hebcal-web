@@ -163,7 +163,7 @@ function makePropsForFullHtml(ctx) {
     jsonLD: firstCandles && location.getGeoId() ? JSON.stringify(getJsonLD(firstCandles, location)) : '',
     locationName: location.getName(),
     xtra_html:
-`<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+`<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
 <script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
 <script>
