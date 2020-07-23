@@ -91,7 +91,9 @@ write_files:
         compress
         notifempty
         missingok
-        copytruncate
+        postrotate
+           kill -HUP `cat /var/log/hebcal/koa.pid`
+        endscript
       }
   - path: /etc/postfix/main.cf
     permissions: '0644'

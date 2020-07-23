@@ -14,6 +14,7 @@ import {geoAutoComplete} from './complete';
 import {homepage} from './homepage';
 import maxmind from 'maxmind';
 import {hebcalApp} from './hebcal';
+import fs from 'fs';
 
 const app = new Koa();
 
@@ -25,13 +26,22 @@ const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
+// const debugLog = pino(pino.destination(logDir + '/debug.log'));
+
 app.use(async (ctx, next) => {
+  /*
+  debugLog.info(Object.assign({
+    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    method: ctx.request.method,
+    url: ctx.request.originalUrl,
+  }, ctx.request.headers));
+  */
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
-  if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
-    ctx.request.header['accept-encoding'] = 'identity';
+  if (typeof ctx.request.headers['accept-encoding'] == 'undefined') {
+    ctx.request.headers['accept-encoding'] = 'identity';
   }
   if (!ctx.lookup) {
     const mmdbPath = 'GeoLite2-Country.mmdb';
@@ -49,12 +59,12 @@ function makeLogInfo(ctx, attrs={}) {
   return Object.assign({
     status: ctx.response.status,
     length: ctx.response.length,
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
-    ua: ctx.request.header['user-agent'],
-    ref: ctx.request.header['referer'],
-    cookie: ctx.request.header['cookie'],
+    ua: ctx.request.headers['user-agent'],
+    ref: ctx.request.headers['referer'],
+    cookie: ctx.request.headers['cookie'],
   }, attrs);
 }
 
@@ -87,10 +97,10 @@ app.use(async (ctx, next) => {
     }
   }
   // force error middleware to use proper json response type
-  const accept = ctx.request.header['accept'];
+  const accept = ctx.request.headers['accept'];
   const cfg = ctx.request.query.cfg;
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
-    ctx.request.header['accept'] = 'application/json';
+    ctx.request.headers['accept'] = 'application/json';
   }
   await next();
 });
@@ -128,14 +138,19 @@ app.use(async (ctx, next) => {
 
 app.use(serve('/var/www/html', {defer: true}));
 
-const port = process.env.NODE_PORT || 8080;
-app.listen(port, () => {
-  logger.info('Koa server listening on port ' + port);
-  console.log('Koa server listening on port ' + port);
-});
-
 process.on('unhandledRejection', (err) => {
   logger.fatal(err);
   console.log(err);
   process.exit(1);
+});
+
+if (process.env.NODE_ENV == 'production' ) {
+  fs.writeFileSync(logDir + '/koa.pid', process.pid);
+  process.on('SIGHUP', () => dest.reopen());
+}
+
+const port = process.env.NODE_PORT || 8080;
+app.listen(port, () => {
+  logger.info('Koa server listening on port ' + port);
+  console.log('Koa server listening on port ' + port);
 });

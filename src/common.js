@@ -214,6 +214,9 @@ export function makeHebcalOptions(db, query) {
       options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
     } else {
       options.year = +query.year;
+      if (options.year < 1) {
+        throw new RangeError(`Invalid year ${query.year}`);
+      }
     }
   }
   if (!empty(query.month)) {
