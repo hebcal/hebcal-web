@@ -28,7 +28,7 @@
     "@hebcal/core": "^2.2.0",
     "@hebcal/geo-sqlite": "^2.2.4",
     "@hebcal/locales": "^2.1.0",
-    "@hebcal/rest-api": "^2.3.1",
+    "@hebcal/rest-api": "^2.3.2",
     "better-sqlite3": "^7.1.0",
     "dayjs": "^1.8.29",
     "etag": "^1.8.1",
