@@ -42,7 +42,9 @@ export async function hebcalApp(ctx) {
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
-    if (q.v === '1') {
+    if (q.cfg === 'json' || q.cfg === 'fc') {
+      ctx.throw(400, err);
+    } else if (q.v === '1') {
       error = err;
     }
     delete q.v;

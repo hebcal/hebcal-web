@@ -91,11 +91,14 @@ function makeItems(ctx) {
       {c: 'on', tgt: '_top'},
       ctx.request.query,
   );
-  let opts0;
+  let opts0 = {};
   try {
     opts0 = makeHebcalOptions(ctx.db, q);
   } catch (err) {
-    ctx.throw(400, err.message);
+    if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
+      ctx.throw(400, err);
+    }
+    ctx.state.message = err.message;
   }
   const location = opts0.location || ctx.db.lookupLegacyCity('New York');
   q['city-typeahead'] = location.getName();
