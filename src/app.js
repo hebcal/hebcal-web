@@ -94,13 +94,7 @@ app.use(async (ctx, next) => {
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
     ctx.request.header['accept'] = 'application/json';
   }
-  try {
-    await next();
-  } catch (err) {
-    ctx.status = err.status || 500;
-    ctx.body = err.message;
-    ctx.app.emit('error', err, ctx);
-  }
+  await next();
 });
 
 app.use(error({
@@ -140,4 +134,10 @@ const port = process.env.NODE_PORT || 8080;
 app.listen(port, () => {
   logger.info('Koa server listening on port ' + port);
   console.log('Koa server listening on port ' + port);
+});
+
+process.on('unhandledRejection', (err) => {
+  logger.fatal(err);
+  console.log(err);
+  process.exit(1);
 });
