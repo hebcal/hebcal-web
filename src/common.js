@@ -246,6 +246,16 @@ export function makeHebcalOptions(db, query) {
   return options;
 }
 
+const tzidMap = {
+  'US/Eastern': 'America/New_York',
+  'US/Central': 'America/Chicago',
+  'US/Mountain': 'America/Denver',
+  'US/Pacific': 'America/Los_Angeles',
+  'US/Alaska': 'America/Anchorage',
+  'US/Hawaii': 'Pacific/Honolulu',
+  'US/Aleutian': 'Pacific/Honolulu',
+};
+
 /**
  * @param {any} db
  * @param {any} query
@@ -283,6 +293,7 @@ export function getLocationFromQuery(db, query, il) {
       if (query.tzid == 'Asia/Jerusalem') {
         il = true;
       }
+      query.tzid = tzidMap[query.tzid] || query.tzid;
       const cityName = query['city-typeahead'] || `Location ${query.latitude},${query.longitude}`;
       return new Location(+query.latitude, +query.longitude, il, query.tzid, cityName);
     } else {
@@ -314,6 +325,7 @@ export function getLocationFromQuery(db, query, il) {
       if (tzid == 'Asia/Jerusalem') {
         il = true;
       }
+      tzid = tzidMap[tzid] || tzid;
       query.latitude = latitude;
       query.longitude = longitude;
       query.tzid = tzid;
