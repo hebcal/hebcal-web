@@ -1,7 +1,8 @@
 import Koa from 'koa';
 import compress from 'koa-compress';
-import conditional from 'koa-conditional-get';
-import etag from 'koa-etag';
+// import conditional from 'koa-conditional-get';
+// import etag from 'koa-etag';
+import timeout from 'koa-timeout-v2';
 import render from 'koa-ejs';
 import serve from 'koa-static';
 import error from 'koa-error';
@@ -26,24 +27,34 @@ const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
-app.use(async (ctx, next) => {
-  if (!ctx.lookup) {
-    const mmdbPath = 'GeoLite2-Country.mmdb';
-    logger.info(`Opening ${mmdbPath}`);
-    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
-  }
-  await next();
-});
+app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
 app.use(async (ctx, next) => {
-  ctx.state.rpath = ctx.request.path;
+  ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
     ctx.request.header['accept-encoding'] = 'identity';
   }
+  if (!ctx.lookup) {
+    const mmdbPath = 'GeoLite2-Country.mmdb';
+    logger.info(`Opening ${mmdbPath}`);
+    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
+  }
   await next();
+  const duration = Date.now() - ctx.state.startTime;
+  logger.info({
+    status: ctx.response.status,
+    length: ctx.response.length,
+    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    method: ctx.request.method,
+    url: ctx.request.originalUrl,
+    ua: ctx.request.header['user-agent'],
+    ref: ctx.request.header['referer'],
+    cookie: ctx.request.header['cookie'],
+    duration,
+  });
 });
 
 app.on('error', (err, ctx) => {
@@ -53,8 +64,8 @@ app.on('error', (err, ctx) => {
   }));
 });
 
-app.use(conditional());
-app.use(etag());
+// app.use(conditional());
+// app.use(etag());
 app.use(compress({
   threshold: 2048,
   gzip: true,
@@ -125,21 +136,8 @@ app.use(async (ctx, next) => {
 
 app.use(serve('/var/www/html', {defer: true}));
 
-// logger
-app.use(async (ctx) => {
-  const duration = Date.now() - ctx.state.startTime;
-  logger.info({
-    status: ctx.response.status,
-    length: ctx.response.length,
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-    ua: ctx.request.header['user-agent'],
-    ref: ctx.request.header['referer'],
-    cookie: ctx.request.header['cookie'],
-    duration,
-  });
-});
-
 const port = process.env.NODE_PORT || 8080;
-app.listen(port, () => console.log('Koa server listening on port ' + port));
+app.listen(port, () => {
+  logger.info('Koa server listening on port ' + port);
+  console.log('Koa server listening on port ' + port);
+});
