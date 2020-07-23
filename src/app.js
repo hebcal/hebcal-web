@@ -1,7 +1,5 @@
 import Koa from 'koa';
 import compress from 'koa-compress';
-// import conditional from 'koa-conditional-get';
-// import etag from 'koa-etag';
 import timeout from 'koa-timeout-v2';
 import render from 'koa-ejs';
 import serve from 'koa-static';
@@ -27,8 +25,6 @@ const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
-app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
-
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.startTime = Date.now();
@@ -43,8 +39,14 @@ app.use(async (ctx, next) => {
     ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
   }
   await next();
-  const duration = Date.now() - ctx.state.startTime;
-  logger.info({
+  logger.info(makeLogInfo(ctx, {
+    duration: Date.now() - ctx.state.startTime,
+  }));
+});
+
+// eslint-disable-next-line require-jsdoc
+function makeLogInfo(ctx, attrs={}) {
+  return Object.assign({
     status: ctx.response.status,
     length: ctx.response.length,
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
@@ -53,15 +55,11 @@ app.use(async (ctx, next) => {
     ua: ctx.request.header['user-agent'],
     ref: ctx.request.header['referer'],
     cookie: ctx.request.header['cookie'],
-    duration,
-  });
-});
+  }, attrs);
+}
 
 app.on('error', (err, ctx) => {
-  logger.error(Object.assign(err, {
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
-    url: ctx.request.originalUrl,
-  }));
+  logger.error(Object.assign(err, makeLogInfo(ctx)));
 });
 
 // app.use(conditional());
@@ -109,6 +107,8 @@ app.use(error({
   engine: 'ejs',
   template: path.join(__dirname, 'views', 'error.ejs'),
 }));
+
+app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
 // request dispatcher
 app.use(async (ctx, next) => {
