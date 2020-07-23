@@ -22,6 +22,10 @@ const localeMap = {
 };
 
 export async function shabbatApp(ctx) {
+  if (ctx.request.method === 'POST') {
+    ctx.set('Allow', 'GET');
+    ctx.throw(405, 'POST not allowed; try using GET instead');
+  }
   makeItems(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.request.querystring.length > 0) {

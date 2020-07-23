@@ -33,6 +33,9 @@ const hebcalFormDefaults = {
 };
 
 export async function hebcalApp(ctx) {
+  if (ctx.request.method === 'POST') {
+    ctx.throw(405, 'POST not allowed; try using GET instead');
+  }
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ? hebcalFormDefaults :
     ctx.request.query.v === '1' ? ctx.request.query :
