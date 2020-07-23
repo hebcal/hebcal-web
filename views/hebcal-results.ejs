@@ -124,7 +124,9 @@ div.pbba { page-break-before: always }
     <svg class="icon"><use xlink:href="#gi-list"></use></svg> List
    </label>
   </div><!-- .btn-group -->
+<% if (gy >= 1970) { -%>
 <div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
+<% } %>
 <% if (q.c === 'on') { %>
 <div class="btn-group mr-1" role="group">
   <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon"><use xlink:href="#gi-print"></use></svg> Print</a></div>
@@ -180,7 +182,7 @@ window['hebcal'].events=<%- JSON.stringify(items) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
 </div><!-- #content -->
-
+<% if (gy >= 1970) { -%>
 <div class="modal fade" id="hcdl-modal" tabindex="-1" role="dialog" aria-hidden="true">
  <div class="modal-dialog" role="document">
   <div class="modal-content">
@@ -320,6 +322,7 @@ href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
   </div><!-- .modal-content -->
  </div><!-- .modal-dialog -->
 </div><!-- .modal -->
+<% } -%>
 <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs>
 <symbol id="gi-print" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
