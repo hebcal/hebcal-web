@@ -62,8 +62,6 @@ app.on('error', (err, ctx) => {
   logger.error(Object.assign(err, makeLogInfo(ctx)));
 });
 
-// app.use(conditional());
-// app.use(etag());
 app.use(compress({
   threshold: 2048,
   gzip: true,
