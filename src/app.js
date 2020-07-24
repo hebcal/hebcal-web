@@ -132,6 +132,12 @@ app.use(async (ctx, next) => {
     await shabbatApp(ctx);
   } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
+  } else if (rpath.startsWith('/yahrzeit')) {
+    await ctx.render('yahrzeit-form', {
+      title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
+      nums: Array.from(Array(10), (_, i) => i + 1),
+      q: ctx.request.query,
+    });
   }
   await next();
 });
