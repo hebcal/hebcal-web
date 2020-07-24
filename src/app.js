@@ -130,7 +130,7 @@ app.use(async (ctx, next) => {
     await hebrewDateConverter(ctx);
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
-  } else if (rpath.startsWith('/hebcal/')) {
+  } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
   }
   await next();

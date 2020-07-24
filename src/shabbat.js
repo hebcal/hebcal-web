@@ -43,7 +43,7 @@ export async function shabbatApp(ctx) {
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.type = 'application/rss+xml; charset=utf-8';
-    const selfUrl = `https://www.hebcal.com/shabbat/?${ctx.state.geoUrlArgs}`;
+    const selfUrl = `https://www.hebcal.com/shabbat?${ctx.state.geoUrlArgs}`;
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
@@ -147,7 +147,7 @@ function makeItems(ctx) {
   geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
   Object.assign(ctx.state, {
     geoUrlArgs,
-    rssUrl: `https://www.hebcal.com/shabbat/?cfg=r&${geoUrlArgs}&pubDate=0`,
+    rssUrl: `https://www.hebcal.com/shabbat?cfg=r&${geoUrlArgs}&pubDate=0`,
   });
 }
 

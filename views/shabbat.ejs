@@ -46,7 +46,7 @@ ul.list-unstyled.nav-list li {
 <% include partials/location-warnings.ejs %>
 <% include partials/shabbat-items.ejs %>
 <hr class="mt-5">
-<form action="/shabbat/" method="get" id="shabbat-form">
+<form action="/shabbat" method="get" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
 <input type="hidden" name="city" value="<%= q.city %>" id="city">
@@ -80,24 +80,24 @@ ul.list-unstyled.nav-list li {
 <hr>
 <p><%= Shabbat %> times for world cities</p>
 <ul class="bullet-list-inline">
-<li><a href="/shabbat/?city=Baltimore">Baltimore</a></li>
-<li><a href="/shabbat/?city=Boston">Boston</a></li>
-<li><a href="/shabbat/?geonameid=4148411">Boca Raton</a></li>
-<li><a href="/shabbat/?geonameid=5110302">Brooklyn</a></li>
-<li><a href="/shabbat/?city=Chicago">Chicago</a></li>
-<li><a href="/shabbat/?city=Jerusalem">Jerusalem</a></li>
-<li><a href="/shabbat/?geonameid=5100280">Lakewood, NJ</a></li>
-<li><a href="/shabbat/?city=London">London</a></li>
-<li><a href="/shabbat/?city=Los+Angeles">Los Angeles</a></li>
-<li><a href="/shabbat/?city=Melbourne">Melbourne</a></li>
-<li><a href="/shabbat/?city=Miami">Miami</a></li>
-<li><a href="/shabbat/?city=Montreal">Montreal</a></li>
-<li><a href="/shabbat/?city=New+York">New York</a></li>
-<li><a href="/shabbat/?city=San+Francisco">San Francisco</a></li>
-<li><a href="/shabbat/?geonameid=5809844">Seattle</a></li>
-<li><a href="/shabbat/?city=Tel+Aviv">Tel Aviv</a></li>
-<li><a href="/shabbat/?city=Toronto">Toronto</a></li>
-<li><a href="/shabbat/?geonameid=4140963">Washington, DC</a></li>
+<li><a href="/shabbat?city=Baltimore">Baltimore</a></li>
+<li><a href="/shabbat?city=Boston">Boston</a></li>
+<li><a href="/shabbat?geonameid=4148411">Boca Raton</a></li>
+<li><a href="/shabbat?geonameid=5110302">Brooklyn</a></li>
+<li><a href="/shabbat?city=Chicago">Chicago</a></li>
+<li><a href="/shabbat?city=Jerusalem">Jerusalem</a></li>
+<li><a href="/shabbat?geonameid=5100280">Lakewood, NJ</a></li>
+<li><a href="/shabbat?city=London">London</a></li>
+<li><a href="/shabbat?city=Los+Angeles">Los Angeles</a></li>
+<li><a href="/shabbat?city=Melbourne">Melbourne</a></li>
+<li><a href="/shabbat?city=Miami">Miami</a></li>
+<li><a href="/shabbat?city=Montreal">Montreal</a></li>
+<li><a href="/shabbat?city=New+York">New York</a></li>
+<li><a href="/shabbat?city=San+Francisco">San Francisco</a></li>
+<li><a href="/shabbat?geonameid=5809844">Seattle</a></li>
+<li><a href="/shabbat?city=Tel+Aviv">Tel Aviv</a></li>
+<li><a href="/shabbat?city=Toronto">Toronto</a></li>
+<li><a href="/shabbat?geonameid=4140963">Washington, DC</a></li>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>
 </div><!-- .col-md-9 -->
@@ -109,7 +109,7 @@ ul.list-unstyled.nav-list li {
     <a title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>"> Print <%= hyear %></a>
   </li>
   <li><svg class="icon"><use xlink:href="#gi-calendar"></use></svg>
-    <a href="/hebcal/?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;month=x&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
+    <a href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;month=x&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
   </li>
   <li><svg class="icon"><use xlink:href="#gi-envelope"></use></svg>
     <a href="https://www.hebcal.com/email/?geo=<%= q.geo %>&amp;<%= geoUrlArgs %>">Weekly email</a>

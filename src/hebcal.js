@@ -191,9 +191,9 @@ function renderHtml(ctx) {
   const dlhref = downloadHref(q, options);
   const subical = downloadHref(q, options, {year: 'now', subscribe: 1}) + '.ics';
   const url = {
-    settings: '/hebcal/?' + urlArgs(q, {v: 0}),
-    prev: '/hebcal/?' + urlArgs(q, {year: options.year - 1}),
-    next: '/hebcal/?' + urlArgs(q, {year: options.year + 1}),
+    settings: '/hebcal?' + urlArgs(q, {v: 0}),
+    prev: '/hebcal?' + urlArgs(q, {year: options.year - 1}),
+    next: '/hebcal?' + urlArgs(q, {year: options.year + 1}),
     pdf: dlhref + '.pdf',
     ics: dlhref + '.ics',
     subical: subical,
