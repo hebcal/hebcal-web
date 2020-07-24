@@ -175,9 +175,12 @@ function renderHtml(ctx) {
   shortTitle += options.year;
   const events = HebrewCalendar.calendar(options);
   if (events.length === 0) {
-    return renderForm(ctx, {message: 'Please check options; no Hebrew Calendar events found'});
+    return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const months = makeMonthlyDates(events);
+  if (months.length > 13) {
+    throw new Error(`Something is wrong; months.length=${months.length}`);
+  }
   const result = eventsToClassicApi(events, options, false);
   const q = ctx.state.q;
   if (q.set !== 'off') {
@@ -343,7 +346,7 @@ function renderEventHtml(ev, options) {
 function makeMonthlyDates(events) {
   const startDate = dayjs(events[0].getDate().greg());
   const endDate = dayjs(events[events.length - 1].getDate().greg());
-  const start = startDate.set('date', 1);
+  const start = startDate.date(1);
   if (events.length === 1) {
     return [start];
   }

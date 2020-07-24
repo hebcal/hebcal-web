@@ -214,8 +214,10 @@ export function makeHebcalOptions(db, query) {
       options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
     } else {
       options.year = +query.year;
-      if (options.year < 1) {
-        throw new RangeError(`Invalid year ${query.year}`);
+      if (options.isHebrewYear && options.year < 3762) {
+        throw new RangeError('Sorry, Hebrew year must be 3762 or later');
+      } else if (options.year < 1) {
+        throw new RangeError(`Sorry, invalid Gregorian year ${query.year}`);
       }
     }
   }
