@@ -335,7 +335,10 @@ function renderEventHtml(ev, options) {
   const url = ev.url();
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
-  return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}</span>${aclose}</div>\n`;
+  const hebrew = options.appendHebrewToSubject ?
+    '<br><span lang="he" dir="rtl">' + ev.renderBrief('he') + '</span>' : '';
+  // eslint-disable-next-line max-len
+  return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}${hebrew}</span>${aclose}</div>\n`;
 }
 
 /**
