@@ -40,10 +40,13 @@ app.use(async (ctx, next) => {
 });
 
 app.on('error', (err, ctx) => {
-  logger.error(Object.assign(err, {
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
-    url: ctx.request.originalUrl,
-  }));
+  if (ctx && ctx.status != 404) {
+    logger.error(Object.assign(err, {
+      status: ctx.status,
+      ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+      url: ctx.request.originalUrl,
+    }));
+  }
 });
 
 app.use(conditional());
