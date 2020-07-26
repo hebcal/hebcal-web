@@ -76,10 +76,7 @@ export async function hebcalDownload(ctx) {
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
-      if (categories.length > 1 && categories[1] == 'minor') {
-        return false;
-      }
-      return true;
+      return categories.length < 2 || categories[1] !== 'minor';
     });
   }
   if (!events.length) {
