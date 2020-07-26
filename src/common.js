@@ -298,8 +298,10 @@ export function getLocationFromQuery(db, query, il) {
         il = true;
       }
       query.tzid = tzidMap[query.tzid] || query.tzid;
-      const cityName = query['city-typeahead'] || `Location ${query.latitude},${query.longitude}`;
-      return new Location(+query.latitude, +query.longitude, il, query.tzid, cityName);
+      const latitude = +query.latitude;
+      const longitude = +query.longitude;
+      const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
+      return new Location(latitude, longitude, il, query.tzid, cityName);
     } else {
       let tzid = query.tzid;
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
@@ -333,9 +335,26 @@ export function getLocationFromQuery(db, query, il) {
       query.latitude = latitude;
       query.longitude = longitude;
       query.tzid = tzid;
-      const cityName = query['city-typeahead'] || `Location ${latitude},${longitude}`;
+      const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, tzid);
       return new Location(latitude, longitude, il, tzid, cityName);
     }
   }
   return null;
+}
+
+/**
+ * @param {number} latitude
+ * @param {number} longitude
+ * @param {string} tzid
+ * @return {string}
+ */
+function makeGeoCityName(latitude, longitude, tzid) {
+  const ladir = latitude < 0 ? 'S' : 'N';
+  const ladeg = latitude < 0 ? Math.ceil(latitude) * -1 : Math.floor(latitude);
+  const lamin = Math.floor(60 * (Math.abs(latitude) - ladeg));
+  const lodir = longitude < 0 ? 'W' : 'E';
+  const lodeg = longitude < 0 ? Math.ceil(longitude) * -1 : Math.floor(longitude);
+  const lomin = Math.floor(60 * (Math.abs(longitude) - lodeg));
+
+  return `${ladeg}°${lamin}′${ladir}, ${lodeg}°${lomin}′${lodir}, ${tzid}`;
 }

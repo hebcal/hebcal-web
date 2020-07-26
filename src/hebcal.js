@@ -25,7 +25,6 @@ const hebcalFormDefaults = {
   ss: 'on',
   mod: 'on',
   i: 'off',
-  year: 'now',
   yt: 'G',
   lg: 's',
   b: 18,
@@ -59,8 +58,9 @@ export async function hebcalApp(ctx) {
   if (options.location) {
     q['city-typeahead'] = options.location.getName();
   }
-  if (q.year === 'now') {
-    q.year = options.year;
+  if (empty(q.year)) {
+    q.year = options.year = options.isHebrewYear ?
+        new HDate().getFullYear() : new Date().getFullYear();
   }
   ctx.state.q = q;
   ctx.state.options = options;
