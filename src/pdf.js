@@ -158,12 +158,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     x += width;
   }
   let subj = evt.render();
+  const desc = evt.getDesc();
   let fontStyle = evt.getFlags() & flags.CHAG ? 'bold' : 'plain';
   const colon = subj.indexOf(': ');
   if (evt.getFlags() & flags.DAF_YOMI) {
     subj = subj.substring(colon + 2);
-  } else if (colon != -1) {
-    // Candle lighting or Havdalah
+  } else if (desc === 'Candle lighting' || desc === 'Havdalah') {
+    // Candle lighting or Havdalah (translated)
     subj = subj.substring(0, colon);
     fontStyle = 'plain';
   } else if (subj.startsWith('Shabbat Mevarchim')) {
