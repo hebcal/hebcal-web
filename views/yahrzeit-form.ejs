@@ -41,7 +41,7 @@ and then come back to this page.</p>
 <option value="Birthday">Birthday</option>
 <option value="Anniversary">Anniversary</option>
 </select></div>
-<div class="mb-2 mr-2"><input class="form-control" type="text" name="n<%=num%>"  value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
+<div class="mb-2 mr-2"><input class="form-control" type="text" name="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
 <div class="mb-2 mr-2"><input class="form-control" type="text" name="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day"></div>
 <div class="mb-2 mr-2">
 <select name="m<%=num%>" class="form-select">
@@ -58,7 +58,7 @@ and then come back to this page.</p>
 <option <%- (q['m'+num] == 11) ? 'selected' : '' -%> value="11">November</option>
 <option <%- (q['m'+num] == 12) ? 'selected' : '' -%> value="12">December</option>
 </select></div>
-<div class="mb-2 mr-2"><input type="text" name="y<%=num%>"  size="4" maxlength="4" class="form-control" pattern="\d*" placeholder="Year"></div>
+<div class="mb-2 mr-2"><input class="form-control" type="text" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year"></div>
 <div class="mb-2 mr-2">
   <div class="form-check">
     <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' -%> value="off">
@@ -86,8 +86,9 @@ and then come back to this page.</p>
 </div><!-- .flex-row -->
 <input type="hidden" name="ref_url" value="" >
 <input type="hidden" name="ref_text" value="" >
-<input type="hidden" name=".cgifields" value="hebdate" ><input type="hidden" name=".cgifields" value="yizkor" >
-<input type="submit" class="btn btn-primary" value="Create Calendar"></form>
+<input type="hidden" name="count" value="<%= count %>">
+<input type="submit" class="btn btn-primary" value="Create Calendar">
+</form>
 
 <p class="d-print-none">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer

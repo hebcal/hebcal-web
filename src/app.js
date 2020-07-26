@@ -137,10 +137,11 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
+    const q = Object.assign({}, ctx.request.body, ctx.request.query);
     await ctx.render('yahrzeit-form', {
       title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
-      q: Object.assign({}, ctx.request.body, ctx.request.query),
-      count: +ctx.request.query.count || 6,
+      q,
+      count: +q.count || 6,
     });
   }
   await next();
