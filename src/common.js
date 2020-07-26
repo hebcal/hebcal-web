@@ -25,6 +25,8 @@ const lgToLocale = {
 };
 
 const negativeOpts = {
+  maj: 'noHolidays',
+  min: 'noMinorHolidays',
   nx: 'noRoshChodesh',
   mod: 'noModern',
   mf: 'noMinorFast',
@@ -67,7 +69,7 @@ const cookieOpts = geoKeys.concat(['geo', 'lg'],
  * @return {boolean}
  */
 export function empty(val) {
-  return typeof val == 'undefined' || !val.length;
+  return typeof val === 'undefined' || !val.length;
 }
 
 /**
@@ -75,7 +77,7 @@ export function empty(val) {
  * @return {boolean}
  */
 export function off(val) {
-  return typeof val == 'undefined' || val == 'off' || val == '0';
+  return typeof val === 'undefined' || val === 'off' || val == '0';
 }
 
 /**
@@ -178,9 +180,14 @@ export function processCookieAndQuery(cookieString, defaults, query) {
  */
 export function makeHebcalOptions(db, query) {
   const options = {};
+  // map very old "nh=on" to 5 new parameters
+  if (query.nh === 'on') {
+    Object.keys(negativeOpts).filter((x) => x !== 'nx').forEach((x) => query[x] = 'on');
+    delete query.nh;
+  }
   for (const [key, val] of Object.entries(booleanOpts)) {
-    if (typeof query[key] == 'string' &&
-      (query[key] == 'on' || query[key] == '1')) {
+    if (typeof query[key] === 'string' &&
+      (query[key] === 'on' || query[key] === '1')) {
       options[val] = true;
     }
   }
@@ -189,28 +196,20 @@ export function makeHebcalOptions(db, query) {
       options[val] = true;
     }
   }
-  if (typeof query.nh == 'undefined' && typeof query.maj == 'undefined') {
-    options.noHolidays = true;
-  }
-  // legacy: before we had maj/min/mod/ss/mf, we only had nh/nx.
-  // disable minor holidays only if we are sure it's not an old URL
-  if ((query.nh != 'on' || query.nx != 'on') && off(query.min)) {
-    options.noMinorHolidays = true;
-  }
   // Before we parse numberOpts, check for tzeit preference
   if (options.havdalahTzeit) {
     delete query.m;
   }
   for (const [key, val] of Object.entries(numberOpts)) {
-    if (typeof query[key] == 'string' && query[key].length) {
+    if (typeof query[key] === 'string' && query[key].length) {
       options[val] = +query[key];
     }
   }
   if (!empty(query.yt)) {
-    options.isHebrewYear = Boolean(query.yt == 'H');
+    options.isHebrewYear = Boolean(query.yt === 'H');
   }
   if (!empty(query.year)) {
-    if (query.year == 'now') {
+    if (query.year === 'now') {
       options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
     } else {
       options.year = +query.year;
@@ -233,7 +232,7 @@ export function makeHebcalOptions(db, query) {
   if (!empty(query.lg)) {
     const lg = query.lg;
     options.locale = lgToLocale[lg] || lg;
-    if (lg == 'ah' || lg == 'sh') {
+    if (lg === 'ah' || lg === 'sh') {
       options.appendHebrewToSubject = true;
     }
   }
@@ -290,12 +289,12 @@ export function getLocationFromQuery(db, query, il) {
     query.geo = 'geoname';
     query.geonameid = location.getGeoId();
     return location;
-  } else if (query.geo == 'pos') {
+  } else if (query.geo === 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
         throw new Error('Timezone required');
       }
-      if (query.tzid == 'Asia/Jerusalem') {
+      if (query.tzid === 'Asia/Jerusalem') {
         il = true;
       }
       query.tzid = tzidMap[query.tzid] || query.tzid;
@@ -305,7 +304,7 @@ export function getLocationFromQuery(db, query, il) {
       let tzid = query.tzid;
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
         tzid = Location.legacyTzToTzid(query.tz, query.dst);
-        if (!tzid && query.dst == 'none') {
+        if (!tzid && query.dst === 'none') {
           const tz = +query.tz;
           const plus = tz > 0 ? '+' : '';
           tzid = `Etc/GMT${plus}${tz}`;
@@ -321,13 +320,13 @@ export function getLocationFromQuery(db, query, il) {
       }
       let latitude = +query.ladeg + (+query.lamin / 60.0);
       let longitude = +query.lodeg + (+query.lomin / 60.0);
-      if (query.ladir == 's') {
+      if (query.ladir === 's') {
         latitude *= -1;
       }
-      if (query.lodir == 'w') {
+      if (query.lodir === 'w') {
         longitude *= -1;
       }
-      if (tzid == 'Asia/Jerusalem') {
+      if (tzid === 'Asia/Jerusalem') {
         il = true;
       }
       tzid = tzidMap[tzid] || tzid;

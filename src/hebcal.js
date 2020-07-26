@@ -173,7 +173,13 @@ function renderHtml(ctx) {
     shortTitle += greg.monthNames[options.month] + ' ';
   }
   shortTitle += options.year;
-  const events = HebrewCalendar.calendar(options);
+  let events = HebrewCalendar.calendar(options);
+  if (options.noMinorHolidays) {
+    events = events.filter((ev) => {
+      const categories = getEventCategories(ev);
+      return categories.length < 2 || categories[1] !== 'minor';
+    });
+  }
   if (events.length === 0) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
