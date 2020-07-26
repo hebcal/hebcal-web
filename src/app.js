@@ -15,6 +15,8 @@ import {homepage} from './homepage';
 import maxmind from 'maxmind';
 import {hebcalApp} from './hebcal';
 import fs from 'fs';
+const bodyParser = require('koa-bodyparser');
+
 
 const app = new Koa();
 
@@ -112,6 +114,8 @@ app.use(error({
 
 app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
+app.use(bodyParser());
+
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
@@ -135,8 +139,8 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/yahrzeit')) {
     await ctx.render('yahrzeit-form', {
       title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
-      nums: Array.from(Array(10), (_, i) => i + 1),
-      q: ctx.request.query,
+      q: Object.assign({}, ctx.request.body, ctx.request.query),
+      count: +ctx.request.query.count || 6,
     });
   }
   await next();
