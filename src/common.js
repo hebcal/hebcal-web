@@ -1,6 +1,7 @@
 import {HDate, Location} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
+import createError from 'http-errors';
 
 export const langTzDefaults = {
   US: ['s', 'America/New_York'],
@@ -270,21 +271,21 @@ export function getLocationFromQuery(db, query, il) {
   if (!empty(query.geonameid)) {
     const location = db.lookupGeoname(+query.geonameid);
     if (location == null) {
-      throw new Error(`Sorry, can't find geonameid ${query.geonameid}`);
+      throw createError(404, `Sorry, can't find geonameid ${query.geonameid}`);
     }
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {
     const location = db.lookupZip(query.zip);
     if (location == null) {
-      throw new Error(`Sorry, can't find ZIP code ${query.zip}`);
+      throw createError(404, `Sorry, can't find ZIP code ${query.zip}`);
     }
     query.geo = 'zip';
     return location;
   } else if (!empty(query.city)) {
     const location = db.lookupLegacyCity(query.city);
     if (location == null) {
-      throw new Error(`Invalid legacy city ${query.city}`);
+      throw createError(404, `Invalid legacy city ${query.city}`);
     }
     query.geo = 'geoname';
     query.geonameid = location.getGeoId();
@@ -292,7 +293,7 @@ export function getLocationFromQuery(db, query, il) {
   } else if (query.geo === 'pos') {
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
-        throw new Error('Timezone required');
+        throw createError(400, 'Timezone required');
       }
       if (query.tzid === 'Asia/Jerusalem') {
         il = true;
@@ -313,7 +314,7 @@ export function getLocationFromQuery(db, query, il) {
         }
       }
       if (!tzid) {
-        throw new Error('Timezone required');
+        throw createError(400, 'Timezone required');
       }
       for (const [key, max] of Object.entries(geoposLegacy)) {
         if (empty(query[key]) || +query[key] > max) {

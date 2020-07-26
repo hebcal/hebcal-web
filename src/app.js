@@ -71,7 +71,9 @@ function makeLogInfo(ctx, attrs={}) {
 }
 
 app.on('error', (err, ctx) => {
-  logger.error(Object.assign(err, makeLogInfo(ctx)));
+  if (ctx && ctx.status != 404) {
+    logger.error(Object.assign(err, makeLogInfo(ctx)));
+  }
 });
 
 app.use(compress({
