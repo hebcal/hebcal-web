@@ -211,7 +211,15 @@ export function makeHebcalOptions(db, query) {
   }
   if (!empty(query.year)) {
     if (query.year === 'now') {
-      options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
+      if (options.isHebrewYear) {
+        options.year = new HDate().getFullYear();
+      } else {
+        const dt = new Date();
+        options.year = dt.getFullYear();
+        if (query.month === 'now') {
+          query.month = String(dt.getMonth() + 1);
+        }
+      }
     } else {
       options.year = +query.year;
       if (isNaN(options.year)) {
@@ -228,7 +236,7 @@ export function makeHebcalOptions(db, query) {
     if (month >= 1 && month <= 12) {
       options.month = month;
     } else {
-      delete query.month;
+      delete query.month; // month=x is default, implies entire year
     }
   }
   if (options.ashkenazi && empty(query.lg)) {
