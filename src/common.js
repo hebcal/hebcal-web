@@ -214,7 +214,9 @@ export function makeHebcalOptions(db, query) {
       options.year = options.isHebrewYear ? new HDate().getFullYear() : new Date().getFullYear();
     } else {
       options.year = +query.year;
-      if (options.isHebrewYear && options.year < 3762) {
+      if (isNaN(options.year)) {
+        throw new RangeError(`Sorry, invalid year ${query.year}`);
+      } else if (options.isHebrewYear && options.year < 3762) {
         throw new RangeError('Sorry, Hebrew year must be 3762 or later');
       } else if (options.year < 1) {
         throw new RangeError(`Sorry, invalid Gregorian year ${query.year}`);
@@ -225,6 +227,8 @@ export function makeHebcalOptions(db, query) {
     const month = +query.month;
     if (month >= 1 && month <= 12) {
       options.month = month;
+    } else {
+      delete query.month;
     }
   }
   if (options.ashkenazi && empty(query.lg)) {
