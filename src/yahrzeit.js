@@ -4,6 +4,7 @@ import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
+import {empty} from './common';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -68,7 +69,7 @@ function getEventsForId(query, id, startYear, endYear) {
     query[`m${id}`],
     query[`y${id}`],
   ];
-  if (!dd || !mm || !yy) {
+  if (empty(dd) || empty(mm) || empty(yy)) {
     return events;
   }
   const type = query[`t${id}`] || 'Yahrzeit';

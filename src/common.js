@@ -69,7 +69,7 @@ const cookieOpts = geoKeys.concat(['geo', 'lg'],
  * @return {boolean}
  */
 export function empty(val) {
-  return typeof val === 'undefined' || !val.length;
+  return typeof val !== 'string' || val.length === 0;
 }
 
 /**
