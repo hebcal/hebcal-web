@@ -72,7 +72,12 @@ function makeLogInfo(ctx, attrs={}) {
 
 app.on('error', (err, ctx) => {
   if (ctx && ctx.status != 404) {
-    logger.error(Object.assign(err, makeLogInfo(ctx)));
+    const obj = Object.assign(err, makeLogInfo(ctx));
+    if (ctx.status < 500) {
+      logger.warn(obj);
+    } else {
+      logger.error(obj);
+    }
   }
 });
 
