@@ -184,7 +184,7 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const months = makeMonthlyDates(events);
-  if (months.length > 13) {
+  if (months.length > 14) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
   }
   const result = eventsToClassicApi(events, options, false);
