@@ -62,6 +62,7 @@ const geoposLegacy = {
 
 const primaryGeoKeys = ['geonameid', 'zip', 'city'];
 const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'tzid']);
+const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy));
 const cookieOpts = geoKeys.concat(['geo', 'lg'],
     Object.keys(numberOpts), Object.keys(booleanOpts));
 
@@ -87,17 +88,28 @@ export function off(val) {
  * @return {string}
  */
 export function urlArgs(query, override={}) {
-  const s = [];
-  for (const [key, val0] of Object.entries(query)) {
-    const val = typeof override[key] === 'undefined' ? val0 : override[key];
-    s.push(key + '=' + encodeURIComponent(val));
+  const q = Object.assign({}, query, override);
+  for (const key of getGeoKeysToRemove(q.geo)) {
+    delete q[key];
   }
-  for (const [key, val] of Object.entries(override)) {
-    if (typeof query[key] === 'undefined') {
-      s.push(key + '=' + encodeURIComponent(val));
-    }
+  delete q['.s'];
+  return querystring.stringify(q);
+}
+
+/**
+ * @param {string} geo
+ * @return {string[]}
+ */
+function getGeoKeysToRemove(geo) {
+  if (empty(geo)) {
+    return [];
   }
-  return s.join('&');
+  switch (geo) {
+    case 'pos': return primaryGeoKeys;
+    case 'none': return allGeoKeys;
+    case 'geoname': return allGeoKeys.filter((k) => k !== 'geonameid');
+    default: return allGeoKeys.filter((k) => k !== geo);
+  }
 }
 
 /**
@@ -151,7 +163,6 @@ export function possiblySetCookie(ctx, query) {
 export function processCookieAndQuery(cookieString, defaults, query) {
   const ck = querystring.parse(cookieString || '');
   let found = false;
-  const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy));
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
       for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
