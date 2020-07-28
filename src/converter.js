@@ -39,6 +39,7 @@ function isset(val) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebrewDateConverter(ctx) {
+  Locale.useLocale('en');
   const p = makeProperties(ctx);
   if (p.message) {
     ctx.status = 400;

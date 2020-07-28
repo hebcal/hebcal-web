@@ -7,9 +7,8 @@ import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {yahrzeitDownload} from './yahrzeit';
-import {hebcalDownload} from './hebcal';
-import {geoLookup} from './geolookup';
+import {yahrzeitDownload} from './yahrzeit-download';
+import {hebcalDownload} from './hebcal-download';
 
 const app = new Koa();
 
@@ -118,8 +117,6 @@ app.use(async (ctx, next) => {
     } else if (ctx.request.query.v == '1') {
       await hebcalDownload(ctx);
     }
-  } else if (rpath.startsWith('/geo')) {
-    geoLookup(ctx);
   }
   await next();
 });

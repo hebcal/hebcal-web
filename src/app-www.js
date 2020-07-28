@@ -16,6 +16,7 @@ import maxmind from 'maxmind';
 import {hebcalApp} from './hebcal';
 import fs from 'fs';
 const bodyParser = require('koa-bodyparser');
+import {geoLookup} from './geolookup';
 
 
 const app = new Koa();
@@ -135,6 +136,8 @@ app.use(async (ctx, next) => {
     await homepage(ctx);
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
+  } else if (rpath.startsWith('/geo')) {
+    geoLookup(ctx);
   } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
