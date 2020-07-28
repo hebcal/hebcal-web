@@ -64,19 +64,22 @@
     <label class="form-check-label" for="i1">Israel holiday schedule</label>
   </div>
 </div>
-<div class="form-group mb-2">
-  <label for="year" class="sr-only">Year</label>
-  <input type="text" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="\d*" placeholder="Year" style="width: 80px">
-</div>
-<input type="hidden" name="month" value="x" id="month">
+<div class="row align-items-center gx-3 mt-3">
+<div class="col-auto mb-1">
+<label for="year" class="sr-only">Year</label>
+<input type="text" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="\d*" placeholder="Year">
+</div><!-- .col-sm-4 -->
+<div class="col-auto">
 <div class="form-check mb-1">
   <input class="form-check-input" type="radio" name="yt" value="G" id="ytG" <%- q.yt !== 'H' ? 'checked' : '' %> onclick="s6(this.value)">
-  <label class="form-check-label" for="ytG">Gregorian year (common era)</label>
+  <label class="form-check-label" for="ytG">Gregorian year <small>(common era)</small></label>
   </div>
 <div class="form-check mb-1">
   <input class="form-check-input" type="radio" name="yt" value="H" id="ytH" <%- q.yt === 'H' ? 'checked' : '' %> onclick="s6(this.value)">
   <label class="form-check-label" for="ytH">Hebrew year</label>
 </div>
+</div><!-- .col-sm -->
+</div><!-- .row -->
 </div><!-- .col-sm-6 -->
 <div class="col-sm-6">
 <fieldset>
@@ -116,13 +119,15 @@
 <input type="hidden" name="city" value="<%= q.city || '' %>" id="city">
 <input type="hidden" name="geonameid" value="<%= q.geonameid || '' %>" id="geonameid">
   <div class="city-typeahead" style="margin-bottom:12px">
-    <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code">
+    <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control typeahead" id="city-typeahead" placeholder="Search for city or ZIP code ...">
   </div>
 <% } -%>
 </div>
-<div class="mb-3">
-  <label class="form-label" for="b1">Candle-lighting minutes before sundown</label>
-  <input class="form-control" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
+<div class="row gx-2 mb-3">
+  <div class="col-auto">
+    <input class="form-control" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
+  </div>
+  <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
 <div class="mb-1">Havdalah</div>
 <div class="form-check mb-2">
@@ -140,7 +145,7 @@
   </label>
 </div><!-- .form-check -->
 <div class="mb-3">
-  <input type="text" class="form-control" id="m1" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" placeholder="minutes" pattern="\d*">
+  <input type="text" class="form-control" id="m1" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
 </div><!-- .mb-3 -->
 </fieldset>
 </div><!-- .col-sm-6 -->

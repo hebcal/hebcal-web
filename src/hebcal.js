@@ -100,7 +100,6 @@ async function renderForm(ctx, error) {
 <script>
 var d=document;
 function s6(val){
-d.f1.month.value='x';
 if(val=='G'){d.f1.year.value=${defaultYear};}
 if(val=='H'){d.f1.year.value=${defaultYearHeb};}
 return false;}
