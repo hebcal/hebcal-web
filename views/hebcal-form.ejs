@@ -134,18 +134,18 @@
   <input class="form-check-input" type="radio" name="M" id="M1" <%- q.M !== 'off' ? 'checked' : '' %> value="on">
   <label class="form-check-label" for="M1">
     nightfall (tzeit hakochavim)
-    <span id="M1t" title="the point when 3 small stars are observable in the night time sky with the naked eye" data-toggle="tooltip" data-placement="top">ℹ️</span>
+    <span title="the point when 3 small stars are observable in the night time sky with the naked eye" data-toggle="tooltip" data-placement="top">ℹ️</span>
   </label>
 </div><!-- .form-check -->
 <div class="form-check mb-2">
   <input class="form-check-input" type="radio" name="M" id="M0" <%- q.M === 'off' ? 'checked' : '' %> value="off">
   <label class="form-check-label" for="M0">
     minutes past sundown
-    <span id="M2t" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-toggle="tooltip" data-placement="top">ℹ️</span>
+    <span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-toggle="tooltip" data-placement="top">ℹ️</span>
   </label>
 </div><!-- .form-check -->
 <div class="mb-3">
-  <input type="text" class="form-control" id="m1" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
+  <input type="text" class="form-control" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
 </div><!-- .mb-3 -->
 </fieldset>
 </div><!-- .col-sm-6 -->

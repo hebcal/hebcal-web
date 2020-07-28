@@ -2,7 +2,10 @@
 <style>
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
-@media print { div.pbba { page-break-before: always } }
+@media print{
+  @page {size: landscape}
+  div.pbba { page-break-before: always }
+}
 .fc-emulated-table {
   table-layout: fixed;
 }
@@ -103,7 +106,7 @@ div.pbba { page-break-before: always }
 </head>
 <body>
 <% include partials/navbar.ejs %>
-<div class="container">
+<div class="container-fluid">
 <div id="content">
 <div class="row">
 <div class="col-sm-8">
