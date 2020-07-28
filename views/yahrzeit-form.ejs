@@ -35,19 +35,17 @@ and then come back to this page.</p>
 <form class="yahrzeit-form d-print-none" method="post" action="/yahrzeit">
 <% for (let num = 1; num <= +q.count; num++) { -%>
 <div class="yahrzeit-row">
-<div class="d-flex flex-row mt-1">
-<div class="mr-2 mb-2">
+<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
+<div class="col-auto"><input class="form-control" type="text" name="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
+<div class="col-auto">
 <select name="t<%=num%>" class="form-select">
 <option value="Yahrzeit">Yahrzeit</option>
 <option value="Birthday">Birthday</option>
 <option value="Anniversary">Anniversary</option>
 </select></div>
-<div class="mb-2 mr-2"><input class="form-control" type="text" name="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
-</div><!-- .flex-row -->
-<div class="d-inline-flex flex-row">
-  <div class="mb-2 mr-2"><input class="form-control" type="text" name="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day"></div>
-  <div class="mb-2 mr-2">
-  <select name="m<%=num%>" class="form-select">
+<div class="col-auto"><input class="form-control" type="text" name="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day"></div>
+<div class="col-auto">
+<select name="m<%=num%>" class="form-select">
   <option <%- (q['m'+num] == 1) ? 'selected' : '' -%> value="1">January</option>
   <option <%- (q['m'+num] == 2) ? 'selected' : '' -%> value="2">February</option>
   <option <%- (q['m'+num] == 3) ? 'selected' : '' -%> value="3">March</option>
@@ -60,21 +58,21 @@ and then come back to this page.</p>
   <option <%- (q['m'+num] == 10) ? 'selected' : '' -%> value="10">October</option>
   <option <%- (q['m'+num] == 11) ? 'selected' : '' -%> value="11">November</option>
   <option <%- (q['m'+num] == 12) ? 'selected' : '' -%> value="12">December</option>
-  </select></div>
-  <div class="mb-2 mr-2"><input class="form-control" type="text" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year"></div>
-    <div class="form-check m-1">
-    <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' -%> value="off">
-    <label class="form-check-label" for="s<%=num%>-0">Before sunset</label>
-  </div>
-  <div class="form-check m-1">
-    <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' -%> value="on">
-    <label class="form-check-label" for="s<%=num%>-1">After sunset</label>
-  </div>
-</div><!-- .flex-row -->
+</select></div>
+<div class="col-auto"><input class="form-control" type="text" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year"></div>
+<div class="col-auto form-check m-2">
+  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' -%> value="off">
+  <label class="form-check-label" for="s<%=num%>-0">Before sunset</label>
+</div>
+<div class="col-auto form-check">
+  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' -%> value="on">
+  <label class="form-check-label" for="s<%=num%>-1">After sunset</label>
+</div>
+</div><!-- .row -->
 </div><!-- .yahrzeit-row -->
 <% } %>
 
-<div class="form-check mb-2">
+<div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
 </div>
@@ -82,15 +80,18 @@ and then come back to this page.</p>
 <input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' -%> id="yizkor" >
 <label class="form-check-label" for="yizkor">Include Yizkor dates</label>
 </div>
-<div class="d-flex flex-row">
-  <label class="form-label mr-2" for="years">Number of years:</label>
-  <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
-</div><!-- .flex-row -->
+<div class="row gx-2 mb-3 align-items-center">
+  <label class="col-auto col-form-label" for="years">Number of years:</label>
+  <div class="col-auto">
+    <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
+  </div>
+</div><!-- .row -->
 <input type="hidden" name="count" value="<%= q.count %>">
+<input type="hidden" name="v" value="yahrzeit">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
 
-<p class="d-print-none">Would you like to use this calendar for your website? See
+<p class="d-print-none text-muted mt-3">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
 </div><!-- .col-sm-12 -->
