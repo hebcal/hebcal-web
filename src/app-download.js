@@ -7,7 +7,7 @@ import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {yahrzeitDownload} from './yahrzeit-download';
+import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal-download';
 
 const app = new Koa();

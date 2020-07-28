@@ -14,30 +14,14 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
-      .map((k) => +(k.substring(1)));
   ctx.logger.debug(Object.assign({
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     url: ctx.request.originalUrl,
-    ids,
   }, query));
-  const maxId = Math.max(...ids);
-  const years = +query.years || 20;
-  const startYear = new HDate().getFullYear();
-  const endYear = startYear + years;
-  let events = [];
-  for (let id = 1; id <= maxId; id++) {
-    events = events.concat(getEventsForId(query, id, startYear, endYear));
-  }
-  if (query.yizkor == 'on') {
-    const holidays = makeYizkorEvents(startYear, endYear);
-    events = events.concat(holidays);
-  }
+  const events = makeYahrzeitEvents(query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
-  events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
   if (!query.subscribe) {
@@ -53,6 +37,30 @@ export async function yahrzeitDownload(ctx) {
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = ical;
   }
+}
+
+/**
+ * @param {any} query
+ * @return {Event[]}
+ */
+export function makeYahrzeitEvents(query) {
+  const ids = Object.keys(query)
+      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
+      .map((k) => +(k.substring(1)));
+  const maxId = Math.max(...ids);
+  const years = +query.years || 20;
+  const startYear = new HDate().getFullYear();
+  const endYear = startYear + years;
+  let events = [];
+  for (let id = 1; id <= maxId; id++) {
+    events = events.concat(getEventsForId(query, id, startYear, endYear));
+  }
+  if (query.yizkor == 'on') {
+    const holidays = makeYizkorEvents(startYear, endYear);
+    events = events.concat(holidays);
+  }
+  events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
+  return events;
 }
 
 /**
@@ -87,7 +95,9 @@ function getEventsForId(query, id, startYear, endYear) {
       const typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
       let subj = `${name}'s ${typeStr}`;
       if (query.hebdate == 'on') {
-        subj += ' (' + hd.render('en') + ')';
+        const hebdate = hd.render('en');
+        const comma = hebdate.indexOf(',');
+        subj += ' (' + hebdate.substring(0, comma) + ')';
       }
       events.push(new Event(hd, subj, flags.USER_EVENT));
     }

@@ -62,7 +62,7 @@ write_files:
       # set the working directory to have consistent relative paths
       WorkingDirectory=/var/www
       # start the server file (file is relative to WorkingDirectory here)
-      ExecStart=/usr/bin/node /var/www/dist/app.js
+      ExecStart=/usr/bin/node /var/www/dist/app-www.js
       # if process crashes, always try to restart
       Restart=always
       # let 500ms between the crash and the restart
@@ -167,13 +167,13 @@ runcmd:
   - systemctl reload ssh.service
   - curl -sL https://deb.nodesource.com/setup_12.x | bash -
   - apt-get install -y nodejs
-  - git clone https://github.com/hebcal/hebcal-converter.git /home/hebcal/hebcal-converter
-  - cd /home/hebcal/hebcal-converter && npm install
-  - cd /home/hebcal/hebcal-converter && npm run build
+  - git clone https://github.com/hebcal/hebcal-web.git /home/hebcal/hebcal-web
+  - cd /home/hebcal/hebcal-web && npm install
+  - cd /home/hebcal/hebcal-web && npm run build
   - mkdir -p /var/www
-  - rsync -av /home/hebcal/hebcal-converter/dist /var/www/
-  - rsync -av /home/hebcal/hebcal-converter/node_modules /var/www/
-  - rsync -av /home/hebcal/hebcal-converter/views /var/www/dist/
+  - rsync -av /home/hebcal/hebcal-web/dist /var/www/
+  - rsync -av /home/hebcal/hebcal-web/node_modules /var/www/
+  - rsync -av /home/hebcal/hebcal-web/views /var/www/dist/
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
   - curl -o /tmp/admin1CodesASCII.txt http://download.geonames.org/export/dump/admin1CodesASCII.txt
   - curl -o /tmp/cities5000.zip http://download.geonames.org/export/dump/cities5000.zip
@@ -185,7 +185,7 @@ runcmd:
   - chown -R hebcal:hebcal /home/hebcal
   - rsync -av /var/www/node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/
   - sqlite3 -echo /var/www/zips.sqlite3 < /tmp/zips-dummy.sql
-  - cd /home/hebcal/hebcal-converter && npx build-geonames-sqlite /var/www/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /home/hebcal/hebcal-converter/node_modules/@hebcal/geo-sqlite/cities-patch.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
+  - cd /home/hebcal/hebcal-web && npx build-geonames-sqlite /var/www/geonames.sqlite3 /tmp/countryInfo.txt /tmp/cities5000.txt /home/hebcal/hebcal-web/node_modules/@hebcal/geo-sqlite/cities-patch.txt /tmp/admin1CodesASCII.txt /tmp/IL.txt
   - systemctl enable koa.service
   - systemctl start koa.service
   - mkdir -p /var/www/html

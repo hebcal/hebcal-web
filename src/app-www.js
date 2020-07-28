@@ -17,7 +17,7 @@ import {hebcalApp} from './hebcal';
 import fs from 'fs';
 const bodyParser = require('koa-bodyparser');
 import {geoLookup} from './geolookup';
-
+import {makeYahrzeitEvents} from './yahrzeit';
 
 const app = new Koa();
 
@@ -153,6 +153,10 @@ app.use(async (ctx, next) => {
       count: 6,
       years: 20,
     }, ctx.request.body, ctx.request.query);
+    if (q.v === 'yahrzeit') {
+      const ev = makeYahrzeitEvents(q);
+      console.log(ev);
+    }
     await ctx.render('yahrzeit-form', {
       title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
       q,
