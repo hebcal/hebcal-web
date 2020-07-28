@@ -67,14 +67,13 @@
 </div><!-- #converter-results -->
 <div id="converter-form" class="d-print-none">
 <div class="row">
-<div class="col-sm">
+<div class="col-md">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" action="/converter">
 <h5>Convert from Gregorian to Hebrew date</h5>
-<form method="get" action="/converter">
-<div class="row">
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
 </div><!-- .col -->
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <select name="gm" class="form-select">
  <option <%- (gm === 1) ? 'selected' : '' -%> value="1">January</option>
  <option <%- (gm === 2) ? 'selected' : '' -%> value="2">February</option>
@@ -90,35 +89,31 @@
  <option <%- (gm === 12) ? 'selected' : '' -%> value="12">December</option>
 </select>
 </div><!-- .col -->
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <input type="text" class="form-control" name="gy" placeholder="year" value="<%= gy %>" size="4" maxlength="4" id="gy" pattern="\d*">
 </div><!-- .col -->
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <div class="form-check">
   <input class="form-check-input" type="checkbox" name="gs" value="on" <%= gs ? ' checked' : '' -%> id="gs">
   <label class="form-check-label" for="gs">After sunset</label>
 </div><!-- .form-check -->
 </div><!-- .col -->
-</div><!-- .row -->
-<div class="row">
-<div class="col mb-3">
+<div class="col-auto mb-2">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="#gi-refresh"></use></svg>
   Convert to Hebrew
 </button>
 </div><!-- .col -->
-</div><!-- .row -->
 </form>
-</div><!-- .col-sm -->
+</div><!-- .col-md -->
 
-<div class="col-sm">
+<div class="col-md">
+<form class="row gy-1 gx-2 mb-3" method="get" action="/converter">
 <h5>Convert from Hebrew to Gregorian date</h5>
-<form method="get" action="/converter">
-<div class="row">
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <input type="text" class="form-control" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">
 </div><!-- .col -->
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <select name="hm" class="form-select">
  <option <%- (hm === 1) ? 'selected' : '' -%> value="Nisan">Nisan</option>
  <option <%- (hm === 2) ? 'selected' : '' -%> value="Iyyar">Iyyar</option>
@@ -136,18 +131,17 @@
  <option <%- (hm === 13) ? 'selected' : '' -%> value="Adar2">Adar II</option>
 </select>
 </div><!-- .col -->
-<div class="col-auto mb-3">
+<div class="col-auto mb-2">
 <input type="text" class="form-control" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
 </div><!-- .col -->
-<div class="col mb-3">
+<div class="col mb-2">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="#gi-refresh"></use></svg>
   Convert to Gregorian
 </button>
 </div><!-- .col -->
-</div><!-- .row -->
 </form>
-</div><!-- .col-sm -->
+</div><!-- .col-md -->
 </div><!-- .row -->
 </div><!-- #converter-form -->
 
