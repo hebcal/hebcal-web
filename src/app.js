@@ -144,11 +144,15 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
-    const q = Object.assign({}, ctx.request.body, ctx.request.query);
+    const q = Object.assign({
+      hebdate: 'on',
+      yizkor: 'off',
+      count: 6,
+      years: 20,
+    }, ctx.request.body, ctx.request.query);
     await ctx.render('yahrzeit-form', {
       title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
       q,
-      count: +q.count || 6,
     });
   }
   await next();

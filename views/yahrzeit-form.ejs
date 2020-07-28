@@ -33,7 +33,7 @@ href="/converter/">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
 </div><!-- .d-print-none -->
 <form class="yahrzeit-form d-print-none" method="post" action="/yahrzeit/">
-<% for (let num = 1; num <= count; num++) { -%>
+<% for (let num = 1; num <= +q.count; num++) { -%>
 <div class="d-flex flex-row yahrzeit-row">
 <div class="mr-2 mb-2">
 <select name="t<%=num%>" class="form-select">
@@ -82,12 +82,10 @@ and then come back to this page.</p>
 </div>
 <div class="d-flex flex-row">
   <label class="form-label mr-2" for="years">Number of years:</label>
-  <input type="text" name="years" value="<%= q.years || 20 %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
+  <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
 </div><!-- .flex-row -->
-<input type="hidden" name="ref_url" value="" >
-<input type="hidden" name="ref_text" value="" >
-<input type="hidden" name="count" value="<%= count %>">
-<input type="submit" class="btn btn-primary" value="Create Calendar">
+<input type="hidden" name="count" value="<%= q.count %>">
+<button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
 
 <p class="d-print-none">Would you like to use this calendar for your website? See
