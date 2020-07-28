@@ -326,7 +326,7 @@ function renderEventHtml(ev, options) {
     const colon = title.indexOf(':');
     if (colon != -1) {
       const time = HebrewCalendar.reformatTimeStr(ev.getAttrs().eventTimeStr, 'p', options);
-      title = '<b>' + time + '</b> ' + title.substring(0, colon);
+      title = '<small class="text-muted">' + time + '</small> ' + title.substring(0, colon);
     }
   } else if (ev.getFlags() & flags.DAF_YOMI) {
     const colon = title.indexOf(':');
