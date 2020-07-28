@@ -62,7 +62,7 @@ const geoposLegacy = {
 
 const primaryGeoKeys = ['geonameid', 'zip', 'city'];
 const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'tzid']);
-const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy));
+const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy)).concat(['city-typeahead']);
 const cookieOpts = geoKeys.concat(['geo', 'lg'],
     Object.keys(numberOpts), Object.keys(booleanOpts));
 
@@ -106,7 +106,7 @@ function getGeoKeysToRemove(geo) {
   }
   switch (geo) {
     case 'pos': return primaryGeoKeys;
-    case 'none': return allGeoKeys;
+    case 'none': return allGeoKeys.concat(['b', 'm', 'M']);
     case 'geoname': return allGeoKeys.filter((k) => k !== 'geonameid');
     default: return allGeoKeys.filter((k) => k !== geo);
   }
