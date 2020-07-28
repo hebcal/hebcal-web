@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<hebcal>
+<gregorian year="<%= gy %>" month="<%= gm %>" day="<%= gd %>" />
+<hebrew year="<%= hy %>" month="<%= hmStr %>" day="<%= hd %>" str="<%= hebrew %>" />
+<% if (events.length) { -%>
+<events>
+<%   events.forEach((ev) => { -%>
+ <event name="<%= ev.render() %>" href="<%= ev.url() %>" />
+<% }); -%>
+</events>
+<% } -%>
+</hebcal>

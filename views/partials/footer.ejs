@@ -1,0 +1,27 @@
+<footer class="hebcal-footer d-print-none">
+<div class="row">
+<div class="col">
+<p><small>Except where otherwise noted, content on this site is licensed under a <a
+rel="license" href="https://creativecommons.org/licenses/by/3.0/deed.en_US">Creative Commons Attribution 3.0 License</a>.
+Some location data comes from <a href="https://www.geonames.org/">GeoNames</a>,
+also under a cc-by license.</small></p>
+<ul class="bullet-list-inline">
+<li><time datetime="<%= new Date().toISOString() %>"><%= new Intl.DateTimeFormat('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric' }).format(new Date())%></time></li>
+<li><a href="/home/about">About</a></li>
+<li><a href="/home/about/privacy-policy">Privacy</a></li>
+<li><a href="/home/help">Help</a></li>
+<li><a href="/home/about/contact">Contact</a></li>
+<li><a href="/home/developer-apis">Developer APIs</a></li>
+</ul>
+</div><!-- .col -->
+</div><!-- .row -->
+</footer>
+</div> <!-- .container -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js" integrity="sha384-DBjhmceckmzwrnMMrjI7BvG2FmRuxQVaTfFYHgfnrdfqMhxKt445b7j3KBQLolRl" crossorigin="anonymous"></script>
+<% if (typeof xtra_html !== 'undefined') { -%>
+<%- xtra_html -%>
+<% } -%>
+</body>
+</html>
+<!-- generated <%= new Date().toISOString() %> -->
