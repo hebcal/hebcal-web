@@ -31,19 +31,19 @@
 <label class="form-check-label" for="maj">Major Holidays</label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="min" value="on" <%= q.min === 'on' ? 'checked' : '' -%> id="min">
-<label class="form-check-label" for="min">Minor Holidays <small class="text-muted">(Tu BiShvat, Lag BaOmer, ...)</small></label>
+<label class="form-check-label" for="min">Minor Holidays <small title="Tu BiShvat, Purim Katan, Shushan Purim, Pesach Sheni, Lag BaOmer, Tu B'Av, &amp; Leil Selichot" data-toggle="tooltip" data-placement="top">ℹ️</small></label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="nx" value="on" <%= q.nx === 'on' ? 'checked' : '' -%> id="nx">
 <label class="form-check-label" for="nx">Rosh Chodesh</label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="mf" value="on" <%= q.mf === 'on' ? 'checked' : '' -%> id="mf">
-<label class="form-check-label" for="mf">Minor Fasts <small class="text-muted">(Ta'anit Esther, Tzom Gedaliah, ...)</small></label>
+<label class="form-check-label" for="mf">Minor Fasts <small title="Ta'anit Esther, Tzom Gedaliah, Tzom Tammuz, Asara B'Tevet, &amp; Ta'anit Bechorot" data-toggle="tooltip" data-placement="top">ℹ️</small></label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="ss" value="on" <%= q.ss === 'on' ? 'checked' : '' -%> id="ss">
-<label class="form-check-label" for="ss">Special Shabbatot <small class="text-muted">(Shabbat Shekalim, Zachor, ...)</small></label>
+<label class="form-check-label" for="ss">Special Shabbatot <small title="Shabbat Shuva, Shekalim, Zachor, Parah, HaChodesh, HaGadol, Chazon, &amp; Nachamu" data-toggle="tooltip" data-placement="top">ℹ️</small></label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="mod" value="on" <%= q.mod === 'on' ? 'checked' : '' -%> id="mod">
-<label class="form-check-label" for="mod">Modern Holidays <small class="text-muted">(Yom HaShoah, Yom HaAtzma'ut, ...)</small></label>
+<label class="form-check-label" for="mod">Modern Holidays <small title="Yom HaShoah, Yom HaZikaron, Yom HaAtzma'ut, Yom Yerushalayim, Sigd, &amp; Yom HaAliyah" data-toggle="tooltip" data-placement="top">ℹ️</small></label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="o" value="on" <%= q.o === 'on' ? 'checked' : '' -%> id="o">
 <label class="form-check-label" for="o">Days of the Omer</label>
@@ -145,9 +145,7 @@
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-<div class="clearfix" style="margin-top:10px">
-<input type="submit" name=".s" value="Create Calendar" class="btn btn-primary">
-</div><!-- .clearfix -->
+<button type="submit" class="btn btn-primary mt-3">Create Calendar</button>
 </form>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
