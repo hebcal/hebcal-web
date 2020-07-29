@@ -192,6 +192,6 @@ runcmd:
   - cd /tmp/zoneinfo
   - nice wget --mirror --no-parent --limit-rate=40k http://tzurl.sgp1.cdn.digitaloceanspaces.com/zoneinfo/index.html
   - find /tmp/zoneinfo -name 'index.html*' -delete
-  - mkdir -p /var/www/html/zoneinfo
-  - rsync -av /tmp/zoneinfo/tzurl.sgp1.cdn.digitaloceanspaces.com/zoneinfo/ /var/www/html/zoneinfo/
+  - mkdir -p /var/www/zoneinfo
+  - rsync -av /tmp/zoneinfo/tzurl.sgp1.cdn.digitaloceanspaces.com/zoneinfo/ /var/www/zoneinfo/
   - curl -v -o /var/www/html/favicon.ico https://www.hebcal.com/favicon.ico
