@@ -198,6 +198,7 @@ function renderHtml(ctx) {
   const dlhref = downloadHref(q, dlFilename);
   const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1}) + '.ics';
   const url = {
+    canonical: 'https://www.hebcal.com/hebcal?' + urlArgs(q),
     settings: '/hebcal?' + urlArgs(q, {v: 0}),
     prev: '/hebcal?' + urlArgs(q, {year: options.year - 1}),
     next: '/hebcal?' + urlArgs(q, {year: options.year + 1}),

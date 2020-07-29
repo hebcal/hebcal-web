@@ -82,14 +82,14 @@ function setDefaultYear(ctx, dt, hdate) {
   const gregYr1 = hyear - 3761;
   const gregYr2 = gregYr1 + 1;
   let gregRange = gregYr1 + '-' + gregYr2;
-  let yearArgs = `&yt=H&year=${hyear}&month=x`;
+  let yearArgs = `&yt=H&year=${hyear}`;
   const gd = dt.getDate();
   const gm = dt.getMonth() + 1;
   const gy = dt.getFullYear();
   // for the first 7 months of the year, just show the current Gregorian year
   if (gm < 8 || gm == 12 && gd >= 10) {
     const gytmp = (gm == 12) ? gy + 1 : gy;
-    yearArgs = `&yt=G&year=${gytmp}&month=x`;
+    yearArgs = `&yt=G&year=${gytmp}`;
     gregRange = gytmp;
   }
   Object.assign(ctx.state, {
