@@ -5,11 +5,25 @@ import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
 import {empty, downloadHref} from './common';
+import pino from 'pino';
+
+const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
+const debugLog = pino(pino.destination(logDir + '/debug.log'));
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function yahrzeitApp(ctx) {
+  debugLog.info({
+    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    method: ctx.request.method,
+    url: ctx.request.originalUrl,
+    ua: ctx.request.headers['user-agent'],
+    ref: ctx.request.headers['referer'],
+    cookie: ctx.request.headers['cookie'],
+    body: ctx.request.body,
+    query: ctx.request.query,
+  });
   const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
     hebdate: 'on',
     yizkor: 'off',
@@ -23,6 +37,8 @@ export async function yahrzeitApp(ctx) {
     if (tables !== null) {
       makeDownloadProps(ctx);
     }
+  } else {
+    ctx.state.tables = null;
   }
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
