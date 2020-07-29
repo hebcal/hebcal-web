@@ -136,7 +136,7 @@ function makeItems(ctx) {
     locale,
     hyear: events[0].getDate().getFullYear(),
     items: events.map((ev) => eventToItem(ev, options, locale)),
-    title: Locale.gettext('Shabbat') + ' Times for ' + location.getName(),
+    title: Locale.gettext('Shabbat') + ' Candle-Lighting Times for ' + location.getName(),
     Shabbat: Locale.gettext('Shabbat'),
   });
 
