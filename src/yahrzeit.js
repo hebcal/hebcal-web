@@ -18,7 +18,7 @@ export async function yahrzeitApp(ctx) {
   };
   const q = Object.assign(defaults, ctx.request.body, ctx.request.query);
   const tables = processForm(q);
-  await ctx.render('yahrzeit-form', {
+  await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     q,
     tables,
@@ -30,7 +30,15 @@ function processForm(q) {
   if (q.v !== 'yahrzeit') {
     return null;
   }
+  const maxId = getMaxId(q);
+  if (maxId === 0) {
+    return null;
+  }
+  q.count = maxId + 5;
   const events = makeYahrzeitEvents(q);
+  if (events.length === 0) {
+    return null;
+  }
   const items = events.map((ev) => {
     const dt = ev.getDate().greg();
     return {
@@ -91,10 +99,7 @@ export async function yahrzeitDownload(ctx) {
  * @return {Event[]}
  */
 export function makeYahrzeitEvents(query) {
-  const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
-      .map((k) => +(k.substring(1)));
-  const maxId = Math.max(...ids);
+  const maxId = getMaxId(query);
   const years = +query.years || 20;
   const startYear = new HDate().getFullYear();
   const endYear = startYear + years;
@@ -108,6 +113,18 @@ export function makeYahrzeitEvents(query) {
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   return events;
+}
+
+/**
+ * @param {any} query
+ * @return {number}
+ */
+function getMaxId(query) {
+  const ids = Object.keys(query)
+      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
+      .map((k) => +(k.substring(1)))
+      .map((id) => empty(query['y'+id]) ? 0 : id);
+  return ids.length === 0 ? 0 : Math.max(...ids);
 }
 
 /**
