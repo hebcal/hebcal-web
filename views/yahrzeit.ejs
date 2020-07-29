@@ -29,7 +29,7 @@ div.yahrzeit-row {
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
-<% if (typeof tables !== 'undefined') { %>
+<% if (tables !== null) { %>
 <div class="btn-toolbar d-print-none">
 <div class="mr-1">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
@@ -37,6 +37,15 @@ div.yahrzeit-row {
 </div><!-- .btn-toolbar -->
 <p>Yahrzeit candles should be lit the evening before the date specified.
 This is because the Jewish day actually begins at sundown on the previous night.</p>
+<% if (adarInfo) { %>
+<div class="alert alert-info alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<strong>Note:</strong> the results below contain one or more anniversary in Adar.
+To learn more about how Hebcal handles these dates, read <a
+href="/home/54/how-does-hebcal-determine-an-anniversary-occurring-in-adar">How
+does Hebcal determine an anniversary occurring in Adar?</a>
+</div><!-- .alert -->
+<% } %>
 <% tables.forEach((items, heading) => { -%>
 <% if (heading) { %><h4><%= heading %></h4><% } %>
 <table class="table table-condensed table-striped">
@@ -60,7 +69,7 @@ href="/converter">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
 </div><!-- .d-print-none -->
 <form class="yahrzeit-form d-print-none" method="post" action="/yahrzeit">
-<% for (let num = 1; num <= +q.count; num++) { -%>
+<% for (let num = 1; num <= count; num++) { -%>
 <div class="yahrzeit-row">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
 <div class="col-auto"><input class="form-control" type="text" name="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
@@ -113,7 +122,6 @@ and then come back to this page.</p>
     <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
   </div>
 </div><!-- .row -->
-<input type="hidden" name="count" value="<%= q.count %>">
 <input type="hidden" name="v" value="yahrzeit">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
@@ -124,6 +132,9 @@ instructions</a>.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 </div><!-- #content -->
+<% if (tables !== null) { -%>
+<% include partials/download-modal.ejs %>
+<% } -%>
 <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs>
 <symbol viewBox="0 0 16 16" id="bi-cloud-download" xmlns="http://www.w3.org/2000/svg">

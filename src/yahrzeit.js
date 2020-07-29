@@ -4,7 +4,7 @@ import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
-import {empty} from './common';
+import {empty, downloadHref} from './common';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -13,34 +13,36 @@ export async function yahrzeitApp(ctx) {
   const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
     hebdate: 'on',
     yizkor: 'off',
-    count: 6,
     years: 20,
   };
-  const q = Object.assign(defaults, ctx.request.body, ctx.request.query);
-  const tables = processForm(q);
+  const q = ctx.state.q = Object.assign(defaults, ctx.request.body, ctx.request.query);
+  const maxId = getMaxId(q);
+  ctx.state.adarInfo = false;
+  if (maxId > 0 && q.v === 'yahrzeit') {
+    const tables = ctx.state.tables = makeFormResults(ctx);
+    if (tables !== null) {
+      makeDownloadProps(ctx);
+    }
+  }
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
-    q,
-    tables,
+    count: Math.max(6, maxId + 5),
   });
 }
 
 // eslint-disable-next-line require-jsdoc
-function processForm(q) {
-  if (q.v !== 'yahrzeit') {
-    return null;
-  }
-  const maxId = getMaxId(q);
-  if (maxId === 0) {
-    return null;
-  }
-  q.count = maxId + 5;
+function makeFormResults(ctx) {
+  const q = ctx.state.q;
   const events = makeYahrzeitEvents(q);
   if (events.length === 0) {
     return null;
   }
   const items = events.map((ev) => {
-    const dt = ev.getDate().greg();
+    const hd = ev.getDate();
+    if (hd.getMonth() >= months.ADAR_I) {
+      ctx.state.adarInfo = true;
+    }
+    const dt = hd.greg();
     return {
       date: dayjs(dt).format('ddd, D MMM YYYY'),
       desc: ev.render(),
@@ -59,6 +61,57 @@ function processForm(q) {
     }
     return m;
   }, new Map());
+}
+
+// eslint-disable-next-line require-jsdoc
+function makeDownloadProps(ctx) {
+  const q = ctx.state.q;
+  removeEmptyArgs(q);
+  const types0 = Object.entries(q)
+      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
+      .map((x) => x[1]);
+  const types = Array.from(new Set(types0));
+  const type = types.length === 1 ? types[0] : 'Anniversary';
+  ctx.state.downloadTitle = type;
+  const filename = type.toLowerCase() + '_' + dayjs().format('YYYYMMDDHHmmss');
+  const dlhref = downloadHref(q, filename);
+  const subical = downloadHref(q, filename, {subscribe: 1}) + '.ics';
+  const url = ctx.state.url = {
+    ics: dlhref + '.ics',
+    subical: subical,
+    webcal: subical.replace(/^https/, 'webcal'),
+    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    csv_usa: dlhref + '_usa.csv',
+    csv_eur: downloadHref(q, filename, {euro: 1}) + '_eur.csv',
+  };
+  ctx.state.filename = {
+    ics: basename(url.ics),
+    csv_usa: basename(url.csv_usa),
+    csv_eur: basename(url.csv_eur),
+  };
+}
+
+// eslint-disable-next-line require-jsdoc
+function removeEmptyArgs(q) {
+  const maxId = getMaxId(q);
+  const keyPrefixes = 'mdytns'.split('');
+  for (let i = 1; i <= maxId; i++) {
+    // ensure that month, day and year are not empty
+    if (empty(q['d' + i]) || empty(q['m' + i]) || empty(q['y' + i])) {
+      for (const prefix of keyPrefixes) {
+        delete q[prefix + i];
+      }
+    }
+  }
+  // remove anything larger than maxId
+  for (const k of Object.keys(q)) {
+    if (isNumKey(k)) {
+      const id = +k.substring(1);
+      if (id > maxId) {
+        delete q[k];
+      }
+    }
+  }
 }
 
 /**
@@ -116,12 +169,21 @@ export function makeYahrzeitEvents(query) {
 }
 
 /**
+ * @param {string} k
+ * @return {boolean}
+ */
+function isNumKey(k) {
+  const code = k.charCodeAt(1);
+  return code >= 48 && code <= 57;
+}
+
+/**
  * @param {any} query
  * @return {number}
  */
 function getMaxId(query) {
   const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y' && k.charCodeAt(1) >= 48 && k.charCodeAt(1) <= 57)
+      .filter((k) => k[0] == 'y' && isNumKey(k))
       .map((k) => +(k.substring(1)))
       .map((id) => empty(query['y'+id]) ? 0 : id);
   return ids.length === 0 ? 0 : Math.max(...ids);
@@ -158,7 +220,7 @@ function getEventsForId(query, id, startYear, endYear) {
     if (hd) {
       const typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
       let subj = `${name}'s ${typeStr}`;
-      if (query.hebdate == 'on') {
+      if (query.hebdate === 'on') {
         const hebdate = hd.render('en');
         const comma = hebdate.indexOf(',');
         subj += ' (' + hebdate.substring(0, comma) + ')';

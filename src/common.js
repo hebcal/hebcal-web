@@ -1,4 +1,5 @@
 import {HDate, Location} from '@hebcal/core';
+import {getDownloadFilename} from '@hebcal/rest-api';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -80,6 +81,22 @@ export function empty(val) {
  */
 export function off(val) {
   return typeof val === 'undefined' || val === 'off' || val == '0';
+}
+
+/**
+ * @param {any} q
+ * @param {string} filename
+ * @param {any} override
+ * @return {string}
+ */
+export function downloadHref(q, filename, override={}) {
+  const encoded = Buffer.from(urlArgs(q, override))
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+  const type = q.v === 'yahrzeit' ? 'y' : 'h';
+  return `https://download.hebcal.com/v2/${type}/${encoded}/${filename}`;
 }
 
 /**

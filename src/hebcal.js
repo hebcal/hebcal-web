@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie, empty, urlArgs} from './common';
+import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
+  empty, urlArgs, downloadHref} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -193,8 +194,9 @@ function renderHtml(ctx) {
   }
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const localeData = dayjs().locale(locale).localeData();
-  const dlhref = downloadHref(q, options);
-  const subical = downloadHref(q, options, {year: 'now', subscribe: 1}) + '.ics';
+  const dlFilename = getDownloadFilename(options);
+  const dlhref = downloadHref(q, dlFilename);
+  const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1}) + '.ics';
   const url = {
     settings: '/hebcal?' + urlArgs(q, {v: 0}),
     prev: '/hebcal?' + urlArgs(q, {year: options.year - 1}),
@@ -205,9 +207,9 @@ function renderHtml(ctx) {
     webcal: subical.replace(/^https/, 'webcal'),
     gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
     csv_usa: dlhref + '_usa.csv',
-    csv_eur: downloadHref(q, options, {euro: 1}) + '_eur.csv',
+    csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
   };
-  const filename = {
+  const filenames = {
     ics: basename(url.ics),
     pdf: basename(url.pdf),
     csv_usa: basename(url.csv_usa),
@@ -224,7 +226,7 @@ function renderHtml(ctx) {
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
   const endYear = options.year + getNumYears(options) - 1;
-  const yearRange = `${options.year}-${endYear}`;
+  const downloadTitle = `${options.year}-${endYear}`;
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
@@ -236,8 +238,8 @@ function renderHtml(ctx) {
     prevTitle: options.year - 1,
     nextTitle: options.year + 1,
     url,
-    filename,
-    yearRange,
+    filename: filenames,
+    downloadTitle,
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
@@ -260,16 +262,6 @@ function getNumYears(options) {
     }
   }
   return numYears;
-}
-
-function downloadHref(q, options, override={}) {
-  const filename = getDownloadFilename(options);
-  const encoded = Buffer.from(urlArgs(q, override))
-      .toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-  return 'https://download.hebcal.com/v2/h/' + encoded + '/' + filename;
 }
 
 function makeTableBodies(events, months, options) {
