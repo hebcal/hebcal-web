@@ -13,6 +13,14 @@ div.yahrzeit-row {
 .yahrzeit-form > div.yahrzeit-row:nth-of-type(odd) {
   background-color: rgba(0, 123, 255, .15);
 }
+.icon {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
 </style>
 </head>
 <body>
@@ -21,9 +29,25 @@ div.yahrzeit-row {
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
-
+<% if (typeof items !== 'undefined') { %>
+<div class="btn-toolbar d-print-none">
+<div class="mr-1">
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
+<a class="btn btn-secondary" href="#form"><svg class="icon"><use xlink:href="#gi-cogwheel"></use></svg> Enter more dates and names</a>
+</div><!-- .btn-toolbar -->
+<p>Yahrzeit candles should be lit the evening before the date specified.
+This is because the Jewish day actually begins at sundown on the previous night.</p>
+<table class="table table-condensed table-striped">
+<col style="width:174px"><col>
+<tbody>
+<% items.forEach((i) => { -%>
+<tr><td><%= i.date %></td><td><%= i.desc %></td></tr>
+<% }); -%>
+</tbody>
+</table>
+<% } %>
 <div class="d-print-none">
-<p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
+<p class="lead" id="form">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries for the next 20 years.</p>
 <p>For example, you might enter <strong>20 October 1994 (after
 sunset)</strong> to calculate <strong>Reb Shlomo Carlebach</strong>&apos;s
@@ -97,4 +121,15 @@ instructions</a>.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 </div><!-- #content -->
+<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol viewBox="0 0 16 16" id="bi-cloud-download" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
+<path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
+</symbol>
+<symbol id="gi-cogwheel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+<path d="M27.83521,14.75977a.50437.50437,0,0,0-.3808-.43165l-2.81769-.70507a8.94342,8.94342,0,0,0-.89551-2.167l1.49121-2.48449a.50672.50672,0,0,0-.038-.57923A11.97611,11.97611,0,0,0,23.512,6.71a.50681.50681,0,0,0-.57922-.03808L20.44818,8.16309a8.94053,8.94053,0,0,0-2.16687-.89551L17.57617,4.45a.50438.50438,0,0,0-.43164-.38086,10.32381,10.32381,0,0,0-2.38476,0,.5044.5044,0,0,0-.43165.38086L13.623,7.26758a8.92589,8.92589,0,0,0-2.165.89551L8.97253,6.6709a.5068.5068,0,0,0-.57922.03808A11.96918,11.96918,0,0,0,6.71088,8.39136a.507.507,0,0,0-.038.57934l1.49121,2.48438a8.89783,8.89783,0,0,0-.89648,2.168l-2.81769.70507a.50448.50448,0,0,0-.38086.43165,10.33272,10.33272,0,0,0,0,2.38476.50446.50446,0,0,0,.38086.43164l2.81769.70508a8.89087,8.89087,0,0,0,.89648,2.167l-1.49212,2.4845a.50658.50658,0,0,0,.038.57922,11.97622,11.97622,0,0,0,1.68237,1.68238.50673.50673,0,0,0,.57917.03808l2.48462-1.49121a8.93994,8.93994,0,0,0,2.16687.89551l.70513,2.81763a.50442.50442,0,0,0,.43165.38086,10.32381,10.32381,0,0,0,2.38476,0,.50441.50441,0,0,0,.43164-.38086l.70514-2.81763a8.93493,8.93493,0,0,0,2.16791-.89649l2.48535,1.49122a.50663.50663,0,0,0,.57922-.03821A12.00092,12.00092,0,0,0,25.19525,23.511a.5066.5066,0,0,0,.038-.57923l-1.49207-2.48449a8.93642,8.93642,0,0,0,.89551-2.166l2.81769-.70508a.50434.50434,0,0,0,.3808-.43164,10.32381,10.32381,0,0,0,0-2.38476Zm-11.88312,5.373a4.18067,4.18067,0,1,1,4.18072-4.18066A4.18111,4.18111,0,0,1,15.95209,20.13281Z"/>
+</symbol>
+</defs>
+</svg>
 <%_ include partials/footer.ejs _%>

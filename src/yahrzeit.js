@@ -9,6 +9,36 @@ import {empty} from './common';
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
+export async function yahrzeitApp(ctx) {
+  const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
+    hebdate: 'on',
+    yizkor: 'off',
+    count: 6,
+    years: 20,
+  };
+  const q = Object.assign(defaults, ctx.request.body, ctx.request.query);
+  let items;
+  if (q.v === 'yahrzeit') {
+    const events = makeYahrzeitEvents(q);
+    items = events.map((ev) => {
+      const dt = ev.getDate().greg();
+      return {
+        date: dayjs(dt).format('ddd, D MMM YYYY'),
+        desc: ev.render(),
+        year: dt.getFullYear(),
+      };
+    });
+  }
+  await ctx.render('yahrzeit-form', {
+    title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
+    q,
+    items,
+  });
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
 export async function yahrzeitDownload(ctx) {
   const query = ctx.request.query;
   if (query.v !== 'yahrzeit') {
