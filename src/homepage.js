@@ -184,6 +184,10 @@ begins at sundown on ${strtime}`];
 <a href="https://www.hebcal.com/holidays/pesach">Passover</a>.
 Pesach begins at sundown on ${strtime}`];
   }
+  if (mm == months.AV && dd == 8) {
+    return ['Tzom Kal', `<a href="https://www.hebcal.com/holidays/tisha-bav">Tish'a B'Av</a>
+begins tonight at sundown. We wish you an easy fast`];
+  }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
     return ['Tzom Kal', 'We wish you an easy fast'];

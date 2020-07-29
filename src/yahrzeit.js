@@ -30,9 +30,9 @@ export async function yahrzeitApp(ctx) {
     years: 20,
   };
   const q = ctx.state.q = Object.assign(defaults, ctx.request.body, ctx.request.query);
-  const maxId = getMaxId(q);
+  const maxId = ctx.state.maxId = getMaxId(q);
   ctx.state.adarInfo = false;
-  if (maxId > 0 && q.v === 'yahrzeit') {
+  if (maxId > 0) {
     const tables = ctx.state.tables = makeFormResults(ctx);
     if (tables !== null) {
       makeDownloadProps(ctx);
@@ -49,7 +49,7 @@ export async function yahrzeitApp(ctx) {
 // eslint-disable-next-line require-jsdoc
 function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events = makeYahrzeitEvents(q);
+  const events = makeYahrzeitEvents(ctx.state.maxId, q);
   if (events.length === 0) {
     return null;
   }
@@ -142,7 +142,8 @@ export async function yahrzeitDownload(ctx) {
     ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
     url: ctx.request.originalUrl,
   }, query));
-  const events = makeYahrzeitEvents(query);
+  const maxId = getMaxId(query);
+  const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
@@ -164,11 +165,11 @@ export async function yahrzeitDownload(ctx) {
 }
 
 /**
+ * @param {number} maxId
  * @param {any} query
  * @return {Event[]}
  */
-export function makeYahrzeitEvents(query) {
-  const maxId = getMaxId(query);
+export function makeYahrzeitEvents(maxId, query) {
   const years = +query.years || 20;
   const startYear = new HDate().getFullYear();
   const endYear = startYear + years;
@@ -202,7 +203,14 @@ function getMaxId(query) {
       .filter((k) => k[0] == 'y' && isNumKey(k))
       .map((k) => +(k.substring(1)))
       .map((id) => empty(query['y'+id]) ? 0 : id);
-  return ids.length === 0 ? 0 : Math.max(...ids);
+  const max = Math.max(...ids);
+  const valid = [];
+  for (let i = 1; i <= max; i++) {
+    if (!empty(query['d' + i]) && !empty(query['m' + i]) && !empty(query['y' + i])) {
+      valid.push(i);
+    }
+  }
+  return valid.length === 0 ? 0 : Math.max(...valid);
 }
 
 /**

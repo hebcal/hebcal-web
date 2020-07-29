@@ -29,6 +29,11 @@ div.yahrzeit-row {
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
+<% if (typeof q.ref_url === 'string') { -%>
+<% let ref_text = q.ref_text || q.ref_url; -%>
+<p class="lead">Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>
+<p>When you finish here, you can return to <a href="<%= q.ref_url %>"><%= ref_text %></a>.</p>
+<% } -%>
 <% if (tables !== null) { %>
 <div class="btn-toolbar d-print-none">
 <div class="mr-1">
