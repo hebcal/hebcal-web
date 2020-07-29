@@ -17,23 +17,40 @@ export async function yahrzeitApp(ctx) {
     years: 20,
   };
   const q = Object.assign(defaults, ctx.request.body, ctx.request.query);
-  let items;
-  if (q.v === 'yahrzeit') {
-    const events = makeYahrzeitEvents(q);
-    items = events.map((ev) => {
-      const dt = ev.getDate().greg();
-      return {
-        date: dayjs(dt).format('ddd, D MMM YYYY'),
-        desc: ev.render(),
-        year: dt.getFullYear(),
-      };
-    });
-  }
+  const tables = processForm(q);
   await ctx.render('yahrzeit-form', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     q,
-    items,
+    tables,
   });
+}
+
+// eslint-disable-next-line require-jsdoc
+function processForm(q) {
+  if (q.v !== 'yahrzeit') {
+    return null;
+  }
+  const events = makeYahrzeitEvents(q);
+  const items = events.map((ev) => {
+    const dt = ev.getDate().greg();
+    return {
+      date: dayjs(dt).format('ddd, D MMM YYYY'),
+      desc: ev.render(),
+      year: dt.getFullYear(),
+    };
+  });
+  if (q.yizkor !== 'on') {
+    return new Map([['', items]]);
+  }
+  return items.reduce((m, val) => {
+    const arr = m.get(val.year);
+    if (arr) {
+      arr.push(val);
+    } else {
+      m.set(val.year, [val]);
+    }
+    return m;
+  }, new Map());
 }
 
 /**

@@ -29,7 +29,7 @@ div.yahrzeit-row {
 <div id="content">
 <div class="row">
 <div class="col-sm-12">
-<% if (typeof items !== 'undefined') { %>
+<% if (typeof tables !== 'undefined') { %>
 <div class="btn-toolbar d-print-none">
 <div class="mr-1">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
@@ -37,6 +37,8 @@ div.yahrzeit-row {
 </div><!-- .btn-toolbar -->
 <p>Yahrzeit candles should be lit the evening before the date specified.
 This is because the Jewish day actually begins at sundown on the previous night.</p>
+<% tables.forEach((items, heading) => { -%>
+<% if (heading) { %><h4><%= heading %></h4><% } %>
 <table class="table table-condensed table-striped">
 <col style="width:174px"><col>
 <tbody>
@@ -45,6 +47,7 @@ This is because the Jewish day actually begins at sundown on the previous night.
 <% }); -%>
 </tbody>
 </table>
+<% }); -%>
 <% } %>
 <div class="d-print-none">
 <p class="lead" id="form">Generate a list of Yahrzeit dates, Hebrew Birthdays,
