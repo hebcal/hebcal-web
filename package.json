@@ -1,7 +1,7 @@
 {
-  "name": "hebcal-converter",
+  "name": "hebcal-web",
   "version": "1.0.0",
-  "description": "Convert between Hebrew and Gregorian dates and see today's date in a Hebrew font",
+  "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hebcal/hebcal-web.git"
@@ -12,6 +12,8 @@
   "homepage": "https://github.com/hebcal/hebcal-web#readme",
   "scripts": {
     "build": "babel src --out-dir dist",
+    "deploy": "rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/",
+    "start": "node dist/app-www.js",
     "test": "echo \"OK: no test specified\" && exit 0"
   },
   "keywords": [

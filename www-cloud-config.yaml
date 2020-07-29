@@ -171,9 +171,7 @@ runcmd:
   - cd /home/hebcal/hebcal-web && npm install
   - cd /home/hebcal/hebcal-web && npm run build
   - mkdir -p /var/www
-  - rsync -av /home/hebcal/hebcal-web/dist /var/www/
-  - rsync -av /home/hebcal/hebcal-web/node_modules /var/www/
-  - rsync -av /home/hebcal/hebcal-web/views /var/www/dist/
+  - cd /home/hebcal/hebcal-web && npm run deploy
   - curl -o /tmp/countryInfo.txt http://download.geonames.org/export/dump/countryInfo.txt
   - curl -o /tmp/admin1CodesASCII.txt http://download.geonames.org/export/dump/admin1CodesASCII.txt
   - curl -o /tmp/cities5000.zip http://download.geonames.org/export/dump/cities5000.zip
