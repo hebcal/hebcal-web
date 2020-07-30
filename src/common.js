@@ -248,6 +248,7 @@ export function makeHebcalOptions(db, query) {
           query.month = String(dt.getMonth() + 1);
         }
       }
+      query.year = String(options.year);
     } else {
       options.year = +query.year;
       if (isNaN(options.year)) {
