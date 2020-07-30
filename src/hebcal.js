@@ -189,7 +189,16 @@ function renderHtml(ctx) {
   }
   const result = eventsToClassicApi(events, options, false);
   // Reduce size of HTML
-  result.items.forEach((i) => delete i.memo);
+  result.items.forEach((i) => {
+    delete i.memo;
+    if (typeof i.link === 'string' && i.link.startsWith('https://www.hebcal.com/')) {
+      i.link = i.link.substring(22);
+      const utm = i.link.indexOf('?utm_source=');
+      if (utm !== -1) {
+        i.link = i.link.substring(0, utm);
+      }
+    }
+  });
   const q = ctx.state.q;
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
@@ -332,7 +341,10 @@ function renderEventHtml(ev, options) {
   const classes = categories.join(' ');
   const memo0 = getHolidayDescription(ev, true);
   const memo = memo0 ? ` title="${memo0}"` : '';
-  const url = ev.url();
+  let url = ev.url();
+  if (typeof url === 'string' && url.startsWith('https://www.hebcal.com/')) {
+    url = url.substring(22);
+  }
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   const hebrew = options.appendHebrewToSubject ?
