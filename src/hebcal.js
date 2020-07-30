@@ -188,6 +188,8 @@ function renderHtml(ctx) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
   }
   const result = eventsToClassicApi(events, options, false);
+  // Reduce size of HTML
+  result.items.forEach((i) => delete i.memo);
   const q = ctx.state.q;
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
