@@ -1,22 +1,23 @@
+import fs from 'fs';
 import Koa from 'koa';
+import bodyParser from 'koa-bodyparser';
 import compress from 'koa-compress';
-import timeout from 'koa-timeout-v2';
+import error from 'koa-error';
 import render from 'koa-ejs';
 import serve from 'koa-static';
-import error from 'koa-error';
+import timeout from 'koa-timeout-v2';
+import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
-import {hebrewDateConverter} from './converter';
-import {fridgeShabbat} from './fridge';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {shabbatApp} from './shabbat';
+import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
-import {homepage} from './homepage';
-import maxmind from 'maxmind';
-import {hebcalApp} from './hebcal';
-import fs from 'fs';
-const bodyParser = require('koa-bodyparser');
 import {geoLookup} from './geolookup';
+import {hebcalApp} from './hebcal';
+import {hebrewDateConverter} from './converter';
+import {homepage} from './homepage';
+import {shabbatApp} from './shabbat';
+import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery} from './common';
 import {yahrzeitApp} from './yahrzeit';
 
 const app = new Koa();
@@ -148,6 +149,17 @@ app.use(async (ctx, next) => {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
+  } else if (rpath.startsWith('/link')) {
+    const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
+    const location = getLocationFromQuery(ctx.db, q, false);
+    const geoUrlArgs = urlArgs(q);
+    const geoUrlArgsDbl = geoUrlArgs.replace(/&/g, '&amp;');
+    await ctx.render('link', {
+      q, geoUrlArgs, geoUrlArgsDbl,
+      locationName: location.getName(),
+      title: 'Add weekly Shabbat candle-lighting times to your synagogue website | Hebcal Jewish Calendar',
+      xtra_html: tooltipScript + typeaheadScript,
+    });
   }
   await next();
 });

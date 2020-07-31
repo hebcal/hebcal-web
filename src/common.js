@@ -1,5 +1,4 @@
 import {HDate, Location} from '@hebcal/core';
-import {getDownloadFilename} from '@hebcal/rest-api';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -108,6 +107,9 @@ export function urlArgs(query, override={}) {
   const q = Object.assign({}, query, override);
   for (const key of getGeoKeysToRemove(q.geo)) {
     delete q[key];
+  }
+  if (q.M === 'on') {
+    delete q.m;
   }
   delete q['.s'];
   return querystring.stringify(q);
@@ -400,3 +402,17 @@ function makeGeoCityName(latitude, longitude, tzid) {
 
   return `${ladeg}°${lamin}′${ladir}, ${lodeg}°${lomin}′${lodir}, ${tzid}`;
 }
+
+export const tooltipScript = `<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+var tooltipList = tooltipTriggerList.map(function (el) {
+  return new bootstrap.Tooltip(el);
+});
+</script>
+`;
+
+export const typeaheadScript = `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+<script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
+<script>window['hebcal'].createCityTypeahead(false);</script>
+`;

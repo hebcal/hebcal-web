@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, urlArgs, downloadHref} from './common';
+  empty, urlArgs, downloadHref, tooltipScript, typeaheadScript} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -95,10 +95,8 @@ async function renderForm(ctx, error) {
     message,
     title: 'Custom Calendar | Hebcal Jewish Calendar',
     tzids,
-    xtra_html: `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-<script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
-<script>
+    xtra_html: typeaheadScript + tooltipScript +
+`<script>
 var d=document;
 function s6(val){
 if(val=='G'){d.f1.year.value=${defaultYear};}
@@ -124,11 +122,6 @@ d.getElementById("d2").onclick=function(){
   d.getElementById("d1").checked = false;
  }
 }
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (el) {
-return new bootstrap.Tooltip(el);
-});
-window['hebcal'].createCityTypeahead(false);
 </script>`,
   });
 }
