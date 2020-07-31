@@ -23,14 +23,14 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
     "@babel/register": "^7.10.5",
     "eslint": "^7.5.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.2.3",
+    "@hebcal/core": "^2.2.4",
     "@hebcal/geo-sqlite": "^2.2.5",
     "@hebcal/icalendar": "^2.1.2",
     "@hebcal/leyning": "^2.2.0",
