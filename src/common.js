@@ -416,3 +416,21 @@ export const typeaheadScript = `<script src="https://ajax.googleapis.com/ajax/li
 <script src="https://www.hebcal.com/i/hebcal-app-1.9.min.js"></script>
 <script>window['hebcal'].createCityTypeahead(false);</script>
 `;
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {any} [attrs={}]
+ * @return {Object}
+ */
+export function makeLogInfo(ctx, attrs={}) {
+  return Object.assign({
+    status: ctx.response.status,
+    length: ctx.response.length,
+    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    method: ctx.request.method,
+    url: ctx.request.originalUrl,
+    ua: ctx.request.headers['user-agent'],
+    ref: ctx.request.headers['referer'],
+    cookie: ctx.request.headers['cookie'],
+  }, attrs);
+}

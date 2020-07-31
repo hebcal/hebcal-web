@@ -1,18 +1,18 @@
 import Koa from 'koa';
 import fs from 'fs';
-import util from 'util';
-import path from 'path';
 import pino from 'pino';
 import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
+import serve from 'koa-static';
+import timeout from 'koa-timeout-v2';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {yahrzeitDownload} from './yahrzeit';
 import {hebcalDownload} from './hebcal-download';
+import {makeLogInfo} from './common';
 
 const app = new Koa();
 
-const stat = util.promisify(fs.stat);
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
 const logger = app.context.logger = pino({
@@ -36,15 +36,19 @@ app.use(async (ctx, next) => {
     ctx.body = err.message;
     ctx.app.emit('error', err, ctx);
   }
+  logger.info(makeLogInfo(ctx, {
+    duration: Date.now() - ctx.state.startTime,
+  }));
 });
 
 app.on('error', (err, ctx) => {
   if (ctx && ctx.status != 404) {
-    logger.error(Object.assign(err, {
-      status: ctx.status,
-      ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
-      url: ctx.request.originalUrl,
-    }));
+    const obj = Object.assign(err, makeLogInfo(ctx));
+    if (ctx.status < 500) {
+      logger.warn(obj);
+    } else {
+      logger.error(obj);
+    }
   }
 });
 
@@ -89,25 +93,20 @@ app.use(async (ctx, next) => {
   await next();
 });
 
+app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath == '/') {
+  if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
   } else if (rpath == '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
-  } else if (rpath == '/ical' || rpath == '/ical/') {
+  } else if (rpath === '/ical' || rpath === '/ical/') {
     ctx.redirect('https://www.hebcal.com/ical/');
-  } else if (rpath == '/favicon.ico' || rpath.startsWith('/ical')) {
-    const fpath = path.join('/var/www/html', rpath);
-    const fstat = await stat(fpath);
-    if (fstat.isFile()) {
-      ctx.set('Cache-Control', 'max-age=5184000');
-      ctx.type = path.extname(fpath);
-      ctx.length = fstat.size;
-      ctx.lastModified = fstat.mtime;
-      ctx.body = fs.createReadStream(fpath);
-    }
+  } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
+    ctx.set('Cache-Control', 'max-age=5184000');
+    // let serve() handle this file
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {
@@ -121,21 +120,21 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-// logger
-app.use(async (ctx) => {
-  const duration = Date.now() - ctx.state.startTime;
-  logger.info({
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-    ua: ctx.request.header['user-agent'],
-    cookie: ctx.request.header['cookie'],
-    status: ctx.response.status,
-    length: ctx.response.length,
-    duration,
-  });
+app.use(serve('/var/www/html', {defer: true}));
+
+process.on('unhandledRejection', (err) => {
+  logger.fatal(err);
+  console.log(err);
+  process.exit(1);
 });
 
+if (process.env.NODE_ENV == 'production' ) {
+  fs.writeFileSync(logDir + '/koa.pid', process.pid);
+  process.on('SIGHUP', () => dest.reopen());
+}
+
 const port = process.env.NODE_PORT || 8080;
-app.listen(port);
-console.log('Koa server listening on port ' + port);
+app.listen(port, () => {
+  logger.info('Koa server listening on port ' + port);
+  console.log('Koa server listening on port ' + port);
+});

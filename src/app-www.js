@@ -17,7 +17,7 @@ import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
-import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery} from './common';
+import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
 import {yahrzeitApp} from './yahrzeit';
 
 const app = new Koa();
@@ -57,20 +57,6 @@ app.use(async (ctx, next) => {
     duration: Date.now() - ctx.state.startTime,
   }));
 });
-
-// eslint-disable-next-line require-jsdoc
-function makeLogInfo(ctx, attrs={}) {
-  return Object.assign({
-    status: ctx.response.status,
-    length: ctx.response.length,
-    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-    ua: ctx.request.headers['user-agent'],
-    ref: ctx.request.headers['referer'],
-    cookie: ctx.request.headers['cookie'],
-  }, attrs);
-}
 
 app.on('error', (err, ctx) => {
   if (ctx && ctx.status != 404) {
