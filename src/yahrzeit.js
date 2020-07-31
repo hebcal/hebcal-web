@@ -90,6 +90,7 @@ function makeDownloadProps(ctx) {
   const type = types.length === 1 ? types[0] : 'Anniversary';
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase() + '_' + dayjs().format('YYYYMMDDHHmmss');
+  q.v = 'yahrzeit';
   const dlhref = downloadHref(q, filename);
   const subical = downloadHref(q, filename, {subscribe: 1}) + '.ics';
   const url = ctx.state.url = {
@@ -232,7 +233,7 @@ function getEventsForId(query, id, startYear, endYear) {
   }
   const type = query[`t${id}`] || 'Yahrzeit';
   const sunset = query[`s${id}`];
-  const name = query[`n${id}`] || `Person${id}`;
+  const name = query[`n${id}`] ? query[`n${id}`].trim() : `Person${id}`;
   let day = dayjs(new Date(yy, mm - 1, dd));
   if (sunset === 'on') {
     day = day.add(1, 'day');
