@@ -75,22 +75,23 @@ function setDefautLangTz(ctx) {
 }
 
 function setDefaultYear(ctx, dt, hdate) {
-  const hm = hdate.getMonth();
   const hy = hdate.getFullYear();
-  // default to next year if it's past Tu B'Av or anytime in Elul
-  const hyear = (hm == months.ELUL || (hm == months.AV && hdate.getDate() >= 16)) ? hy + 1 : hy;
-  const gregYr1 = hyear - 3761;
+  const gregYr1 = hy - 3761;
   const gregYr2 = gregYr1 + 1;
   let gregRange = gregYr1 + '-' + gregYr2;
-  let yearArgs = `&yt=H&year=${hyear}`;
-  const gd = dt.getDate();
+  let yearArgs;
   const gm = dt.getMonth() + 1;
-  const gy = dt.getFullYear();
-  // for the first 7 months of the year, just show the current Gregorian year
-  if (gm < 8 || gm == 12 && gd >= 10) {
-    const gytmp = (gm == 12) ? gy + 1 : gy;
+  // for the first 8 months of the year, just show the current Gregorian year
+  if (gm <= 8 || gm === 12 && dt.getDate() >= 10) {
+    const gy = dt.getFullYear();
+    const gytmp = (gm === 12) ? gy + 1 : gy;
     yearArgs = `&yt=G&year=${gytmp}`;
     gregRange = gytmp;
+  } else {
+    // default to next year if it's past Tu B'Av or anytime in Elul
+    const hm = hdate.getMonth();
+    const hyear = (gm >= 9 || hm == months.ELUL || (hm == months.AV && hdate.getDate() >= 16)) ? hy + 1 : hy;
+    yearArgs = `&yt=H&year=${hyear}`;
   }
   Object.assign(ctx.state, {
     gregRange,
