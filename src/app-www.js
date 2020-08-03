@@ -22,7 +22,7 @@ import {yahrzeitApp} from './yahrzeit';
 
 const app = new Koa();
 
-const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
+const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
 const dest = pino.destination(logDir + '/access.log');
 const logger = app.context.logger = pino(dest);
 
@@ -44,7 +44,7 @@ app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
-  if (typeof ctx.request.headers['accept-encoding'] == 'undefined') {
+  if (typeof ctx.request.headers['accept-encoding'] === 'undefined') {
     ctx.request.headers['accept-encoding'] = 'identity';
   }
   if (!ctx.lookup) {
@@ -114,12 +114,12 @@ app.use(bodyParser());
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath == '/favicon.ico' || rpath.startsWith('/i/')) {
+  if (rpath === '/favicon.ico' || rpath.startsWith('/i/')) {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
-  } else if (rpath == '/robots.txt') {
+  } else if (rpath === '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
-  } else if (rpath == '/') {
+  } else if (rpath === '/') {
     await homepage(ctx);
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
@@ -146,6 +146,10 @@ app.use(async (ctx, next) => {
       title: 'Add weekly Shabbat candle-lighting times to your synagogue website | Hebcal Jewish Calendar',
       xtra_html: tooltipScript + typeaheadScript,
     });
+  } else if (rpath === '/ical/') {
+    await ctx.render('ical', {
+      title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
+    });
   }
   await next();
 });
@@ -158,7 +162,7 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
-if (process.env.NODE_ENV == 'production' ) {
+if (process.env.NODE_ENV === 'production' ) {
   fs.writeFileSync(logDir + '/koa.pid', process.pid);
   process.on('SIGHUP', () => dest.reopen());
 }
