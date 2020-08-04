@@ -12,7 +12,7 @@
   "homepage": "https://github.com/hebcal/hebcal-web#readme",
   "scripts": {
     "build": "babel src --out-dir dist",
-    "deploy": "rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/",
+    "deploy": "rsync -av ./static/ /var/www/html/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/",
     "start": "node dist/app-www.js",
     "test": "echo \"OK: no test specified\" && exit 0"
   },
@@ -26,7 +26,7 @@
     "@babel/core": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
     "@babel/register": "^7.10.5",
-    "eslint": "^7.5.0",
+    "eslint": "^7.6.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
@@ -37,7 +37,7 @@
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.3.3",
     "better-sqlite3": "^7.1.0",
-    "dayjs": "^1.8.31",
+    "dayjs": "^1.8.32",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
     "geolite2-redist": "^1.0.7",
@@ -53,6 +53,6 @@
     "koa-timeout-v2": "^1.0.0",
     "maxmind": "^4.1.4",
     "pdfkit": "^0.11.0",
-    "pino": "^6.4.0"
+    "pino": "^6.5.0"
   }
 }

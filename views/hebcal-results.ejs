@@ -113,19 +113,19 @@ div.pbba { page-break-before: always }
   <div class="btn-group mr-1" role="group" data-toggle="buttons">
    <label class="btn btn-secondary btn-sm active mb-1">
     <input type="radio" name="view" id="toggle-month" checked>
-    <svg class="icon align-top"><use xlink:href="#gi-calendar"></use></svg> Month
+    <svg class="icon align-top"><use xlink:href="/i/sprite1.svg#gi-calendar"></use></svg> Month
    </label>
    <label class="btn btn-secondary btn-sm mb-1">
     <input type="radio" name="view" id="toggle-list">
-    <svg class="icon align-top"><use xlink:href="#gi-list"></use></svg> List
+    <svg class="icon align-top"><use xlink:href="/i/sprite1.svg#gi-list"></use></svg> List
    </label>
   </div><!-- .btn-group -->
 <% if (gy >= 1970) { -%>
-<div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="#bi-cloud-download"></use></svg> Download</a></div>
+<div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="/i/sprite1.svg#bi-cloud-download"></use></svg> Download</a></div>
 <% } %>
 <% if (q.c === 'on') { %>
 <div class="btn-group mr-1" role="group">
-  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="#gi-print"></use></svg> Print</a></div>
+  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite1.svg#gi-print"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-toggle="dropdown" aria-expanded="false">
    <span class="sr-only">Toggle Dropdown</span>
   </button>
@@ -135,9 +135,9 @@ div.pbba { page-break-before: always }
   </ul>
 </div>
 <% } else { %>
-<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="#gi-print"></use></svg> Print</a></div>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite1.svg#gi-print"></use></svg> Print</a></div>
 <% } %>
-<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="#gi-cogwheel"></use></svg> Settings</a>
+<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="/i/sprite1.svg#gi-cogwheel"></use></svg> Settings</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
@@ -185,26 +185,6 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <% if (gy >= 1970) { -%>
 <% include partials/download-modal.ejs %>
 <% } -%>
-<svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<defs>
-<symbol id="gi-print" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M10,22H22v5a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1ZM23,5a1,1,0,0,0-1-1H10A1,1,0,0,0,9,5V9H23Zm5,8V23a2.00591,2.00591,0,0,1-2,2H24V21a1.00291,1.00291,0,0,0-1-1H9a1.00291,1.00291,0,0,0-1,1v4H6a2.00591,2.00591,0,0,1-2-2V13a2.00591,2.00591,0,0,1,2-2H26A2.00591,2.00591,0,0,1,28,13Zm-2,.5a.5.5,0,0,0-.5-.5H23.49872a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5H25.5a.5.5,0,0,0,.5-.5Z"/>
-</symbol>
-<symbol id="gi-calendar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M15,18.5v1a.5.5,0,0,1-.5.5h-1a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5h1A.5.5,0,0,1,15,18.5ZM14.5,22h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,14.5,22Zm0-8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,14.5,14Zm4,8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,22Zm-8-4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,10.5,18Zm0,4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,10.5,22Zm12-8h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,22.5,14Zm0,4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,22.5,18Zm-4,0h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,18Zm0-4h-1a.5.5,0,0,0-.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1A.5.5,0,0,0,18.5,14ZM27,7V26a2.00006,2.00006,0,0,1-2,2H7a2.00006,2.00006,0,0,1-2-2V7A2.002,2.002,0,0,1,7,5V6.5a.5.5,0,0,0,.5.5h1A.5.5,0,0,0,9,6.5v-1A.5.5,0,0,1,9.5,5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5v-1a.5.5,0,0,1,.5-.5h1a.5.5,0,0,1,.5.5v1a.5.5,0,0,0,.5.5h1a.5.5,0,0,0,.5-.5V5A2.002,2.002,0,0,1,27,7ZM25.00146,26l-.00109-14H7V26Z"/>
-</symbol>
-<symbol viewBox="0 0 16 16" id="bi-cloud-download" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" d="M4.406 1.342A5.53 5.53 0 0 1 8 0c2.69 0 4.923 2 5.166 4.579C14.758 4.804 16 6.137 16 7.773 16 9.569 14.502 11 12.687 11H10a.5.5 0 0 1 0-1h2.688C13.979 10 15 8.988 15 7.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 2.825 10.328 1 8 1a4.53 4.53 0 0 0-2.941 1.1c-.757.652-1.153 1.438-1.153 2.055v.448l-.445.049C2.064 4.805 1 5.952 1 7.318 1 8.785 2.23 10 3.781 10H6a.5.5 0 0 1 0 1H3.781C1.708 11 0 9.366 0 7.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383z"/>
-<path fill-rule="evenodd" d="M7.646 15.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 14.293V5.5a.5.5 0 0 0-1 0v8.793l-2.146-2.147a.5.5 0 0 0-.708.708l3 3z"/>
-</symbol>
-<symbol id="gi-cogwheel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M27.83521,14.75977a.50437.50437,0,0,0-.3808-.43165l-2.81769-.70507a8.94342,8.94342,0,0,0-.89551-2.167l1.49121-2.48449a.50672.50672,0,0,0-.038-.57923A11.97611,11.97611,0,0,0,23.512,6.71a.50681.50681,0,0,0-.57922-.03808L20.44818,8.16309a8.94053,8.94053,0,0,0-2.16687-.89551L17.57617,4.45a.50438.50438,0,0,0-.43164-.38086,10.32381,10.32381,0,0,0-2.38476,0,.5044.5044,0,0,0-.43165.38086L13.623,7.26758a8.92589,8.92589,0,0,0-2.165.89551L8.97253,6.6709a.5068.5068,0,0,0-.57922.03808A11.96918,11.96918,0,0,0,6.71088,8.39136a.507.507,0,0,0-.038.57934l1.49121,2.48438a8.89783,8.89783,0,0,0-.89648,2.168l-2.81769.70507a.50448.50448,0,0,0-.38086.43165,10.33272,10.33272,0,0,0,0,2.38476.50446.50446,0,0,0,.38086.43164l2.81769.70508a8.89087,8.89087,0,0,0,.89648,2.167l-1.49212,2.4845a.50658.50658,0,0,0,.038.57922,11.97622,11.97622,0,0,0,1.68237,1.68238.50673.50673,0,0,0,.57917.03808l2.48462-1.49121a8.93994,8.93994,0,0,0,2.16687.89551l.70513,2.81763a.50442.50442,0,0,0,.43165.38086,10.32381,10.32381,0,0,0,2.38476,0,.50441.50441,0,0,0,.43164-.38086l.70514-2.81763a8.93493,8.93493,0,0,0,2.16791-.89649l2.48535,1.49122a.50663.50663,0,0,0,.57922-.03821A12.00092,12.00092,0,0,0,25.19525,23.511a.5066.5066,0,0,0,.038-.57923l-1.49207-2.48449a8.93642,8.93642,0,0,0,.89551-2.166l2.81769-.70508a.50434.50434,0,0,0,.3808-.43164,10.32381,10.32381,0,0,0,0-2.38476Zm-11.88312,5.373a4.18067,4.18067,0,1,1,4.18072-4.18066A4.18111,4.18111,0,0,1,15.95209,20.13281Z"/>
-</symbol>
-<symbol id="gi-list" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-<path d="M28,24v1a1,1,0,0,1-1,1H11a1,1,0,0,1-1-1V24a1,1,0,0,1,1-1H27A1,1,0,0,1,28,24Zm-1-7H11a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V18A1,1,0,0,0,27,17Zm0-6H11a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V12A1,1,0,0,0,27,11Zm0-6H11a1,1,0,0,0-1,1V7a1,1,0,0,0,1,1H27a1,1,0,0,0,1-1V6A1,1,0,0,0,27,5ZM6,23H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V24A1,1,0,0,0,6,23Zm0-6H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V18A1,1,0,0,0,6,17Zm0-6H5a1,1,0,0,0-1,1v1a1,1,0,0,0,1,1H6a1,1,0,0,0,1-1V12A1,1,0,0,0,6,11ZM6,5H5A1,1,0,0,0,4,6V7A1,1,0,0,0,5,8H6A1,1,0,0,0,7,7V6A1,1,0,0,0,6,5Z"/>
-</symbol>
-</defs>
-</svg>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
