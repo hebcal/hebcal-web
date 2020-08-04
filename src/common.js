@@ -281,7 +281,7 @@ export function makeHebcalOptions(db, query) {
     }
   }
   if (options.candlelighting) {
-    const location = getLocationFromQuery(db, query, options.il);
+    const location = getLocationFromQuery(db, query);
     if (location) {
       options.location = location;
       if (location.getIsrael()) {
@@ -307,10 +307,9 @@ const tzidMap = {
 /**
  * @param {any} db
  * @param {any} query
- * @param {boolean} il
  * @return {Location}
  */
-export function getLocationFromQuery(db, query, il) {
+export function getLocationFromQuery(db, query) {
   if (!empty(query.geonameid)) {
     const location = db.lookupGeoname(parseInt(query.geonameid, 10));
     if (location == null) {
@@ -334,6 +333,7 @@ export function getLocationFromQuery(db, query, il) {
     query.geonameid = location.getGeoId();
     return location;
   } else if (query.geo === 'pos') {
+    let il = query.i === 'on';
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
         throw createError(400, 'Timezone required');

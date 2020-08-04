@@ -12,7 +12,6 @@ import pino from 'pino';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
-import {geoLookup} from './geolookup';
 import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
@@ -124,7 +123,9 @@ app.use(async (ctx, next) => {
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/geo')) {
-    geoLookup(ctx);
+    // it's fine if this throws a Not Found exception
+    ctx.response.type = ctx.request.headers['accept'] = 'application/json';
+    ctx.body = getLocationFromQuery(ctx.db, ctx.request.query);
   } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
@@ -137,7 +138,7 @@ app.use(async (ctx, next) => {
     await yahrzeitApp(ctx);
   } else if (rpath.startsWith('/link')) {
     const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
-    const location = getLocationFromQuery(ctx.db, q, false);
+    const location = getLocationFromQuery(ctx.db, q);
     const geoUrlArgs = urlArgs(q);
     const geoUrlArgsDbl = geoUrlArgs.replace(/&/g, '&amp;');
     await ctx.render('link', {
