@@ -112,7 +112,8 @@ function makeItems(ctx) {
     q.geo = 'geoname';
   }
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-      new Date(+q.gy, +q.gm - 1, +q.gd) : new Date();
+      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
+      new Date();
   const [midnight, endOfWeek] = getStartAndEnd(dt);
   const options = {
     start: midnight.toDate(),

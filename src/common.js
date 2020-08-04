@@ -233,7 +233,7 @@ export function makeHebcalOptions(db, query) {
   }
   for (const [key, val] of Object.entries(numberOpts)) {
     if (typeof query[key] === 'string' && query[key].length) {
-      options[val] = +query[key];
+      options[val] = parseInt(query[key], 10);
     }
   }
   if (!empty(query.yt)) {
@@ -252,7 +252,7 @@ export function makeHebcalOptions(db, query) {
       }
       query.year = String(options.year);
     } else {
-      options.year = +query.year;
+      options.year = parseInt(query.year, 10);
       if (isNaN(options.year)) {
         throw new RangeError(`Sorry, invalid year ${query.year}`);
       } else if (options.isHebrewYear && options.year < 3762) {
@@ -263,7 +263,7 @@ export function makeHebcalOptions(db, query) {
     }
   }
   if (!empty(query.month)) {
-    const month = +query.month;
+    const month = parseInt(query.month, 10);
     if (month >= 1 && month <= 12) {
       options.month = month;
     } else {
@@ -312,7 +312,7 @@ const tzidMap = {
  */
 export function getLocationFromQuery(db, query, il) {
   if (!empty(query.geonameid)) {
-    const location = db.lookupGeoname(+query.geonameid);
+    const location = db.lookupGeoname(parseInt(query.geonameid, 10));
     if (location == null) {
       throw createError(404, `Sorry, can't find geonameid ${query.geonameid}`);
     }
@@ -342,8 +342,8 @@ export function getLocationFromQuery(db, query, il) {
         il = true;
       }
       query.tzid = tzidMap[query.tzid] || query.tzid;
-      const latitude = +query.latitude;
-      const longitude = +query.longitude;
+      const latitude = parseFloat(query.latitude);
+      const longitude = parseFloat(query.longitude);
       const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
       return new Location(latitude, longitude, il, query.tzid, cityName);
     } else {
@@ -351,7 +351,7 @@ export function getLocationFromQuery(db, query, il) {
       if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
         tzid = Location.legacyTzToTzid(query.tz, query.dst);
         if (!tzid && query.dst === 'none') {
-          const tz = +query.tz;
+          const tz = parseInt(query.tz, 10);
           const plus = tz > 0 ? '+' : '';
           tzid = `Etc/GMT${plus}${tz}`;
         }
@@ -360,12 +360,12 @@ export function getLocationFromQuery(db, query, il) {
         throw createError(400, 'Timezone required');
       }
       for (const [key, max] of Object.entries(geoposLegacy)) {
-        if (empty(query[key]) || +query[key] > max) {
+        if (empty(query[key]) || parseInt(query[key], 10) > max) {
           throw new RangeError(`Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
         }
       }
-      let latitude = +query.ladeg + (+query.lamin / 60.0);
-      let longitude = +query.lodeg + (+query.lomin / 60.0);
+      let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
+      let longitude = parseInt(query.lodeg, 10) + (parseInt(query.lomin, 10) / 60.0);
       if (query.ladir === 's') {
         latitude *= -1;
       }

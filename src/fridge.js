@@ -25,7 +25,7 @@ function makeProperties(ctx) {
   if (!location) {
     ctx.throw(400, 'Location required: geonameid, zip, city');
   }
-  const hyear = +query.year || new HDate().getFullYear();
+  const hyear = parseInt(query.year, 10) || new HDate().getFullYear();
   if (hyear < 3761) {
     ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
   }

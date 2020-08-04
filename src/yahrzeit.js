@@ -123,7 +123,7 @@ function removeEmptyArgs(q) {
   // remove anything larger than maxId
   for (const k of Object.keys(q)) {
     if (isNumKey(k)) {
-      const id = +k.substring(1);
+      const id = parseInt(k.substring(1), 10);
       if (id > maxId) {
         delete q[k];
       }
@@ -171,7 +171,7 @@ export async function yahrzeitDownload(ctx) {
  * @return {Event[]}
  */
 export function makeYahrzeitEvents(maxId, query) {
-  const years = +query.years || 20;
+  const years = parseInt(query.years, 10) || 20;
   const startYear = new HDate().getFullYear();
   const endYear = startYear + years;
   let events = [];

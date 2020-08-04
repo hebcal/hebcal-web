@@ -141,8 +141,8 @@ function makeProperties(ctx) {
 function parseConverterQuery(ctx) {
   const query = ctx.request.query;
   if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
-    const hy = +query.hy;
-    const hd = +query.hd;
+    const hy = parseInt(query.hy, 10);
+    const hd = parseInt(query.hd, 10);
     if (isNaN(hd)) {
       throw new Error('Hebrew day must be numeric');
     } else if (isNaN(hy)) {
@@ -170,9 +170,9 @@ function parseConverterQuery(ctx) {
       if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
         return g2h(new Date(), gs, true);
       }
-      const gy = +query.gy;
-      const gd = +query.gd;
-      const gm = +query.gm;
+      const gy = parseInt(query.gy, 10);
+      const gd = parseInt(query.gd, 10);
+      const gm = parseInt(query.gm, 10);
       if (isNaN(gd)) {
         throw new Error('Gregorian day must be numeric');
       } else if (isNaN(gm)) {
@@ -195,7 +195,7 @@ function parseConverterQuery(ctx) {
       return g2h(dt, gs, false);
     } else {
       const dt = (!empty(query.t) && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) ?
-        new Date(+query.t * 1000) : new Date();
+        new Date(parseInt(query.t, 10) * 1000) : new Date();
       return g2h(dt, gs, true);
     }
   }

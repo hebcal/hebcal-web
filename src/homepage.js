@@ -7,7 +7,8 @@ import querystring from 'querystring';
 export async function homepage(ctx) {
   const q = ctx.request.query;
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-    new Date(+q.gy, +q.gm - 1, +q.gd) : new Date();
+      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
+      new Date();
   const hd = new HDate(dt);
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
@@ -74,24 +75,27 @@ function setDefautLangTz(ctx) {
   }
 }
 
+// For the first 7 months of the year, show the current Gregorian year
+// For the last 3 weeks of December, show next Gregorian year
+// After Tu B'Av show next Hebrew year
 function setDefaultYear(ctx, dt, hdate) {
-  const hy = hdate.getFullYear();
+  const today = hdate.abs();
+  const hy0 = hdate.getFullYear();
+  const av15 = new HDate(15, months.AV, hy0).abs();
+  const hy = today > av15 ? hy0 + 1 : hy0;
   const gregYr1 = hy - 3761;
   const gregYr2 = gregYr1 + 1;
-  let gregRange = gregYr1 + '-' + gregYr2;
+  let gregRange;
   let yearArgs;
+  const gy0 = dt.getFullYear();
   const gm = dt.getMonth() + 1;
-  // for the first 8 months of the year, just show the current Gregorian year
-  if (gm <= 8 || gm === 12 && dt.getDate() >= 10) {
-    const gy = dt.getFullYear();
-    const gytmp = (gm === 12) ? gy + 1 : gy;
-    yearArgs = `&yt=G&year=${gytmp}`;
-    gregRange = gytmp;
+  const gy = (gm === 12) ? gy0 + 1 : gy0;
+  if (gm < 8 || (gm <= 9 && today <= av15) || gm === 12 && dt.getDate() >= 10) {
+    yearArgs = `&yt=G&year=${gy}`;
+    gregRange = gy;
   } else {
-    // default to next year if it's past Tu B'Av or anytime in Elul
-    const hm = hdate.getMonth();
-    const hyear = (gm >= 9 || hm == months.ELUL || (hm == months.AV && hdate.getDate() >= 16)) ? hy + 1 : hy;
-    yearArgs = `&yt=H&year=${hyear}`;
+    yearArgs = `&yt=H&year=${hy}`;
+    gregRange = gregYr1 + '-' + gregYr2;
   }
   Object.assign(ctx.state, {
     gregRange,
