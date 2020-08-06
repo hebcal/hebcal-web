@@ -62,6 +62,9 @@ function mastheadHolidays(items, hd) {
  */
 function setDefautLangTz(ctx) {
   const cookieStr = ctx.state.cookieStr = ctx.cookies.get('C') || '';
+  if (cookieStr.length !== 0) {
+    ctx.set('Cache-Control', 'private');
+  }
   const cookie = ctx.state.cookie = querystring.parse(cookieStr);
   const ip = ctx.request.header['x-client-ip'] || ctx.request.ip;
   const geoip = ctx.lookup.get(ip);

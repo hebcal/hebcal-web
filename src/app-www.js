@@ -11,6 +11,7 @@ import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
 import {GeoDb} from '@hebcal/geo-sqlite';
+import {emailVerify} from './verify';
 import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
 import {hebcalApp} from './hebcal';
@@ -152,6 +153,8 @@ app.use(async (ctx, next) => {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
+  } else if (rpath === '/email/verify.php') {
+    await emailVerify(ctx);
   } else if (rpath.startsWith('/link')) {
     const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
     const location = getLocationFromQuery(ctx.db, q);

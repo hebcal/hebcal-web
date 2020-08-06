@@ -1,0 +1,29 @@
+<% include partials/header.ejs %>
+<div id="content">
+<div class="row">
+<div class="col">
+<p class="lead">Confirm your subscription to weekly Shabbat candle lighting
+  times and Torah portion by email.</p>
+<% if (success) { %>
+<div class="alert alert-success">
+<strong>Thank you!</strong> Your subscription is now active.
+A confirmation message has been sent to <strong><%= emailAddress %></strong>.
+</div><!-- .alert -->
+<% } else { %>
+<p>Email: <strong><%= emailAddress %></strong>
+<br>Location: <%= locationName %></p>
+<form method="post" action="<%= rpath %>">
+<input type="hidden" name="k" value="<%= subscriptionId %>">
+<input type="hidden" name="commit" value="1">
+<button type="submit" class="btn btn-success">Confirm Subscription</button>
+</form>
+<h3>Email Privacy Policy</h3>
+<p>We will never sell or give your email address to anyone.
+<br>We will never use your email address to send you unsolicited offers.</p>
+<p>To unsubscribe, send an email to <a
+href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>    
+<% } %>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<% include partials/footer.ejs %>
