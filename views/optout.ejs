@@ -1,0 +1,16 @@
+<% include partials/header.ejs %>
+<div id="content">
+<div class="row">
+<div class="col">
+<h1><%= title %></h1>
+<% if (optout) { %>
+<p class="lead">Opt-out completed successfully.</p>
+<p>Your <b>hebcal.com</b> cookie id is now set to opt_out.</p>
+<% } else { %>
+<p class="lead">We deleted your cookie for the Hebcal Jewish Calendar and
+ Shabbat Candle Lighting Times.</p>
+<% } %>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<% include partials/footer.ejs %>

@@ -6,6 +6,7 @@ import error from 'koa-error';
 import render from 'koa-ejs';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
+import dayjs from 'dayjs';
 import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
@@ -132,6 +133,21 @@ app.use(async (ctx, next) => {
     await hebrewDateConverter(ctx);
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
+  } else if (rpath === '/hebcal/del_cookie.cgi') {
+    ctx.set('Cache-Control', 'private');
+    const optout = (ctx.request.querystring === 'optout');
+    const cookieVal = optout ? 'opt_out' : '0';
+    // Either future or in the past (1970-01-01T00:00:01.000Z)
+    const expires = optout ? dayjs().add(2, 'year').toDate() : new Date(1000);
+    ctx.cookies.set('C', cookieVal, {
+      expires: expires,
+      overwrite: true,
+      httpOnly: false,
+    });
+    await ctx.render('optout', {
+      title: optout ? 'Opt-Out Complete' : 'Cookie Deleted',
+      optout,
+    });
   } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {

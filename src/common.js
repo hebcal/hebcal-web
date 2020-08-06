@@ -158,6 +158,9 @@ export function possiblySetCookie(ctx, query) {
   const newCookie = makeCookie(query);
   const prevCookie = ctx.cookies.get('C');
   if (prevCookie) {
+    if (prevCookie === 'opt_out') {
+      return false;
+    }
     const prev = prevCookie.substring(prevCookie.indexOf('&'));
     const current = newCookie.substring(newCookie.indexOf('&'));
     if (prev === current) {
