@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery} from './common';
+import {getLocationFromQuery, tooltipScript, typeaheadScript} from './common';
 import {makeDb} from './makedb';
 import {makeEmailTransport} from './email';
 
@@ -105,4 +105,13 @@ function getSubscriptionId(ctx, q) {
     }
   }
   return undefined;
+}
+
+export async function emailForm(ctx) {
+  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  await ctx.render('email', {
+    title: `Shabbat Candle Lighting Times by Email | Hebcal Jewish Calendar`,
+    q,
+    xtra_html: tooltipScript + typeaheadScript,
+  });
 }

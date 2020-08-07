@@ -1,0 +1,40 @@
+<% include partials/header-noclose.ejs %>
+<link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
+</head>
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col">
+<p class="lead">Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</p>
+
+<div id="email-form">
+<form id="f1" action="<%= rpath %>" method="post">
+<input type="hidden" name="v" value="1">
+<div class="form-group">
+<label class="form-label" for="em">E-mail address</label>
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="">
+</div>
+<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
+<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
+<% include partials/city-and-havdalah.ejs %>
+<button type="submit" class="btn btn-primary" name="modify" value="1">Subscribe</button>
+<button type="submit" class="btn btn-secondary" name="unsubscribe" value="1">Unsubscribe</button>
+</fieldset>
+</form>
+</div><!-- #email-form -->
+<hr>
+<p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
+<div id="privacy-policy">
+<h4 class="mt-4">Email Privacy Policy</h4>
+<p>We will never sell or give your email address to anyone.
+<br>We will never use your email address to send you unsolicited offers.</p>
+<p>To unsubscribe, send an email to
+<br><a href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
+</div><!-- #privacy-policy -->
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<% include partials/footer.ejs %>
