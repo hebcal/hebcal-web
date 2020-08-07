@@ -1,22 +1,14 @@
 /* eslint-disable require-jsdoc */
-import ini from 'ini';
-import path from 'path';
-import fs from 'fs';
 import {getLocationFromQuery} from './common';
 import {makeDb} from './makedb';
 
-const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
-const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
-const iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
-
 export async function emailVerify(ctx) {
-  const success = false;
-  const title = success ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
-  const subscriptionId = getSubscriptionId(ctx);
+  const query = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const subscriptionId = getSubscriptionId(ctx, query);
   if (!subscriptionId) {
     ctx.throw(400, 'No subscription confirmation key');
   }
-  const db = makeDb(iniConfig);
+  const db = makeDb(ctx.iniConfig);
   const sql = `
 SELECT email_id, email_address, email_status, email_created,
   email_candles_zipcode, email_candles_city,
@@ -24,10 +16,9 @@ SELECT email_id, email_address, email_status, email_created,
   email_candles_havdalah, email_optin_announce
 FROM hebcal_shabbat_email
 WHERE hebcal_shabbat_email.email_id = ?`;
-  ctx.logger.debug(sql);
   const results = await db.query(sql, subscriptionId);
-  db.close();
   if (!results || !results[0]) {
+    db.close();
     ctx.throw(404, `Subscription confirmation key ${subscriptionId} not found`);
   }
   const row = results[0];
@@ -41,6 +32,16 @@ WHERE hebcal_shabbat_email.email_id = ?`;
   }
   const location = getLocationFromQuery(ctx.db, q);
   const locationName = location ? location.getName() : 'unknown';
+  const success = (query.commit === '1');
+  const title = success ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
+  if (success) {
+    const ip = ctx.request.headers['x-client-ip'] || ctx.request.ip;
+    const sqlUpdate = `UPDATE hebcal_shabbat_email
+    SET email_status='active', email_ip='${ip}'
+    WHERE email_id = ?`;
+    await db.query(sqlUpdate, subscriptionId);
+  }
+  db.close();
   await ctx.render('verify', {
     title: `${title} | Hebcal Jewish Calendar`,
     subscriptionId,
@@ -50,9 +51,9 @@ WHERE hebcal_shabbat_email.email_id = ?`;
   });
 }
 
-function getSubscriptionId(ctx) {
+function getSubscriptionId(ctx, q) {
   const subscriptionRe = /^[0-9a-f]{24}$/;
-  const k = ctx.request.body ? ctx.request.body.k : ctx.request.query.k;
+  const k = q.k;
   if (typeof k === 'string') {
     if (!k.match(subscriptionRe)) {
       ctx.throw(400, 'Invalid subscription confirmation key');

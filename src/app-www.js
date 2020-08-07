@@ -7,6 +7,7 @@ import render from 'koa-ejs';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import dayjs from 'dayjs';
+import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
@@ -30,6 +31,10 @@ const logger = app.context.logger = pino(dest);
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+
+const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
+const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
+app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 // const debugLog = pino(pino.destination(logDir + '/debug.log'));
 
