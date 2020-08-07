@@ -4,6 +4,7 @@ import {makeDb} from './makedb';
 import {makeEmailTransport} from './email';
 
 export async function emailVerify(ctx) {
+  ctx.set('Cache-Control', 'private');
   const query = Object.assign({}, ctx.request.body || {}, ctx.request.query);
   const subscriptionId = ctx.state.subscriptionId = getSubscriptionId(ctx, query);
   if (!subscriptionId) {
