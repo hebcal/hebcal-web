@@ -8,7 +8,12 @@
 <div class="row">
 <div class="col">
 <p class="lead">Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</p>
-
+<% if (typeof message !== 'undefined') { %>
+<div class="alert alert-danger alert-dismissible" role="alert">
+<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<%= message %>
+</div><!-- .alert -->
+<% } %>
 <div id="email-form">
 <form id="f1" action="<%= rpath %>" method="post">
 <input type="hidden" name="v" value="1">

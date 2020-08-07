@@ -12,7 +12,7 @@ import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {emailVerify, emailForm} from './verify';
+import {emailVerify, emailForm} from './email';
 import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
 import {hebcalApp} from './hebcal';

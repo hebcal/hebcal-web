@@ -1,7 +1,24 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery, tooltipScript, typeaheadScript} from './common';
+import {getLocationFromQuery, processCookieAndQuery, tooltipScript, typeaheadScript} from './common';
 import {makeDb} from './makedb';
-import {makeEmailTransport} from './email';
+import nodemailer from 'nodemailer';
+
+/**
+ * @param {Object<string,any>} iniConfig
+ * @return {nodemailer.Transporter}
+ */
+function makeEmailTransport(iniConfig) {
+  const transporter = nodemailer.createTransport({
+    host: iniConfig['hebcal.email.shabbat.host'],
+    port: 465,
+    secure: true,
+    auth: {
+      user: iniConfig['hebcal.email.shabbat.user'],
+      pass: iniConfig['hebcal.email.shabbat.password'],
+    },
+  });
+  return transporter;
+}
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
@@ -108,7 +125,19 @@ function getSubscriptionId(ctx, q) {
 }
 
 export async function emailForm(ctx) {
-  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  ctx.set('Cache-Control', 'private');
+  const q = processCookieAndQuery(
+      ctx.cookies.get('C'),
+      {},
+      Object.assign({}, ctx.request.body || {}, ctx.request.query),
+  );
+  let location;
+  try {
+    location = getLocationFromQuery(ctx.db, q);
+  } catch (err) {
+    ctx.state.message = err.message;
+  }
+  q['city-typeahead'] = location ? location.getName() : '';
   await ctx.render('email', {
     title: `Shabbat Candle Lighting Times by Email | Hebcal Jewish Calendar`,
     q,
