@@ -35,7 +35,7 @@ SELECT email_id, email_address, email_status, email_created,
   email_candles_geonameid,
   email_candles_havdalah, email_optin_announce
 FROM hebcal_shabbat_email
-WHERE hebcal_shabbat_email.email_id = ?`;
+WHERE email_id = ?`;
   const results = await db.query(sql, subscriptionId);
   if (!results || !results[0]) {
     await db.close();
@@ -69,21 +69,22 @@ function getGeoFromRow(row) {
 }
 
 async function updateDbAndEmail(ctx, db) {
-  const sqlUpdate = `UPDATE hebcal_shabbat_email
+  const sql = `UPDATE hebcal_shabbat_email
     SET email_status = 'active', email_ip = ?
     WHERE email_id = ?`;
   const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId;
-  await db.query(sqlUpdate, [ip, subscriptionId]);
+  await db.query(sql, [ip, subscriptionId]);
 
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const emailAddress = ctx.state.emailAddress;
   const unsubUrl = getUnsubUrl(emailAddress);
   const message = {
-    from: 'Hebcal <shabbat-owner@hebcal.com>',
-    replyTo: 'no-reply@hebcal.com',
     to: emailAddress,
     subject: 'Your subscription to hebcal is complete',
+    headers: {
+      'List-Unsubscribe': `<mailto:${unsubAddr}>`,
+    },
     text: `Hello,
 
 Your subscription request for hebcal is complete.
@@ -96,15 +97,8 @@ hebcal.com
 To modify your subscription or to unsubscribe completely, visit:
 ${unsubUrl}
 `,
-    headers: {
-      'X-Originating-IP': `[${ip}]`,
-      'List-Unsubscribe': `<mailto:${unsubAddr}>`,
-    },
   };
-  const transporter = makeEmailTransport(ctx.iniConfig);
-  // console.log(message);
-  // return Promise.resolve({response: '250 OK', messageId: 'foo'});
-  return transporter.sendMail(message);
+  await mySendMail(ctx, message);
 }
 
 function getUnsubUrl(emailAddress) {
@@ -166,14 +160,11 @@ export async function emailForm(ctx) {
       ctx.state.emailAddress = q.em;
       const ok = await unsubscribe(ctx, q.em);
       if (ok) {
-        await ctx.render('email-unsubscribe');
-        return Promise.resolve(true);
+        return ctx.render('email-unsubscribe');
       }
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
     } else if (q.modify === '1' && !ctx.state.message) {
-      const emailAddress = ctx.state.emailAddress = q.em;
-      const locationName = ctx.state.locationName = location.getName();
       const db = makeDb(ctx.iniConfig);
       if (typeof q.prev === 'string' && q.prev != q.em) {
         const subInfo = await getSubInfo(db, q.prev);
@@ -181,49 +172,25 @@ export async function emailForm(ctx) {
           await unsubscribe(ctx, q.prev, subInfo);
         }
       }
+      ctx.state.emailAddress = q.em;
+      ctx.state.locationName = location.getName();
       // check if email address already verified
       const subInfo = await getSubInfo(db, q.em);
-      if (subInfo && subInfo.status === 'pending') {
-        q.k = subInfo.k;
-      } else if (subInfo && subInfo.status === 'active') {
-        await writeSubInfo(db, q);
-        const unsubUrl = getUnsubUrl(emailAddress);
-        const subscriptionId = subInfo.k;
-        const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
-        const ip = getIpAddress(ctx);
-        const message = {
-          from: 'Hebcal <shabbat-owner@hebcal.com>',
-          replyTo: 'no-reply@hebcal.com',
-          to: emailAddress,
-          subject: 'Your subscription to hebcal is updated',
-          text: `Hello,
-
-We have updated your weekly Shabbat candle lighting time subscription for ${locationName}.
-
-Regards,
-hebcal.com
-
-To modify your subscription or to unsubscribe completely, visit:
-${unsubUrl}
-`,
-          headers: {
-            'X-Originating-IP': `[${ip}]`,
-            'List-Unsubscribe': `<mailto:${unsubAddr}>`,
-          },
-        };
-        console.log(message);
-        await ctx.render('email-success', {
+      if (subInfo && typeof subInfo.k === 'string') {
+        ctx.state.subscriptionId = subInfo.k;
+      }
+      if (subInfo && subInfo.status === 'active') {
+        await updateActiveSub(ctx, db, q);
+        db.close();
+        return ctx.render('email-success', {
           updated: true,
         });
-        db.close();
-        return Promise.resolve(true);
       }
-      const subscriptionId = await writeStagingInfo(ctx, db, q);
-      await ctx.render('email-success', {
+      await writeStagingInfo(ctx, db, q);
+      db.close();
+      return ctx.render('email-success', {
         updated: false,
       });
-      db.close();
-      return Promise.resolve(true);
     }
   }
   await ctx.render('email', {
@@ -231,6 +198,32 @@ ${unsubUrl}
     xtra_html: tooltipScript + typeaheadScript,
     defaultUnsubscribe,
   });
+}
+
+async function updateActiveSub(ctx, db, q) {
+  await writeSubInfo(ctx, db, q);
+  const emailAddress = ctx.state.emailAddress;
+  const unsubUrl = getUnsubUrl(emailAddress);
+  const subscriptionId = ctx.state.subscriptionId;
+  const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
+  const message = {
+    to: emailAddress,
+    subject: 'Your subscription to hebcal is updated',
+    headers: {
+      'List-Unsubscribe': `<mailto:${unsubAddr}>`,
+    },
+    text: `Hello,
+
+We have updated your weekly Shabbat candle lighting time subscription for ${ctx.state.locationName}.
+
+Regards,
+hebcal.com
+
+To modify your subscription or to unsubscribe completely, visit:
+${unsubUrl}
+`,
+  };
+  await mySendMail(ctx, message);
 }
 
 function validateEmail(email) {
@@ -250,11 +243,11 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = false;
     success = true;
   } else {
-    const sqlUpdate = `UPDATE hebcal_shabbat_email
+    const sql = `UPDATE hebcal_shabbat_email
     SET email_status = 'unsubscribed', email_ip = ?
     WHERE email_address = ?`;
     const ip = getIpAddress(ctx);
-    await db.query(sqlUpdate, [ip, emailAddress]);
+    await db.query(sql, [ip, emailAddress]);
     ctx.state.success = true;
     success = true;
   }
@@ -273,7 +266,7 @@ async function getSubInfo(db, emailAddress) {
     email_candles_geonameid,
     email_candles_havdalah, email_optin_announce
   FROM hebcal_shabbat_email
-  WHERE hebcal_shabbat_email.email_address = ?`;
+  WHERE email_address = ?`;
   const results = await db.query(sql, emailAddress);
   if (!results || !results[0]) {
     return null;
@@ -288,16 +281,33 @@ async function getSubInfo(db, emailAddress) {
   }, getGeoFromRow(r));
 }
 
-async function writeSubInfo(db, q) {
-  // return Promise.reject(new Error('something bad happened'));
-  return '1ac9844fda1039087ddcdd3d';
+async function writeSubInfo(ctx, db, q) {
+  const sql = `UPDATE hebcal_shabbat_email
+    SET email_status = 'active',
+      email_candles_zipcode = ?,
+      email_candles_geonameid = ?,
+      email_candles_havdalah = ?,
+      email_ip = ?
+    WHERE email_id = ?`;
+  await db.query(sql, [
+    q.zip || null,
+    q.geonameid || null,
+    q.m,
+    getIpAddress(ctx),
+    ctx.state.subscriptionId,
+  ]);
+}
+
+function makeSubscriptionId(ctx) {
+  if (ctx.state.subscriptionId) {
+    return ctx.state.subscriptionId;
+  }
+  return Date.now().toString(36) + randomBigInt(80).toString(36).padStart(16, '0');
 }
 
 async function writeStagingInfo(ctx, db, q) {
   const ip = getIpAddress(ctx);
-  if (!q.k) {
-    q.k = Date.now().toString(36) + randomBigInt(80).toString(36).padStart(16, '0');
-  }
+  const subscriptionId = ctx.state.subscriptionId = makeSubscriptionId(ctx);
   const locationColumn = q.zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
   const locationValue = q.zip ? q.zip : q.geonameid;
   const sql = `REPLACE INTO hebcal_shabbat_email
@@ -305,12 +315,10 @@ async function writeStagingInfo(ctx, db, q) {
    email_candles_havdalah, email_optin_announce,
    ${locationColumn}, email_ip)
   VALUES (?, ?, 'pending', NOW(), ?, '0', ?, ?)`;
-  await db.query(sql, [q.k, q.em, q.m, locationValue, ip]);
-  const url = `https://www.hebcal.com/email/verify.php?${q.k}`;
+  await db.query(sql, [subscriptionId, q.em, q.m, locationValue, ip]);
+  const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
   const message = {
-    from: 'Hebcal <shabbat-owner@hebcal.com>',
-    replyTo: 'no-reply@hebcal.com',
     to: q.em,
     subject: 'Please confirm your request to subscribe to hebcal',
     html: `<div dir="ltr">
@@ -334,11 +342,18 @@ apologies and ignore this message.</div>
 <div>[${ip}]</div>
 </div>
 `,
-    headers: {
-      'X-Originating-IP': `[${ip}]`,
-    },
   };
-  console.log(message);
-  // return Promise.reject(new Error('something bad happened'));
-  return q.k;
+  await mySendMail(ctx, message);
+}
+
+async function mySendMail(ctx, message) {
+  message.from = 'Hebcal <shabbat-owner@hebcal.com>';
+  message.replyTo = 'no-reply@hebcal.com';
+  const ip = getIpAddress(ctx);
+  message.headers = message.headers || {};
+  message.headers['X-Originating-IP'] = `[${ip}]`;
+  // console.log(message);
+  const transporter = makeEmailTransport(ctx.iniConfig);
+  await transporter.sendMail(message);
+  // return Promise.resolve({response: '250 OK', messageId: 'foo'});
 }
