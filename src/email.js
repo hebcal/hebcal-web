@@ -71,14 +71,13 @@ async function updateDbAndEmail(ctx, db) {
   const sqlUpdate = `UPDATE hebcal_shabbat_email
     SET email_status = 'active', email_ip = ?
     WHERE email_id = ?`;
-  const ip = ctx.request.headers['x-client-ip'] || ctx.request.ip;
+  const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId;
   await db.query(sqlUpdate, [ip, subscriptionId]);
 
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const emailAddress = ctx.state.emailAddress;
-  const encoded = encodeURIComponent(Buffer.from(emailAddress).toString('base64'));
-  const unsubUrl = `https://www.hebcal.com/email/?e=${encoded}`;
+  const unsubUrl = getUnsubUrl(emailAddress);
   const message = {
     from: 'Hebcal <shabbat-owner@hebcal.com>',
     replyTo: 'no-reply@hebcal.com',
@@ -105,6 +104,12 @@ ${unsubUrl}
   // console.log(message);
   // return Promise.resolve({response: '250 OK', messageId: 'foo'});
   return transporter.sendMail(message);
+}
+
+function getUnsubUrl(emailAddress) {
+  const encoded = encodeURIComponent(Buffer.from(emailAddress).toString('base64'));
+  const unsubUrl = `https://www.hebcal.com/email/?e=${encoded}`;
+  return unsubUrl;
 }
 
 function getSubscriptionId(ctx, q) {
@@ -157,7 +162,8 @@ export async function emailForm(ctx) {
     } else if (!validateEmail(q.em)) {
       ctx.state.message = `Invalid email address ${q.em}`;
     } else if (q.unsubscribe === '1') {
-      const ok = await unsubscribe(ctx, q);
+      ctx.state.emailAddress = q.em;
+      const ok = await unsubscribe(ctx, q.em);
       if (ok) {
         await ctx.render('email-unsubscribe');
         return Promise.resolve(true);
@@ -165,6 +171,42 @@ export async function emailForm(ctx) {
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
     } else if (q.modify === '1' && !ctx.state.message) {
+      if (typeof q.prev === 'string' && q.prev != q.em) {
+        const subInfo = await getSubInfo(db, q.prev);
+        if (subInfo && subInfo.status === 'active') {
+          await unsubscribe(ctx, q.prev);
+        }
+      }
+      // check if email address already verified
+      const subInfo = await getSubInfo(db, q.em);
+      if (subInfo && subInfo.status === 'active') {
+        const emailAddress = q.em;
+        const unsubUrl = getUnsubUrl(emailAddress);
+        const subscriptionId = subInfo.k;
+        const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
+        const ip = getIpAddress(ctx);
+        const message = {
+          from: 'Hebcal <shabbat-owner@hebcal.com>',
+          replyTo: 'no-reply@hebcal.com',
+          to: emailAddress,
+          subject: 'Your subscription to hebcal is updated',
+          text: `Hello,
+
+We have updated your weekly Shabbat candle lighting time subscription for ${location.getName()}.
+
+Regards,
+hebcal.com
+
+To modify your subscription or to unsubscribe completely, visit:
+${unsubUrl}
+`,
+          headers: {
+            'X-Originating-IP': `[${ip}]`,
+            'List-Unsubscribe': `<mailto:${unsubAddr}>`,
+          },
+        };
+        console.log(message);
+      }
       await ctx.render('email-success', {
         emailAddress: q.em,
         locationName: location.getName(),
@@ -185,13 +227,12 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-async function unsubscribe(ctx, q) {
+async function unsubscribe(ctx, emailAddress) {
   const db = makeDb(ctx.iniConfig);
-  const subInfo = await getSubInfo(db, q.em);
-  ctx.state.emailAddress = q.em;
+  const subInfo = await getSubInfo(db, emailAddress);
   let success;
   if (!subInfo) {
-    ctx.state.message = `Sorry, ${q.em} is not currently subscribed`;
+    ctx.state.message = `Sorry, ${emailAddress} is not currently subscribed`;
     success = false;
   } else if (subInfo.status === 'unsubscribed') {
     ctx.state.success = false;
@@ -200,13 +241,17 @@ async function unsubscribe(ctx, q) {
     const sqlUpdate = `UPDATE hebcal_shabbat_email
     SET email_status = 'unsubscribed', email_ip = ?
     WHERE email_address = ?`;
-    const ip = ctx.request.headers['x-client-ip'] || ctx.request.ip;
-    await db.query(sqlUpdate, [ip, q.em]);
+    const ip = getIpAddress(ctx);
+    await db.query(sqlUpdate, [ip, emailAddress]);
     ctx.state.success = true;
     success = true;
   }
   await db.close();
   return success;
+}
+
+function getIpAddress(ctx) {
+  return ctx.request.headers['x-client-ip'] || ctx.request.ip;
 }
 
 async function getSubInfo(db, emailAddress) {
