@@ -2,6 +2,7 @@
 import {getLocationFromQuery, processCookieAndQuery, tooltipScript, typeaheadScript} from './common';
 import {makeDb} from './makedb';
 import nodemailer from 'nodemailer';
+import randomBigInt from 'random-bigint';
 
 /**
  * @param {Object<string,any>} iniConfig
@@ -113,7 +114,7 @@ function getUnsubUrl(emailAddress) {
 }
 
 function getSubscriptionId(ctx, q) {
-  const subscriptionRe = /^[0-9a-f]{24}$/;
+  const subscriptionRe = /^[0-9a-z]{24}$/;
   const k = q.k;
   if (typeof k === 'string') {
     if (!k.match(subscriptionRe)) {
@@ -295,11 +296,18 @@ async function writeSubInfo(db, q) {
 async function writeStagingInfo(ctx, db, q) {
   const ip = getIpAddress(ctx);
   if (!q.k) {
-    const buffer = new ArrayBuffer(8);
-    const view = new UInt32Array(buffer);
-    view[0] = Math.floor(Date.now() / 1000);
+    q.k = Date.now().toString(36) + randomBigInt(80).toString(36).padStart(16, '0');
   }
+  const locationColumn = q.zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
+  const locationValue = q.zip ? q.zip : q.geonameid;
+  const sql = `REPLACE INTO hebcal_shabbat_email
+  (email_id, email_address, email_status, email_created,
+   email_candles_havdalah, email_optin_announce,
+   ${locationColumn}, email_ip)
+  VALUES (?, ?, 'pending', NOW(), ?, '0', ?, ?)`;
+  await db.query(sql, [q.k, q.em, q.m, locationValue, ip]);
   const url = `https://www.hebcal.com/email/verify.php?${q.k}`;
+  const locationName = ctx.state.locationName;
   const message = {
     from: 'Hebcal <shabbat-owner@hebcal.com>',
     replyTo: 'no-reply@hebcal.com',

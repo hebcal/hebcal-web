@@ -37,7 +37,7 @@
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.3.3",
     "better-sqlite3": "^7.1.0",
-    "dayjs": "^1.8.32",
+    "dayjs": "^1.8.33",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
     "geolite2-redist": "^1.0.7",
@@ -55,6 +55,7 @@
     "mysql2": "^2.1.0",
     "nodemailer": "^6.4.11",
     "pdfkit": "^0.11.0",
-    "pino": "^6.5.0"
+    "pino": "^6.5.0",
+    "random-bigint": "0.0.1"
   }
 }
