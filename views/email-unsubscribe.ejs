@@ -1,0 +1,19 @@
+<% include partials/header.ejs %>
+<div id="content">
+<div class="row">
+<div class="col">
+<% if (success) { %>
+<div class="alert alert-success">
+<h4>Unsubscribed</h4>
+<strong><%= emailAddress %></strong> has been removed from the email subscription list.
+</div><!-- .alert -->
+<% } else { %>
+<div class="alert alert-warning">
+<h4>Unsubscribed</h4>
+<strong><%= emailAddress %></strong> was previously removed from the email subscription list.
+</div><!-- .alert -->
+<% } %>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<% include partials/footer.ejs %>

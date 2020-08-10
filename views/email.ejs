@@ -7,7 +7,7 @@
 <div id="content">
 <div class="row">
 <div class="col">
-<p class="lead">Subscribe to weekly Shabbat candle lighting times and Torah portion by email.</p>
+<p class="lead"><%= defaultUnsubscribe ? 'Unsubscribe from' : 'Subscribe to' %> weekly Shabbat candle lighting times and Torah portion by email.</p>
 <% if (typeof message !== 'undefined') { %>
 <div class="alert alert-danger alert-dismissible" role="alert">
 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -17,19 +17,28 @@
 <div id="email-form">
 <form id="f1" action="<%= rpath %>" method="post">
 <input type="hidden" name="v" value="1">
-<div class="form-group">
+<% if (typeof q.em === 'string' && q.status === 'active') { %>
+<input type="hidden" name="prev" value="<%= q.em %>">
+<% } %>
+<% if (typeof q.k === 'string' && q.status === 'active') { %>
+<input type="hidden" name="k" value="<%= q.k %>">
+<% } %>
+<div class="mb-3">
 <label class="form-label" for="em">E-mail address</label>
-<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="">
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>">
 </div>
+<% if (!defaultUnsubscribe) { %>
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
 <input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
 <input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
 <% include partials/city-and-havdalah.ejs %>
-<button type="submit" class="btn btn-primary" name="modify" value="1">Subscribe</button>
-<button type="submit" class="btn btn-secondary" name="unsubscribe" value="1">Unsubscribe</button>
+<button type="submit" class="btn btn-primary" name="modify" value="1"><%= q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
+<% } %>
+<button type="submit" class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
 </fieldset>
 </form>
 </div><!-- #email-form -->
+<% if (!defaultUnsubscribe) { %>
 <hr>
 <p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
 <div id="privacy-policy">
@@ -39,6 +48,7 @@
 <p>To unsubscribe, send an email to
 <br><a href="mailto:shabbat-unsubscribe&#64;hebcal.com">shabbat-unsubscribe&#64;hebcal.com</a>.</p>
 </div><!-- #privacy-policy -->
+<% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->

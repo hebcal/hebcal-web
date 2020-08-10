@@ -1,0 +1,17 @@
+<% include partials/header.ejs %>
+<div id="content">
+<div class="row">
+<div class="col">
+<div class="alert alert-success">
+<strong>Thank you!</strong> A confirmation message has been sent to
+<strong><%= emailAddress %></strong> for <%= locationName %>.
+<br>Click the link within that message to confirm your subscription.
+</div><!-- .alert -->
+<p>If you do not receive this message within a few minutes, then
+the most likely problem is that you made a typo in your email
+address. If so, please return to the subscription page and try again,
+taking care to avoid typos.</p>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<% include partials/footer.ejs %>
