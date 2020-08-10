@@ -171,16 +171,21 @@ export async function emailForm(ctx) {
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
     } else if (q.modify === '1' && !ctx.state.message) {
+      const emailAddress = ctx.state.emailAddress = q.em;
+      const locationName = ctx.state.locationName = location.getName();
+      const db = makeDb(ctx.iniConfig);
       if (typeof q.prev === 'string' && q.prev != q.em) {
         const subInfo = await getSubInfo(db, q.prev);
         if (subInfo && subInfo.status === 'active') {
-          await unsubscribe(ctx, q.prev);
+          await unsubscribe(ctx, q.prev, subInfo);
         }
       }
       // check if email address already verified
       const subInfo = await getSubInfo(db, q.em);
-      if (subInfo && subInfo.status === 'active') {
-        const emailAddress = q.em;
+      if (subInfo && subInfo.status === 'pending') {
+        q.k = subInfo.k;
+      } else if (subInfo && subInfo.status === 'active') {
+        await writeSubInfo(db, q);
         const unsubUrl = getUnsubUrl(emailAddress);
         const subscriptionId = subInfo.k;
         const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
@@ -192,7 +197,7 @@ export async function emailForm(ctx) {
           subject: 'Your subscription to hebcal is updated',
           text: `Hello,
 
-We have updated your weekly Shabbat candle lighting time subscription for ${location.getName()}.
+We have updated your weekly Shabbat candle lighting time subscription for ${locationName}.
 
 Regards,
 hebcal.com
@@ -206,11 +211,17 @@ ${unsubUrl}
           },
         };
         console.log(message);
+        await ctx.render('email-success', {
+          updated: true,
+        });
+        db.close();
+        return Promise.resolve(true);
       }
+      const subscriptionId = await writeStagingInfo(ctx, db, q);
       await ctx.render('email-success', {
-        emailAddress: q.em,
-        locationName: location.getName(),
+        updated: false,
       });
+      db.close();
       return Promise.resolve(true);
     }
   }
@@ -227,9 +238,9 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 
-async function unsubscribe(ctx, emailAddress) {
+async function unsubscribe(ctx, emailAddress, subInfo) {
   const db = makeDb(ctx.iniConfig);
-  const subInfo = await getSubInfo(db, emailAddress);
+  subInfo = subInfo || await getSubInfo(db, emailAddress);
   let success;
   if (!subInfo) {
     ctx.state.message = `Sorry, ${emailAddress} is not currently subscribed`;
@@ -274,4 +285,52 @@ async function getSubInfo(db, emailAddress) {
     m: String(r.email_candles_havdalah),
     t: r.email_created,
   }, getGeoFromRow(r));
+}
+
+async function writeSubInfo(db, q) {
+  // return Promise.reject(new Error('something bad happened'));
+  return '1ac9844fda1039087ddcdd3d';
+}
+
+async function writeStagingInfo(ctx, db, q) {
+  const ip = getIpAddress(ctx);
+  if (!q.k) {
+    const buffer = new ArrayBuffer(8);
+    const view = new UInt32Array(buffer);
+    view[0] = Math.floor(Date.now() / 1000);
+  }
+  const url = `https://www.hebcal.com/email/verify.php?${q.k}`;
+  const message = {
+    from: 'Hebcal <shabbat-owner@hebcal.com>',
+    replyTo: 'no-reply@hebcal.com',
+    to: q.em,
+    subject: 'Please confirm your request to subscribe to hebcal',
+    html: `<div dir="ltr">
+<div>Hello,</div>
+<div><br></div>
+<div>We have received your request to receive weekly Shabbat
+candle lighting time information from hebcal.com for
+${locationName}.</div>
+<div><br></div>
+<div>Please confirm your request by clicking on this link:</div>
+<div><br></div>
+<div><a href="${url}">${url}</a></div>
+<div><br></div>
+<div>If you did not request (or do not want) weekly Shabbat
+candle lighting time information, please accept our
+apologies and ignore this message.</div>
+<div><br></div>
+<div>Regards,
+<br>hebcal.com</div>
+<div><br></div>
+<div>[${ip}]</div>
+</div>
+`,
+    headers: {
+      'X-Originating-IP': `[${ip}]`,
+    },
+  };
+  console.log(message);
+  // return Promise.reject(new Error('something bad happened'));
+  return q.k;
 }

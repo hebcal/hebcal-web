@@ -2,6 +2,13 @@
 <div id="content">
 <div class="row">
 <div class="col">
+<% if (updated) { %>
+<div class="alert alert-success">
+<strong>Success!</strong> Your subsciption information has been updated.
+<p>Email: <strong><%= emailAddress %></strong>
+<br>Location: <%= locationName %></p>
+</div><!-- .alert -->
+<% } else { %>
 <div class="alert alert-success">
 <strong>Thank you!</strong> A confirmation message has been sent to
 <strong><%= emailAddress %></strong> for <%= locationName %>.
@@ -11,6 +18,7 @@
 the most likely problem is that you made a typo in your email
 address. If so, please return to the subscription page and try again,
 taking care to avoid typos.</p>
+<% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
