@@ -1,6 +1,12 @@
 import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
+import 'dayjs/locale/fi';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/he';
+import 'dayjs/locale/hu';
+import 'dayjs/locale/pl';
+import 'dayjs/locale/ru';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -11,18 +17,6 @@ const PDF_RMARGIN = 24;
 const PDF_COLUMNS = 7;
 // not intended to be an integer
 const PDF_COLWIDTH = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN) / PDF_COLUMNS;
-
-const hebrewDoW = [
-  'ראשון',
-  'שני',
-  'שלישי',
-  'רביעי',
-  'חמישי',
-  'שישי',
-  'שבת',
-];
-
-const dowNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const hebrewGregMoy = [
   '',
@@ -39,6 +33,16 @@ const hebrewGregMoy = [
   'נוֹבֶמְבֶּר',
   'דֶּצֶמְבֶּר',
 ];
+
+const localeMap = {
+  'fi': 'fi',
+  'fr': 'fr',
+  'he': 'he',
+  'hu': 'hu',
+  'h': 'he',
+  'pl': 'pl',
+  'ru': 'ru',
+};
 
 /**
  * @param {Date} d
@@ -75,19 +79,28 @@ function eventsToCells(events) {
   return cells;
 }
 
-// eslint-disable-next-line require-jsdoc
-function getMonthTitle(rtl, year, month) {
-  if (rtl) {
-    return `${year} ${hebrewGregMoy[month]}`;
-  } else {
-    return `${greg.monthNames[month]} ${year}`;
+/**
+ * @param {dayjs.Dayjs} d
+ * @return {string[]}
+ */
+function getWeekdays(d) {
+  let sunday = d;
+  while (sunday.day() != 0) {
+    sunday = sunday.add(1, 'day');
   }
+  const weekdays = [];
+  for (let i = 0, dd = sunday; i < 7; i++, dd = dd.add(1, 'day')) {
+    weekdays.push(dd.format('dddd'));
+  }
+  return weekdays;
 }
 
 // eslint-disable-next-line require-jsdoc
-function renderPdfMonthGrid(doc, year, month, rtl, rows, rowheight) {
+function renderPdfMonthGrid(doc, year, month, rtl, locale0, rows, rowheight) {
   // title at top of page
-  const monthTitle = getMonthTitle(rtl, year, month);
+  const locale = localeMap[locale0] || 'en';
+  const d = dayjs(new Date(year, month - 1, 1)).locale(locale);
+  const monthTitle = d.format(rtl ? 'YYYY MMMM' : 'MMMM YYYY');
   const monthFont = rtl ? 'hebrew' : 'bold';
   doc.fontSize(24)
       .font(monthFont)
@@ -104,11 +117,12 @@ function renderPdfMonthGrid(doc, year, month, rtl, rows, rowheight) {
   // days of the week above 7 columns
   doc.fontSize(10)
       .font(rtl ? 'hebrew' : 'plain');
+  const dowNames = getWeekdays(d);
   for (let i = 0; i < dowNames.length; i++) {
     const edgeOffset = (i * PDF_COLWIDTH) + (PDF_COLWIDTH / 2);
     const x = rtl ? PDF_WIDTH - PDF_RMARGIN - edgeOffset :
       PDF_LMARGIN + edgeOffset;
-    const str = rtl ? hebrewDoW[i] : dowNames[i];
+    const str = dowNames[i];
     const width = doc.widthOfString(str);
     doc.text(str, x - (width / 2), PDF_TMARGIN + 24);
   }
@@ -231,7 +245,7 @@ export function renderPdf(doc, events, options) {
     const rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN) / rows;
 
     doc.addPage();
-    renderPdfMonthGrid(doc, year, month, rtl, rows, rowheight);
+    renderPdfMonthGrid(doc, year, month, rtl, options.locale, rows, rowheight);
 
     let dow = startDayOfWeek;
     let xpos = xposNewRow + (dow * PDF_COLWIDTH) * xposMultiplier;
