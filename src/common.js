@@ -316,27 +316,30 @@ export function getLocationFromQuery(db, query) {
   if (!empty(query.geonameid)) {
     const location = db.lookupGeoname(parseInt(query.geonameid, 10));
     if (location == null) {
-      throw createError(404, `Sorry, can't find geonameid ${query.geonameid}`);
+      throw createError(404, `Sorry, can't find geonameid: ${query.geonameid}`);
     }
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {
     const location = db.lookupZip(query.zip);
     if (location == null) {
-      throw createError(404, `Sorry, can't find ZIP code ${query.zip}`);
+      throw createError(404, `Sorry, can't find ZIP code: ${query.zip}`);
     }
     query.geo = 'zip';
     return location;
   } else if (!empty(query.city)) {
     const location = db.lookupLegacyCity(query.city);
     if (location == null) {
-      throw createError(404, `Invalid legacy city ${query.city}`);
+      throw createError(404, `Invalid legacy city specified: ${query.city}`);
     }
     query.geo = 'geoname';
     query.geonameid = location.getGeoId();
     return location;
   } else if (query.geo === 'pos') {
     let il = query.i === 'on';
+    if (!hasLatLong(query)) {
+      throw createError(400, 'Missing or empty latitude/longitude parameters');
+    }
     if (!empty(query.latitude) && !empty(query.longitude)) {
       if (empty(query.tzid)) {
         throw createError(400, 'Timezone required');
@@ -346,7 +349,13 @@ export function getLocationFromQuery(db, query) {
       }
       query.tzid = tzidMap[query.tzid] || query.tzid;
       const latitude = parseFloat(query.latitude);
+      if (isNaN(latitude)) {
+        throw createError(400, `Invalid latitude specified: ${query.latitude}`);
+      }
       const longitude = parseFloat(query.longitude);
+      if (isNaN(longitude)) {
+        throw createError(400, `Invalid longitude specified: ${query.longitude}`);
+      }
       const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
       return new Location(latitude, longitude, il, query.tzid, cityName);
     } else {
@@ -387,6 +396,22 @@ export function getLocationFromQuery(db, query) {
     }
   }
   return null;
+}
+
+/**
+ * @param {any} query
+ * @return {string}
+ */
+function hasLatLong(query) {
+  if (!empty(query.latitude) && !empty(query.longitude)) {
+    return true;
+  }
+  for (const k of ['ladir', 'lodir'].concat(Object.keys(geoposLegacy))) {
+    if (empty(query[k])) {
+      throw createError(400, `Missing or empty '${k}' parameter`);
+    }
+  }
+  return true;
 }
 
 /**
