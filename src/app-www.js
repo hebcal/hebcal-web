@@ -53,11 +53,6 @@ app.use(async (ctx, next) => {
   if (typeof ctx.request.headers['accept-encoding'] === 'undefined') {
     ctx.request.headers['accept-encoding'] = 'identity';
   }
-  if (!ctx.lookup) {
-    const mmdbPath = 'GeoLite2-Country.mmdb';
-    logger.info(`Opening ${mmdbPath}`);
-    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
-  }
   await next();
   logger.info(makeLogInfo(ctx, {
     duration: Date.now() - ctx.state.startTime,
@@ -91,7 +86,7 @@ render(app, {
 });
 
 // Fix up querystring so we can later use ctx.request.query
-app.use(async (ctx, next) => {
+app.use(async function fixup(ctx, next) {
   const qs = ctx.request.querystring;
   if (qs && qs.length) {
     const semi = qs.indexOf(';');
@@ -104,6 +99,11 @@ app.use(async (ctx, next) => {
   const cfg = ctx.request.query.cfg;
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
     ctx.request.headers['accept'] = 'application/json';
+  }
+  if (!ctx.lookup) {
+    const mmdbPath = 'GeoLite2-Country.mmdb';
+    logger.info(`Opening ${mmdbPath}`);
+    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
   }
   await next();
 });
@@ -118,7 +118,7 @@ app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 app.use(bodyParser());
 
 // request dispatcher
-app.use(async (ctx, next) => {
+app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/favicon.ico' || rpath.startsWith('/i/')) {
     ctx.set('Cache-Control', 'max-age=5184000');
