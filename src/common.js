@@ -1,4 +1,4 @@
-import {HDate, Location} from '@hebcal/core';
+import {HDate, Location, months} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -436,4 +436,15 @@ export function makeLogInfo(ctx, attrs={}) {
     ref: ctx.request.headers['referer'],
     cookie: ctx.request.headers['cookie'],
   }, attrs);
+}
+
+/**
+ * @param {HDate} hdate today
+ * @return {number}
+ */
+export function getDefaultHebrewYear(hdate) {
+  const today = hdate.abs();
+  const hy0 = hdate.getFullYear();
+  const av15 = new HDate(15, months.AV, hy0).abs();
+  return today > av15 ? hy0 + 1 : hy0;
 }

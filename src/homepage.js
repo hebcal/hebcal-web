@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
-import {langTzDefaults, empty} from './common';
+import {langTzDefaults, empty, getDefaultHebrewYear} from './common';
 import dayjs from 'dayjs';
 import querystring from 'querystring';
 
@@ -83,9 +83,8 @@ function setDefautLangTz(ctx) {
 // After Tu B'Av show next Hebrew year
 function setDefaultYear(ctx, dt, hdate) {
   const today = hdate.abs();
-  const hy0 = hdate.getFullYear();
-  const av15 = new HDate(15, months.AV, hy0).abs();
-  const hy = today > av15 ? hy0 + 1 : hy0;
+  const av15 = new HDate(15, months.AV, hdate.getFullYear()).abs();
+  const hy = getDefaultHebrewYear(hdate);
   const gregYr1 = hy - 3761;
   const gregYr2 = gregYr1 + 1;
   let gregRange;

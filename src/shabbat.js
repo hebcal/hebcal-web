@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, typeaheadScript, tooltipScript} from './common';
+  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
@@ -136,7 +136,7 @@ function makeItems(ctx) {
     q,
     location,
     locale,
-    hyear: events[0].getDate().getFullYear(),
+    hyear: getDefaultHebrewYear(events[0].getDate()),
     items: events.map((ev) => eventToItem(ev, options, locale)),
     title: Locale.gettext('Shabbat') + ' Candle-Lighting Times for ' + location.getName(),
     Shabbat: Locale.gettext('Shabbat'),
