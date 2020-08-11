@@ -30,10 +30,7 @@ export async function emailVerify(ctx) {
   }
   const db = makeDb(ctx.iniConfig);
   const sql = `
-SELECT email_id, email_address, email_status, email_created,
-  email_candles_zipcode, email_candles_city,
-  email_candles_geonameid,
-  email_candles_havdalah, email_optin_announce
+SELECT email_address, email_candles_zipcode, email_candles_city, email_candles_geonameid
 FROM hebcal_shabbat_email
 WHERE email_id = ?`;
   const results = await db.query(sql, subscriptionId);
@@ -103,7 +100,7 @@ ${unsubUrl}
 
 function getUnsubUrl(emailAddress) {
   const encoded = encodeURIComponent(Buffer.from(emailAddress).toString('base64'));
-  const unsubUrl = `https://www.hebcal.com/email/?e=${encoded}`;
+  const unsubUrl = `https://www.hebcal.com/email?e=${encoded}`;
   return unsubUrl;
 }
 
@@ -264,7 +261,7 @@ async function getSubInfo(db, emailAddress) {
   SELECT email_id, email_address, email_status, email_created,
     email_candles_zipcode, email_candles_city,
     email_candles_geonameid,
-    email_candles_havdalah, email_optin_announce
+    email_candles_havdalah, email_havdalah_tzeit
   FROM hebcal_shabbat_email
   WHERE email_address = ?`;
   const results = await db.query(sql, emailAddress);
@@ -277,6 +274,7 @@ async function getSubInfo(db, emailAddress) {
     em: r.email_address,
     status: r.email_status,
     m: String(r.email_candles_havdalah),
+    M: r.email_havdalah_tzeit == 1 ? 'on' : 'off',
     t: r.email_created,
   }, getGeoFromRow(r));
 }
@@ -287,12 +285,14 @@ async function writeSubInfo(ctx, db, q) {
       email_candles_zipcode = ?,
       email_candles_geonameid = ?,
       email_candles_havdalah = ?,
+      email_havdalah_tzeit = ?,
       email_ip = ?
     WHERE email_id = ?`;
   await db.query(sql, [
     q.zip || null,
     q.geonameid || null,
     q.m,
+    q.M === 'on' ? 1 : 0,
     getIpAddress(ctx),
     ctx.state.subscriptionId,
   ]);
@@ -302,7 +302,7 @@ function makeSubscriptionId(ctx) {
   if (ctx.state.subscriptionId) {
     return ctx.state.subscriptionId;
   }
-  return Date.now().toString(36) + randomBigInt(80).toString(36).padStart(16, '0');
+  return randomBigInt(80).toString(36).padStart(16, '0') + Date.now().toString(36);
 }
 
 async function writeStagingInfo(ctx, db, q) {
@@ -312,10 +312,17 @@ async function writeStagingInfo(ctx, db, q) {
   const locationValue = q.zip ? q.zip : q.geonameid;
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
-   email_candles_havdalah, email_optin_announce,
+   email_candles_havdalah, email_havdalah_tzeit,
    ${locationColumn}, email_ip)
-  VALUES (?, ?, 'pending', NOW(), ?, '0', ?, ?)`;
-  await db.query(sql, [subscriptionId, q.em, q.m, locationValue, ip]);
+  VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?)`;
+  await db.query(sql, [
+    subscriptionId,
+    q.em,
+    q.m,
+    q.M === 'on' ? 1 : 0,
+    locationValue,
+    ip,
+  ]);
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
   const message = {
