@@ -19,7 +19,7 @@ const monthInPrefix = {
  * @param {HDate} hdate
  * @return {string}
  */
-function gematriyaDate(hdate) {
+export function gematriyaDate(hdate) {
   const d = hdate.getDate();
   const monthName = hdate.getMonthName();
   const m = monthInPrefix[monthName] || heInStr + Locale.gettext(monthName, 'he');

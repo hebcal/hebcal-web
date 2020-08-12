@@ -11,12 +11,13 @@ import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
+import {HDate} from '@hebcal/core';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {emailVerify, emailForm} from './email';
 import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
 import {hebcalApp} from './hebcal';
-import {hebrewDateConverter} from './converter';
+import {hebrewDateConverter, gematriyaDate} from './converter';
 import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
@@ -177,6 +178,15 @@ app.use(async function router(ctx, next) {
     await ctx.render('ical', {
       title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
     });
+  } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
+    const dt = new Date();
+    const hd = new HDate(dt);
+    const exp = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, 0, 0, 0);
+    ctx.set('Last-Modified', dt.toUTCString());
+    ctx.set('Expires', exp.toUTCString());
+    ctx.type = 'application/javascript';
+    const dateStr = rpath === '/etc/hdate-en.js' ? hd.render() : gematriyaDate(hd);
+    ctx.body = 'document.write("' + dateStr + '");\n';
   }
   await next();
 });
