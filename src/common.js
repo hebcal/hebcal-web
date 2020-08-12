@@ -403,6 +403,11 @@ export function getLocationFromQuery(db, query) {
  * @return {string}
  */
 function hasLatLong(query) {
+  for (const k of ['latitude', 'longitude', 'tzid']) {
+    if (typeof query[k] === 'string' && query[k].length === 0) {
+      throw createError(400, `Invalid empty parameter '${k}'`);
+    }
+  }
   if (!empty(query.latitude) && !empty(query.longitude)) {
     return true;
   }
