@@ -162,6 +162,9 @@ export async function emailForm(ctx) {
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
     } else if (q.modify === '1' && !ctx.state.message) {
+      if (q.M === 'on') {
+        delete q.m;
+      }
       const db = makeDb(ctx.iniConfig);
       if (typeof q.prev === 'string' && q.prev != q.em) {
         const subInfo = await getSubInfo(db, q.prev);
@@ -269,11 +272,12 @@ async function getSubInfo(db, emailAddress) {
     return null;
   }
   const r = results[0];
+  const m = r.email_candles_havdalah === null ? null : String(r.email_candles_havdalah);
   return Object.assign({
     k: r.email_id,
     em: r.email_address,
     status: r.email_status,
-    m: String(r.email_candles_havdalah),
+    m: m,
     M: r.email_havdalah_tzeit == 1 ? 'on' : 'off',
     t: r.email_created,
   }, getGeoFromRow(r));
