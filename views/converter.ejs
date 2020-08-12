@@ -60,7 +60,7 @@
 <div id="converter-form" class="d-print-none">
 <div class="row">
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" action="/converter">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Gregorian to Hebrew date</h5>
 <div class="col-auto mb-2">
 <input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
@@ -100,7 +100,7 @@
 </div><!-- .col-md -->
 
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3" method="get" action="/converter">
+<form class="row gy-1 gx-2 mb-3" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Hebrew to Gregorian date</h5>
 <div class="col-auto mb-2">
 <input type="text" class="form-control" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">

@@ -39,7 +39,7 @@ ul.list-unstyled.nav-list li {
 <% include partials/location-warnings.ejs %>
 <% include partials/shabbat-items.ejs %>
 <hr class="mt-5">
-<form action="/shabbat" method="get" id="shabbat-form">
+<form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
 <input type="hidden" name="city" value="<%= q.city %>" id="city">
