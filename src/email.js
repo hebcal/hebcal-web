@@ -291,7 +291,7 @@ async function writeSubInfo(ctx, db, q) {
   await db.query(sql, [
     q.zip || null,
     q.geonameid || null,
-    q.m,
+    q.m || null,
     q.M === 'on' ? 1 : 0,
     getIpAddress(ctx),
     ctx.state.subscriptionId,
@@ -318,7 +318,7 @@ async function writeStagingInfo(ctx, db, q) {
   await db.query(sql, [
     subscriptionId,
     q.em,
-    q.m,
+    q.m || null,
     q.M === 'on' ? 1 : 0,
     locationValue,
     ip,
