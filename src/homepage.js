@@ -150,7 +150,7 @@ function getHolidayGreeting(hd) {
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
     return ['Happy Chanukah',
-      `Light the first <a href="https://www.hebcal.com/holidays/chanukah">Chanukah candle</a> ${when} on ${strtime}`];
+      `Light the first <a href="/holidays/chanukah">Chanukah candle</a> ${when} on ${strtime}`];
   }
   if ((mm == months.TISHREI && dd >= 14 && dd <= 21) ||
       (mm == months.NISAN && dd >= 14 && dd <= 21)) {
@@ -163,7 +163,7 @@ function getHolidayGreeting(hd) {
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
     return ['Shana Tova', `We wish you a happy and healthy New Year.
-<br>Rosh Hashana ${nextYear} begins at sundown on ${strtime}`];
+<br><a href="/holidays/rosh-hashana">Rosh Hashana</a> ${nextYear} begins at sundown on ${strtime}`];
   }
   if (mm == months.TISHREI && dd >= 3 && dd <= 10) {
     // between RH & YK
@@ -171,7 +171,7 @@ function getHolidayGreeting(hd) {
     if (dd < 10) {
       const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
       const strtime = erevYK.format(FORMAT_DOW_MONTH_DAY);
-      longText += `.\n<br><a href="https://www.hebcal.com/holidays/yom-kippur">Yom Kippur</a>
+      longText += `.\n<br><a href="/holidays/yom-kippur">Yom Kippur</a>
 begins at sundown on ${strtime}`;
     }
     return ['G\'mar Chatima Tova', longText];
@@ -180,7 +180,7 @@ begins at sundown on ${strtime}`;
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
-    return ['Chag Purim Sameach', `<a href="https://www.hebcal.com/holidays/purim">Purim</a>
+    return ['Chag Purim Sameach', `<a href="/holidays/purim">Purim</a>
 begins at sundown on ${strtime}`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
@@ -188,11 +188,11 @@ begins at sundown on ${strtime}`];
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
     const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
     return ['Chag Kasher v\'Sameach', `We wish you a happy
-<a href="https://www.hebcal.com/holidays/pesach">Passover</a>.
+<a href="/holidays/pesach">Passover</a>.
 Pesach begins at sundown on ${strtime}`];
   }
   if (mm == months.AV && dd == 8) {
-    return ['Tzom Kal', `<a href="https://www.hebcal.com/holidays/tisha-bav">Tish'a B'Av</a>
+    return ['Tzom Kal', `<a href="/holidays/tisha-bav">Tish'a B'Av</a>
 begins tonight at sundown. We wish you an easy fast`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
