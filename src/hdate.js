@@ -18,19 +18,28 @@ export function hdateJavascript(ctx) {
   ctx.body = 'document.write("' + dateStr + '");\n';
 }
 
+const hmToArg = {
+  'Sh\'vat': 'Shvat',
+  'Adar I': 'Adar1',
+  'Adar II': 'Adar2',
+};
+
 export async function hdateXml(ctx) {
   const rpath = ctx.request.path;
   const dt = new Date();
   const hd = new HDate(dt);
   const utcString = dt.toUTCString();
   const hebrew = rpath === '/etc/hdate-he.xml';
+  const hm = hd.getMonthName();
   const props = {
     writeResp: false,
     title: hebrew ? gematriyaDate(hd) : hd.render(),
-    lang: hebrew ? 'he' : 'en-us',
+    lang: hebrew ? 'he' : 'en',
     lastBuildDate: utcString,
     year: dt.getFullYear(),
-    link: 'https://www.hebcal.com/converter?hd=23&hm=Av&hy=5780&h2g=1&utm_medium=rss&utm_source=rss-hdate-he',
+    hy: hd.getFullYear(),
+    hm: hmToArg[hm] || hm,
+    hd: hd.getDate(),
   };
   ctx.set('Last-Modified', utcString);
   expires(ctx, dt);

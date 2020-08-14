@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<title><%= title %></title>
+<link><%= channel_link %> </link>
+<atom:link href="<%= channel_link + basename %>" rel="self" type="application/rss+xml" />
+<description><%= description %></description>
+<language><%= lang %></language>
+<copyright>Copyright (c) <%= syear %> Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate><%= pubDate %></lastBuildDate>
+<item>
+<title><%= parasha %> - <%= stime %></title>
+<link><%= link %></link>
+<description><%= memo %></description>
+<pubDate><%= parasha_pubDate %></pubDate>
+<guid isPermaLink="false"><%= link %>&amp;dt=<%= dt %></guid>
+</item>
+</channel>
+</rss>
