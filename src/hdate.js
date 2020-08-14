@@ -28,6 +28,8 @@ const hmToArg = {
   'Adar II': 'Adar2',
 };
 
+const RSS_CONTENT_TYPE = 'application/rss+xml; charset=utf-8';
+
 export async function hdateXml(ctx) {
   const rpath = ctx.request.path;
   const dt = new Date();
@@ -47,7 +49,7 @@ export async function hdateXml(ctx) {
   };
   ctx.set('Last-Modified', utcString);
   expires(ctx, dt);
-  ctx.type = 'text/xml';
+  ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('hdate-xml', props);
 }
 
@@ -89,7 +91,7 @@ export async function parshaRss(ctx) {
   };
   ctx.set('Last-Modified', utcString);
   expires(ctx, saturday.toDate());
-  ctx.type = 'text/xml';
+  ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('parsha-rss', props);
 }
 
