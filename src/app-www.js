@@ -15,7 +15,7 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {emailVerify, emailForm} from './email';
 import {fridgeShabbat} from './fridge';
 import {geoAutoComplete} from './complete';
-import {hdateJavascript, hdateXml} from './hdate';
+import {hdateJavascript, hdateXml, parshaRss} from './hdate';
 import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
@@ -182,6 +182,8 @@ app.use(async function router(ctx, next) {
     hdateJavascript(ctx);
   } else if (rpath === '/etc/hdate-he.xml' || rpath === '/etc/hdate-en.xml') {
     await hdateXml(ctx);
+  } else if (rpath === '/sedrot/index.xml' || rpath === '/sedrot/israel.xml' || rpath === '/sedrot/israel-he.xml') {
+    await parshaRss(ctx);
   }
   await next();
 });
