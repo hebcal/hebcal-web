@@ -335,65 +335,65 @@ export function getLocationFromQuery(db, query) {
     query.geo = 'geoname';
     query.geonameid = location.getGeoId();
     return location;
-  } else if (query.geo === 'pos') {
+  } else if (!empty(query.latitude) && !empty(query.longitude)) {
+    if (empty(query.tzid)) {
+      throw createError(400, 'Timezone required');
+    }
     let il = query.i === 'on';
-    if (!hasLatLong(query)) {
-      throw createError(400, 'Missing or empty latitude/longitude parameters');
+    if (query.tzid === 'Asia/Jerusalem') {
+      il = true;
     }
-    if (!empty(query.latitude) && !empty(query.longitude)) {
-      if (empty(query.tzid)) {
-        throw createError(400, 'Timezone required');
-      }
-      if (query.tzid === 'Asia/Jerusalem') {
-        il = true;
-      }
-      query.tzid = tzidMap[query.tzid] || query.tzid;
-      const latitude = parseFloat(query.latitude);
-      if (isNaN(latitude)) {
-        throw createError(400, `Invalid latitude specified: ${query.latitude}`);
-      }
-      const longitude = parseFloat(query.longitude);
-      if (isNaN(longitude)) {
-        throw createError(400, `Invalid longitude specified: ${query.longitude}`);
-      }
-      const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
-      return new Location(latitude, longitude, il, query.tzid, cityName);
-    } else {
-      let tzid = query.tzid;
-      if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
-        tzid = Location.legacyTzToTzid(query.tz, query.dst);
-        if (!tzid && query.dst === 'none') {
-          const tz = parseInt(query.tz, 10);
-          const plus = tz > 0 ? '+' : '';
-          tzid = `Etc/GMT${plus}${tz}`;
-        }
-      }
-      if (!tzid) {
-        throw createError(400, 'Timezone required');
-      }
-      for (const [key, max] of Object.entries(geoposLegacy)) {
-        if (empty(query[key]) || parseInt(query[key], 10) > max) {
-          throw new RangeError(`Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
-        }
-      }
-      let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
-      let longitude = parseInt(query.lodeg, 10) + (parseInt(query.lomin, 10) / 60.0);
-      if (query.ladir === 's') {
-        latitude *= -1;
-      }
-      if (query.lodir === 'w') {
-        longitude *= -1;
-      }
-      if (tzid === 'Asia/Jerusalem') {
-        il = true;
-      }
-      tzid = tzidMap[tzid] || tzid;
-      query.latitude = latitude;
-      query.longitude = longitude;
-      query.tzid = tzid;
-      const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, tzid);
-      return new Location(latitude, longitude, il, tzid, cityName);
+    query.tzid = tzidMap[query.tzid] || query.tzid;
+    const latitude = parseFloat(query.latitude);
+    if (isNaN(latitude)) {
+      throw createError(400, `Invalid latitude specified: ${query.latitude}`);
     }
+    const longitude = parseFloat(query.longitude);
+    if (isNaN(longitude)) {
+      throw createError(400, `Invalid longitude specified: ${query.longitude}`);
+    }
+    const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
+    query.geo = 'pos';
+    return new Location(latitude, longitude, il, query.tzid, cityName);
+  } else if (hasLatLongLegacy(query)) {
+    let tzid = query.tzid;
+    if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
+      tzid = Location.legacyTzToTzid(query.tz, query.dst);
+      if (!tzid && query.dst === 'none') {
+        const tz = parseInt(query.tz, 10);
+        const plus = tz > 0 ? '+' : '';
+        tzid = `Etc/GMT${plus}${tz}`;
+      }
+    }
+    if (!tzid) {
+      throw createError(400, 'Timezone required');
+    }
+    for (const [key, max] of Object.entries(geoposLegacy)) {
+      if (empty(query[key]) || parseInt(query[key], 10) > max) {
+        throw new RangeError(`Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
+      }
+    }
+    let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
+    let longitude = parseInt(query.lodeg, 10) + (parseInt(query.lomin, 10) / 60.0);
+    if (query.ladir === 's') {
+      latitude *= -1;
+    }
+    if (query.lodir === 'w') {
+      longitude *= -1;
+    }
+    let il = query.i === 'on';
+    if (tzid === 'Asia/Jerusalem') {
+      il = true;
+    }
+    tzid = tzidMap[tzid] || tzid;
+    query.latitude = latitude;
+    query.longitude = longitude;
+    query.tzid = tzid;
+    const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, tzid);
+    query.geo = 'pos';
+    return new Location(latitude, longitude, il, tzid, cityName);
+  } else if (query.geo === 'pos' && !hasLatLong(query)) {
+    throw createError(400, 'Missing or empty latitude/longitude parameters');
   }
   return null;
 }
@@ -414,6 +414,20 @@ function hasLatLong(query) {
   for (const k of ['ladir', 'lodir'].concat(Object.keys(geoposLegacy))) {
     if (empty(query[k])) {
       throw createError(400, `Missing or empty '${k}' parameter`);
+    }
+  }
+  return true;
+}
+
+/**
+ * @private
+ * @param {any} query
+ * @return {boolean}
+ */
+function hasLatLongLegacy(query) {
+  for (const k of ['ladir', 'lodir'].concat(Object.keys(geoposLegacy))) {
+    if (empty(query[k])) {
+      return false;
     }
   }
   return true;
