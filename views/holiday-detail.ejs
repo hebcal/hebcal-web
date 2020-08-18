@@ -1,0 +1,213 @@
+<% include partials/header.ejs %>
+<meta name="description" content="Jewish holiday of <%=holiday + next_observed_meta + descrShort%>. Holiday Torah readings, dates observed.">
+<script>
+  WebFontConfig = {
+    google: { families: [ 'Alef' ] }
+  };
+  (function(d) {
+    var wf = d.createElement('script'), s = d.scripts[0];
+    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+    wf.async = true;
+    s.parentNode.insertBefore(wf, s);
+  })(document);
+</script>
+</head>
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
+<div id="content">
+<div class="row">
+<% include partials/holiday-detail-breadcrumb.ejs %>
+
+<h2><%=holiday%> / <span lang="he" dir="rtl"><%=hebrew%></span></h2>
+<p><%=descrLong%>.</p>
+<%=next_observed_para%>
+
+<p class="d-print-none"><em>Read more from <a class="outbound" title="More about Rosh Hashana from Judaism 101" href="http://www.jewfaq.org/holiday2.htm">Judaism 101&nbsp;&rarr;</a> or <a class="outbound" title="More about Rosh Hashana from Wikipedia" href="https://en.wikipedia.org/wiki/Rosh_Hashanah">Wikipedia&nbsp;&rarr;</a></em></p>
+
+<div class="d-print-none">
+<!-- Visible only on xs -->
+<div class="d-block d-sm-none">
+<div class="d-flex justify-content-center d-print-none">
+<div><h6>Advertisement</h6></div>
+</div><!-- .d-flex -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- banner-320x100 -->
+<ins class="adsbygoogle"
+  style="display:inline-block;width:320px;height:100px"
+  data-ad-client="ca-pub-7687563417622459"
+  data-ad-slot="1867606375"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .d-sm-none -->
+</div><!-- .d-print-none -->
+
+<div class="d-print-none">
+<div class="d-none d-md-block">
+<ul class="pagination">
+<li class="page-item"><a class="page-link" href="#$slug">$part</a></li>
+</ul><!-- .pagination -->
+</div>
+</div>
+
+<h3 id="dates">List of Dates</h3>
+$f begins on:
+<ul>
+<li><a href="/hebcal?v=1&amp;year=2019&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="2019-09-29">Sun, 29 September 2019</time></a> at sundown (1st of Tishrei, 5780)
+<li><a href="/hebcal?v=1&amp;year=2020&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off" style="background-color:#FFFFCC"><time datetime="2020-09-18">Fri, 18 September 2020</time></a> at sundown (1st of Tishrei, 5781)
+<li><a href="/hebcal?v=1&amp;year=2021&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="2021-09-06">Mon, 06 September 2021</time></a> at sundown (1st of Tishrei, 5782)
+<li><a%s href="/hebcal?v=1&amp;year=%d&amp;month=%d$args&amp;set=off"$style><time datetime="%s">%s, %02d %s %04d</time></a> $rise_or_set (%s)
+</ul>
+
+<h3 id="books">Recommended Books</h3>
+<div class="row">
+<div class="col-3">
+<div class="thumbnail">
+<a class="amzn" id="rosh-hashana-0827608217-1" title="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" href="https://www.amazon.com/o/ASIN/0827608217/hebcal-20"><img src="/i/0827608217.01.MZZZZZZZ.jpg"
+class="img-fluid img-thumbnail"
+alt="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" width="104" height="160" style="border:none"></a>
+<div class="figure-caption">
+<a class="amzn" id="rosh-hashana-0827608217-2" title="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" href="https://www.amazon.com/o/ASIN/0827608217/hebcal-20">Entering the High Holy Days</a>
+<br>by Rabbi Reuven Hammer
+</div><!-- .figure-caption -->
+</div><!-- .thumbnail -->
+</div><!-- .col-3 -->
+<div class="col-3">
+<div class="thumbnail">
+<a class="amzn" id="rosh-hashana-0316739081-1" title="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" href="https://www.amazon.com/o/ASIN/0316739081/hebcal-20"><img src="/i/0316739081.01.MZZZZZZZ.jpg"
+class="img-fluid img-thumbnail"
+alt="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" width="160" height="111" style="border:none"></a>
+<div class="figure-caption">
+<a class="amzn" id="rosh-hashana-0316739081-2" title="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" href="https://www.amazon.com/o/ASIN/0316739081/hebcal-20">This Is Real and You Are Completely Unprepared</a>
+<br>by Rabbi Alan Lew
+</div><!-- .figure-caption -->
+</div><!-- .thumbnail -->
+</div><!-- .col-3 -->
+<div class="col-3">
+<div class="thumbnail">
+<a class="amzn" id="rosh-hashana-0789338637-1" title="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" href="https://www.amazon.com/o/ASIN/0789338637/hebcal-20"><img src="/i/0789338637.01.MZZZZZZZ.jpg"
+class="img-fluid img-thumbnail"
+alt="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" width="160" height="160" style="border:none"></a>
+<div class="figure-caption">
+<a class="amzn" id="rosh-hashana-0789338637-2" title="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" href="https://www.amazon.com/o/ASIN/0789338637/hebcal-20">The 2021 Jewish Calendar 16-Month Wall Calendar</a>
+
+</div><!-- .figure-caption -->
+</div><!-- .thumbnail -->
+</div><!-- .col-3 -->
+<div class="col-3">
+<div class="thumbnail">
+<a class="amzn" id="rosh-hashana-1580234372-1" title="Rosh Hashanah Readings: Inspiration, Information And Contemplation" href="https://www.amazon.com/o/ASIN/1580234372/hebcal-20"><img src="/i/1580234372.01.MZZZZZZZ.jpg"
+class="img-fluid img-thumbnail"
+alt="Rosh Hashanah Readings: Inspiration, Information And Contemplation" width="106" height="160" style="border:none"></a>
+<div class="figure-caption">
+<a class="amzn" id="rosh-hashana-1580234372-2" title="Rosh Hashanah Readings: Inspiration, Information And Contemplation" href="https://www.amazon.com/o/ASIN/1580234372/hebcal-20">Rosh Hashanah Readings</a>
+<br>by Rabbi Dov Peretz Elkins
+</div><!-- .figure-caption -->
+</div><!-- .thumbnail -->
+</div><!-- .col-3 -->
+</div><!-- .row -->
+
+
+<h3 id="reading">Rosh Hashana
+  - <span lang="he" dir="rtl">ראש השנה</span></h3>
+  <!-- reading -->
+  
+  <h3 id="reading-i">Rosh Hashana I
+  - <span lang="he" dir="rtl">ראש השנה יום א׳</span></h3>
+  
+  <h4 id="rosh-hashana-i-torah" style="margin-bottom:8px">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1-torah"
+  title="English translation from JPS Tanakh">Genesis 21:1 - 21:34 &amp; Numbers 29:1 - 29:6</a></h4>
+  <p>1: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.1-4?lang=bi">Genesis 21:1-4</a><br>
+  2: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.5-12?lang=bi">Genesis 21:5-12</a><br>
+  3: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.13-21?lang=bi">Genesis 21:13-21</a><br>
+  4: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.22-27?lang=bi">Genesis 21:22-27</a><br>
+  5: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.28-34?lang=bi">Genesis 21:28-34</a><br>
+  maf: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Numbers.29.1-6?lang=bi">Numbers 29:1-6</a>
+  <small>(6&nbsp;p'sukim)</small><br>
+  </p>
+  
+  <h4 id="rosh-hashana-i-haft">Haftarah: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
+  title="English translation from JPS Tanakh">I Samuel 1:1 - 2:10</a></h4>
+  <!-- reading-i -->
+  
+  <h3 id="reading-i-on-shabbat">Rosh Hashana I (on Shabbat)
+  - <span lang="he" dir="rtl">ראש השנה יום א׳ (בשבת)</span></h3>
+  
+  <h4 id="rosh-hashana-i-on-shabbat-torah" style="margin-bottom:8px">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1-torah"
+  title="English translation from JPS Tanakh">Genesis 21:1 - 21:34 &amp; Numbers 29:1 - 29:6</a></h4>
+  <p>1: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.1-4?lang=bi">Genesis 21:1-4</a><br>
+  2: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.5-8?lang=bi">Genesis 21:5-8</a><br>
+  3: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.9-12?lang=bi">Genesis 21:9-12</a><br>
+  4: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.13-17?lang=bi">Genesis 21:13-17</a><br>
+  5: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.18-21?lang=bi">Genesis 21:18-21</a><br>
+  6: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.22-27?lang=bi">Genesis 21:22-27</a><br>
+  7: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Genesis.21.28-34?lang=bi">Genesis 21:28-34</a><br>
+  maf: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
+  href="https://www.sefaria.org/Numbers.29.1-6?lang=bi">Numbers 29:1-6</a>
+  <small>(6&nbsp;p'sukim)</small><br>
+  </p>
+  
+
+
+
+<h3 id="ref">References</h3>
+<dl>
+<dt><em><a class="amzn" id="strassfeld-2"
+href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
+Jewish Holidays: A Guide &amp; Commentary</a></em>
+<dd>Rabbi Michael Strassfeld
+
+<dt><em><a class="outbound"
+href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanach</a></em>
+<dd>Sefaria.org
+<dt><em><a class="amzn" id="jps-tanakh-1"
+title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
+href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
+The Holy Scriptures</a></em>
+<dd>Jewish Publication Society
+
+
+<dt><a class="outbound"
+href="$wikipedia_href">"$wiki_title"
+in <em>Wikipedia: The Free Encyclopedia</em></a>
+<dd>Wikimedia Foundation Inc.
+
+<% include partials/holiday-detail-breadcrumb.ejs %>
+
+</div><!-- .col-sm-10 -->
+<div class="col-sm-2 d-print-none">
+<div class="d-flex justify-content-center d-print-none">
+<div><h6>Advertisement</h6></div>
+</div><!-- .d-flex -->
+<div class="d-none d-sm-block">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- skyscraper text only -->
+<ins class="adsbygoogle"
+  style="display:inline-block;width:160px;height:600px"
+  data-ad-client="ca-pub-7687563417622459"
+  data-ad-slot="7666032223"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .d-sm-block -->
+</div><!-- .col-sm-2 -->
+</div><!-- .row -->
+
+</div><!-- .row -->
+</div><!-- #content -->
+
+<%_ include partials/footer.ejs _%>
