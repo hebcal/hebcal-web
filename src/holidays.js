@@ -1,15 +1,20 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HolidayEvent, Locale, flags} from '@hebcal/core';
+import {HDate, HolidayEvent, Locale, HebrewCalendar, flags} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
 // import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import holidayMeta from './holidays.json';
+import dayjs from 'dayjs';
+
+const today = new HDate();
 
 const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
   holidays.set(makeAnchor(key), key);
 }
+
+const holidayBegin = getFirstOcccurences();
 
 const categories = {
   major: {id: 'major-holidays', name: 'Major holidays', flags: 0},
@@ -26,8 +31,6 @@ const primarySource = {
   'en.wikipedia.org': 'Wikipedia',
 };
 
-const dummyDate = new HDate();
-
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
@@ -40,12 +43,27 @@ export async function holidayDetail(ctx) {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
   const category = categories[meta.category] || {};
-  const mask = category.flag || 0;
-  const ev = new HolidayEvent(dummyDate, holiday, mask);
+  const mask = category.flags || 0;
+  const ev = new HolidayEvent(today, holiday, mask);
   const descrShort = getHolidayDescription(ev, true);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrLong = wikipediaText || getHolidayDescription(ev, false);
   const hebrew = Locale.gettext(holiday, 'he');
+  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+      mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
+  const occursOn = holidayBegin
+      .filter((ev) => holiday === ev.basename())
+      .map((ev) => {
+        const hd = ev.getDate();
+        const d = dayjs(hd.greg());
+        return {
+          hd,
+          beginsWhen,
+          d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
+          desc: ev.render(),
+          basename: ev.basename(),
+        };
+      });
   await ctx.render('holiday-detail', {
     title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
     holiday,
@@ -56,12 +74,44 @@ export async function holidayDetail(ctx) {
     categoryName: category.name,
     next_observed_meta: '',
     next_observed_para: '',
+    occursOn,
     wikipedia: meta.wikipedia,
     readMore: {
       name: sourceName(meta.about.href),
       href: meta.about.href,
     },
   });
+}
+
+function getFirstOcccurences() {
+  const events = HebrewCalendar.calendar({
+    year: today.getFullYear() - 1,
+    isHebrewYear: true,
+    numYears: 11,
+  });
+  let prevYear = -1;
+  let seen = new Set();
+  const result = [];
+  for (const ev of events) {
+    const hd = ev.getDate();
+    const hy = hd.getFullYear();
+    if (hy != prevYear) {
+      prevYear = hy;
+      seen = new Set();
+    }
+    const subj = ev.getDesc();
+    if (subj.startsWith('Erev ') ||
+        (subj.startsWith('Chanukah: ') && subj != 'Chanukah: 2 Candles')) {
+      continue;
+    }
+    const holiday = ev.basename();
+    if (seen.has(holiday)) {
+      continue;
+    }
+    seen.add(holiday);
+    result.push(ev);
+  }
+  return result;
 }
 
 function sourceName(href) {

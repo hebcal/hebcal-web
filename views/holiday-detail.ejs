@@ -17,17 +17,18 @@
 <div class="container">
 <div id="content">
 <div class="row">
+<div class="col-sm-10">
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
 <h2><%=holiday%> / <span lang="he" dir="rtl"><%=hebrew%></span></h2>
-<p><%=descrLong%>.</p>
+<p><%=descrLong%></p>
 <%=next_observed_para%>
 
 <p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=readMore.name%>" href="<%=readMore.href%>"><%=readMore.name%>&nbsp;&rarr;</a>
 <% if (typeof wikipedia === 'object' && typeof wikipedia.href === 'string') { %>
-or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=wikipedia.href%>">Wikipedia&nbsp;&rarr;</a></em>
+or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <% } %>
-</p>
+</em></p>
 
 <div class="d-print-none">
 <!-- Visible only on xs -->
@@ -48,20 +49,19 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=w
 </div><!-- .d-print-none -->
 
 <div class="d-print-none">
-<div class="d-none d-md-block">
+<nav class="d-none d-md-block">
 <ul class="pagination">
 <li class="page-item"><a class="page-link" href="#$slug">$part</a></li>
 </ul><!-- .pagination -->
-</div>
+</nav>
 </div>
 
 <h3 id="dates">List of Dates</h3>
-$f begins on:
+<%=holiday%> begins on:
 <ul>
-<li><a href="/hebcal?v=1&amp;year=2019&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="2019-09-29">Sun, 29 September 2019</time></a> at sundown (1st of Tishrei, 5780)
-<li><a href="/hebcal?v=1&amp;year=2020&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off" style="background-color:#FFFFCC"><time datetime="2020-09-18">Fri, 18 September 2020</time></a> at sundown (1st of Tishrei, 5781)
-<li><a href="/hebcal?v=1&amp;year=2021&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="2021-09-06">Mon, 06 September 2021</time></a> at sundown (1st of Tishrei, 5782)
-<li><a%s href="/hebcal?v=1&amp;year=%d&amp;month=%d$args&amp;set=off"$style><time datetime="%s">%s, %02d %s %04d</time></a> $rise_or_set (%s)
+<% occursOn.forEach((item) => { %>
+<li><a href="/hebcal?v=1&amp;year=<%=item.d.format('YYYY')%>&amp;month=<%=item.d.format('M')%>&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, D MMMM YYYY') %></time></a> <%= item.beginsWhen %> (<%= item.hd.toString() %>)
+<% }); %>
 </ul>
 
 <h3 id="books">Recommended Books</h3>
