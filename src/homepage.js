@@ -66,7 +66,7 @@ function setDefautLangTz(ctx) {
     ctx.set('Cache-Control', 'private');
   }
   const cookie = ctx.state.cookie = querystring.parse(cookieStr);
-  const ip = ctx.request.header['x-client-ip'] || ctx.request.ip;
+  const ip = ctx.get('x-client-ip') || ctx.request.ip;
   const geoip = ctx.lookup.get(ip);
   const cc = ctx.state.countryCode = geoip ? ctx.state.countryCode : 'US';
   if (langTzDefaults[cc]) {

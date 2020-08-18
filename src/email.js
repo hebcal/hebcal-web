@@ -256,7 +256,7 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
 }
 
 function getIpAddress(ctx) {
-  return ctx.request.headers['x-client-ip'] || ctx.request.ip;
+  return ctx.get('x-client-ip') || ctx.request.ip;
 }
 
 async function getSubInfo(db, emailAddress) {

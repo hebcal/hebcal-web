@@ -27,7 +27,7 @@ app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();
   try {
     // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
-    if (typeof ctx.request.header['accept-encoding'] == 'undefined') {
+    if (typeof ctx.get('accept-encoding') == 'undefined') {
       ctx.request.header['accept-encoding'] = 'identity';
     }
     await next();

@@ -15,12 +15,12 @@ const debugLog = pino(pino.destination(logDir + '/debug.log'));
  */
 export async function yahrzeitApp(ctx) {
   debugLog.info({
-    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    ip: ctx.get('x-client-ip') || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
-    ua: ctx.request.headers['user-agent'],
-    ref: ctx.request.headers['referer'],
-    cookie: ctx.request.headers['cookie'],
+    ua: ctx.get('user-agent'),
+    ref: ctx.get('referer'),
+    cookie: ctx.get('cookie'),
     body: ctx.request.body,
     query: ctx.request.query,
   });
@@ -140,7 +140,7 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
   ctx.logger.debug(Object.assign({
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    ip: ctx.get('x-client-ip') || ctx.request.ip,
     url: ctx.request.originalUrl,
   }, query));
   const maxId = getMaxId(query);

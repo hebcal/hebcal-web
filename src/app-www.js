@@ -22,6 +22,7 @@ import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
 import {yahrzeitApp} from './yahrzeit';
+import { holidayDetail } from './holidays';
 
 const app = new Koa();
 
@@ -42,17 +43,17 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 app.use(async (ctx, next) => {
   /*
   debugLog.info(Object.assign({
-    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    ip: ctx.get('x-client-ip') || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
-  }, ctx.request.headers));
+  }, ctx.request.header));
   */
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
-  if (typeof ctx.request.headers['accept-encoding'] === 'undefined') {
-    ctx.request.headers['accept-encoding'] = 'identity';
+  if (typeof ctx.get('accept-encoding') === 'undefined') {
+    ctx.request.header['accept-encoding'] = 'identity';
   }
   await next();
   logger.info(makeLogInfo(ctx, {
@@ -96,10 +97,10 @@ app.use(async function fixup(ctx, next) {
     }
   }
   // force error middleware to use proper json response type
-  const accept = ctx.request.headers['accept'];
+  const accept = ctx.get('accept');
   const cfg = ctx.request.query.cfg;
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
-    ctx.request.headers['accept'] = 'application/json';
+    ctx.request.header['accept'] = 'application/json';
   }
   if (!ctx.lookup) {
     const mmdbPath = 'GeoLite2-Country.mmdb';
@@ -132,7 +133,7 @@ app.use(async function router(ctx, next) {
     await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/geo')) {
     // it's fine if this throws a Not Found exception
-    ctx.response.type = ctx.request.headers['accept'] = 'application/json';
+    ctx.response.type = ctx.request.header['accept'] = 'application/json';
     ctx.body = getLocationFromQuery(ctx.db, ctx.request.query);
   } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
     await fridgeShabbat(ctx);
@@ -159,6 +160,13 @@ app.use(async function router(ctx, next) {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
+  } else if (rpath === '/holidays') {
+    const proto = ctx.get('x-forwarded-proto') || 'http';
+    const host = ctx.get('host') || 'www.hebcal.com';
+    ctx.status = 301;
+    ctx.redirect(`${proto}://${host}/holidays/`);
+  } else if (rpath.startsWith('/holidays/')) {
+    await holidayDetail(ctx);
   } else if (rpath === '/email/verify.php') {
     await emailVerify(ctx);
   } else if (rpath.startsWith('/email')) {

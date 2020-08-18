@@ -473,12 +473,12 @@ export function makeLogInfo(ctx, attrs={}) {
   return Object.assign({
     status: ctx.response.status,
     length: ctx.response.length,
-    ip: ctx.request.headers['x-client-ip'] || ctx.request.ip,
+    ip: ctx.get('x-client-ip') || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
-    ua: ctx.request.headers['user-agent'],
-    ref: ctx.request.headers['referer'],
-    cookie: ctx.request.headers['cookie'],
+    ua: ctx.get('user-agent'),
+    ref: ctx.get('referer'),
+    cookie: ctx.get('cookie'),
   }, attrs);
 }
 

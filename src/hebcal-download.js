@@ -69,7 +69,7 @@ export async function hebcalDownload(ctx) {
     options.numYears = getNumYears(options);
   }
   ctx.logger.debug(Object.assign({
-    ip: ctx.request.header['x-client-ip'] || ctx.request.ip,
+    ip: ctx.get('x-client-ip') || ctx.request.ip,
     url: ctx.request.originalUrl,
   }, options));
   let events = HebrewCalendar.calendar(options);
