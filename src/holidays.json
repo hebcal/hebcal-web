@@ -377,7 +377,7 @@
   },
   "Shabbat Machar Chodesh": {
    "about": {
-    "attr": "dummy"
+    "href": "https://judaism.stackexchange.com/questions/57591/why-is-there-a-special-haftarah-for-machar-chodesh"
    },
    "category": "shabbat"
   },
@@ -405,7 +405,7 @@
   },
   "Shabbat Rosh Chodesh": {
    "about": {
-    "attr": "dummy"
+    "href": "https://www.chabad.org/parshah/article_cdo/aid/3572702/jewish/Shabbat-Rosh-Chodesh-Haftarah-in-a-Nutshell.htm"
    },
    "category": "shabbat"
   },
@@ -670,7 +670,7 @@
   },
   "Tzom Tammuz": {
    "about": {
-    "href": "https://www.ou.org/holidays/fast-of-shiva-asar-btammuz/fast_of_shiva_asar_btammuz/"
+    "href": "https://www.ou.org/holidays/fast_of_shiva_asar_btammuz/"
    },
    "wikipedia": {
     "href": "https://en.wikipedia.org/wiki/Seventeenth_of_Tammuz",

@@ -1,5 +1,5 @@
 <% include partials/header.ejs %>
-<meta name="description" content="Jewish holiday of <%=holiday + next_observed_meta + descrShort%>. Holiday Torah readings, dates observed.">
+<meta name="description" content="Jewish holiday of <%=holiday%>. <%next_observed_meta + descrShort%>">
 <script>
   WebFontConfig = {
     google: { families: [ 'Alef' ] }
@@ -23,7 +23,11 @@
 <p><%=descrLong%>.</p>
 <%=next_observed_para%>
 
-<p class="d-print-none"><em>Read more from <a class="outbound" title="More about Rosh Hashana from Judaism 101" href="http://www.jewfaq.org/holiday2.htm">Judaism 101&nbsp;&rarr;</a> or <a class="outbound" title="More about Rosh Hashana from Wikipedia" href="https://en.wikipedia.org/wiki/Rosh_Hashanah">Wikipedia&nbsp;&rarr;</a></em></p>
+<p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=readMore.name%>" href="<%=readMore.href%>"><%=readMore.name%>&nbsp;&rarr;</a>
+<% if (typeof wikipedia === 'object' && typeof wikipedia.href === 'string') { %>
+or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=wikipedia.href%>">Wikipedia&nbsp;&rarr;</a></em>
+<% } %>
+</p>
 
 <div class="d-print-none">
 <!-- Visible only on xs -->
