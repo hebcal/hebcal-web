@@ -49,7 +49,7 @@ export async function holidayDetail(ctx) {
   if (Array.isArray(meta.books)) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');
-      book.shortTitle = colon === -1 ? book.text : book.text.substring(0, colon);
+      book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
     }
   }
   const category = categories[meta.category] || {};
@@ -63,6 +63,7 @@ export async function holidayDetail(ctx) {
   if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
     meta.items = [holiday];
   }
+  makeHolidayReadings(holiday, meta);
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
       mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
   const nowAbs = greg.greg2abs(new Date());
@@ -99,6 +100,50 @@ export async function holidayDetail(ctx) {
     occursOn,
     meta,
   });
+}
+
+function makeHolidayReadings(holiday, meta) {
+  if (!Array.isArray(meta.items)) {
+    return;
+  }
+  meta.reading = meta.reading || {};
+  for (const item of meta.items) {
+    const reading = leyning.getLeyningForHolidayKey(item);
+    if (typeof reading !== 'undefined') {
+      if (reading.fullkriyah) {
+        for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {
+          reading.fullkriyah[num].num = num == 'M' ? 'maf' : num;
+          const begin = aliyah.b.split(':');
+          const end = aliyah.e.split(':');
+          const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
+          const verses = `${aliyah.b}-${endChapVerse}`;
+          reading.fullkriyah[num].verses = `${aliyah.k} ${verses}`;
+          const sefariaVerses = verses.replace(/:/g, '.');
+          const url = `https://www.sefaria.org/${aliyah.k}.${sefariaVerses}?lang=bi&aliyot=0`;
+          reading.fullkriyah[num].href = url;
+        }
+      }
+      meta.reading[item] = reading;
+      const hebrew = Locale.lookupTranslation(item, 'he');
+      if (typeof hebrew === 'string') {
+        meta.reading[item].hebrew = hebrew;
+      }
+      meta.reading[item].id = makeAnchor(item);
+      if (item.startsWith(holiday)) {
+        if (meta.items.length === 1 || item === holiday) {
+          meta.reading[item].shortName = 'Tanakh';
+        } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
+          meta.reading[item].shortName = item.substring(holiday.length + 1);
+        } else if (item.startsWith(`${holiday} (`)) {
+          meta.reading[item].shortName = item.substring(holiday.length + 2, item.length - 1);
+        } else {
+          meta.reading[item].shortName = 'Day ' + item.substring(holiday.length + 1);
+        }
+      } else {
+        meta.reading[item].shortName = item;
+      }
+    }
+  }
 }
 
 function getFirstOcccurences() {

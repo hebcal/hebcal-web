@@ -24,7 +24,7 @@
 <div class="col-sm-10">
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
-<h2><%=holiday%> / <span lang="he" dir="rtl"><%=hebrew%></span></h2>
+<h2><%=holiday%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%></span></h2>
 <p><%=descrLong%></p>
 <%-next_observed_para%>
 
@@ -52,13 +52,22 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 </div><!-- .d-sm-none -->
 </div><!-- .d-print-none -->
 
+<% if (typeof meta.reading !== 'undefined') { %>
 <div class="d-print-none">
 <nav class="d-none d-md-block">
-<ul class="pagination">
-<li class="page-item"><a class="page-link" href="#$slug">$part</a></li>
+<ul class="pagination<%= meta.items.length > 3 ? ' pagination-sm' : ''%>">
+<li class="page-item"><a class="page-link" href="#dates">Dates</a></li>
+<% if (typeof meta.books !== 'undefined') { %>
+<li class="page-item"><a class="page-link" href="#books">Books</a></li>
+<% } %>
+<% for (const [item, reading] of Object.entries(meta.reading)) { %>
+<li class="page-item"><a class="page-link" href="#reading-<%=reading.id%>"><%=reading.shortName%></a></li>
+<% } // ... for %>
+<li class="page-item"><a class="page-link" href="#ref">References</a></li>
 </ul><!-- .pagination -->
 </nav>
 </div>
+<% } // meta.reading %>
 
 <h3 id="dates">List of Dates</h3>
 <%=holiday%> begins on:
@@ -87,88 +96,52 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 </div><!-- .row -->
 <% } // books %>
 
-<% if (typeof meta.items !== 'undefined') { %>
-<div id="reading"></div>
-<% meta.items.forEach((item) => { %>
-<p>Item: <%= item %></p>
-<% }); %>
-<h3 id="foo-reading">Rosh Hashana
-  - <span lang="he" dir="rtl">ראש השנה</span></h3>
-  <!-- reading -->
-  
-  <h3 id="reading-i">Rosh Hashana I
-  - <span lang="he" dir="rtl">ראש השנה יום א׳</span></h3>
-  
-  <h4 id="rosh-hashana-i-torah" style="margin-bottom:8px">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1-torah"
-  title="English translation from JPS Tanakh">Genesis 21:1 - 21:34 &amp; Numbers 29:1 - 29:6</a></h4>
-  <p>1: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.1-4?lang=bi">Genesis 21:1-4</a><br>
-  2: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.5-12?lang=bi">Genesis 21:5-12</a><br>
-  3: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.13-21?lang=bi">Genesis 21:13-21</a><br>
-  4: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.22-27?lang=bi">Genesis 21:22-27</a><br>
-  5: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.28-34?lang=bi">Genesis 21:28-34</a><br>
-  maf: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Numbers.29.1-6?lang=bi">Numbers 29:1-6</a>
-  <small>(6&nbsp;p'sukim)</small><br>
-  </p>
-  
-  <h4 id="rosh-hashana-i-haft">Haftarah: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
-  title="English translation from JPS Tanakh">I Samuel 1:1 - 2:10</a></h4>
-  <!-- reading-i -->
-  
-  <h3 id="reading-i-on-shabbat">Rosh Hashana I (on Shabbat)
-  - <span lang="he" dir="rtl">ראש השנה יום א׳ (בשבת)</span></h3>
-  
-  <h4 id="rosh-hashana-i-on-shabbat-torah" style="margin-bottom:8px">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1-torah"
-  title="English translation from JPS Tanakh">Genesis 21:1 - 21:34 &amp; Numbers 29:1 - 29:6</a></h4>
-  <p>1: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.1-4?lang=bi">Genesis 21:1-4</a><br>
-  2: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.5-8?lang=bi">Genesis 21:5-8</a><br>
-  3: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.9-12?lang=bi">Genesis 21:9-12</a><br>
-  4: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.13-17?lang=bi">Genesis 21:13-17</a><br>
-  5: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.18-21?lang=bi">Genesis 21:18-21</a><br>
-  6: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.22-27?lang=bi">Genesis 21:22-27</a><br>
-  7: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Genesis.21.28-34?lang=bi">Genesis 21:28-34</a><br>
-  maf: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org"
-  href="https://www.sefaria.org/Numbers.29.1-6?lang=bi">Numbers 29:1-6</a>
-  <small>(6&nbsp;p'sukim)</small><br>
-  </p>
-<% } // meta.items %>
-
-
+<% if (typeof meta.reading !== 'undefined') { %>
+<h3 id="reading" class="mt-3">Tanakh</h3>
+<% for (const [item, reading] of Object.entries(meta.reading)) { %>
+<h4 id="reading-<%=reading.id%>"><%=item%>
+<% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %></h4>
+<% if (reading.summary) { %>
+<p class="lead torah">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
+title="English translation from JPS Tanakh"><%=reading.summary%></a></p>
+<% } // reading.summary %>
+<% if (reading.fullkriyah) { %>
+<ul class="list-unstyled">
+<%    for (const aliyah of Object.values(reading.fullkriyah)) {  %>
+<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<%       if (aliyah.v) { %>
+<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<%       } // aliyah.v %>
+<%    } // ... for %>
+</ul>
+<% } // reading.fullkriyah %>
+<% if (reading.haftara) { %>
+<p class="lead haftara">Haftarah: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
+  title="English translation from JPS Tanakh"><%=reading.haftara%></a></p>
+<% } // reading.haftara %>
+<% } // ... for %>
+<% } // meta.reading %>
 <h3 id="ref">References</h3>
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dd>Rabbi Michael Strassfeld
-
+<% if (typeof meta.reading !== 'undefined') { %>
 <dt><em><a class="outbound"
-href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanach</a></em>
+href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dd>Sefaria.org
 <dt><em><a class="amzn" id="jps-tanakh-1"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
-
+<% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
 <dt><a class="outbound" href="<%=meta.wikipedia.href%>">"<%=meta.wikipedia.title%>" in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
-
 <% include partials/holiday-detail-breadcrumb.ejs %>
-
 </div><!-- .col-sm-10 -->
 <div class="col-sm-2 d-print-none">
 <div class="d-flex justify-content-center d-print-none">
