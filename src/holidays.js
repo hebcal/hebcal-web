@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HolidayEvent, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
-// import leyning from '@hebcal/leyning';
+import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import holidayMeta from './holidays.json';
@@ -42,6 +42,16 @@ export async function holidayDetail(ctx) {
   if (typeof meta === 'undefined' || typeof meta.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
+  meta.about.name = sourceName(meta.about.href);
+  if (meta.wikipedia && meta.wikipedia.href) {
+    meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
+  }
+  if (Array.isArray(meta.books)) {
+    for (const book of meta.books) {
+      const colon = book.text.indexOf(':');
+      book.shortTitle = colon === -1 ? book.text : book.text.substring(0, colon);
+    }
+  }
   const category = categories[meta.category] || {};
   const mask = category.flags || 0;
   const ev = new HolidayEvent(today, holiday, mask);
@@ -50,6 +60,9 @@ export async function holidayDetail(ctx) {
   const descrMedium = getHolidayDescription(ev, false);
   const descrLong = wikipediaText || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
+  if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
+    meta.items = [holiday];
+  }
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
       mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
   const nowAbs = greg.greg2abs(new Date());
@@ -74,6 +87,7 @@ export async function holidayDetail(ctx) {
   await ctx.render('holiday-detail', {
     title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
     holiday,
+    holidayAnchor: base,
     hebrew,
     descrShort,
     descrMedium,
@@ -83,11 +97,7 @@ export async function holidayDetail(ctx) {
     next_observed_meta: nextObserved,
     next_observed_para: `<p>${holiday} ${nextObserved}.<p>`,
     occursOn,
-    wikipedia: meta.wikipedia,
-    readMore: {
-      name: sourceName(meta.about.href),
-      href: meta.about.href,
-    },
+    meta,
   });
 }
 

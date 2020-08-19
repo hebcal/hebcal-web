@@ -28,10 +28,10 @@
 <p><%=descrLong%></p>
 <%-next_observed_para%>
 
-<p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=readMore.name%>" href="<%=readMore.href%>"><%=readMore.name%>&nbsp;&rarr;</a>
-<% if (typeof wikipedia === 'object' && typeof wikipedia.href === 'string') { %>
-or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
-<% } %>
+<p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=meta.about.name%>" href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
+<% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
+or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
+<% } // wikipedia %>
 </em></p>
 
 <div class="d-print-none">
@@ -68,56 +68,31 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=w
 <% }); %>
 </ul>
 
+<% if (typeof meta.books !== 'undefined') { %>
 <h3 id="books">Recommended Books</h3>
 <div class="row">
-<div class="col-3">
+<% meta.books.forEach((book) => { %>
+<div class="col">
 <div class="thumbnail">
-<a class="amzn" id="rosh-hashana-0827608217-1" title="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" href="https://www.amazon.com/o/ASIN/0827608217/hebcal-20"><img src="/i/0827608217.01.MZZZZZZZ.jpg"
-class="img-fluid img-thumbnail"
-alt="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" width="104" height="160" style="border:none"></a>
+<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
+class="img-fluid img-thumbnail" alt="<%=book.text%>" width="104" height="160" style="border:none"
+src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 <div class="figure-caption">
-<a class="amzn" id="rosh-hashana-0827608217-2" title="Entering the High Holy Days: A Guide to Origins, Themes, and Prayers" href="https://www.amazon.com/o/ASIN/0827608217/hebcal-20">Entering the High Holy Days</a>
-<br>by Rabbi Reuven Hammer
+<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
+<% if (book.author) { %><br>by <%=book.author%><% } %>
 </div><!-- .figure-caption -->
 </div><!-- .thumbnail -->
-</div><!-- .col-3 -->
-<div class="col-3">
-<div class="thumbnail">
-<a class="amzn" id="rosh-hashana-0316739081-1" title="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" href="https://www.amazon.com/o/ASIN/0316739081/hebcal-20"><img src="/i/0316739081.01.MZZZZZZZ.jpg"
-class="img-fluid img-thumbnail"
-alt="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" width="160" height="111" style="border:none"></a>
-<div class="figure-caption">
-<a class="amzn" id="rosh-hashana-0316739081-2" title="This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation" href="https://www.amazon.com/o/ASIN/0316739081/hebcal-20">This Is Real and You Are Completely Unprepared</a>
-<br>by Rabbi Alan Lew
-</div><!-- .figure-caption -->
-</div><!-- .thumbnail -->
-</div><!-- .col-3 -->
-<div class="col-3">
-<div class="thumbnail">
-<a class="amzn" id="rosh-hashana-0789338637-1" title="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" href="https://www.amazon.com/o/ASIN/0789338637/hebcal-20"><img src="/i/0789338637.01.MZZZZZZZ.jpg"
-class="img-fluid img-thumbnail"
-alt="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" width="160" height="160" style="border:none"></a>
-<div class="figure-caption">
-<a class="amzn" id="rosh-hashana-0789338637-2" title="The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781" href="https://www.amazon.com/o/ASIN/0789338637/hebcal-20">The 2021 Jewish Calendar 16-Month Wall Calendar</a>
-
-</div><!-- .figure-caption -->
-</div><!-- .thumbnail -->
-</div><!-- .col-3 -->
-<div class="col-3">
-<div class="thumbnail">
-<a class="amzn" id="rosh-hashana-1580234372-1" title="Rosh Hashanah Readings: Inspiration, Information And Contemplation" href="https://www.amazon.com/o/ASIN/1580234372/hebcal-20"><img src="/i/1580234372.01.MZZZZZZZ.jpg"
-class="img-fluid img-thumbnail"
-alt="Rosh Hashanah Readings: Inspiration, Information And Contemplation" width="106" height="160" style="border:none"></a>
-<div class="figure-caption">
-<a class="amzn" id="rosh-hashana-1580234372-2" title="Rosh Hashanah Readings: Inspiration, Information And Contemplation" href="https://www.amazon.com/o/ASIN/1580234372/hebcal-20">Rosh Hashanah Readings</a>
-<br>by Rabbi Dov Peretz Elkins
-</div><!-- .figure-caption -->
-</div><!-- .thumbnail -->
-</div><!-- .col-3 -->
+</div><!-- .col -->
+<% }); %>
 </div><!-- .row -->
+<% } // books %>
 
-
-<h3 id="reading">Rosh Hashana
+<% if (typeof meta.items !== 'undefined') { %>
+<div id="reading"></div>
+<% meta.items.forEach((item) => { %>
+<p>Item: <%= item %></p>
+<% }); %>
+<h3 id="foo-reading">Rosh Hashana
   - <span lang="he" dir="rtl">ראש השנה</span></h3>
   <!-- reading -->
   
@@ -168,8 +143,7 @@ alt="Rosh Hashanah Readings: Inspiration, Information And Contemplation" width="
   href="https://www.sefaria.org/Numbers.29.1-6?lang=bi">Numbers 29:1-6</a>
   <small>(6&nbsp;p'sukim)</small><br>
   </p>
-  
-
+<% } // meta.items %>
 
 
 <h3 id="ref">References</h3>
@@ -188,11 +162,10 @@ href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
 
-
-<dt><a class="outbound"
-href="$wikipedia_href">"$wiki_title"
-in <em>Wikipedia: The Free Encyclopedia</em></a>
+<% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
+<dt><a class="outbound" href="<%=meta.wikipedia.href%>">"<%=meta.wikipedia.title%>" in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
+<% } %>
 
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
