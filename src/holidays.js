@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HolidayEvent, Locale, HebrewCalendar, flags} from '@hebcal/core';
+import {HDate, HolidayEvent, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
 // import leyning from '@hebcal/leyning';
 import {basename} from 'path';
@@ -47,14 +47,17 @@ export async function holidayDetail(ctx) {
   const ev = new HolidayEvent(today, holiday, mask);
   const descrShort = getHolidayDescription(ev, true);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
-  const descrLong = wikipediaText || getHolidayDescription(ev, false);
+  const descrMedium = getHolidayDescription(ev, false);
+  const descrLong = wikipediaText || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
       mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
+  const nowAbs = greg.greg2abs(new Date());
   const occursOn = holidayBegin
       .filter((ev) => holiday === ev.basename())
       .map((ev) => {
         const hd = ev.getDate();
+        const abs = hd.abs();
         const d = dayjs(hd.greg());
         return {
           hd,
@@ -62,18 +65,23 @@ export async function holidayDetail(ctx) {
           d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
           desc: ev.render(),
           basename: ev.basename(),
+          ppf: abs < nowAbs ? 'past' : 'future',
         };
       });
+  const next = occursOn.find((item) => item.ppf === 'future');
+  next.ppf = 'current';
+  const nextObserved = `begins ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
   await ctx.render('holiday-detail', {
     title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
     holiday,
     hebrew,
     descrShort,
+    descrMedium,
     descrLong,
     categoryId: category.id,
     categoryName: category.name,
-    next_observed_meta: '',
-    next_observed_para: '',
+    next_observed_meta: nextObserved,
+    next_observed_para: `<p>${holiday} ${nextObserved}.<p>`,
     occursOn,
     wikipedia: meta.wikipedia,
     readMore: {

@@ -22,7 +22,7 @@ import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
 import {yahrzeitApp} from './yahrzeit';
-import { holidayDetail } from './holidays';
+import {holidayDetail} from './holidays';
 
 const app = new Koa();
 
