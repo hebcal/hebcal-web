@@ -210,7 +210,7 @@ function renderHtml(ctx) {
     ics: dlhref + '.ics',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
-    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    gcal: encodeURIComponent(subical),
     csv_usa: dlhref + '_usa.csv',
     csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
   };
@@ -248,6 +248,31 @@ function renderHtml(ctx) {
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
+    xtra_html: `
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script>
+var clipboard = new ClipboardJS('#grabBtn', {
+    container: document.getElementsByClassName('modal')[0]
+});
+var grabBtn = document.querySelector('#grabBtn');
+var tooltipBtn=new bootstrap.Tooltip(grabBtn);
+clipboard.on('success', function(e) {
+  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
+  e.trigger.setAttribute('data-original-title','Copied!');
+  tooltipBtn.show();
+  e.trigger.setAttribute('data-original-title','Copy to clipboard');
+  e.clearSelection();
+});
+clipboard.on('error', function(e) {
+  var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
+  var fallbackMsg='Press '+modifierKey+'C to copy';
+  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
+  e.trigger.setAttribute('data-original-title',fallbackMsg);
+  tooltipBtn.show();
+  e.trigger.setAttribute('data-original-title','Copy to clipboard');
+});
+</script>
+`,
   });
 }
 
