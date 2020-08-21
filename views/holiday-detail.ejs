@@ -29,7 +29,7 @@
 <%-next_observed_para%>
 
 <p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=meta.about.name%>" href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
-<% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
+<% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
 or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <% } // wikipedia %>
 </em></p>

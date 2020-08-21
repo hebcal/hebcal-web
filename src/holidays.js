@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HolidayEvent, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
-import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
+import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
@@ -14,7 +14,12 @@ for (const key of Object.keys(holidayMeta)) {
   holidays.set(makeAnchor(key), key);
 }
 
-const holidayBegin = getFirstOcccurences();
+const events11years = HebrewCalendar.calendar({
+  year: today.getFullYear() - 1,
+  isHebrewYear: true,
+  numYears: 11,
+});
+const holidayBegin = getFirstOcccurences(events11years);
 
 const categories = {
   major: {id: 'major-holidays', name: 'Major holidays', flags: 0},
@@ -34,8 +39,36 @@ const primarySource = {
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
+  const events0 = HebrewCalendar.calendar({year});
+  const events = getFirstOcccurences(events0);
+  const items = {};
+  for (const key of Object.keys(categories)) {
+    items[key] = [];
+  }
+  for (const ev of events) {
+    const descrShort = getHolidayDescription(ev, true);
+    const eventCategories = getEventCategories(ev);
+    const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
+    const holiday = ev.basename();
+    const d = dayjs(ev.getDate().greg());
+    const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+      ev.getFlags() === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
+    const item = {
+      name: holiday,
+      id: makeAnchor(holiday),
+      descrShort,
+      beginsWhen,
+      beginsD: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
+      d,
+      isoDate: d.format('YYYY-MM-DD'),
+    };
+    items[category].push(item);
+  }
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
+    year,
+    categories,
+    items,
   });
 }
 
@@ -164,12 +197,7 @@ function makeHolidayReadings(holiday, meta) {
   }
 }
 
-function getFirstOcccurences() {
-  const events = HebrewCalendar.calendar({
-    year: today.getFullYear() - 1,
-    isHebrewYear: true,
-    numYears: 11,
-  });
+function getFirstOcccurences(events) {
   let prevYear = -1;
   let seen = new Set();
   const result = [];

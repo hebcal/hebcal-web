@@ -776,13 +776,13 @@
   "about": {
    "href": "https://en.wikipedia.org/wiki/Yom_Ha%27atzmaut"
   },
-  "books": {
-   "book": {
+  "books": [
+   {
     "ASIN": "0822576686",
     "author": "Ellen Dietrick",
     "text": "It's Israel's Birthday!"
    }
-  },
+  ],
   "category": "modern",
   "yomtov": false
  },
@@ -794,13 +794,13 @@
    "href": "https://en.wikipedia.org/wiki/Yom_HaShoah",
    "text": "Yom HaZikaron laShoah ve-laG'vurah (יום הזיכרון לשואה ולגבורה; \"Holocaust and Heroism Remembrance Day\"), known colloquially in Israel and abroad as Yom HaShoah (יום השואה) and in English as Holocaust Remembrance Day, or Holocaust Day, is observed as Israel's day of commemoration for the approximately six million Jews and five million others who perished in the Holocaust as a result of the actions carried out by Nazi Germany and its accessories, and for the Jewish resistance in that period. In Israel, it is a national memorial day and public holiday. It was inaugurated on 1953, anchored by a law signed by the Prime Minister of Israel David Ben-Gurion and the President of Israel Yitzhak Ben-Zvi. It is held on the 27th of Nisan (April/May), unless the 27th would be adjacent to Shabbat, in which case the date is shifted by a day."
   },
-  "books": {
-   "book": {
+  "books": [
+   {
     "ASIN": "1550652893",
     "author": "Irene Lilienheim Angelico",
     "text": "The Third Seder: A Haggadah for Yom Hashoah"
    }
-  },
+  ],
   "category": "modern",
   "yomtov": false
  },
