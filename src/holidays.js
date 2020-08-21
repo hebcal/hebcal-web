@@ -1,11 +1,13 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HolidayEvent, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
-import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
+import {makeAnchor, getHolidayDescription, getEventCategories, getCalendarTitle} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import holidayMeta from './holidays.json';
 import dayjs from 'dayjs';
+import etag from 'etag';
+import {createPdfDoc, renderPdf} from './pdf';
 
 const today = new HDate();
 
@@ -36,6 +38,31 @@ const primarySource = {
   'en.wikipedia.org': 'Wikipedia',
 };
 
+export async function holidayPdf(ctx) {
+  const rpath = ctx.request.path;
+  const base = basename(rpath);
+  if (!base.startsWith('hebcal-')) {
+    throw createError(400, `Bad PDF URL format`);
+  }
+  const year = base.substring(7, 11);
+  const options = {
+    year,
+    addHebrewDates: true,
+  };
+  if (year >= 3761) {
+    options.isHebrewYear = true;
+  }
+  const events = HebrewCalendar.calendar(options);
+  const title = getCalendarTitle(events, options);
+  ctx.set('Last-Modified', new Date().toUTCString());
+  ctx.set('Cache-Control', 'max-age=5184000');
+  ctx.response.type = 'application/pdf';
+  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+  const doc = ctx.body = createPdfDoc(title);
+  renderPdf(doc, events, options);
+  doc.end();
+}
+
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
@@ -64,6 +91,7 @@ export async function holidayYearIndex(ctx) {
     };
     items[category].push(item);
   }
+  ctx.set('Last-Modified', new Date().toUTCString());
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     year,
@@ -126,6 +154,7 @@ export async function holidayDetail(ctx) {
   const next = occursOn.find((item) => item.ppf === 'future');
   next.ppf = 'current';
   const nextObserved = `begins ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
+  ctx.set('Last-Modified', new Date().toUTCString());
   await ctx.render('holiday-detail', {
     title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
     holiday,
