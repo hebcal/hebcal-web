@@ -42,16 +42,14 @@ export async function holidayPdf(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   if (!base.startsWith('hebcal-')) {
-    throw createError(400, `Bad PDF URL format`);
+    throw createError(400, `Invalid PDF URL format: ${base}`);
   }
-  const year = base.substring(7, 11);
+  const year = parseInt(base.substring(7), 10);
   const options = {
     year,
     addHebrewDates: true,
+    isHebrewYear: year >= 3761,
   };
-  if (year >= 3761) {
-    options.isHebrewYear = true;
-  }
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
   ctx.set('Last-Modified', new Date().toUTCString());
@@ -66,7 +64,17 @@ export async function holidayPdf(ctx) {
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
-  const events0 = HebrewCalendar.calendar({year});
+  const yearNum = parseInt(year, 10);
+  if (isNaN(yearNum)) {
+    throw createError(400, `Invalid holiday year: ${year}`);
+  }
+  const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
+  const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
+  const options = {
+    year: calendarYear,
+    isHebrewYear,
+  };
+  const events0 = HebrewCalendar.calendar(options);
   const events = getFirstOcccurences(events0);
   const items = {};
   for (const key of Object.keys(categories)) {
@@ -91,12 +99,17 @@ export async function holidayYearIndex(ctx) {
     };
     items[category].push(item);
   }
+  const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   ctx.set('Last-Modified', new Date().toUTCString());
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
+    today: dayjs(),
     year,
+    isHebrewYear,
+    calendarYear,
     categories,
     items,
+    RH: dayjs(roshHashana.getDate().greg()),
   });
 }
 

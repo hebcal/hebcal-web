@@ -7,13 +7,14 @@
 <div class="row">
 <div class="col-sm-8">
 <h2>Jewish Holidays <%=year%></h2>
-<p class="d-print-none">Dates of major and minor Jewish holidays for <%=year%>. Each
+<p class="d-print-none">Dates of major and minor Jewish holidays for <%=isHebrewYear ? `Hebrew Year ${calendarYear}` : year%>. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <strong><time itemprop="startDate" content="2024-10-03" datetime="2024-10-03" title="begins at sundown on Oct 2">Oct 3</time>-<time datetime="2024-10-04">4</time></strong>, then the holiday begins at
-sundown on <strong>Oct 2</strong> and ends at nightfall on <strong>Oct 4</strong>.</p>
+Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
+then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
+and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <div class="btn-toolbar d-print-none">
 <div class="btn-group mr-1" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=year%>" href="hebcal-<%=year%>.pdf"><svg class="icon align-top"><use xlink:href="/i/sprite2.svg#gi-print"></use></svg> Print</a>
@@ -44,18 +45,11 @@ data-ad-slot="1140358973"></ins>
 <div class="col">
 <nav class="d-print-none mt-3 mb-3">
 <ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" title="2019" aria-label="Previous" href="/hebcal?year=2019&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&laquo;</span></a></li>
-<li class="page-item"><a class="page-link" href="2020">2020</a></li>
-<li class="page-item"><a class="page-link" href="2021">2021</a></li>
-<li class="page-item"><a class="page-link" href="2022">2022</a></li>
-<li class="page-item"><a class="page-link" href="2023">2023</a></li>
-<li class="page-item active"><a class="page-link" href="<%=year%>"><%=year%></a></li>
-<li class="page-item"><a class="page-link" href="2025">2025</a></li>
-<li class="page-item"><a class="page-link" href="2026">2026</a></li>
-<li class="page-item"><a class="page-link" href="2027">2027</a></li>
-<li class="page-item"><a class="page-link" href="2028">2028</a></li>
-<li class="page-item"><a class="page-link" href="2029">2029</a></li>
-<li class="page-item"><a class="page-link" title="2030" aria-label="Next" href="/hebcal?year=2030&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&raquo;</span></a></li>
+<li class="page-item"><a class="page-link" title="<%=today.year() - 1%>" aria-label="Previous" href="/hebcal?year=<%=today.year() - 1%>&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&laquo;</span></a></li>
+<% for (let i = today.year(); i < today.year() + 10; i++) { %>
+<li class="page-item<%= i == year ? ' active' : '' %>"><a class="page-link" href="<%=i%>"><%=i%></a></li>
+<% } %>
+<li class="page-item"><a class="page-link" title="<%=today.year() + 10%>" aria-label="Next" href="/hebcal?year=<%=today.year() + 10%>&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&raquo;</span></a></li>
 </ul>
 </nav>
 <% for (const [catId, category] of Object.entries(categories)) { %>
@@ -83,7 +77,7 @@ is forbidden.</p>
 -->
 <% for (const item of items[catId]) { %>
 <tr itemscope itemtype="http://schema.org/Event"><td><a href="<%=item.id%>" itemprop="name"><%=item.name%></a></td>
-<td><time itemprop="startDate" content="<%=item.isoDate%>" datetime="<%=item.isoDate%>" title="begins <%=item.beginsWhen%> on <%=item.beginsD.format('MMM D')%>"><%=item.d.format('MMM D')%></time> <small class="text-muted"><%=item.d.format('dd')%></small></td>
+<td><time itemprop="startDate" content="<%=item.isoDate%>" datetime="<%=item.isoDate%>" title="begins <%=item.beginsWhen%> on <%=item.beginsD.format('MMM D')%>"><%=item.d.format(isHebrewYear ? 'MMM D, YYYY' : 'MMM D')%></time> <small class="text-muted"><%=item.d.format('dd')%></small></td>
 <td class="d-none d-sm-block"><%=item.descrShort%></td>
 </tr>
 <% } %>
