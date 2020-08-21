@@ -102,8 +102,9 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 <h4 id="reading-<%=reading.id%>"><%=item%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %></h4>
 <% if (reading.summary) { %>
-<p class="lead torah">Torah Portion: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
-title="English translation from JPS Tanakh"><%=reading.summary%></a></p>
+<p class="lead torah">Torah Portion:
+<% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
+href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ? '</a>' : '' %></p>
 <% } // reading.summary %>
 <% if (reading.fullkriyah) { %>
 <ul class="list-unstyled">
@@ -116,8 +117,9 @@ title="English translation from JPS Tanakh"><%=reading.summary%></a></p>
 </ul>
 <% } // reading.fullkriyah %>
 <% if (reading.haftara) { %>
-<p class="lead haftara">Haftarah: <a class="outbound" href="http://www.jtsa.edu/rosh-hashanah-day-1"
-  title="English translation from JPS Tanakh"><%=reading.haftara%></a></p>
+<p class="lead haftara">Haftarah:
+<% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"
+href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %></p>
 <% } // reading.haftara %>
 <% } // ... for %>
 <% } // meta.reading %>

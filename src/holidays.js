@@ -129,6 +129,16 @@ function makeHolidayReadings(holiday, meta) {
         meta.reading[item].hebrew = hebrew;
       }
       meta.reading[item].id = makeAnchor(item);
+      if (meta.links && meta.links.torah && meta.links.torah[item]) {
+        meta.reading[item].torahHref = meta.links.torah[item];
+      } else if (meta.about.torah) {
+        meta.reading[item].torahHref = meta.about.torah;
+      }
+      if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
+        meta.reading[item].haftaraHref = meta.links.haftara[item];
+      } else if (meta.about.haftara) {
+        meta.reading[item].haftaraHref = meta.about.haftara;
+      }
       if (item.startsWith(holiday)) {
         if (meta.items.length === 1 || item === holiday) {
           meta.reading[item].shortName = 'Tanakh';
