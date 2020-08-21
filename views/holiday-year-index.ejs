@@ -62,23 +62,13 @@ obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
 <% } // major-holidays %>
 <table class="table table-striped table-condensed">
-<col style="width:180px"><col style="width:156px"><col class="d-none d-sm-block">
+<col style="width:180px"><col style="width:<%=isHebrewYear ? 180 : 156%>px"><col>
 <tbody>
-<tr><th>Holiday</th><th>Dates</th><th class="d-none d-sm-block">Description</th></tr>
-<!--
-<tr itemscope itemtype="http://schema.org/Event"><td><a href="purim"><span itemprop="name">Purim</span></a></td>
-<td><time itemprop="startDate" content="2024-03-24" datetime="2024-03-24" title="begins at sundown on Mar 23">Mar 24</time> <small class="text-muted">Su</small></td>
-<td class="d-none d-sm-block">Purim is one of the most joyous and fun holidays on the Jewish calendar</td>
-</tr>
-<tr itemscope itemtype="http://schema.org/Event"><td><a href="shavuot"><span itemprop="name">Shavuot</span></a></td>
-<td><strong><time itemprop="startDate" content="2024-06-12" datetime="2024-06-12" title="begins at sundown on Jun 11">Jun 12</time>-<time datetime="2024-06-13">13</time> <small class="text-muted">W&#8209;Th</small></strong></td>
-<td class="d-none d-sm-block">Festival of Weeks, commemorates the giving of the Torah at Mount Sinai</td>
-</tr>
--->
+<tr><th>Holiday</th><th>Dates</th><th>Description</th></tr>
 <% for (const item of items[catId]) { %>
 <tr itemscope itemtype="http://schema.org/Event"><td><a href="<%=item.id%>" itemprop="name"><%=item.name%></a></td>
-<td><time itemprop="startDate" content="<%=item.isoDate%>" datetime="<%=item.isoDate%>" title="begins <%=item.beginsWhen%> on <%=item.beginsD.format('MMM D')%>"><%=item.d.format(isHebrewYear ? 'MMM D, YYYY' : 'MMM D')%></time> <small class="text-muted"><%=item.d.format('dd')%></small></td>
-<td class="d-none d-sm-block"><%=item.descrShort%></td>
+<td><%- item.dates %></td>
+<td><%=item.descrShort%></td>
 </tr>
 <% } %>
 </tbody>

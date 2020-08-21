@@ -86,16 +86,11 @@ export async function holidayYearIndex(ctx) {
     const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
     const holiday = ev.basename();
     const d = dayjs(ev.getDate().greg());
-    const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-      ev.getFlags() === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
     const item = {
       name: holiday,
       id: makeAnchor(holiday),
       descrShort,
-      beginsWhen,
-      beginsD: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
-      d,
-      isoDate: d.format('YYYY-MM-DD'),
+      dates: tableCellObserved(ev, d, isHebrewYear),
     };
     items[category].push(item);
   }
@@ -111,6 +106,109 @@ export async function holidayYearIndex(ctx) {
     items,
     RH: dayjs(roshHashana.getDate().greg()),
   });
+}
+
+/**
+ * @param {Event} ev
+ * @param {dayjs.Dayjs} d
+ * @param {boolean} isHebrewYear
+ * @return {string}
+ */
+function tableCellObserved(ev, d, isHebrewYear) {
+  const f = ev.basename();
+  const mask = ev.getFlags();
+  const b0 = '<strong>';
+  const b1 = '</strong>';
+  if (f === 'Chanukah') {
+    return formatDatePlusDelta(d, 7, isHebrewYear) + shortDayOfWeek(d, 7);
+  } else if (f === 'Leil Selichot' || mask & flags.MINOR_FAST) {
+    return formatSingleDay(d, isHebrewYear) + shortDayOfWeek(d, 0);
+  } else if (f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
+    return formatSingleDayHtml(d, isHebrewYear) + shortDayOfWeek(d, 0);
+  } else {
+    switch (f) {
+      case 'Shavuot':
+      case 'Rosh Hashana':
+        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1);
+      case 'Yom Kippur':
+      case 'Shmini Atzeret':
+      case 'Simchat Torah':
+        return b0 + formatSingleDayHtml(d, isHebrewYear) + b1 + shortDayOfWeek(d, 0);
+      case 'Sukkot':
+        const d2 = d.add(2, 'd');
+        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1) +
+        '<br>' + formatDatePlusDelta(d2, 4, isHebrewYear) + shortDayOfWeek(d2, 4);
+      case 'Pesach':
+        const d3 = d.add(2, 'd');
+        const d6 = d.add(6, 'd');
+        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1) +
+        '<br>' + formatDatePlusDelta(d3, 3, isHebrewYear) + shortDayOfWeek(d3, 3) +
+        '<br>' + b0 + formatDatePlusDelta(d6, 1, isHebrewYear) + b1 + shortDayOfWeek(d6, 1);
+    }
+  }
+}
+
+const DoWtiny = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
+
+/**
+ * @param {dayjs.Dayjs} d
+ * @param {number} delta
+ * @return {string}
+ */
+function shortDayOfWeek(d, delta) {
+  let s = DoWtiny[d.day()];
+  if (delta) {
+    const d2 = d.add(delta, 'd');
+    s += '‑' + DoWtiny[d2.day()];
+  }
+  return ` <small class="text-muted">${s}</small>`;
+}
+
+/**
+ * @param {dayjs.Dayjs} d1
+ * @param {dayjs.Dayjs} d2
+ * @param {boolean} showYear
+ * @return {string}
+ */
+function formatDateRange(d1, d2, showYear) {
+  const iso = d2.format('YYYY-MM-DD');
+  const day2str = d1.month() === d2.month() ? String(d2.date()) : formatSingleDay(d2, false);
+  const str = formatSingleDayHtml(d1, false) + '‑' + `<time datetime="${iso}">${day2str}</time>`;
+  return showYear ? str + ', ' + d2.year() : str;
+}
+
+/**
+ * @param {dayjs.Dayjs} d
+ * @param {boolean} showYear
+ * @return {string}
+ */
+function formatSingleDayHtml(d, showYear) {
+  const d0 = d.subtract(1, 'd');
+  const iso = d.format('YYYY-MM-DD');
+  const d0str = formatSingleDay(d0, false);
+  const dayStr = formatSingleDay(d, showYear);
+  // eslint-disable-next-line max-len
+  return `<time itemprop="startDate" content="${iso}" datetime="${iso}" title="begins at sundown on ${d0str}">${dayStr}</time>`;
+}
+
+/**
+ * @param {dayjs.Dayjs} d
+ * @param {boolean} showYear
+ * @return {string}
+ */
+function formatSingleDay(d, showYear) {
+  return d.format(showYear ? 'MMM D, YYYY' : 'MMM D');
+}
+
+/**
+ * @param {dayjs.Dayjs} d
+ * @param {number} delta
+ * @param {boolean} showYear
+ * @return {string}
+ */
+function formatDatePlusDelta(d, delta, showYear) {
+  const d2 = d.add(delta, 'd');
+  return formatDateRange(d, d2, showYear);
 }
 
 export async function holidayDetail(ctx) {
