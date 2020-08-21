@@ -31,6 +31,14 @@ const primarySource = {
   'en.wikipedia.org': 'Wikipedia',
 };
 
+export async function holidayYearIndex(ctx) {
+  const rpath = ctx.request.path;
+  const year = basename(rpath);
+  await ctx.render('holiday-year-index', {
+    title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
+  });
+}
+
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
