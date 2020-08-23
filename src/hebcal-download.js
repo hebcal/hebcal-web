@@ -82,15 +82,16 @@ export async function hebcalDownload(ctx) {
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
   }
-  if (!query.subscribe) {
-    ctx.response.attachment(basename(path));
-  }
   if (extension == '.ics') {
+    if (!query.subscribe) {
+      ctx.response.attachment(basename(path));
+    }
     ctx.response.type = 'text/calendar; charset=utf-8';
     const readable = ctx.body = new Readable();
     eventsToIcalendarStream(readable, events, options);
   } else if (extension == '.csv') {
     const ical = eventsToCsv(events, options);
+    ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = ical;
   } else if (extension == '.pdf') {
