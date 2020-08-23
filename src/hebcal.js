@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, urlArgs, downloadHref, tooltipScript, typeaheadScript} from './common';
+  empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
+  getDefaultHebrewYear} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -89,7 +90,7 @@ async function renderForm(ctx, error) {
     ctx.set('Cache-Control', 'private');
   }
   const defaultYear = new Date().getFullYear();
-  const defaultYearHeb = new HDate().getFullYear();
+  const defaultYearHeb = getDefaultHebrewYear(new HDate());
   const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
   return ctx.render('hebcal-form', {
     message,
