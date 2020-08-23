@@ -321,7 +321,7 @@ async function writeStagingInfo(ctx, db, q) {
   (email_id, email_address, email_status, email_created,
    email_candles_havdalah, email_havdalah_tzeit, email_sundown_candles,
    ${locationColumn}, email_ip)
-  VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?)`;
+  VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?, ?)`;
   await db.query(sql, [
     subscriptionId,
     q.em,

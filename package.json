@@ -25,7 +25,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.4",
     "@babel/preset-env": "^7.11.0",
     "@babel/register": "^7.10.5",
     "eslint": "^7.7.0",
@@ -39,7 +39,7 @@
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.3.3",
     "better-sqlite3": "^7.1.0",
-    "dayjs": "^1.8.33",
+    "dayjs": "^1.8.34",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
     "geolite2-redist": "^1.0.7",
