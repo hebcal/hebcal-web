@@ -98,7 +98,7 @@ function makeDownloadProps(ctx) {
     ics: dlhref + '.ics',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
-    gcal: encodeURIComponent(subical),
+    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
     csv_usa: dlhref + '_usa.csv',
     csv_eur: downloadHref(q, filename, {euro: 1}) + '_eur.csv',
   };
