@@ -47,8 +47,7 @@ table {border-spacing: 0; border-collapse: collapse;}
 <%- itemsHtml %>
 </tbody></table>
 <p><a class="goto" title="Previous" rel="nofollow"
-href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Times
-in <strong>bold</strong> indicate holidays.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
+href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Candle-lighting times are <%= q.b || 18 %> minutes before sunset.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
 href="<%- url %>&amp;year=<%= hyear + 1 %>" rel="nofollow"><%= hyear + 1 %>&nbsp;&rarr;</a></p>
 </div><!-- align=center -->
 </body>

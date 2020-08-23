@@ -264,7 +264,7 @@ async function getSubInfo(db, emailAddress) {
   SELECT email_id, email_address, email_status, email_created,
     email_candles_zipcode, email_candles_city,
     email_candles_geonameid,
-    email_candles_havdalah, email_havdalah_tzeit
+    email_candles_havdalah, email_havdalah_tzeit, email_sundown_candles
   FROM hebcal_shabbat_email
   WHERE email_address = ?`;
   const results = await db.query(sql, emailAddress);
@@ -280,6 +280,7 @@ async function getSubInfo(db, emailAddress) {
     m: m,
     M: r.email_havdalah_tzeit == 1 ? 'on' : 'off',
     t: r.email_created,
+    b: r.email_sundown_candles,
   }, getGeoFromRow(r));
 }
 
@@ -290,6 +291,7 @@ async function writeSubInfo(ctx, db, q) {
       email_candles_geonameid = ?,
       email_candles_havdalah = ?,
       email_havdalah_tzeit = ?,
+      email_sundown_candles = ?,
       email_ip = ?
     WHERE email_id = ?`;
   await db.query(sql, [
@@ -297,6 +299,7 @@ async function writeSubInfo(ctx, db, q) {
     q.geonameid || null,
     q.m || null,
     q.M === 'on' ? 1 : 0,
+    q.b || 18,
     getIpAddress(ctx),
     ctx.state.subscriptionId,
   ]);
@@ -316,7 +319,7 @@ async function writeStagingInfo(ctx, db, q) {
   const locationValue = q.zip ? q.zip : q.geonameid;
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
-   email_candles_havdalah, email_havdalah_tzeit,
+   email_candles_havdalah, email_havdalah_tzeit, email_sundown_candles,
    ${locationColumn}, email_ip)
   VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?)`;
   await db.query(sql, [
@@ -324,6 +327,7 @@ async function writeStagingInfo(ctx, db, q) {
     q.em,
     q.m || null,
     q.M === 'on' ? 1 : 0,
+    q.b || 18,
     locationValue,
     ip,
   ]);

@@ -289,6 +289,10 @@ export function makeHebcalOptions(db, query) {
       options.location = location;
       if (location.getIsrael()) {
         options.il = true;
+        if (location.getShortName() === 'Jerusalem') {
+          options.candleLightingMins = 40;
+          query.b = '40';
+        }
       }
     } else {
       delete options.candlelighting;

@@ -128,6 +128,9 @@ function makeItems(ctx) {
   if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
     options.havdalahMins = opts0.havdalahMins;
   }
+  if (!isNaN(opts0.candleLightingMins)) {
+    options.candleLightingMins = opts0.candleLightingMins;
+  }
   const events = HebrewCalendar.calendar(options);
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   Object.assign(ctx.state, {
@@ -143,6 +146,9 @@ function makeItems(ctx) {
   });
 
   let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  if (typeof options.candleLightingMins !== 'undefined') {
+    geoUrlArgs += '&b=' + options.candleLightingMins;
+  }
   if (typeof options.havdalahMins !== 'undefined') {
     geoUrlArgs += '&m=' + options.havdalahMins;
   }

@@ -38,7 +38,7 @@ function makeProperties(ctx) {
   const items = makeContents(events, options);
   const itemsHtml = formatItemsAsTable(items, options);
   let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
-  for (const opt of ['a', 'i', 'm', 'M', 'lg']) {
+  for (const opt of ['a', 'i', 'b', 'm', 'M', 'lg']) {
     if (query[opt]) {
       url += `&amp;${opt}=${query[opt]}`;
     }
@@ -52,6 +52,7 @@ function makeProperties(ctx) {
     itemsHtml,
     url,
     candleLightingStr: Locale.gettext('Candle lighting'),
+    q: query,
   };
 }
 
