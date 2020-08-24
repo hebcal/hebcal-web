@@ -8,6 +8,7 @@ import holidayMeta from './holidays.json';
 import dayjs from 'dayjs';
 import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
+import {getDefaultHebrewYear} from './common';
 
 const today = new HDate();
 
@@ -76,6 +77,22 @@ export async function holidayYearIndex(ctx) {
   };
   const events0 = HebrewCalendar.calendar(options);
   const events = getFirstOcccurences(events0);
+  const items = makeItems(events, isHebrewYear);
+  const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
+  ctx.set('Last-Modified', new Date().toUTCString());
+  await ctx.render('holiday-year-index', {
+    title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
+    today: dayjs(),
+    year,
+    isHebrewYear,
+    calendarYear,
+    categories,
+    items,
+    RH: dayjs(roshHashana.getDate().greg()),
+  });
+}
+
+function makeItems(events, showYear) {
   const items = {};
   for (const key of Object.keys(categories)) {
     items[key] = [];
@@ -90,22 +107,11 @@ export async function holidayYearIndex(ctx) {
       name: holiday,
       id: makeAnchor(holiday),
       descrShort,
-      dates: tableCellObserved(ev, d, isHebrewYear),
+      dates: tableCellObserved(ev, d, showYear),
     };
     items[category].push(item);
   }
-  const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
-  ctx.set('Last-Modified', new Date().toUTCString());
-  await ctx.render('holiday-year-index', {
-    title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
-    today: dayjs(),
-    year,
-    isHebrewYear,
-    calendarYear,
-    categories,
-    items,
-    RH: dayjs(roshHashana.getDate().greg()),
-  });
+  return items;
 }
 
 /**
@@ -369,4 +375,38 @@ function sourceName(href) {
   const domain0 = href.substring(slashslash + 2, endSlash);
   const domain = domain0.startsWith('www.') ? domain0.substring(4) : domain0;
   return primarySource[domain] || domain;
+}
+
+export async function holidayMainIndex(ctx) {
+  const dt = new Date();
+  const hyear = getDefaultHebrewYear(new HDate(dt));
+  const tishrei1 = new HDate(1, 'Tishrei', hyear);
+  const items = {};
+  for (const catId of Object.keys(categories)) {
+    items[catId] = {};
+  }
+  for (let i = 0; i < 6; i++) {
+    const events0 = HebrewCalendar.calendar({
+      year: hyear + i - 1,
+      isHebrewYear: true,
+    });
+    const events = getFirstOcccurences(events0);
+    const items0 = makeItems(events, false);
+    for (const [catId, items1] of Object.entries(items0)) {
+      for (const item of items1) {
+        if (!Array.isArray(items[catId][item.name])) {
+          items[catId][item.name] = Array(6);
+        }
+        items[catId][item.name][i] = item;
+      }
+    }
+  }
+  await ctx.render('holiday-main-index', {
+    title: 'Jewish Holidays | Hebcal Jewish Calendar',
+    RH: dayjs(tishrei1.greg()),
+    today: dayjs(dt),
+    hyear,
+    categories,
+    items,
+  });
 }

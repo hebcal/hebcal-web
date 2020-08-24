@@ -22,7 +22,7 @@ import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
 import {yahrzeitApp} from './yahrzeit';
-import {holidayDetail, holidayYearIndex, holidayPdf} from './holidays';
+import {holidayDetail, holidayYearIndex, holidayPdf, holidayMainIndex} from './holidays';
 
 const app = new Koa();
 
@@ -166,7 +166,9 @@ app.use(async function router(ctx, next) {
     ctx.status = 301;
     ctx.redirect(`${proto}://${host}/holidays/`);
   } else if (rpath.startsWith('/holidays/')) {
-    if (rpath.endsWith('.pdf')) {
+    if (rpath === '/holidays/') {
+      await holidayMainIndex(ctx);
+    } else if (rpath.endsWith('.pdf')) {
       await holidayPdf(ctx);
     } else {
       const charCode = rpath.charCodeAt(10);

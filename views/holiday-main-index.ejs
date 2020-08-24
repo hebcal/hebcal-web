@@ -1,0 +1,81 @@
+<% include partials/header.ejs %>
+<meta name="description" content="Dates of major and minor Jewish holidays for years <%=today.year() - 1%>-<%=today.year()+6%>. Links to pages describing observance and customs, holiday Torah readings.">
+<body>
+<% include partials/navbar.ejs %>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm-8">
+<h2>Jewish Holidays</h2>
+<p class="d-print-none">Dates of major and minor Jewish holidays. Each
+holiday page includes a brief overview of special observances and
+customs, and any special Torah readings.</p>
+<p>All holidays begin at sundown on the evening before the date
+specified in the tables below. For example, if the dates for Rosh
+Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
+then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
+and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
+<div class="btn-toolbar d-print-none mb-3">
+<div class="btn-group mr-1" role="group">
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf"><svg class="icon align-top"><use xlink:href="/i/sprite2.svg#gi-print"></use></svg> Print</a>
+</div>
+<div class="btn-group mr-1" role="group">
+<a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><svg class="icon align-top"><use xlink:href="/i/sprite2.svg#bi-cloud-download"></use></svg> Download</a>
+</div>
+<div class="btn-group mr-1" role="group">
+<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="/i/sprite2.svg#bi-pencil-square"></use></svg> Customize</a>
+</div>
+</div><!-- .btn-toolbar -->
+</div><!-- .col-sm-8 -->
+<div class="col-sm-4 d-print-none">
+<h5>Advertisement</h5>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 300x250, created 10/14/10 -->
+<ins class="adsbygoogle"
+style="display:inline-block;width:300px;height:250px"
+data-ad-client="ca-pub-7687563417622459"
+data-ad-slot="1140358973"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div><!-- .col-sm-4 -->
+</div><!-- .row -->
+<div class="row">
+<div class="col">
+
+<% for (const [catId, category] of Object.entries(categories)) { %>
+<div id="<%=category.id%>">
+<h3><%=category.name%></h3>
+<% if ('major-holidays' === category.id) { %>
+<p>Holidays begin at sundown on the evening before the date specified.</p>
+<p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
+obligations and restrictions to Shabbat in the sense that normal "work"
+is forbidden.</p>
+<% } // major-holidays %>
+<div class="table-responsive">
+<table class="table table-sm">
+<col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
+<tbody>
+<tr><th>Holiday</th>
+<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
+<th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%>"><%=yr%></a>
+<br><small class="text-muted"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
+<% } %>
+</tr>
+<% for (const [holiday,arr] of Object.entries(items[catId])) { %>
+<tr><td><%=holiday%></td>
+<% for (const item of arr) { %>
+<td><% if (typeof item !== 'undefined') { %><%-item.dates%><% } %></td>
+<% } %>
+</tr>
+<% } %>
+</tbody>
+</table>
+</div><!-- #<%=category.id%> -->
+<% } // ... for %>
+      
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%_ include partials/footer.ejs _%>
