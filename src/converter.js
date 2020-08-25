@@ -52,6 +52,7 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = {error: p.message};
     } else {
       if (!p.noCache) {
+        ctx.set('Last-Modified', ctx.launchUTCString);
         ctx.set('Cache-Control', 'max-age=63072000');
       }
       let result = {
@@ -80,6 +81,10 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
     } else {
       p.writeResp = false;
+      if (!p.noCache) {
+        ctx.set('Last-Modified', ctx.launchUTCString);
+        ctx.set('Cache-Control', 'max-age=63072000');
+      }
       ctx.body = await ctx.render('converter-xml', p);
     }
   } else {
