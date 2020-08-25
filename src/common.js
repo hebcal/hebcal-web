@@ -203,7 +203,7 @@ export function processCookieAndQuery(cookieString, defaults, query) {
       delete query[key];
     }
   }
-  return Object.assign(ck, defaults, query);
+  return Object.assign({}, defaults, ck, query);
 }
 
 /**
