@@ -45,11 +45,17 @@ export async function holidayPdf(ctx) {
   if (!base.startsWith('hebcal-')) {
     throw createError(400, `Invalid PDF URL format: ${base}`);
   }
-  const year = parseInt(base.substring(7), 10);
+  const year = basename(base.substring(7));
+  const yearNum = parseInt(year, 10);
+  if (isNaN(yearNum)) {
+    throw createError(400, `Invalid holiday year: ${year}`);
+  }
+  const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
+  const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
   const options = {
-    year,
+    year: calendarYear,
     addHebrewDates: true,
-    isHebrewYear: year >= 3761,
+    isHebrewYear,
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
