@@ -2,6 +2,7 @@ import fs from 'fs';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import compress from 'koa-compress';
+import createError from 'http-errors';
 import error from 'koa-error';
 import render from 'koa-ejs';
 import serve from 'koa-static';
@@ -24,6 +25,7 @@ import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogIn
   httpRedirect} from './common';
 import {yahrzeitApp} from './yahrzeit';
 import {holidayDetail, holidayYearIndex, holidayPdf, holidayMainIndex} from './holidays';
+import redirectMap from './redirect.json';
 
 const app = new Koa();
 
@@ -133,6 +135,15 @@ app.use(async function router(ctx, next) {
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/') {
     await homepage(ctx);
+  } else if (typeof redirectMap[rpath] !== 'undefined') {
+    const destination = redirectMap[rpath];
+    if (destination === null) {
+      throw createError(410,
+          'The requested resource is no longer available on this server and there is no forwarding address. ' +
+          'Please remove all references to this resource.');
+    }
+    ctx.status = 301;
+    ctx.redirect(destination);
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/geo')) {
