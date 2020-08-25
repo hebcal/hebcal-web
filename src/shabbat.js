@@ -93,7 +93,7 @@ function getStartAndEnd(now) {
 function makeItems(ctx) {
   const q = processCookieAndQuery(
       ctx.cookies.get('C'),
-      {c: 'on', tgt: '_top'},
+      {c: 'on', s: 'on', tgt: '_top'},
       ctx.request.query,
   );
   let opts0 = {};
