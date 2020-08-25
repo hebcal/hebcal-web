@@ -54,7 +54,7 @@ obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
 <% } // major-holidays %>
 <div class="table-responsive">
-<table class="table table-sm">
+<table class="table table-sm table-striped">
 <col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 <tbody>
 <tr><th>Holiday</th>
@@ -64,7 +64,8 @@ is forbidden.</p>
 <% } %>
 </tr>
 <% for (const [holiday,arr] of Object.entries(items[catId])) { %>
-<tr><td><%=holiday%></td>
+<% let first = arr.find((item) => typeof item !== 'undefined'); %>
+<tr><td><a href="<%=first.id%>" title="<%=first.descrShort%>"><%=holiday%></a></td>
 <% for (const item of arr) { %>
 <td><% if (typeof item !== 'undefined') { %><%-item.dates%><% } %></td>
 <% } %>

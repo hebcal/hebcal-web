@@ -377,6 +377,8 @@ function sourceName(href) {
   return primarySource[domain] || domain;
 }
 
+const NUM_YEARS = 6;
+
 export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear = getDefaultHebrewYear(new HDate(dt));
@@ -385,7 +387,7 @@ export async function holidayMainIndex(ctx) {
   for (const catId of Object.keys(categories)) {
     items[catId] = {};
   }
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < NUM_YEARS; i++) {
     const events0 = HebrewCalendar.calendar({
       year: hyear + i - 1,
       isHebrewYear: true,
@@ -395,7 +397,7 @@ export async function holidayMainIndex(ctx) {
     for (const [catId, items1] of Object.entries(items0)) {
       for (const item of items1) {
         if (!Array.isArray(items[catId][item.name])) {
-          items[catId][item.name] = Array(6);
+          items[catId][item.name] = Array(NUM_YEARS);
         }
         items[catId][item.name][i] = item;
       }
