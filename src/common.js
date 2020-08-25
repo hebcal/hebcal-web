@@ -496,3 +496,14 @@ export function getDefaultHebrewYear(hdate) {
   const av15 = new HDate(15, months.AV, hy0).abs();
   return today > av15 ? hy0 + 1 : hy0;
 }
+
+/**
+ * Perform a 302 redirect to `rpath`.
+ * @param {any} ctx
+ * @param {string} rpath
+ */
+export function httpRedirect(ctx, rpath) {
+  const proto = ctx.get('x-forwarded-proto') || 'http';
+  const host = ctx.get('host') || 'www.hebcal.com';
+  ctx.redirect(`${proto}://${host}${rpath}`);
+}

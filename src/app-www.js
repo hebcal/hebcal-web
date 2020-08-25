@@ -20,7 +20,8 @@ import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
 import {shabbatApp} from './shabbat';
-import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo} from './common';
+import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
+  httpRedirect} from './common';
 import {yahrzeitApp} from './yahrzeit';
 import {holidayDetail, holidayYearIndex, holidayPdf, holidayMainIndex} from './holidays';
 
@@ -128,6 +129,7 @@ app.use(async function router(ctx, next) {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
   } else if (rpath === '/robots.txt') {
+    ctx.set('Last-Modified', ctx.launchUTCString);
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/') {
     await homepage(ctx);
@@ -163,10 +165,8 @@ app.use(async function router(ctx, next) {
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
   } else if (rpath === '/holidays') {
-    const proto = ctx.get('x-forwarded-proto') || 'http';
-    const host = ctx.get('host') || 'www.hebcal.com';
     ctx.status = 301;
-    ctx.redirect(`${proto}://${host}/holidays/`);
+    httpRedirect(ctx, `${rpath}/`);
   } else if (rpath.startsWith('/holidays/')) {
     ctx.set('Last-Modified', ctx.launchUTCString);
     if (rpath === '/holidays/') {
@@ -181,6 +181,10 @@ app.use(async function router(ctx, next) {
         await holidayDetail(ctx);
       }
     }
+  } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/')) {
+    const base = path.basename(rpath);
+    const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
+    httpRedirect(ctx, `/${dest}/${base}?utm_source=redir&utm_medium=redir`);
   } else if (rpath === '/email/verify.php') {
     await emailVerify(ctx);
   } else if (rpath.startsWith('/email')) {
