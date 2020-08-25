@@ -15,7 +15,7 @@ specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
-<div class="btn-toolbar d-print-none">
+<div class="btn-toolbar d-print-none mb-3">
 <div class="btn-group mr-1" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=year%>" href="hebcal-<%=year%>.pdf"><svg class="icon align-top"><use xlink:href="/i/sprite2.svg#gi-print"></use></svg> Print</a>
 </div>
@@ -28,7 +28,10 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
-<h5>Advertisement</h5>
+<div class="d-flex justify-content-center d-print-none">
+<div><h6>Advertisement</h6></div>
+</div><!-- .d-flex -->
+<div class="d-flex justify-content-center d-print-none">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
@@ -38,12 +41,12 @@ data-ad-slot="1140358973"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-
+</div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
-<div class="row">
+<div class="row mt-2">
 <div class="col">
-<nav class="d-print-none mt-3 mb-3">
+<nav class="d-print-none mb-3">
 <ul class="pagination pagination-sm">
 <li class="page-item"><a class="page-link" title="<%=today.year() - 1%>" aria-label="Previous" href="/hebcal?year=<%=today.year() - 1%>&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&laquo;</span></a></li>
 <% for (let i = today.year(); i < today.year() + 10; i++) { %>

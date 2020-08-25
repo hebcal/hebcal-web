@@ -28,7 +28,10 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
-<h5>Advertisement</h5>
+<div class="d-flex justify-content-center d-print-none">
+<div><h6>Advertisement</h6></div>
+</div><!-- .d-flex -->
+<div class="d-flex justify-content-center d-print-none">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
@@ -38,10 +41,10 @@ data-ad-slot="1140358973"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-
+</div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
-<div class="row">
+<div class="row mt-2">
 <div class="col">
 
 <% for (const [catId, category] of Object.entries(categories)) { %>
