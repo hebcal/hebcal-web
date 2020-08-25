@@ -23,6 +23,8 @@ const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
+app.context.launchUTCString = new Date().toUTCString();
+
 app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();
   try {

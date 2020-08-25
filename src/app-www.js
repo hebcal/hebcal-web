@@ -38,6 +38,8 @@ const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
+app.context.launchUTCString = new Date().toUTCString();
+
 // const debugLog = pino(pino.destination(logDir + '/debug.log'));
 
 app.use(async (ctx, next) => {
@@ -166,6 +168,7 @@ app.use(async function router(ctx, next) {
     ctx.status = 301;
     ctx.redirect(`${proto}://${host}/holidays/`);
   } else if (rpath.startsWith('/holidays/')) {
+    ctx.set('Last-Modified', ctx.launchUTCString);
     if (rpath === '/holidays/') {
       await holidayMainIndex(ctx);
     } else if (rpath.endsWith('.pdf')) {
@@ -184,7 +187,8 @@ app.use(async function router(ctx, next) {
     await emailForm(ctx);
   } else if (rpath.startsWith('/link')) {
     const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
-    const location = getLocationFromQuery(ctx.db, q);
+    const location0 = getLocationFromQuery(ctx.db, q);
+    const location = location0 || ctx.db.lookupLegacyCity('New York');
     const geoUrlArgs = urlArgs(q);
     const geoUrlArgsDbl = geoUrlArgs.replace(/&/g, '&amp;');
     await ctx.render('link', {

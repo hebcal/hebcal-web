@@ -53,7 +53,6 @@ export async function holidayPdf(ctx) {
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
-  ctx.set('Last-Modified', new Date().toUTCString());
   ctx.set('Cache-Control', 'max-age=5184000');
   ctx.response.type = 'application/pdf';
   ctx.response.etag = etag(JSON.stringify(options), {weak: true});
@@ -79,7 +78,6 @@ export async function holidayYearIndex(ctx) {
   const events = getFirstOcccurences(events0);
   const items = makeItems(events, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
-  ctx.set('Last-Modified', new Date().toUTCString());
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
@@ -271,7 +269,6 @@ export async function holidayDetail(ctx) {
   const next = occursOn.find((item) => item.ppf === 'future');
   next.ppf = 'current';
   const nextObserved = `begins ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
-  ctx.set('Last-Modified', new Date().toUTCString());
   await ctx.render('holiday-detail', {
     title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
     holiday,
