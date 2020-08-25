@@ -88,6 +88,7 @@ export async function holidayYearIndex(ctx) {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
     year,
+    year4: +year.substring(0, 4),
     isHebrewYear,
     calendarYear,
     categories,
@@ -195,7 +196,7 @@ function formatDateRange(d1, d2, showYear) {
 function formatSingleDayHtml(d, showYear) {
   const d0 = d.subtract(1, 'd');
   const iso = d.format('YYYY-MM-DD');
-  const d0str = formatSingleDay(d0, false);
+  const d0str = formatSingleDay(d0, true);
   const dayStr = formatSingleDay(d, showYear);
   // eslint-disable-next-line max-len
   return `<time itemprop="startDate" content="${iso}" datetime="${iso}" title="begins at sundown on ${d0str}">${dayStr}</time>`;

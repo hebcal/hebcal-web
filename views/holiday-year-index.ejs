@@ -7,8 +7,13 @@
 <div class="row">
 <div class="col-sm-8">
 <h2>Jewish Holidays <%=year%></h2>
-<p class="d-print-none">Dates of major and minor Jewish holidays for <%=isHebrewYear ? `Hebrew Year ${calendarYear}` : year%>. Each
-holiday page includes a brief overview of special observances and
+<p class="d-print-none">Dates of major and minor Jewish holidays for
+<% if (isHebrewYear) { %>
+Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>).
+<% } else { %>
+<%=year%>.
+<% } %>
+Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
@@ -48,11 +53,11 @@ data-ad-slot="1140358973"></ins>
 <div class="col">
 <nav class="d-print-none mb-3">
 <ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" title="<%=today.year() - 1%>" aria-label="Previous" href="/hebcal?year=<%=today.year() - 1%>&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&laquo;</span></a></li>
-<% for (let i = today.year(); i < today.year() + 10; i++) { %>
-<li class="page-item<%= i == year ? ' active' : '' %>"><a class="page-link" href="<%=i%>"><%=i%></a></li>
+<li class="page-item"><a class="page-link" title="<%=year4 - 4%>" aria-label="Previous" href="<%=year4 - 4%>" rel="nofollow"><span aria-hidden="true">&laquo;</span></a></li>
+<% for (let i = year4 - 3; i <= year4 + 3; i++) { %>
+<li class="page-item<%= i == year ? ' active' : '' %>"><a class="page-link" href="<%=i%>"<%- (i > today.year()+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
-<li class="page-item"><a class="page-link" title="<%=today.year() + 10%>" aria-label="Next" href="/hebcal?year=<%=today.year() + 10%>&amp;v=1&amp;maj=on&amp;min=on&amp;nx=on&amp;mf=on&amp;ss=on&amp;mod=on"><span aria-hidden="true">&raquo;</span></a></li>
+<li class="page-item"><a class="page-link" title="<%=year4 + 4%>" aria-label="Next" href="<%=year4 + 4%>"<%- (year4+4 > today.year()+20) ? ' rel="nofollow"' : '' %>><span aria-hidden="true">&raquo;</span></a></li>
 </ul>
 </nav>
 <% for (const [catId, category] of Object.entries(categories)) { %>
