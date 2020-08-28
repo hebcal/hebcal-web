@@ -57,7 +57,6 @@ app.on('error', (err, ctx) => {
 app.use(conditional());
 app.use(etag());
 app.use(compress({
-  threshold: 2048,
   gzip: true,
   deflate: true,
   br: true,

@@ -78,7 +78,6 @@ app.on('error', (err, ctx) => {
 });
 
 app.use(compress({
-  threshold: 2048,
   gzip: true,
   deflate: true,
   br: true,
@@ -154,6 +153,9 @@ app.use(async function router(ctx, next) {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
     await hebrewDateConverter(ctx);
+  } else if (rpath.startsWith('/shabbat/browse')) {
+    ctx.type = 'html';
+    // let serve() handle
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
   } else if (rpath === '/hebcal/del_cookie.cgi') {
