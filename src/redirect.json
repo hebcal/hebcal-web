@@ -18,6 +18,8 @@
  "/converter/converter.html": "https://www.hebcal.com/converter/",
  "/converter/converter.pl": "https://www.hebcal.com/converter/",
  "/converter/index.pl": "https://www.hebcal.com/converter/",
+ "/dist": null,
+ "/dist/": null,
  "/dist/ChangeLog.txt": null,
  "/dist/HEADER.html": null,
  "/dist/HebcalGPL.pm": null,

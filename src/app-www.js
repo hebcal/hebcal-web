@@ -30,6 +30,13 @@ import redirectMap from './redirect.json';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
+const needsTrailingSlash = {
+  '/shabbat/browse': true,
+  '/holidays': true,
+  '/ical': true,
+  '/sedrot': true,
+};
+
 const app = new Koa();
 
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
@@ -129,14 +136,14 @@ app.use(bodyParser());
 // request dispatcher
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
-  if (rpath === '/favicon.ico' || rpath.startsWith('/i/')) {
-    ctx.set('Cache-Control', 'max-age=5184000');
-    // let serve() handle this file
-  } else if (rpath === '/robots.txt') {
+  if (rpath === '/robots.txt') {
     ctx.set('Last-Modified', ctx.launchUTCString);
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/') {
     await homepage(ctx);
+  } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
+    ctx.set('Last-Modified', ctx.launchUTCString);
+    await ctx.render('dir-hidden');
   } else if (typeof redirectMap[rpath] !== 'undefined') {
     const destination = redirectMap[rpath];
     if (destination === null) {
@@ -146,9 +153,12 @@ app.use(async function router(ctx, next) {
     }
     ctx.status = 301;
     ctx.redirect(destination);
-  } else if (rpath === '/shabbat/browse' || rpath === '/holidays') {
+  } else if (needsTrailingSlash[rpath]) {
     ctx.status = 301;
     httpRedirect(ctx, `${rpath}/`);
+  } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/')) {
+    ctx.set('Cache-Control', 'max-age=5184000');
+    // let serve() handle this file
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/geo')) {
@@ -165,7 +175,7 @@ app.use(async function router(ctx, next) {
     await send(ctx, ctx.path, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
-  } else if (rpath === '/hebcal/del_cookie.cgi') {
+  } else if (rpath.startsWith('/hebcal/del_cookie')) {
     ctx.set('Cache-Control', 'private');
     const optout = (ctx.request.querystring === 'optout');
     const cookieVal = optout ? 'opt_out' : '0';
