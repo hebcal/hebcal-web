@@ -5,6 +5,7 @@ import compress from 'koa-compress';
 import createError from 'http-errors';
 import error from 'koa-error';
 import render from 'koa-ejs';
+import send from 'koa-send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import dayjs from 'dayjs';
@@ -26,6 +27,8 @@ import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogIn
 import {yahrzeitApp} from './yahrzeit';
 import {holidayDetail, holidayYearIndex, holidayPdf, holidayMainIndex} from './holidays';
 import redirectMap from './redirect.json';
+
+const DOCUMENT_ROOT = '/var/www/html';
 
 const app = new Koa();
 
@@ -143,6 +146,9 @@ app.use(async function router(ctx, next) {
     }
     ctx.status = 301;
     ctx.redirect(destination);
+  } else if (rpath === '/shabbat/browse' || rpath === '/holidays') {
+    ctx.status = 301;
+    httpRedirect(ctx, `${rpath}/`);
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
   } else if (rpath.startsWith('/geo')) {
@@ -155,7 +161,8 @@ app.use(async function router(ctx, next) {
     await hebrewDateConverter(ctx);
   } else if (rpath.startsWith('/shabbat/browse')) {
     ctx.type = 'html';
-    // let serve() handle
+    ctx.set('Cache-Control', 'public');
+    await send(ctx, ctx.path, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/shabbat')) {
     await shabbatApp(ctx);
   } else if (rpath === '/hebcal/del_cookie.cgi') {
@@ -177,9 +184,6 @@ app.use(async function router(ctx, next) {
     await hebcalApp(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
-  } else if (rpath === '/holidays') {
-    ctx.status = 301;
-    httpRedirect(ctx, `${rpath}/`);
   } else if (rpath.startsWith('/holidays/')) {
     ctx.set('Last-Modified', ctx.launchUTCString);
     if (rpath === '/holidays/') {
@@ -231,7 +235,7 @@ app.use(async function router(ctx, next) {
   await next();
 });
 
-app.use(serve('/var/www/html', {defer: true}));
+app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
 process.on('unhandledRejection', (err) => {
   logger.fatal(err);
