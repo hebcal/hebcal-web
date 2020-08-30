@@ -57,7 +57,8 @@ data-ad-slot="1140358973"></ins>
 <% for (let i = year4 - 2; i <= year4 + 2; i++) { %>
 <li class="page-item<%= i == year ? ' active' : '' %>"><a class="page-link" href="<%=i%>"<%- (i > today.year()+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
-<li class="page-item"><a class="page-link" href="<%=year4 + 3%>"<%- (year4+3 > today.year()+20) ? ' rel="nofollow"' : '' %>><%=year4 + 3%>&nbsp;&raquo;</a></li>
+<li class="page-item
+"><a class="page-link" href="<%=year4 + 3%>"<%- (year4+3 > today.year()+20) ? ' rel="nofollow"' : '' %>><%=year4 + 3%>&nbsp;&raquo;</a></li>
 </ul>
 </nav>
 <% for (const [catId, category] of Object.entries(categories)) { %>
@@ -74,7 +75,7 @@ is forbidden.</p>
 <tbody>
 <tr><th>Holiday</th><th>Dates</th><th>Description</th></tr>
 <% for (const item of items[catId]) { %>
-<tr itemscope itemtype="http://schema.org/Event"><td><a href="<%=item.id%>" itemprop="name"><%=item.name%></a></td>
+<tr><td><a href="<%=item.id%>-<%=item.d.year()%>"><%=item.name%></a></td>
 <td><%- item.dates %></td>
 <td><%=item.descrShort%></td>
 </tr>

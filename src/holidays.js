@@ -10,19 +10,17 @@ import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
 import {getDefaultHebrewYear} from './common';
 
-const today = new HDate();
-
 const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
   holidays.set(makeAnchor(key), key);
 }
 
 const events11years = HebrewCalendar.calendar({
-  year: today.getFullYear() - 1,
+  year: new HDate().getFullYear() - 1,
   isHebrewYear: true,
   numYears: 11,
 });
-const holidayBegin = getFirstOcccurences(events11years);
+const events11yearsBegin = getFirstOcccurences(events11years);
 
 const categories = {
   major: {id: 'major-holidays', name: 'Major holidays', flags: 0},
@@ -113,6 +111,7 @@ function makeItems(events, showYear) {
       id: makeAnchor(holiday),
       descrShort,
       dates: tableCellObserved(ev, d, showYear),
+      d,
     };
     items[category].push(item);
   }
@@ -199,7 +198,7 @@ function formatSingleDayHtml(d, showYear) {
   const d0str = formatSingleDay(d0, true);
   const dayStr = formatSingleDay(d, showYear);
   // eslint-disable-next-line max-len
-  return `<time itemprop="startDate" content="${iso}" datetime="${iso}" title="begins at sundown on ${d0str}">${dayStr}</time>`;
+  return `<time datetime="${iso}" title="begins at sundown on ${d0str}">${dayStr}</time>`;
 }
 
 /**
@@ -222,10 +221,14 @@ function formatDatePlusDelta(d, delta, showYear) {
   return formatDateRange(d, d2, showYear);
 }
 
+const holidayYearRe = /^([a-z-]+)-(\d{4})$/;
+
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
-  const holiday = holidays.get(base);
+  const matches = base.match(holidayYearRe);
+  const year = matches && +matches[2];
+  const holiday = matches === null ? holidays.get(base) : holidays.get(matches[1]);
   if (typeof holiday !== 'string') {
     throw createError(404, `Sorry, can't find holiday: ${base}`);
   }
@@ -245,7 +248,8 @@ export async function holidayDetail(ctx) {
   }
   const category = categories[meta.category] || {};
   const mask = category.flags || 0;
-  const ev = new HolidayEvent(today, holiday, mask);
+  const now = new Date();
+  const ev = new HolidayEvent(new HDate(now), holiday, mask);
   const descrShort = getHolidayDescription(ev, true);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrMedium = getHolidayDescription(ev, false);
@@ -255,31 +259,25 @@ export async function holidayDetail(ctx) {
     meta.items = [holiday];
   }
   makeHolidayReadings(holiday, meta);
-  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-      mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
-  const nowAbs = greg.greg2abs(new Date());
-  const occursOn = holidayBegin
-      .filter((ev) => holiday === ev.basename())
-      .map((ev) => {
-        const hd = ev.getDate();
-        const abs = hd.abs();
-        const d = dayjs(hd.greg());
-        return {
-          hd,
-          beginsWhen,
-          d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
-          desc: ev.render(),
-          basename: ev.basename(),
-          ppf: abs < nowAbs ? 'past' : 'future',
-        };
-      });
-  const next = occursOn.find((item) => item.ppf === 'future');
+  const holidayBegin = year ? getFirstOcccurences(HebrewCalendar.calendar({
+    year: year - 3,
+    isHebrewYear: false,
+    numYears: 10,
+  })) : events11yearsBegin;
+  const occursOn = makeOccursOn(holidayBegin, ev, now);
+  const next = year ? occursOn.find((item) => item.d.year() === year) :
+    occursOn.find((item) => item.ppf === 'future');
   next.ppf = 'current';
-  const nextObserved = `begins ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
+  const verb = year && next.d.isBefore(dayjs(now)) ? 'began' : 'begins';
+  const nextObserved = `${verb} ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
+  const title = year ?
+    `${holiday} ${year} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar` :
+    `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`;
   await ctx.render('holiday-detail', {
-    title: `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`,
+    title,
+    year,
     holiday,
-    holidayAnchor: base,
+    holidayAnchor: makeAnchor(holiday),
     hebrew,
     descrShort,
     descrMedium,
@@ -287,10 +285,42 @@ export async function holidayDetail(ctx) {
     categoryId: category.id,
     categoryName: category.name,
     next_observed_meta: nextObserved,
-    next_observed_para: `<p>${holiday} ${nextObserved}.<p>`,
+    next_observed_para: `<p class="lead">${holiday} ${nextObserved}.</p>`,
     occursOn,
     meta,
+    jsonLD: JSON.stringify(getJsonLD(next, descrMedium)),
   });
+}
+
+/**
+ * @param {Event[]} events
+ * @param {HolidayEvent} ev0
+ * @param {Date} now
+ * @return {any[]}
+ */
+function makeOccursOn(events, ev0, now) {
+  const holiday = ev0.getDesc();
+  const mask = ev0.getFlags();
+  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+    mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
+  const nowAbs = greg.greg2abs(now);
+  const occursOn = events
+    .filter((ev) => holiday === ev.basename())
+    .map((ev) => {
+      const hd = ev.getDate();
+      const abs = hd.abs();
+      const d = dayjs(hd.greg());
+      return {
+        id: makeAnchor(holiday),
+        hd,
+        beginsWhen,
+        d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
+        desc: ev.render(),
+        basename: ev.basename(),
+        ppf: abs < nowAbs ? 'past' : 'future',
+      };
+    });
+  return occursOn;
 }
 
 function makeHolidayReadings(holiday, meta) {
@@ -347,6 +377,10 @@ function makeHolidayReadings(holiday, meta) {
   }
 }
 
+/**
+ * @param {Event[]} events
+ * @return {Event[]}
+ */
 function getFirstOcccurences(events) {
   let prevYear = -1;
   let seen = new Set();
@@ -415,4 +449,17 @@ export async function holidayMainIndex(ctx) {
     categories,
     items,
   });
+}
+
+function getJsonLD(item, description) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': item.basename,
+    'startDate': item.d.format('YYYY-MM-DD'),
+    'endDate': item.d.format('YYYY-MM-DD'),
+    'description': description,
+    'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
+    'eventStatus': 'https://schema.org/EventScheduled',
+  }
 }

@@ -1,5 +1,6 @@
 <% include partials/header.ejs %>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=next_observed_meta%>. <%=descrMedium%>">
+<script type="application/ld+json"><%- jsonLD %></script>
 <script>
   WebFontConfig = {
     google: { families: [ 'Alef' ] }
@@ -24,9 +25,9 @@
 <div class="col-sm-10">
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
-<h2><%=holiday%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%></span></h2>
-<p><%=descrLong%></p>
+<h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%></span></h2>
 <%-next_observed_para%>
+<p><%=descrLong%></p>
 
 <p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=meta.about.name%>" href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
 <% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
@@ -75,7 +76,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <%=holiday%> begins on:
 <ul>
 <% occursOn.forEach((item) => { %>
-<li><span class="<%=item.ppf%>"><a href="/hebcal?v=1&amp;year=<%=item.d.format('YYYY')%>&amp;month=<%=item.d.format('M')%>&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, D MMMM YYYY') %></time></a> <%= item.beginsWhen %> (<%= item.hd.toString() %>)</span>
+<li><span class="<%=item.ppf%>"><a href="<%=item.id%>-<%=item.d.format('YYYY')%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, D MMMM YYYY') %></time></a> <%= item.beginsWhen %> (<%= item.hd.toString() %>)</span>
 <% }); %>
 </ul>
 

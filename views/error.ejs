@@ -105,15 +105,13 @@ code {
 <body>
 <div class="container">
 <h1>Error <%= status %></h1>
-<p>Looks like something broke!</p>
-<h2>Message:</h2>
-<pre><code><%= error %></code></pre>
+<p><%= error %></p>
 <% if (env === 'development') { %>
 <h2>Stack:</h2>
 <pre><code><%= stack %></code></pre>
 <% } %>
 <hr>
-<p><%= new Date().toString() %></p>
+<p><small><%= new Date().toString() %></small></p>
 </div>
 </body>
 </html>

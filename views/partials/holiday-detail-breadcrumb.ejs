@@ -4,7 +4,12 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="/holidays/">Holidays</a></li>
   <li class="breadcrumb-item"><a href="/holidays/#<%=categoryId%>"><%=categoryName%></a></li>
+<% if (year) { %>
+  <li class="breadcrumb-item"><a href="<%=holidayAnchor%>"><%=holiday%></a></li>
+  <li class="breadcrumb-item active"><%=year%></li>
+<% } else { %>
   <li class="breadcrumb-item active"><%=holiday%></li>
+<% } %>
 </ol>
 </nav>
 </div><!-- .d-none d-sm-block -->
