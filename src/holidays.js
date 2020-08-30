@@ -230,7 +230,7 @@ export async function holidayDetail(ctx) {
   const year = matches && +matches[2];
   const holiday = matches === null ? holidays.get(base) : holidays.get(matches[1]);
   if (typeof holiday !== 'string') {
-    throw createError(404, `Sorry, can't find holiday: ${base}`);
+    throw createError(404, `Holiday not found: ${base}`);
   }
   const meta = getHolidayMeta(holiday);
   const holidayBegin = year ? getFirstOcccurences(HebrewCalendar.calendar({
@@ -244,6 +244,9 @@ export async function holidayDetail(ctx) {
   const occursOn = makeOccursOn(holidayBegin, holiday, mask, now);
   const next = year ? occursOn.find((item) => item.d.year() === year) :
     occursOn.find((item) => item.ppf === 'future');
+  if (typeof next === 'undefined' && year) {
+    throw createError(404, `${holiday} does not occur during year ${year}`);
+  }
   next.ppf = 'current';
   const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast);
