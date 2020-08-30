@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HolidayEvent, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
+import {HDate, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories, getCalendarTitle} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
@@ -232,44 +232,26 @@ export async function holidayDetail(ctx) {
   if (typeof holiday !== 'string') {
     throw createError(404, `Sorry, can't find holiday: ${base}`);
   }
-  const meta = holidayMeta[holiday];
-  if (typeof meta === 'undefined' || typeof meta.about.href === 'undefined') {
-    throw createError(500, `Internal error; broken configuration for: ${holiday}`);
-  }
-  meta.about.name = sourceName(meta.about.href);
-  if (meta.wikipedia && meta.wikipedia.href) {
-    meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
-  }
-  if (Array.isArray(meta.books)) {
-    for (const book of meta.books) {
-      const colon = book.text.indexOf(':');
-      book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
-    }
-  }
-  const category = categories[meta.category] || {};
-  const mask = category.flags || 0;
-  const now = new Date();
-  const ev = new HolidayEvent(new HDate(now), holiday, mask);
-  const descrShort = getHolidayDescription(ev, true);
-  const wikipediaText = meta.wikipedia && meta.wikipedia.text;
-  const descrMedium = getHolidayDescription(ev, false);
-  const descrLong = wikipediaText || descrMedium;
-  const hebrew = Locale.gettext(holiday, 'he');
-  if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
-    meta.items = [holiday];
-  }
-  makeHolidayReadings(holiday, meta);
+  const meta = getHolidayMeta(holiday);
   const holidayBegin = year ? getFirstOcccurences(HebrewCalendar.calendar({
     year: year - 3,
     isHebrewYear: false,
     numYears: 10,
   })) : events11yearsBegin;
-  const occursOn = makeOccursOn(holidayBegin, ev, now);
+  const category = categories[meta.category] || {};
+  const mask = category.flags || 0;
+  const now = new Date();
+  const occursOn = makeOccursOn(holidayBegin, holiday, mask, now);
   const next = year ? occursOn.find((item) => item.d.year() === year) :
     occursOn.find((item) => item.ppf === 'future');
   next.ppf = 'current';
-  const verb = year && next.d.isBefore(dayjs(now)) ? 'began' : 'begins';
-  const nextObserved = `${verb} ${next.beginsWhen} on ` + next.d.format('ddd, D MMMM YYYY');
+  const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
+  const nextObserved = makeNextObserved(next, isPast);
+  const descrShort = getHolidayDescription(next.event, true);
+  const descrMedium = getHolidayDescription(next.event, false);
+  const wikipediaText = meta.wikipedia && meta.wikipedia.text;
+  const descrLong = wikipediaText || descrMedium;
+  const hebrew = Locale.gettext(holiday, 'he');
   const title = year ?
     `${holiday} ${year} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar` :
     `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`;
@@ -284,42 +266,92 @@ export async function holidayDetail(ctx) {
     descrLong,
     categoryId: category.id,
     categoryName: category.name,
-    next_observed_meta: nextObserved,
-    next_observed_para: `<p class="lead">${holiday} ${nextObserved}.</p>`,
+    nextObserved,
     occursOn,
     meta,
     jsonLD: JSON.stringify(getJsonLD(next, descrMedium)),
   });
 }
 
+function getHolidayMeta(holiday) {
+  const meta = holidayMeta[holiday];
+  if (typeof meta === 'undefined' || typeof meta.about.href === 'undefined') {
+    throw createError(500, `Internal error; broken configuration for: ${holiday}`);
+  }
+  meta.about.name = sourceName(meta.about.href);
+  if (meta.wikipedia && meta.wikipedia.href) {
+    meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
+  }
+  if (Array.isArray(meta.books)) {
+    for (const book of meta.books) {
+      const colon = book.text.indexOf(':');
+      book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
+    }
+  }
+  if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
+    meta.items = [holiday];
+  }
+  makeHolidayReadings(holiday, meta);
+  return meta;
+}
+
+const holidayDuration = {
+  'Rosh Hashana': 2,
+  'Chanukah': 8,
+  'Sukkot': 6,
+  'Pesach': 8,
+  'Shavuot': 2,
+};
+
+/**
+ * @param {any} item
+ * @param {boolean} isPast
+ * @return {string}
+ */
+function makeNextObserved(item, isPast) {
+  const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
+  const dateStr = item.d.format('ddd, D MMMM YYYY');
+  const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
+  const nextObserved = `${verb}${beginsWhen} on ${dateStr}`;
+  if (!item.duration) {
+    return nextObserved;
+  }
+  const endVerb = isPast ? 'ended' : 'ends';
+  const endObserved = ` and ${endVerb} at nightfall on ` + item.d.add(item.duration, 'd').format('ddd, D MMMM YYYY');
+  return nextObserved + endObserved;
+}
+
 /**
  * @param {Event[]} events
- * @param {HolidayEvent} ev0
+ * @param {string} holiday
+ * @param {number} mask
  * @param {Date} now
  * @return {any[]}
  */
-function makeOccursOn(events, ev0, now) {
-  const holiday = ev0.getDesc();
-  const mask = ev0.getFlags();
+function makeOccursOn(events, holiday, mask, now) {
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
     mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
   const nowAbs = greg.greg2abs(now);
+  const duration0 = (mask === flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
+    (holidayDuration[holiday] || 1);
   const occursOn = events
-    .filter((ev) => holiday === ev.basename())
-    .map((ev) => {
-      const hd = ev.getDate();
-      const abs = hd.abs();
-      const d = dayjs(hd.greg());
-      return {
-        id: makeAnchor(holiday),
-        hd,
-        beginsWhen,
-        d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
-        desc: ev.render(),
-        basename: ev.basename(),
-        ppf: abs < nowAbs ? 'past' : 'future',
-      };
-    });
+      .filter((ev) => holiday === ev.basename())
+      .map((ev) => {
+        const hd = ev.getDate();
+        const abs = hd.abs();
+        const d = dayjs(hd.greg());
+        return {
+          id: makeAnchor(holiday),
+          hd,
+          beginsWhen,
+          d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
+          desc: ev.render(),
+          basename: ev.basename(),
+          ppf: abs < nowAbs ? 'past' : 'future',
+          duration: mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0,
+          event: ev,
+        };
+      });
   return occursOn;
 }
 
@@ -457,9 +489,9 @@ function getJsonLD(item, description) {
     '@type': 'Event',
     'name': item.basename,
     'startDate': item.d.format('YYYY-MM-DD'),
-    'endDate': item.d.format('YYYY-MM-DD'),
+    'endDate': item.d.add(item.duration, 'd').format('YYYY-MM-DD'),
     'description': description,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',
-  }
+  };
 }
