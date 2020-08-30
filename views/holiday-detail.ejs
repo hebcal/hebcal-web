@@ -74,11 +74,23 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% } // meta.reading %>
 
 <h3 id="dates">Dates for <%=holiday%></h3>
-<ul>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+<tr><th>Holiday</th><th>Starts</th><th>Ends</th><th>Hebrew Date</th></tr>
+</thead>
+<tbody>
 <% occursOn.forEach((item) => { %>
-<li><span class="<%=item.ppf%>"><a href="<%=item.id%>-<%=item.d.format('YYYY')%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, D MMMM YYYY') %></time></a> <%= item.beginsWhen %> (<%= item.hd.toString() %>)</span>
+<tr class="<%=item.ppf%>">
+<td><a href="<%=item.id%>-<%=item.d.format('YYYY')%>"><%=holiday%> <%=item.d.format('YYYY')%></a></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, MMM D') %></time></td>
+<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%= item.endD.format('ddd, MMM D') %></time></td>
+<td><%=item.hd.toString()%></td>
+</tr>
 <% }); %>
-</ul>
+</tbody>
+</table>
+</div>
 
 <% if (typeof meta.books !== 'undefined') { %>
 <h3 id="books">Recommended Books</h3>

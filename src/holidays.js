@@ -324,7 +324,7 @@ function makeNextObserved(item, isPast) {
   const endVerb = isPast ? 'ended' : 'ends';
   const endWhen = isPast ? '' : ' at nightfall';
   const endObservedPrefix = ` and ${endVerb}${endWhen} on `;
-  const end = item.d.add(item.duration, 'd');
+  const end = item.endD;
   const endIso = end.format('YYYY-MM-DD');
   const endObserved = endObservedPrefix + end.format('D-MMM-YYYY');
   const endObservedHtml = endObservedPrefix + `<strong><time datetime="${endIso}">` +
@@ -350,16 +350,19 @@ function makeOccursOn(events, holiday, mask, now) {
       .map((ev) => {
         const hd = ev.getDate();
         const abs = hd.abs();
-        const d = dayjs(hd.greg());
+        const d0 = dayjs(hd.greg());
+        const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
+        const duration = mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0;
         return {
           id: makeAnchor(holiday),
           hd,
           beginsWhen,
-          d: beginsWhen === 'at sundown' ? d.subtract(1, 'd') : d,
+          d,
+          duration,
+          endD: d.add(duration, 'd'),
           desc: ev.render(),
           basename: ev.basename(),
           ppf: abs < nowAbs ? 'past' : 'future',
-          duration: mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0,
           event: ev,
         };
       });
@@ -500,7 +503,7 @@ function getJsonLD(item, description) {
     '@type': 'Event',
     'name': item.basename,
     'startDate': item.d.format('YYYY-MM-DD'),
-    'endDate': item.d.add(item.duration, 'd').format('YYYY-MM-DD'),
+    'endDate': item.endD.format('YYYY-MM-DD'),
     'description': description,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',

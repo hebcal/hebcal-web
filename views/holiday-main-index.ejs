@@ -58,14 +58,18 @@ is forbidden.</p>
 <% } // major-holidays %>
 <div class="table-responsive">
 <table class="table table-sm table-striped">
+<colgroup>
 <col style="width:180px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
-<tbody>
+</colgroup>
+<thead>
 <tr><th>Holiday</th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
 <th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%>"><%=yr%></a>
 <br><small class="text-muted"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
 <% } %>
 </tr>
+</thead>
+<tbody>
 <% for (const [holiday,arr] of Object.entries(items[catId])) { %>
 <% let first = arr.find((item) => typeof item !== 'undefined'); %>
 <tr><td><a href="<%=first.id%>" title="<%=first.descrShort%>"><%=holiday%></a></td>
