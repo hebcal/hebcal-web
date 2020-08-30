@@ -320,7 +320,8 @@ function makeNextObserved(item, isPast) {
   const nextObserved = `${verb}${beginsWhen} on ${dateStrShort}`;
   const iso = item.d.format('YYYY-MM-DD');
   const dateStrLong = item.d.format('dddd, D MMMM YYYY');
-  const nextObservedHtml = `${verb}${beginsWhen} on <strong><time datetime="${iso}">${dateStrLong}</time></strong>`;
+  // eslint-disable-next-line max-len
+  const nextObservedHtml = `${verb}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
   if (!item.duration) {
     return [nextObserved, nextObservedHtml];
   }
@@ -330,7 +331,7 @@ function makeNextObserved(item, isPast) {
   const end = item.endD;
   const endIso = end.format('YYYY-MM-DD');
   const endObserved = endObservedPrefix + end.format('D-MMM-YYYY');
-  const endObservedHtml = endObservedPrefix + `<strong><time datetime="${endIso}">` +
+  const endObservedHtml = endObservedPrefix + `<strong class="text-burgundy"><time datetime="${endIso}">` +
     end.format('dddd, D MMMM YYYY') + '</time></strong>';
   return [nextObserved + endObserved, nextObservedHtml + endObservedHtml];
 }
