@@ -246,7 +246,7 @@ export async function holidayDetail(ctx) {
     occursOn.find((item) => item.ppf === 'future');
   next.ppf = 'current';
   const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
-  const nextObserved = makeNextObserved(next, isPast);
+  const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = getHolidayDescription(next.event, false);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
@@ -267,6 +267,8 @@ export async function holidayDetail(ctx) {
     categoryId: category.id,
     categoryName: category.name,
     nextObserved,
+    nextObservedHtml,
+    upcomingHebrewYear: next.hd.getFullYear(),
     occursOn,
     meta,
     jsonLD: JSON.stringify(getJsonLD(next, descrMedium)),
@@ -306,19 +308,28 @@ const holidayDuration = {
 /**
  * @param {any} item
  * @param {boolean} isPast
- * @return {string}
+ * @return {string[]}
  */
 function makeNextObserved(item, isPast) {
   const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
-  const dateStr = item.d.format('ddd, D MMMM YYYY');
+  const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
-  const nextObserved = `${verb}${beginsWhen} on ${dateStr}`;
+  const nextObserved = `${verb}${beginsWhen} on ${dateStrShort}`;
+  const iso = item.d.format('YYYY-MM-DD');
+  const dateStrLong = item.d.format('dddd, D MMMM YYYY');
+  const nextObservedHtml = `${verb}${beginsWhen} on <strong><time datetime="${iso}">${dateStrLong}</time></strong>`;
   if (!item.duration) {
-    return nextObserved;
+    return [nextObserved, nextObservedHtml];
   }
   const endVerb = isPast ? 'ended' : 'ends';
-  const endObserved = ` and ${endVerb} at nightfall on ` + item.d.add(item.duration, 'd').format('ddd, D MMMM YYYY');
-  return nextObserved + endObserved;
+  const endWhen = isPast ? '' : ' at nightfall';
+  const endObservedPrefix = ` and ${endVerb}${endWhen} on `;
+  const end = item.d.add(item.duration, 'd');
+  const endIso = end.format('YYYY-MM-DD');
+  const endObserved = endObservedPrefix + end.format('D-MMM-YYYY');
+  const endObservedHtml = endObservedPrefix + `<strong><time datetime="${endIso}">` +
+    end.format('dddd, D MMMM YYYY') + '</time></strong>';
+  return [nextObserved + endObserved, nextObservedHtml + endObservedHtml];
 }
 
 /**
