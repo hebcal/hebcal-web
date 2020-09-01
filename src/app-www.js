@@ -21,7 +21,7 @@ import {hdateJavascript, hdateXml, parshaRss} from './hdate';
 import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
-import {parshaDetail} from './sedrot';
+import {parshaDetail, parshaIndex} from './sedrot';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
   httpRedirect} from './common';
@@ -243,7 +243,11 @@ app.use(async function router(ctx, next) {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
   } else if (rpath.startsWith('/sedrot/')) {
-    await parshaDetail(ctx);
+    if (rpath === '/sedrot/') {
+      await parshaIndex(ctx);
+    } else {
+      await parshaDetail(ctx);
+    }
   }
   await next();
 });

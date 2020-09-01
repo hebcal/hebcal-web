@@ -1,11 +1,30 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, Locale, Sedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {addSefariaLinksToLeyning} from './common';
 import dayjs from 'dayjs';
+
+export async function parshaIndex(ctx) {
+  const saturday = dayjs().day(6);
+  const hd = new HDate(saturday.toDate());
+  const hyear = hd.getFullYear();
+  const q = ctx.request.query;
+  const il = q.i === 'on';
+  const sedra = new Sedra(hyear, il);
+  const parsha0 = sedra.lookup(hd);
+  const parsha = parsha0.chag ? null : parsha0.parsha.join('-');
+  const parshaHref = parsha0.chag ? null : makeAnchor(parsha);
+  await ctx.render('parsha-index', {
+    title: 'Torah Readings | Hebcal Jewish Calendar',
+    il,
+    saturday,
+    parsha,
+    parshaHref,
+  });
+}
 
 const sedrot = new Map();
 for (const key of Object.keys(leyning.parshiyot)) {
@@ -37,7 +56,7 @@ export async function parshaDetail(ctx) {
   }
   const dt = new Date();
   const hd = new HDate(dt);
-  const hyear = hd.getFullYear();
+  const hyear = year ? year + 3760 : hd.getFullYear();
   const q = ctx.request.query;
   const il = q.i === 'on';
   const parsha = Object.assign({anchor: parshaAnchor, name: parshaName}, leyning.parshiyot[parshaName]);
@@ -58,9 +77,13 @@ export async function parshaDetail(ctx) {
   const parshaEv = getParshaEvent(parshaName, events, il, hyear);
   const reading = leyning.getLeyningForParshaHaShavua(parshaEv);
   addSefariaLinksToLeyning(reading.fullkriyah, false);
-  const cycleStartYear = leyning.Triennial.getCycleStartYear(hyear);
-  const triennial = il ? null : leyning.getTriennialForParshaHaShavua(parshaEv);
-  // addSefariaLinksToLeyning(tri, false);
+  let triennial;
+  if (!il) {
+    // const tri = leyning.getTriennial(hyear);
+    const cycleStartYear = leyning.Triennial.getCycleStartYear(hyear);
+    triennial = leyning.getTriennialForParshaHaShavua(parshaEv);
+    addSefariaLinksToLeyning(triennial, false);
+  }
   await ctx.render('parsha-detail', {
     title: `${parsha.name} - Torah Portion - ${parsha.hebrew} | Hebcal Jewish Calendar`,
     parsha,
@@ -71,6 +94,11 @@ export async function parshaDetail(ctx) {
     jsonLD: '{}',
     year: year,
   });
+}
+
+function makeBibleOrtUrl(parsha) {
+  // eslint-disable-next-line max-len
+  return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${parsha.num}`;
 }
 
 function getParshaEvent(parshaName, events, il, hyear) {

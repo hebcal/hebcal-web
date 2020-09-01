@@ -48,6 +48,20 @@ title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%><
 </ol>
 <% } // reading.fullkriyah %>
 </div><!-- fk -->
+<% if (!il) { %>
+<% if (year) { %>
+<div class="col-4 col-sm-3">
+<h5>Triennial</h5>
+<ol class="list-unstyled">
+<%    for (const aliyah of Object.values(triennial)) {  %>
+<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<%       if (aliyah.v) { %>
+<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<%       } // aliyah.v %>
+<%    } // ... for %>
+</ol>
+</div>
+<% } else { // year %>
 <div class="col-4 col-sm-3">
 <h5>Triennial Year&nbsp;1
 <br><span class="h6 small text-muted">12 Sep 2020</span></h5>
@@ -82,6 +96,8 @@ title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%><
 - <span class="text-muted">01 Oct 2022</span>
 </ul>
 </div><!-- tri3 -->
+<% } // !year %>
+<% } // !il %>
 </div><!-- .row -->
 <div class="row">
 <div class="col">
