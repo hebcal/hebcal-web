@@ -27,7 +27,8 @@ Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%></a>
-<a class="outbound d-print-none" data-toggle="tooltip" id="ort-audio" rel="nofollow" href="http://www.bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=5&amp;chapter=31&amp;verse=1&amp;portion=52" title="Tikkun &amp; audio from World ORT">
+<a class="outbound d-print-none" data-toggle="tooltip" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
+href="<%=ortUrl%>">
   <svg class="icon"><use xlink:href="/i/sprite3.svg#bi-volume-up-fill"></use></svg>
 </a>
 </h4>
@@ -35,7 +36,7 @@ title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%><
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-12 col-sm-3">
+<div class="col-12 col-sm-<%=year ? 6: 3%>">
 <h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
@@ -50,7 +51,7 @@ title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%><
 </div><!-- fk -->
 <% if (!il) { %>
 <% if (year) { %>
-<div class="col-4 col-sm-3">
+<div class="col-sm-6">
 <h5>Triennial</h5>
 <ol class="list-unstyled">
 <%    for (const aliyah of Object.values(triennial)) {  %>

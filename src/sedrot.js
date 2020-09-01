@@ -93,10 +93,29 @@ export async function parshaDetail(ctx) {
     triennial,
     jsonLD: '{}',
     year: year,
+    ortUrl: makeBibleOrtUrl(parsha),
   });
 }
 
+/**
+ * @param {string} book
+ * @return {number}
+ */
+function getBookId(book) {
+  switch (book.toLowerCase()) {
+    case 'genesis': return 1;
+    case 'exodus': return 2;
+    case 'leviticus': return 3;
+    case 'numbers': return 4;
+    case 'deuteronomy': return 5;
+    default: return 0;
+  }
+}
+
 function makeBibleOrtUrl(parsha) {
+  const chapVerse = parsha.fullkriyah['1'].b;
+  const [chapter, verse] = chapVerse.split(':');
+  const book = getBookId(parsha.book);
   // eslint-disable-next-line max-len
   return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${parsha.num}`;
 }
