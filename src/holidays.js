@@ -8,7 +8,7 @@ import holidayMeta from './holidays.json';
 import dayjs from 'dayjs';
 import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
-import {getDefaultHebrewYear} from './common';
+import {getDefaultHebrewYear, addSefariaLinksToLeyning} from './common';
 
 const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
@@ -382,46 +382,36 @@ function makeHolidayReadings(holiday, meta) {
     const reading = leyning.getLeyningForHolidayKey(item);
     if (typeof reading !== 'undefined') {
       if (reading.fullkriyah) {
-        for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {
-          reading.fullkriyah[num].num = num == 'M' ? 'maf' : num;
-          const begin = aliyah.b.split(':');
-          const end = aliyah.e.split(':');
-          const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
-          const verses = `${aliyah.b}-${endChapVerse}`;
-          reading.fullkriyah[num].verses = `${aliyah.k} ${verses}`;
-          const sefariaVerses = verses.replace(/:/g, '.');
-          const url = `https://www.sefaria.org/${aliyah.k}.${sefariaVerses}?lang=bi&aliyot=0`;
-          reading.fullkriyah[num].href = url;
-        }
+        addSefariaLinksToLeyning(reading.fullkriyah, true);
       }
-      meta.reading[item] = reading;
+      const itemReading = meta.reading[item] = reading;
       const hebrew = Locale.lookupTranslation(item, 'he');
       if (typeof hebrew === 'string') {
-        meta.reading[item].hebrew = hebrew;
+        itemReading.hebrew = hebrew;
       }
-      meta.reading[item].id = makeAnchor(item);
+      itemReading.id = makeAnchor(item);
       if (meta.links && meta.links.torah && meta.links.torah[item]) {
-        meta.reading[item].torahHref = meta.links.torah[item];
+        itemReading.torahHref = meta.links.torah[item];
       } else if (meta.about.torah) {
-        meta.reading[item].torahHref = meta.about.torah;
+        itemReading.torahHref = meta.about.torah;
       }
       if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
-        meta.reading[item].haftaraHref = meta.links.haftara[item];
+        itemReading.haftaraHref = meta.links.haftara[item];
       } else if (meta.about.haftara) {
-        meta.reading[item].haftaraHref = meta.about.haftara;
+        itemReading.haftaraHref = meta.about.haftara;
       }
       if (item.startsWith(holiday)) {
         if (meta.items.length === 1 || item === holiday) {
-          meta.reading[item].shortName = 'Tanakh';
+          itemReading.shortName = 'Tanakh';
         } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
-          meta.reading[item].shortName = item.substring(holiday.length + 1);
+          itemReading.shortName = item.substring(holiday.length + 1);
         } else if (item.startsWith(`${holiday} (`)) {
-          meta.reading[item].shortName = item.substring(holiday.length + 2, item.length - 1);
+          itemReading.shortName = item.substring(holiday.length + 2, item.length - 1);
         } else {
-          meta.reading[item].shortName = 'Day ' + item.substring(holiday.length + 1);
+          itemReading.shortName = 'Day ' + item.substring(holiday.length + 1);
         }
       } else {
-        meta.reading[item].shortName = item;
+        itemReading.shortName = item;
       }
     }
   }

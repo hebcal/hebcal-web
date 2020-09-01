@@ -507,3 +507,23 @@ export function httpRedirect(ctx, rpath) {
   const host = ctx.get('host') || 'www.hebcal.com';
   ctx.redirect(`${proto}://${host}${rpath}`);
 }
+
+/**
+ * Makes Sefaria links
+ * @param {any} aliyot
+ * @param {boolean} showBook
+ */
+export function addSefariaLinksToLeyning(aliyot, showBook) {
+  for (const [num, aliyah] of Object.entries(aliyot)) {
+    aliyot[num].num = num == 'M' ? 'maf' : num;
+    const begin = aliyah.b.split(':');
+    const end = aliyah.e.split(':');
+    const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
+    const verses = `${aliyah.b}-${endChapVerse}`;
+    aliyot[num].verses = showBook ? `${aliyah.k} ${verses}` : verses;
+    const sefariaVerses = verses.replace(/:/g, '.');
+    const sefAliyot = showBook ? '0' : '1';
+    const url = `https://www.sefaria.org/${aliyah.k}.${sefariaVerses}?lang=bi&aliyot=${sefAliyot}`;
+    aliyot[num].href = url;
+  }
+}

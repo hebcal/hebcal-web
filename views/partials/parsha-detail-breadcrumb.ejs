@@ -1,0 +1,16 @@
+<div class="d-print-none mt-2">
+<div class="d-none d-sm-block">
+<nav>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/sedrot/">Torah Readings</a></li>
+  <li class="breadcrumb-item"><a href="/sedrot/#<%=parsha.book%>"><%=parsha.book%></a></li>
+<% if (year) { %>
+  <li class="breadcrumb-item"><a href="<%=parsha.id%>"><%=parsha.name%></a></li>
+  <li class="breadcrumb-item active"><%=year%></li>
+<% } else { %>
+  <li class="breadcrumb-item active"><%=parsha.name%></li>
+<% } %>
+</ol>
+</nav>
+</div><!-- .d-none d-sm-block -->
+</div><!-- .d-print-none -->

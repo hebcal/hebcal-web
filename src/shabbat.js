@@ -173,20 +173,23 @@ function makePropsForFullHtml(ctx) {
     }
   });
   const firstCandles = items.find((i) => i.cat === 'candles');
+  const parashaItem = items.find((i) => i.cat === 'parashat');
   return {
     summary: briefText.join('. '),
-    jsonLD: firstCandles && location.getGeoId() ? JSON.stringify(getJsonLD(firstCandles, location)) : '',
+    jsonLD: firstCandles && location.getGeoId() ?
+      JSON.stringify(getJsonLD(firstCandles, parashaItem && parashaItem.desc, location)) :
+      '',
     locationName: location.getName(),
     xtra_html: typeaheadScript + tooltipScript,
   };
 }
 
-function getJsonLD(item, location) {
+function getJsonLD(item, torahPortion, location) {
   const admin1 = location.admin1 || '';
-  return {
+  const result = {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    'name': `Candle Lighting for ${location.getShortName()} at ${item.fmtTime}`,
+    'name': `Shabbat candle lighting for ${location.getShortName()}`,
     'startDate': `${item.isoDate}T${item.isoTime}:00`,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',
@@ -206,6 +209,10 @@ function getJsonLD(item, location) {
       },
     },
   };
+  if (torahPortion) {
+    result.description = `Torah portion: ${torahPortion}`;
+  }
+  return result;
 }
 
 /**
