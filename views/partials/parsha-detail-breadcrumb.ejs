@@ -5,7 +5,7 @@
   <li class="breadcrumb-item"><a href="/sedrot/">Torah Readings</a></li>
   <li class="breadcrumb-item"><a href="/sedrot/#<%=parsha.book%>"><%=parsha.book%></a></li>
 <% if (year) { %>
-  <li class="breadcrumb-item"><a href="<%=parsha.id%>"><%=parsha.name%></a></li>
+  <li class="breadcrumb-item"><a href="<%=parsha.anchor%>"><%=parsha.name%></a></li>
   <li class="breadcrumb-item active"><%=year%></li>
 <% } else { %>
   <li class="breadcrumb-item active"><%=parsha.name%></li>
