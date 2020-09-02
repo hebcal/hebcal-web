@@ -61,7 +61,15 @@ export async function parshaDetail(ctx) {
   const il = q.i === 'on';
   const parsha = Object.assign({anchor: parshaAnchor, name: parshaName}, leyning.parshiyot[parshaName]);
   /** @todo needs to be adjusted for combined, which are all num >= 100 */
-  parsha.ordinal = Locale.ordinal(parsha.num);
+  if (parsha.combined) {
+    const [p1, p2] = parshaName.split('-');
+    parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
+    const n1 = leyning.parshiyot[p1].num;
+    parsha.ordinal = Locale.ordinal(n1) + ' and ' + Locale.ordinal(n1 + 1);
+  } else {
+    parsha.ordinal = Locale.ordinal(parsha.num);
+  }
+  console.log(parsha);
   const options = {
     noHolidays: true,
     sedrot: true,
