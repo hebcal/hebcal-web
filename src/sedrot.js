@@ -27,19 +27,54 @@ export async function parshaIndex(ctx) {
 }
 
 const sedrot = new Map();
-for (const key of Object.keys(leyning.parshiyot)) {
-  const anchor = makeAnchor(key);
-  sedrot.set(anchor, key);
-  sedrot.set(anchor.replace(/-/g, ''), key);
+const doubled = new Map();
+for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
+  const anchor = makeAnchor(parshaName);
+  sedrot.set(anchor, parshaName);
+  sedrot.set(anchor.replace(/-/g, ''), parshaName);
+  if (reading.combined) {
+    const [p1, p2] = parshaName.split('-');
+    doubled.set(p1, parshaName);
+    doubled.set(p2, parshaName);
+  }
 }
 
-const doubled = new Map();
-for (const [name, reading] of Object.entries(leyning.parshiyot)) {
-  if (reading.combined) {
-    const [p1, p2] = name.split('-');
-    doubled.set(p1, name);
-    doubled.set(p2, name);
+const options15yr = {
+  year: new Date().getFullYear() - 1,
+  numYears: 15,
+  noHolidays: true,
+  sedrot: true,
+};
+const allEvts15yrIsrael = HebrewCalendar.calendar(Object.assign({il: true}, options15yr));
+const allEvts15yrDiaspora = HebrewCalendar.calendar(Object.assign({il: false}, options15yr));
+const evts15yrIsrael = new Map();
+const evts15yrDiaspora = new Map();
+for (const parshaName of Object.keys(leyning.parshiyot)) {
+  evts15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
+  evts15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
+}
+
+/**
+ * Returns Parsha events during 15 year period that match this parshaName
+ * @param {string} parshaName
+ * @param {boolean} il
+ * @return {Event[]}
+ */
+function get15yrEvents(parshaName, il) {
+  const events = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
+  const parsha = leyning.parshiyot[parshaName];
+  const prefix = 'Parashat ';
+  const descs = [prefix + parshaName];
+  if (parsha.combined) {
+    const [p1, p2] = parshaName.split('-');
+    descs.push(prefix + p1, prefix + p2);
+  } else {
+    const pair = doubled.get(parshaName);
+    if (pair) {
+      descs.push(prefix + pair);
+    }
   }
+  return events.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
 }
 
 const parshaYearRe = /^([a-z-]+)-(\d{4})$/;
@@ -60,7 +95,6 @@ export async function parshaDetail(ctx) {
   const q = ctx.request.query;
   const il = q.i === 'on';
   const parsha = Object.assign({anchor: parshaAnchor, name: parshaName}, leyning.parshiyot[parshaName]);
-  /** @todo needs to be adjusted for combined, which are all num >= 100 */
   if (parsha.combined) {
     const [p1, p2] = parshaName.split('-');
     parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
@@ -69,7 +103,6 @@ export async function parshaDetail(ctx) {
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num);
   }
-  console.log(parsha);
   const options = {
     noHolidays: true,
     sedrot: true,
@@ -82,13 +115,23 @@ export async function parshaDetail(ctx) {
     options.end = new Date(dt.getTime() + (365 * 24 * 60 * 60 * 1000));
   }
   const events = HebrewCalendar.calendar(options);
+  const events15map = il ? evts15yrIsrael : evts15yrDiaspora;
+  const events15 = events15map.get(parshaName);
+  const items = events15.map((ev) => {
+    return {
+      desc: ev.getDesc().substring(9),
+      d: dayjs(ev.getDate().greg()),
+    };
+  });
   const parshaEv = getParshaEvent(parshaName, events, il, hyear);
-  const reading = leyning.getLeyningForParshaHaShavua(parshaEv);
+  const reading = leyning.getLeyningForParshaHaShavua(parshaEv, il);
   addSefariaLinksToLeyning(reading.fullkriyah, false);
   let triennial;
+  let triYearNum;
   if (!il) {
     // const tri = leyning.getTriennial(hyear);
     const cycleStartYear = leyning.Triennial.getCycleStartYear(hyear);
+    triYearNum = 1 + hyear - cycleStartYear;
     triennial = leyning.getTriennialForParshaHaShavua(parshaEv);
     addSefariaLinksToLeyning(triennial, false);
   }
@@ -99,9 +142,13 @@ export async function parshaDetail(ctx) {
     il,
     d: dayjs(parshaEv.getDate().greg()),
     triennial,
+    triYearNum,
     jsonLD: '{}',
     year: year,
     ortUrl: makeBibleOrtUrl(parsha),
+    locationName: il ? 'Israel' : 'the Diaspora',
+    items,
+    sometimesDoubled: parsha.combined || doubled.has(parshaName),
   });
 }
 
@@ -130,7 +177,7 @@ function makeBibleOrtUrl(parsha) {
 
 function getParshaEvent(parshaName, events, il, hyear) {
   if (parshaName === 'Vezot Haberakhah') {
-    const mday = il ? 22 : 23;
+    const mday = il ? 21 : 22;
     return new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [parshaName]);
   }
   const desc = 'Parashat ' + parshaName;

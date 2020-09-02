@@ -22,8 +22,8 @@ WebFontConfig = {
 <% include partials/parsha-detail-breadcrumb.ejs %>
 
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> / <bdo dir="rtl"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
-<p>Read in <%= il ? 'Israel' : 'the Diaspora' %> on <%= d.format('D MMMM YYYY') %>.
-Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
+<p class="lead">Read in <%=locationName%> on <%= d.format('D MMMM YYYY') %>.</p>
+<p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%></a>
@@ -36,15 +36,16 @@ href="<%=ortUrl%>">
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-12 col-sm-<%=year ? 6: 3%>">
+<div class="<%= il ? 'col' : year ? 'col-12 col-sm-6' : 'col-12 col-sm-3'%>">
 <h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
-<%    for (const aliyah of Object.values(reading.fullkriyah)) {  %>
+<%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%       if (aliyah.v) { %>
 <small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%       } // aliyah.v %>
+<% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
 </ol>
 <% } // reading.fullkriyah %>
@@ -52,7 +53,7 @@ href="<%=ortUrl%>">
 <% if (!il) { %>
 <% if (year) { %>
 <div class="col-sm-6">
-<h5>Triennial</h5>
+<h5>Triennial<small class="text-muted"> - year <%=triYearNum%></small></h5>
 <ol class="list-unstyled">
 <%    for (const aliyah of Object.values(triennial)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
@@ -105,7 +106,9 @@ href="<%=ortUrl%>">
 <% if (reading.haftara) { %>
 <p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
 <% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"
-href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %></p>
+href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %>
+<% if (reading.reason && reading.reason.haftara) { %>(<%= reading.reason.haftara %>)<% } %>
+</p>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
 <p class="lead haftara">Haftarah for Sephardim: <%=reading.sephardic%></p>
@@ -121,10 +124,12 @@ href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHr
 </div><!-- .d-print-none -->
 
 <h4 id="dates">List of Dates</h4>
-Parashat Nitzavim-Vayeilech is read in the Diaspora on:
-<ul class="bullet-list-inline">
-<li><a title="September 2020 holiday calendar" href="/hebcal?v=1&amp;year=2020&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off#hebcal-results">12 September 2020</a>
-<li><a title="September 2023 holiday calendar" rel="nofollow" href="/hebcal?v=1&amp;year=2023&amp;month=9&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off#hebcal-results">09 September 2023</a>
+Parashat <%=parsha.name%> is read in <%=locationName%> on:
+<ul class="<%=sometimesDoubled ? 'list-unstyled' : 'bullet-list-inline' %>">
+<% items.forEach((item) => { -%>
+<li><a title="<%=item.d.format('MMMM YYYY')%> holiday calendar" href="/hebcal?v=1&amp;year=<%=item.d.format('YYYY')%>&amp;month=<%=item.d.format('M')%>&amp;i=<%=il?'on':'off'%>&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on&amp;set=off#hebcal-results"><%=item.d.format('D MMM YYYY')%></a>
+<% if (item.desc !== parsha.name) { %> - <small><%=item.desc%></small><% } %>
+<% }); %>
 </ul>
 
 <h4 id="ref">References</h4>
