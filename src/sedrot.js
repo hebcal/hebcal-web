@@ -50,8 +50,8 @@ const allEvts15yrDiaspora = HebrewCalendar.calendar(Object.assign({il: false}, o
 const items15yrIsrael = new Map();
 const items15yrDiaspora = new Map();
 for (const parshaName of Object.keys(leyning.parshiyot)) {
-  items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true).map(eventToItem));
-  items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false).map(eventToItem));
+  items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
+  items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
 
 function eventToItem(ev) {
@@ -66,17 +66,23 @@ function eventToItem(ev) {
  * Returns Parsha events during 15 year period that match this parshaName
  * @param {string} parshaName
  * @param {boolean} il
- * @return {Event[]}
+ * @return {any}
  */
 function get15yrEvents(parshaName, il) {
-  const events = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
+  const allEvents = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
   const prefix = 'Parashat ';
   const descs = [prefix + parshaName];
   const pair = doubled.get(parshaName);
   if (pair) {
     descs.push(prefix + pair);
   }
-  return events.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
+  const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
+  const items = events.map(eventToItem);
+  const byYear = new Map();
+  for (const item of items) {
+    byYear.set(item.event.getDate().getFullYear(), item);
+  }
+  return {items, byYear};
 }
 
 const parshaYearRe = /^([a-z-]+)-(\d{4})$/;
@@ -114,7 +120,8 @@ export async function parshaDetail(ctx) {
     parsha.ordinal = Locale.ordinal(parsha.num);
   }
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
-  const items = items15map.get(parshaName);
+  const items0 = items15map.get(parshaName);
+  const items = items0.items;
   const reading = leyning.getLeyningForParshaHaShavua(parshaEv, il);
   addSefariaLinksToLeyning(reading.fullkriyah, false);
   const triennial = {};
@@ -134,10 +141,18 @@ export async function parshaDetail(ctx) {
           addSefariaLinksToLeyning(triReading, false);
         }
       }
-      triennial.dates = items.filter((item) => {
-        const hy = item.event.getDate().getFullYear();
-        return (hy >= cycleStartYear && hy <= cycleStartYear+2);
-      }).map((item) => item.d);
+      triennial.dates = Array(3);
+      for (let i = 0; i < 3; i++) {
+        const hy = cycleStartYear + i;
+        const item = items0.byYear.get(hy);
+        if (item) {
+          triennial.dates[i] = item.d;
+        } else {
+          const item1 = items15map.get(parsha.p1).byYear.get(hy);
+          const item2 = items15map.get(parsha.p2).byYear.get(hy);
+          triennial.dates[i] = [item1.d, item2.d];
+        }
+      }
     }
   }
   await ctx.render('parsha-detail', {

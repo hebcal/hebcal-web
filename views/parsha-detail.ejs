@@ -69,18 +69,18 @@ href="<%=ortUrl%>">
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-4 col-sm-3">
 <h5>Triennial Year&nbsp;<%=yr%>
-<% if (typeof triD !== 'undefined') { %><br><span class="h6 small text-muted"><%=triD.format('D MMM YYYY')%></span><% } %></h5>
+<% if (!Array.isArray(triD)) { %><br><span class="h6 small text-muted"><%=triD.format('D MMM YYYY')%></span><% } %></h5>
 <% if (typeof triReading === 'undefined') { %>
 <p>Read separately. See:</p>
 <ul class="list-unstyled">
-<li><a href="<%=parsha.p1anchor%>"><%=parsha.p1%></a> - <span class="text-muted">04 Sep 2021</span>
-<li><a href="<%=parsha.p2anchor%>"><%=parsha.p2%></a> - <span class="text-muted">11 Sep 2021</span>
+<li><a href="<%=parsha.p1anchor%>-<%=triD[0].format('YYYY')%>"><%=parsha.p1%></a> - <span class="text-muted"><%=triD[0].format('D MMM YYYY')%></span>
+<li><a href="<%=parsha.p2anchor%>-<%=triD[1].format('YYYY')%>"><%=parsha.p2%></a> - <span class="text-muted"><%=triD[1].format('D MMM YYYY')%></span>
 </ul>
 <% } else if (triReading.readTogether) { %>
-<p><small>See <a href="<%=triReading.anchor%>"><%=triReading.readTogether%></a></small></p>
+<p><small>See <a href="<%=triReading.anchor%>-<%=triD.format('YYYY')%>"><%=triReading.readTogether%></a></small></p>
 <% } else { %>
 <ul class="list-unstyled">
-<%  for (const aliyah of Object.values(triennial.readings[yr-1])) { %>
+<%  for (const aliyah of Object.values(triReading)) { %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%     if (aliyah.v) { %>
 <small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
