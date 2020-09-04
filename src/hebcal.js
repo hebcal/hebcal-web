@@ -348,9 +348,12 @@ function renderEventHtml(ev, options) {
   if (desc == 'Havdalah' || desc == 'Candle lighting') {
     const colon = title.indexOf(':');
     if (colon != -1) {
-      const time = HebrewCalendar.reformatTimeStr(ev.getAttrs().eventTimeStr, 'p', options);
+      const time = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'p', options);
       title = '<small class="text-muted">' + time + '</small> ' + title.substring(0, colon);
     }
+  } else if (ev.getFlags() & flags.CHANUKAH_CANDLES) {
+    const time = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'p', options);
+    title = '<small>' + time + '</small> ' + title;
   } else if (ev.getFlags() & flags.DAF_YOMI) {
     const colon = title.indexOf(':');
     if (colon != -1) {

@@ -225,14 +225,13 @@ function eventToItem(ev, options, locale) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
-  const attrs = ev.getAttrs();
   const fmtDate = d.locale(locale).format('dddd, D MMMM YYYY');
   const isoDate = d.format('YYYY-MM-DD');
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
   const id = d.format('YYYYMMDD') + '-' + makeAnchor(desc);
   if (desc.startsWith('Candle lighting') || desc.startsWith('Havdalah')) {
-    const hourMin = HebrewCalendar.reformatTimeStr(attrs.eventTimeStr, 'pm', options);
+    const hourMin = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
     const subj = ev.render();
     const shortDesc = subj.substring(0, subj.indexOf(':'));
     return {
@@ -241,7 +240,7 @@ function eventToItem(ev, options, locale) {
       cat: cat0,
       d,
       isoDate,
-      isoTime: attrs.eventTimeStr,
+      isoTime: ev.eventTimeStr,
       fmtDate,
       fmtTime: hourMin,
     };

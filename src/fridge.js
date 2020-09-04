@@ -70,11 +70,10 @@ function makeContents(events, options) {
       continue;
     }
     const hd = ev.getDate();
-    const attrs = ev.getAttrs();
     const d = dayjs(hd.greg());
     const item = {
       date: d,
-      time: HebrewCalendar.reformatTimeStr(attrs.eventTimeStr, '', options),
+      time: HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options),
     };
     if (i == events.length - 1) {
       item.reason = Locale.gettext('Rosh Hashana');
@@ -92,7 +91,7 @@ function makeContents(events, options) {
         continue;
       }
     }
-    if (attrs.linkedEvent && attrs.linkedEvent.getDesc().startsWith('Chanukah')) {
+    if (ev.linkedEvent && ev.linkedEvent.getDesc().startsWith('Chanukah')) {
       continue;
     }
     const nextEv = events[i + 1];

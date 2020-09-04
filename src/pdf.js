@@ -18,22 +18,6 @@ const PDF_COLUMNS = 7;
 // not intended to be an integer
 const PDF_COLWIDTH = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN) / PDF_COLUMNS;
 
-const hebrewGregMoy = [
-  '',
-  'יָנוּאָר',
-  'פֶבְּרוּאָר',
-  'מֶרְץ',
-  'אַפְּרִיל',
-  'מַאי',
-  'יוּנִי',
-  'יוּלִי',
-  'אוֹגוּסְט',
-  'סֶפְּטֶמְבֶּר',
-  'אוֹקְטוֹבֶּר',
-  'נוֹבֶמְבֶּר',
-  'דֶּצֶמְבֶּר',
-];
-
 const localeMap = {
   'fi': 'fi',
   'fr': 'fr',
@@ -162,10 +146,9 @@ function eventColor(evt) {
 function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const color = eventColor(evt);
   doc.fillColor(color).fontSize(8);
-  const attrs = evt.getAttrs();
-  const timed = Boolean(attrs && attrs.eventTime);
+  const timed = Boolean(evt.eventTime);
   if (timed) {
-    const str = HebrewCalendar.reformatTimeStr(attrs.eventTimeStr, 'p', options) + ' ';
+    const str = HebrewCalendar.reformatTimeStr(evt.eventTimeStr, 'p', options) + ' ';
     doc.font('bold');
     const width = doc.widthOfString(str);
     doc.text(str, x, y);

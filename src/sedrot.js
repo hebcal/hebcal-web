@@ -55,10 +55,13 @@ for (const parshaName of Object.keys(leyning.parshiyot)) {
 }
 
 function eventToItem(ev) {
+  const desc = ev.getDesc().substring(9);
   return {
     event: ev,
-    desc: ev.getDesc().substring(9),
+    desc: desc,
+    anchor: makeAnchor(desc),
     d: dayjs(ev.getDate().greg()),
+    hyear: ev.getDate().getFullYear(),
   };
 }
 
@@ -80,7 +83,15 @@ function get15yrEvents(parshaName, il) {
   const items = events.map(eventToItem);
   const byYear = new Map();
   for (const item of items) {
-    byYear.set(item.event.getDate().getFullYear(), item);
+    const hd = item.event.getDate();
+    const hy0 = hd.getFullYear();
+    const hy = parshaName === 'Vayeilech' && hd.getMonth() === months.TISHREI ? hy0 - 1 : hy0;
+    const prev = byYear.get(hy);
+    if (prev) {
+      byYear.set(hy, [prev, item]);
+    } else {
+      byYear.set(hy, item);
+    }
   }
   return {items, byYear};
 }
@@ -102,7 +113,6 @@ export async function parshaDetail(ctx) {
   const il = q.i === 'on';
   const events = makeYearEvents(il, year, dt);
   const parshaEv = getParshaEvent(il, parshaName0, events);
-  const hyear = parshaEv.getDate().getFullYear();
   const parshaName = year ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha = Object.assign(
       {name: parshaName, anchor: makeAnchor(parshaName)},
@@ -126,6 +136,7 @@ export async function parshaDetail(ctx) {
   addSefariaLinksToLeyning(reading.fullkriyah, false);
   const triennial = {};
   if (!il && parshaName !== 'Vezot Haberakhah') {
+    const hyear = parshaEv.getDate().getFullYear();
     const cycleStartYear = leyning.Triennial.getCycleStartYear(hyear);
     if (year) {
       triennial.yearNum = 1 + hyear - cycleStartYear;
@@ -141,16 +152,24 @@ export async function parshaDetail(ctx) {
           addSefariaLinksToLeyning(triReading, false);
         }
       }
-      triennial.dates = Array(3);
+      triennial.items = Array(3);
       for (let i = 0; i < 3; i++) {
         const hy = cycleStartYear + i;
         const item = items0.byYear.get(hy);
         if (item) {
-          triennial.dates[i] = item.d;
-        } else {
+          // Vayeilech will occur twice in a Hebrew year
+          if (Array.isArray(item)) {
+            triennial.items[i++] = item[0];
+            triennial.items[i] = item[1];
+          } else {
+            triennial.items[i] = item;
+          }
+        } else if (parsha.p1) {
           const item1 = items15map.get(parsha.p1).byYear.get(hy);
           const item2 = items15map.get(parsha.p2).byYear.get(hy);
-          triennial.dates[i] = [item1.d, item2.d];
+            console.log('***', i, hy, item1);
+            console.log('@@@', i, hy, item2);
+          triennial.items[i] = [item1, item2];
         }
       }
     }
@@ -181,6 +200,7 @@ function makeYearEvents(il, year, dt) {
   };
   if (year) {
     options.year = year;
+    options.isHebrewYear = true;
   } else {
     options.start = dt;
     options.end = new Date(dt.getTime() + (365 * 24 * 60 * 60 * 1000));
