@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale} from '@hebcal/core';
+import {HebrewCalendar, Locale, flags} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear} from './common';
 import '@hebcal/locales';
@@ -230,8 +230,8 @@ function eventToItem(ev, options, locale) {
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
   const id = d.format('YYYYMMDD') + '-' + makeAnchor(desc);
+  const hourMin = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
   if (desc.startsWith('Candle lighting') || desc.startsWith('Havdalah')) {
-    const hourMin = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
     const subj = ev.render();
     const shortDesc = subj.substring(0, subj.indexOf(':'));
     return {
@@ -245,7 +245,7 @@ function eventToItem(ev, options, locale) {
       fmtTime: hourMin,
     };
   } else {
-    return {
+    const result = {
       id,
       desc: ev.render(),
       cat: cat0,
@@ -254,5 +254,10 @@ function eventToItem(ev, options, locale) {
       fmtDate,
       url: ev.url(),
     };
+    if (ev.getFlags() & flags.CHANUKAH_CANDLES) {
+      result.fmtTime = hourMin;
+      result.isoTime = ev.eventTimeStr;
+    }
+    return result;
   }
 }
