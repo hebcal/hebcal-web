@@ -1,6 +1,5 @@
 <% include partials/header.ejs %>
-<meta name="description" content="Parashat Ki Tavo (Deuteronomy 26:1 - 29:8). Read on 05 September 2020 in the Diaspora. Torah reading, Haftarah, links to audio and commentary.">
-<script type="application/ld+json"><%- jsonLD %></script>
+<meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>) in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <script>
 WebFontConfig = {
   google: { families: [ 'Alef' ] }
@@ -36,7 +35,7 @@ href="<%=ortUrl%>">
 </div><!-- .row -->
 
 <div class="row">
-<div class="<%= !hasTriennial ? 'col' : year ? 'col-12 col-sm-6' : 'col-12 col-sm-3'%>">
+<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-sm-3'%>">
 <h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
@@ -51,7 +50,7 @@ href="<%=ortUrl%>">
 <% } // reading.fullkriyah %>
 </div><!-- fk -->
 <% if (hasTriennial) { %>
-<% if (year) { %>
+<% if (date) { %>
 <div class="col-sm-6">
 <h5>Triennial<small class="text-muted"> - year <%=triennial.yearNum%></small></h5>
 <ol class="list-unstyled">
@@ -64,24 +63,23 @@ href="<%=ortUrl%>">
 <%    } // ... for %>
 </ol>
 </div>
-<% } else { // year %>
+<% } else { // date %>
 <% for (let yr = 1; yr <= 3; yr++) { 
-  const triItem = triennial.items[yr - 1];
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-4 col-sm-3">
 <h5>Triennial Year&nbsp;<%=yr%>
-<% if (!Array.isArray(triItem)) { %><br><span class="h6 small text-muted"><%=triItem.d.format('D MMM YYYY')%></span><% } %></h5>
-<% if (typeof triReading === 'undefined') { %>
+<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><%=triReading.d.format('D MMM YYYY')%></span><% } %></h5>
+<% if (triReading.readSeparately) { %>
 <p>Read separately. See:</p>
 <ul class="list-unstyled">
-<li><a href="<%=parsha.p1anchor%>-<%=triItem[0].hyear%>"><%=parsha.p1%></a> - <span class="text-muted"><%=triItem[0].d.format('D MMM YYYY')%></span>
-<li><a href="<%=parsha.p2anchor%>-<%=triItem[1].hyear%>"><%=parsha.p2%></a> - <span class="text-muted"><%=triItem[1].d.format('D MMM YYYY')%></span>
+<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%></a> - <span class="text-muted"><%=triReading.p1d.format('D MMM YYYY')%></span>
+<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%></a> - <span class="text-muted"><%=triReading.p2d.format('D MMM YYYY')%></span>
 </ul>
 <% } else if (triReading.readTogether) { %>
-<p><small>See <a href="<%=triReading.anchor%>-<%=triItem.hyear%>"><%=triReading.readTogether%></a></small></p>
+<p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%></a></small></p>
 <% } else { %>
 <ul class="list-unstyled">
-<%  for (const [num, aliyah] of Object.entries(triReading)) { %>
+<%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%     if (aliyah.v) { %>
 <small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
@@ -92,7 +90,7 @@ href="<%=ortUrl%>">
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
-<% } // !year %>
+<% } // !date %>
 <% } // !il %>
 </div><!-- .row -->
 <div class="row">
@@ -121,7 +119,7 @@ href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHr
 Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <ul class="<%=sometimesDoubled ? 'list-unstyled' : 'bullet-list-inline' %>">
 <% items.forEach((item) => { -%>
-<li><a href="<%=item.anchor%>-<%=item.hyear%>"><%=item.d.format('D MMM YYYY')%></a>
+<li><a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.d.format('D MMM YYYY')%></a>
 <% if (item.desc !== parsha.name) { %> - <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>

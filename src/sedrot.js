@@ -81,39 +81,28 @@ function get15yrEvents(parshaName, il) {
   }
   const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
   const items = events.map(eventToItem);
-  const byYear = new Map();
-  for (const item of items) {
-    const hd = item.event.getDate();
-    const hy0 = hd.getFullYear();
-    const hy = parshaName === 'Vayeilech' && hd.getMonth() === months.TISHREI ? hy0 - 1 : hy0;
-    const prev = byYear.get(hy);
-    if (prev) {
-      byYear.set(hy, [prev, item]);
-    } else {
-      byYear.set(hy, item);
-    }
-  }
-  return {items, byYear};
+  return {items};
 }
 
-const parshaYearRe = /^([a-z-]+)-(\d{4})$/;
+const parshaDateRe = /^([a-z-]+)-(\d{8})$/;
 
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
-  const matches = base.match(parshaYearRe);
-  const year = matches && +matches[2];
+  const matches = base.match(parshaDateRe);
+  const date = matches && matches[2];
   const parshaAnchor = matches === null ? base : matches[1];
   const parshaName0 = sedrot.get(parshaAnchor);
   if (typeof parshaName0 !== 'string') {
     throw createError(404, `Parsha not found: ${base}`);
   }
-  const dt = new Date();
   const q = ctx.request.query;
   const il = q.i === 'on';
-  const events = makeYearEvents(il, year, dt);
-  const parshaEv = getParshaEvent(il, parshaName0, events);
-  const parshaName = year ? parshaEv.getDesc().substring(9) : parshaName0;
+  const parshaEv = getParshaEvent(il, date, parshaName0);
+  if (!parshaEv) {
+    throw createError(500, `Internal error: ${parshaName0}`);
+  }
+  const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha = Object.assign(
       {name: parshaName, anchor: makeAnchor(parshaName)},
       leyning.parshiyot[parshaName]);
@@ -136,55 +125,45 @@ export async function parshaDetail(ctx) {
   addSefariaLinksToLeyning(reading.fullkriyah, false);
   const triennial = {};
   if (!il && parshaName !== 'Vezot Haberakhah') {
-    const hyear = parshaEv.getDate().getFullYear();
-    const cycleStartYear = leyning.Triennial.getCycleStartYear(hyear);
-    if (year) {
-      triennial.yearNum = 1 + hyear - cycleStartYear;
-      triennial.reading = leyning.getTriennialForParshaHaShavua(parshaEv);
+    if (date) {
+      const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
+      triennial.reading = reading.aliyot;
+      triennial.yearNum = reading.yearNum + 1;
       addSefariaLinksToLeyning(triennial.reading, false);
     } else {
+      const hyear = parshaEv.getDate().getFullYear();
       const tri = leyning.getTriennial(hyear);
-      triennial.readings = tri.getReadings()[parshaName];
-      for (const triReading of triennial.readings) {
-        if (triReading.readTogether) {
-          triReading.anchor = makeAnchor(triReading.readTogether);
+      triennial.readings = Array(3);
+      for (let yr = 0; yr < 3; yr++) {
+        const triReading = triennial.readings[yr] = tri.getReading(parshaName, yr);
+        if (triReading.readSeparately) {
+          triReading.hyear = hyear + yr;
+          triReading.p1d = dayjs(triReading.date1.greg());
+          triReading.p2d = dayjs(triReading.date2.greg());
         } else {
-          addSefariaLinksToLeyning(triReading, false);
-        }
-      }
-      triennial.items = Array(3);
-      for (let i = 0; i < 3; i++) {
-        const hy = cycleStartYear + i;
-        const item = items0.byYear.get(hy);
-        if (item) {
-          // Vayeilech will occur twice in a Hebrew year
-          if (Array.isArray(item)) {
-            triennial.items[i++] = item[0];
-            triennial.items[i] = item[1];
+          triReading.d = dayjs(triReading.date.greg());
+          if (triReading.readTogether) {
+            triReading.anchor = makeAnchor(triReading.readTogether);
           } else {
-            triennial.items[i] = item;
+            addSefariaLinksToLeyning(triReading.aliyot, false);
           }
-        } else if (parsha.p1) {
-          const item1 = items15map.get(parsha.p1).byYear.get(hy);
-          const item2 = items15map.get(parsha.p2).byYear.get(hy);
-            console.log('***', i, hy, item1);
-            console.log('@@@', i, hy, item2);
-          triennial.items[i] = [item1, item2];
         }
       }
     }
   }
+  const hd = parshaEv.getDate();
+  const titleYear = date ? ' ' + hd.getFullYear() : '';
   await ctx.render('parsha-detail', {
-    title: `${parsha.name} - Torah Portion - ${parsha.hebrew} | Hebcal Jewish Calendar`,
+    title: `${parsha.name}${titleYear} - Torah Portion - ${parsha.hebrew} | Hebcal Jewish Calendar`,
     parsha,
     reading,
     il,
-    d: dayjs(parshaEv.getDate().greg()),
-    hd: parshaEv.getDate(),
+    iSuffix: il ? '?i=on' : '',
+    d: dayjs(hd.greg()),
+    hd,
+    date,
     hasTriennial: !il && parsha.name !== 'Vezot Haberakhah',
     triennial,
-    jsonLD: '{}',
-    year: year,
     ortUrl: makeBibleOrtUrl(parsha),
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
@@ -192,16 +171,25 @@ export async function parshaDetail(ctx) {
   });
 }
 
-function makeYearEvents(il, year, dt) {
+/**
+ * @param {boolean} il
+ * @param {string} date
+ * @return {Event[]}
+ */
+function makeYearEvents(il, date) {
   const options = {
     noHolidays: true,
     sedrot: true,
     il: il,
   };
-  if (year) {
-    options.year = year;
-    options.isHebrewYear = true;
+  if (date) {
+    const gy = parseInt(date.substring(0, 4), 10);
+    const gm = parseInt(date.substring(4, 6), 10);
+    const gd = parseInt(date.substring(6, 8), 10);
+    const dt = new Date(gy, gm - 1, gd);
+    options.start = options.end = dt;
   } else {
+    const dt = new Date();
     options.start = dt;
     options.end = new Date(dt.getTime() + (365 * 24 * 60 * 60 * 1000));
   }
@@ -232,7 +220,8 @@ function makeBibleOrtUrl(parsha) {
   return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${parsha.num}`;
 }
 
-function getParshaEvent(il, parshaName, events) {
+function getParshaEvent(il, date, parshaName) {
+  const events = makeYearEvents(il, date);
   if (parshaName === 'Vezot Haberakhah') {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
