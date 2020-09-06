@@ -254,7 +254,7 @@ function eventToItem(ev, options, locale) {
       fmtDate,
       url: ev.url(),
     };
-    if (ev.getFlags() & flags.CHANUKAH_CANDLES) {
+    if (hourMin && ev.getFlags() & flags.CHANUKAH_CANDLES) {
       result.fmtTime = hourMin;
       result.isoTime = ev.eventTimeStr;
     }
