@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, Locale, HebrewCalendar, flags, greg} from '@hebcal/core';
+import {HDate, Locale, HebrewCalendar, flags, greg, Event, months} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories, getCalendarTitle} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
@@ -233,11 +233,12 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base}`);
   }
   const meta = getHolidayMeta(holiday);
-  const holidayBegin = year ? getFirstOcccurences(HebrewCalendar.calendar({
-    year: year - 3,
-    isHebrewYear: false,
-    numYears: 10,
-  })) : events11yearsBegin;
+  const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
+    year ? getFirstOcccurences(HebrewCalendar.calendar({
+      year: year - 3,
+      isHebrewYear: false,
+      numYears: 10,
+    })) : events11yearsBegin;
   const category = categories[meta.category] || {};
   const mask = category.flags || 0;
   const now = new Date();
@@ -255,9 +256,9 @@ export async function holidayDetail(ctx) {
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrLong = wikipediaText || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
-  const title = year ?
-    `${holiday} ${year} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar` :
-    `${holiday} - ${descrShort} - ${hebrew} | Hebcal Jewish Calendar`;
+  const titleHebrew = Locale.hebrewStripNikkud(hebrew);
+  const titleYear = year ? ' ' + year : '';
+  const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
   await ctx.render('holiday-detail', {
     title,
     year,
@@ -307,6 +308,19 @@ const holidayDuration = {
   'Pesach': 8,
   'Shavuot': 2,
 };
+
+const OMER_TITLE = 'Days of the Omer';
+holidayDuration[OMER_TITLE] = 49;
+
+function makeOmerEvents(year) {
+  const events = [];
+  const hy = year ? year + 3757 : new HDate().getFullYear() - 1;
+  for (let i = 0; i < 11; i++) {
+    const hd = new HDate(16, months.NISAN, hy + i);
+    events.push(new Event(hd, OMER_TITLE, flags.OMER_COUNT));
+  }
+  return events;
+}
 
 /**
  * @param {any} item
@@ -457,6 +471,22 @@ function sourceName(href) {
 
 const NUM_YEARS = 6;
 
+const rchNames = [
+  'Cheshvan',
+  'Kislev',
+  'Tevet',
+  'Sh\'vat',
+  'Adar',
+  'Adar I',
+  'Adar II',
+  'Nisan',
+  'Iyyar',
+  'Sivan',
+  'Tamuz',
+  'Av',
+  'Elul',
+];
+
 export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear = getDefaultHebrewYear(new HDate(dt));
@@ -465,6 +495,8 @@ export async function holidayMainIndex(ctx) {
   for (const catId of Object.keys(categories)) {
     items[catId] = {};
   }
+  const rch = items['roshchodesh'];
+  rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = Array(NUM_YEARS));
   for (let i = 0; i < NUM_YEARS; i++) {
     const events0 = HebrewCalendar.calendar({
       year: hyear + i - 1,
