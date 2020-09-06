@@ -124,6 +124,10 @@ export async function parshaDetail(ctx) {
   const items = items0.items;
   const reading = leyning.getLeyningForParshaHaShavua(parshaEv, il);
   addSefariaLinksToLeyning(reading.fullkriyah, false);
+  reading.haftaraHref = getHaftarahHref(reading.haftara);
+  if (reading.sephardic) {
+    reading.sephardicHref = getHaftarahHref(reading.sephardic);
+  }
   const triennial = {};
   if (!il && parshaName !== 'Vezot Haberakhah') {
     if (date) {
@@ -172,6 +176,16 @@ export async function parshaDetail(ctx) {
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
   });
+}
+
+function getHaftarahHref(haftara) {
+  const matches = haftara.match(/^([^\d]+)(\d.+)$/);
+  if (matches === null) {
+    return null;
+  }
+  const book = matches[1].trim().replace(/\s+/g, '_');
+  const verses = matches[2].replace(/;.+$/, '').replace(/:/g, '.').replace(/ - /, '-');
+  return `https://www.sefaria.org/${book}.${verses}`;
 }
 
 /**
