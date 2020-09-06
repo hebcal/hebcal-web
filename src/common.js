@@ -1,4 +1,4 @@
-import {HDate, Location, months} from '@hebcal/core';
+import {HDate, Location, months, HebrewCalendar} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -527,4 +527,19 @@ export function addSefariaLinksToLeyning(aliyot, showBook) {
     const url = `https://www.sefaria.org/${aliyah.k}.${sefariaVerses}?lang=bi&aliyot=${sefAliyot}`;
     aliyot[num].href = url;
   }
+}
+
+/**
+ * @param {any} ctx
+ * @param {HebrewCalendar.Options} options
+ * @return {Event[]}
+ */
+export function makeHebrewCalendar(ctx, options) {
+  let events;
+  try {
+    events = HebrewCalendar.calendar(options);
+  } catch (err) {
+    ctx.throw(400, err);
+  }
+  return events;
 }

@@ -1,4 +1,3 @@
-import {HebrewCalendar} from '@hebcal/core';
 import {eventsToIcalendarStream} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/rest-api';
 import '@hebcal/locales';
@@ -6,7 +5,7 @@ import {createPdfDoc, renderPdf} from './pdf';
 import {Readable} from 'stream';
 import etag from 'etag';
 import {basename} from 'path';
-import {makeHebcalOptions} from './common';
+import {makeHebcalOptions, makeHebrewCalendar} from './common';
 
 const maxNumYear = {
   candlelighting: 4,
@@ -72,7 +71,7 @@ export async function hebcalDownload(ctx) {
     ip: ctx.get('x-client-ip') || ctx.request.ip,
     url: ctx.request.originalUrl,
   }, options));
-  let events = HebrewCalendar.calendar(options);
+  let events = makeHebrewCalendar(ctx, options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);

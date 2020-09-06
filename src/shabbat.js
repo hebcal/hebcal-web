@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, flags} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear} from './common';
+  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
@@ -131,7 +131,7 @@ function makeItems(ctx) {
   if (!isNaN(opts0.candleLightingMins)) {
     options.candleLightingMins = opts0.candleLightingMins;
   }
-  const events = HebrewCalendar.calendar(options);
+  const events = makeHebrewCalendar(ctx, options);
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   Object.assign(ctx.state, {
     events,

@@ -1,5 +1,5 @@
 import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
-import {makeHebcalOptions} from './common';
+import {makeHebcalOptions, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 
@@ -32,7 +32,7 @@ function makeProperties(ctx) {
   }
   options.start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   options.end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
-  const events = HebrewCalendar.calendar(options).filter((ev) => {
+  const events = makeHebrewCalendar(ctx, options).filter((ev) => {
     const desc = ev.getDesc();
     return desc != 'Havdalah' && !desc.startsWith('Chanukah');
   });

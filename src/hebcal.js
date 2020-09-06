@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
-  getDefaultHebrewYear} from './common';
+  getDefaultHebrewYear, makeHebrewCalendar} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -39,7 +39,8 @@ export async function hebcalApp(ctx) {
     ctx.throw(405, 'POST not allowed; try using GET instead');
   }
   const cookie = ctx.cookies.get('C');
-  const q = (ctx.request.querystring.length === 0 && !cookie) ? hebcalFormDefaults :
+  const q = (ctx.request.querystring.length === 0 && !cookie) ?
+    Object.assign({}, hebcalFormDefaults) :
     ctx.request.query.v === '1' ? ctx.request.query :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
   let error;
@@ -50,9 +51,9 @@ export async function hebcalApp(ctx) {
     if (q.cfg === 'json' || q.cfg === 'fc') {
       ctx.throw(400, err);
     } else if (q.v === '1') {
+      q.v = '0';
       error = err;
     }
-    delete q.v;
   }
   if (options.il) {
     q.i = 'on';
@@ -88,6 +89,9 @@ async function renderForm(ctx, error) {
   if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
     // private cache only if we're tailoring results by cookie
     ctx.set('Cache-Control', 'private');
+  }
+  if (error) {
+    ctx.status = 400;
   }
   const defaultYear = new Date().getFullYear();
   const defaultYearHeb = getDefaultHebrewYear(new HDate());
@@ -167,7 +171,7 @@ function renderHtml(ctx) {
     shortTitle += greg.monthNames[options.month] + ' ';
   }
   shortTitle += options.year;
-  let events = HebrewCalendar.calendar(options);
+  let events = makeHebrewCalendar(ctx, options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
@@ -407,7 +411,7 @@ function renderFullCalendar(ctx) {
   const options = ctx.state.options;
   options.start = new Date(q.start);
   options.end = new Date(q.end);
-  const events = HebrewCalendar.calendar(options);
+  const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
   ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
@@ -415,7 +419,7 @@ function renderFullCalendar(ctx) {
 
 function renderJson(ctx) {
   ctx.set('Cache-Control', 'max-age=86400');
-  const events = HebrewCalendar.calendar(ctx.state.options);
+  const events = makeHebrewCalendar(ctx, ctx.state.options);
   const q = ctx.state.q;
   let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
   const cb = q.callback;
@@ -428,7 +432,7 @@ function renderJson(ctx) {
 function renderLegacyJavascript(ctx) {
   const options = ctx.state.options;
   options.numYears = 2;
-  const events = HebrewCalendar.calendar(options);
+  const events = makeHebrewCalendar(ctx, options);
   if (ctx.state.q.cfg === 'e') {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());
