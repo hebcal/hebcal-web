@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {addSefariaLinksToLeyning} from './common';
+import {addSefariaLinksToLeyning, httpRedirect} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -88,6 +88,10 @@ export async function parshaDetail(ctx) {
   const il = q.i === 'on';
   const parshaEv = getParshaEvent(il, date, parshaName0);
   if (!parshaEv) {
+    if (date) {
+      httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
+      return;
+    }
     throw createError(500, `Internal error: ${parshaName0}`);
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;

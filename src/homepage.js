@@ -15,8 +15,9 @@ export async function homepage(ctx) {
   setDefautLangTz(ctx);
   const items = ctx.state.items = [];
   mastheadDates(items, dt, hd);
-  mastheadHolidays(items, hd);
-  mastheadParsha(items, hd);
+  const il = ctx.state.timezone === 'Asia/Jerusalem';
+  mastheadHolidays(items, hd, il);
+  mastheadParsha(items, dt, il);
   const [blub, longText] = getHolidayGreeting(hd);
   if (blub) {
     ctx.state.holidayBlurb = blub;
@@ -37,22 +38,27 @@ function mastheadDates(items, dt, hd) {
   );
 }
 
-function mastheadParsha(items, hd) {
-  const sedra = new Sedra(hd.getFullYear(), false);
+function mastheadParsha(items, dt, il) {
+  const saturday = dayjs(dt).day(6);
+  const hd = new HDate(saturday.toDate());
+  const sedra = new Sedra(hd.getFullYear(), il);
   if (sedra.isParsha(hd)) {
     const pe = new ParshaEvent(hd, sedra.get(hd));
-    items.push(`<a href="${pe.url()}">${pe.render()}</a>`);
+    const url = pe.url();
+    const suffix = il ? '?i=on' : '';
+    items.push(`<a href="${url}${suffix}">${pe.render()}</a>`);
   }
 }
 
-function mastheadHolidays(items, hd) {
+function mastheadHolidays(items, hd, il) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hd) || [];
+  const suffix = il ? '?i=on' : '';
   holidays
-      .filter((ev) => ev.observedInDiaspora())
+      .filter((ev) => (il && ev.observedInIsrael()) || (!il && ev.observedInDiaspora()))
       .map((ev) => {
         const url = ev.url();
         const desc = ev.render();
-        return url ? `<a href="${url}">${desc}</a>` : desc;
+        return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
 

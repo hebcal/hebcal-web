@@ -13,7 +13,7 @@ verses for each aliyah and accompanying Haftarah. Includes
 both traditional (full kriyah) and <a
 href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading schemes.</p>
 <% if (parsha !== null) { %>
-<p>This week's Torah Portion is <a href="/sedrot/<%=parshaHref%>"><%=parsha%></a> (read in <%=il ? 'Israel' : 'the Diaspora'%> on <%=saturday.format('D MMMM YYYY')%>).</p>
+<p>This week's Torah Portion is <a href="/sedrot/<%=parshaHref%>-<%=saturday.format('YYYYMMDD')%><%= il ? '?i=on' : ''%>"><%=parsha%></a> (read in <%=il ? 'Israel' : 'the Diaspora'%> on <%=saturday.format('D MMMM YYYY')%>).</p>
 <% } %>
 <div class="btn-toolbar">
 <div class="btn-group mr-1 mb-2">
