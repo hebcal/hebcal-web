@@ -8,24 +8,9 @@ import {addSefariaLinksToLeyning} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
-export async function parshaIndex(ctx) {
-  const saturday = dayjs().day(6);
-  const hd = new HDate(saturday.toDate());
-  const hyear = hd.getFullYear();
-  const q = ctx.request.query;
-  const il = q.i === 'on';
-  const sedra = new Sedra(hyear, il);
-  const parsha0 = sedra.lookup(hd);
-  const parsha = parsha0.chag ? null : parsha0.parsha.join('-');
-  const parshaHref = parsha0.chag ? null : makeAnchor(parsha);
-  await ctx.render('parsha-index', {
-    title: 'Torah Readings | Hebcal Jewish Calendar',
-    il,
-    saturday,
-    parsha,
-    parshaHref,
-  });
-}
+const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
+const parshaByBook = new Map();
+torahBookNames.forEach((book) => parshaByBook.set(book, new Map()));
 
 const sedrot = new Map();
 const doubled = new Map();
@@ -38,6 +23,8 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
     doubled.set(p1, parshaName);
     doubled.set(p2, parshaName);
   }
+  const bookId = reading.combined ? 'DoubledParshiyot' : reading.book;
+  parshaByBook.get(bookId).set(anchor, parshaName);
 }
 
 const options15yr = {
@@ -261,4 +248,27 @@ function getParshaEvent(il, date, parshaName) {
     }
   }
   return event;
+}
+
+export async function parshaIndex(ctx) {
+  const saturday = dayjs().day(6);
+  const hd = new HDate(saturday.toDate());
+  const hyear = hd.getFullYear();
+  const q = ctx.request.query;
+  const il = q.i === 'on';
+  const sedra = new Sedra(hyear, il);
+  const parsha0 = sedra.lookup(hd);
+  const parsha = parsha0.chag ? null : parsha0.parsha.join('-');
+  const parshaHref = parsha0.chag ? null : makeAnchor(parsha);
+  await ctx.render('parsha-index', {
+    title: 'Torah Readings | Hebcal Jewish Calendar',
+    il,
+    saturday,
+    hyear,
+    triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
+    parsha,
+    parshaHref,
+    parshaByBook,
+    torahBookNames,
+  });
 }

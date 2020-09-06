@@ -16,7 +16,7 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
 <p>This week's Torah Portion is <a href="/sedrot/<%=parshaHref%>"><%=parsha%></a> (read in <%=il ? 'Israel' : 'the Diaspora'%> on <%=saturday.format('D MMMM YYYY')%>).</p>
 <% } %>
 <div class="btn-toolbar">
-<div class="btn-group mr-1">
+<div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   Download for Diaspora <span class="caret"></span>
  </button>
@@ -30,7 +30,7 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
  </ul>
 </div><!-- .btn-group -->
 
-<div class="btn-group mr-1">
+<div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   Download for Israel <span class="caret"></span>
  </button>
@@ -44,111 +44,29 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
  </ul>
 </div><!-- .btn-group -->
 
-<a class="btn btn-sm btn-secondary" title="Download aliyah-by-aliyah breakdown"
+<a class="btn btn-sm btn-secondary mr-1 mb-2" title="Download aliyah-by-aliyah breakdown"
 href="#download">
 <svg class="icon align-top"><use xlink:href="/i/sprite2.svg#bi-cloud-download"></use></svg>
 Leyning spreadsheet</a>
 </div><!-- .btn-toolbar -->
-</div><!-- .col-sm-12 -->
+</div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-4">
-<h4 id="Genesis">Genesis</h4>
+<% for (const book of torahBookNames) { %>
+<div class="col">
+<h4 id="<%=book%>"><%= book === 'DoubledParshiyot' ? 'Doubled Parshiyot' : book %></h4>
 <ol class="list-unstyled">
-<li><a href="bereshit">Bereshit</a>
-<li><a href="noach">Noach</a>
-<li><a href="lech-lecha">Lech-Lecha</a>
-<li><a href="vayera">Vayera</a>
-<li><a href="chayei-sara">Chayei Sara</a>
-<li><a href="toldot">Toldot</a>
-<li><a href="vayetzei">Vayetzei</a>
-<li><a href="vayishlach">Vayishlach</a>
-<li><a href="vayeshev">Vayeshev</a>
-<li><a href="miketz">Miketz</a>
-<li><a href="vayigash">Vayigash</a>
-<li><a href="vayechi">Vayechi</a>
+<%   for (const [anchor, parshaName] of parshaByBook.get(book)) { %>
+<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%=parshaName%></a></li>
+<%   } %>
 </ol>
-</div><!-- .col-4 -->
-<div class="col-4">
-<h4 id="Exodus">Exodus</h4>
-<ol class="list-unstyled">
-<li><a href="shemot">Shemot</a>
-<li><a href="vaera">Vaera</a>
-<li><a href="bo">Bo</a>
-<li><a href="beshalach">Beshalach</a>
-<li><a href="yitro">Yitro</a>
-<li><a href="mishpatim">Mishpatim</a>
-<li><a href="terumah">Terumah</a>
-<li><a href="tetzaveh">Tetzaveh</a>
-<li><a href="ki-tisa">Ki Tisa</a>
-<li><a href="vayakhel">Vayakhel</a>
-<li><a href="pekudei">Pekudei</a>
-</ol>
-</div><!-- .col-4 -->
-<div class="col-4">
-<h4 id="Leviticus">Leviticus</h4>
-<ol class="list-unstyled">
-<li><a href="vayikra">Vayikra</a>
-<li><a href="tzav">Tzav</a>
-<li><a href="shmini">Shmini</a>
-<li><a href="tazria">Tazria</a>
-<li><a href="metzora">Metzora</a>
-<li><a href="achrei-mot">Achrei Mot</a>
-<li><a href="kedoshim">Kedoshim</a>
-<li><a href="emor">Emor</a>
-<li><a href="behar">Behar</a>
-<li><a href="bechukotai">Bechukotai</a>
-</ol>
-</div><!-- .col-4 -->
+</div><!-- .col -->
+<% } %>
 </div><!-- .row -->
+
 <div class="row">
-<div class="col-4">
-<h4 id="Numbers">Numbers</h4>
-<ol class="list-unstyled">
-<li><a href="bamidbar">Bamidbar</a>
-<li><a href="nasso">Nasso</a>
-<li><a href="behaalotcha">Beha'alotcha</a>
-<li><a href="shlach">Sh'lach</a>
-<li><a href="korach">Korach</a>
-<li><a href="chukat">Chukat</a>
-<li><a href="balak">Balak</a>
-<li><a href="pinchas">Pinchas</a>
-<li><a href="matot">Matot</a>
-<li><a href="masei">Masei</a>
-</ol>
-</div><!-- .col-4 -->
-<div class="col-4">
-<h4 id="Deuteronomy">Deuteronomy</h4>
-<ol class="list-unstyled">
-<li><a href="devarim">Devarim</a>
-<li><a href="vaetchanan">Vaetchanan</a>
-<li><a href="eikev">Eikev</a>
-<li><a href="reeh">Re'eh</a>
-<li><a href="shoftim">Shoftim</a>
-<li><a href="ki-teitzei">Ki Teitzei</a>
-<li><a href="ki-tavo">Ki Tavo</a>
-<li><a href="nitzavim">Nitzavim</a>
-<li><a href="vayeilech">Vayeilech</a>
-<li><a href="haazinu">Ha'Azinu</a>
-<li><a href="vezot-haberakhah">Vezot Haberakhah</a>
-</ol>
-</div><!-- .col-4 -->
-<div class="col-4">
-<h4 id="DoubledParshiyot">Doubled Parshiyot</h4>
-<ol class="list-unstyled">
-<li><a href="vayakhel-pekudei">Vayakhel-Pekudei</a>
-<li><a href="tazria-metzora">Tazria-Metzora</a>
-<li><a href="achrei-mot-kedoshim">Achrei Mot-Kedoshim</a>
-<li><a href="behar-bechukotai">Behar-Bechukotai</a>
-<li><a href="chukat-balak">Chukat-Balak</a>
-<li><a href="matot-masei">Matot-Masei</a>
-<li><a href="nitzavim-vayeilech">Nitzavim-Vayeilech</a>
-</ol>
-</div><!-- .col-4 -->
-</div><!-- .row -->
-<div class="row">
-<div class="col-sm-12">
+<div class="col">
 <h4>Parashat ha-Shavua by Hebrew year</h4>
 <nav>
 <ul class="pagination pagination-sm">
@@ -193,36 +111,51 @@ Leyning spreadsheet</a>
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
 <div class="btn-toolbar">
-<div class="btn-group mr-1">
+<div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   Full Kriyah (Diaspora) <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a><li class="dropdown-divider"></li><li><a class="dropdown-item download" id="leyning-fullkriyah-5779" href="fullkriyah-5779.csv" download="fullkriyah-5779.csv">fullkriyah-5779.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5780" href="fullkriyah-5780.csv" download="fullkriyah-5780.csv">fullkriyah-5780.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5781" href="fullkriyah-5781.csv" download="fullkriyah-5781.csv">fullkriyah-5781.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5782" href="fullkriyah-5782.csv" download="fullkriyah-5782.csv">fullkriyah-5782.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5783" href="fullkriyah-5783.csv" download="fullkriyah-5783.csv">fullkriyah-5783.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5784" href="fullkriyah-5784.csv" download="fullkriyah-5784.csv">fullkriyah-5784.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5785" href="fullkriyah-5785.csv" download="fullkriyah-5785.csv">fullkriyah-5785.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5786" href="fullkriyah-5786.csv" download="fullkriyah-5786.csv">fullkriyah-5786.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5787" href="fullkriyah-5787.csv" download="fullkriyah-5787.csv">fullkriyah-5787.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5788" href="fullkriyah-5788.csv" download="fullkriyah-5788.csv">fullkriyah-5788.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5789" href="fullkriyah-5789.csv" download="fullkriyah-5789.csv">fullkriyah-5789.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5790" href="fullkriyah-5790.csv" download="fullkriyah-5790.csv">fullkriyah-5790.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5791" href="fullkriyah-5791.csv" download="fullkriyah-5791.csv">fullkriyah-5791.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-5792" href="fullkriyah-5792.csv" download="fullkriyah-5792.csv">fullkriyah-5792.csv</a></ul>
+<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
+<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
+<li><small><a class="dropdown-item download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" download="fullkriyah-<%=yr%>.csv">fullkriyah-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
 </div>
 
-<div class="btn-group mr-1">
+<div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   Triennial (Diaspora) <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a><li class="dropdown-divider"></li><li><a class="dropdown-item download" id="leyning-triennial-5777" href="triennial-5777-5780.csv" download="triennial-5777-5780.csv"> triennial-5777-5780.csv</a></li><li><a class="dropdown-item download" id="leyning-triennial-5780" href="triennial-5780-5783.csv" download="triennial-5780-5783.csv"> triennial-5780-5783.csv</a></li><li><a class="dropdown-item download" id="leyning-triennial-5783" href="triennial-5783-5786.csv" download="triennial-5783-5786.csv"> triennial-5783-5786.csv</a></li><li><a class="dropdown-item download" id="leyning-triennial-5786" href="triennial-5786-5789.csv" download="triennial-5786-5789.csv"> triennial-5786-5789.csv</a></li><li><a class="dropdown-item download" id="leyning-triennial-5789" href="triennial-5789-5792.csv" download="triennial-5789-5792.csv"> triennial-5789-5792.csv</a></li></ul>
+<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
+<% for (let yr = triCycleStartYear - 3; yr < triCycleStartYear + 12; yr += 3) { %>
+<li><a class="dropdown-item download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" download="triennial-<%=yr%>-<%=yr+2%>.csv">triennial-<%=yr%>-<%=yr+2%>.csv</a></li>
+<% } %>
+</ul>
 </div>
 
-<div class="btn-group mr-1">
+<div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
   Full Kriyah (Israel) <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a><li class="dropdown-divider"></li><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5779" href="fullkriyah-il-5779.csv" download="fullkriyah-il-5779.csv">fullkriyah-il-5779.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5780" href="fullkriyah-il-5780.csv" download="fullkriyah-il-5780.csv">fullkriyah-il-5780.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5781" href="fullkriyah-il-5781.csv" download="fullkriyah-il-5781.csv">fullkriyah-il-5781.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5782" href="fullkriyah-il-5782.csv" download="fullkriyah-il-5782.csv">fullkriyah-il-5782.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5783" href="fullkriyah-il-5783.csv" download="fullkriyah-il-5783.csv">fullkriyah-il-5783.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5784" href="fullkriyah-il-5784.csv" download="fullkriyah-il-5784.csv">fullkriyah-il-5784.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5785" href="fullkriyah-il-5785.csv" download="fullkriyah-il-5785.csv">fullkriyah-il-5785.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5786" href="fullkriyah-il-5786.csv" download="fullkriyah-il-5786.csv">fullkriyah-il-5786.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5787" href="fullkriyah-il-5787.csv" download="fullkriyah-il-5787.csv">fullkriyah-il-5787.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5788" href="fullkriyah-il-5788.csv" download="fullkriyah-il-5788.csv">fullkriyah-il-5788.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5789" href="fullkriyah-il-5789.csv" download="fullkriyah-il-5789.csv">fullkriyah-il-5789.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5790" href="fullkriyah-il-5790.csv" download="fullkriyah-il-5790.csv">fullkriyah-il-5790.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5791" href="fullkriyah-il-5791.csv" download="fullkriyah-il-5791.csv">fullkriyah-il-5791.csv</a><li><a class="dropdown-item download" id="leyning-fullkriyah-il-5792" href="fullkriyah-il-5792.csv" download="fullkriyah-il-5792.csv">fullkriyah-il-5792.csv</a></ul>
+<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
+<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
+<li><small><a class="dropdown-item download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
 </div>
 
 </div><!-- .btn-toolbar -->
-<p> </p>
+
 <p>Example content:</p>
-<table class="table table-striped table-condensed">
-<tbody>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
 <tr><th>Date</th><th>Parashah</th><th>Aliyah</th><th>Reading</th><th>Verses</th></tr>
+</thead>
+<tbody>
 <tr><td>25-Oct-2003</td><td>Bereshit</td><td>1</td><td>Genesis 1:1 &#8211; 2:3</td><td>34</td></tr>
 <tr><td>25-Oct-2003</td><td>Bereshit</td><td>2</td><td>Genesis 2:4 &#8211; 2:19</td><td>16</td></tr>
 <tr><td>25-Oct-2003</td><td>Bereshit</td><td>3</td><td>Genesis 2:20 &#8211; 3:21</td><td>27</td></tr>
@@ -243,6 +176,7 @@ spreadsheet program.</p>
 <tr><td>1-Nov-2003</td><td>Noach</td><td>Haftara</td><td>Isaiah 54:1 &#8211; 55:5</td><td></td></tr>
 </tbody>
 </table>
+</div>
 
 </div><!-- .col -->
 </div><!-- .row -->
