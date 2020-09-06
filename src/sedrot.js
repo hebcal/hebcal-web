@@ -6,6 +6,7 @@ import {basename} from 'path';
 import createError from 'http-errors';
 import {addSefariaLinksToLeyning} from './common';
 import dayjs from 'dayjs';
+import drash from './drash.json';
 
 export async function parshaIndex(ctx) {
   const saturday = dayjs().day(6);
@@ -153,8 +154,9 @@ export async function parshaDetail(ctx) {
   }
   const hd = parshaEv.getDate();
   const titleYear = date ? ' ' + hd.getFullYear() : '';
+  const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
   await ctx.render('parsha-detail', {
-    title: `${parsha.name}${titleYear} - Torah Portion - ${parsha.hebrew} | Hebcal Jewish Calendar`,
+    title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
     reading,
     il,
@@ -168,6 +170,7 @@ export async function parshaDetail(ctx) {
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
+    commentary: drash[parsha.name],
   });
 }
 

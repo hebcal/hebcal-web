@@ -109,9 +109,21 @@ href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHr
 <div class="d-print-none">
 <h4 id="drash">Commentary</h4>
 <ul class="bullet-list-inline">
-<li><a class="outbound" title="Parashat Nitzavim-Vayeilech commentary from Torah.org" href="http://www.torah.org/learning/parsha/parsha.html?id1=88&amp;id2=89">Torah.org</a>
-<li><a class="outbound" title="Parashat Nitzavim-Vayeilech commentary from Jewish Theological Seminary" href="http://www.jtsa.edu/jts-torah-online?parashah=2051&amp;parashah=2052">Jewish Theological Seminary</a>
-<li><a class="outbound" title="Parashat Nitzavim-Vayeilech commentary from Chabad" href="http://www.chabad.org/article.asp?aid=53151">Chabad</a>
+<% if (typeof commentary['ou.org'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>">OU Torah</a>
+<% } %>
+<% if (typeof commentary['torah.org'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
+<% } %>
+<% if (typeof commentary['jtsa.edu'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="http://www.jtsa.edu/jts-torah-online?parashah=<%=commentary['jtsa.edu'].cid%><% if (commentary['jtsa.edu'].cid2) {%><%='&amp;parashah=' + commentary['jtsa.edu'].cid2%><% } %>">Jewish Theological Seminary</a>
+<% } %>
+<% if (typeof commentary['chabad.org'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
+<% } %>
+<% if (typeof commentary['reformjudaism.org'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
+<% } %>
 </ul>
 </div><!-- .d-print-none -->
 
