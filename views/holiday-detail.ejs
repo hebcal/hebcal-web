@@ -25,7 +25,7 @@
 <div class="col-sm-10">
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
-<h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%></span></h2>
+<h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <p class="lead"><%=holiday%> (<%=descrShort%>)
 for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.</p>
 <p><%=descrLong%></p>
