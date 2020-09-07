@@ -191,9 +191,9 @@ function renderHtml(ctx) {
     delete i.memo;
     if (typeof i.link === 'string' && i.link.startsWith('https://www.hebcal.com/')) {
       i.link = i.link.substring(22);
-      const utm = i.link.indexOf('?utm_source=');
+      const utm = i.link.indexOf('utm_source=');
       if (utm !== -1) {
-        i.link = i.link.substring(0, utm);
+        i.link = i.link.substring(0, utm - 1);
       }
     }
   });
@@ -368,7 +368,8 @@ function renderEventHtml(ev, options) {
   const memo = memo0 ? ` title="${memo0}"` : '';
   let url = ev.url();
   if (typeof url === 'string' && url.startsWith('https://www.hebcal.com/')) {
-    url = url.substring(22);
+    const suffix = options.il ? '?i=on' : '';
+    url = url.substring(22) + suffix;
   }
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
