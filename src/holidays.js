@@ -8,7 +8,7 @@ import holidayMeta from './holidays.json';
 import dayjs from 'dayjs';
 import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
-import {getDefaultHebrewYear, addSefariaLinksToLeyning} from './common';
+import {getDefaultHebrewYear, addSefariaLinksToLeyning, httpRedirect} from './common';
 
 const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
@@ -232,6 +232,7 @@ export async function holidayDetail(ctx) {
   if (typeof holiday !== 'string') {
     throw createError(404, `Holiday not found: ${base}`);
   }
+  const holidayAnchor = makeAnchor(holiday);
   const meta = getHolidayMeta(holiday);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
@@ -246,7 +247,8 @@ export async function holidayDetail(ctx) {
   const next = year ? occursOn.find((item) => item.d.year() === year) :
     occursOn.find((item) => item.ppf === 'future');
   if (typeof next === 'undefined' && year) {
-    throw createError(404, `${holiday} does not occur during year ${year}`);
+    httpRedirect(ctx, `/holidays/${holidayAnchor}`);
+    return;
   }
   next.ppf = 'current';
   const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
@@ -263,7 +265,7 @@ export async function holidayDetail(ctx) {
     title,
     year,
     holiday,
-    holidayAnchor: makeAnchor(holiday),
+    holidayAnchor,
     hebrew,
     descrShort,
     descrMedium,

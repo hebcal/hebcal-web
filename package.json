@@ -37,7 +37,7 @@
     "@hebcal/icalendar": "^2.4.0",
     "@hebcal/leyning": "^3.3.0",
     "@hebcal/locales": "^2.1.0",
-    "@hebcal/rest-api": "^2.5.0",
+    "@hebcal/rest-api": "^2.6.0",
     "better-sqlite3": "^7.1.0",
     "dayjs": "^1.8.35",
     "ejs": "^2.7.4",
