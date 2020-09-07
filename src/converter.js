@@ -92,6 +92,8 @@ export async function hebrewDateConverter(ctx) {
   }
 }
 
+const sedraCache = new Map();
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
@@ -109,13 +111,15 @@ function makeProperties(ctx) {
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render();
-  const hy = hdate.getFullYear();
+  const saturday = hdate.onOrAfter(6);
+  const hy = saturday.getFullYear();
   let pe = [];
   if (hy >= 3762) {
-    const sedra = new Sedra(hy, false);
-    if (sedra.isParsha(hdate)) {
-      pe = new ParshaEvent(hdate, sedra.get(hdate));
+    const sedra = sedraCache.get(hy) || new Sedra(hy, false);
+    if (sedra.isParsha(saturday)) {
+      pe = new ParshaEvent(saturday, sedra.get(saturday));
     }
+    sedraCache.set(hy, sedra);
   }
   const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
   const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
