@@ -179,10 +179,11 @@ export function possiblySetCookie(ctx, query) {
 /**
  * @param {string} cookieString
  * @param {any} defaults
- * @param {any} query
+ * @param {any} query0
  * @return {any}
  */
-export function processCookieAndQuery(cookieString, defaults, query) {
+export function processCookieAndQuery(cookieString, defaults, query0) {
+  const query = Object.assign({}, query0);
   const ck = querystring.parse(cookieString || '');
   let found = false;
   for (const geoKey of primaryGeoKeys) {
