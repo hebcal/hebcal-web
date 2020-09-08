@@ -119,36 +119,11 @@ export async function parshaDetail(ctx) {
   if (reading.sephardic) {
     reading.sephardicHref = getHaftarahHref(reading.sephardic);
   }
-  const triennial = {};
-  if (!il && parshaName !== 'Vezot Haberakhah') {
-    if (date) {
-      const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
-      triennial.reading = reading.aliyot;
-      triennial.yearNum = reading.yearNum + 1;
-      addSefariaLinksToLeyning(triennial.reading, false);
-    } else {
-      const hyear = parshaEv.getDate().getFullYear();
-      const tri = leyning.getTriennial(hyear);
-      triennial.readings = Array(3);
-      for (let yr = 0; yr < 3; yr++) {
-        const triReading = triennial.readings[yr] = tri.getReading(parshaName, yr);
-        if (triReading.readSeparately) {
-          triReading.hyear = hyear + yr;
-          triReading.p1d = dayjs(triReading.date1.greg());
-          triReading.p2d = dayjs(triReading.date2.greg());
-        } else {
-          triReading.d = dayjs(triReading.date.greg());
-          if (triReading.readTogether) {
-            triReading.anchor = makeAnchor(triReading.readTogether);
-          } else {
-            addSefariaLinksToLeyning(triReading.aliyot, false);
-          }
-        }
-      }
-    }
-  }
   const hd = parshaEv.getDate();
-  const titleYear = date ? ' ' + hd.getFullYear() : '';
+  const hyear = hd.getFullYear();
+  const hasTriennial = !il && hyear >= 5745 && hyear <= 5830 && parshaName !== 'Vezot Haberakhah';
+  const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
+  const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
@@ -159,7 +134,7 @@ export async function parshaDetail(ctx) {
     d: dayjs(hd.greg()),
     hd,
     date,
-    hasTriennial: !il && parsha.name !== 'Vezot Haberakhah',
+    hasTriennial,
     triennial,
     ortUrl: makeBibleOrtUrl(parsha),
     locationName: il ? 'Israel' : 'the Diaspora',
@@ -167,6 +142,35 @@ export async function parshaDetail(ctx) {
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
   });
+}
+
+function makeTriennial(date, parshaEv, hyear, parshaName) {
+  const triennial = {};
+  if (date) {
+    const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
+    triennial.reading = reading.aliyot;
+    triennial.yearNum = reading.yearNum + 1;
+    addSefariaLinksToLeyning(triennial.reading, false);
+  } else {
+    const tri = leyning.getTriennial(hyear);
+    triennial.readings = Array(3);
+    for (let yr = 0; yr < 3; yr++) {
+      const triReading = triennial.readings[yr] = tri.getReading(parshaName, yr);
+      if (triReading.readSeparately) {
+        triReading.hyear = hyear + yr;
+        triReading.p1d = dayjs(triReading.date1.greg());
+        triReading.p2d = dayjs(triReading.date2.greg());
+      } else {
+        triReading.d = dayjs(triReading.date.greg());
+        if (triReading.readTogether) {
+          triReading.anchor = makeAnchor(triReading.readTogether);
+        } else {
+          addSefariaLinksToLeyning(triReading.aliyot, false);
+        }
+      }
+    }
+  }
+  return triennial;
 }
 
 function getHaftarahHref(haftara) {
