@@ -207,11 +207,13 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   return Object.assign({}, defaults, ck, query);
 }
 
+const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
+
 /**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {any} query
- * @return {HebcalOptions}
+ * @return {HebrewCalendar.Options}
  */
 export function makeHebcalOptions(db, query) {
   const options = {};
@@ -272,6 +274,19 @@ export function makeHebcalOptions(db, query) {
       options.month = month;
     } else {
       delete query.month; // month=x is default, implies entire year
+    }
+  }
+  for (const param of ['start', 'end']) {
+    if (!empty(query[param])) {
+      const val = query[param];
+      if (!reIsoDate.test(val)) {
+        throw new SyntaxError(`Parameter '${param}' must match format YYYY-MM-DD`);
+      }
+      const dt = new Date(val);
+      if (isNaN(dt.getTime())) {
+        throw new RangeError(`Invalid parameter '${param}': '${val}'`);
+      }
+      options[param] = dt;
     }
   }
   if (options.ashkenazi && empty(query.lg)) {

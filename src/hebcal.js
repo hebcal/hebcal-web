@@ -61,7 +61,7 @@ export async function hebcalApp(ctx) {
   if (options.location) {
     q['city-typeahead'] = options.location.getName();
   }
-  if (empty(q.year)) {
+  if (empty(q.year) && q.cfg !== 'fc') {
     q.year = options.year = options.isHebrewYear ?
         new HDate().getFullYear() : new Date().getFullYear();
   }
@@ -399,19 +399,13 @@ function makeMonthlyDates(events) {
 }
 
 function renderFullCalendar(ctx) {
-  const q = ctx.state.q;
+  ctx.set('Cache-Control', 'max-age=604800');
+  const options = ctx.state.options;
   for (const param of ['start', 'end']) {
-    if (empty(q[param])) {
+    if (typeof options[param] === 'undefined') {
       ctx.throw(400, `Please specify required parameter '${param}'`);
     }
-    const re = /^\d\d\d\d-\d\d-\d\d/;
-    if (!re.test(q[param])) {
-      ctx.throw(400, `Parameter '${param}' must match format YYYY-MM-DD`);
-    }
   }
-  const options = ctx.state.options;
-  options.start = new Date(q.start);
-  options.end = new Date(q.end);
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
