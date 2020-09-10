@@ -1,4 +1,5 @@
 <% include partials/header.ejs %>
+<% if (year <= 1752) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
 <body>
 <% include partials/navbar.ejs %>
@@ -15,6 +16,7 @@ Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>).
 <% } %>
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
+<% if (year <= 1752) { -%><% include partials/warning-1752.ejs %><% } -%>
 <p>All holidays begin at sundown on the evening before the date
 specified in the tables below. For example, if the dates for Rosh
 Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
