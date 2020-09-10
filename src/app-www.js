@@ -26,7 +26,7 @@ import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
   httpRedirect} from './common';
 import {yahrzeitApp} from './yahrzeit';
-import {holidayDetail, holidayYearIndex, holidayPdf, holidayMainIndex} from './holidays';
+import {holidaysApp} from './holidays';
 import redirectMap from './redirect.json';
 
 const DOCUMENT_ROOT = '/var/www/html';
@@ -196,19 +196,7 @@ app.use(async function router(ctx, next) {
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
   } else if (rpath.startsWith('/holidays/')) {
-    ctx.set('Last-Modified', ctx.launchUTCString);
-    if (rpath === '/holidays/') {
-      await holidayMainIndex(ctx);
-    } else if (rpath.endsWith('.pdf')) {
-      await holidayPdf(ctx);
-    } else {
-      const charCode = rpath.charCodeAt(10);
-      if (charCode >= 48 && charCode <= 57) {
-        await holidayYearIndex(ctx);
-      } else {
-        await holidayDetail(ctx);
-      }
-    }
+    await holidaysApp(ctx);
   } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/')) {
     const base = path.basename(rpath);
     const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';

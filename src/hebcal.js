@@ -398,7 +398,20 @@ function makeMonthlyDates(events) {
   return result;
 }
 
+function isFresh(ctx) {
+  ctx.set('Last-Modified', ctx.launchUTCString);
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return true;
+  }
+  return false;
+}
+
 function renderFullCalendar(ctx) {
+  if (isFresh(ctx)) {
+    return;
+  }
   ctx.set('Cache-Control', 'max-age=604800');
   const options = ctx.state.options;
   for (const param of ['start', 'end']) {
@@ -413,6 +426,9 @@ function renderFullCalendar(ctx) {
 }
 
 function renderJson(ctx) {
+  if (isFresh(ctx)) {
+    return;
+  }
   ctx.set('Cache-Control', 'max-age=86400');
   const events = makeHebrewCalendar(ctx, ctx.state.options);
   const q = ctx.state.q;
@@ -425,6 +441,9 @@ function renderJson(ctx) {
 }
 
 function renderLegacyJavascript(ctx) {
+  if (isFresh(ctx)) {
+    return;
+  }
   const options = ctx.state.options;
   options.numYears = 2;
   const events = makeHebrewCalendar(ctx, options);

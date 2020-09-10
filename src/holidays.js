@@ -541,3 +541,25 @@ function getJsonLD(item, description) {
     },
   };
 }
+
+export async function holidaysApp(ctx) {
+  ctx.set('Last-Modified', ctx.launchUTCString);
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
+  const rpath = ctx.request.path;
+  if (rpath === '/holidays/') {
+    await holidayMainIndex(ctx);
+  } else if (rpath.endsWith('.pdf')) {
+    await holidayPdf(ctx);
+  } else {
+    const charCode = rpath.charCodeAt(10);
+    if (charCode >= 48 && charCode <= 57) {
+      await holidayYearIndex(ctx);
+    } else {
+      await holidayDetail(ctx);
+    }
+  }
+}
