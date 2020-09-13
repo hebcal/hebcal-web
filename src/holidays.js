@@ -233,7 +233,9 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base}`);
   }
   const holidayAnchor = makeAnchor(holiday);
-  const meta = getHolidayMeta(holiday);
+  const q = ctx.request.query;
+  const il = q.i === 'on';
+  const meta = getHolidayMeta(holiday, year, il);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
       year: year - 3,
@@ -283,11 +285,12 @@ export async function holidayDetail(ctx) {
   });
 }
 
-function getHolidayMeta(holiday) {
-  const meta = holidayMeta[holiday];
-  if (typeof meta === 'undefined' || typeof meta.about.href === 'undefined') {
+function getHolidayMeta(holiday, year, il) {
+  const meta0 = holidayMeta[holiday];
+  if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
+  const meta = Object.assign({}, meta0);
   meta.about.name = sourceName(meta.about.href);
   if (meta.wikipedia && meta.wikipedia.href) {
     meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
@@ -298,10 +301,25 @@ function getHolidayMeta(holiday) {
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
     }
   }
-  if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
-    meta.items = [holiday];
+  if (year) {
+    const events = HebrewCalendar.calendar({year}).filter((ev) => holiday === ev.basename());
+    meta.reading = {};
+    meta.items = [];
+    for (const ev of events) {
+      const reading = leyning.getLeyningForHoliday(ev, il);
+      if (typeof reading !== 'undefined') {
+        const key = leyning.getLeyningKeyForEvent(ev, il);
+        meta.items.push(key);
+        makeHolidayReading(holiday, key, meta, reading);
+        reading.d = dayjs(ev.getDate().greg());
+      }
+    }
+  } else {
+    if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
+      meta.items = [holiday];
+    }
+    makeHolidayReadings(holiday, meta);
   }
-  makeHolidayReadings(holiday, meta);
   return meta;
 }
 
@@ -414,39 +432,43 @@ function makeHolidayReadings(holiday, meta) {
   for (const item of meta.items) {
     const reading = leyning.getLeyningForHolidayKey(item);
     if (typeof reading !== 'undefined') {
-      if (reading.fullkriyah) {
-        addSefariaLinksToLeyning(reading.fullkriyah, true);
-      }
-      const itemReading = meta.reading[item] = reading;
-      const hebrew = Locale.lookupTranslation(item, 'he');
-      if (typeof hebrew === 'string') {
-        itemReading.hebrew = hebrew;
-      }
-      itemReading.id = makeAnchor(item);
-      if (meta.links && meta.links.torah && meta.links.torah[item]) {
-        itemReading.torahHref = meta.links.torah[item];
-      } else if (meta.about.torah) {
-        itemReading.torahHref = meta.about.torah;
-      }
-      if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
-        itemReading.haftaraHref = meta.links.haftara[item];
-      } else if (meta.about.haftara) {
-        itemReading.haftaraHref = meta.about.haftara;
-      }
-      if (item.startsWith(holiday)) {
-        if (meta.items.length === 1 || item === holiday) {
-          itemReading.shortName = 'Tanakh';
-        } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
-          itemReading.shortName = item.substring(holiday.length + 1);
-        } else if (item.startsWith(`${holiday} (`)) {
-          itemReading.shortName = item.substring(holiday.length + 2, item.length - 1);
-        } else {
-          itemReading.shortName = 'Day ' + item.substring(holiday.length + 1);
-        }
-      } else {
-        itemReading.shortName = item;
-      }
+      makeHolidayReading(holiday, item, meta, reading);
     }
+  }
+}
+
+function makeHolidayReading(holiday, item, meta, reading) {
+  if (reading.fullkriyah) {
+    addSefariaLinksToLeyning(reading.fullkriyah, true);
+  }
+  const itemReading = meta.reading[item] = reading;
+  const hebrew = Locale.lookupTranslation(item, 'he');
+  if (typeof hebrew === 'string') {
+    itemReading.hebrew = hebrew;
+  }
+  itemReading.id = makeAnchor(item);
+  if (meta.links && meta.links.torah && meta.links.torah[item]) {
+    itemReading.torahHref = meta.links.torah[item];
+  } else if (meta.about.torah) {
+    itemReading.torahHref = meta.about.torah;
+  }
+  if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
+    itemReading.haftaraHref = meta.links.haftara[item];
+  } else if (meta.about.haftara) {
+    itemReading.haftaraHref = meta.about.haftara;
+  }
+  if (item.startsWith(holiday)) {
+    if (meta.items.length === 1 || item === holiday) {
+      itemReading.shortName = 'Tanakh';
+    } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
+      itemReading.shortName = item.substring(holiday.length + 1);
+    } else if (item.startsWith(`${holiday} (`)) {
+      itemReading.shortName = item.substring(holiday.length + 2, item.length - 1);
+    } else {
+      itemReading.shortName = 'Day ' + item.substring(holiday.length + 1);
+    }
+  } else {
+    itemReading.shortName = item;
   }
 }
 

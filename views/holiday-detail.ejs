@@ -115,7 +115,9 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 <h3 id="reading" class="mt-3">Tanakh</h3>
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
 <h4 id="reading-<%=reading.id%>"><%=item%>
-<% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %></h4>
+<% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
+<% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd, D MMMM YYYY')%></time><% } %>
+</h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
 <% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
