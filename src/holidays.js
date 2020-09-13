@@ -393,7 +393,7 @@ function makeOccursOn(events, holiday, mask, now) {
           d,
           duration,
           endD: d.add(duration, 'd'),
-          endHd: duration > 1 ? new HDate(hd.abs() + duration - 1) : null,
+          hdRange: hebrewDateRange(hd, duration),
           desc: ev.render(),
           basename: ev.basename(),
           ppf: abs < nowAbs ? 'past' : 'future',
@@ -401,6 +401,20 @@ function makeOccursOn(events, holiday, mask, now) {
         };
       });
   return occursOn;
+}
+
+function hebrewDateRange(hd, duration) {
+  if (duration <= 1) {
+    return hd.toString();
+  }
+  const end = new HDate(hd.abs() + duration - 1);
+  const startMonth = hd.getMonthName();
+  const startMday = hd.getDate();
+  const endMonth = end.getMonthName();
+  if (startMonth === endMonth) {
+    return `${startMday}-${end.getDate()} ${startMonth} ${hd.getFullYear()}`;
+  }
+  return `${startMday} ${startMonth} - ${end.toString()}`;
 }
 
 function makeHolidayReadings(holiday, meta) {
