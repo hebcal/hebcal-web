@@ -313,6 +313,17 @@ const holidayDuration = {
   'Shavuot': 2,
 };
 
+class MyOmerEvent extends Event {
+  constructor(hd) {
+    super(hd, OMER_TITLE, flags.OMER_COUNT);
+  }
+  /** @return {string} */
+  url() {
+    return 'https://www.hebcal.com/holidays/days-of-the-omer-' +
+      this.getDate().greg().getFullYear();
+  }
+}
+
 const OMER_TITLE = 'Days of the Omer';
 holidayDuration[OMER_TITLE] = 49;
 
@@ -321,7 +332,7 @@ function makeOmerEvents(year) {
   const hy = year ? year + 3757 : new HDate().getFullYear() - 1;
   for (let i = 0; i < 11; i++) {
     const hd = new HDate(16, months.NISAN, hy + i);
-    events.push(new Event(hd, OMER_TITLE, flags.OMER_COUNT));
+    events.push(new MyOmerEvent(hd));
   }
   return events;
 }
