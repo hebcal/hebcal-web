@@ -282,6 +282,7 @@ export async function holidayDetail(ctx) {
     meta,
     noindex,
     jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
+    il,
   });
 }
 
@@ -302,7 +303,8 @@ function getHolidayMeta(holiday, year, il) {
     }
   }
   if (year) {
-    const events = HebrewCalendar.calendar({year}).filter((ev) => holiday === ev.basename());
+    const events = HebrewCalendar.calendar({year,
+      il}).filter((ev) => holiday === ev.basename());
     meta.reading = {};
     meta.items = [];
     for (const ev of events) {

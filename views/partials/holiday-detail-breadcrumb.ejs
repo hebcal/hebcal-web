@@ -5,7 +5,7 @@
   <li class="breadcrumb-item"><a href="/holidays/">Holidays</a></li>
   <li class="breadcrumb-item"><a href="/holidays/#<%=categoryId%>"><%=categoryName%></a></li>
 <% if (year) { %>
-  <li class="breadcrumb-item"><a href="<%=holidayAnchor%>"><%=holiday%></a></li>
+  <li class="breadcrumb-item"><a href="<%=holidayAnchor%><%=il?'?i=on':''%>"><%=holiday%></a></li>
   <li class="breadcrumb-item active"><%=year%> (<%=upcomingHebrewYear%>)</li>
 <% } else { %>
   <li class="breadcrumb-item active"><%=holiday%></li>
