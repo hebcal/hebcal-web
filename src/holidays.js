@@ -308,7 +308,7 @@ function getHolidayMeta(holiday) {
 const holidayDuration = {
   'Rosh Hashana': 2,
   'Chanukah': 8,
-  'Sukkot': 6,
+  'Sukkot': 7,
   'Pesach': 8,
   'Shavuot': 2,
 };
