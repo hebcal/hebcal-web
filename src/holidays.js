@@ -393,6 +393,7 @@ function makeOccursOn(events, holiday, mask, now) {
           d,
           duration,
           endD: d.add(duration, 'd'),
+          endHd: duration > 1 ? new HDate(hd.abs() + duration - 1) : null,
           desc: ev.render(),
           basename: ev.basename(),
           ppf: abs < nowAbs ? 'past' : 'future',

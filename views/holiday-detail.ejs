@@ -83,9 +83,9 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% occursOn.forEach((item) => { %>
 <tr class="<%=item.ppf%>">
 <td><a href="<%=item.id%>-<%=item.d.format('YYYY')%>"><%=holiday%> <%=item.d.format('YYYY')%></a></td>
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd, MMM D') %></time></td>
-<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%= item.endD.format('ddd, MMM D') %></time></td>
-<td><%=item.hd.toString()%></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd') %>, <span class="text-nowrap"><%=item.d.format('MMM D')%></span></time></td>
+<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%= item.endD.format('ddd') %>, <span class="text-nowrap"><%=item.endD.format('MMM D')%></span></time></td>
+<td><span class="text-nowrap"><%=item.hd.toString()%></span><% if (item.endHd) { %> - <span class="text-nowrap"><%=item.endHd.toString()%></span><% } %></td>
 </tr>
 <% }); %>
 </tbody>
