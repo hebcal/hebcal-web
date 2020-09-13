@@ -1,5 +1,5 @@
 <% include partials/header.ejs %>
-<% if (gy <= 1752) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
 <style>

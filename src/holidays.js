@@ -261,6 +261,7 @@ export async function holidayDetail(ctx) {
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
   const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
+  const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
   await ctx.render('holiday-detail', {
     title,
     year,
@@ -277,7 +278,8 @@ export async function holidayDetail(ctx) {
     upcomingHebrewYear: next.hd.getFullYear(),
     occursOn,
     meta,
-    jsonLD: JSON.stringify(getJsonLD(next, descrMedium)),
+    noindex,
+    jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
   });
 }
 

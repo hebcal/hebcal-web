@@ -1,5 +1,5 @@
 <% include partials/header.ejs %>
-<% if (year <= 1752) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (year <= 1752 || today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
 <body>
 <% include partials/navbar.ejs %>
@@ -40,13 +40,11 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 </div><!-- .d-flex -->
 <div class="d-flex justify-content-center d-print-none">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Responsive Square 2020 -->
+<!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
-  style="display:block"
-  data-ad-client="ca-pub-7687563417622459"
-  data-ad-slot="8149436309"
-  data-ad-format="auto"
-  data-full-width-responsive="true"></ins>
+style="display:inline-block;width:300px;height:250px"
+data-ad-client="ca-pub-7687563417622459"
+data-ad-slot="1140358973"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>

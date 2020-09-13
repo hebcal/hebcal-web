@@ -1,6 +1,6 @@
 <% include partials/header.ejs %>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
-<script type="application/ld+json"><%- jsonLD %></script>
+<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
 <script>
   WebFontConfig = {
     google: { families: [ 'Alef' ] }
