@@ -308,9 +308,9 @@ function getHolidayMeta(holiday, year, il) {
     meta.reading = {};
     meta.items = [];
     for (const ev of events) {
-      const reading = leyning.getLeyningForHoliday(ev, il);
+      const reading = getReadingForHoliday(ev, il);
       if (typeof reading !== 'undefined') {
-        const key = leyning.getLeyningKeyForEvent(ev, il);
+        const key = leyning.getLeyningKeyForEvent(ev, il) || ev.getDesc();
         meta.items.push(key);
         makeHolidayReading(holiday, key, meta, reading);
         reading.d = dayjs(ev.getDate().greg());
@@ -323,6 +323,20 @@ function getHolidayMeta(holiday, year, il) {
     makeHolidayReadings(holiday, meta);
   }
   return meta;
+}
+
+function getReadingForHoliday(ev, il) {
+  const hd = ev.getDate();
+  const dow = hd.abs() % 7;
+  const desc = ev.getDesc();
+  if (desc.startsWith('Shabbat ') || (desc.startsWith('Chanukah') && dow === 6)) {
+    const parshaEv = HebrewCalendar.calendar({start: hd, end: hd,
+      il, noHolidays: true, sedrot: true});
+    if (parshaEv.length > 0) {
+      return leyning.getLeyningForParshaHaShavua(parshaEv[0], il);
+    }
+  }
+  return leyning.getLeyningForHoliday(ev, il);
 }
 
 const holidayDuration = {
