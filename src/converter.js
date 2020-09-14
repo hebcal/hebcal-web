@@ -135,7 +135,7 @@ function makeProperties(ctx) {
     gy: dt.getFullYear(),
     gm: dt.getMonth() + 1,
     gd: dt.getDate(),
-    hy,
+    hy: hdate.getFullYear(),
     hm: hdate.getMonth(),
     hmStr: hdate.getMonthName(),
     hd: hdate.getDate(),
