@@ -332,6 +332,9 @@ function makeTableBodies(events, months, options) {
       }
     }
     html += '</tr>\n';
+    if (html.endsWith('<tr></tr>\n')) {
+      html = html.substring(0, html.length - 10);
+    }
     tableBodies[yearMonth] = html;
   }
   return tableBodies;
