@@ -331,6 +331,10 @@ function makeTableBodies(events, months, options) {
         html += '</tr>\n<tr>';
       }
     }
+    while (n % 7 !== 0) {
+      html += '<td>&nbsp;</td>';
+      n++;
+    }
     html += '</tr>\n';
     if (html.endsWith('<tr></tr>\n')) {
       html = html.substring(0, html.length - 10);
