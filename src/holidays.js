@@ -253,6 +253,7 @@ export async function holidayDetail(ctx) {
     return;
   }
   next.ppf = 'current';
+  makeHolidayReadings(meta, holiday, year, il, next);
   const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast);
   const descrShort = getHolidayDescription(next.event, true);
@@ -302,10 +303,17 @@ function getHolidayMeta(holiday, year, il) {
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
     }
   }
+  return meta;
+}
+
+function makeHolidayReadings(meta, holiday, year, il, next) {
+  meta.reading = meta.reading || {};
   if (year) {
-    const events = HebrewCalendar.calendar({year,
-      il}).filter((ev) => holiday === ev.basename());
-    meta.reading = {};
+    const events = HebrewCalendar.calendar({
+      year: next.event.getDate().getFullYear(),
+      isHebrewYear: true,
+      il,
+    }).filter((ev) => holiday === ev.basename());
     meta.items = [];
     for (const ev of events) {
       const reading = getReadingForHoliday(ev, il);
@@ -313,16 +321,26 @@ function getHolidayMeta(holiday, year, il) {
         const key = leyning.getLeyningKeyForEvent(ev, il) || ev.getDesc();
         meta.items.push(key);
         makeHolidayReading(holiday, key, meta, reading);
-        reading.d = dayjs(ev.getDate().greg());
+        const hd = reading.hd = ev.getDate();
+        reading.d = dayjs(hd.greg());
       }
+    }
+    if (meta.items.length === 0) {
+      delete meta.items;
     }
   } else {
     if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
       meta.items = [holiday];
     }
-    makeHolidayReadings(holiday, meta);
+    if (Array.isArray(meta.items)) {
+      for (const item of meta.items) {
+        const reading = leyning.getLeyningForHolidayKey(item);
+        if (typeof reading !== 'undefined') {
+          makeHolidayReading(holiday, item, meta, reading);
+        }
+      }
+    }
   }
-  return meta;
 }
 
 function getReadingForHoliday(ev, il) {
@@ -438,19 +456,6 @@ function hebrewDateRange(hd, duration) {
     return `${startMday}-${end.getDate()} ${startMonth} ${hd.getFullYear()}`;
   }
   return `${startMday} ${startMonth} - ${end.toString()}`;
-}
-
-function makeHolidayReadings(holiday, meta) {
-  if (!Array.isArray(meta.items)) {
-    return;
-  }
-  meta.reading = meta.reading || {};
-  for (const item of meta.items) {
-    const reading = leyning.getLeyningForHolidayKey(item);
-    if (typeof reading !== 'undefined') {
-      makeHolidayReading(holiday, item, meta, reading);
-    }
-  }
 }
 
 function makeHolidayReading(holiday, item, meta, reading) {
