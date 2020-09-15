@@ -32,13 +32,13 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.5.1",
+    "@hebcal/core": "^2.5.2",
     "@hebcal/geo-sqlite": "^2.2.5",
     "@hebcal/icalendar": "^2.4.0",
-    "@hebcal/leyning": "^3.3.0",
+    "@hebcal/leyning": "^3.3.1",
     "@hebcal/locales": "^2.1.0",
     "@hebcal/rest-api": "^2.6.0",
-    "better-sqlite3": "^7.1.0",
+    "better-sqlite3": "^7.1.1",
     "dayjs": "^1.8.35",
     "ejs": "^2.7.4",
     "etag": "^1.8.1",
@@ -59,7 +59,7 @@
     "mysql2": "^2.1.0",
     "nodemailer": "^6.4.11",
     "pdfkit": "^0.11.0",
-    "pino": "^6.6.0",
+    "pino": "^6.6.1",
     "random-bigint": "0.0.1"
   }
 }

@@ -245,7 +245,7 @@ export async function holidayDetail(ctx) {
   const category = categories[meta.category] || {};
   const mask = category.flags || 0;
   const now = new Date();
-  const occursOn = makeOccursOn(holidayBegin, holiday, mask, now);
+  const occursOn = makeOccursOn(holidayBegin, holiday, mask, now, il);
   const next = year ? occursOn.find((item) => item.d.year() === year) :
     occursOn.find((item) => item.ppf === 'future');
   if (typeof next === 'undefined' && year) {
@@ -255,7 +255,7 @@ export async function holidayDetail(ctx) {
   next.ppf = 'current';
   makeHolidayReadings(meta, holiday, year, il, next);
   const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
-  const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast);
+  const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = getHolidayDescription(next.event, false);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
@@ -357,16 +357,19 @@ function getReadingForHoliday(ev, il) {
   return leyning.getLeyningForHoliday(ev, il);
 }
 
-const holidayDuration = {
+// Don't include any 1-day duration holidays (it's the default)
+const holidayDurationIL = {
   'Rosh Hashana': 2,
   'Chanukah': 8,
   'Sukkot': 7,
-  'Pesach': 8,
-  'Shavuot': 2,
+  'Pesach': 7,
 };
 
+const holidayDurationDiaspora = Object.assign({'Shavuot': 2}, holidayDurationIL);
+holidayDurationDiaspora['Pesach'] = 8;
+
 const OMER_TITLE = 'Days of the Omer';
-holidayDuration[OMER_TITLE] = 49;
+holidayDurationDiaspora[OMER_TITLE] = holidayDurationIL[OMER_TITLE] = 49;
 
 function makeOmerEvents(year) {
   const events = [];
@@ -381,17 +384,23 @@ function makeOmerEvents(year) {
 /**
  * @param {any} item
  * @param {boolean} isPast
+ * @param {boolean} il
  * @return {string[]}
  */
-function makeNextObserved(item, isPast) {
+function makeNextObserved(item, isPast, il) {
   const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
   const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
-  const nextObserved = `${verb}${beginsWhen} on ${dateStrShort}`;
+  let nextObserved = `${verb}${beginsWhen} on ${dateStrShort}`;
   const iso = item.d.format('YYYY-MM-DD');
   const dateStrLong = item.d.format('dddd, D MMMM YYYY');
   // eslint-disable-next-line max-len
-  const nextObservedHtml = `${verb}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
+  let nextObservedHtml = `${verb}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
+  if (item.basename === 'Shavuot' || item.basename === 'Pesach') {
+    const suffix = il ? ' in Israel' : ' in the Diaspora';
+    nextObserved += suffix;
+    nextObservedHtml += suffix;
+  }
   if (!item.duration) {
     return [nextObserved, nextObservedHtml];
   }
@@ -411,12 +420,14 @@ function makeNextObserved(item, isPast) {
  * @param {string} holiday
  * @param {number} mask
  * @param {Date} now
+ * @param {boolean} il
  * @return {any[]}
  */
-function makeOccursOn(events, holiday, mask, now) {
+function makeOccursOn(events, holiday, mask, now, il) {
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
     mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
   const nowAbs = greg.greg2abs(now);
+  const holidayDuration = il ? holidayDurationIL : holidayDurationDiaspora;
   const duration0 = (mask === flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
     (holidayDuration[holiday] || 1);
   const occursOn = events
