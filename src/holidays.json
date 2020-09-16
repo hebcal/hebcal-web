@@ -338,6 +338,11 @@
   },
   "books": [
    {
+    "ASIN": "0789338637",
+    "author": "",
+    "text": "The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781"
+   },
+   {
     "ASIN": "0827608217",
     "author": "Rabbi Reuven Hammer",
     "text": "Entering the High Holy Days: A Guide to Origins, Themes, and Prayers"
@@ -346,11 +351,6 @@
     "ASIN": "0316739081",
     "author": "Rabbi Alan Lew",
     "text": "This Is Real and You Are Completely Unprepared: The Days of Awe as a Journey of Transformation"
-   },
-   {
-    "ASIN": "0789338637",
-    "author": "",
-    "text": "The 2021 Jewish Calendar 16-Month Wall Calendar: Jewish Year 5781"
    }
   ],
   "category": "major",

@@ -22,7 +22,7 @@
 <div class="container">
 <div id="content">
 <div class="row">
-<div class="col-sm-10">
+<div class="col-md-10">
 <% include partials/holiday-detail-breadcrumb.ejs %>
 
 <h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
@@ -36,34 +36,11 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% } // wikipedia %>
 </em></p>
 
-<div class="d-print-none">
-<!-- Visible only on xs -->
-<div class="d-block d-sm-none">
-<div class="d-flex justify-content-center d-print-none">
-<div><h6>Advertisement</h6></div>
-</div><!-- .d-flex -->
-<div class="d-flex justify-content-center d-print-none">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- banner-320x100 -->
-<ins class="adsbygoogle"
-  style="display:inline-block;width:320px;height:100px"
-  data-ad-client="ca-pub-7687563417622459"
-  data-ad-slot="1867606375"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .d-flex -->
-</div><!-- .d-sm-none -->
-</div><!-- .d-print-none -->
-
 <% if (typeof meta.reading !== 'undefined' && Array.isArray(meta.items)) { %>
 <div class="d-print-none">
 <nav class="d-none d-md-block">
 <ul class="pagination<%= meta.items.length > 3 ? ' pagination-sm' : ''%>">
 <li class="page-item"><a class="page-link" href="#dates">Dates</a></li>
-<% if (typeof meta.books !== 'undefined') { %>
-<li class="page-item"><a class="page-link" href="#books">Books</a></li>
-<% } %>
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
 <li class="page-item"><a class="page-link" href="#reading-<%=reading.id%>"><%=reading.shortName%></a></li>
 <% } // ... for %>
@@ -72,6 +49,21 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 </nav>
 </div>
 <% } // meta.reading %>
+
+<div class="justify-content-center d-print-none">
+<div><h6>Advertisement</h6></div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Responsive horizontal -->
+<ins class="adsbygoogle"
+  style="display:block"
+  data-ad-client="ca-pub-7687563417622459"
+  data-ad-slot="3531211046"
+  data-ad-format="auto"
+  data-full-width-responsive="true"></ins>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- advertisement -->
 
 <h3 id="dates">Dates for <%=holiday%></h3>
 <div class="table-responsive">
@@ -91,25 +83,6 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 </tbody>
 </table>
 </div>
-
-<% if (typeof meta.books !== 'undefined') { %>
-<h3 id="books">Recommended Books</h3>
-<div class="row">
-<% meta.books.forEach((book) => { %>
-<div class="col">
-<div class="thumbnail">
-<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
-class="img-fluid img-thumbnail" alt="<%=book.text%>" width="104" height="160" style="border:none"
-src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
-<div class="figure-caption">
-<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
-<% if (book.author) { %><br>by <%=book.author%><% } %>
-</div><!-- .figure-caption -->
-</div><!-- .thumbnail -->
-</div><!-- .col -->
-<% }); %>
-</div><!-- .row -->
-<% } // books %>
 
 <% if (typeof meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-3">Tanakh</h3>
@@ -161,26 +134,33 @@ The Holy Scriptures</a></em>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>
-<% include partials/holiday-detail-breadcrumb.ejs %>
-</div><!-- .col-sm-10 -->
-<div class="col-sm-2 d-print-none">
-<div class="d-flex justify-content-center d-print-none">
-<div><h6>Advertisement</h6></div>
-</div><!-- .d-flex -->
-<div class="d-none d-sm-block">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- skyscraper text only -->
-<ins class="adsbygoogle"
-  style="display:inline-block;width:160px;height:600px"
-  data-ad-client="ca-pub-7687563417622459"
-  data-ad-slot="7666032223"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .d-sm-block -->
-</div><!-- .col-sm-2 -->
+</div><!-- .col-md-10 -->
+<% if (typeof meta.books !== 'undefined') { %>
+<div class="col-md-2">
+<h6 id="books">Books</h3>
+<div class="row">
+<% meta.books.forEach((book) => { %>
+<div class="col">
+<div class="card mb-3" style="width: 8rem;">
+<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
+class="img-fluid card-img-top" alt="<%=book.text%>" width="104" height="160" style="border:none"
+src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
+<div class="card-body">
+<p class="card-text small"><a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
+<% if (book.author) { %><br>by <%=book.author%><% } %></p>
+</div><!-- .card-body -->
+</div><!-- .card -->
+</div><!-- .col -->
+<% }); %>
+</div><!-- .row -->
+</div><!-- .col-md-2 -->
+<% } // books %>
 
 </div><!-- .row -->
+
+<div class="row">
+<% include partials/holiday-detail-breadcrumb.ejs %>
+</div>
 </div><!-- #content -->
 
 <%_ include partials/footer.ejs _%>
