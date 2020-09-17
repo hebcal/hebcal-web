@@ -282,9 +282,12 @@ export function makeHebcalOptions(db, query) {
       if (!reIsoDate.test(val)) {
         throw new SyntaxError(`Parameter '${param}' must match format YYYY-MM-DD`);
       }
-      const dt = new Date(val);
-      if (isNaN(dt.getTime())) {
-        throw new RangeError(`Invalid parameter '${param}': '${val}'`);
+      const yy = parseInt(val, 10);
+      const mm = parseInt(val.substring(5, 7), 10);
+      const dd = parseInt(val.substring(8, 10), 10);
+      const dt = new Date(yy, mm - 1, dd);
+      if (yy < 100) {
+        dt.setFullYear(yy);
       }
       options[param] = dt;
     }
