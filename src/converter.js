@@ -121,8 +121,8 @@ function makeProperties(ctx) {
     }
     sedraCache.set(hy, sedra);
   }
-  const holidays = HebrewCalendar.getHolidaysOnDate(hdate) || [];
-  const events = holidays.filter((ev) => ev.observedInDiaspora()).concat(pe);
+  const holidays = HebrewCalendar.getHolidaysOnDate(hdate, false) || [];
+  const events = holidays.concat(pe);
   return {
     message: props.message,
     noCache: Boolean(props.noCache),

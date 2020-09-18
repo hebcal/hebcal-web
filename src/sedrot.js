@@ -266,8 +266,19 @@ export async function parshaIndex(ctx) {
   const il = q.i === 'on';
   const sedra = new Sedra(hyear, il);
   const parsha0 = sedra.lookup(hd);
-  const parsha = parsha0.chag ? null : parsha0.parsha.join('-');
-  const parshaHref = parsha0.chag ? null : makeAnchor(parsha);
+  let parsha = null;
+  let parshaHref = null;
+  if (parsha0.chag) {
+    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    if (events.length > 0) {
+      parsha = events[0].basename();
+      parshaHref = events[0].url();
+    }
+  } else {
+    parsha = parsha0.parsha.join('-');
+    const pe = new ParshaEvent(hd, parsha0);
+    parshaHref = pe.url();
+  }
   await ctx.render('parsha-index', {
     title: 'Torah Readings | Hebcal Jewish Calendar',
     il,

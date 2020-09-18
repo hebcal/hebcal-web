@@ -68,8 +68,7 @@ export async function parshaRss(ctx) {
   if (isParsha) {
     ev = new ParshaEvent(hd, sedra.get(hd));
   } else {
-    const holidays = HebrewCalendar.getHolidaysOnDate(saturday.toDate()) || [];
-    const events = holidays.filter((ev) => (il && ev.observedInIsrael() || (!il && ev.observedInDiaspora())));
+    const events = HebrewCalendar.getHolidaysOnDate(saturday.toDate(), il) || [];
     ev = events[0];
   }
 

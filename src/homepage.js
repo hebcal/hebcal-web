@@ -18,7 +18,7 @@ export async function homepage(ctx) {
   const il = ctx.state.timezone === 'Asia/Jerusalem';
   mastheadHolidays(items, hd, il);
   mastheadParsha(items, dt, il);
-  const [blub, longText] = getHolidayGreeting(hd);
+  const [blub, longText] = getHolidayGreeting(hd, il);
   if (blub) {
     ctx.state.holidayBlurb = blub;
     ctx.state.holidayLongText = longText;
@@ -51,10 +51,9 @@ function mastheadParsha(items, dt, il) {
 }
 
 function mastheadHolidays(items, hd, il) {
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd) || [];
+  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   const suffix = il ? '?i=on' : '';
   holidays
-      .filter((ev) => (il && ev.observedInIsrael()) || (!il && ev.observedInDiaspora()))
       .map((ev) => {
         const url = ev.url();
         const desc = ev.render();
@@ -131,13 +130,13 @@ const chagSameach = {
   'Simchat Torah': true,
 };
 
-function getHolidayGreeting(hd) {
+function getHolidayGreeting(hd, il) {
   const mm = hd.getMonth();
   const dd = hd.getDate();
   const yy = hd.getFullYear();
   const gy = hd.greg().getFullYear();
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd) || [];
+  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   const roshChodesh = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
 
   if (roshChodesh) {
