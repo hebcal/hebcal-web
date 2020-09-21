@@ -2,8 +2,8 @@
 <div class="d-none d-sm-block">
 <nav>
 <ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/holidays/">Holidays</a></li>
-  <li class="breadcrumb-item"><a href="/holidays/#<%=categoryId%>"><%=categoryName%></a></li>
+  <li class="breadcrumb-item"><a href="/holidays/<%=il?'?i=on':''%>">Holidays</a></li>
+  <li class="breadcrumb-item"><a href="/holidays/<%=il?'?i=on':''%>#<%=categoryId%>"><%=categoryName%></a></li>
 <% if (year) { %>
   <li class="breadcrumb-item"><a href="<%=holidayAnchor%><%=il?'?i=on':''%>"><%=holiday%></a></li>
   <li class="breadcrumb-item active"><%=year%> (<%=upcomingHebrewYear%>)</li>

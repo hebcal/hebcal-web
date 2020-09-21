@@ -32,11 +32,11 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^2.6.0",
+    "@hebcal/core": "^2.6.1",
     "@hebcal/geo-sqlite": "^2.2.5",
     "@hebcal/icalendar": "^2.4.2",
     "@hebcal/leyning": "^3.3.1",
-    "@hebcal/locales": "^2.1.0",
+    "@hebcal/locales": "^2.2.0",
     "@hebcal/rest-api": "^2.7.1",
     "better-sqlite3": "^7.1.1",
     "dayjs": "^1.8.36",
@@ -56,7 +56,7 @@
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
     "maxmind": "^4.1.4",
-    "mysql2": "^2.2.1",
+    "mysql2": "^2.2.5",
     "nodemailer": "^6.4.11",
     "pdfkit": "^0.11.0",
     "pino": "^6.6.1",

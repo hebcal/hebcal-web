@@ -54,6 +54,7 @@ export async function holidayPdf(ctx) {
     year: calendarYear,
     addHebrewDates: true,
     isHebrewYear,
+    il: ctx.state.il,
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
@@ -74,9 +75,11 @@ export async function holidayYearIndex(ctx) {
   }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
+  const il = ctx.state.il;
   const options = {
     year: calendarYear,
     isHebrewYear,
+    il,
   };
   const events0 = HebrewCalendar.calendar(options);
   const events = getFirstOcccurences(events0);
@@ -92,6 +95,7 @@ export async function holidayYearIndex(ctx) {
     categories,
     items,
     RH: dayjs(roshHashana.getDate().greg()),
+    il,
   });
 }
 
@@ -233,8 +237,7 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base}`);
   }
   const holidayAnchor = makeAnchor(holiday);
-  const q = ctx.request.query;
-  const il = q.i === 'on';
+  const il = ctx.state.il;
   const meta = getHolidayMeta(holiday, year, il);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
@@ -434,10 +437,10 @@ function makeOccursOn(events, holiday, mask, now, il) {
       .filter((ev) => holiday === ev.basename())
       .map((ev) => {
         const hd = ev.getDate();
-        const abs = hd.abs();
         const d0 = dayjs(hd.greg());
         const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
         const duration = mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0;
+        const endAbs = hd.abs() + duration;
         return {
           id: makeAnchor(holiday),
           hd,
@@ -448,7 +451,7 @@ function makeOccursOn(events, holiday, mask, now, il) {
           hdRange: hebrewDateRange(hd, duration),
           desc: ev.render(),
           basename: ev.basename(),
-          ppf: abs < nowAbs ? 'past' : 'future',
+          ppf: endAbs < nowAbs ? 'past' : 'future',
           event: ev,
         };
       });
@@ -570,10 +573,12 @@ export async function holidayMainIndex(ctx) {
   }
   const rch = items['roshchodesh'];
   rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = Array(NUM_YEARS));
+  const il = ctx.state.il;
   for (let i = 0; i < NUM_YEARS; i++) {
     const events0 = HebrewCalendar.calendar({
       year: hyear + i - 1,
       isHebrewYear: true,
+      il,
     });
     const events = getFirstOcccurences(events0);
     const items0 = makeItems(events, false);
@@ -593,6 +598,7 @@ export async function holidayMainIndex(ctx) {
     hyear,
     categories,
     items,
+    il,
   });
 }
 
@@ -621,6 +627,7 @@ export async function holidaysApp(ctx) {
     return;
   }
   const rpath = ctx.request.path;
+  ctx.state.il = ctx.request.query.i === 'on';
   if (rpath === '/holidays/') {
     await holidayMainIndex(ctx);
   } else if (rpath.endsWith('.pdf')) {
