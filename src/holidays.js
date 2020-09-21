@@ -9,6 +9,9 @@ import dayjs from 'dayjs';
 import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
 import {getDefaultHebrewYear, addSefariaLinksToLeyning, httpRedirect} from './common';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+
+dayjs.extend(isSameOrAfter);
 
 const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
@@ -257,7 +260,7 @@ export async function holidayDetail(ctx) {
   }
   next.ppf = 'current';
   makeHolidayReadings(meta, holiday, year, il, next);
-  const isPast = Boolean(year && next.d.isBefore(dayjs(now)));
+  const isPast = year ? !next.d.isSameOrAfter(dayjs(now), 'd') : false;
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = getHolidayDescription(next.event, false);
@@ -440,7 +443,7 @@ function makeOccursOn(events, holiday, mask, now, il) {
         const d0 = dayjs(hd.greg());
         const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
         const duration = mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0;
-        const endAbs = hd.abs() + duration;
+        const endAbs = duration ? hd.abs() + duration - 1 : hd.abs();
         return {
           id: makeAnchor(holiday),
           hd,
