@@ -276,7 +276,7 @@ export async function parshaIndex(ctx) {
     }
   } else {
     parsha = parsha0.parsha.join('-');
-    const pe = new ParshaEvent(hd, parsha0);
+    const pe = new ParshaEvent(hd, parsha0.parsha);
     parshaHref = pe.url();
   }
   await ctx.render('parsha-index', {
