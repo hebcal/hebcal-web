@@ -113,16 +113,17 @@ function makeProperties(ctx) {
   const hdateStr = hdate.render();
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
-  let pe = [];
+  let events = [];
   if (hy >= 3762) {
     const sedra = sedraCache.get(hy) || new Sedra(hy, false);
+    let pe = [];
     if (sedra.isParsha(saturday)) {
       pe = new ParshaEvent(saturday, sedra.get(saturday));
     }
     sedraCache.set(hy, sedra);
+    const holidays = HebrewCalendar.getHolidaysOnDate(hdate, false) || [];
+    events = holidays.concat(pe);
   }
-  const holidays = HebrewCalendar.getHolidaysOnDate(hdate, false) || [];
-  const events = holidays.concat(pe);
   return {
     message: props.message,
     noCache: Boolean(props.noCache),
