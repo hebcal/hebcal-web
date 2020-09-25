@@ -162,6 +162,7 @@ div.pbba { page-break-before: always }
 <%_ include partials/pagination.ejs _%>
 <% let first = true; %>
 <% dates.forEach((d) => { -%>
+<% if (today.isSame(d, 'year') && today.isSame(d, 'month')) { %><div id="cal-current"></div><% } -%>
 <div id="cal-<%= d.format('YYYY-MM') %>">
 <div class="cal<%if(first){first=false;%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
 <h3 class="text-center"><%= d.locale(locale).format('MMMM YYYY') %></h3>

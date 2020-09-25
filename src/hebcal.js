@@ -240,6 +240,7 @@ function renderHtml(ctx) {
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
+    today: dayjs(),
     dates: months,
     gy: months[0].year(),
     tableBodies: makeTableBodies(events, months, options),
@@ -419,7 +420,6 @@ function renderFullCalendar(ctx) {
   if (isFresh(ctx)) {
     return;
   }
-  ctx.set('Cache-Control', 'max-age=604800');
   const options = ctx.state.options;
   for (const param of ['start', 'end']) {
     if (typeof options[param] === 'undefined') {
@@ -429,6 +429,7 @@ function renderFullCalendar(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
+  ctx.set('Cache-Control', 'max-age=604800');
   ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
 }
 
@@ -436,7 +437,6 @@ function renderJson(ctx) {
   if (isFresh(ctx)) {
     return;
   }
-  ctx.set('Cache-Control', 'max-age=86400');
   const events = makeHebrewCalendar(ctx, ctx.state.options);
   const q = ctx.state.q;
   let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
@@ -444,6 +444,7 @@ function renderJson(ctx) {
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
+  ctx.set('Cache-Control', 'max-age=86400');
   ctx.body = obj;
 }
 
