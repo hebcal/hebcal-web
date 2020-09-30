@@ -352,20 +352,21 @@ function makeTableBodies(events, months, options) {
  */
 function renderEventHtml(ev, options) {
   const categories = getEventCategories(ev);
-  if (categories[0] == 'holiday' && ev.getFlags() & flags.CHAG) {
+  const mask = ev.getFlags();
+  if (categories[0] == 'holiday' && mask & flags.CHAG) {
     categories.push('yomtov');
   }
   let title = ev.render();
-  const desc = ev.getDesc();
   const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-  if (desc == 'Havdalah' || desc == 'Candle lighting') {
+  if (time) {
+    categories.push('timed');
     const colon = title.indexOf(':');
-    if (colon != -1) {
+    if (colon !== -1 && !(mask & flags.CHANUKAH_CANDLES)) {
       title = '<small class="text-muted">' + time + '</small> ' + title.substring(0, colon);
+    } else {
+      title = '<small>' + time + '</small> ' + title;
     }
-  } else if (time) {
-    title = '<small>' + time + '</small> ' + title;
-  } else if (ev.getFlags() & flags.DAF_YOMI) {
+  } else if (mask & flags.DAF_YOMI) {
     const colon = title.indexOf(':');
     if (colon != -1) {
       title = title.substring(colon + 1);

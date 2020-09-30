@@ -55,15 +55,17 @@ div.pbba { page-break-before: always }
 .fc-event.dafyomi a:focus {
     color: #005580;
 }
-.fc-event.candles, .fc-event.havdalah {
-  background-color:#FFF;
-  border-color:#FFF;
-  color:#333;
-}
-.fc-event.holiday {
+.fc-event.holiday,
+.fc-event.holiday.timed {
   background-color:#3a87ad;
   border-color:#3a87ad;
   color:#FFF;
+}
+.fc-event.timed,
+.fc-event.holiday.timed.fast {
+  background-color:#FFF;
+  border-color:#FFF;
+  color:#333;
 }
 .fc-event.holiday.yomtov,
 .fc-event.holiday.yomtov a {
