@@ -1,16 +1,6 @@
 <% include partials/header.ejs %>
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>) in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
-<script>
-WebFontConfig = {
-  google: { families: [ 'Alef' ] }
-};
-(function(d) {
-  var wf = d.createElement('script'), s = d.scripts[0];
-  wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-  wf.async = true;
-  s.parentNode.insertBefore(wf, s);
-})(document);
-</script>
+<% include partials/hebrew-font.ejs %>
 </head>
 <body>
 <% include partials/navbar.ejs %>

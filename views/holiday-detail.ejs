@@ -1,17 +1,7 @@
 <% include partials/header.ejs %>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
-<script>
-  WebFontConfig = {
-    google: { families: [ 'Alef' ] }
-  };
-  (function(d) {
-    var wf = d.createElement('script'), s = d.scripts[0];
-    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-    wf.async = true;
-    s.parentNode.insertBefore(wf, s);
-  })(document);
-</script>
+<% include partials/hebrew-font.ejs %>
 <style>
 .past {color: rgba(0, 0, 0, 0.5) !important;}
 .current {background-color: #ffc;}

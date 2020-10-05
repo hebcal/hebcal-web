@@ -19,17 +19,7 @@
 }
 .nobr { white-space: nowrap }
 </style>
-<script>
-  WebFontConfig = {
-    google: { families: [ 'Alef' ] }
-  };
-  (function(d) {
-    var wf = d.createElement('script'), s = d.scripts[0];
-    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-    wf.async = true;
-    s.parentNode.insertBefore(wf, s);
-  })(document);
-</script>
+<% include partials/hebrew-font.ejs %>
 </head>
 <body>
 <% include partials/navbar.ejs %>
@@ -39,7 +29,7 @@
 <div class="col-sm-12">
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
   <%= message %>
 </div><!-- .alert -->
 <% } else if (gy < 1752) { -%>
