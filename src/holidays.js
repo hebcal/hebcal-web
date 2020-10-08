@@ -228,7 +228,7 @@ function formatDatePlusDelta(d, delta, showYear) {
   return formatDateRange(d, d2, showYear);
 }
 
-const holidayYearRe = /^([a-z-]+)-(\d{4})$/;
+const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
@@ -240,6 +240,10 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base}`);
   }
   const holidayAnchor = makeAnchor(holiday);
+  if (year && year < 100) {
+    httpRedirect(ctx, `/holidays/${holidayAnchor}`);
+    return;
+  }
   const il = ctx.state.il;
   const meta = getHolidayMeta(holiday, year, il);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
