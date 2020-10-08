@@ -1,3 +1,4 @@
+<% if (locale === 'he') { %><div lang="he" dir="rtl"><% } %>
 <ul class="hebcal-results">
 <% items.forEach((i) => { -%>
 <% if (i.isoTime) { -%>
@@ -9,3 +10,4 @@
 <% } -%>
 <% }); -%>
 </ul>
+<% if (locale === 'he') { %></div><% } %>

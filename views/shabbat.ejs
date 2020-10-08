@@ -28,7 +28,7 @@ ul.list-unstyled.nav-list li {
 <div id="content">
 <div class="row mt-3">
 <div class="col-md-9">
-<h2><%= Shabbat %> <span class="d-none d-sm-inline">Times</span>
+<h2 dir="<%- locale === 'he' ? 'rtl' : 'ltr'%>"><%= Shabbat %> <span class="d-none d-sm-inline">Times</span>
   <span class="h4 small text-muted"><%= locationName %></span></h2>
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">

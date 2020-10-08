@@ -243,7 +243,7 @@ function renderHtml(ctx) {
     today: dayjs(),
     dates: months,
     gy: months[0].year(),
-    tableBodies: makeTableBodies(events, months, options),
+    tableBodies: makeTableBodies(events, months, options, locale),
     locale,
     weekdaysShort: localeData.weekdaysShort(),
     prevTitle: options.year - 1,
@@ -300,7 +300,7 @@ function getNumYears(options) {
   return numYears;
 }
 
-function makeTableBodies(events, months, options) {
+function makeTableBodies(events, months, options, locale) {
   const eventMap = new Map();
   for (const ev of events) {
     const key = dayjs(ev.date.greg()).format('YYYY-MM-DD');
@@ -324,7 +324,7 @@ function makeTableBodies(events, months, options) {
       html += `<td><p><b>${i}</b></p>`;
       const evs = eventMap.get(yearMonth + '-' + pad2(i)) || [];
       for (const ev of evs) {
-        html += renderEventHtml(ev, options);
+        html += renderEventHtml(ev, options, locale);
       }
       html += '</td>\n';
       n++;
@@ -348,9 +348,10 @@ function makeTableBodies(events, months, options) {
 /**
  * @param {Event} ev
  * @param {HebrewCalendar.Options} options
+ * @param {string} locale
  * @return {string}
  */
-function renderEventHtml(ev, options) {
+function renderEventHtml(ev, options, locale) {
   const categories = getEventCategories(ev);
   const mask = ev.getFlags();
   if (categories[0] == 'holiday' && mask & flags.CHAG) {
@@ -362,15 +363,17 @@ function renderEventHtml(ev, options) {
     categories.push('timed');
     const colon = title.indexOf(':');
     if (colon !== -1 && !(mask & flags.CHANUKAH_CANDLES)) {
-      title = '<small class="text-muted">' + time + '</small> ' + title.substring(0, colon);
+      title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(locale, title.substring(0, colon));
     } else {
-      title = '<small>' + time + '</small> ' + title;
+      title = '<small>' + time + '</small> ' + subjectSpan(locale, title);
     }
   } else if (mask & flags.DAF_YOMI) {
     const colon = title.indexOf(':');
     if (colon != -1) {
-      title = title.substring(colon + 1);
+      title = subjectSpan(locale, title.substring(colon + 1));
     }
+  } else {
+    title = subjectSpan(locale, title);
   }
   const classes = categories.join(' ');
   const memo0 = getHolidayDescription(ev, true);
@@ -383,9 +386,21 @@ function renderEventHtml(ev, options) {
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   const hebrew = options.appendHebrewToSubject ?
-    '<br><span lang="he" dir="rtl">' + ev.renderBrief('he') + '</span>' : '';
+    '<br>' + subjectSpan('he', ev.renderBrief('he')) : '';
   // eslint-disable-next-line max-len
   return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}${hebrew}</span>${aclose}</div>\n`;
+}
+
+/**
+ * @param {string} locale
+ * @param {string} str
+ * @return {string}
+ */
+function subjectSpan(locale, str) {
+  if (locale === 'he') {
+    return '<span lang="he" dir="rtl">' + str + '</span>';
+  }
+  return str;
 }
 
 /**

@@ -266,6 +266,7 @@ export async function holidayDetail(ctx) {
   const descrMedium = getHolidayDescription(next.event, false);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrLong = wikipediaText || descrMedium;
+  const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
@@ -279,7 +280,7 @@ export async function holidayDetail(ctx) {
     hebrew,
     descrShort,
     descrMedium,
-    descrLong,
+    descrLong: descrLong.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`),
     categoryId: category.id,
     categoryName: category.name,
     nextObserved,

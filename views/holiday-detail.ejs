@@ -1,7 +1,6 @@
 <% include partials/header.ejs %>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
-<% include partials/hebrew-font.ejs %>
 <style>
 .past {color: rgba(0, 0, 0, 0.5) !important;}
 .current {background-color: #ffc;}
@@ -18,7 +17,7 @@
 <h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <p class="lead"><%=holiday%> (<%=descrShort%>)
 for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.</p>
-<p><%=descrLong%></p>
+<p><%-descrLong%></p>
 
 <p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=meta.about.name%>" href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
 <% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>

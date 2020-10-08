@@ -13,6 +13,7 @@
   ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
+<% include hebrew-font.ejs %>
 <style>
 a {
   color: #007bff;
@@ -67,8 +68,8 @@ a:not([href]):not([tabindex]):focus {
 .bullet-list-inline li:last-child:after{content:""}
 .label{text-transform:none}
 :lang(he) {
-  font-family:'Miriam Libre','Alef','Alef Hebrew','SBL Hebrew',David,serif;
-  font-size:105%;
+  font-family:'SBL Hebrew',David,serif;
+  font-size:110%;
   direction:rtl;
 }
 @media print{

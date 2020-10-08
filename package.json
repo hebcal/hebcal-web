@@ -55,11 +55,11 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
-    "maxmind": "^4.2.0",
+    "maxmind": "^4.3.0",
     "mysql2": "^2.2.5",
-    "nodemailer": "^6.4.12",
+    "nodemailer": "^6.4.13",
     "pdfkit": "^0.11.0",
-    "pino": "^6.6.1",
+    "pino": "^6.7.0",
     "random-bigint": "0.0.1"
   }
 }

@@ -79,7 +79,7 @@ div.pbba { page-break-before: always }
   color:#FFF;
 }
 .fc-event.hebrew .fc-title {
-  font-family:'Miriam Libre','Alef Hebrew','SBL Hebrew',David;
+  font-family:'SBL Hebrew',David;
   font-size:110%;
   font-weight:normal;
   direction:rtl;
@@ -167,9 +167,9 @@ div.pbba { page-break-before: always }
 <% if (today.isSame(d, 'year') && today.isSame(d, 'month')) { %><div id="cal-current"></div><% } -%>
 <div id="cal-<%= d.format('YYYY-MM') %>">
 <div class="cal<%if(first){first=false;%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
-<h3 class="text-center"><%= d.locale(locale).format('MMMM YYYY') %></h3>
+<h3 class="text-center"><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= d.locale(locale).format('MMMM YYYY') %><% if (locale === 'he') { %></span><% } %></h3>
 <table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
-<tbody><tr><% weekdaysShort.forEach((s) => { -%><th><%= s %></th><% }); -%></tr>
+<tbody><tr><% weekdaysShort.forEach((s) => { -%><th><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= s %><% if (locale === 'he') { %></span><% } %></th><% }); -%></tr>
 <%- tableBodies[d.format('YYYY-MM')] _%>
 </tbody></table>
 </div><!-- .cal -->
