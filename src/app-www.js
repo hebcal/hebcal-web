@@ -22,6 +22,7 @@ import {hebcalApp} from './hebcal';
 import {hebrewDateConverter} from './converter';
 import {homepage} from './homepage';
 import {parshaDetail, parshaIndex} from './sedrot';
+import {parshaCsv} from './parsha-csv';
 import {shabbatApp} from './shabbat';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
   httpRedirect} from './common';
@@ -227,12 +228,12 @@ app.use(async function router(ctx, next) {
     await hdateXml(ctx);
   } else if (rpath === '/sedrot/index.xml' || rpath === '/sedrot/israel.xml' || rpath === '/sedrot/israel-he.xml') {
     await parshaRss(ctx);
-  } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
-    ctx.set('Cache-Control', 'max-age=5184000');
-    // let serve() handle this file
   } else if (rpath.startsWith('/sedrot/')) {
     if (rpath === '/sedrot/') {
       await parshaIndex(ctx);
+    } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
+      ctx.set('Cache-Control', 'max-age=5184000');
+      await parshaCsv(ctx);
     } else {
       await parshaDetail(ctx);
     }
