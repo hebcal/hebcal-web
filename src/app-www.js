@@ -157,7 +157,7 @@ app.use(async function router(ctx, next) {
   } else if (needsTrailingSlash[rpath]) {
     ctx.status = 301;
     httpRedirect(ctx, `${rpath}/`);
-  } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/')) {
+  } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
   } else if (rpath.startsWith('/complete')) {
