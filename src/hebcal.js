@@ -397,6 +397,7 @@ function renderEventHtml(ev, options, locale) {
  * @return {string}
  */
 function subjectSpan(locale, str) {
+  str = Locale.hebrewStripNikkud(str);
   if (locale === 'he') {
     return '<span lang="he" dir="rtl">' + str + '</span>';
   }
