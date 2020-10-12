@@ -264,8 +264,7 @@ export async function holidayDetail(ctx) {
   }
   next.ppf = 'current';
   makeHolidayReadings(meta, holiday, year, il, next);
-  const isPast = year ? !next.d.isSameOrAfter(dayjs(now), 'd') : false;
-  const [nextObserved, nextObservedHtml] = makeNextObserved(next, isPast, il);
+  const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = getHolidayDescription(next.event, false);
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
@@ -394,11 +393,13 @@ function makeOmerEvents(year) {
 
 /**
  * @param {any} item
- * @param {boolean} isPast
+ * @param {number} year
  * @param {boolean} il
  * @return {string[]}
  */
-function makeNextObserved(item, isPast, il) {
+function makeNextObserved(item, year, il) {
+  const now = dayjs();
+  const isPast = year ? !item.d.isSameOrAfter(now, 'd') : false;
   const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
   const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
@@ -415,10 +416,11 @@ function makeNextObserved(item, isPast, il) {
   if (!item.duration) {
     return [nextObserved, nextObservedHtml];
   }
-  const endVerb = isPast ? 'ended' : 'ends';
-  const endWhen = isPast ? '' : ' at nightfall';
-  const endObservedPrefix = ` and ${endVerb}${endWhen} on `;
   const end = item.endD;
+  const isPast2 = year ? !end.isSameOrAfter(now, 'd') : false;
+  const endVerb = isPast2 ? 'ended' : 'ends';
+  const endWhen = isPast2 ? '' : ' at nightfall';
+  const endObservedPrefix = ` and ${endVerb}${endWhen} on `;
   const endIso = end.format('YYYY-MM-DD');
   const endObserved = endObservedPrefix + end.format('D-MMM-YYYY');
   const endObservedHtml = endObservedPrefix + `<strong class="text-burgundy"><time datetime="${endIso}">` +
