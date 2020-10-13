@@ -30,7 +30,7 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 <a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#bi-cloud-download"></use></svg> Download</a>
 </div>
 <div class="btn-group mr-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=year%>&amp;yt=G"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-pencil-square"></use></svg> Customize</a>
+<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%>"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
