@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery, processCookieAndQuery, tooltipScript, typeaheadScript} from './common';
+import {getLocationFromQuery, processCookieAndQuery, tooltipScript, typeaheadScript, getIpAddress} from './common';
 import {makeDb} from './makedb';
 import nodemailer from 'nodemailer';
 import randomBigInt from 'random-bigint';
@@ -253,10 +253,6 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
   }
   await db.close();
   return success;
-}
-
-function getIpAddress(ctx) {
-  return ctx.get('x-client-ip') || ctx.request.ip;
 }
 
 async function getSubInfo(db, emailAddress) {

@@ -1,15 +1,17 @@
-import Koa from 'koa';
+import {GeoDb} from '@hebcal/geo-sqlite';
 import fs from 'fs';
-import pino from 'pino';
+import ini from 'ini';
+import Koa from 'koa';
 import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import etag from 'koa-etag';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
-import {GeoDb} from '@hebcal/geo-sqlite';
-import {yahrzeitDownload} from './yahrzeit';
-import {hebcalDownload} from './hebcal-download';
+import {join} from 'path';
+import pino from 'pino';
 import {makeLogInfo} from './common';
+import {hebcalDownload} from './hebcal-download';
+import {yahrzeitDownload} from './yahrzeit';
 
 const app = new Koa();
 
@@ -22,6 +24,10 @@ const logger = app.context.logger = pino({
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+
+const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
+const iniPath = join(iniDir, 'hebcal-dot-com.ini');
+app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.launchUTCString = new Date().toUTCString();
 
@@ -108,6 +114,8 @@ app.use(async (ctx, next) => {
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
+  } else if (rpath.startsWith('/v3')) {
+    await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {

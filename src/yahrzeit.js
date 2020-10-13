@@ -4,11 +4,15 @@ import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
-import {empty, downloadHref} from './common';
+import {empty, getIpAddress, clipboardScript} from './common';
 import pino from 'pino';
+import {ulid} from 'ulid';
+import {makeDb} from './makedb';
 
 const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
 const debugLog = pino(pino.destination(logDir + '/debug.log'));
+
+const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -36,7 +40,7 @@ export async function yahrzeitApp(ctx) {
   if (maxId > 0) {
     const tables = ctx.state.tables = makeFormResults(ctx);
     if (tables !== null) {
-      makeDownloadProps(ctx);
+      await makeDownloadProps(ctx);
     }
   } else {
     ctx.state.tables = null;
@@ -44,6 +48,7 @@ export async function yahrzeitApp(ctx) {
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     count: Math.max(count, maxId + 5),
+    xtra_html: clipboardScript,
   });
 }
 
@@ -81,7 +86,7 @@ function makeFormResults(ctx) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function makeDownloadProps(ctx) {
+async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
   removeEmptyArgs(q);
   const types0 = Object.entries(q)
@@ -90,22 +95,30 @@ function makeDownloadProps(ctx) {
   const types = Array.from(new Set(types0));
   const type = types.length === 1 ? types[0] : 'Anniversary';
   ctx.state.downloadTitle = type;
-  const filename = type.toLowerCase() + '_' + dayjs().format('YYYYMMDDHHmmss');
+  const filename = type.toLowerCase();
+  const db = makeDb(ctx.iniConfig);
+  const id = ulid().toLowerCase();
+  const ip = getIpAddress(ctx);
+  const sql = 'INSERT INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';
-  const dlhref = downloadHref(q, filename);
-  const subical = downloadHref(q, filename, {subscribe: 1}) + '.ics';
-  const url = ctx.state.url = {
-    ics: dlhref + '.ics',
+  await db.query(sql, [id, ip, JSON.stringify(q)]);
+  await db.close();
+  const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
+  const subical = dlhref + '.ics';
+  const usaCSV = '_usa.csv';
+  const eurCSV = '_eur.csv';
+  ctx.state.filename = {
+    ics: filename + '.ics',
+    csv_usa: filename + usaCSV,
+    csv_eur: filename + eurCSV,
+  };
+  ctx.state.url = {
+    ics: dlhref + '.ics?dl=1',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
     gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
-    csv_usa: dlhref + '_usa.csv',
-    csv_eur: downloadHref(q, filename, {euro: 1}) + '_eur.csv',
-  };
-  ctx.state.filename = {
-    ics: basename(url.ics),
-    csv_usa: basename(url.csv_usa),
-    csv_eur: basename(url.csv_eur),
+    csv_usa: dlhref + usaCSV + '?dl=1',
+    csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
   };
 }
 
@@ -135,8 +148,32 @@ function removeEmptyArgs(q) {
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
+async function getDetailsFromDb(ctx) {
+  const db = makeDb(ctx.iniConfig);
+  const id = ctx.request.path.substring(4, 30);
+  const sql = 'SELECT contents, downloaded FROM yahrzeit WHERE id = ?';
+  const results = await db.query(sql, id);
+  if (!results || !results[0]) {
+    await db.close();
+    ctx.throw(404, `Download key ${id} not found`);
+  }
+  const row = results[0];
+  const obj = row.contents;
+  if (!row.downloaded) {
+    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
+    await db.query(sqlUpdate, id);
+  }
+  await db.close();
+  return obj;
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
 export async function yahrzeitDownload(ctx) {
-  const query = ctx.request.query;
+  const rpath = ctx.request.path;
+  const details = rpath.startsWith('/v3') ? await getDetailsFromDb(ctx) : {};
+  const query = Object.assign({}, details, ctx.request.query);
   if (query.v !== 'yahrzeit') {
     return;
   }
@@ -149,10 +186,9 @@ export async function yahrzeitDownload(ctx) {
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
-  const path = ctx.request.path;
-  const extension = path.substring(path.length - 4);
-  if (!query.subscribe) {
-    ctx.response.attachment(basename(path));
+  const extension = rpath.substring(rpath.length - 4);
+  if (query.dl == '1') {
+    ctx.response.attachment(basename(rpath));
   }
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';

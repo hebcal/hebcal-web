@@ -60,6 +60,7 @@
     "nodemailer": "^6.4.13",
     "pdfkit": "^0.11.0",
     "pino": "^6.7.0",
-    "random-bigint": "0.0.1"
+    "random-bigint": "0.0.1",
+    "ulid": "^2.3.0"
   }
 }

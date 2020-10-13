@@ -487,6 +487,32 @@ export const typeaheadScript = `<script src="https://ajax.googleapis.com/ajax/li
 <script>window['hebcal'].createCityTypeahead(false);</script>
 `;
 
+export const clipboardScript = `
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script>
+var clipboard = new ClipboardJS('#grabBtn', {
+    container: document.getElementsByClassName('modal')[0]
+});
+var grabBtn = document.querySelector('#grabBtn');
+var tooltipBtn=new bootstrap.Tooltip(grabBtn);
+clipboard.on('success', function(e) {
+  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
+  e.trigger.setAttribute('data-original-title','Copied!');
+  tooltipBtn.show();
+  e.trigger.setAttribute('data-original-title','Copy to clipboard');
+  e.clearSelection();
+});
+clipboard.on('error', function(e) {
+  var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
+  var fallbackMsg='Press '+modifierKey+'C to copy';
+  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
+  e.trigger.setAttribute('data-original-title',fallbackMsg);
+  tooltipBtn.show();
+  e.trigger.setAttribute('data-original-title','Copy to clipboard');
+});
+</script>
+`;
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @param {any} [attrs={}]
@@ -561,4 +587,12 @@ export function makeHebrewCalendar(ctx, options) {
     ctx.throw(400, err);
   }
   return events;
+}
+
+/**
+ * @param {any} ctx
+ * @return {string}
+ */
+export function getIpAddress(ctx) {
+  return ctx.get('x-client-ip') || ctx.request.ip;
 }
