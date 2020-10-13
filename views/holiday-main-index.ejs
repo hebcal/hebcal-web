@@ -1,7 +1,7 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="Dates of major and minor Jewish holidays for years <%=today.year() - 1%>-<%=today.year()+6%>. Links to pages describing observance and customs, holiday Torah readings.">
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">

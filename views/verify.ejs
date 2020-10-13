@@ -1,4 +1,4 @@
-<% include partials/header-and-navbar.ejs %>
+<%- await include('partials/header-and-navbar.ejs') -%>
 <div id="content">
 <div class="row">
 <div class="col">
@@ -27,4 +27,4 @@ A confirmation message has been sent to <strong><%= emailAddress %></strong>.
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
-<% include partials/footer.ejs %>
+<%- await include('partials/footer.ejs') -%>

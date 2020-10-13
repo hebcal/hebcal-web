@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
 <style type="text/css">
 @media (min-width: 768px) {
@@ -16,7 +16,7 @@ div.yahrzeit-row {
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
@@ -130,6 +130,6 @@ instructions</a>.</p>
 </div><!-- .row -->
 </div><!-- #content -->
 <% if (tables !== null) { -%>
-<% include partials/download-modal.ejs %>
+<%- await include('partials/download-modal.ejs') -%>
 <% } -%>
 <%_ include partials/footer.ejs _%>

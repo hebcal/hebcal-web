@@ -1,8 +1,8 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
@@ -181,4 +181,4 @@ spreadsheet program.</p>
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
-<% include partials/footer.ejs %>
+<%- await include('partials/footer.ejs') -%>

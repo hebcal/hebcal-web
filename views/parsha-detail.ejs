@@ -1,13 +1,13 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>) in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
 <div class="col">
-<% include partials/parsha-detail-breadcrumb.ejs %>
+<%- await include('partials/parsha-detail-breadcrumb.ejs') -%>
 
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>

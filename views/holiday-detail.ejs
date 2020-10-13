@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
 <style>
@@ -7,12 +7,12 @@
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
 <div class="col-md-10">
-<% include partials/holiday-detail-breadcrumb.ejs %>
+<%- await include('partials/holiday-detail-breadcrumb.ejs') -%>
 
 <h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <p class="lead"><%=holiday%> (<%=descrShort%>)
@@ -148,7 +148,7 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 </div><!-- .row -->
 
 <div class="row">
-<% include partials/holiday-detail-breadcrumb.ejs %>
+<%- await include('partials/holiday-detail-breadcrumb.ejs') -%>
 </div>
 </div><!-- #content -->
 

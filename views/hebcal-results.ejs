@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <link rel="canonical" href="<%= url.canonical %>">
 <style>
@@ -101,15 +101,15 @@ div.pbba { page-break-before: always }
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container-fluid">
 <div id="content">
 <div class="row">
 <div class="col-sm-8">
 <% if (gy < 1752) { -%>
-<% include partials/warning-1752.ejs %>
+<%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<% include partials/location-warnings.ejs %>
+<%- await include('partials/location-warnings.ejs') -%>
 <h2><%= shortTitle %>
 <% if (q.c === 'on') { %><br><% } %><small class="text-muted"><%= locationName %></small></h2>
 <div class="d-print-none">
@@ -187,7 +187,7 @@ window['hebcal'].cconfig=<%- cconfig %>;
 </script>
 </div><!-- #content -->
 <% if (gy >= 1970) { -%>
-<% include partials/download-modal.ejs %>
+<%- await include('partials/download-modal.ejs') -%>
 <% } -%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>

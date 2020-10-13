@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 <link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 <style type="text/css">
@@ -10,7 +10,7 @@ ul.hebcal-results { list-style-type: none }
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
@@ -44,7 +44,7 @@ src="https://www.hebcal.com/shabbat?cfg=j&amp;<%= geoUrlArgs %>&amp;tgt=_top">
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
 <input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
 <input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
-<% include partials/city-and-havdalah.ejs %>
+<%- await include('partials/city-and-havdalah.ejs') -%>
 <div class="form-check mb-3">
   <input class="form-check-input" type="checkbox" name="a" <%= q.a === 'on' ? 'checked' : '' -%> id="a">
   <label class="form-check-label" for="a">Use Ashkenazis Hebrew transliterations</label>

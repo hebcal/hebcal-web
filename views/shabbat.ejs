@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="<%= summary %>">
 <% if (jsonLD) { -%>
 <script type="application/ld+json"><%- jsonLD %></script>
@@ -23,7 +23,7 @@ ul.list-unstyled.nav-list li {
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row mt-3">
@@ -36,15 +36,15 @@ ul.list-unstyled.nav-list li {
   <%= message %>
 </div><!-- .alert -->
 <% } -%>
-<% include partials/location-warnings.ejs %>
-<% include partials/shabbat-items.ejs %>
+<%- await include('partials/location-warnings.ejs') -%>
+<%- await include('partials/shabbat-items.ejs') -%>
 <hr class="mt-5">
 <form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
 <input type="hidden" name="city" value="<%= q.city %>" id="city">
 <input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
-<% include partials/city-and-havdalah.ejs %>
+<%- await include('partials/city-and-havdalah.ejs') -%>
   <button type="submit" class="btn btn-primary">Get Shabbat Times</button>
 </form>
 <hr>

@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="Hebcal makes calendars of Jewish holidays. Convert Hebrew and Gregorian dates, get Shabbat candle-lighting times, Torah readings for Diaspora + Israel, Yahrzeit dates and more.">
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
@@ -57,7 +57,7 @@ a.icon-block {
 </script>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="masthead" tabindex="-1">
 <div class="container">
 <ul class="list-inline">

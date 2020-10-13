@@ -1,8 +1,8 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <link rel="stylesheet" type="text/css" href="https://www.hebcal.com/i/hyspace-typeahead.css">
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
@@ -31,7 +31,7 @@
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
 <input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
 <input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
-<% include partials/city-and-havdalah.ejs %>
+<%- await include('partials/city-and-havdalah.ejs') -%>
 <button type="submit" class="btn btn-primary" name="modify" value="1"><%= q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
 <% } %>
 <button type="submit" class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
@@ -52,4 +52,4 @@
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
-<% include partials/footer.ejs %>
+<%- await include('partials/footer.ejs') -%>

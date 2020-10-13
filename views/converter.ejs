@@ -1,4 +1,4 @@
-<% include partials/header.ejs %>
+<%- await include('partials/header.ejs') -%>
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
@@ -21,7 +21,7 @@
 </style>
 </head>
 <body>
-<% include partials/navbar.ejs %>
+<%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
 <div class="row">
@@ -32,7 +32,7 @@
   <%= message %>
 </div><!-- .alert -->
 <% } else if (gy < 1752) { -%>
-<% include partials/warning-1752.ejs %>
+<%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <div id="converter-results">
 <ul class="list-unstyled">
@@ -157,4 +157,4 @@ future. Download/export to Outlook, iPhone, Google Calendar and more.</p>
 </div><!-- .row -->
 </div><!-- #content -->
 
-<%_ include partials/footer.ejs _%>
+<%- await include('partials/footer.ejs') _%>
