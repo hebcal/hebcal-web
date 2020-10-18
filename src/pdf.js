@@ -169,17 +169,47 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   }
   if (rtl) {
     fontStyle = 'hebrew';
-    // nonsense required for pdfkit
-    subj = subj.replace('(', '\u0001').replace(')', '\u0002');
-    subj = subj.replace('\u0001', ')').replace('\u0002', '(');
-    subj = subj.split(' ').reverse().join('  ');
+    subj = reverseHebrewWords(subj);
   }
   doc.font(fontStyle);
-  const width = doc.widthOfString(subj);
-  if (width > (PDF_COLWIDTH - 6)) {
+  let width = doc.widthOfString(subj);
+  if (width > (PDF_COLWIDTH - 20)) {
     doc.fontSize(7);
+    width = doc.widthOfString(subj);
   }
   doc.text(subj, x, y);
+  if (options.appendHebrewToSubject) {
+    const slash = ' / ';
+    doc.font('plain');
+    const widthSlash = doc.widthOfString(slash);
+    const hebrew = evt.renderBrief('he');
+    doc.font('hebrew');
+    const hebrewWidth = doc.widthOfString(hebrew);
+    if ((width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 22)) {
+      y += 12;
+    } else {
+      x += width;
+      doc.font('plain');
+      doc.text(slash, x, y);
+      x += widthSlash;
+      y += 2;
+    }
+    doc.font('hebrew');
+    doc.text(reverseHebrewWords(hebrew), x, y);
+  }
+  return y + 12; // newline within cell
+}
+
+/**
+ * nonsense required for pdfkit
+ * @param {string} subj
+ * @return {string}
+ */
+function reverseHebrewWords(subj) {
+  subj = subj.replace('(', '\u0001').replace(')', '\u0002');
+  subj = subj.replace('\u0001', ')').replace('\u0002', '(');
+  subj = subj.split(' ').reverse().join('  ');
+  return subj;
 }
 
 /**
@@ -245,8 +275,7 @@ export function renderPdf(doc, events, options) {
       if (cells[yearMonth][mday]) {
         let y = ypos + 18;
         for (const evt of cells[yearMonth][mday]) {
-          renderPdfEvent(doc, evt, xpos - PDF_COLWIDTH + 8, y, rtl, options);
-          y += 12; // newline within cell
+          y = renderPdfEvent(doc, evt, xpos - PDF_COLWIDTH + 8, y, rtl, options);
         }
       }
 
