@@ -102,11 +102,12 @@ async function renderForm(ctx, error) {
     tzids,
     xtra_html: typeaheadScript + tooltipScript +
 `<script>
-var d=document;
-function s6(val){
-if(val=='G'){d.f1.year.value=${defaultYear};}
-if(val=='H'){d.f1.year.value=${defaultYearHeb};}
-return false;}
+(function() {
+var d=document,d1=d.getElementById("d1"),d2=d.getElementById("d2");
+d1.onclick=function(){if(this.checked){d2.checked=false;}}
+d2.onclick=function(){if(this.checked){d1.checked=false;}}
+d.getElementById("ytH").onclick=function(){d.f1.year.value=${defaultYearHeb};}
+d.getElementById("ytG").onclick=function(){d.f1.year.value=${defaultYear};}
 d.getElementById("maj").onclick=function(){
  if (this.checked == false) {
   ["nx","mf","ss","min","mod"].forEach(function(x){
@@ -117,16 +118,7 @@ d.getElementById("maj").onclick=function(){
 ["nx","mf","ss","min","mod"].forEach(function(x){
  d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
 });
-d.getElementById("d1").onclick=function(){
- if (this.checked) {
-  d.getElementById("d2").checked = false;
- }
-}
-d.getElementById("d2").onclick=function(){
- if (this.checked) {
-  d.getElementById("d1").checked = false;
- }
-}
+})();
 </script>`,
   });
 }
@@ -373,9 +365,9 @@ function renderEventHtml(ev, options, locale) {
  * @return {string}
  */
 function subjectSpan(locale, str) {
-  str = Locale.hebrewStripNikkud(str);
+  str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
   if (locale === 'he') {
-    return '<span lang="he" dir="rtl">' + str + '</span>';
+    return '<span lang="he" dir="rtl">' + Locale.hebrewStripNikkud(str) + '</span>';
   }
   return str;
 }
