@@ -67,44 +67,9 @@ and then come back to this page.</p>
 </div><!-- .d-print-none -->
 <form class="yahrzeit-form d-print-none" method="post" action="<%= rpath %>">
 <% for (let num = 1; num <= count; num++) { -%>
-<div class="yahrzeit-row">
-<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
-<div class="col-auto"><input class="form-control" type="text" name="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)"></div>
-<div class="col-auto">
-<select name="t<%=num%>" class="form-select">
-<option <%- (q['t'+num] == 'Yahrzeit') ? 'selected' : '' -%> value="Yahrzeit">Yahrzeit</option>
-<option <%- (q['t'+num] == 'Birthday') ? 'selected' : '' -%> value="Birthday">Birthday</option>
-<option <%- (q['t'+num] == 'Anniversary') ? 'selected' : '' -%> value="Anniversary">Anniversary</option>
-</select></div>
-<div class="col-auto"><input class="form-control" type="text" name="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day"></div>
-<div class="col-auto">
-<select name="m<%=num%>" class="form-select">
-  <option <%- (q['m'+num] == 1) ? 'selected' : '' -%> value="1">January</option>
-  <option <%- (q['m'+num] == 2) ? 'selected' : '' -%> value="2">February</option>
-  <option <%- (q['m'+num] == 3) ? 'selected' : '' -%> value="3">March</option>
-  <option <%- (q['m'+num] == 4) ? 'selected' : '' -%> value="4">April</option>
-  <option <%- (q['m'+num] == 5) ? 'selected' : '' -%> value="5">May</option>
-  <option <%- (q['m'+num] == 6) ? 'selected' : '' -%> value="6">June</option>
-  <option <%- (q['m'+num] == 7) ? 'selected' : '' -%> value="7">July</option>
-  <option <%- (q['m'+num] == 8) ? 'selected' : '' -%> value="8">August</option>
-  <option <%- (q['m'+num] == 9) ? 'selected' : '' -%> value="9">September</option>
-  <option <%- (q['m'+num] == 10) ? 'selected' : '' -%> value="10">October</option>
-  <option <%- (q['m'+num] == 11) ? 'selected' : '' -%> value="11">November</option>
-  <option <%- (q['m'+num] == 12) ? 'selected' : '' -%> value="12">December</option>
-</select></div>
-<div class="col-auto"><input class="form-control" type="text" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year"></div>
-<div class="col-auto form-check m-2">
-  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' -%> value="off">
-  <label class="form-check-label" for="s<%=num%>-0">Before sunset</label>
-</div>
-<div class="col-auto form-check">
-  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' -%> value="on">
-  <label class="form-check-label" for="s<%=num%>-1">After sunset</label>
-</div>
-</div><!-- .row -->
-</div><!-- .yahrzeit-row -->
+<%- await include('partials/yahrzeit-row.ejs', {num}) -%>
 <% } %>
-
+<button class="btn btn-secondary btn-sm mt-2" id="newrow">+ Add another row</button>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
