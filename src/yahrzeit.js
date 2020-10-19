@@ -61,8 +61,8 @@ document.getElementById("newrow").onclick = function() {
   newNode.className = "yahrzeit-row";
   newNode.id = "row" + n;
   newNode.innerHTML = yahrzeitRow(n);
-  var parentDiv = this.parentNode;
-  parentDiv.insertBefore(newNode, this);
+  var parentDiv = document.getElementById("rows");
+  parentDiv.insertBefore(newNode, null);
   return false;
 }
 })();

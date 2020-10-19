@@ -1,16 +1,11 @@
 <%- await include('partials/header.ejs') -%>
 <meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
 <style type="text/css">
-@media (min-width: 768px) {
- .form-inline .radio label {
-    padding-left: 8px;
- }
-}
 div.yahrzeit-row {
   border-bottom:1px solid #dddddd;
   padding:4px;
 }
-.yahrzeit-form > div.yahrzeit-row:nth-of-type(odd) {
+#rows > div.yahrzeit-row:nth-of-type(odd) {
   background-color: rgba(0, 123, 255, .15);
 }
 </style>
@@ -20,7 +15,7 @@ div.yahrzeit-row {
 <div class="container">
 <div id="content">
 <div class="row">
-<div class="col-sm-12">
+<div class="col">
 <% if (typeof q.ref_url === 'string') { -%>
 <% let ref_text = q.ref_text || q.ref_url; -%>
 <p class="lead">Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>
@@ -30,7 +25,7 @@ div.yahrzeit-row {
 <div class="btn-toolbar d-print-none">
 <div class="mr-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-cloud-download"></use></svg> Download</a></div>
-<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-pencil-square"></use></svg> Enter more dates and names</a>
+<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-pencil-square"></use></svg> Edit</a>
 </div><!-- .btn-toolbar -->
 <p>Yahrzeit candles should be lit the evening before the date specified.
 This is because the Jewish day actually begins at sundown on the previous night.</p>
@@ -65,11 +60,14 @@ yahrzeit.</p>
 href="/converter">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
 </div><!-- .d-print-none -->
-<form class="yahrzeit-form d-print-none" method="post" action="<%= rpath %>">
+<form class="d-print-none" method="post" action="<%= rpath %>">
+<div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
 <% } %>
-<button class="btn btn-secondary btn-sm mt-2" id="newrow">+ Add another row</button>
+</div><!-- #rows -->
+<div class="row">
+<div class="col">
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
@@ -83,6 +81,11 @@ and then come back to this page.</p>
   <div class="col-auto">
     <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
   </div>
+</div>
+</div><!-- .col -->
+<div class="col">
+  <p class="text-right"><button class="btn btn-secondary btn-sm mt-3" id="newrow">+ Add another name</button></p>
+</div><!-- .col -->
 </div><!-- .row -->
 <input type="hidden" name="v" value="yahrzeit">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
@@ -91,7 +94,7 @@ and then come back to this page.</p>
 <p class="d-print-none text-muted mt-3">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
-</div><!-- .col-sm-12 -->
+</div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
 <% if (tables !== null) { -%>
