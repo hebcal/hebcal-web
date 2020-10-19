@@ -330,7 +330,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       if (typeof reading !== 'undefined') {
         const key = leyning.getLeyningKeyForEvent(ev, il) || ev.getDesc();
         meta.items.push(key);
-        makeHolidayReading(holiday, key, meta, reading);
+        makeHolidayReading(holiday, key, meta, reading, ev);
         const hd = reading.hd = ev.getDate();
         reading.d = dayjs(hd.greg());
       }
@@ -485,7 +485,7 @@ function hebrewDateRange(hd, duration) {
   return `${startMday} ${startMonth} - ${end.toString()}`;
 }
 
-function makeHolidayReading(holiday, item, meta, reading) {
+function makeHolidayReading(holiday, item, meta, reading, ev) {
   if (reading.fullkriyah) {
     addSefariaLinksToLeyning(reading.fullkriyah, true);
   }
@@ -493,6 +493,8 @@ function makeHolidayReading(holiday, item, meta, reading) {
   const hebrew = Locale.lookupTranslation(item, 'he');
   if (typeof hebrew === 'string') {
     itemReading.hebrew = hebrew;
+  } else if (typeof ev === 'object') {
+    itemReading.hebrew = ev.render('he');
   }
   itemReading.id = makeAnchor(item);
   if (meta.links && meta.links.torah && meta.links.torah[item]) {
