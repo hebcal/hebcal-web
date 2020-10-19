@@ -31,7 +31,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <ul class="pagination<%= meta.items.length > 3 ? ' pagination-sm' : ''%>">
 <li class="page-item"><a class="page-link" href="#dates">Dates</a></li>
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
-<li class="page-item"><a class="page-link" href="#reading-<%=reading.id%>"><%=reading.shortName%></a></li>
+<li class="page-item"><a class="page-link" href="#reading<%=reading.shortName === 'Tanakh' ? '' : '-'+reading.id %>"><%=reading.shortName%></a></li>
 <% } // ... for %>
 <li class="page-item"><a class="page-link" href="#ref">References</a></li>
 </ul><!-- .pagination -->

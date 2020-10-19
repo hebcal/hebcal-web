@@ -351,6 +351,9 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       }
     }
   }
+  if (Object.keys(meta.reading).length === 0) {
+    delete meta.reading;
+  }
 }
 
 function getReadingForHoliday(ev, il) {
