@@ -3,6 +3,13 @@
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style>
+@font-face {
+  font-family: 'Merriweather';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Merriweather Regular'), local('Merriweather-Regular'), url(https://fonts.gstatic.com/s/merriweather/v22/u-440qyriQwlOrhSvowK_l5-fCZMdeX3rg.woff2) format('woff2');
+}
 ul.list-inline li:after{content:"\00a0\00b7"}
 ul.list-inline li:last-child:after{content:""}
 .h1, .h2, .h3, h1, h2, h3 {
@@ -44,17 +51,6 @@ a.icon-block {
 }
 </style>
 <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
-<script>
-  WebFontConfig = {
-    google: { families: [ 'Merriweather:400:latin' ] }
-  };
-  (function(d) {
-    var wf = d.createElement('script'), s = d.scripts[0];
-    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
-    wf.async = true;
-    s.parentNode.insertBefore(wf, s);
-  })(document);
-</script>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
