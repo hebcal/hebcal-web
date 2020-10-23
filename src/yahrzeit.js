@@ -4,7 +4,7 @@ import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
-import {empty, getIpAddress, clipboardScript} from './common';
+import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
 import pino from 'pino';
 import {ulid} from 'ulid';
 import {makeDb} from './makedb';
@@ -45,10 +45,11 @@ export async function yahrzeitApp(ctx) {
   } else {
     ctx.state.tables = null;
   }
+  const scriptHtml = ctx.state.tables ? (clipboardScript + tooltipScript) : tooltipScript;
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     count,
-    xtra_html: (ctx.state.tables ? clipboardScript : '') +
+    xtra_html: scriptHtml +
 `<script>
 (function() {
 var count=${count};
