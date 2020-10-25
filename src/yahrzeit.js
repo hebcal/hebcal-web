@@ -184,6 +184,7 @@ async function getDetailsFromDb(ctx) {
     await db.close();
     ctx.throw(404, `Download key ${id} not found`);
   }
+  ctx.state.relcalid = id;
   const row = results[0];
   const obj = row.contents;
   if (!row.downloaded) {
@@ -219,33 +220,46 @@ export async function yahrzeitDownload(ctx) {
   }
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
-    const names = Object.entries(query)
-        .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
-        .map((x) => x[1]);
-    const calendarType0 = summarizeAnniversaryTypes(query);
-    let calendarType = calendarType0; // default 'Yahrzeit'
-    switch (calendarType0) {
-      case 'Anniversary':
-        calendarType = 'Hebrew Anniversaries';
-        break;
-      case 'Birthday':
-        calendarType = 'Hebrew Birthdays';
-        break;
-      default:
-        break;
-    }
-    let title = `${calendarType} - ` + names.join(', ');
-    if (title.length > 60) {
-      title = title.substring(0, 57) + '...';
-    }
+    const title = makeCalendarTitle(query);
     const readable = ctx.body = new Readable();
-    eventsToIcalendarStream(readable, events, {yahrzeit: true, title});
+    const relcalid = ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null;
+    eventsToIcalendarStream(readable, events, {yahrzeit: true, title, relcalid});
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
     const ical = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = ical;
   }
+}
+
+/**
+ * @param {any} query
+ * @return {string}
+ */
+function makeCalendarTitle(query) {
+  const names = Object.entries(query)
+      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
+      .map((x) => x[1]);
+  const calendarType0 = summarizeAnniversaryTypes(query);
+  let calendarType = calendarType0; // default 'Yahrzeit'
+  switch (calendarType0) {
+    case 'Anniversary':
+      calendarType = 'Hebrew Anniversaries';
+      break;
+    case 'Birthday':
+      calendarType = 'Hebrew Birthdays';
+      break;
+    default:
+      break;
+  }
+  let title = calendarType;
+  if (names.length > 0) {
+    title += ': ' + names.join(', ');
+  }
+  if (title.length > 64) {
+    title = title.substring(0, 61) + '...';
+  }
+  return title;
 }
 
 /**
