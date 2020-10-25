@@ -63,8 +63,10 @@ and then come back to this page.</p>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
 <% } %>
 </div><!-- #rows -->
-<div class="row">
-<div class="col">
+<div class="clearfix">
+<p class="text-right float-sm-right">
+ <button class="btn btn-secondary btn-sm mt-2" id="newrow">+ Add another name</button>
+</p>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
@@ -81,11 +83,7 @@ and then come back to this page.</p>
     <input type="text" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*">
   </div>
 </div>
-</div><!-- .col -->
-<div class="col">
-  <p class="text-right"><button class="btn btn-secondary btn-sm mt-3" id="newrow">+ Add another name</button></p>
-</div><!-- .col -->
-</div><!-- .row -->
+</div><!-- .clearfix -->
 <input type="hidden" name="v" value="yahrzeit">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>

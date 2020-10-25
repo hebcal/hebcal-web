@@ -35,7 +35,7 @@ export async function yahrzeitApp(ctx) {
   };
   const q = ctx.state.q = Object.assign(defaults, ctx.request.body, ctx.request.query);
   const maxId = ctx.state.maxId = getMaxId(q);
-  const count = Math.max(+q.count || 3, maxId);
+  const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   if (maxId > 0) {
     const tables = ctx.state.tables = makeFormResults(ctx);
@@ -108,11 +108,7 @@ function makeFormResults(ctx) {
 async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
   removeEmptyArgs(q);
-  const types0 = Object.entries(q)
-      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
-      .map((x) => x[1]);
-  const types = Array.from(new Set(types0));
-  const type = types.length === 1 ? types[0] : 'Anniversary';
+  const type = summarizeAnniversaryTypes(q);
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase();
   const db = makeDb(ctx.iniConfig);
@@ -139,6 +135,18 @@ async function makeDownloadProps(ctx) {
     csv_usa: dlhref + usaCSV + '?dl=1',
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
   };
+}
+
+/**
+ * @param {any} query
+ * @return {string}
+ */
+function summarizeAnniversaryTypes(query) {
+  const types0 = Object.entries(query)
+      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
+      .map((x) => x[1]);
+  const types = Array.from(new Set(types0));
+  return types.length === 1 ? types[0] : 'Anniversary';
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -211,8 +219,27 @@ export async function yahrzeitDownload(ctx) {
   }
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
+    const names = Object.entries(query)
+        .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
+        .map((x) => x[1]);
+    const calendarType0 = summarizeAnniversaryTypes(query);
+    let calendarType = calendarType0; // default 'Yahrzeit'
+    switch (calendarType0) {
+      case 'Anniversary':
+        calendarType = 'Hebrew Anniversaries';
+        break;
+      case 'Birthday':
+        calendarType = 'Hebrew Birthdays';
+        break;
+      default:
+        break;
+    }
+    let title = `${calendarType} - ` + names.join(', ');
+    if (title.length > 60) {
+      title = title.substring(0, 57) + '...';
+    }
     const readable = ctx.body = new Readable();
-    eventsToIcalendarStream(readable, events, {yahrzeit: true});
+    eventsToIcalendarStream(readable, events, {yahrzeit: true, title});
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
     const ical = eventsToCsv(events, {euro});
