@@ -1,5 +1,11 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
+<style>
+.icon-sm {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -15,40 +21,7 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
 <% if (parsha !== null) { %>
 <p>This week's Torah Portion is <a href="<%=parshaHref%><%= il ? '?i=on' : ''%>"><%=parsha%></a> (read in <%=il ? 'Israel' : 'the Diaspora'%> on <%=saturday.format('D MMMM YYYY')%>).</p>
 <% } %>
-<div class="btn-toolbar">
-<div class="btn-group mr-1 mb-2">
- <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  Download for Diaspora <span class="caret"></span>
- </button>
- <ul class="dropdown-menu" role="menu">
-  <li><a class="dropdown-item download" id="quick-ical-torah-readings-diaspora" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">iPhone, iPad, Mac OS X</a></li>
-  <li><a class="dropdown-item download" id="quick-gcal-torah-readings-diaspora" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">Google Calendar</a></li>
-  <li><a class="dropdown-item download" id="quick-csv-torah-readings-diaspora" href="http://download.hebcal.com/ical/torah-readings-diaspora.csv" download="torah-readings-diaspora.csv">Microsoft Outlook CSV</a>
-  <li class="dropdown-divider"></li>
-  <li><a class="dropdown-item" href="index.xml">Parashat ha-Shavua RSS feed</a></li>
 
- </ul>
-</div><!-- .btn-group -->
-
-<div class="btn-group mr-1 mb-2">
- <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  Download for Israel <span class="caret"></span>
- </button>
- <ul class="dropdown-menu" role="menu">
-  <li><a class="dropdown-item download" id="quick-ical-torah-readings-israel" href="webcal://download.hebcal.com/ical/torah-readings-israel.ics">iPhone, iPad, Mac OS X</a></li>
-  <li><a class="dropdown-item download" id="quick-gcal-torah-readings-israel" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel.ics">Google Calendar</a></li>
-  <li><a class="dropdown-item download" id="quick-csv-torah-readings-israel" href="http://download.hebcal.com/ical/torah-readings-israel.csv" download="torah-readings-israel.csv">Microsoft Outlook CSV</a>
-  <li class="dropdown-divider"></li>
-  <li><a class="dropdown-item" href="israel.xml">Parashat ha-Shavua RSS feed (Translit.)</a></li>
-  <li><a class="dropdown-item" href="israel-he.xml">Parashat ha-Shavua RSS feed (Hebrew)</a></li>
- </ul>
-</div><!-- .btn-group -->
-
-<a class="btn btn-sm btn-secondary mr-1 mb-2" title="Download aliyah-by-aliyah breakdown"
-href="#download">
-<svg class="icon align-top"><use xlink:href="/i/sprite3.svg#bi-cloud-download"></use></svg>
-Leyning spreadsheet</a>
-</div><!-- .btn-toolbar -->
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -67,46 +40,49 @@ Leyning spreadsheet</a>
 
 <div class="row">
 <div class="col">
-<h4>Parashat ha-Shavua by Hebrew year</h4>
+<h3 id="download">Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
+<p>Download or subscribe to Parashat ha-Shavua (weekly Torah Portion) on your device
+or web/desktop application. Subscribers to these feeds receive perpetual updates.</p>
 <nav>
 <ul class="pagination pagination-sm">
 <li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5779&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5779</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5780&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5780</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5781&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5781</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5782&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5782</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5783&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5783</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5784&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5784</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5785&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5785</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5786&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5786</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5787&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5787</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5788&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5788</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5789&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5789</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5790&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5790</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5791&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5791</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5792&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5792</a></li>
-</ul><!-- .pagination -->
+<li class="page-item">
+  <a class="page-link" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS
+</a></li>
+<li class="page-item">
+  <a class="page-link" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar
+</a></li>
+<li class="page-item">
+  <a class="page-link" href="index.xml">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed
+</a></li>
+</ul>
 </nav>
 <nav>
 <ul class="pagination pagination-sm">
 <li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5779&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5779</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5780&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5780</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5781&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5781</a></li>
-<li class="page-item"><a class="page-link" href="/hebcal?year=5782&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5782</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5783&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5783</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5784&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5784</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5785&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5785</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5786&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5786</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5787&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5787</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5788&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5788</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5789&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5789</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5790&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5790</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5791&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5791</a></li>
-<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5792&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5792</a></li>
-</ul><!-- .pagination -->
+<li class="page-item">
+  <a class="page-link" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS
+</a></li>
+<li class="page-item">
+  <a class="page-link" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar
+</a></li>
+<li class="page-item">
+  <a class="page-link" href="israel-he.xml">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Hebrew)
+</a></li>
+<li class="page-item">
+  <a class="page-link" href="israel.xml">
+  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Translit.)
+</a></li>
+</ul>
 </nav>
-<h4 id="download">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
+
+<h4 id="download-leyning">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
 <p>Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
@@ -177,6 +153,46 @@ spreadsheet program.</p>
 </tbody>
 </table>
 </div>
+
+<h3>Parashat ha-Shavua by Hebrew year</h3>
+<nav>
+<ul class="pagination pagination-sm">
+<li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5779&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5779</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5780&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5780</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5781&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5781</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5782&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5782</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5783&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5783</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5784&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5784</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5785&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5785</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5786&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5786</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5787&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5787</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5788&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5788</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5789&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5789</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5790&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5790</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5791&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5791</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5792&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=off&amp;set=off">5792</a></li>
+</ul><!-- .pagination -->
+</nav>
+<nav>
+<ul class="pagination pagination-sm">
+<li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5779&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5779</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5780&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5780</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5781&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5781</a></li>
+<li class="page-item"><a class="page-link" href="/hebcal?year=5782&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5782</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5783&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5783</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5784&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5784</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5785&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5785</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5786&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5786</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5787&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5787</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5788&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5788</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5789&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5789</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5790&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5790</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5791&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5791</a></li>
+<li class="page-item"><a rel="nofollow" class="page-link" href="/hebcal?year=5792&amp;v=1&amp;month=x&amp;yt=H&amp;s=on&amp;i=on&amp;set=off">5792</a></li>
+</ul><!-- .pagination -->
+</nav>
 
 </div><!-- .col -->
 </div><!-- .row -->

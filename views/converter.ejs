@@ -17,7 +17,7 @@
 #converter-results .jumbo {
   font-size: 37px;
 }
-.nobr { white-space: nowrap }
+.smaller {font-size: 0.75em}
 </style>
 </head>
 <body>
@@ -36,7 +36,7 @@
 <% } -%>
 <div id="converter-results">
 <ul class="list-unstyled">
-<li class="big-list"><span class="nobr"><%= first %></span> = <strong class="nobr"><%= second %></strong></li>
+<li class="big-list"><span class="text-nowrap"><%- first.replace(/ \(after sunset\)/, ' <span class="smaller">(after sunset)</span>') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
 <% events.forEach((ev) => { -%>
 <% if (ev.url()) { -%>
@@ -51,7 +51,7 @@
 <div class="row">
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
-<h5>Convert from Gregorian to Hebrew date</h5>
+<h5>Convert from Gregorian to Hebrew</h5>
 <div class="col-auto mb-2">
 <input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
 </div><!-- .col -->
@@ -91,7 +91,7 @@
 
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3" method="get" autocomplete="off" action="/converter">
-<h5>Convert from Hebrew to Gregorian date</h5>
+<h5>Convert from Hebrew to Gregorian</h5>
 <div class="col-auto mb-2">
 <input type="text" class="form-control" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">
 </div><!-- .col -->
