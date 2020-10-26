@@ -43,44 +43,32 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
 <h3 id="download">Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
 <p>Download or subscribe to Parashat ha-Shavua (weekly Torah Portion) on your device
 or web/desktop application. Subscribers to these feeds receive perpetual updates.</p>
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
-<li class="page-item">
-  <a class="page-link" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS
-</a></li>
-<li class="page-item">
-  <a class="page-link" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar
-</a></li>
-<li class="page-item">
-  <a class="page-link" href="index.xml">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed
-</a></li>
-</ul>
-</nav>
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
-<li class="page-item">
-  <a class="page-link" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS
-</a></li>
-<li class="page-item">
-  <a class="page-link" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar
-</a></li>
-<li class="page-item">
-  <a class="page-link" href="israel-he.xml">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Hebrew)
-</a></li>
-<li class="page-item">
-  <a class="page-link" href="israel.xml">
-  <svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Translit.)
-</a></li>
-</ul>
-</nav>
+
+<div class="row mt-2">
+<div class="col-2 col-lg-1"><span class="text-muted">Diaspora</span></div>
+<div class="col-10 col-lg-11">
+<a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar</a>
+<a class="btn btn-outline-primary btn-sm mb-2" href="index.xml">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed</a>
+</div>
+</div><!-- .row -->
+
+<div class="row mt-2 mb-4">
+<div class="col-2 col-lg-1"><span class="text-muted">Israel</span></div>
+<div class="col-10 col-lg-11">
+<a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar</a>
+<a class="btn btn-outline-primary btn-sm mb-2" href="israel-he.xml">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Hebrew)</a>
+<a class="btn btn-outline-primary btn-sm mb-2" href="israel.xml">
+<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Translit.)</a>
+</div>
+</div><!-- .row -->
 
 <h4 id="download-leyning">Download leyning spreadsheet <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
 <p>Leyning coordinators can download these Comma Separated
@@ -89,12 +77,24 @@ spreadsheet program.</p>
 <div class="btn-toolbar">
 <div class="btn-group mr-1 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  Full Kriyah (Diaspora) <span class="caret"></span>
+  Diaspora Full Kriyah <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
 <li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
 <% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
 <li><small><a class="dropdown-item download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" download="fullkriyah-<%=yr%>.csv">fullkriyah-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
+</div>
+
+<div class="btn-group mr-1 mb-2">
+ <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+  Israel Full Kriyah <span class="caret"></span>
+ </button>
+ <ul class="dropdown-menu" role="menu">
+<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
+<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
+<li><small><a class="dropdown-item download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
 <% } %>
 </ul>
 </div>
@@ -107,18 +107,6 @@ spreadsheet program.</p>
 <li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
 <% for (let yr = triCycleStartYear - 3; yr < triCycleStartYear + 12; yr += 3) { %>
 <li><a class="dropdown-item download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" download="triennial-<%=yr%>-<%=yr+2%>.csv">triennial-<%=yr%>-<%=yr+2%>.csv</a></li>
-<% } %>
-</ul>
-</div>
-
-<div class="btn-group mr-1 mb-2">
- <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-  Full Kriyah (Israel) <span class="caret"></span>
- </button>
- <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
-<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
-<li><small><a class="dropdown-item download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
 <% } %>
 </ul>
 </div>
