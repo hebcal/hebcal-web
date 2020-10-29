@@ -40,7 +40,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% } // meta.reading %>
 
 <div class="d-flex justify-content-center d-print-none">
-<div><h6>Advertisement</h6></div>
+<div><h6 class="text-muted mb-2">Advertisement</h6></div>
 </div><!-- .d-flex -->
 <div class="d-flex justify-content-center d-print-none">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -106,7 +106,7 @@ href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHr
 <dl>
 <dt><em><a class="amzn" id="strassfeld-2"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
-Jewish Holidays: A Guide &amp; Commentary</a></em>
+Jewish Holidays: A Guide &amp; Commentary</a></em> <small class="text-muted">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% if (typeof meta.reading !== 'undefined') { %>
 <dt><em><a class="outbound"
@@ -115,7 +115,7 @@ href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dt><em><a class="amzn" id="jps-tanakh-1"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
-The Holy Scriptures</a></em>
+The Holy Scriptures</a></em> <small class="text-muted">(paid link)</small>
 <dd>Jewish Publication Society
 <% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
@@ -126,7 +126,7 @@ The Holy Scriptures</a></em>
 </div><!-- .col-md-10 -->
 <% if (typeof meta.books !== 'undefined') { %>
 <div class="col-md-2">
-<h6 id="books">Books</h3>
+<h6 id="books">Books <small class="text-muted">(paid links)</small></h3>
 <div class="row">
 <% meta.books.forEach((book) => { %>
 <div class="col">
