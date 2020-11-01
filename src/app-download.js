@@ -115,16 +115,15 @@ app.use(async (ctx, next) => {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
   } else if (rpath.startsWith('/v3')) {
-    ctx.set('Cache-Control', 'private');
+    ctx.set('Cache-Control', 'max-age=2592000');
     await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {
+    ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
-      ctx.set('Cache-Control', 'private');
       await yahrzeitDownload(ctx);
     } else if (ctx.request.query.v == '1') {
-      ctx.set('Cache-Control', 'max-age=2592000');
       await hebcalDownload(ctx);
     }
   }
