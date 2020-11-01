@@ -123,11 +123,7 @@ function getSubscriptionId(ctx, q) {
 
 export async function emailForm(ctx) {
   ctx.set('Cache-Control', 'private');
-  const q = processCookieAndQuery(
-      ctx.cookies.get('C'),
-      {},
-      Object.assign({}, ctx.request.body || {}, ctx.request.query),
-  );
+  let q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
   let defaultUnsubscribe = false;
   if (typeof q.e === 'string') {
     const buff = Buffer.from(q.e, 'base64');
@@ -139,6 +135,8 @@ export async function emailForm(ctx) {
     }
     await db.close();
     defaultUnsubscribe = q.unsubscribe === '1';
+  } else {
+    q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
   }
   let location;
   try {
