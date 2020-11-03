@@ -1,9 +1,9 @@
 /*
  * hebcal calendar HTML client-side rendering
  *
- * requries jQuery, Moment.js, and FullCalendar.io
+ * requries jQuery, Day.js, and FullCalendar.io
  *
- * Copyright (c) 2019  Michael J. Radwin.
+ * Copyright (c) 2020  Michael J. Radwin.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or
@@ -37,7 +37,7 @@
 window['hebcal'] = window['hebcal'] || {};
 
 window['hebcal'].isDateInRange = function(begin, end, now) {
-    var t = now ? moment(now) : moment();
+    var t = now ? dayjs(now) : dayjs();
     return (t.isSame(begin) || t.isAfter(begin)) && (t.isSame(end) || t.isBefore(end));
 };
 
@@ -60,7 +60,7 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
             title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':')),
             dest = {
                 title: title,
-                start: moment(src.date, moment.ISO_8601),
+                start: dayjs(src.date),
                 className: window['hebcal'].getEventClassName(src),
                 allDay: allDay
             };
@@ -98,7 +98,7 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
 
 window['hebcal'].renderCalendar = function(lang, singleMonth) {
     var evts = window['hebcal'].fullCalendarEvents || window['hebcal'].transformHebcalEvents(window['hebcal'].events, lang),
-        today = moment(),
+        today = dayjs(),
         todayInRange = window['hebcal'].isDateInRange(evts[0].start, evts[evts.length - 1].start, today),
         defaultDate = todayInRange ? today : evts[0].start,
         rightNav = singleMonth ? '' : (lang === 'h' ? 'next prev' : 'prev next');
@@ -132,7 +132,7 @@ window['hebcal'].splitByMonth = function(events) {
         prevMonth = '',
         monthEvents;
     events.forEach(function(evt) {
-        var m = moment(evt.date, moment.ISO_8601),
+        var m = dayjs(evt.date),
             month = m.format("YYYY-MM");
         if (month !== prevMonth) {
             prevMonth = month;
@@ -148,7 +148,7 @@ window['hebcal'].splitByMonth = function(events) {
 };
 
 window['hebcal'].tableRow = function(evt) {
-    var m = moment(evt.date, moment.ISO_8601),
+    var m = dayjs(evt.date),
         dateStr = m.format('ddd DD MMM'),
         allDay = evt.date.indexOf('T') == -1,
         lang = window['hebcal'].lang || 's',
@@ -194,7 +194,7 @@ window['hebcal'].tableRow = function(evt) {
 
 window['hebcal'].monthHtml = function(month) {
     var date = month.month + "-01",
-        m = moment(date, moment.ISO_8601),
+        m = dayjs(date),
         divBegin = '<div class="month-table">',
         divEnd = '</div><!-- .month-table -->',
         heading = '<h3>' + m.format('MMMM YYYY') + '</h3>',
