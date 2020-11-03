@@ -1,7 +1,12 @@
+/* eslint-disable max-len */
+/* eslint-disable one-var */
+/* eslint-disable comma-dangle */
+/* eslint-disable indent */
+/* eslint-disable no-var */
 /*
  * hebcal calendar HTML client-side rendering
  *
- * requries jQuery, Day.js, and FullCalendar.io
+ * requries jQuery and Day.js
  *
  * Copyright (c) 2020  Michael J. Radwin.
  * All rights reserved.
@@ -36,11 +41,6 @@
 
 window['hebcal'] = window['hebcal'] || {};
 
-window['hebcal'].isDateInRange = function(begin, end, now) {
-    var t = now ? dayjs(now) : dayjs();
-    return (t.isSame(begin) || t.isAfter(begin)) && (t.isSame(end) || t.isBefore(end));
-};
-
 window['hebcal'].getEventClassName = function(evt) {
     var className = evt.category;
     if (evt.yomtov) {
@@ -74,7 +74,7 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
             dest.hebrew = src.hebrew;
             if (lang === 'h') {
                 dest.title = src.hebrew;
-                dest.className += " hebrew";
+                dest.className += ' hebrew';
             }
         }
         return dest;
@@ -86,7 +86,7 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
             if (evt.hebrew) {
                 var tmp = $.extend({}, evt, {
                     title: evt.hebrew,
-                    className: evt.className + " hebrew"
+                    className: evt.className + ' hebrew'
                 });
                 dest.push(tmp);
             }
@@ -96,44 +96,13 @@ window['hebcal'].transformHebcalEvents = function(events, lang) {
     return evts;
 };
 
-window['hebcal'].renderCalendar = function(lang, singleMonth) {
-    var evts = window['hebcal'].fullCalendarEvents || window['hebcal'].transformHebcalEvents(window['hebcal'].events, lang),
-        today = dayjs(),
-        todayInRange = window['hebcal'].isDateInRange(evts[0].start, evts[evts.length - 1].start, today),
-        defaultDate = todayInRange ? today : evts[0].start,
-        rightNav = singleMonth ? '' : (lang === 'h' ? 'next prev' : 'prev next');
-    window['hebcal'].fullCalendarEvents = evts;
-    $('#full-calendar').fullCalendar({
-        header: {
-            left: 'title',
-            center: '',
-            right: rightNav
-        },
-        isRTL: lang === 'h',
-        fixedWeekCount: false,
-        contentHeight: 580,
-        defaultDate: defaultDate,
-        timezone: false,
-        events: evts
-    });
-    if (!singleMonth) {
-        $("body").keydown(function(e) {
-            if (e.keyCode === 37) {
-                $('#full-calendar').fullCalendar('prev');
-            } else if (e.keyCode === 39) {
-                $('#full-calendar').fullCalendar('next');
-            }
-        });
-    }
-};
-
 window['hebcal'].splitByMonth = function(events) {
     var out = [],
         prevMonth = '',
         monthEvents;
     events.forEach(function(evt) {
         var m = dayjs(evt.date),
-            month = m.format("YYYY-MM");
+            month = m.format('YYYY-MM');
         if (month !== prevMonth) {
             prevMonth = month;
             monthEvents = [];
@@ -182,7 +151,7 @@ window['hebcal'].tableRow = function(evt) {
         if (lang == 'h') {
             subj = hebrewHtml;
         } else if (lang.indexOf('h') != -1) {
-            subj += " / " + hebrewHtml;
+            subj += ' / ' + hebrewHtml;
         }
     }
     if (evt.link) {
@@ -193,7 +162,7 @@ window['hebcal'].tableRow = function(evt) {
 };
 
 window['hebcal'].monthHtml = function(month) {
-    var date = month.month + "-01",
+    var date = month.month + '-01',
         m = dayjs(date),
         divBegin = '<div class="month-table">',
         divEnd = '</div><!-- .month-table -->',
@@ -215,7 +184,7 @@ window['hebcal'].renderMonthTables = function() {
         });
         window['hebcal'].monthTablesRendered = true;
     }
-}
+};
 
 window['hebcal'].createCityTypeahead = function(autoSubmit) {
     var hebcalCities = new Bloodhound({
@@ -239,13 +208,13 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
                 return '<div class="tt-suggestion">Sorry, no city names match <b>' + encodedStr + '</b>.</div>';
             },
             suggestion: function(ctx) {
-                if (typeof ctx.geo === "string" && ctx.geo == "zip") {
+                if (typeof ctx.geo === 'string' && ctx.geo == 'zip') {
                     return '<p>' + ctx.asciiname + ', ' + ctx.admin1 + ' <strong>' + ctx.id + '</strong> - United States</p>';
                 } else {
-                    var ctry = ctx.country && ctx.country == "United Kingdom" ? "UK" : ctx.country,
+                    var ctry = ctx.country && ctx.country == 'United Kingdom' ? 'UK' : ctx.country,
                         ctryStr = ctry || '',
                         s = '<p><strong>' + ctx.asciiname + '</strong>';
-                    if (ctry && typeof ctx.admin1 === "string" && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
+                    if (ctry && typeof ctx.admin1 === 'string' && ctx.admin1.length > 0 && ctx.admin1.indexOf(ctx.asciiname) != 0) {
                         ctryStr = ctx.admin1 + ', ' + ctryStr;
                     }
                     if (ctryStr) {
@@ -256,7 +225,7 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
             }
         }
     }).on('typeahead:selected', function(obj, datum, name) {
-        if (typeof datum.geo === "string" && datum.geo == "zip") {
+        if (typeof datum.geo === 'string' && datum.geo == 'zip') {
             $('#geo').val('zip');
             $('#zip').val(datum.id);
             if (autoSubmit) {
@@ -280,7 +249,7 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
         if (autoSubmit) {
             $('#shabbat-form').submit();
         }
-    }).bind("keyup keypress", function(e) {
+    }).bind('keyup keypress', function(e) {
         if (!autoSubmit && !$(this).val()) {
             $('#geo').val('none');
             $('#c').val('off');
@@ -312,4 +281,4 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
             return false;
         }
     });
-}
+};
