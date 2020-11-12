@@ -34,6 +34,7 @@ export async function shabbatBrowseIndex(ctx) {
       });
     }
   }
+  ctx.set('Last-Modified', ctx.launchUTCString);
   await ctx.render('shabbat-browse', {
     title: 'Shabbat candle-lighting times for world cities | Hebcal Jewish Calendar',
     continents: Object.values(continents),
