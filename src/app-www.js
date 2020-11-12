@@ -24,6 +24,7 @@ import {homepage} from './homepage';
 import {parshaDetail, parshaIndex} from './sedrot';
 import {parshaCsv} from './parsha-csv';
 import {shabbatApp} from './shabbat';
+import {shabbatBrowseIndex} from './shabbat-browse';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
   httpRedirect} from './common';
 import {yahrzeitApp} from './yahrzeit';
@@ -171,6 +172,8 @@ app.use(async function router(ctx, next) {
     await fridgeShabbat(ctx);
   } else if (rpath.startsWith('/converter')) {
     await hebrewDateConverter(ctx);
+  } else if (rpath === '/shabbat/browse/') {
+    await shabbatBrowseIndex(ctx);
   } else if (rpath.startsWith('/shabbat/browse')) {
     ctx.type = 'html';
     ctx.set('Cache-Control', 'public');
