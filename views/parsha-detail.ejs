@@ -1,5 +1,8 @@
 <%- await include('partials/header.ejs') -%>
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>) in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
+<style>
+ol.list-unstyled li {margin-bottom: 0.33em}
+</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -25,7 +28,7 @@ href="<%=ortUrl%>">
 </div><!-- .row -->
 
 <div class="row">
-<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-sm-3'%>">
+<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-md-3'%>">
 <h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
@@ -68,7 +71,7 @@ href="<%=ortUrl%>">
 <% } else if (triReading.readTogether) { %>
 <p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%></a></small></p>
 <% } else { %>
-<ul class="list-unstyled">
+<ol class="list-unstyled">
 <%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%     if (aliyah.v) { %>
@@ -76,7 +79,7 @@ href="<%=ortUrl%>">
 <%     } // aliyah.v %>
 <% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
 <%   } // ... for aliyah %>
-</ul>
+</ol>
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
