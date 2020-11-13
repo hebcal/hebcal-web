@@ -1,4 +1,11 @@
-<%- await include('partials/header-and-navbar.ejs') -%>
+<%- await include('partials/header.ejs') -%>
+<style>
+ul.list-unstyled li {margin-bottom: 0.5em}
+</style>
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
 <div id="content">
 <div class="row mt-3">
 <div class="col">
@@ -8,9 +15,9 @@
 </div><!-- .row -->
 <div class="row">
 <% for (const a1 of admin1) { -%>
-<div id="<%=a1.id%>" class="col-sm-3">
+<div id="<%=a1.id%>" class="col-md-3">
 <h3><%=a1.name%></h3>
-<ul class="list-unstyled lh-lg">
+<ul class="list-unstyled">
 <% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
 <li><a href="/shabbat?geonameid=<%= r.geonameid %>"><%= r.name %></a> <%= r.time %></li>
 <% } -%>    

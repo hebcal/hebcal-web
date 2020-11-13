@@ -27,14 +27,14 @@
 </div><!-- .row -->
 <div class="row">
 <% for (const continent of continents) { -%>
-<div class="col-sm-4">
+<div class="col-md-4">
 <h3><%= continent.name %></h3>
 <ul class="bullet-list-inline">
 <% for (const country of continent.countries) { -%>
 <li><a href="<%= country.href %>"><%= country.name %></a></li>
 <% } -%>
 </ul>
-</div><!-- .col-sm-4 -->
+</div><!-- .col-md-4 -->
 <% } -%>
 </div><!-- .row -->
 </div><!-- #content -->
