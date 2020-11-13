@@ -141,7 +141,7 @@ function makeItems(ctx) {
     locale,
     hyear: getDefaultHebrewYear(events[0].getDate()),
     items: events.map((ev) => eventToItem(ev, options, locale)),
-    title: Locale.gettext('Shabbat') + ' Candle-Lighting Times for ' + location.getName(),
+    title: location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times | Hebcal Jewish Calendar',
     Shabbat: Locale.gettext('Shabbat'),
   });
 
@@ -189,7 +189,7 @@ function getJsonLD(item, torahPortion, location) {
   const result = {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    'name': `Shabbat candle lighting for ${location.getShortName()}`,
+    'name': `${location.getShortName()} Shabbat candle lighting`,
     'startDate': `${item.isoDate}T${item.isoTime}:00`,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',

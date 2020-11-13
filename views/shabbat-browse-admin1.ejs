@@ -1,0 +1,14 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div id="content">
+<div class="row">
+<div class="col">
+<h2><%=countryName%> <span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
+<ul class="list-unstyled">
+<% for (const a1 of admin1) { -%>
+<li><a href="<%= a1.href %>"><%= a1.name %></a></li>
+<% } -%>
+</ul>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') _%>

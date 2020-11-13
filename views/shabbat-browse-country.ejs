@@ -1,0 +1,22 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div id="content">
+<div class="row">
+<div class="col">
+<h2><%=countryName%> <span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
+<p class="lead"><%= saturday.format('dddd, D MMMM YYYY') %> - <%= parsha %></a></p>
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row">
+<% for (const a1 of admin1) { -%>
+<div id="<%=a1.id%>" class="col-sm-3">
+<h3><%=a1.name%></h3>
+<ul class="list-unstyled">
+<% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
+<li><a href="/shabbat?geonameid=<%= r.geonameid %>"><%= r.name %></a> <%= r.time %></li>
+<% } -%>    
+</ul>
+</div><!-- .col -->
+<% } -%>
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') _%>
