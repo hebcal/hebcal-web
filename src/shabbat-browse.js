@@ -82,9 +82,8 @@ export async function shabbatBrowse(ctx) {
     // console.log(countryName, results.length, admin1.size);
     const friday = dayjs().day(5);
     const parsha = getParsha(iso);
-    if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size < 1.15)) {
-      results.forEach((r) => r.countryCode = iso);
-      results.forEach((r) => addCandleTime(r));
+    if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size) < 1.25) {
+      results.forEach((r) => addCandleTime(r, iso));
       await ctx.render('shabbat-browse-country-small', {
         title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
         countryName,
@@ -104,8 +103,7 @@ export async function shabbatBrowse(ctx) {
       });
       return;
     } else {
-      results.forEach((r) => r.countryCode = iso);
-      results.forEach((r) => addCandleTime(r));
+      results.forEach((r) => addCandleTime(r, iso));
       const listItems = makeAdmin1(admin1);
       await ctx.render('shabbat-browse-country', {
         title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
@@ -153,9 +151,9 @@ function makeAdmin1(admin1) {
   return listItems;
 }
 
-function addCandleTime(r) {
-  const location = new Location(r.latitude, r.longitude, r.countryCode === 'IL', r.timezone,
-      r.name, r.countryCode, r.geonameid);
+function addCandleTime(r, countryCode) {
+  const location = new Location(r.latitude, r.longitude, countryCode === 'IL', r.timezone,
+      r.name, countryCode, r.geonameid);
   const friday = dayjs().day(5);
   const dt = friday.toDate();
   const events = HebrewCalendar.calendar({
@@ -166,5 +164,7 @@ function addCandleTime(r) {
     start: dt,
     end: dt,
   });
-  r.time = events[0].eventTimeStr;
+  if (events.length && typeof events[0].eventTimeStr === 'string') {
+    r.time = events[0].eventTimeStr;
+  }
 }
