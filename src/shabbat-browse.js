@@ -79,9 +79,9 @@ export async function shabbatBrowse(ctx) {
       }
       return map;
     }, new Map());
-    console.log(countryName, results.length, admin1.size);
-    const saturday = dayjs().day(6);
-    const parsha = getParsha(saturday, iso);
+    // console.log(countryName, results.length, admin1.size);
+    const friday = dayjs().day(5);
+    const parsha = getParsha(iso);
     if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size < 1.15)) {
       results.forEach((r) => r.countryCode = iso);
       results.forEach((r) => addCandleTime(r));
@@ -90,7 +90,7 @@ export async function shabbatBrowse(ctx) {
         countryName,
         results,
         admin1,
-        saturday,
+        friday,
         parsha,
       });
       return;
@@ -112,20 +112,20 @@ export async function shabbatBrowse(ctx) {
         countryName,
         results,
         admin1: listItems,
-        saturday,
+        friday,
         parsha,
       });
       return;
     }
   } else {
-    console.log(base, iso);
     ctx.type = 'html';
     ctx.set('Cache-Control', 'public');
     await send(ctx, ctx.path, {root: DOCUMENT_ROOT});
   }
 }
 
-function getParsha(saturday, iso) {
+function getParsha(iso) {
+  const saturday = dayjs().day(6);
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
   const il = iso === 'IL';

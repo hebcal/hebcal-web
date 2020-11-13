@@ -1,9 +1,9 @@
 <%- await include('partials/header-and-navbar.ejs') -%>
 <div id="content">
-<div class="row">
+<div class="row mt-3">
 <div class="col">
 <h2><%=countryName%> <span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
-<p class="lead"><%= saturday.format('dddd, D MMMM YYYY') %> - <%= parsha %></a></p>
+<p class="lead"><%= friday.format('dddd, D MMMM YYYY') %> - Parashat <%= parsha %></a></p>
 <ul class="list-unstyled">
 <% for (const r of results) { -%>
 <li><a href="/shabbat?geonameid=<%= r.geonameid %>"><%= r.name %></a><% if (r.name != r.admin1 && admin1.size > 1) { %>, <small><%=r.admin1%></small><% } %> <%= r.time %></li>
