@@ -5,7 +5,6 @@ import compress from 'koa-compress';
 import createError from 'http-errors';
 import error from 'koa-error';
 import render from 'koa-ejs';
-import send from 'koa-send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import dayjs from 'dayjs';
