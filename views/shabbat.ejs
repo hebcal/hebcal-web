@@ -82,7 +82,7 @@ ul.list-unstyled.nav-list li {
     <a href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
   </li>
   <li><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-envelope"></use></svg>
-    <a href="/email/?geo=<%= q.geo %>&amp;<%= geoUrlArgs %>">Weekly email</a>
+    <a href="#email-modal" data-toggle="modal" data-target="#email-modal">Weekly email</a>
   </li>
   <li>
   <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg>
@@ -108,4 +108,5 @@ ul.list-unstyled.nav-list li {
 </div><!-- .row -->
 
 </div><!-- #content -->
+<%- await include('partials/email-candles-modal.ejs') _%>
 <%- await include('partials/footer.ejs') _%>

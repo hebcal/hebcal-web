@@ -35,7 +35,6 @@
 <button type="submit" class="btn btn-primary" name="modify" value="1"><%= q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
 <% } %>
 <button type="submit" class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
-</fieldset>
 </form>
 </div><!-- #email-form -->
 <% if (!defaultUnsubscribe) { %>

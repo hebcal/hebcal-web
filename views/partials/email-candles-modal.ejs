@@ -1,0 +1,30 @@
+<div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<form action="/email" method="post">
+<input type="hidden" name="v" value="1">
+<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
+<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
+<div class="modal-header">
+  <h5 class="modal-title">Weekly Shabbat times email</h5>
+  <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+  <p>Get candle lighting times, Torah portion &amp; Havdalah every Thursday.</p>
+  <div class="mb-3">
+    <label class="form-label" for="em">Email address</label>
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com">
+  </div>
+  <p><small><strong>Email Privacy Policy</strong>:
+    We will never sell or give your email address to anyone.
+    We will never use your email address to send you unsolicited offers.</small></p>
+</div><!-- .modal-body -->
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="submit" class="btn btn-primary" name="modify" value="1">Subscribe</button>
+</div>
+</form>
+</div><!-- .modal-content -->
+</div><!-- .modal-dialog -->
+</div><!-- .modal -->  

@@ -137,6 +137,7 @@ div.pbba { page-break-before: always }
   <li><a class="dropdown-item" href="<%= url.fridge %>">Candle-lighting times only</a></li>
   </ul>
 </div>
+<div class="btn-group mr-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#email-modal"><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-envelope"></use></svg> Email</a></div>
 <% } else { %>
 <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-print"></use></svg> Print</a></div>
 <% } %>
@@ -188,6 +189,7 @@ window['hebcal'].cconfig=<%- cconfig %>;
 </div><!-- #content -->
 <% if (gy >= 1970) { -%>
 <%- await include('partials/download-modal.ejs') -%>
+<% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
