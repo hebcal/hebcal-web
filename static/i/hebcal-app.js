@@ -280,5 +280,7 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
             e.preventDefault();
             return false;
         }
+    }).bind('focus', function(e) {
+        $(this).typeahead('val', '');
     });
 };
