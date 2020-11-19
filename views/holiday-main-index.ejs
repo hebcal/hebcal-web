@@ -17,13 +17,13 @@ then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <div class="btn-toolbar d-print-none mb-2">
 <div class="btn-group mr-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-print"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a>
 </div>
 <div class="btn-group mr-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#bi-cloud-download"></use></svg> Download</a>
+<a class="btn btn-secondary btn-sm" title="export to Outlook, iPhone, Google and more" href="/ical/"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
 <div class="btn-group mr-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="/i/sprite3.svg#bi-pencil-square"></use></svg> Customize</a>
+<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->

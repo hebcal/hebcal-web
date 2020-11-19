@@ -22,7 +22,7 @@
 <div id="ios-body" class="tab-pane active">
 <p>Apple iPhone, iPad &amp; macOS</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-ios-sub" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> Subscribe on iPhone, iPad &amp; macOS</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ios-sub" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> Subscribe on iPhone, iPad &amp; macOS</a></p>
 <p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
 href="/home/77/iphone-ipad-jewish-calendar">iPhone &amp; iPad</a></p>
 <p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
@@ -37,7 +37,7 @@ and then import manually into Apple macOS Calendar.app.</p>
 <p><small>To keep the imported calendar up-to-date, subscribe to the
 Hebcal calendar in Outlook. Our calendar subscription feeds include
 2+ years of events.</small></p>
-<p><a class="btn btn-secondary download mb-1" id="dl-ol-ics" title="<%= filename.ics %>" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-microsoftoutlook"></use></svg> Outlook Internet Calendar Subscription</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-ics" title="<%= filename.ics %>" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook Internet Calendar Subscription</a></p>
 <p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
@@ -52,7 +52,7 @@ and then import manually into Microsoft Outlook.</p>
 <p><a class="btn btn-secondary download mb-1" id="dl-gcal-sub" rel="nofollow"
 title="Add <%= filename.ics %> to Google Calendar"
 href="https://www.google.com/calendar/render?cid=<%= url.gcal %>">
-<svg class="icon icon-google"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Add to Google Calendar</a></p>
+<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Add to Google Calendar</a></p>
 <p>Alternate option:
 <a class="download" id="dl-gcal-alt" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
 and then <a
@@ -65,7 +65,7 @@ our Google Calendar import instructions</a>.</p>
 <div id="ol-mac-body" class="tab-pane">
 <p>Outlook for Mac</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-ol-mac" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-microsoftoutlook"></use></svg> Download to Outlook for Mac</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-ol-mac" title="<%= filename.ics %>" href="<%= url.ics %>" download="<%= filename.ics %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download to Outlook for Mac</a></p>
 <p>Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
 href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
 Outlook for Mac</a></p>
@@ -82,10 +82,8 @@ many desktop and web calendar applications.</small></p>
 <input type="text" class="form-control" size="60" id="grabLink"
 value="<%= url.subical %>">
 <button id="grabBtn" class="btn btn-secondary" data-clipboard-target="#grabLink">
+<svg class="icon icon-md align-top"><use xlink:href="<%=spriteHref%>#clippy"></use></svg>
 Copy
-<!--
-  <svg class="icon icon-md align-top"><use xlink:href="/i/sprite3.svg#clippy"></use></svg>
--->
 </button>
 
 </div>
@@ -100,8 +98,8 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 <div>
 Select one of:
 <ul class="list-unstyled">
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="<%= filename.csv_usa %>" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-microsoftoutlook"></use></svg> Download CSV - USA (month/day/year)</a></li>
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="<%= filename.csv_eur %>" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-microsoftoutlook"></use></svg> Download CSV - Europe (day/month/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="<%= filename.csv_usa %>" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - USA (month/day/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="<%= filename.csv_eur %>" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - Europe (day/month/year)</a></li>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
@@ -112,7 +110,7 @@ href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
 <div id="pdf-body" class="tab-pane">
 <p>Print PDF (formatted for 8.5"x11" paper)</p>
 <div>
-<p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
+<p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
 
 </div>
 </div><!-- #pdf-body -->

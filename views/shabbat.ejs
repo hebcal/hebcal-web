@@ -75,20 +75,20 @@ ul.list-unstyled.nav-list li {
 <div style="padding-bottom:16px">
 <h5><%= location.getShortName() %></h5>
 <ul class="list-unstyled nav-list">
-  <li><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-print"></use></svg>
+  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg>
     <a title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>"> Print <%= hyear %></a>
   </li>
-  <li><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-calendar"></use></svg>
+  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-calendar"></use></svg>
     <a href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
   </li>
-  <li><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-envelope"></use></svg>
+  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg>
     <a href="#email-modal" data-toggle="modal" data-target="#email-modal">Weekly email</a>
   </li>
   <li>
-  <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg>
+  <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
     <a title="RSS feed of candle lighting times" href="<%= rssUrl %>">RSS feed</a>
   </li>
-  <li><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-wrench"></use></svg>
+  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-wrench"></use></svg>
     <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="/link/?<%= geoUrlArgs %>">Developer API</a>
   </li>
 </ul>

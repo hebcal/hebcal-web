@@ -116,19 +116,19 @@ div.pbba { page-break-before: always }
   <div class="btn-group mr-1" role="group" data-toggle="buttons">
    <label class="btn btn-secondary btn-sm active mb-1">
     <input type="radio" name="view" id="toggle-month" checked>
-    <svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-calendar"></use></svg> Month
+    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-calendar"></use></svg> Month
    </label>
    <label class="btn btn-secondary btn-sm mb-1">
     <input type="radio" name="view" id="toggle-list">
-    <svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-list"></use></svg> List
+    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-list"></use></svg> List
    </label>
   </div><!-- .btn-group -->
 <% if (gy >= 1970) { -%>
-<div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#bi-cloud-download"></use></svg> Download</a></div>
+<div class="btn-group mr-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
 <% } %>
 <% if (q.c === 'on') { %>
 <div class="btn-group mr-1" role="group">
-  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-print"></use></svg> Print</a></div>
+  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-toggle="dropdown" aria-expanded="false">
    <span class="visually-hidden">Toggle Dropdown</span>
   </button>
@@ -137,11 +137,11 @@ div.pbba { page-break-before: always }
   <li><a class="dropdown-item" href="<%= url.fridge %>">Candle-lighting times only</a></li>
   </ul>
 </div>
-<div class="btn-group mr-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#email-modal"><svg class="icon"><use xlink:href="/i/sprite3.svg#gi-envelope"></use></svg> Email</a></div>
+<div class="btn-group mr-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#email-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg> Email</a></div>
 <% } else { %>
-<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-print"></use></svg> Print</a></div>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a></div>
 <% } %>
-<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="/i/sprite3.svg#gi-cogwheel"></use></svg> Settings</a>
+<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-cogwheel"></use></svg> Settings</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">

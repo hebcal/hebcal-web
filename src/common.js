@@ -488,7 +488,7 @@ export const typeaheadScript = `<script src="https://ajax.googleapis.com/ajax/li
 `;
 
 export const clipboardScript = `
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <script>
 var clipboard = new ClipboardJS('#grabBtn', {
     container: document.getElementsByClassName('modal')[0]
@@ -499,7 +499,6 @@ clipboard.on('success', function(e) {
   var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
   e.trigger.setAttribute('data-original-title','Copied!');
   tooltipBtn.show();
-  e.trigger.setAttribute('data-original-title','Copy to clipboard');
   e.clearSelection();
 });
 clipboard.on('error', function(e) {
@@ -508,7 +507,6 @@ clipboard.on('error', function(e) {
   var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
   e.trigger.setAttribute('data-original-title',fallbackMsg);
   tooltipBtn.show();
-  e.trigger.setAttribute('data-original-title','Copy to clipboard');
 });
 </script>
 `;

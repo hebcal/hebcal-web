@@ -1,11 +1,5 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
-<style>
-.icon-sm {
-  width: 1.1rem;
-  height: 1.1rem;
-}
-</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -48,11 +42,11 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <div class="col-2 col-lg-1"><span class="text-muted">Diaspora</span></div>
 <div class="col-10 col-lg-11">
 <a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="index.xml">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed</a>
 </div>
 </div><!-- .row -->
 
@@ -60,13 +54,13 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <div class="col-2 col-lg-1"><span class="text-muted">Israel</span></div>
 <div class="col-10 col-lg-11">
 <a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#icon-google"></use></svg> Google Calendar</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="israel-he.xml">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Hebrew)</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed (Hebrew)</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="israel.xml">
-<svg class="icon icon-sm align-top"><use xlink:href="/i/sprite3.svg#bi-rss-fill"></use></svg> RSS feed (Translit.)</a>
+<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed (Translit.)</a>
 </div>
 </div><!-- .row -->
 

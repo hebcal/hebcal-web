@@ -112,7 +112,7 @@ async function makeDownloadProps(ctx) {
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase();
   const db = makeDb(ctx.iniConfig);
-  const id = ulid().toLowerCase();
+  const id = ctx.state.ulid = ulid().toLowerCase();
   const ip = getIpAddress(ctx);
   const sql = 'INSERT INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';

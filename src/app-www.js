@@ -66,6 +66,7 @@ app.use(async (ctx, next) => {
   }, ctx.request.header));
   */
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
+  ctx.state.spriteHref = '/i/sprite4.svg';
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
