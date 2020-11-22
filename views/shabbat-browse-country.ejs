@@ -19,7 +19,7 @@ ul.list-unstyled li {margin-bottom: 0.5em}
 <h3><%=a1.name%></h3>
 <ul class="list-unstyled">
 <% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
-<li><a href="/shabbat?geonameid=<%= r.geonameid %>"><%= r.name %></a> <time datetime="<%= r.isoDate %>T<%= r.isoTime %>:00"><%= r.fmtTime %></time></li>
+<li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;M=on&amp;lg=s"><%= r.name %></a> <time datetime="<%= r.isoDate %>T<%= r.isoTime %>:00"><%= r.fmtTime %></time></li>
 <% } -%>
 </ul>
 </div><!-- .col -->
