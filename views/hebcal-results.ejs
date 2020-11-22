@@ -192,48 +192,31 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-  $('a.amzn').click(function(){
-    var x = $(this).attr('id');
-    if (x) {
-      ga('send','event','outbound-amzn',x);
-    }
-  });
-  $('a.outbound').click(function(){
-    var c=$(this).attr('href');
-    if (c&&c.length) {
-      var ss=c.indexOf('//');
-      if(ss!=-1) {
-        var d=c.indexOf('/',ss+2),d2=d!=-1?d:c.length;
-        ga('send','event','outbound-article',c.substring(ss+2,d2));
-      }
-    }
-  });
-  $('a.download').click(function(){
-    var x = $(this).attr('id');
-    if (x) {
-      ga('send','event','download',x);
-    }
-  });
-});
-</script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1.9.6/dayjs.min.js"></script>
 <script src="/i/hebcal-app-2.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#toggle-month').on('change', function() {
-        $('div.agenda').hide();
-        $('div.cal').show();
+document.addEventListener('DOMContentLoaded', function() {
+  var d = document;
+  var toggleList = document.getElementById('toggle-list');
+  var show = function (el) { el.style.display = 'block' };
+  var hide = function (el) { el.style.display = 'none' };
+  document.getElementById('toggle-month').onchange = function() {
+    d.querySelectorAll('div.agenda').forEach(hide);
+    d.querySelectorAll('div.cal').forEach(show);
+  };
+  document.getElementById('toggle-list').onchange = function() {
+    d.querySelectorAll('div.cal').forEach(hide);
+    window['hebcal'].renderMonthTables();
+    d.querySelectorAll('div.agenda').forEach(show);
+  };
+  if (window.outerWidth < 768) {
+    var event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true
     });
-    $('#toggle-list').on('change', function() {
-        $('div.cal').hide();
-        window['hebcal'].renderMonthTables();
-        $('div.agenda').show();
-    });
-    if ($(window).width() < 768) {
-        $('#toggle-list').click();
-    }
+    toggleList.dispatchEvent(event);
+  }
 });
 </script>
 <%- await include('partials/footer.ejs') _%>
