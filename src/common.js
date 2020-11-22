@@ -481,8 +481,8 @@ var tooltipList = tooltipTriggerList.map(function (el) {
 </script>
 `;
 
-export const typeaheadScript = `<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/typeahead.js@0.10.4/dist/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-app-2.1.min.js"></script>
 <script>window['hebcal'].createCityTypeahead(false);</script>
 `;

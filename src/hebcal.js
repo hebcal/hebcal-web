@@ -245,7 +245,7 @@ function renderHtml(ctx) {
     downloadTitle,
     shortTitle,
     locationName,
-    title: shortTitle + ' ' + locationName + ' | Hebcal Jewish Calendar',
+    title: shortTitle + ' ' + locationName + ' | Hebcal',
     xtra_html: clipboardScript,
   });
 }
