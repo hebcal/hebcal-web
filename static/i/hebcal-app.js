@@ -180,7 +180,9 @@ window['hebcal'].renderMonthTables = function() {
         months.forEach(function(month) {
             var html = window['hebcal'].monthHtml(month),
                 selector = '#cal-' + month.month + ' .agenda';
-            $(selector).html(html);
+            document.querySelectorAll(selector).forEach(function(el) {
+                el.innerHTML = html;
+            });
         });
         window['hebcal'].monthTablesRendered = true;
     }
@@ -195,6 +197,14 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
     });
 
     hebcalCities.initialize();
+
+    var clearGeo = function() {
+        $('#geo').val('none');
+        $('#c').val('off');
+        $('#geonameid').val('');
+        $('#zip').val('');
+        $('#city').val('');
+    };
 
     $('#city-typeahead').typeahead(null, {
         name: 'hebcal-city',
@@ -251,11 +261,7 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
         }
     }).bind('keyup keypress', function(e) {
         if (!autoSubmit && !$(this).val()) {
-            $('#geo').val('none');
-            $('#c').val('off');
-            $('#geonameid').val('');
-            $('#zip').val('');
-            $('#city').val('');
+            clearGeo();
         }
         // if we get a 5-digit zip, don't require user to select typeahead result
         var val0 = $('#city-typeahead').typeahead('val'),
@@ -282,5 +288,6 @@ window['hebcal'].createCityTypeahead = function(autoSubmit) {
         }
     }).bind('focus', function(e) {
         $(this).typeahead('val', '');
-    });
+        clearGeo();
+});
 };
