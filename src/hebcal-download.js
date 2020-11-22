@@ -67,10 +67,6 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
-  ctx.logger.debug(Object.assign({
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
-    url: ctx.request.originalUrl,
-  }, options));
   let events = makeHebrewCalendar(ctx, options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {

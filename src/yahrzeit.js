@@ -5,12 +5,8 @@ import dayjs from 'dayjs';
 import {Readable} from 'stream';
 import {basename} from 'path';
 import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
-import pino from 'pino';
 import {ulid} from 'ulid';
 import {makeDb} from './makedb';
-
-const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
-const debugLog = pino(pino.destination(logDir + '/debug.log'));
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
@@ -18,16 +14,6 @@ const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebca
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function yahrzeitApp(ctx) {
-  debugLog.info({
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-    ua: ctx.get('user-agent'),
-    ref: ctx.get('referer'),
-    cookie: ctx.get('cookie'),
-    body: ctx.request.body,
-    query: ctx.request.query,
-  });
   const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
     hebdate: 'on',
     yizkor: 'off',
@@ -205,10 +191,6 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  ctx.logger.debug(Object.assign({
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
-    url: ctx.request.originalUrl,
-  }, query));
   const maxId = getMaxId(query);
   const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
