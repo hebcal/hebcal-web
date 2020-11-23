@@ -22,16 +22,14 @@ div.yahrzeit-row {
 <p>When you finish here, you can return to <a href="<%= q.ref_url %>"><%= ref_text %></a>.</p>
 <% } -%>
 <% if (tables !== null) { %>
-<div class="btn-toolbar d-print-none">
+<div class="btn-toolbar d-print-none mt-2">
 <div class="mr-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
-<!--
 <div class="mr-2 mb-2">
   <a href="#email-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#email-modal">
     <svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg> Email
   </a>
 </div>
--->
 <div class="mr-2 mb-2">
 <a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
@@ -108,25 +106,52 @@ instructions</a>.</p>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
-<form action="/email" method="post">
+<form id="f2">
 <input type="hidden" name="v" value="1">
+<input type="hidden" name="type" value="<%=downloadTitle%>">
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <div class="modal-header">
 <h5 class="modal-title">Email reminders</h5>
 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-<p>Receive a reminder email 7 days before each anniversary to honor your loved ones.</p>
+<p>Receive a reminder email 7 days before each anniversary.</p>
   <div class="mb-3">
     <label class="form-label" for="em">Email address</label>
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com">
   </div>
-</div><!-- .modal-body -->
+  <p><small><strong>Email Privacy Policy</strong>:
+    We will never sell or give your email address to anyone.
+    We will never use your email address to send you unsolicited offers.</small></p>
+  <div id="email-modal-success"></div>
+  </div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-  <button type="submit" class="btn btn-primary" name="modify" value="1">Subscribe</button>
+  <button type="button" class="btn btn-primary" name="modify" value="1" id="email-subscribe">Subscribe</button>
 </div>
 </form>
+<script>
+var emailSubscribeBtn = document.getElementById('email-subscribe');
+emailSubscribeBtn.onclick = function(e) {
+  e.preventDefault();
+  emailSubscribeBtn.textContent = 'Subscribing...';
+  emailSubscribeBtn.disabled = true;
+  var params = new URLSearchParams();
+  var formData = new FormData(document.getElementById('f2'));
+  for (var pair of formData) {
+    params.append(pair[0], pair[1]);
+  }
+  fetch('/yahrzeit/email', {
+    method: 'POST',
+    credentials: 'omit',
+    body: params,
+  }).then(function(response) {
+    emailSubscribeBtn.textContent = 'Subscribe';
+    emailSubscribeBtn.disabled = false;
+    document.getElementById('email-modal-success').innerHTML = '<div class="alert alert-success"><strong>Thank you!</strong> A confirmation message has been sent to your email address. Click the link within that message to confirm your subscription.</div>';
+  });
+};
+</script>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->

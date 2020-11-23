@@ -29,6 +29,7 @@ import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogIn
 import {yahrzeitApp} from './yahrzeit';
 import {holidaysApp} from './holidays';
 import redirectMap from './redirect.json';
+import {yahrzeitEmailSub} from './yahrzeit-email';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -55,16 +56,7 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.launchUTCString = new Date().toUTCString();
 
-// const debugLog = pino(pino.destination(logDir + '/debug.log'));
-
 app.use(async (ctx, next) => {
-  /*
-  debugLog.info(Object.assign({
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-  }, ctx.request.header));
-  */
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.spriteHref = '/i/sprite4.svg';
   ctx.state.startTime = Date.now();
@@ -193,6 +185,8 @@ app.use(async function router(ctx, next) {
     });
   } else if (rpath.startsWith('/hebcal')) {
     await hebcalApp(ctx);
+  } else if (rpath === '/yahrzeit/email') {
+    await yahrzeitEmailSub(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
   } else if (rpath.startsWith('/holidays/')) {

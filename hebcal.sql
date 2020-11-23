@@ -35,3 +35,15 @@ CREATE TABLE hebcal_shabbat_bounce (
   deactivated tinyint(1) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE yahrzeit_email (
+  id varchar(26) NOT NULL,
+  email_addr varchar(200) NOT NULL,
+  sub_status varchar(16) NOT NULL,
+  created datetime NOT NULL,
+  updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  ip_addr varchar(16) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY email_addr (email_addr),
+  KEY sub_status (sub_status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

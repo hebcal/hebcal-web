@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery, processCookieAndQuery, tooltipScript, typeaheadScript, getIpAddress} from './common';
 import {makeDb} from './makedb';
 import nodemailer from 'nodemailer';
 import randomBigInt from 'random-bigint';
+import {getIpAddress, getLocationFromQuery, processCookieAndQuery, tooltipScript,
+  typeaheadScript, validateEmail} from './common';
 
 /**
  * @param {Object<string,any>} iniConfig
@@ -222,12 +223,6 @@ ${unsubUrl}
 `,
   };
   await mySendMail(ctx, message);
-}
-
-function validateEmail(email) {
-  // eslint-disable-next-line max-len
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
 }
 
 async function unsubscribe(ctx, emailAddress, subInfo) {

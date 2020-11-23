@@ -594,3 +594,13 @@ export function makeHebrewCalendar(ctx, options) {
 export function getIpAddress(ctx) {
   return ctx.get('x-client-ip') || ctx.request.ip;
 }
+
+/**
+ * @param {string} email
+ * @return {boolean}
+ */
+export function validateEmail(email) {
+  // eslint-disable-next-line max-len
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
