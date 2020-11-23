@@ -7,6 +7,8 @@ import {basename} from 'path';
 import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
 import {ulid} from 'ulid';
 import {makeDb} from './makedb';
+import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
+  isNumKey, summarizeAnniversaryTypes} from './common2';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
@@ -20,7 +22,7 @@ export async function yahrzeitApp(ctx) {
     years: 20,
   };
   const q = ctx.state.q = Object.assign(defaults, ctx.request.body, ctx.request.query);
-  const maxId = ctx.state.maxId = getMaxId(q);
+  const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   if (maxId > 0) {
@@ -123,21 +125,9 @@ async function makeDownloadProps(ctx) {
   };
 }
 
-/**
- * @param {any} query
- * @return {string}
- */
-function summarizeAnniversaryTypes(query) {
-  const types0 = Object.entries(query)
-      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
-      .map((x) => x[1]);
-  const types = Array.from(new Set(types0));
-  return types.length === 1 ? types[0] : 'Anniversary';
-}
-
 // eslint-disable-next-line require-jsdoc
 function removeEmptyArgs(q) {
-  const maxId = getMaxId(q);
+  const maxId = getMaxYahrzeitId(q);
   const keyPrefixes = 'mdytns'.split('');
   for (let i = 1; i <= maxId; i++) {
     // ensure that month, day and year are not empty
@@ -164,19 +154,8 @@ function removeEmptyArgs(q) {
 async function getDetailsFromDb(ctx) {
   const db = makeDb(ctx.iniConfig);
   const id = ctx.request.path.substring(4, 30);
-  const sql = 'SELECT contents, downloaded FROM yahrzeit WHERE id = ?';
-  const results = await db.query(sql, id);
-  if (!results || !results[0]) {
-    await db.close();
-    ctx.throw(404, `Download key ${id} not found`);
-  }
+  const obj = await getYahrzeitDetailsFromDb(ctx, db, id);
   ctx.state.relcalid = id;
-  const row = results[0];
-  const obj = row.contents;
-  if (!row.downloaded) {
-    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-    await db.query(sqlUpdate, id);
-  }
   await db.close();
   return obj;
 }
@@ -191,7 +170,7 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  const maxId = getMaxId(query);
+  const maxId = getMaxYahrzeitId(query);
   const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
@@ -222,18 +201,7 @@ function makeCalendarTitle(query) {
   const names = Object.entries(query)
       .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
       .map((x) => x[1]);
-  const calendarType0 = summarizeAnniversaryTypes(query);
-  let calendarType = calendarType0; // default 'Yahrzeit'
-  switch (calendarType0) {
-    case 'Anniversary':
-      calendarType = 'Hebrew Anniversaries';
-      break;
-    case 'Birthday':
-      calendarType = 'Hebrew Birthdays';
-      break;
-    default:
-      break;
-  }
+  const calendarType = summarizeAnniversaryTypes(query, true);
   let title = calendarType;
   if (names.length > 0) {
     title += ': ' + names.join(', ');
@@ -266,34 +234,6 @@ export function makeYahrzeitEvents(maxId, query) {
 }
 
 /**
- * @param {string} k
- * @return {boolean}
- */
-function isNumKey(k) {
-  const code = k.charCodeAt(1);
-  return code >= 48 && code <= 57;
-}
-
-/**
- * @param {any} query
- * @return {number}
- */
-function getMaxId(query) {
-  const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y' && isNumKey(k))
-      .map((k) => +(k.substring(1)))
-      .map((id) => empty(query['y'+id]) ? 0 : id);
-  const max = Math.max(...ids);
-  const valid = [];
-  for (let i = 1; i <= max; i++) {
-    if (!empty(query['d' + i]) && !empty(query['m' + i]) && !empty(query['y' + i])) {
-      valid.push(i);
-    }
-  }
-  return valid.length === 0 ? 0 : Math.max(...valid);
-}
-
-/**
  * @param {any} query
  * @param {number} id
  * @param {number} startYear
@@ -302,21 +242,13 @@ function getMaxId(query) {
  */
 function getEventsForId(query, id, startYear, endYear) {
   const events = [];
-  const [dd, mm, yy] = [
-    query[`d${id}`],
-    query[`m${id}`],
-    query[`y${id}`],
-  ];
-  if (empty(dd) || empty(mm) || empty(yy)) {
+  const info = getYahrzeitDetailForId(query, id);
+  if (info === null) {
     return events;
   }
-  const type = query[`t${id}`] || 'Yahrzeit';
-  const sunset = query[`s${id}`];
-  const name = query[`n${id}`] ? query[`n${id}`].trim() : `Person${id}`;
-  let day = dayjs(new Date(yy, mm - 1, dd));
-  if (sunset === 'on') {
-    day = day.add(1, 'day');
-  }
+  const type = info.type;
+  const name = info.name;
+  const day = info.day;
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const hd = (type == 'Yahrzeit') ?
       HebrewCalendar.getYahrzeit(hyear, day.toDate()) :

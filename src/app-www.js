@@ -58,7 +58,7 @@ app.context.launchUTCString = new Date().toUTCString();
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
-  ctx.state.spriteHref = '/i/sprite4.svg';
+  ctx.state.spriteHref = '/i/sprite5.svg';
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
@@ -187,7 +187,7 @@ app.use(async function router(ctx, next) {
     await hebcalApp(ctx);
   } else if (rpath === '/yahrzeit/email') {
     await yahrzeitEmailSub(ctx);
-  } else if (rpath === '/yahrzeit/verify') {
+  } else if (rpath.startsWith('/yahrzeit/verify')) {
     await yahrzeitEmailVerify(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);

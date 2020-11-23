@@ -1,12 +1,53 @@
 /* eslint-disable require-jsdoc */
 import {makeDb} from './makedb';
-import nodemailer from 'nodemailer';
 import {getIpAddress, validateEmail} from './common';
+import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetailsFromDb,
+  summarizeAnniversaryTypes} from './common2';
 import {ulid} from 'ulid';
 import {basename} from 'path';
 
 export async function yahrzeitEmailVerify(ctx) {
-  const base = basename(ctx.request.path);
+  ctx.set('Cache-Control', 'private');
+  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const key = basename(ctx.request.path);
+  if (key.length !== 26) {
+    ctx.throw(400, `Invalid verification key '${key}'`);
+  }
+  const db = makeDb(ctx.iniConfig);
+  const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
+  const results = await db.query(sql, [key]);
+  if (!results || !results[0]) {
+    await db.close();
+    ctx.throw(404, `Verification key '${key}' not found`);
+  }
+  const row = results[0];
+  const confirmed = (q.commit === '1');
+  if (confirmed) {
+    const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
+    const ip = getIpAddress(ctx);
+    await db.query(sqlUpdate, [ip, key]);
+  } else {
+    const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, db, row.calendar_id);
+    ctx.state.anniversaryType = summarizeAnniversaryTypes(obj, true);
+    const maxId = ctx.state.maxId = getMaxYahrzeitId(obj);
+    for (let num = 1; num <= maxId; num++) {
+      const info = getYahrzeitDetailForId(obj, num);
+      const afterSunset = (info.sunset === 'on');
+      const d = afterSunset ? info.day.subtract(1, 'day') : info.day;
+      obj['date'+num] = d.format('D MMM YYYY');
+      if (afterSunset) {
+        obj['date'+num] += ' (after sunset)';
+      }
+    }
+  }
+  await db.close();
+  const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
+  await ctx.render('yahrzeit-verify', {
+    title: `${title} | Hebcal Jewish Calendar`,
+    confirmed,
+    subscriptionId: key,
+    emailAddress: row.email_addr,
+  });
 }
 
 export async function yahrzeitEmailSub(ctx) {
@@ -38,7 +79,7 @@ export async function yahrzeitEmailSub(ctx) {
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const message = {
     to: q.em,
-    subject: `Please confirm your ${anniversaryType} reminders`,
+    subject: `Activate your ${anniversaryType} reminders`,
     html: `<div dir="ltr">
 <div>Hello,</div>
 <div><br></div>
@@ -62,33 +103,4 @@ please accept our apologies and ignore this message.</div>
   };
   await mySendMail(ctx, message);
   ctx.body = {ok: true};
-}
-
-async function mySendMail(ctx, message) {
-  message.from = 'Hebcal <shabbat-owner@hebcal.com>';
-  message.replyTo = 'no-reply@hebcal.com';
-  const ip = getIpAddress(ctx);
-  message.headers = message.headers || {};
-  message.headers['X-Originating-IP'] = `[${ip}]`;
-  // console.log(message);
-  const transporter = makeEmailTransport(ctx.iniConfig);
-  await transporter.sendMail(message);
-  // return Promise.resolve({response: '250 OK', messageId: 'foo'});
-}
-
-/**
- * @param {Object<string,any>} iniConfig
- * @return {nodemailer.Transporter}
- */
-function makeEmailTransport(iniConfig) {
-  const transporter = nodemailer.createTransport({
-    host: iniConfig['hebcal.email.shabbat.host'],
-    port: 465,
-    secure: true,
-    auth: {
-      user: iniConfig['hebcal.email.shabbat.user'],
-      pass: iniConfig['hebcal.email.shabbat.password'],
-    },
-  });
-  return transporter;
 }

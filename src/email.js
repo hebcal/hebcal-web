@@ -1,26 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {makeDb} from './makedb';
-import nodemailer from 'nodemailer';
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery, tooltipScript,
   typeaheadScript, validateEmail} from './common';
-
-/**
- * @param {Object<string,any>} iniConfig
- * @return {nodemailer.Transporter}
- */
-function makeEmailTransport(iniConfig) {
-  const transporter = nodemailer.createTransport({
-    host: iniConfig['hebcal.email.shabbat.host'],
-    port: 465,
-    secure: true,
-    auth: {
-      user: iniConfig['hebcal.email.shabbat.user'],
-      pass: iniConfig['hebcal.email.shabbat.password'],
-    },
-  });
-  return transporter;
-}
+import {mySendMail} from './common2';
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
@@ -348,16 +331,4 @@ apologies and ignore this message.</div>
 `,
   };
   await mySendMail(ctx, message);
-}
-
-async function mySendMail(ctx, message) {
-  message.from = 'Hebcal <shabbat-owner@hebcal.com>';
-  message.replyTo = 'no-reply@hebcal.com';
-  const ip = getIpAddress(ctx);
-  message.headers = message.headers || {};
-  message.headers['X-Originating-IP'] = `[${ip}]`;
-  // console.log(message);
-  const transporter = makeEmailTransport(ctx.iniConfig);
-  await transporter.sendMail(message);
-  // return Promise.resolve({response: '250 OK', messageId: 'foo'});
 }

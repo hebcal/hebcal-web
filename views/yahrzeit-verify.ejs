@@ -1,0 +1,34 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div id="content">
+<div class="row">
+<div class="col">
+<p class="lead">Receive anniversary reminders by email.</p>
+<% if (confirmed) { %>
+<div class="alert alert-success">
+<strong>Thank you!</strong> Your annual email reminders are now active.
+</div><!-- .alert -->
+<% } else { %>
+<p>To activate your <%= anniversaryType %> reminders, please confirm your email
+and complete your registration via the button below.</p>
+<p>Email: <strong><%= emailAddress %></strong></p>
+<form method="post" action="<%= rpath %>">
+<input type="hidden" name="commit" value="1">
+<button type="submit" class="btn btn-primary mb-2">
+  <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+  Confirm
+</button>
+</form>
+<p>Receive annual reminders for:</p>
+<ul>
+<% for (let num = 1; num <= maxId; num++) { -%>
+<li><%= details['n'+num] || `Person${num}` %>'s <%= details['t'+num] %> - <%= details['date'+num] %>
+<% } -%>
+</ul>
+<h4 class="mt-4">Email Privacy Policy</h4>
+<p>We will never sell or give your email address to anyone.
+<br>We will never use your email address to send you unsolicited offers.</p>
+<% } %>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') -%>

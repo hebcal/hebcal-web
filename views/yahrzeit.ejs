@@ -115,21 +115,22 @@ instructions</a>.</p>
 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-<p>Receive a reminder email 7 days before each anniversary.</p>
+<div id="email-modal-success" class="alert alert-success" style="display: none">
+  <strong>Thank you!</strong> A confirmation message has been sent to your email address.
+  Click the link within that message to confirm your subscription.
+</div><!-- .alert -->
+<div id="email-modal-entry">
+  <p>Receive a reminder email 7 days before each anniversary.</p>
   <div class="mb-3">
     <label class="form-label" for="em">Email address</label>
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
-    <div class="valid-feedback">Looks good!</div>
     <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
   <p><small><strong>Email Privacy Policy</strong>:
     We will never sell or give your email address to anyone.
     We will never use your email address to send you unsolicited offers.</small></p>
-  <div id="email-modal-success" class="alert alert-success" style="display: none">
-    <strong>Thank you!</strong> A confirmation message has been sent to your email address.
-    Click the link within that message to confirm your subscription.
-  </div>
-  </div><!-- .modal-body -->
+</div><!-- #email-modal-entry -->
+</div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
   <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
@@ -139,18 +140,28 @@ instructions</a>.</p>
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
 <script>
+(function () {
+function show(el) { el.style.display = 'block' }
+function hide(el) { el.style.display = 'none' }
 var emailModalSuccess = document.getElementById('email-modal-success');
+var emailModalEntry = document.getElementById('email-modal-entry');
 var emailModal = document.getElementById('email-modal');
 var emailSubscribeBtn = document.getElementById('email-subscribe');
 var emailForm = document.getElementById('f2');
 emailModal.addEventListener('show.bs.modal', function () {
-  emailModalSuccess.style.display = 'none';
+  hide(emailModalSuccess);
+  show(emailModalEntry);
+  show(emailSubscribeBtn);
   emailSubscribeBtn.textContent = 'Subscribe';
   emailSubscribeBtn.disabled = false;
   emailForm.classList.remove('was-validated');
 });
+emailModal.addEventListener('shown.bs.modal', function () {
+  var myInput = document.getElementById('em');
+  myInput.focus();
+});
 emailSubscribeBtn.onclick = function(e) {
-  emailModalSuccess.style.display = 'none';
+  hide(emailModalSuccess);
   emailForm.classList.remove('was-validated');
   if (!emailForm.checkValidity()) {
     e.preventDefault();
@@ -174,13 +185,14 @@ emailSubscribeBtn.onclick = function(e) {
   }).then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
-        emailSubscribeBtn.textContent = 'Subscribe';
-        emailSubscribeBtn.disabled = false;
-        emailModalSuccess.style.display = 'block';
+        show(emailModalSuccess);
+        hide(emailModalEntry);
+        hide(emailSubscribeBtn);
       });
     }
   });
 };
+})();
 </script>
 <% } -%>
 <%- await include('partials/footer.ejs') _%>

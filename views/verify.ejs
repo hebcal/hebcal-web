@@ -10,12 +10,16 @@
 A confirmation message has been sent to <strong><%= emailAddress %></strong>.
 </div><!-- .alert -->
 <% } else { %>
+<p>To activate your account, please confirm your email and complete your registration via the button below.</p>
 <p>Email: <strong><%= emailAddress %></strong>
 <br>Location: <%= locationName %></p>
 <form method="post" action="<%= rpath %>">
 <input type="hidden" name="k" value="<%= subscriptionId %>">
 <input type="hidden" name="commit" value="1">
-<button type="submit" class="btn btn-success mb-2">Confirm Subscription</button>
+<button type="submit" class="btn btn-primary mb-2">
+  <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+  Confirm Subscription
+</button>
 </form>
 <p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
 <h4 class="mt-4">Email Privacy Policy</h4>
