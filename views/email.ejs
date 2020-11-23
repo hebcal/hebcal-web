@@ -25,7 +25,7 @@
 <% } %>
 <div class="mb-3">
 <label class="form-label" for="em">E-mail address</label>
-<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>">
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
 </div>
 <% if (!defaultUnsubscribe) { %>
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">

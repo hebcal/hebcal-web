@@ -39,6 +39,7 @@ CREATE TABLE hebcal_shabbat_bounce (
 CREATE TABLE yahrzeit_email (
   id varchar(26) NOT NULL,
   email_addr varchar(200) NOT NULL,
+  calendar_id varchar(26) NOT NULL,
   sub_status varchar(16) NOT NULL,
   created datetime NOT NULL,
   updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

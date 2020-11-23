@@ -106,7 +106,7 @@ instructions</a>.</p>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
-<form id="f2">
+<form id="f2" class="needs-validation" novalidate>
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="type" value="<%=downloadTitle%>">
 <input type="hidden" name="ulid" value="<%=ulid%>">
@@ -118,26 +118,52 @@ instructions</a>.</p>
 <p>Receive a reminder email 7 days before each anniversary.</p>
   <div class="mb-3">
     <label class="form-label" for="em">Email address</label>
-    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com">
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
+    <div class="valid-feedback">Looks good!</div>
+    <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
   <p><small><strong>Email Privacy Policy</strong>:
     We will never sell or give your email address to anyone.
     We will never use your email address to send you unsolicited offers.</small></p>
-  <div id="email-modal-success"></div>
+  <div id="email-modal-success" class="alert alert-success" style="display: none">
+    <strong>Thank you!</strong> A confirmation message has been sent to your email address.
+    Click the link within that message to confirm your subscription.
+  </div>
   </div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-primary" name="modify" value="1" id="email-subscribe">Subscribe</button>
+  <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
 </div>
 </form>
+</div><!-- .modal-content -->
+</div><!-- .modal-dialog -->
+</div><!-- .modal -->
 <script>
+var emailModalSuccess = document.getElementById('email-modal-success');
+var emailModal = document.getElementById('email-modal');
 var emailSubscribeBtn = document.getElementById('email-subscribe');
+var emailForm = document.getElementById('f2');
+emailModal.addEventListener('show.bs.modal', function () {
+  emailModalSuccess.style.display = 'none';
+  emailSubscribeBtn.textContent = 'Subscribe';
+  emailSubscribeBtn.disabled = false;
+  emailForm.classList.remove('was-validated');
+});
 emailSubscribeBtn.onclick = function(e) {
-  e.preventDefault();
+  emailModalSuccess.style.display = 'none';
+  emailForm.classList.remove('was-validated');
+  if (!emailForm.checkValidity()) {
+    e.preventDefault();
+    e.stopPropagation();
+    emailForm.classList.add('was-validated');
+    return;
+  }
+  emailForm.classList.add('was-validated');
+
   emailSubscribeBtn.textContent = 'Subscribing...';
   emailSubscribeBtn.disabled = true;
   var params = new URLSearchParams();
-  var formData = new FormData(document.getElementById('f2'));
+  var formData = new FormData(emailForm);
   for (var pair of formData) {
     params.append(pair[0], pair[1]);
   }
@@ -146,14 +172,15 @@ emailSubscribeBtn.onclick = function(e) {
     credentials: 'omit',
     body: params,
   }).then(function(response) {
-    emailSubscribeBtn.textContent = 'Subscribe';
-    emailSubscribeBtn.disabled = false;
-    document.getElementById('email-modal-success').innerHTML = '<div class="alert alert-success"><strong>Thank you!</strong> A confirmation message has been sent to your email address. Click the link within that message to confirm your subscription.</div>';
+    if (response.ok) {
+      response.json().then(function(data) {
+        emailSubscribeBtn.textContent = 'Subscribe';
+        emailSubscribeBtn.disabled = false;
+        emailModalSuccess.style.display = 'block';
+      });
+    }
   });
 };
 </script>
-</div><!-- .modal-content -->
-</div><!-- .modal-dialog -->
-</div><!-- .modal -->
 <% } -%>
 <%- await include('partials/footer.ejs') _%>

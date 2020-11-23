@@ -2,6 +2,12 @@
 import {makeDb} from './makedb';
 import nodemailer from 'nodemailer';
 import {getIpAddress, validateEmail} from './common';
+import {ulid} from 'ulid';
+import {basename} from 'path';
+
+export async function yahrzeitEmailVerify(ctx) {
+  const base = basename(ctx.request.path);
+}
 
 export async function yahrzeitEmailSub(ctx) {
   ctx.set('Cache-Control', 'private');
@@ -19,20 +25,24 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
+  const id = ulid().toLowerCase();
   const db = makeDb(ctx.iniConfig);
   const ip = getIpAddress(ctx);
   const sql = `INSERT INTO yahrzeit_email
-  (id, email_addr, sub_status, created, ip_addr)
-  VALUES (?, ?, 'pending', NOW(), ?)`;
-  await db.query(sql, [q.ulid, q.em, ip]);
-  const url = `https://www.hebcal.com/yahrzeit/email/verify/${q.ulid}`;
+  (id, email_addr, calendar_id, sub_status, created, ip_addr)
+  VALUES (?, ?, ?, 'pending', NOW(), ?)`;
+  await db.query(sql, [id, q.em, q.ulid, ip]);
+  const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
+  await db.query(sqlUpdate, q.ulid);
+  const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
+  const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const message = {
     to: q.em,
-    subject: `Please confirm your ${q.type} reminder request`,
+    subject: `Please confirm your ${anniversaryType} reminders`,
     html: `<div dir="ltr">
 <div>Hello,</div>
 <div><br></div>
-<div>We have received your request to receive ${q.type} reminders
+<div>We have received your request to receive ${anniversaryType} reminders
 from hebcal.com.</div>
 <div><br></div>
 <div>Please confirm your request and activate your subscription
@@ -40,7 +50,7 @@ by clicking on this link:</div>
 <div><br></div>
 <div><a href="${url}">${url}</a></div>
 <div><br></div>
-<div>If you did not request (or do not want) ${q.type} reminders,
+<div>If you did not request (or do not want) ${anniversaryType} reminders,
 please accept our apologies and ignore this message.</div>
 <div><br></div>
 <div>Regards,

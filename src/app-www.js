@@ -29,7 +29,7 @@ import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogIn
 import {yahrzeitApp} from './yahrzeit';
 import {holidaysApp} from './holidays';
 import redirectMap from './redirect.json';
-import {yahrzeitEmailSub} from './yahrzeit-email';
+import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -187,6 +187,8 @@ app.use(async function router(ctx, next) {
     await hebcalApp(ctx);
   } else if (rpath === '/yahrzeit/email') {
     await yahrzeitEmailSub(ctx);
+  } else if (rpath === '/yahrzeit/verify') {
+    await yahrzeitEmailVerify(ctx);
   } else if (rpath.startsWith('/yahrzeit')) {
     await yahrzeitApp(ctx);
   } else if (rpath.startsWith('/holidays/')) {
