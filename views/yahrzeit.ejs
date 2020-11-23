@@ -115,7 +115,10 @@ instructions</a>.</p>
 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-<div id="email-modal-success" class="alert alert-success" style="display: none">
+<div id="email-modal-failure" class="alert alert-warning" role="alert" style="display: none">
+  Sorry, that didn't work. Please try again later.
+</div>
+<div id="email-modal-success" class="alert alert-success" role="alert" style="display: none">
   <strong>Thank you!</strong> A confirmation message has been sent to your email address.
   Click the link within that message to confirm your subscription.
 </div><!-- .alert -->
@@ -144,12 +147,14 @@ instructions</a>.</p>
 function show(el) { el.style.display = 'block' }
 function hide(el) { el.style.display = 'none' }
 var emailModalSuccess = document.getElementById('email-modal-success');
+var emailModalFailure = document.getElementById('email-modal-failure');
 var emailModalEntry = document.getElementById('email-modal-entry');
 var emailModal = document.getElementById('email-modal');
 var emailSubscribeBtn = document.getElementById('email-subscribe');
 var emailForm = document.getElementById('f2');
 emailModal.addEventListener('show.bs.modal', function () {
   hide(emailModalSuccess);
+  hide(emailModalFailure);
   show(emailModalEntry);
   show(emailSubscribeBtn);
   emailSubscribeBtn.textContent = 'Subscribe';
@@ -162,6 +167,7 @@ emailModal.addEventListener('shown.bs.modal', function () {
 });
 emailSubscribeBtn.onclick = function(e) {
   hide(emailModalSuccess);
+  hide(emailModalFailure);
   emailForm.classList.remove('was-validated');
   if (!emailForm.checkValidity()) {
     e.preventDefault();
@@ -186,9 +192,14 @@ emailSubscribeBtn.onclick = function(e) {
     if (response.ok) {
       response.json().then(function(data) {
         show(emailModalSuccess);
+        hide(emailModalFailure);
         hide(emailModalEntry);
         hide(emailSubscribeBtn);
       });
+    } else {
+      show(emailModalFailure);
+      emailSubscribeBtn.textContent = 'Subscribe';
+      emailSubscribeBtn.disabled = false;
     }
   });
 };

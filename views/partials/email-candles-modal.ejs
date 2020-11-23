@@ -1,8 +1,9 @@
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
-<form action="/email" method="post">
+<form id="f2" class="needs-validation" novalidate>
 <input type="hidden" name="v" value="1">
+<input type="hidden" name="modify" value="1">
 <input type="hidden" name="geo" value="<%= q.geo || 'geonameid' %>">
 <input type="hidden" name="zip" value="<%= q.zip || '' %>">
 <input type="hidden" name="geonameid" value="<%= q.geonameid %>">
@@ -14,20 +15,96 @@
   <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
+<div id="email-modal-failure" class="alert alert-warning" role="alert" style="display: none">
+  Sorry, that didn't work. Please try again later.
+</div>
+<div id="email-modal-success" class="alert alert-success" role="alert" style="display: none">
+  <strong>Thank you!</strong> A confirmation message has been sent to your email address.
+  Click the link within that message to confirm your subscription.
+</div><!-- .alert -->
+<div id="email-modal-entry">
   <p>Get candle lighting times, Torah portion &amp; Havdalah every Thursday.</p>
   <div class="mb-3">
     <label class="form-label" for="em">Email address</label>
-    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com">
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
+    <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
   <p><small><strong>Email Privacy Policy</strong>:
     We will never sell or give your email address to anyone.
     We will never use your email address to send you unsolicited offers.</small></p>
+</div><!-- #email-modal-entry -->
 </div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-  <button type="submit" class="btn btn-primary" name="modify" value="1">Subscribe</button>
+  <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
 </div>
 </form>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->  
+<script>
+(function () {
+function show(el) { el.style.display = 'block' }
+function hide(el) { el.style.display = 'none' }
+var emailModalSuccess = document.getElementById('email-modal-success');
+var emailModalFailure = document.getElementById('email-modal-failure');
+var emailModalEntry = document.getElementById('email-modal-entry');
+var emailModal = document.getElementById('email-modal');
+var emailSubscribeBtn = document.getElementById('email-subscribe');
+var emailForm = document.getElementById('f2');
+emailModal.addEventListener('show.bs.modal', function () {
+  hide(emailModalSuccess);
+  hide(emailModalFailure);
+  show(emailModalEntry);
+  show(emailSubscribeBtn);
+  emailSubscribeBtn.textContent = 'Subscribe';
+  emailSubscribeBtn.disabled = false;
+  emailForm.classList.remove('was-validated');
+});
+emailModal.addEventListener('shown.bs.modal', function () {
+  var myInput = document.getElementById('em');
+  myInput.focus();
+});
+emailSubscribeBtn.onclick = function(e) {
+  hide(emailModalSuccess);
+  hide(emailModalFailure);
+  emailForm.classList.remove('was-validated');
+  if (!emailForm.checkValidity()) {
+    e.preventDefault();
+    e.stopPropagation();
+    emailForm.classList.add('was-validated');
+    return;
+  }
+  emailForm.classList.add('was-validated');
+
+  emailSubscribeBtn.textContent = 'Subscribing...';
+  emailSubscribeBtn.disabled = true;
+  var params = new URLSearchParams();
+  var formData = new FormData(emailForm);
+  for (var pair of formData) {
+    params.append(pair[0], pair[1]);
+  }
+  fetch('/email/', {
+    method: 'POST',
+    credentials: 'omit',
+    body: params,
+    headers: {
+      'Accept': 'application/json',
+    },
+  }).then(function(response) {
+    if (response.ok) {
+      response.blob().then(function(data) {
+        show(emailModalSuccess);
+        hide(emailModalFailure);
+        hide(emailModalEntry);
+        hide(emailSubscribeBtn);
+      });
+    } else {
+      show(emailModalFailure);
+      emailSubscribeBtn.textContent = 'Subscribe';
+      emailSubscribeBtn.disabled = false;
+    }
+  });
+};
+})();
+</script>

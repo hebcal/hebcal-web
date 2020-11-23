@@ -127,14 +127,17 @@ export async function emailForm(ctx) {
     location = getLocationFromQuery(ctx.db, q);
   } catch (err) {
     ctx.state.message = err.message;
+    ctx.status = err.status;
   }
   q['city-typeahead'] = location ? location.getName() : '';
   ctx.state.title = 'Shabbat Candle Lighting Times by Email | Hebcal Jewish Calendar';
   if (q.v === '1') {
     if (!q.em) {
       ctx.state.message = 'Please enter your email address.';
+      ctx.status = 400;
     } else if (!validateEmail(q.em)) {
       ctx.state.message = `Invalid email address ${q.em}`;
+      ctx.status = 400;
     } else if (q.unsubscribe === '1') {
       ctx.state.emailAddress = q.em;
       const ok = await unsubscribe(ctx, q.em);
@@ -143,6 +146,7 @@ export async function emailForm(ctx) {
       }
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
+      ctx.status = 400;
     } else if (q.modify === '1' && !ctx.state.message) {
       if (q.M === 'on') {
         delete q.m;
