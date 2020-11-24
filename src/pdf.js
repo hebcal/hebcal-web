@@ -160,12 +160,18 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const colon = subj.indexOf(': ');
   if (evt.getFlags() & flags.DAF_YOMI) {
     subj = subj.substring(colon + 2);
-  } else if (desc === 'Candle lighting' || desc === 'Havdalah') {
-    // Candle lighting or Havdalah (translated)
-    subj = subj.substring(0, colon);
-    fontStyle = 'plain';
   } else if (subj.startsWith('Shabbat Mevarchim')) {
     subj = subj.substring(8);
+  } else if (colon !== -1) {
+    switch (desc) {
+      case 'Candle lighting':
+      case 'Havdalah':
+      case 'Fast begins':
+      case 'Fast ends':
+        subj = subj.substring(0, colon);
+        fontStyle = 'plain';
+        break;
+    }
   }
   if (rtl) {
     fontStyle = 'hebrew';
