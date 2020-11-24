@@ -142,68 +142,6 @@ instructions</a>.</p>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
-<script>
-(function () {
-function show(el) { el.style.display = 'block' }
-function hide(el) { el.style.display = 'none' }
-var emailModalSuccess = document.getElementById('email-modal-success');
-var emailModalFailure = document.getElementById('email-modal-failure');
-var emailModalEntry = document.getElementById('email-modal-entry');
-var emailModal = document.getElementById('email-modal');
-var emailSubscribeBtn = document.getElementById('email-subscribe');
-var emailForm = document.getElementById('f2');
-emailModal.addEventListener('show.bs.modal', function () {
-  hide(emailModalSuccess);
-  hide(emailModalFailure);
-  show(emailModalEntry);
-  show(emailSubscribeBtn);
-  emailSubscribeBtn.textContent = 'Subscribe';
-  emailSubscribeBtn.disabled = false;
-  emailForm.classList.remove('was-validated');
-});
-emailModal.addEventListener('shown.bs.modal', function () {
-  var myInput = document.getElementById('em');
-  myInput.focus();
-});
-emailSubscribeBtn.onclick = function(e) {
-  hide(emailModalSuccess);
-  hide(emailModalFailure);
-  emailForm.classList.remove('was-validated');
-  if (!emailForm.checkValidity()) {
-    e.preventDefault();
-    e.stopPropagation();
-    emailForm.classList.add('was-validated');
-    return;
-  }
-  emailForm.classList.add('was-validated');
-
-  emailSubscribeBtn.textContent = 'Subscribing...';
-  emailSubscribeBtn.disabled = true;
-  var params = new URLSearchParams();
-  var formData = new FormData(emailForm);
-  for (var pair of formData) {
-    params.append(pair[0], pair[1]);
-  }
-  fetch('/yahrzeit/email', {
-    method: 'POST',
-    credentials: 'omit',
-    body: params,
-  }).then(function(response) {
-    if (response.ok) {
-      response.json().then(function(data) {
-        show(emailModalSuccess);
-        hide(emailModalFailure);
-        hide(emailModalEntry);
-        hide(emailSubscribeBtn);
-      });
-    } else {
-      show(emailModalFailure);
-      emailSubscribeBtn.textContent = 'Subscribe';
-      emailSubscribeBtn.disabled = false;
-    }
-  });
-};
-})();
-</script>
+<%- await include('partials/email-modal-script.ejs', {resource: '/yahrzeit/email'}) -%>
 <% } -%>
 <%- await include('partials/footer.ejs') _%>
