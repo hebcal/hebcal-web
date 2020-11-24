@@ -249,7 +249,7 @@ function eventToItem(ev, options, locale) {
     obj.fmtTime = hourMin;
   }
   const url0 = ev.url();
-  const url = url0 && options.il && cat0 === 'parashat' ? url0 + '?i=on' : url0;
+  const url = url0 && options.il ? url0 + '?i=on' : url0;
   if (url) {
     obj.url = url;
   }
