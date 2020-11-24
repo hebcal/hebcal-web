@@ -162,7 +162,7 @@ div.pbba { page-break-before: always }
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
 <div id="hebcal-results">
-<%_ include partials/pagination.ejs _%>
+<%- await include('partials/pagination.ejs') -%>
 <% let first = true; %>
 <% dates.forEach((d) => { -%>
 <% if (today.isSame(d, 'year') && today.isSame(d, 'month')) { %><div id="cal-current"></div><% } -%>
@@ -178,7 +178,7 @@ div.pbba { page-break-before: always }
 </div><!-- .agenda -->
 </div><!-- #cal-<%= d.format('YYYY-MM') %> -->
 <% }); -%>
-<%_ include partials/pagination.ejs _%>
+<%- await include('partials/pagination.ejs') -%>
 </div><!-- #hebcal-results -->
 <script>
 window['hebcal']=window['hebcal']||{};

@@ -111,7 +111,7 @@
 <div class="mb-3">
   <label class="form-label" for="city-typeahead">Candle lighting times</label>
 <% if (q.geo === 'pos') { -%>
-<%_ include partials/legacy-geopos.ejs _%>
+<%- await include('partials/legacy-geopos.ejs') -%>
 <% } else { -%>
 <input type="hidden" name="c" value="<%= q.c || 'off' %>" id="c">
 <input type="hidden" name="geo" value="<%= q.geo || 'none' %>" id="geo">
