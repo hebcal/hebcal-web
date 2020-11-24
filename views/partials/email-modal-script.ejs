@@ -29,20 +29,19 @@ function validateEmail(email) {
   return re.test(String(email).toLowerCase());
 }
 function doSubscribe(event) {
+  event.preventDefault();
+  event.stopPropagation();
   hide(emailModalSuccess);
   hide(emailModalFailure);
   emailForm.classList.remove('was-validated');
   if (!emailForm.checkValidity()) {
-    event.preventDefault();
-    event.stopPropagation();
     emailForm.classList.add('was-validated');
     return;
   }
   emailInput.classList.remove('is-invalid');
   if (!validateEmail(emailInput.value)) {
+    emailForm.classList.add('was-validated');
     emailInput.classList.add('is-invalid');
-    event.preventDefault();
-    event.stopPropagation();
     return;
   }
   emailForm.classList.add('was-validated');
