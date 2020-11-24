@@ -1,10 +1,11 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale, flags} from '@hebcal/core';
+import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
-import {countryNames, getEventCategories, makeAnchor, eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
+  eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/fr';
 import 'dayjs/locale/he';
@@ -133,6 +134,7 @@ function makeItems(ctx) {
   }
   const events = makeHebrewCalendar(ctx, options);
   const locale = localeMap[Locale.getLocaleName()] || 'en';
+  const titlePrefix = location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times';
   Object.assign(ctx.state, {
     events,
     options,
@@ -141,7 +143,8 @@ function makeItems(ctx) {
     locale,
     hyear: getDefaultHebrewYear(events[0].getDate()),
     items: events.map((ev) => eventToItem(ev, options, locale)),
-    title: location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times | Hebcal Jewish Calendar',
+    h3title: titlePrefix,
+    title: titlePrefix + ' | Hebcal Jewish Calendar',
     Shabbat: Locale.gettext('Shabbat'),
   });
 
@@ -230,34 +233,25 @@ function eventToItem(ev, options, locale) {
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
   const id = d.format('YYYYMMDD') + '-' + makeAnchor(desc);
-  const hourMin = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-  if (desc.startsWith('Candle lighting') || desc.startsWith('Havdalah')) {
-    const subj = ev.render();
-    const shortDesc = subj.substring(0, subj.indexOf(':'));
-    return {
-      id,
-      desc: shortDesc,
-      cat: cat0,
-      d,
-      isoDate,
-      isoTime: ev.eventTimeStr,
-      fmtDate,
-      fmtTime: hourMin,
-    };
-  } else {
-    const result = {
-      id,
-      desc: ev.render(),
-      cat: cat0,
-      d,
-      isoDate,
-      fmtDate,
-      url: ev.url(),
-    };
-    if (hourMin && ev.getFlags() & flags.CHANUKAH_CANDLES) {
-      result.fmtTime = hourMin;
-      result.isoTime = ev.eventTimeStr;
-    }
-    return result;
+  const subj = renderTitleWithoutTime(ev);
+  const obj = {
+    id,
+    desc: subj,
+    cat: cat0,
+    d,
+    isoDate,
+    fmtDate,
+  };
+  const timed = Boolean(ev.eventTime);
+  if (timed) {
+    const hourMin = timed && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
+    obj.isoTime = ev.eventTimeStr;
+    obj.fmtTime = hourMin;
   }
+  const url0 = ev.url();
+  const url = url0 && options.il && cat0 === 'parashat' ? url0 + '?i=on' : url0;
+  if (url) {
+    obj.url = url;
+  }
+  return obj;
 }
