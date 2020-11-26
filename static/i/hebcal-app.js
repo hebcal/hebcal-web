@@ -116,33 +116,39 @@ window['hebcal'].splitByMonth = function(events) {
     return out;
 };
 
+window['hebcal'].hour12cc = {
+    US: 1, CA: 1, BR: 1, AU: 1, NZ: 1, DO: 1, PR: 1, GR: 1, IN: 1, KR: 1, NP: 1, ZA: 1,
+};
+
 window['hebcal'].tableRow = function(evt) {
     var m = dayjs(evt.date),
+        dt = evt.date,
+        cat = evt.category,
         dateStr = m.format('ddd DD MMM'),
-        allDay = evt.date.indexOf('T') == -1,
+        allDay = dt.indexOf('T') === -1,
         lang = window['hebcal'].lang || 's',
         subj = evt.title,
         timeStr = '',
         timeTd,
         className = window['hebcal'].getEventClassName(evt);
-    if (evt.category === 'dafyomi') {
+    if (cat === 'dafyomi') {
         subj = subj.substring(subj.indexOf(':') + 1);
-    } else if (evt.category === 'candles' || evt.category === 'havdalah') {
+    } else if (cat === 'candles' || cat === 'havdalah') {
         // "Candle lighting: foo" or "Havdalah (42 min): foo"
-        subj = evt.title.substring(0, evt.title.indexOf(':'));
+        subj = subj.substring(0, subj.indexOf(':'));
     }
     if (!allDay) {
-        var timeMatch = evt.title.match(/\d+:\d+\w*$/);
-        if (timeMatch && timeMatch.length) {
-            timeStr = timeMatch[0];
-        }
-        if (subj.startsWith('Chanukah: ') ||
-            (typeof evt.title_orig === 'string' && evt.title_orig.startsWith('Chanukah: '))) {
-            var colon = subj.lastIndexOf(':'),
-                colon2 = subj.lastIndexOf(':', colon - 1);
-            if (colon2 > 0) {
-                subj = subj.substring(0, colon2);
+        var cc = window['hebcal'].cconfig.cc;
+        if (typeof window['hebcal'].hour12cc[cc] === 'undefined') {
+            timeStr = dt.substring(11, 16);
+        } else {
+            var hour = +dt.substring(11, 13);
+            var suffix = hour >= 12 ? 'pm' : 'am';
+            if (hour > 12) {
+                hour = hour - 12;
             }
+            var min = dt.substring(14, 16);
+            timeStr = String(hour) + ':' + String(min) + suffix;
         }
     }
     timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<td>' + timeStr + '</td>';
