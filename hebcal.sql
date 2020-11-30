@@ -48,3 +48,13 @@ CREATE TABLE yahrzeit_email (
   KEY email_addr (email_addr),
   KEY sub_status (sub_status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE yahrzeit_sent (
+  id int NOT NULL AUTO_INCREMENT,
+  yahrzeit_id varchar(26) NOT NULL,
+  num int NOT NULL,
+  hyear int NOT NULL,
+  sent_date datetime NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY (yahrzeit_id, num, hyear)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
