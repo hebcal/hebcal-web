@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {makeDb} from './makedb';
-import {getIpAddress, validateEmail} from './common';
+import {getIpAddress, validateEmail, empty} from './common';
 import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetailsFromDb,
   summarizeAnniversaryTypes} from './common2';
 import {ulid} from 'ulid';
@@ -53,13 +53,23 @@ export async function yahrzeitEmailVerify(ctx) {
 export async function yahrzeitEmailSub(ctx) {
   ctx.set('Cache-Control', 'private');
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
+  /*
   if (ctx.request.method === 'GET') {
     ctx.set('Allow', 'POST');
     ctx.throw(405, 'GET not allowed; try using POST instead');
   }
+  */
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  if (!empty(q.id) && !empty(q.num) && q.unsubscribe === '1' && q.commit === '1') {
+    const db = makeDb(ctx.iniConfig);
+    const sql = 'INSERT INTO yahrzeit_optout (email_id, num, deactivated) VALUES (?, ?, 1)';
+    await db.query(sql, [q.id, q.num]);
+    await db.close();
+    ctx.body = {ok: true};
+    return;
+  }
   ['em', 'ulid', 'type'].forEach((key) => {
-    if (typeof q[key] === 'undefined' || q[key] === '') {
+    if (empty(q[key])) {
       ctx.throw(400, `Missing required key '${key}'`);
     }
   });
@@ -75,6 +85,7 @@ export async function yahrzeitEmailSub(ctx) {
   await db.query(sql, [id, q.em, q.ulid, ip]);
   const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
   await db.query(sqlUpdate, q.ulid);
+  await db.close();
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const message = {

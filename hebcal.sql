@@ -52,9 +52,18 @@ CREATE TABLE yahrzeit_email (
 CREATE TABLE yahrzeit_sent (
   id int NOT NULL AUTO_INCREMENT,
   yahrzeit_id varchar(26) NOT NULL,
-  num int NOT NULL,
-  hyear int NOT NULL,
+  num smallint NOT NULL,
+  hyear smallint NOT NULL,
   sent_date datetime NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY (yahrzeit_id, num, hyear)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
+CREATE TABLE yahrzeit_optout (
+  email_id varchar(26) NOT NULL,
+  num smallint NOT NULL,
+  deactivated tinyint(1) NOT NULL,
+  updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (email_id, num),
+  KEY (email_id)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;

@@ -67,7 +67,7 @@ export function isNumKey(k) {
 }
 
 /**
- * @param {any} query
+ * @param {Object<string,any>} query
  * @param {boolean} [long]
  * @return {string}
  */
@@ -88,7 +88,7 @@ export function summarizeAnniversaryTypes(query, long=false) {
 }
 
 /**
- * @param {any} query
+ * @param {Object<string,any>} query
  * @return {number}
  */
 export function getMaxYahrzeitId(query) {
@@ -107,7 +107,7 @@ export function getMaxYahrzeitId(query) {
 }
 
 /**
- * @param {*} query
+ * @param {Object<string,any>} query
  * @param {number} id
  * @return {*}
  */
