@@ -1,8 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
-import {langTzDefaults, empty, getDefaultHebrewYear} from './common';
+import {empty, getDefaultHebrewYear, setDefautLangTz} from './common';
 import dayjs from 'dayjs';
-import querystring from 'querystring';
 
 export async function homepage(ctx) {
   const q = ctx.request.query;
@@ -16,6 +15,7 @@ export async function homepage(ctx) {
   const items = ctx.state.items = [];
   mastheadDates(items, dt, hd);
   const il = ctx.state.timezone === 'Asia/Jerusalem';
+  console.log(ctx.state.ipCountryCode, ctx.state.lang, ctx.state.timezone);
   mastheadHolidays(items, hd, il);
   mastheadParsha(items, dt, il);
   const [blub, longText] = getHolidayGreeting(hd, il);
@@ -59,28 +59,6 @@ function mastheadHolidays(items, hd, il) {
         const desc = ev.render();
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
-}
-
-/**
- * MaxMind geoIP lookup GeoLite2-Country.mmdb
- * @param {any} ctx
- */
-function setDefautLangTz(ctx) {
-  const cookieStr = ctx.state.cookieStr = ctx.cookies.get('C') || '';
-  if (cookieStr.length !== 0) {
-    ctx.set('Cache-Control', 'private');
-  }
-  const cookie = ctx.state.cookie = querystring.parse(cookieStr);
-  const ip = ctx.get('x-client-ip') || ctx.request.ip;
-  const geoip = ctx.lookup.get(ip);
-  const cc = ctx.state.countryCode = geoip ? ctx.state.countryCode : 'US';
-  if (langTzDefaults[cc]) {
-    ctx.state.lang = langTzDefaults[cc][0];
-    ctx.state.timezone = langTzDefaults[cc][1];
-  } else {
-    ctx.state.lang = cookie.lg || langTzDefaults['US'][0];
-    ctx.state.timezone = langTzDefaults['US'][1];
-  }
 }
 
 // For the first 7 months of the year, show the current Gregorian year

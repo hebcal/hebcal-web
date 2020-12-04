@@ -604,3 +604,22 @@ export function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
+
+/**
+ * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * @param {any} ctx
+ */
+export function setDefautLangTz(ctx) {
+  const cookieStr = ctx.cookies.get('C') || '';
+  if (cookieStr.length !== 0) {
+    ctx.set('Cache-Control', 'private');
+  }
+  const cookie = ctx.state.cookie = querystring.parse(cookieStr);
+  const ip = getIpAddress(ctx);
+  const geoipCountryCode = ctx.state.ipCountryCode = ctx.lookup.get(ip);
+  const cc = (geoipCountryCode && typeof langTzDefaults[geoipCountryCode] === 'object') ?
+    geoipCountryCode : 'US';
+  const ccDefaults = langTzDefaults[cc];
+  ctx.state.lang = cookie.lg || ccDefaults[0];
+  ctx.state.timezone = ccDefaults[1];
+}
