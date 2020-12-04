@@ -43,7 +43,7 @@
     "ejs": "^2.7.4",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
-    "geolite2-redist": "^1.0.7",
+    "geolite2-redist": "^2.0.0",
     "http-errors": "^1.8.0",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
