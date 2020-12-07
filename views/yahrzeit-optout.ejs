@@ -1,0 +1,16 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div id="content">
+<div class="row">
+<div class="col">
+<p>Thanks for using the Hebcal Yahrzeit, Birthay and Anniversary Calendar.</p>
+<div class="alert alert-success">
+Annual reminders of <strong><%= info.name %>'s <%= info.typeStr %></strong>
+will no longer be sent to <strong><%= emailAddress %></strong>.
+</div><!-- .alert -->
+<p>To generate a new list of Yahrzeit (memorial) and Yizkor dates, Hebrew Birthdays,
+or Anniversaries for the next 20 years, visit our
+<a href="/yahrzeit">Yahrzeit + Anniversary Calendar</a>.</p>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') -%>

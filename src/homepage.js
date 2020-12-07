@@ -15,7 +15,6 @@ export async function homepage(ctx) {
   const items = ctx.state.items = [];
   mastheadDates(items, dt, hd);
   const il = ctx.state.timezone === 'Asia/Jerusalem';
-  console.log(ctx.state.ipCountryCode, ctx.state.lang, ctx.state.timezone);
   mastheadHolidays(items, hd, il);
   mastheadParsha(items, dt, il);
   const [blub, longText] = getHolidayGreeting(hd, il);
