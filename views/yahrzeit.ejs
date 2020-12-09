@@ -64,7 +64,7 @@ or Hebrew Anniversaries.</p>
 href="/converter">Hebrew Date Converter</a> to get the Gregorian date
 and then come back to this page.</p>
 </div><!-- .d-print-none -->
-<form class="d-print-none" method="post" action="<%= rpath %>">
+<form class="d-print-none" method="post" action="/yahrzeit">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
@@ -92,6 +92,7 @@ and then come back to this page.</p>
 </div>
 </div><!-- .clearfix -->
 <input type="hidden" name="v" value="yahrzeit">
+<input type="hidden" name="ulid" value="<%=ulid||''%>">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
 

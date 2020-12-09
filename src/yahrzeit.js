@@ -13,15 +13,34 @@ import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {*} ctx
+ * @return {*}
  */
-export async function yahrzeitApp(ctx) {
+async function makeQuery(ctx) {
+  const rpath = ctx.request.path;
+  if (rpath.startsWith('/yahrzeit/edit/')) {
+    const id = ctx.state.ulid = basename(rpath);
+    const db = makeDb(ctx.iniConfig);
+    const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
+    const results = await db.query(sql, id);
+    if (results && results[0]) {
+      await db.close();
+      return results[0].contents;
+    }
+  }
   const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
     hebdate: 'on',
     yizkor: 'off',
     years: 20,
   };
-  const q = ctx.state.q = Object.assign(defaults, ctx.request.body, ctx.request.query);
+  return Object.assign(defaults, ctx.request.body, ctx.request.query);
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
+export async function yahrzeitApp(ctx) {
+  const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
@@ -100,10 +119,11 @@ async function makeDownloadProps(ctx) {
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase();
   const db = makeDb(ctx.iniConfig);
-  const id = ctx.state.ulid = ulid().toLowerCase();
+  const id = ctx.state.ulid = q.ulid || ctx.state.ulid || ulid().toLowerCase();
   const ip = getIpAddress(ctx);
-  const sql = 'INSERT INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
+  const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';
+  delete q.ulid;
   await db.query(sql, [id, ip, JSON.stringify(q)]);
   await db.close();
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
