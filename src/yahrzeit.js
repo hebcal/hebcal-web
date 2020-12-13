@@ -17,6 +17,7 @@ const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebca
  * @return {*}
  */
 async function makeQuery(ctx) {
+  ctx.state.ulid = '';
   const rpath = ctx.request.path;
   if (rpath.startsWith('/yahrzeit/edit/')) {
     const id = ctx.state.ulid = basename(rpath);
