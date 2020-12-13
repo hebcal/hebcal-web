@@ -245,7 +245,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 if (process.env.NODE_ENV === 'production' ) {
-  fs.writeFileSync(logDir + '/koa.pid', process.pid);
+  fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
   process.on('SIGHUP', () => dest.reopen());
 }
 
