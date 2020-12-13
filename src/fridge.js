@@ -1,5 +1,5 @@
 import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
-import {makeHebcalOptions, makeHebrewCalendar} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, localeMap} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 
@@ -44,9 +44,13 @@ function makeProperties(ctx) {
       url += `&amp;${opt}=${query[opt]}`;
     }
   }
+  const locale = Locale.getLocaleName();
+  const lang = localeMap[locale] || 'en';
   return {
+    htmlDir: lang === 'he' ? 'rtl' : 'ltr',
+    lang,
     location,
-    locale: Locale.getLocaleName(),
+    locale,
     hyear,
     gregYear1: events[0].getDate().greg().getFullYear(),
     gregYear2: events[events.length - 1].getDate().greg().getFullYear(),
@@ -63,6 +67,8 @@ function makeProperties(ctx) {
  * @return {any[]}
  */
 function makeContents(events, options) {
+  const locale0 = Locale.getLocaleName();
+  const locale = localeMap[locale0] || 'en';
   const objs = [];
   for (let i = 0; i < events.length; i++) {
     const ev = events[i];
@@ -70,7 +76,7 @@ function makeContents(events, options) {
       continue;
     }
     const hd = ev.getDate();
-    const d = dayjs(hd.greg());
+    const d = dayjs(hd.greg()).locale(locale);
     const item = {
       date: d,
       time: HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options),
@@ -125,6 +131,7 @@ function row(item, right) {
   if (!item) {
     return '<td></td><td></td><td></td><td></td>';
   }
+  const locale = Locale.getLocaleName();
   const cl = [];
   if (item.yomtov) {
     cl.push('yomtov');
@@ -134,6 +141,8 @@ function row(item, right) {
   const subj = item.reason;
   if (lang == 'he') {
     narrow.push('text-right');
+  } else if (locale === 'ru' && subj.length > 10) {
+    narrow.push('narrow');
   } else if (subj.length > 14) {
     narrow.push('narrow');
   }
@@ -141,7 +150,8 @@ function row(item, right) {
   const timeClass = cl.slice();
   timeClass.push('text-right');
   if (right) {
-    monthClass.push('leftpad');
+    const dir = locale === 'he' ? 'right' : 'left';
+    monthClass.push(`${dir}pad`);
   }
   return td(monthClass, item.date.format('MMM')) +
     td(cl.concat(['text-right']), item.date.format('D')) +

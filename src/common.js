@@ -473,8 +473,18 @@ function makeGeoCityName(latitude, longitude, tzid) {
   return `${ladeg}°${lamin}′${ladir}, ${lodeg}°${lomin}′${lodir}, ${tzid}`;
 }
 
+export const localeMap = {
+  'fi': 'fi',
+  'fr': 'fr',
+  'he': 'he',
+  'hu': 'hu',
+  'h': 'he',
+  'pl': 'pl',
+  'ru': 'ru',
+};
+
 export const tooltipScript = `<script>
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'));
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 var tooltipList = tooltipTriggerList.map(function (el) {
   return new bootstrap.Tooltip(el);
 });
@@ -491,21 +501,19 @@ export const clipboardScript = `
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <script>
 var clipboard = new ClipboardJS('#grabBtn', {
-    container: document.getElementsByClassName('modal')[0]
+  container: document.getElementsByClassName('modal')[0]
 });
 var grabBtn = document.querySelector('#grabBtn');
 var tooltipBtn=new bootstrap.Tooltip(grabBtn);
 clipboard.on('success', function(e) {
-  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
-  e.trigger.setAttribute('data-original-title','Copied!');
+  e.trigger.setAttribute('data-bs-original-title','Copied!');
   tooltipBtn.show();
   e.clearSelection();
 });
 clipboard.on('error', function(e) {
   var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
   var fallbackMsg='Press '+modifierKey+'C to copy';
-  var tooltipBtn=bootstrap.Tooltip.getInstance(e.trigger);
-  e.trigger.setAttribute('data-original-title',fallbackMsg);
+  e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
   tooltipBtn.show();
 });
 </script>

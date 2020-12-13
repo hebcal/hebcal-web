@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head>
+<html lang="<%=lang%>" dir="<%=htmlDir%>"><head>
 <meta charset="UTF-8">
 <title><%= location.getName() %> - <%= hyear %> Shabbat Times | Hebcal</title>
 <style>
@@ -26,12 +26,12 @@ h3 {font-weight: 600; margin:24px 0 0;}
 table {border-spacing: 0; border-collapse: collapse;}
 #fridge-table td {padding: 0px 4px;}
 #fridge-table td.leftpad {padding: 0 0 0 12px;}
+#fridge-table td.rightpad {padding: 0 12px 0 0;}
 .text-right {text-align: right;}
 .yomtov { font-weight:600 }
 .narrow { font-family: 'Open Sans Condensed', sans-serif }
 @media print{
  a[href]:after{content:""}
- .sidebar-nav{display:none}
  .goto {display:none}
 }
 </style>
@@ -44,13 +44,13 @@ table {border-spacing: 0; border-collapse: collapse;}
 <table style="width:524px" id="fridge-table">
 <colgroup>
 <col><col><col><col>
-<col>
-<col style="border-left:1px solid #999"><col><col><col>
+<col style="border-right:1px solid #999">
+<col><col><col><col>
 </colgroup>
 <tbody>
 <%- itemsHtml %>
 </tbody></table>
-<p><a class="goto" title="Previous" rel="nofollow"
+<p dir="ltr"><a class="goto" title="Previous" rel="nofollow"
 href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Candle-lighting times are <%= q.b || 18 %> minutes before sunset.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
 href="<%- url %>&amp;year=<%= hyear + 1 %>" rel="nofollow"><%= hyear + 1 %>&nbsp;&rarr;</a></p>
 </div><!-- align=center -->
