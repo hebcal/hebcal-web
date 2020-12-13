@@ -12,7 +12,7 @@
 <input type="hidden" name="b" value="<%= q.b || 18 %>">
 <div class="modal-header">
   <h5 class="modal-title">Weekly Shabbat times email</h5>
-  <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
 <div id="email-modal-failure" class="alert alert-warning" role="alert" style="display: none">
@@ -24,9 +24,9 @@
 </div><!-- .alert -->
 <div id="email-modal-entry">
   <p>Get candle lighting times, Torah portion &amp; Havdalah every Thursday.</p>
-  <div class="mb-3">
-    <label class="form-label" for="em">Email address</label>
+  <div class="form-floating mb-3">
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
+    <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
   <p><small><strong>Email Privacy Policy</strong>:
@@ -35,7 +35,7 @@
 </div><!-- #email-modal-entry -->
 </div><!-- .modal-body -->
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
   <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
 </div>
 </form>

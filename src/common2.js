@@ -46,7 +46,7 @@ export async function getYahrzeitDetailsFromDb(ctx, db, id) {
   const results = await db.query(sql, id);
   if (!results || !results[0]) {
     await db.close();
-    ctx.throw(404, `Download key ${id} not found`);
+    ctx.throw(404, `Yahrzeit/Anniversary id not found: ${id}`);
   }
   const row = results[0];
   const obj = row.contents;

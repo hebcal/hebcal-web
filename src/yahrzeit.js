@@ -62,7 +62,31 @@ export async function yahrzeitApp(ctx) {
 (function() {
 var count=${count};
 function yahrzeitRow(n) {
-  return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1"><div class="col-auto"><input class="form-control" type="text" name="n'+n+'" placeholder="Name (optional)"></div><div class="col-auto"><select name="t'+n+'" class="form-select"><option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option></select></div><div class="col-auto"><input class="form-control" type="text" name="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\\\d*" placeholder="Day"></div><div class="col-auto"><select name="m'+n+'" class="form-select"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></div><div class="col-auto"><input class="form-control" type="text" name="y'+n+'" size="4" maxlength="4" pattern="\\\\d*" placeholder="Year"></div><div class="col-auto form-check m-2"><input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off"><label class="form-check-label" for="s'+n+'-0">Before sunset</label></div><div class="col-auto form-check"><input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-1" value="on"><label class="form-check-label" for="s'+n+'-1">After sunset</label></div></div>';
+  return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1"><div class="col-auto form-floating">'+
+  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name (optional)">'+
+  '<label class="form-label" for="n<%=num%>">Name (optional)</label></div>'+
+  '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
+  '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option></select>'+
+  '<label class="form-label" for="t<%=num%>">Type</label></div>'+
+  '<div class="col-auto form-floating">'+
+  '<input class="form-control" type="text" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\\\d*" placeholder="Day">'+
+  '<label class="form-label" for="d<%=num%>">Day</label></div>'+
+  '<div class="col-auto form-floating"><select name="m'+n+'" id="m'+n+'" class="form-select">'+
+  '<option value="1">January</option><option value="2">February</option><option value="3">March</option>'+
+  '<option value="4">April</option><option value="5">May</option><option value="6">June</option>'+
+  '<option value="7">July</option><option value="8">August</option><option value="9">September</option>'+
+  '<option value="10">October</option><option value="11">November</option><option value="12">December</option>'+
+  '</select>'+
+  '<label class="form-label" for="m<%=num%>">Month</label></div>'+
+  '<div class="col-auto form-floating">'+
+  '<input class="form-control" type="text" name="y'+n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\\\d*" placeholder="Year">'+
+  '<label class="form-label" for="y<%=num%>">Year</label></div>'+
+  '<div class="col-auto form-check m-2">'+
+  '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off">'+
+  '<label class="form-check-label" for="s'+n+'-0">Before sunset</label></div>'+
+  '<div class="col-auto form-check">'+
+  '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-1" value="on">'+
+  '<label class="form-check-label" for="s'+n+'-1">After sunset</label></div></div>';
 }
 document.getElementById("newrow").onclick = function() {
   var n = ++count;

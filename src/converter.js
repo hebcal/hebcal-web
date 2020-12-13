@@ -159,6 +159,8 @@ function parseConverterQuery(ctx) {
       throw new Error('Hebrew year must be numeric');
     } else if (hy < 3761) {
       throw new RangeError('Hebrew year must be in the common era (3761 and above)');
+    } else if (hy > 32000) {
+      throw new RangeError('Hebrew year is too large');
     }
     const hm = HDate.monthFromName(query.hm);
     const maxDay = HDate.daysInMonth(hm, hy);

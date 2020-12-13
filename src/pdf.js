@@ -7,6 +7,7 @@ import 'dayjs/locale/he';
 import 'dayjs/locale/hu';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
+import {localeMap} from './common';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -17,16 +18,6 @@ const PDF_RMARGIN = 24;
 const PDF_COLUMNS = 7;
 // not intended to be an integer
 const PDF_COLWIDTH = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN) / PDF_COLUMNS;
-
-const localeMap = {
-  'fi': 'fi',
-  'fr': 'fr',
-  'he': 'he',
-  'hu': 'hu',
-  'h': 'he',
-  'pl': 'pl',
-  'ru': 'ru',
-};
 
 /**
  * @param {Date} d

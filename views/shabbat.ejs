@@ -32,7 +32,7 @@ ul.list-unstyled.nav-list li {
   <span class="h4 small text-muted"><%= locationName %></span></h2>
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= message %>
 </div><!-- .alert -->
 <% } -%>
@@ -82,7 +82,7 @@ ul.list-unstyled.nav-list li {
     <a href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
   </li>
   <li><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg>
-    <a href="#email-modal" data-toggle="modal" data-target="#email-modal">Weekly email</a>
+    <a href="#email-modal" data-bs-toggle="modal" data-bs-target="#email-modal">Weekly email</a>
   </li>
   <li>
   <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>

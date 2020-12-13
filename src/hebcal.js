@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
-  getDefaultHebrewYear, makeHebrewCalendar, clipboardScript} from './common';
+  getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
+  localeMap} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -144,16 +145,6 @@ async function getTzids() {
     }
   });
 }
-
-const localeMap = {
-  'fi': 'fi',
-  'fr': 'fr',
-  'he': 'he',
-  'hu': 'hu',
-  'h': 'he',
-  'pl': 'pl',
-  'ru': 'ru',
-};
 
 function renderHtml(ctx) {
   const options = ctx.state.options;

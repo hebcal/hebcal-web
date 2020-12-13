@@ -2,7 +2,7 @@
 <% if (location.getCountryCode() == 'US' &&
       (locationName.indexOf(' IN ') != -1 || locationName.indexOf(' Indiana') != -1)) { -%>
 <div class="alert alert-warning alert-dismissible">
-<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 Indiana has confusing time zone &amp; Daylight Saving Time
 rules.<br>Please check <a
@@ -13,7 +13,7 @@ Indiana?</a> to make sure the above settings are correct.
 <% if (location.getCountryCode() == 'US' && location.getTzid() == 'America/Denver' &&
       (locationName.indexOf(' AZ ') != -1 || locationName.indexOf(' Arizona') != -1)) { -%>
 <div class="alert alert-warning alert-dismissible">
-<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 These candle lighting times are for an Arizona county that observes
 Daylight Saving Time rules. Please see <a
@@ -23,7 +23,7 @@ DST in most of Arizona</a> to learn more.
 <% } -%>
 <% if (location.getLatitude() >= 60.0 || location.getLatitude() <= -60.0) { -%>
 <div class="alert alert-warning alert-dismissible">
-<button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 Candle-lighting times are guaranteed to be wrong at extreme
 northern or southern latitudes.</span><br>Please consult your

@@ -17,7 +17,7 @@
 <% } -%>
 -->
 <div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= message %>
 </div><!-- .alert -->
 <% } -%>
@@ -31,19 +31,19 @@
 <label class="form-check-label" for="maj">Major Holidays</label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="min" value="on" <%= q.min === 'on' ? 'checked' : '' -%> id="min">
-<label class="form-check-label" for="min">Minor Holidays</label> &nbsp;<span title="Tu BiShvat, Purim Katan, Shushan Purim, Pesach Sheni, Lag BaOmer, Tu B'Av, &amp; Leil Selichot" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<label class="form-check-label" for="min">Minor Holidays</label> &nbsp;<span title="Tu BiShvat, Purim Katan, Shushan Purim, Pesach Sheni, Lag BaOmer, Tu B'Av, &amp; Leil Selichot" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="nx" value="on" <%= q.nx === 'on' ? 'checked' : '' -%> id="nx">
 <label class="form-check-label" for="nx">Rosh Chodesh</label>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="mf" value="on" <%= q.mf === 'on' ? 'checked' : '' -%> id="mf">
-<label class="form-check-label" for="mf">Minor Fasts</label> &nbsp;<span title="Ta'anit Esther, Tzom Gedaliah, Tzom Tammuz, Asara B'Tevet, &amp; Ta'anit Bechorot" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<label class="form-check-label" for="mf">Minor Fasts</label> &nbsp;<span title="Ta'anit Esther, Tzom Gedaliah, Tzom Tammuz, Asara B'Tevet, &amp; Ta'anit Bechorot" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="ss" value="on" <%= q.ss === 'on' ? 'checked' : '' -%> id="ss">
-<label class="form-check-label" for="ss">Special Shabbatot</label> &nbsp;<span title="Shabbat Shuva, Shekalim, Zachor, Parah, HaChodesh, HaGadol, Chazon, &amp; Nachamu" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<label class="form-check-label" for="ss">Special Shabbatot</label> &nbsp;<span title="Shabbat Shuva, Shekalim, Zachor, Parah, HaChodesh, HaGadol, Chazon, &amp; Nachamu" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="mod" value="on" <%= q.mod === 'on' ? 'checked' : '' -%> id="mod">
-<label class="form-check-label" for="mod">Modern Holidays</label> &nbsp;<span title="Yom HaShoah, Yom HaZikaron, Yom HaAtzma'ut, Yom Yerushalayim, Sigd, &amp; Yom HaAliyah" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<label class="form-check-label" for="mod">Modern Holidays</label> &nbsp;<span title="Yom HaShoah, Yom HaZikaron, Yom HaAtzma'ut, Yom Yerushalayim, Sigd, &amp; Yom HaAliyah" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="o" value="on" <%= q.o === 'on' ? 'checked' : '' -%> id="o">
 <label class="form-check-label" for="o">Days of the Omer</label>
@@ -65,9 +65,9 @@
   </div>
 </div>
 <div class="row align-items-center gx-3 mt-3">
-<div class="col-auto mb-1">
-<label for="year" class="visually-hidden">Year</label>
+<div class="form-floating col-auto mb-1">
 <input type="text" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="\d*" placeholder="Year">
+<label for="year">Year</label>
 </div><!-- .col-sm-4 -->
 <div class="col-auto">
 <div class="form-check mb-1">
@@ -83,8 +83,7 @@
 </div><!-- .col-sm-6 -->
 <div class="col-sm-6">
 <fieldset>
-<div class="form-group">
-<label for="lg">Event titles</label>
+<div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
 <option <%- (q.lg === 's') ? 'selected' : '' -%> value="s">Sephardic transliterations</option>
 <option <%- (q.lg === 'a') ? 'selected' : '' -%> value="a">Ashkenazis transliterations</option>
@@ -97,6 +96,7 @@
 <option <%- (q.lg === 'sh') ? 'selected' : '' -%> value="sh">Sephardic translit. + Hebrew</option>
 <option <%- (q.lg === 'ah') ? 'selected' : '' -%> value="ah">Ashkenazis translit. + Hebrew</option>
 </select>
+<label for="lg">Event titles</label>
 </div>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="D" value="on" <%= q.D === 'on' ? 'checked' : '' -%> id="d1">
@@ -133,12 +133,12 @@
 <div class="form-check mb-2">
   <input class="form-check-input" type="radio" name="M" id="M1" <%- q.M !== 'off' ? 'checked' : '' %> value="on">
   <label class="form-check-label" for="M1">nightfall (tzeit hakochavim)</label>
-  &nbsp;<span title="the point when 3 small stars are observable in the night time sky with the naked eye" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+  &nbsp;<span title="the point when 3 small stars are observable in the night time sky with the naked eye" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
 <div class="form-check mb-2">
   <input class="form-check-input" type="radio" name="M" id="M0" <%- q.M === 'off' ? 'checked' : '' %> value="off">
   <label class="form-check-label" for="M0">minutes past sundown</label>
-  &nbsp;<span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+  &nbsp;<span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
 <div class="mb-3">
   <input type="text" class="form-control" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">

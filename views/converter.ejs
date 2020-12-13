@@ -28,7 +28,7 @@
 <div class="col-sm-12">
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= message %>
 </div><!-- .alert -->
 <% } else if (gy < 1752) { -%>
@@ -52,10 +52,11 @@
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Gregorian to Hebrew</h5>
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
+<label for="gd">Day</label>
 </div><!-- .col -->
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <select name="gm" class="form-select">
  <option <%- (gm === 1) ? 'selected' : '' -%> value="1">January</option>
  <option <%- (gm === 2) ? 'selected' : '' -%> value="2">February</option>
@@ -70,9 +71,11 @@
  <option <%- (gm === 11) ? 'selected' : '' -%> value="11">November</option>
  <option <%- (gm === 12) ? 'selected' : '' -%> value="12">December</option>
 </select>
+<label for="gm">Month</label>
 </div><!-- .col -->
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <input type="text" class="form-control" name="gy" placeholder="year" value="<%= gy %>" size="4" maxlength="4" id="gy" pattern="\d*">
+<label for="gy">Year</label>
 </div><!-- .col -->
 <div class="col-auto mb-2">
 <div class="form-check">
@@ -92,10 +95,11 @@
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Hebrew to Gregorian</h5>
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <input type="text" class="form-control" name="hd" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd" pattern="\d*">
+<label for="hd">Day</label>
 </div><!-- .col -->
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <select name="hm" class="form-select">
  <option <%- (hm === 1) ? 'selected' : '' -%> value="Nisan">Nisan</option>
  <option <%- (hm === 2) ? 'selected' : '' -%> value="Iyyar">Iyyar</option>
@@ -112,9 +116,11 @@
  <option <%- (hm === 12 && hleap) ? 'selected' : '' -%> value="Adar1">Adar I</option>
  <option <%- (hm === 13) ? 'selected' : '' -%> value="Adar2">Adar II</option>
 </select>
+<label for="hm">Month</label>
 </div><!-- .col -->
-<div class="col-auto mb-2">
+<div class="form-floating col-auto mb-2">
 <input type="text" class="form-control" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
+<label for="hy">Year</label>
 </div><!-- .col -->
 <div class="col mb-2">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">

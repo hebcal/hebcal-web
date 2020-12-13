@@ -23,14 +23,14 @@ div.yahrzeit-row {
 <% } -%>
 <% if (tables !== null) { %>
 <div class="btn-toolbar d-print-none mt-2">
-<div class="mr-2 mb-2">
-  <a href="#email-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#email-modal">
+<div class="me-2 mb-2">
+  <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
     <svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg> Email reminders
   </a>
 </div>
-<div class="mr-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-toggle="modal" data-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
-<div class="mr-2 mb-2">
+<div class="me-2 mb-2">
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
+<div class="me-2 mb-2">
 <a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
 </div><!-- .btn-toolbar -->
@@ -38,7 +38,7 @@ div.yahrzeit-row {
 This is because the Jewish day actually begins at sundown on the previous night.</p>
 <% if (adarInfo) { %>
 <div class="alert alert-info alert-dismissible" role="alert">
-  <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Note:</strong> the results below contain one or more anniversary in Adar.
 To learn more about how Hebcal handles these dates, read <a
 href="/home/54/how-does-hebcal-determine-an-anniversary-occurring-in-adar">How
@@ -71,18 +71,18 @@ and then come back to this page.</p>
 <% } %>
 </div><!-- #rows -->
 <div class="clearfix">
-<p class="text-right float-sm-right">
+<p class="text-end float-sm-end">
  <button class="btn btn-secondary btn-sm mt-2" id="newrow">+ Add another name</button>
 </p>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
-&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1's Yahrzeit (15th of Cheshvan)&quot;" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1's Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' -%> id="yizkor" >
 <label class="form-check-label" for="yizkor">Include Yizkor dates</label>
-&nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-toggle="tooltip" data-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+&nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 <div class="row gx-2 mb-3 align-items-center">
   <label class="col-auto col-form-label" for="years">Number of years:</label>
@@ -92,7 +92,7 @@ and then come back to this page.</p>
 </div>
 </div><!-- .clearfix -->
 <input type="hidden" name="v" value="yahrzeit">
-<input type="hidden" name="ulid" value="<%=ulid||''%>">
+<input type="hidden" name="ulid" value="<%=ulid%>">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
 
@@ -113,7 +113,7 @@ instructions</a>.</p>
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <div class="modal-header">
 <h5 class="modal-title">Email reminders</h5>
-<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
 <div id="email-modal-failure" class="alert alert-warning" role="alert" style="display: none">
@@ -125,9 +125,9 @@ instructions</a>.</p>
 </div><!-- .alert -->
 <div id="email-modal-entry">
   <p>Receive a reminder email 7 days before each anniversary.</p>
-  <div class="mb-3">
-    <label class="form-label" for="em">Email address</label>
+  <div class="form-floating mb-3">
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
+    <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
   <p><small><strong>Email Privacy Policy</strong>:
@@ -136,7 +136,7 @@ instructions</a>.</p>
 </div><!-- #email-modal-entry -->
 </div><!-- .modal-body -->
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
   <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
 </div>
 </form>

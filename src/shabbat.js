@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear, makeHebrewCalendar} from './common';
+  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
+  localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
@@ -12,16 +13,6 @@ import 'dayjs/locale/he';
 import 'dayjs/locale/hu';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
-
-const localeMap = {
-  'fi': 'fi',
-  'fr': 'fr',
-  'he': 'he',
-  'hu': 'hu',
-  'h': 'he',
-  'pl': 'pl',
-  'ru': 'ru',
-};
 
 export async function shabbatApp(ctx) {
   if (ctx.request.method === 'POST') {
