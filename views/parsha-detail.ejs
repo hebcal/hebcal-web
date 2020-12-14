@@ -52,7 +52,7 @@ href="<%=ortUrl%>">
 <%       if (aliyah.v) { %>
 <small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%       } // aliyah.v %>
-<% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
+<% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%    } // ... for %>
 </ol>
 </div>
@@ -77,7 +77,7 @@ href="<%=ortUrl%>">
 <%     if (aliyah.v) { %>
 <small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%     } // aliyah.v %>
-<% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
+<% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%   } // ... for aliyah %>
 </ol>
 <% } // ... else triReadings %>
