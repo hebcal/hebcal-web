@@ -1,8 +1,7 @@
-import {eventsToIcalendarStream} from '@hebcal/icalendar';
+import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
-import {PassThrough} from 'stream';
 import etag from 'etag';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar} from './common';
@@ -83,13 +82,12 @@ export async function hebcalDownload(ctx) {
       ctx.response.attachment(basename(path));
     }
     ctx.response.type = 'text/calendar; charset=utf-8';
-    const pt = ctx.body = new PassThrough();
-    eventsToIcalendarStream(pt, events, options);
+    ctx.body = await eventsToIcalendar(events, options);
   } else if (extension == '.csv') {
-    const ical = eventsToCsv(events, options);
+    const csv = eventsToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
-    ctx.body = ical;
+    ctx.body = csv;
   } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
     ctx.response.etag = etag(JSON.stringify(options), {weak: true});

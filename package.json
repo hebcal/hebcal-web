@@ -26,7 +26,7 @@
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@babel/register": "^7.12.10",
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0"
@@ -34,7 +34,7 @@
   "dependencies": {
     "@hebcal/core": "^2.8.1",
     "@hebcal/geo-sqlite": "^2.4.0",
-    "@hebcal/icalendar": "^3.1.1",
+    "@hebcal/icalendar": "^3.3.1",
     "@hebcal/leyning": "^3.3.3",
     "@hebcal/locales": "^2.2.1",
     "@hebcal/rest-api": "^2.8.1",
