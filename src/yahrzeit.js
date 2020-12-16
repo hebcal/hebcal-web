@@ -2,7 +2,7 @@ import {HebrewCalendar, HDate, Event, flags, months} from '@hebcal/core';
 import {eventsToIcalendarStream} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import {Readable} from 'stream';
+import {PassThrough} from 'stream';
 import {basename} from 'path';
 import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
 import {ulid} from 'ulid';
@@ -227,9 +227,9 @@ export async function yahrzeitDownload(ctx) {
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
     const title = makeCalendarTitle(query);
-    const readable = ctx.body = new Readable();
+    const pt = ctx.body = new PassThrough();
     const relcalid = ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null;
-    eventsToIcalendarStream(readable, events, {yahrzeit: true, title, relcalid});
+    eventsToIcalendarStream(pt, events, {yahrzeit: true, title, relcalid});
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
     const ical = eventsToCsv(events, {euro});
