@@ -214,6 +214,14 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
+  if (details.lastModified) {
+    ctx.response.lastModified = details.lastModified;
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
+  }
   const maxId = getMaxYahrzeitId(query);
   const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {

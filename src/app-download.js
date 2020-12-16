@@ -115,7 +115,6 @@ app.use(async (ctx, next) => {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
   } else if (rpath.startsWith('/v3')) {
-    ctx.set('Cache-Control', 'max-age=2592000');
     await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
