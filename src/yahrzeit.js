@@ -45,6 +45,8 @@ export async function yahrzeitApp(ctx) {
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   if (maxId > 0) {
+    const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
+    q.ulid = ctx.state.ulid = id;
     const tables = ctx.state.tables = makeFormResults(ctx);
     if (tables !== null) {
       await makeDownloadProps(ctx);
@@ -143,7 +145,7 @@ async function makeDownloadProps(ctx) {
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase();
   const db = makeDb(ctx.iniConfig);
-  const id = ctx.state.ulid = q.ulid || ctx.state.ulid || ulid().toLowerCase();
+  const id = ctx.state.ulid;
   const ip = getIpAddress(ctx);
   const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';
@@ -197,7 +199,7 @@ function removeEmptyArgs(q) {
  */
 async function getDetailsFromDb(ctx) {
   const db = makeDb(ctx.iniConfig);
-  const id = ctx.request.path.substring(4, 30);
+  const id = ctx.state.ulid = ctx.request.path.substring(4, 30);
   const obj = await getYahrzeitDetailsFromDb(ctx, db, id);
   ctx.state.relcalid = id;
   await db.close();
@@ -223,6 +225,9 @@ export async function yahrzeitDownload(ctx) {
     }
   }
   const maxId = getMaxYahrzeitId(query);
+  if (ctx.state.ulid) {
+    query.ulid = ctx.state.ulid;
+  }
   const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
@@ -300,6 +305,7 @@ function getEventsForId(query, id, startYear, endYear) {
   const type = info.type;
   const name = info.name;
   const day = info.day;
+  const urlPrefix = query.ulid ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const hd = (type == 'Yahrzeit') ?
       HebrewCalendar.getYahrzeit(hyear, day.toDate()) :
@@ -312,7 +318,11 @@ function getEventsForId(query, id, startYear, endYear) {
         const comma = hebdate.indexOf(',');
         subj += ' (' + hebdate.substring(0, comma) + ')';
       }
-      events.push(new Event(hd, subj, flags.USER_EVENT));
+      const ev = new Event(hd, subj, flags.USER_EVENT);
+      if (urlPrefix) {
+        ev.memo = `${urlPrefix}#row${id}`;
+      }
+      events.push(ev);
     }
   }
   return events;
