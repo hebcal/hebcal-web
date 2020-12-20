@@ -256,7 +256,8 @@ export async function yahrzeitDownload(ctx) {
 function makeCalendarTitle(query) {
   const names = Object.entries(query)
       .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
-      .map((x) => x[1]);
+      .map((x) => x[1])
+      .filter((str) => str.length > 0);
   const calendarType = summarizeAnniversaryTypes(query, true);
   let title = calendarType;
   if (names.length > 0) {
