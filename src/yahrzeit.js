@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, Event, flags, months} from '@hebcal/core';
+import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -291,6 +291,19 @@ export function makeYahrzeitEvents(maxId, query) {
 }
 
 /**
+ * @param {Date} origDt
+ * @param {number} hyear
+ * @return {string}
+ */
+function calculateAnniversaryNth(origDt, hyear) {
+  const origHd = new HDate(origDt);
+  const origHyear = origHd.getFullYear();
+  const numYears = hyear - origHyear;
+  const nth = Locale.ordinal(numYears);
+  return nth;
+}
+
+/**
  * @param {any} query
  * @param {number} id
  * @param {number} startYear
@@ -308,12 +321,14 @@ function getEventsForId(query, id, startYear, endYear) {
   const day = info.day;
   const urlPrefix = query.ulid ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
   for (let hyear = startYear; hyear <= endYear; hyear++) {
+    const origDt = day.toDate();
     const hd = (type == 'Yahrzeit') ?
-      HebrewCalendar.getYahrzeit(hyear, day.toDate()) :
-      HebrewCalendar.getBirthdayOrAnniversary(hyear, day.toDate());
+      HebrewCalendar.getYahrzeit(hyear, origDt) :
+      HebrewCalendar.getBirthdayOrAnniversary(hyear, origDt);
     if (hd) {
       const typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
-      let subj = `${name}'s ${typeStr}`;
+      const nth = calculateAnniversaryNth(origDt, hyear);
+      let subj = `${name}'s ${nth} ${typeStr}`;
       if (query.hebdate === 'on') {
         const hebdate = hd.render('en');
         const comma = hebdate.indexOf(',');
