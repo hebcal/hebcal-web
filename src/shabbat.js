@@ -7,6 +7,7 @@ import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+import 'dayjs/locale/es';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/fr';
 import 'dayjs/locale/he';

@@ -1,6 +1,7 @@
 import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/fr';
 import 'dayjs/locale/he';

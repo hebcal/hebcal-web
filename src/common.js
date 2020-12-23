@@ -11,6 +11,8 @@ export const langTzDefaults = {
   AU: ['s', 'Australia/Sydney'],
   ZA: ['s', 'Africa/Johannesburg'],
   BR: ['s', 'America/Sao_Paulo'],
+  ES: ['es', 'Europe/Madrid'],
+  MX: ['es', 'America/Mexico_City'],
   FR: ['fr', 'Europe/Paris'],
   RU: ['ru', 'Europe/Moscow'],
   PL: ['pl', 'Europe/Warsaw'],
@@ -474,6 +476,7 @@ function makeGeoCityName(latitude, longitude, tzid) {
 }
 
 export const localeMap = {
+  'es': 'es',
   'fi': 'fi',
   'fr': 'fr',
   'he': 'he',

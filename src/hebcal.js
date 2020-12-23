@@ -9,6 +9,7 @@ import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
+import 'dayjs/locale/es';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/fr';
 import 'dayjs/locale/he';
@@ -164,7 +165,8 @@ function renderHtml(ctx) {
   if (events.length === 0) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
-  const months = makeMonthlyDates(events);
+  const locale = localeMap[Locale.getLocaleName()] || 'en';
+  const months = makeMonthlyDates(events, locale);
   if (months.length > 14) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
   }
@@ -184,7 +186,6 @@ function renderHtml(ctx) {
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
   }
-  const locale = localeMap[Locale.getLocaleName()] || 'en';
   const localeData = dayjs().locale(locale).localeData();
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref(q, dlFilename);
@@ -366,9 +367,10 @@ function subjectSpan(locale, str) {
 /**
  * Returns an array of dayjs objects for every month (including blanks) in the range
  * @param {Event[]} events
+ * @param {string} locale
  * @return {dayjs.Dayjs[]}
  */
-function makeMonthlyDates(events) {
+function makeMonthlyDates(events, locale) {
   const startDate = dayjs(events[0].getDate().greg());
   const endDate = dayjs(events[events.length - 1].getDate().greg());
   const start = startDate.date(1);
@@ -377,7 +379,7 @@ function makeMonthlyDates(events) {
   }
   const result = [];
   for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
-    result.push(d);
+    result.push(d.locale(locale));
   }
   return result;
 }
