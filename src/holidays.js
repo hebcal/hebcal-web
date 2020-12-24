@@ -234,7 +234,8 @@ export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   const matches = base.match(holidayYearRe);
-  const year = matches && +matches[2];
+  const dateSuffix = matches && matches[2];
+  const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
   const holiday = matches === null ? holidays.get(base) : holidays.get(matches[1]);
   if (typeof holiday !== 'string') {
     throw createError(404, `Holiday not found: ${base}`);
@@ -256,7 +257,9 @@ export async function holidayDetail(ctx) {
   const mask = category.flags || 0;
   const now = new Date();
   const occursOn = makeOccursOn(holidayBegin, holiday, mask, now, il);
-  const next = year ? occursOn.find((item) => item.d.year() === year) :
+  const next = dateSuffix && dateSuffix.length === 8 ?
+    occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
+    year ? occursOn.find((item) => item.d.year() === year) :
     occursOn.find((item) => item.ppf === 'future');
   if (typeof next === 'undefined' && year) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);

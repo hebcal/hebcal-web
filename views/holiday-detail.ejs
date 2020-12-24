@@ -63,7 +63,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <tbody>
 <% occursOn.forEach((item) => { %>
 <tr class="<%=item.ppf%>">
-<td><a href="<%=item.id%>-<%=item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=holiday%> <%=item.d.format('YYYY')%></a></td>
+<td><a href="<%=item.id%>-<%=holiday === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=holiday%> <%=item.d.format('YYYY')%><% if (holiday === 'Asara B\'Tevet') {%> (<%=item.hd.getFullYear()%>)<%}%></a></td>
 <td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd') %>, <span class="text-nowrap"><%=item.d.format('MMM D')%></span></time></td>
 <td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%= item.endD.format('ddd') %>, <span class="text-nowrap"><%=item.endD.format('MMM D')%></span></time></td>
 <td class="small"><%=item.hdRange%></td>
