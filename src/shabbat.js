@@ -7,6 +7,8 @@ import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/es';
 import 'dayjs/locale/fi';
 import 'dayjs/locale/fr';
@@ -14,6 +16,19 @@ import 'dayjs/locale/he';
 import 'dayjs/locale/hu';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+function expires(ctx) {
+  const today = dayjs();
+  const dt = today.toDate();
+  ctx.set('Last-Modified', dt.toUTCString());
+  const sunday = today.day(7);
+  const tzid = ctx.state.location.getTzid();
+  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
+  ctx.set('Expires', exp.toUTCString());
+}
 
 export async function shabbatApp(ctx) {
   if (ctx.request.method === 'POST') {
@@ -23,7 +38,7 @@ export async function shabbatApp(ctx) {
   makeItems(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.request.querystring.length > 0) {
-    ctx.set('Cache-Control', 'max-age=86400');
+    expires(ctx);
   }
   const q = ctx.state.q;
   if (q.cfg === 'i') {
