@@ -40,7 +40,7 @@
     "@hebcal/rest-api": "^3.2.0",
     "better-sqlite3": "^7.1.2",
     "dayjs": "^1.9.8",
-    "ejs": "^2.7.4",
+    "ejs": "^3.1.5",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
     "geolite2-redist": "^1.0.7",
