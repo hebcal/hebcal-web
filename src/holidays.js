@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, Locale, HebrewCalendar, flags, greg, HolidayEvent, months} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories, getCalendarTitle} from '@hebcal/rest-api';
-import leyning from '@hebcal/leyning';
+import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import holidayMeta from './holidays.json';

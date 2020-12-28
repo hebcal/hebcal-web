@@ -2,7 +2,7 @@
 import {HDate, Sedra, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
 import {gematriyaDate} from './converter';
 import {pad2, getHolidayDescription} from '@hebcal/rest-api';
-import leyning from '@hebcal/leyning';
+import * as leyning from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 

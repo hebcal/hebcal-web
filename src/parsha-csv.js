@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {basename} from 'path';
 import {PassThrough} from 'stream';
-import leyning from '@hebcal/leyning';
+import * as leyning from '@hebcal/leyning';
 import createError from 'http-errors';
 
 const reFullKriyahIL = /^fullkriyah-il-(\d+).csv$/;
