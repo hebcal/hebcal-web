@@ -148,7 +148,7 @@ async function countryPage(ctx, countryCode) {
   }, new Map());
 
   // console.log(countryName, results.length, admin1.size);
-  if (results.length > 499) {
+  if (results.length > 299) {
     const listItems = makeAdmin1(admin1);
     const countryUrlToken = makeAnchor(countryName);
     listItems.forEach((a1) => a1.href = countryUrlToken + '-' + a1.id);
