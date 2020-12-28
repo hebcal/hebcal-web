@@ -6,6 +6,11 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {typeaheadScript} from './common';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const geonamesFilename = 'geonames.sqlite3';
 
@@ -79,11 +84,11 @@ function init() {
   didInit = true;
 }
 
-function expires(ctx, today) {
+function expires(ctx, today, tzid) {
   const dt = today.toDate();
   ctx.set('Last-Modified', dt.toUTCString());
   const sunday = today.day(7);
-  const exp = new Date(sunday.year(), sunday.month(), sunday.date(), 0, 0, 0);
+  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
 }
 
@@ -112,10 +117,10 @@ export async function shabbatBrowse(ctx) {
     const results = stmt.all(countryCode, countryA1.admin1);
     db.close();
     const today = dayjs();
-    expires(ctx, today);
+    expires(ctx, today, results[0].timezone);
     const friday = today.day(5);
     const parsha = getParsha(countryCode);
-    results.forEach((city) => addCandleTime(city, countryCode));
+    results.forEach((city) => addCandleTime(friday, city, countryCode));
     const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
     return ctx.render('shabbat-browse-country-small', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
@@ -157,10 +162,10 @@ async function countryPage(ctx, countryCode) {
   }
 
   const today = dayjs();
-  expires(ctx, today);
+  expires(ctx, today, results[0].timezone);
   const friday = today.day(5);
   const parsha = getParsha(countryCode);
-  results.forEach((city) => addCandleTime(city, countryCode));
+  results.forEach((city) => addCandleTime(friday, city, countryCode));
 
   if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size) < 1.25) {
     return ctx.render('shabbat-browse-country-small', {
@@ -213,10 +218,9 @@ function makeAdmin1(admin1) {
   return listItems;
 }
 
-function addCandleTime(city, countryCode) {
+function addCandleTime(friday, city, countryCode) {
   const location = new Location(city.latitude, city.longitude, countryCode === 'IL',
       city.timezone, city.name, countryCode, city.geonameid);
-  const friday = dayjs().day(5);
   const dt = friday.toDate();
   const events = HebrewCalendar.calendar({
     noHolidays: true,
