@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {addSefariaLinksToLeyning, httpRedirect} from './common';
+import {httpRedirect} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -114,7 +114,7 @@ export async function parshaDetail(ctx) {
   const items0 = items15map.get(parshaName);
   const items = items0.items;
   const reading = leyning.getLeyningForParshaHaShavua(parshaEv, il);
-  addSefariaLinksToLeyning(reading.fullkriyah, false);
+  leyning.addSefariaLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHref = getHaftarahHref(reading.haftara);
   if (reading.sephardic) {
     reading.sephardicHref = getHaftarahHref(reading.sephardic);
@@ -150,7 +150,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
     triennial.reading = reading.aliyot;
     triennial.yearNum = reading.yearNum + 1;
-    addSefariaLinksToLeyning(triennial.reading, false);
+    leyning.addSefariaLinksToLeyning(triennial.reading, false);
   } else {
     const startYear = leyning.Triennial.getCycleStartYear(hyear);
     const tri = leyning.getTriennial(startYear);
@@ -168,7 +168,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
         } else {
           const ev = new ParshaEvent(triReading.date, [parshaName]);
           const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
-          addSefariaLinksToLeyning(triReading2.aliyot, false);
+          leyning.addSefariaLinksToLeyning(triReading2.aliyot, false);
           triennial.readings[yr] = triReading2;
         }
       }

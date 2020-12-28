@@ -8,7 +8,7 @@ import holidayMeta from './holidays.json';
 import dayjs from 'dayjs';
 import etag from 'etag';
 import {createPdfDoc, renderPdf} from './pdf';
-import {getDefaultHebrewYear, addSefariaLinksToLeyning, httpRedirect} from './common';
+import {getDefaultHebrewYear, httpRedirect} from './common';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 
 dayjs.extend(isSameOrAfter);
@@ -490,7 +490,7 @@ function hebrewDateRange(hd, duration) {
 
 function makeHolidayReading(holiday, item, meta, reading, ev) {
   if (reading.fullkriyah) {
-    addSefariaLinksToLeyning(reading.fullkriyah, true);
+    leyning.addSefariaLinksToLeyning(reading.fullkriyah, true);
   }
   const itemReading = meta.reading[item] = reading;
   const hebrew = Locale.lookupTranslation(item, 'he');
