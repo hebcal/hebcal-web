@@ -170,7 +170,7 @@ div.pbba { page-break-before: always }
 <div class="cal<%if(first){first=false;%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
 <h3 class="text-center"><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= d.locale(locale).format('MMMM YYYY') %><% if (locale === 'he') { %></span><% } %></h3>
 <table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
-<tbody><tr><% weekdaysShort.forEach((s) => { -%><th><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= s %><% if (locale === 'he') { %></span><% } %></th><% }); -%></tr>
+<tbody><tr><% localeConfig.weekdaysShort.forEach((s) => { -%><th><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= s %><% if (locale === 'he') { %></span><% } %></th><% }); -%></tr>
 <%- tableBodies[d.format('YYYY-MM')] _%>
 </tbody></table>
 </div><!-- .cal -->
@@ -183,6 +183,7 @@ div.pbba { page-break-before: always }
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].lang='<%= q.lg || 's' %>';
+window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
 window['hebcal'].events=<%- JSON.stringify(items) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
@@ -191,8 +192,8 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <%- await include('partials/download-modal.ejs') -%>
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1.9.6/dayjs.min.js"></script>
-<script src="/i/hebcal-app-2.3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.9.8/dayjs.min.js"></script>
+<script src="/i/hebcal-app-2.4.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var d = document;

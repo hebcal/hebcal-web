@@ -58,6 +58,7 @@ app.context.launchUTCString = new Date().toUTCString();
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
+  ctx.state.lang = 'en'; // used by some ejs templates
   ctx.state.spriteHref = '/i/sprite5.svg';
   ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing

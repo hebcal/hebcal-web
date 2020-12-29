@@ -219,6 +219,11 @@ function renderHtml(ctx) {
     const hyear = events[events.length - 1].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
+  const localeConfig = {
+    weekdaysShort: localeData.weekdaysShort(),
+    monthsShort: localeData.monthsShort(),
+    months: localeData.months(),
+  };
   const endYear = options.year + getNumYears(options) - 1;
   const downloadTitle = `${options.year}-${endYear}`;
   return ctx.render('hebcal-results', {
@@ -228,8 +233,9 @@ function renderHtml(ctx) {
     dates: months,
     gy: months[0].year(),
     tableBodies: makeTableBodies(events, months, options, locale),
+    lang: locale === 'he' ? 'en' : locale, // twbs5 doesn't handle <html lang="he"> well enough yet
     locale,
-    weekdaysShort: localeData.weekdaysShort(),
+    localeConfig,
     prevTitle: options.year - 1,
     nextTitle: options.year + 1,
     url,

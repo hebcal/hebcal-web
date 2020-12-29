@@ -124,7 +124,8 @@ window['hebcal'].tableRow = function(evt) {
     var m = dayjs(evt.date),
         dt = evt.date,
         cat = evt.category,
-        dateStr = m.format('ddd DD MMM'),
+        localeData = window['hebcal'].localeConfig,
+        dateStr = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()],
         allDay = dt.indexOf('T') === -1,
         lang = window['hebcal'].lang || 's',
         subj = evt.title,
@@ -170,11 +171,14 @@ window['hebcal'].tableRow = function(evt) {
 window['hebcal'].monthHtml = function(month) {
     var date = month.month + '-01',
         m = dayjs(date),
-        divBegin = '<div class="month-table">',
+        lang = window['hebcal'].lang || 's',
+        dir = lang === 'h' ? 'rtl' : 'ltr',
+        divBegin = '<div class="month-table" dir="' + dir +'">',
         divEnd = '</div><!-- .month-table -->',
-        heading = '<h3>' + m.format('MMMM YYYY') + '</h3>',
+        localeData = window['hebcal'].localeConfig,
+        heading = '<h3>' + localeData.months[m.month()] + ' ' + m.format('YYYY') + '</h3>',
         timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">',
-        tableHead = '<table class="table table-striped"><col style="width:116px">' + timeColumn + '<col><tbody>',
+        tableHead = '<table class="table table-striped" dir="' + dir +'"><col style="width:116px">' + timeColumn + '<col><tbody>',
         tableFoot = '</tbody></table>',
         tableContents = month.events.map(window['hebcal'].tableRow);
     return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
