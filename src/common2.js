@@ -77,7 +77,8 @@ export function summarizeAnniversaryTypes(query, long=false) {
       .filter(([k, val]) => k[0] == 't' && isNumKey(k))
       .map((x) => x[1]);
   const types = Array.from(new Set(types0));
-  const anniversaryType = types.length === 1 ? types[0] : 'Anniversary';
+  const anniversaryType = types.length === 0 ? 'Yahrzeit' :
+    types.length === 1 ? types[0] : 'Anniversary';
   if (long) {
     switch (anniversaryType) {
       case 'Anniversary': return 'Hebrew Anniversaries';
