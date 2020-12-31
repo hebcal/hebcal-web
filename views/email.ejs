@@ -23,9 +23,9 @@
 <% if (typeof q.k === 'string' && q.status === 'active') { %>
 <input type="hidden" name="k" value="<%= q.k %>">
 <% } %>
-<div class="mb-3">
-<label class="form-label" for="em">E-mail address</label>
+<div class="form-floating mb-3">
 <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
+<label class="form-label" for="em">E-mail address</label>
 </div>
 <% if (!defaultUnsubscribe) { %>
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
