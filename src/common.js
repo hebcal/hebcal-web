@@ -187,6 +187,7 @@ export function possiblySetCookie(ctx, query) {
 export function processCookieAndQuery(cookieString, defaults, query0) {
   const query = Object.assign({}, query0);
   const ck = querystring.parse(cookieString || '');
+  delete ck.t;
   let found = false;
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {

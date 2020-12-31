@@ -64,8 +64,10 @@ export async function hebcalApp(ctx) {
     q['city-typeahead'] = options.location.getName();
   }
   if (empty(q.year) && q.cfg !== 'fc') {
+    const dt = new Date();
     q.year = options.year = options.isHebrewYear ?
-        new HDate().getFullYear() : new Date().getFullYear();
+      getDefaultHebrewYear(new HDate(dt)) :
+      dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
   }
   ctx.state.q = q;
   ctx.state.options = options;
@@ -95,8 +97,9 @@ async function renderForm(ctx, error) {
   if (error) {
     ctx.status = 400;
   }
-  const defaultYear = new Date().getFullYear();
-  const defaultYearHeb = getDefaultHebrewYear(new HDate());
+  const today = dayjs();
+  const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
+  const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
   return ctx.render('hebcal-form', {
     message,
@@ -186,7 +189,8 @@ function renderHtml(ctx) {
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
   }
-  const localeData = dayjs().locale(locale).localeData();
+  const today = dayjs();
+  const localeData = today.locale(locale).localeData();
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref(q, dlFilename);
   const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1}) + '.ics';
@@ -229,7 +233,7 @@ function renderHtml(ctx) {
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
-    today: dayjs(),
+    today,
     dates: months,
     gy: months[0].year(),
     tableBodies: makeTableBodies(events, months, options, locale),
