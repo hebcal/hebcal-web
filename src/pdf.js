@@ -77,13 +77,13 @@ function renderPdfMonthGrid(doc, year, month, rtl, locale0, rows, rowheight) {
   const locale = localeMap[locale0] || 'en';
   const d = dayjs(new Date(year, month - 1, 1)).locale(locale);
   const monthTitle = d.format(rtl ? 'YYYY MMMM' : 'MMMM YYYY');
-  const monthFont = rtl ? 'hebrew' : 'bold';
-  doc.fontSize(24)
+  const monthFont = rtl ? 'hebrew' : 'semi';
+  doc.fontSize(36)
       .font(monthFont)
-      .text(monthTitle, 0, PDF_TMARGIN - 8, {align: 'center'});
+      .text(monthTitle, 0, PDF_TMARGIN - 24, {align: 'center'});
   // rectangle of calendar grid
   doc.lineWidth(1)
-      .strokeColor('#aaaaaa')
+      .strokeColor('#cccccc')
       .rect(PDF_LMARGIN,
           PDF_BMARGIN,
           PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN,
@@ -226,6 +226,7 @@ export function createPdfDoc(title) {
   doc.info['Author'] = 'Hebcal Jewish Calendar (www.hebcal.com)';
 
   doc.registerFont('plain', './fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
+  doc.registerFont('semi', './fonts/Source_Sans_Pro/SourceSansPro-SemiBold.ttf');
   doc.registerFont('bold', './fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
   doc.registerFont('hebrew', './fonts/SBL_Hebrew/SBL_Hbrw.ttf');
 
@@ -263,7 +264,7 @@ export function renderPdf(doc, events, options) {
     let ypos = PDF_TMARGIN + 40;
     for (let mday = 1; mday <= daysInMonth; mday++) {
       // render day number
-      doc.font('plain').fontSize(11);
+      doc.font('semi').fontSize(14);
       doc.fillColor('#000000');
       const str = String(mday);
       const width = doc.widthOfString(str);

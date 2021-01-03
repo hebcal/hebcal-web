@@ -84,6 +84,9 @@ export function off(val) {
   return typeof val === 'undefined' || val === 'off' || val == '0';
 }
 
+const dlPrefix = process.env.NODE_ENV == 'production' ?
+  'https://download.hebcal.com' : 'http://127.0.0.1:8081';
+
 /**
  * @param {any} q
  * @param {string} filename
@@ -97,7 +100,7 @@ export function downloadHref(q, filename, override={}) {
       .replace(/\//g, '_')
       .replace(/=/g, '');
   const type = q.v === 'yahrzeit' ? 'y' : 'h';
-  return `https://download.hebcal.com/v2/${type}/${encoded}/${filename}`;
+  return `${dlPrefix}/v2/${type}/${encoded}/${filename}`;
 }
 
 /**

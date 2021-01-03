@@ -28,7 +28,7 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/register": "^7.12.10",
-    "eslint": "^7.16.0",
+    "eslint": "^7.17.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
@@ -39,7 +39,7 @@
     "@hebcal/locales": "^3.1.0",
     "@hebcal/rest-api": "^3.2.0",
     "better-sqlite3": "^7.1.2",
-    "dayjs": "^1.9.8",
+    "dayjs": "^1.10.1",
     "ejs": "^3.1.5",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
