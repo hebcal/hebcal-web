@@ -116,11 +116,7 @@ export async function shabbatBrowse(ctx) {
     const countryCode = countryA1.cc;
     const results = stmt.all(countryCode, countryA1.admin1);
     db.close();
-    const today = dayjs();
-    expires(ctx, today, results[0].timezone);
-    const friday = today.day(5);
-    const parsha = getParsha(countryCode);
-    results.forEach((city) => addCandleTime(friday, city, countryCode));
+    const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
     const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
     return ctx.render('shabbat-browse-country-small', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
@@ -161,11 +157,7 @@ async function countryPage(ctx, countryCode) {
     });
   }
 
-  const today = dayjs();
-  expires(ctx, today, results[0].timezone);
-  const friday = today.day(5);
-  const parsha = getParsha(countryCode);
-  results.forEach((city) => addCandleTime(friday, city, countryCode));
+  const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
 
   if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size) < 1.25) {
     return ctx.render('shabbat-browse-country-small', {
@@ -189,11 +181,20 @@ async function countryPage(ctx, countryCode) {
   }
 }
 
-function getParsha(iso) {
-  const saturday = dayjs().day(6);
+function makeCandleLighting(ctx, results, countryCode) {
+  const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
+  const today = dayjs.tz(new Date(), tzid);
+  expires(ctx, today, tzid);
+  const friday = today.day(5);
+  const parsha = getParsha(today.day(6), countryCode === 'IL');
+  results.forEach((city) => city.countryCode = countryCode);
+  results.forEach((city) => addCandleTime(friday, city));
+  return {friday, parsha};
+}
+
+function getParsha(saturday, il) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
-  const il = iso === 'IL';
   const sedra = new Sedra(hyear, il);
   const parsha0 = sedra.lookup(hd);
   let parsha = null;
@@ -218,10 +219,10 @@ function makeAdmin1(admin1) {
   return listItems;
 }
 
-function addCandleTime(friday, city, countryCode) {
-  const location = new Location(city.latitude, city.longitude, countryCode === 'IL',
-      city.timezone, city.name, countryCode, city.geonameid);
-  const dt = friday.toDate();
+function addCandleTime(friday, city) {
+  const location = new Location(city.latitude, city.longitude, city.countryCode === 'IL',
+      city.timezone, city.name, city.countryCode, city.geonameid);
+  const dt = new Date(friday.year(), friday.month(), friday.date());
   const events = HebrewCalendar.calendar({
     noHolidays: true,
     candlelighting: true,

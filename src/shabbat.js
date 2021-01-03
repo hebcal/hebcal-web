@@ -21,11 +21,11 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 function expires(ctx) {
-  const today = dayjs();
+  const tzid = ctx.state.location.getTzid();
+  const today = dayjs.tz(new Date(), tzid);
   const dt = today.toDate();
   ctx.set('Last-Modified', dt.toUTCString());
   const sunday = today.day(7);
-  const tzid = ctx.state.location.getTzid();
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
 }
@@ -83,10 +83,12 @@ export async function shabbatApp(ctx) {
 /**
  * Gets start and end days for filtering relevant hebcal events
  * @param {Date} now
+ * @param {string} tzid
  * @return {dayjs.Dayjs[]}
  */
-function getStartAndEnd(now) {
-  let midnight = dayjs(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+function getStartAndEnd(now, tzid) {
+  const now0 = dayjs.tz(now, tzid);
+  let midnight = now0.hour(0).minute(0).second(0).millisecond(0);
   const dow = midnight.day();
   // back up to Friday if today is Saturday (include last night's candle-lighting times)
   if (dow == 6) {
@@ -101,9 +103,10 @@ function getStartAndEnd(now) {
 function makeItems(ctx) {
   const q = processCookieAndQuery(
       ctx.cookies.get('C'),
-      {c: 'on', s: 'on', tgt: '_top'},
+      {tgt: '_top'},
       ctx.request.query,
   );
+  q.c = q.s = 'on';
   let opts0 = {};
   try {
     opts0 = makeHebcalOptions(ctx.db, q);
@@ -122,10 +125,10 @@ function makeItems(ctx) {
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
       new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
       new Date();
-  const [midnight, endOfWeek] = getStartAndEnd(dt);
+  const [midnight, endOfWeek] = getStartAndEnd(dt, location.getTzid());
   const options = {
-    start: midnight.toDate(),
-    end: endOfWeek.toDate(),
+    start: new Date(midnight.year(), midnight.month(), midnight.date()),
+    end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),
     candlelighting: true,
     location,
     locale: opts0.locale,
