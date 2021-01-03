@@ -109,7 +109,6 @@ function makeItems(ctx) {
   q.c = q.s = 'on';
   // hack for client who passes +03:00
   if (q.tzid && q.tzid[0] === ' ') {
-    console.log(q.tzid);
     const m = q.tzid.match(/^ (\d\d):00$/);
     if (m && m[1]) {
       q.tzid = 'Etc/GMT+' + parseInt(m[1], 10);
