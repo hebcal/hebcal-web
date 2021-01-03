@@ -371,6 +371,12 @@ export function getLocationFromQuery(db, query) {
     let il = query.i === 'on';
     if (query.tzid === 'Asia/Jerusalem') {
       il = true;
+    } else if (query.tzid[0] === ' ') {
+    // hack for client who passes +03:00
+      const m = query.tzid.match(/^ (\d\d):00$/);
+      if (m && m[1]) {
+        query.tzid = 'Etc/GMT+' + parseInt(m[1], 10);
+      }
     }
     query.tzid = tzidMap[query.tzid] || query.tzid;
     const latitude = parseFloat(query.latitude);

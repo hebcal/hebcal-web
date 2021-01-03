@@ -107,13 +107,6 @@ function makeItems(ctx) {
       ctx.request.query,
   );
   q.c = q.s = 'on';
-  // hack for client who passes +03:00
-  if (q.tzid && q.tzid[0] === ' ') {
-    const m = q.tzid.match(/^ (\d\d):00$/);
-    if (m && m[1]) {
-      q.tzid = 'Etc/GMT+' + parseInt(m[1], 10);
-    }
-  }
   let opts0 = {};
   try {
     opts0 = makeHebcalOptions(ctx.db, q);
