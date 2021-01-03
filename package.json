@@ -14,7 +14,7 @@
     "build": "npm run build:cp-json && npm run build:babel",
     "build:babel": "babel src --out-dir dist",
     "build:cp-json": "mkdir -p ./dist && cp ./src/*.json ./dist",
-    "deploy": "rsync -av ./static/ /var/www/html/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/",
+    "deploy": "rsync -av ./fonts/ /var/www/fonts/ && rsync -av ./static/ /var/www/html/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-Country.mmdb /var/www/",
     "start": "node dist/app-www.js",
     "test": "echo \"OK: no test specified\" && exit 0"
   },
