@@ -425,9 +425,14 @@ function renderJson(ctx) {
   if (isFresh(ctx)) {
     return;
   }
-  const events = makeHebrewCalendar(ctx, ctx.state.options);
+  const options = ctx.state.options;
+  if (!options.noRoshChodesh) {
+    options.shabbatMevarchim = true;
+    // options.molad = true;
+  }
+  const events = makeHebrewCalendar(ctx, options);
   const q = ctx.state.q;
-  let obj = eventsToClassicApi(events, ctx.state.options, q.leyning !== 'off');
+  let obj = eventsToClassicApi(events, options, q.leyning !== 'off');
   const cb = q.callback;
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
