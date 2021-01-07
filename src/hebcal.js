@@ -426,10 +426,6 @@ function renderJson(ctx) {
     return;
   }
   const options = ctx.state.options;
-  if (!options.noRoshChodesh) {
-    options.shabbatMevarchim = true;
-    // options.molad = true;
-  }
   const events = makeHebrewCalendar(ctx, options);
   const q = ctx.state.q;
   let obj = eventsToClassicApi(events, options, q.leyning !== 'off');

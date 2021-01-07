@@ -239,6 +239,9 @@ export function makeHebcalOptions(db, query) {
       options[val] = true;
     }
   }
+  if (!options.noRoshChodesh && !options.noSpecialShabbat) {
+    options.shabbatMevarchim = true;
+  }
   // Before we parse numberOpts, check for tzeit preference
   if (options.havdalahTzeit) {
     delete query.m;
