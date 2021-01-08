@@ -117,6 +117,11 @@ export function urlArgs(query, override={}) {
     delete q.m;
   }
   delete q['.s'];
+  for (const key of Object.keys(negativeOpts)) {
+    if (off(q[key])) {
+      q[key] = 'off';
+    }
+  }
   return querystring.stringify(q);
 }
 
