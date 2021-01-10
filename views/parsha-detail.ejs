@@ -35,7 +35,7 @@ href="<%=ortUrl%>">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%       if (aliyah.v) { %>
-<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<small class="text-muted">(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%       } // aliyah.v %>
 <% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
@@ -50,7 +50,7 @@ href="<%=ortUrl%>">
 <%    for (const [num, aliyah] of Object.entries(triennial.reading)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%       if (aliyah.v) { %>
-<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<small class="text-muted">(<%=aliyah.v%>&nbsp;v.)</small>
 <%       } // aliyah.v %>
 <% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%    } // ... for %>
@@ -75,7 +75,7 @@ href="<%=ortUrl%>">
 <%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%     if (aliyah.v) { %>
-<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<small class="text-muted">(<%=aliyah.v%>&nbsp;v.)</small>
 <%     } // aliyah.v %>
 <% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%   } // ... for aliyah %>

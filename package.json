@@ -35,11 +35,11 @@
     "@hebcal/core": "^3.1.0",
     "@hebcal/geo-sqlite": "^3.0.0",
     "@hebcal/icalendar": "^4.4.0",
-    "@hebcal/leyning": "^4.1.0",
+    "@hebcal/leyning": "^4.2.0",
     "@hebcal/locales": "^3.1.0",
     "@hebcal/rest-api": "^3.2.0",
     "better-sqlite3": "^7.1.2",
-    "dayjs": "^1.10.2",
+    "dayjs": "^1.10.3",
     "ejs": "^3.1.5",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
@@ -59,7 +59,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.4.17",
     "pdfkit": "^0.11.0",
-    "pino": "^6.9.0",
+    "pino": "^6.10.0",
     "random-bigint": "0.0.1",
     "ulid": "^2.3.0"
   }
