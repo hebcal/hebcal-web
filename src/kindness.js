@@ -1,6 +1,11 @@
 import {Event, flags, HDate} from '@hebcal/core';
 import {IcalEvent} from '@hebcal/icalendar';
+import {eventsToCsv} from '@hebcal/rest-api';
 import kindness from './areyvut-kindness-a-day.json';
+import fs from 'fs';
+
+const icalStream = fs.createWriteStream('kindness.ics');
+const csvStream = fs.createWriteStream('kindness.csv');
 
 const version = IcalEvent.version();
 const title = 'Kindness a Day';
@@ -15,16 +20,11 @@ const preamble = [
   `X-WR-CALNAME:${title}`,
   `X-WR-CALDESC:${caldesc}`,
 ].map(IcalEvent.fold).join('\r\n');
-process.stdout.write(preamble);
-process.stdout.write('\r\n');
+icalStream.write(preamble);
+icalStream.write('\r\n');
 
 for (const [monthDay, arr] of Object.entries(kindness)) {
-  const [monthStr, mday] = monthDay.split('-');
-  const month = parseInt(monthStr, 10);
-  const dt = new Date(2021, month - 1, +mday);
-  const summary = cleanStr(arr[0]);
-  const memo = cleanStr(arr[1]);
-  const ev = new Event(new HDate(dt), summary, flags.USER_EVENT, {memo});
+  const {ev, month} = makeEvent(2021, monthDay, arr);
   const ical = new IcalEvent(ev, {});
   const lines = ical.getLongLines();
   const triggerIdx = lines.findIndex((line) => line.startsWith('TRIGGER'));
@@ -36,11 +36,36 @@ for (const [monthDay, arr] of Object.entries(kindness)) {
       'CLASS:PUBLIC',
       `RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=${month}`,
   );
-  process.stdout.write(ical.toString());
-  process.stdout.write('\r\n');
+  icalStream.write(ical.toString());
+  icalStream.write('\r\n');
 }
 
-process.stdout.write('END:VCALENDAR\r\n');
+icalStream.write('END:VCALENDAR\r\n');
+icalStream.close();
+
+const events = [];
+const gyear = new Date().getFullYear();
+for (const [monthDay, arr] of Object.entries(kindness)) {
+  const {ev, month} = makeEvent(gyear, monthDay, arr);
+  events.push(ev);
+}
+for (const [monthDay, arr] of Object.entries(kindness)) {
+  const {ev, month} = makeEvent(gyear+1, monthDay, arr);
+  events.push(ev);
+}
+
+csvStream.write(eventsToCsv(events, {}));
+csvStream.close();
+
+function makeEvent(gyear, monthDay, arr) {
+  const [monthStr, mday] = monthDay.split('-');
+  const month = parseInt(monthStr, 10);
+  const dt = new Date(gyear, month - 1, +mday);
+  const summary = cleanStr(arr[0]);
+  const memo = cleanStr(arr[1]);
+  const ev = new Event(new HDate(dt), summary, flags.USER_EVENT, {memo});
+  return {ev, month};
+}
 
 /**
  * @return {string}
