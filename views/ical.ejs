@@ -32,146 +32,42 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Jewish Holidays</h5>
 <p class="card-text">Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel). <small>10-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-jewish-holidays"
-title="Subscribe to Jewish Holidays for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/jewish-holidays.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-jewish-holidays"
-title="Add Jewish Holidays to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fjewish-holidays.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-jewish-holidays"
-title="Download Jewish Holidays to Microsoft Outlook"
-href="https://download.hebcal.com/ical/jewish-holidays.csv" download="jewish-holidays.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Jewish Holidays (all)</h5>
 <p class="card-text">Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule. <small>10-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-jewish-holidays-all"
-title="Subscribe to Jewish Holidays (all) for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/jewish-holidays-all.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-jewish-holidays-all"
-title="Add Jewish Holidays (all) to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fjewish-holidays-all.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-jewish-holidays-all"
-title="Download Jewish Holidays (all) to Microsoft Outlook"
-href="https://download.hebcal.com/ical/jewish-holidays-all.csv" download="jewish-holidays-all.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Torah Readings (Diaspora)</h5>
 <p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule. <small>3-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-torah-readings-diaspora"
-title="Subscribe to Torah Readings (Diaspora) for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-torah-readings-diaspora"
-title="Add Torah Readings (Diaspora) to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-torah-readings-diaspora"
-title="Download Torah Readings (Diaspora) to Microsoft Outlook"
-href="https://download.hebcal.com/ical/torah-readings-diaspora.csv" download="torah-readings-diaspora.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Torah Readings (Diaspora)', basename: 'torah-readings-diaspora'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h4 class="card-title" lang="he" dir="rtl">פרשת השבוע - ישראל</h4>
 <p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl">בראשית, נח, לך־לך</span>. Israel schedule. <small>3-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-torah-readings-israel-he"
-title="Subscribe to פרשת השבוע - ישראל for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-torah-readings-israel-he"
-title="Add פרשת השבוע - ישראל to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-torah-readings-israel-he"
-title="Download פרשת השבוע - ישראל to Microsoft Outlook"
-href="https://download.hebcal.com/ical/torah-readings-israel-he.csv" download="torah-readings-israel-he.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'פרשת השבוע - ישראל', basename: 'torah-readings-israel-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Days of the Omer</h5>
 <p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot. <small>2-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-omer"
-title="Subscribe to Days of the Omer for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/omer.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-omer"
-title="Add Days of the Omer to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fomer.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-omer"
-title="Download Days of the Omer to Microsoft Outlook"
-href="https://download.hebcal.com/ical/omer.csv" download="omer.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Days of the Omer', basename: 'omer'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Daf Yomi</h5>
 <p class="card-text">Daily regimen of learning the Talmud. <small>2-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-daf-yomi"
-title="Subscribe to Daf Yomi for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/daf-yomi.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-daf-yomi"
-title="Add Daf Yomi to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fdaf-yomi.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-daf-yomi"
-title="Download Daf Yomi to Microsoft Outlook"
-href="https://download.hebcal.com/ical/daf-yomi.csv" download="daf-yomi.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Daf Yomi', basename: 'daf-yomi'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (English)</h5>
 <p class="card-text">Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration. <small>2-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-hdate-en"
-title="Subscribe to Hebrew calendar dates (English) for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/hdate-en.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-hdate-en"
-title="Add Hebrew calendar dates (English) to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fhdate-en.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-hdate-en"
-title="Download Hebrew calendar dates (English) to Microsoft Outlook"
-href="https://download.hebcal.com/ical/hdate-en.csv" download="hdate-en.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (English)', basename: 'hdate-en'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (Hebrew)</h5>
 <p class="card-text">Displays the Hebrew date (such as <strong lang="he" dir="rtl">י״ח בטבת תש״ע</strong>) every day of the week. <small>2-year perpetual feed.</small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-hdate-he"
-title="Subscribe to Hebrew calendar dates (Hebrew) for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/hdate-he.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-hdate-he"
-title="Add Hebrew calendar dates (Hebrew) to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fhdate-he.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-hdate-he"
-title="Download Hebrew calendar dates (Hebrew) to Microsoft Outlook"
-href="https://download.hebcal.com/ical/hdate-he.csv" download="hdate-he.csv">
-<svg class="icon icon-microsoftoutlook"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Advanced Settings</h5>
@@ -187,16 +83,7 @@ href="https://download.hebcal.com/ical/hdate-he.csv" download="hdate-he.csv">
 <p class="card-text">Displays a daily act of kindness and related quotation from Tanach or Rabbinic text. <small>Perpetual feed.</small></p>
 <p><small>Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>
 <em>"The path of the righteous is like a ray of light" (Proverbs 4:18).</em></small></p>
-<div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-kindness"
-title="Subscribe to Kindness A Day for iPhone, iPad, macOS Desktop"
-href="webcal://download.hebcal.com/ical/kindness.ics">
-<svg class="icon icon-appleinc"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-kindness"
-title="Add Kindness A Day to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Fkindness.ics">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-</div><!-- .btn-toolbar -->
+<%- await include('partials/ical-toolbar.ejs', {name: 'Kindness A Day', basename: 'kindness'}) -%>
 </div></div></div>
 <p class="lead">See our <a href="/home/category/import">help importing into apps</a> for step-by-step instructions.</p>  
 </div><!-- .row -->

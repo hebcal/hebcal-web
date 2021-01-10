@@ -1,0 +1,18 @@
+<div class="btn-toolbar">
+<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-ical-<%=basename%>"
+title="Subscribe to <%=name%> for Apple iPhone, iPad, macOS"
+href="webcal://download.hebcal.com/ical/<%=basename%>.ics">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> Apple</a>
+<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-gcal-<%=basename%>"
+title="Add <%=name%> to Google Calendar"
+href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F<%=basename%>.ics">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google</a>
+<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-<%=basename%>"
+title="Download <%=name%> to Microsoft Outlook"
+href="https://download.hebcal.com/ical/<%=basename%>.csv" download="<%=basename%>.csv">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
+<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="https-icalendar-<%=basename%>"
+title="<%=name%> iCalendar feed URL"
+href="https://download.hebcal.com/ical/<%=basename%>.ics">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar-week"></use></svg> iCalendar</a>
+</div><!-- .btn-toolbar -->
