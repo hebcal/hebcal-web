@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {httpRedirect} from './common';
-import {categories, events11yearsBegin, getFirstOcccurences, holidays} from './holidays';
+import {categories, holidays, events11yearsBegin, getFirstOcccurences} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
 // Don't include any 1-day duration holidays (it's the default)
