@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {flags, greg, HDate, HebrewCalendar, Locale} from '@hebcal/core';
+import {flags, greg, HDate, HebrewCalendar, Locale, months, HolidayEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -17,11 +17,17 @@ const holidayDurationIL = {
   'Pesach': 7,
 };
 
-const holidayDurationDiaspora = Object.assign({'Shavuot': 2}, holidayDurationIL);
-holidayDurationDiaspora['Pesach'] = 8;
-
 const OMER_TITLE = 'Days of the Omer';
-holidayDurationDiaspora[OMER_TITLE] = holidayDurationIL[OMER_TITLE] = 49;
+holidayDurationIL[OMER_TITLE] = 49;
+
+const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8, Shavuot: 2});
+
+function getHolidayDuration(il, mask, holiday) {
+  const duration = il ? holidayDurationIL : holidayDurationDiaspora;
+  const days = (mask === flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
+    (duration[holiday] || 1);
+  return days;
+}
 
 const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 
@@ -51,9 +57,7 @@ function makeOccursOn(events, holiday, mask, now, il) {
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
     mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
   const nowAbs = greg.greg2abs(now);
-  const holidayDuration = il ? holidayDurationIL : holidayDurationDiaspora;
-  const duration0 = (mask === flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
-    (holidayDuration[holiday] || 1);
+  const duration0 = getHolidayDuration(il, mask, holiday);
   const occursOn = events
       .filter((ev) => holiday === ev.basename())
       .map((ev) => {
