@@ -328,22 +328,38 @@ function getEventsForId(query, id, startYear, endYear) {
   const urlPrefix = query.ulid ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const origDt = day.toDate();
-    const hd = (type == 'Yahrzeit') ?
+    const isYahrzeit = (type === 'Yahrzeit');
+    const hd = isYahrzeit ?
       HebrewCalendar.getYahrzeit(hyear, origDt) :
       HebrewCalendar.getBirthdayOrAnniversary(hyear, origDt);
     if (hd) {
-      const typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+      const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
+      const hebdate = hd.render('en');
       const nth = calculateAnniversaryNth(origDt, hyear);
       let subj = `${name}'s ${nth} ${typeStr}`;
       if (query.hebdate === 'on') {
-        const hebdate = hd.render('en');
         const comma = hebdate.indexOf(',');
         subj += ' (' + hebdate.substring(0, comma) + ')';
       }
       const ev = new Event(hd, subj, flags.USER_EVENT);
-      if (urlPrefix) {
-        ev.memo = `${urlPrefix}#row${id}`;
+      const observed = dayjs(hd.greg());
+      const erev = observed.subtract(1, 'day');
+      const verb = isYahrzeit ? 'remembering' : 'honoring';
+      let memo = `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr} occurs on ` +
+      `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.\\n\\n` +
+      `${name}'s ${typeStr} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
+      `sundown on the day of observance.`;
+      if (isYahrzeit) {
+        const dow = erev.day();
+        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'after nightfall' : 'at sundown';
+        memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
+        'May your loved one\'s soul be bound up in the bond of eternal life and may their memory ' +
+        'serve as a continued source of inspiration and comfort to you.';
       }
+      if (urlPrefix) {
+        memo += `\\n\\n${urlPrefix}#row${id}`;
+      }
+      ev.memo = memo;
       events.push(ev);
     }
   }
