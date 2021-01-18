@@ -305,7 +305,7 @@ function calculateAnniversaryNth(origDt, hyear) {
   const origHd = new HDate(origDt);
   const origHyear = origHd.getFullYear();
   const numYears = hyear - origHyear;
-  const nth = Locale.ordinal(numYears);
+  const nth = Locale.ordinal(numYears, 'en');
   return nth;
 }
 

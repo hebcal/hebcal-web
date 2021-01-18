@@ -102,13 +102,13 @@ export async function parshaDetail(ctx) {
     const [p1, p2] = parshaName.split('-');
     parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
     const n1 = leyning.parshiyot[p1].num;
-    parsha.ordinal = Locale.ordinal(n1) + ' and ' + Locale.ordinal(n1 + 1);
+    parsha.ordinal = Locale.ordinal(n1, 'en') + ' and ' + Locale.ordinal(n1 + 1, 'en');
     parsha.p1 = p1;
     parsha.p2 = p2;
     parsha.p1anchor = makeAnchor(p1);
     parsha.p2anchor = makeAnchor(p2);
   } else {
-    parsha.ordinal = Locale.ordinal(parsha.num);
+    parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items0 = items15map.get(parshaName);
