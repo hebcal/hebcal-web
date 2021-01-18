@@ -98,7 +98,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+app.use(timeout(9000, {status: 503, message: 'Service Unavailable'}));
 
 // request dispatcher
 app.use(async (ctx, next) => {
