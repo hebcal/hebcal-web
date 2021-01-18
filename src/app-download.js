@@ -4,7 +4,6 @@ import ini from 'ini';
 import Koa from 'koa';
 import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
-import etag from 'koa-etag';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import {join} from 'path';
@@ -61,7 +60,6 @@ app.on('error', (err, ctx) => {
 });
 
 app.use(conditional());
-app.use(etag());
 app.use(compress({
   gzip: true,
   deflate: true,

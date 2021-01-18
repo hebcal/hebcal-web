@@ -77,6 +77,7 @@ export async function hebcalDownload(ctx) {
     ctx.throw(400, 'Please select at least one event option');
   }
   ctx.set('Last-Modified', ctx.launchUTCString);
+  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
   if (extension == '.ics') {
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
@@ -90,7 +91,6 @@ export async function hebcalDownload(ctx) {
     ctx.body = csv;
   } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
-    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
     const title = getCalendarTitle(events, options);
     const doc = ctx.body = createPdfDoc(title);
     renderPdf(doc, events, options);
