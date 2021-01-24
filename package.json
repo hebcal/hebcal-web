@@ -32,14 +32,14 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.1.0",
+    "@hebcal/core": "^3.4.1",
     "@hebcal/geo-sqlite": "^3.0.0",
     "@hebcal/icalendar": "^4.4.0",
-    "@hebcal/leyning": "^4.2.0",
-    "@hebcal/locales": "^3.1.0",
+    "@hebcal/leyning": "^4.3.0",
+    "@hebcal/locales": "^3.2.0",
     "@hebcal/rest-api": "^3.2.0",
     "better-sqlite3": "^7.1.2",
-    "dayjs": "^1.10.3",
+    "dayjs": "^1.10.4",
     "ejs": "^3.1.5",
     "etag": "^1.8.1",
     "gematriya": "^2.0.0",
