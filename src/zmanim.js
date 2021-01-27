@@ -38,6 +38,9 @@ const MAX_DAYS = 45;
 export async function getZmanim(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
   const q = ctx.request.query;
+  if (q.cfg !== 'json') {
+    throw createError(400, 'Parameter cfg=json is required');
+  }
   const {isRange, startD, endD} = getStartAndEnd(q);
   const loc = ctx.state.location = getLocationFromQuery(ctx.db, q);
   if (loc === null) {
