@@ -221,6 +221,25 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
 const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
 
 /**
+ * Parse a string YYYY-MM-DD and return Date
+ * @param {string} str
+ * @return {Date}
+ */
+export function isoDateStringToDate(str) {
+  if (!reIsoDate.test(str)) {
+    throw new SyntaxError(`Date must match format YYYY-MM-DD: ${str}`);
+  }
+  const yy = parseInt(str, 10);
+  const mm = parseInt(str.substring(5, 7), 10);
+  const dd = parseInt(str.substring(8, 10), 10);
+  const dt = new Date(yy, mm - 1, dd);
+  if (yy < 100) {
+    dt.setFullYear(yy);
+  }
+  return dt;
+}
+
+/**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {any} query
@@ -292,18 +311,7 @@ export function makeHebcalOptions(db, query) {
   }
   for (const param of ['start', 'end']) {
     if (!empty(query[param])) {
-      const val = query[param];
-      if (!reIsoDate.test(val)) {
-        throw new SyntaxError(`Parameter '${param}' must match format YYYY-MM-DD`);
-      }
-      const yy = parseInt(val, 10);
-      const mm = parseInt(val.substring(5, 7), 10);
-      const dd = parseInt(val.substring(8, 10), 10);
-      const dt = new Date(yy, mm - 1, dd);
-      if (yy < 100) {
-        dt.setFullYear(yy);
-      }
-      options[param] = dt;
+      options[param] = isoDateStringToDate(query[param]);
     }
   }
   if (options.ashkenazi && empty(query.lg)) {

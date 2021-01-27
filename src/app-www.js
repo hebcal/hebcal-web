@@ -30,6 +30,7 @@ import {yahrzeitApp} from './yahrzeit';
 import {holidaysApp} from './holidays';
 import redirectMap from './redirect.json';
 import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
+import {getZmanim} from './zmanim';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -157,6 +158,8 @@ app.use(async function router(ctx, next) {
     // let serve() handle this file
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
+  } else if (rpath.startsWith('/zmanim')) {
+    await getZmanim(ctx);
   } else if (rpath.startsWith('/geo')) {
     // it's fine if this throws a Not Found exception
     ctx.response.type = ctx.request.header['accept'] = 'application/json';
