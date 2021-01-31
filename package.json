@@ -28,11 +28,11 @@
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
     "@babel/register": "^7.12.10",
-    "eslint": "^7.18.0",
+    "eslint": "^7.19.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.4.1",
+    "@hebcal/core": "^3.7.0",
     "@hebcal/geo-sqlite": "^3.0.0",
     "@hebcal/icalendar": "^4.4.0",
     "@hebcal/leyning": "^4.3.0",

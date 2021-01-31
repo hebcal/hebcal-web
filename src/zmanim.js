@@ -1,5 +1,4 @@
 import {Zmanim} from '@hebcal/core';
-import {toISOStringWithTimezone} from '@hebcal/rest-api';
 import {empty, isoDateStringToDate, getLocationFromQuery} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
@@ -12,6 +11,7 @@ dayjs.extend(timezone);
 dayjs.extend(isSameOrBefore);
 
 const TIMES = {
+  chatzotNight: 1,
   alotHaShachar: 1,
   misheyakir: 1,
   misheyakirMachmir: 1,
@@ -25,8 +25,14 @@ const TIMES = {
   plagHaMincha: 1,
   sunset: 1,
   dusk: 1,
-  tzeit: 1,
-  chatzotNight: 1,
+};
+
+const TZEIT_TIMES = {
+  tzeit7083deg: 7.083,
+  tzeit85deg: 8.5,
+  tzeit42min: 42,
+  tzeit50min: 50,
+  tzeit72min: 72,
 };
 
 const MAX_DAYS = 45;
@@ -51,32 +57,23 @@ export async function getZmanim(ctx) {
   } else {
     expires(ctx);
   }
-  const timeFormat = new Intl.DateTimeFormat('en-US', {
-    timeZone: loc.getTzid(),
-    hour12: false,
-    hour: 'numeric',
-    minute: 'numeric',
-  });
   if (isRange) {
     const times = {};
-    for (const func of Object.keys(TIMES)) {
+    for (const func of Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES))) {
       times[func] = {};
     }
-    times.tzeit7083 = {};
     for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-      const dt = d.toDate();
-      const t = getTimes(dt, loc, timeFormat);
-      const isoDate = dt.toISOString().substring(0, 10);
+      const t = getTimes(d, loc);
+      const isoDate = d.format('YYYY-MM-DD');
       for (const [key, val] of Object.entries(t)) {
         times[key][isoDate] = val;
       }
     }
     ctx.body = {location: loc, times};
   } else {
-    const dt = startD.toDate();
-    const t = getTimes(dt, loc, timeFormat);
-    const isoDate = dt.toISOString().substring(0, 10);
-    ctx.body = {location: loc, date: isoDate, times: t};
+    const times = getTimes(startD, loc);
+    const isoDate = startD.format('YYYY-MM-DD');
+    ctx.body = {location: loc, date: isoDate, times};
   }
 }
 
@@ -116,21 +113,33 @@ function isoToDayjs(str) {
 
 /**
  * @private
- * @param {Date} dt
+ * @param {dayjs.Dayjs} d
  * @param {Location} location
- * @param {Intl.DateTimeFormat} timeFormat
  * @return {Object<string,string>}
  */
-function getTimes(dt, location, timeFormat) {
+function getTimes(d, location) {
   const tzid = location.getTzid();
   const times = {};
-  const zman = new Zmanim(dt, location.getLatitude(), location.getLongitude());
+  const zman = new Zmanim(d.toDate(), location.getLatitude(), location.getLongitude());
   for (const func of Object.keys(TIMES)) {
-    const val = zman[func]();
-    times[func] = toISOStringWithTimezone(val, formatTime(timeFormat, val), tzid);
+    const dt = zman[func]();
+    if (!isNaN(dt.getTime())) {
+      times[func] = formatTime(Zmanim.roundTime(dt), tzid);
+    }
   }
-  const tzeit7 = zman.tzeit(7.083);
-  times['tzeit7083'] = toISOStringWithTimezone(tzeit7, formatTime(timeFormat, tzeit7), tzid);
+  for (const [name, num] of Object.entries(TZEIT_TIMES)) {
+    if (name.endsWith('deg')) {
+      const dt = zman.tzeit(num);
+      if (!isNaN(dt.getTime())) {
+        times[name] = formatTime(Zmanim.roundTime(dt), tzid);
+      }
+    } else if (name.endsWith('min')) {
+      const dt = zman.sunsetOffset(num);
+      if (!isNaN(dt.getTime())) {
+        times[name] = formatTime(dt, tzid);
+      }
+    }
+  }
   return times;
 }
 
@@ -149,15 +158,11 @@ function expires(ctx) {
 
 /**
  * @private
- * @param {Intl.DateTimeFormat} timeFormat
  * @param {Date} dt
+ * @param {string} tzid
  * @return {string}
  */
-function formatTime(timeFormat, dt) {
-  const time = timeFormat.format(dt);
-  const hm = time.split(':');
-  if (hm[0] === '24') {
-    return '00:' + hm[1];
-  }
-  return time;
+function formatTime(dt, tzid) {
+  const d = dayjs.tz(dt, tzid);
+  return d.format();
 }
