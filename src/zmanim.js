@@ -123,21 +123,15 @@ function getTimes(d, location) {
   const zman = new Zmanim(d.toDate(), location.getLatitude(), location.getLongitude());
   for (const func of Object.keys(TIMES)) {
     const dt = zman[func]();
-    if (!isNaN(dt.getTime())) {
-      times[func] = formatTime(Zmanim.roundTime(dt), tzid);
-    }
+    times[func] = isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, Zmanim.roundTime(dt));
   }
   for (const [name, num] of Object.entries(TZEIT_TIMES)) {
     if (name.endsWith('deg')) {
       const dt = zman.tzeit(num);
-      if (!isNaN(dt.getTime())) {
-        times[name] = formatTime(Zmanim.roundTime(dt), tzid);
-      }
+      times[name] = isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, Zmanim.roundTime(dt));
     } else if (name.endsWith('min')) {
       const dt = zman.sunsetOffset(num);
-      if (!isNaN(dt.getTime())) {
-        times[name] = formatTime(dt, tzid);
-      }
+      times[name] = isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, dt);
     }
   }
   return times;
@@ -154,15 +148,4 @@ function expires(ctx) {
   const tomorrow = today.add(1, 'd');
   const exp = dayjs.tz(tomorrow.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
-}
-
-/**
- * @private
- * @param {Date} dt
- * @param {string} tzid
- * @return {string}
- */
-function formatTime(dt, tzid) {
-  const d = dayjs.tz(dt, tzid);
-  return d.format();
 }
