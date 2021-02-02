@@ -166,18 +166,22 @@ export function possiblySetCookie(ctx, query) {
     return false;
   }
   const newCookie = makeCookie(query);
+  const ampersand = newCookie.indexOf('&');
+  if (ampersand === -1) {
+    return false;
+  }
   const prevCookie = ctx.cookies.get('C');
   if (prevCookie) {
     if (prevCookie === 'opt_out') {
       return false;
     }
     const prev = prevCookie.substring(prevCookie.indexOf('&'));
-    const current = newCookie.substring(newCookie.indexOf('&'));
+    const current = newCookie.substring(ampersand);
     if (prev === current) {
       return false;
     }
   }
-  ctx.set('Cache-Control', 'private');
+  // ctx.set('Cache-Control', 'private');
   ctx.cookies.set('C', newCookie, {
     expires: dayjs().add(1, 'year').toDate(),
     overwrite: true,
