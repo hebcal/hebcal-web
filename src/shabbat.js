@@ -97,8 +97,8 @@ function geoIpRedirect(ctx) {
   }
 
   const ip = getIpAddress(ctx);
-  const geoip = ctx.geoipCity.get('185.191.171.10');
-  console.log(geoip);
+  const geoip = ctx.geoipCity.get(ip);
+  // console.log(geoip);
   if (!geoip) {
     return;
   }
