@@ -4,6 +4,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
   getIpAddress, httpRedirect,
   localeMap, makeHebrewCalendar} from './common';
+import {nearestCity} from './nearestCity';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
@@ -36,7 +37,10 @@ export async function shabbatApp(ctx) {
     ctx.set('Allow', 'GET');
     ctx.throw(405, 'POST not allowed; try using GET instead');
   }
-  geoIpRedirect(ctx);
+  const isRedir = geoIpRedirect(ctx);
+  if (isRedir) {
+    return;
+  }
   makeItems(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.request.querystring.length > 0) {
@@ -84,7 +88,7 @@ export async function shabbatApp(ctx) {
 
 function geoIpRedirect(ctx) {
   if (ctx.request.querystring.length !== 0) {
-    return;
+    return false;
   }
 
   const cookieStr = ctx.cookies.get('C');
@@ -92,41 +96,54 @@ function geoIpRedirect(ctx) {
     if (cookieStr.indexOf('geonameid=') !== -1 ||
         cookieStr.indexOf('zip=') !== -1 ||
         cookieStr.indexOf('city=') !== -1) {
-      return;
+      return false;
     }
   }
 
   const ip = getIpAddress(ctx);
   const geoip = ctx.geoipCity.get(ip);
-  // console.log(geoip);
   if (!geoip) {
-    return;
+    return false;
   }
   if (typeof geoip.postal === 'object' &&
         geoip.postal.code.length === 5 &&
         typeof geoip.country === 'object' &&
         geoip.country.iso_code === 'US') {
+    ctx.logger.info({ip, geoip: geoip.postal});
     const dest = `/shabbat?zip=${geoip.postal.code}&M=on&lg=s`;
     redir(ctx, dest);
+    return true;
   }
 
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
     const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&M=on&lg=s`;
+    ctx.logger.info({ip, geoip: geoip.city});
     redir(ctx, dest);
+    return true;
   }
 
-  /*
   if (typeof geoip.location === 'object' &&
         typeof geoip.location.time_zone === 'string' &&
         typeof geoip.location.latitude === 'number' &&
-        typeof geoip.location.longitude === 'number') {
-    const cc = geoip.country && geoip.country.iso_code;
-    const tzid = encodeURIComponent(geoip.location.time_zone);
-    const dest = `/shabbat?geo=pos&latitude=${geoip.location.latitude}&longitude=${geoip.location.longitude}&tzid=${tzid}`;
-    redir(ctx, dest);
+        typeof geoip.location.longitude === 'number' &&
+        typeof geoip.country === 'object' &&
+        typeof geoip.country.iso_code === 'string') {
+    const city = nearestCity(ctx.db.geonamesDb, geoip.location.latitude, geoip.location.longitude,
+        geoip.country.iso_code, geoip.location.time_zone);
+    if (city !== null) {
+      ctx.logger.info({
+        ip,
+        geoip: {cc: geoip.country.iso_code, ...geoip.location},
+        nearest: city,
+      });
+      const dest = `/shabbat?geonameid=${city.geonameid}&M=on&lg=s`;
+      redir(ctx, dest);
+      return true;
+    }
   }
-  */
+
+  return false;
 }
 
 function redir(ctx, dest) {
