@@ -632,7 +632,7 @@ export function setDefautLangTz(ctx) {
   }
   const cookie = ctx.state.cookie = querystring.parse(cookieStr);
   const ip = getIpAddress(ctx);
-  const geoipCountryCode = ctx.state.ipCountryCode = ctx.lookup.get(ip);
+  const geoipCountryCode = ctx.state.ipCountryCode = ctx.geoipCountry.get(ip);
   const cc = (geoipCountryCode && typeof langTzDefaults[geoipCountryCode] === 'object') ?
     geoipCountryCode : 'US';
   const ccDefaults = langTzDefaults[cc];

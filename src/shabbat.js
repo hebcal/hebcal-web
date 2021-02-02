@@ -2,6 +2,7 @@
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
+  getIpAddress, httpRedirect,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -35,6 +36,7 @@ export async function shabbatApp(ctx) {
     ctx.set('Allow', 'GET');
     ctx.throw(405, 'POST not allowed; try using GET instead');
   }
+  geoIpRedirect(ctx);
   makeItems(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.request.querystring.length > 0) {
@@ -78,6 +80,58 @@ export async function shabbatApp(ctx) {
     }
     return ctx.render('shabbat', p);
   }
+}
+
+function geoIpRedirect(ctx) {
+  if (ctx.request.querystring.length !== 0) {
+    return;
+  }
+
+  const cookieStr = ctx.cookies.get('C');
+  if (cookieStr) {
+    if (cookieStr.indexOf('geonameid=') !== -1 ||
+        cookieStr.indexOf('zip=') !== -1 ||
+        cookieStr.indexOf('city=') !== -1) {
+      return;
+    }
+  }
+
+  const ip = getIpAddress(ctx);
+  const geoip = ctx.geoipCity.get('185.191.171.10');
+  console.log(geoip);
+  if (!geoip) {
+    return;
+  }
+  if (typeof geoip.postal === 'object' &&
+        geoip.postal.code.length === 5 &&
+        typeof geoip.country === 'object' &&
+        geoip.country.iso_code === 'US') {
+    const dest = `/shabbat?zip=${geoip.postal.code}&M=on&lg=s`;
+    redir(ctx, dest);
+  }
+
+  if (typeof geoip.city === 'object' &&
+        typeof geoip.city.geoname_id === 'number') {
+    const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&M=on&lg=s`;
+    redir(ctx, dest);
+  }
+
+  /*
+  if (typeof geoip.location === 'object' &&
+        typeof geoip.location.time_zone === 'string' &&
+        typeof geoip.location.latitude === 'number' &&
+        typeof geoip.location.longitude === 'number') {
+    const cc = geoip.country && geoip.country.iso_code;
+    const tzid = encodeURIComponent(geoip.location.time_zone);
+    const dest = `/shabbat?geo=pos&latitude=${geoip.location.latitude}&longitude=${geoip.location.longitude}&tzid=${tzid}`;
+    redir(ctx, dest);
+  }
+  */
+}
+
+function redir(ctx, dest) {
+  ctx.set('Cache-Control', 'private');
+  httpRedirect(ctx, dest);
 }
 
 /**

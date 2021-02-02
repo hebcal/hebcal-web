@@ -113,10 +113,13 @@ app.use(async function fixup(ctx, next) {
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
     ctx.request.header['accept'] = 'application/json';
   }
-  if (!ctx.lookup) {
-    const mmdbPath = 'GeoLite2-Country.mmdb';
-    logger.info(`Opening ${mmdbPath}`);
-    ctx.lookup = app.context.lookup = await maxmind.open(mmdbPath);
+  if (!ctx.geoipCountry) {
+    const geoipCountryMmdbPath = 'GeoLite2-Country.mmdb';
+    logger.info(`Opening ${geoipCountryMmdbPath}`);
+    ctx.geoipCountry = app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath);
+    const geoipCityMmdbPath = 'GeoLite2-City.mmdb';
+    logger.info(`Opening ${geoipCityMmdbPath}`);
+    ctx.geoipCity = app.context.geoipCity = await maxmind.open(geoipCityMmdbPath);
   }
   await next();
 });
