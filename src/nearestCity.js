@@ -1,5 +1,7 @@
 import haversine from 'haversine';
 
+const cityCache = new Map();
+
 /**
  * @return {any}
  * @param {Database} geonamesDb
@@ -9,15 +11,18 @@ import haversine from 'haversine';
  * @param {string} tzid
  */
 export function nearestCity(geonamesDb, latitude, longitude, countryCode, tzid) {
+  const start = {latitude, longitude};
+  let city = cityCache.get(start);
+  if (city) {
+    return city;
+  }
   const stmt = geonamesDb.prepare(
       'SELECT geonameid, name, latitude, longitude FROM geoname WHERE country = ? AND timezone = ?');
   const rows = stmt.all(countryCode, tzid);
   if (!rows || !rows.length) {
     return null;
   }
-  const start = {latitude, longitude};
   let minDistance = Infinity;
-  let city = {};
   for (const location of rows) {
     const distance = haversine(start, location);
     if (distance < minDistance) {
@@ -26,5 +31,6 @@ export function nearestCity(geonamesDb, latitude, longitude, countryCode, tzid) 
     }
   }
   city.distance = minDistance;
+  cityCache.set(start, city);
   return city;
 }

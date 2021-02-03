@@ -95,7 +95,8 @@ function geoIpRedirect(ctx) {
   if (cookieStr) {
     if (cookieStr.indexOf('geonameid=') !== -1 ||
         cookieStr.indexOf('zip=') !== -1 ||
-        cookieStr.indexOf('city=') !== -1) {
+        cookieStr.indexOf('city=') !== -1 ||
+        cookieStr.indexOf('geo=pos') !== -1) {
       return false;
     }
   }
@@ -116,14 +117,14 @@ function geoIpRedirect(ctx) {
       geoip: geoip.postal,
       duration: Date.now() - startTime,
     });
-    const dest = `/shabbat?zip=${geoip.postal.code}&M=on&lg=s`;
+    const dest = `/shabbat?zip=${geoip.postal.code}&geoip=zip`;
     redir(ctx, dest);
     return true;
   }
 
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
-    const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&M=on&lg=s`;
+    const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&geoip=geonameid`;
     ctx.logger.info({
       ip,
       geoip: geoip.city,
@@ -148,7 +149,7 @@ function geoIpRedirect(ctx) {
         nearest: city,
         duration: Date.now() - startTime,
       });
-      const dest = `/shabbat?geonameid=${city.geonameid}&M=on&lg=s`;
+      const dest = `/shabbat?geonameid=${city.geonameid}&geoip=nn`;
       redir(ctx, dest);
       return true;
     }
