@@ -100,16 +100,22 @@ function geoIpRedirect(ctx) {
     }
   }
 
+  const startTime = Date.now();
   const ip = getIpAddress(ctx);
   const geoip = ctx.geoipCity.get(ip);
   if (!geoip) {
     return false;
   }
+
   if (typeof geoip.postal === 'object' &&
         geoip.postal.code.length === 5 &&
         typeof geoip.country === 'object' &&
         geoip.country.iso_code === 'US') {
-    ctx.logger.info({ip, geoip: geoip.postal});
+    ctx.logger.info({
+      ip,
+      geoip: geoip.postal,
+      duration: Date.now() - startTime,
+    });
     const dest = `/shabbat?zip=${geoip.postal.code}&M=on&lg=s`;
     redir(ctx, dest);
     return true;
@@ -118,7 +124,11 @@ function geoIpRedirect(ctx) {
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
     const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&M=on&lg=s`;
-    ctx.logger.info({ip, geoip: geoip.city});
+    ctx.logger.info({
+      ip,
+      geoip: geoip.city,
+      duration: Date.now() - startTime,
+    });
     redir(ctx, dest);
     return true;
   }
@@ -136,6 +146,7 @@ function geoIpRedirect(ctx) {
         ip,
         geoip: {cc: geoip.country.iso_code, ...geoip.location},
         nearest: city,
+        duration: Date.now() - startTime,
       });
       const dest = `/shabbat?geonameid=${city.geonameid}&M=on&lg=s`;
       redir(ctx, dest);
