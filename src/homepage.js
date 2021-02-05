@@ -1,20 +1,19 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, Zmanim} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz} from './common';
 import dayjs from 'dayjs';
 
 export async function homepage(ctx) {
-  const q = ctx.request.query;
-  const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
-      new Date();
-  const hd = new HDate(dt);
+  ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
+  const q = setDefautLangTz(ctx);
+  const {dt, afterSunset} = getDate(ctx, q);
+  const hdate = new HDate(dt);
+  const hd = afterSunset ? hdate.next() : hdate;
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
-  setDefautLangTz(ctx);
   const items = ctx.state.items = [];
-  mastheadDates(items, dt, hd);
-  const il = ctx.state.timezone === 'Asia/Jerusalem';
+  mastheadDates(items, dt, afterSunset, hd);
+  const il = ctx.state.il;
   mastheadHolidays(items, hd, il);
   mastheadParsha(items, dt, il);
   const [blub, longText] = getHolidayGreeting(hd, il);
@@ -27,10 +26,30 @@ export async function homepage(ctx) {
   return ctx.render('homepage');
 }
 
-function mastheadDates(items, dt, hd) {
+function getDate(ctx, q) {
+  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
+  const dt = isToday ? new Date() :
+    new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10));
+  const location = ctx.state.location;
+  if (isToday && location !== null) {
+    const tzid = ctx.state.timezone = location.getTzid();
+    const isoDate = Zmanim.formatISOWithTimeZone(tzid, dt);
+    const gy = parseInt(isoDate.substring(0, 4), 10);
+    const gm = parseInt(isoDate.substring(5, 7), 10);
+    const gd = parseInt(isoDate.substring(8, 10), 10);
+    const day = new Date(gy, gm - 1, gd);
+    const zman = new Zmanim(day, location.getLatitude(), location.getLongitude());
+    const sunset = zman.sunset();
+    const afterSunset = Boolean(dt >= sunset);
+    return {dt: day, afterSunset: afterSunset};
+  }
+  return {dt: dt, afterSunset: false};
+}
+
+function mastheadDates(items, dt, afterSunset, hd) {
   const d = dayjs(dt);
   const isoDt = d.format('YYYY-MM-DD');
-  const fmtDt = d.format('ddd, D MMMM YYYY');
+  const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' (after sunset)' : '');
   items.push(
       `<time datetime="${isoDt}">${fmtDt}</time>`,
       hd.render(),

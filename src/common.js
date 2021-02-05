@@ -627,19 +627,41 @@ export function validateEmail(email) {
 
 /**
  * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * @return {any}
  * @param {any} ctx
  */
 export function setDefautLangTz(ctx) {
-  const cookieStr = ctx.cookies.get('C') || '';
-  if (cookieStr.length !== 0) {
-    ctx.set('Cache-Control', 'private');
+  const q = processCookieAndQuery(ctx.cookies.get('C'), {}, ctx.request.query);
+  let location = getLocationFromQuery(ctx.db, q);
+  let cc = 'US';
+  let tzid = null;
+  if (location !== null) {
+    tzid = location.getTzid();
+    cc = location.getCountryCode();
+  } else {
+    // try to infer location fro GeoIP
+    const ip = getIpAddress(ctx);
+    const geoip = ctx.geoipCity.get(ip);
+    if (geoip && typeof geoip.location === 'object' &&
+                 typeof geoip.location.time_zone === 'string' &&
+                 typeof geoip.location.latitude === 'number' &&
+                 typeof geoip.location.longitude === 'number' &&
+                 typeof geoip.country === 'object' &&
+                 typeof geoip.country.iso_code === 'string') {
+      cc = geoip.country.iso_code;
+      const gloc = geoip.location;
+      tzid = gloc.time_zone;
+      location = new Location(gloc.latitude, gloc.longitude, cc === 'IL', tzid, null, cc);
+    } else {
+      cc = ctx.geoipCountry.get(ip) || 'US';
+    }
   }
-  const cookie = ctx.state.cookie = querystring.parse(cookieStr);
-  const ip = getIpAddress(ctx);
-  const geoipCountryCode = ctx.state.ipCountryCode = ctx.geoipCountry.get(ip);
-  const cc = (geoipCountryCode && typeof langTzDefaults[geoipCountryCode] === 'object') ?
-    geoipCountryCode : 'US';
-  const ccDefaults = langTzDefaults[cc];
-  ctx.state.lang = cookie.lg || ccDefaults[0];
-  ctx.state.timezone = ccDefaults[1];
+  const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
+  ctx.state.lang = q.lg || ccDefaults[0];
+  ctx.state.countryCode = cc;
+  ctx.state.timezone = tzid || ccDefaults[1];
+  ctx.state.location = location;
+  ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
+  ctx.state.q = q;
+  return q;
 }
