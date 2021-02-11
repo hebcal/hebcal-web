@@ -99,8 +99,7 @@ export function downloadHref(q, filename, override={}) {
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
       .replace(/=/g, '');
-  const type = q.v === 'yahrzeit' ? 'y' : 'h';
-  return `${dlPrefix}/v2/${type}/${encoded}/${filename}`;
+  return `${dlPrefix}/v2/h/${encoded}/${filename}`;
 }
 
 /**

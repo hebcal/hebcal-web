@@ -193,6 +193,7 @@ function renderHtml(ctx) {
   const localeData = today.locale(locale).localeData();
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref(q, dlFilename);
+  const dl1year = downloadHref(q, dlFilename, {ny: 1});
   const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1}) + '.ics';
   const url = {
     canonical: 'https://www.hebcal.com/hebcal?' + urlArgs(q),
@@ -201,6 +202,7 @@ function renderHtml(ctx) {
     next: '/hebcal?' + urlArgs(q, {year: options.year + 1}),
     pdf: dlhref + '.pdf',
     ics: dlhref + '.ics',
+    ics1year: dl1year + '.ics',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
     gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
