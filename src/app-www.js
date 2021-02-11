@@ -25,7 +25,7 @@ import {parshaCsv} from './parsha-csv';
 import {shabbatApp} from './shabbat';
 import {shabbatBrowse} from './shabbat-browse';
 import {urlArgs, tooltipScript, typeaheadScript, getLocationFromQuery, makeLogInfo,
-  httpRedirect} from './common';
+  httpRedirect, clipboardScript} from './common';
 import {yahrzeitApp} from './yahrzeit';
 import {holidaysApp} from './holidays';
 import redirectMap from './redirect.json';
@@ -223,6 +223,7 @@ app.use(async function router(ctx, next) {
   } else if (rpath === '/ical/') {
     await ctx.render('ical', {
       title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
+      xtra_html: clipboardScript,
     });
   } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
     hdateJavascript(ctx);

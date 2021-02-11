@@ -11,8 +11,12 @@ href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.co
 title="Download <%=name%> to Microsoft Outlook"
 href="https://download.hebcal.com/ical/<%=basename%>.csv" download="<%=basename%>.csv">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
-<a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="https-icalendar-<%=basename%>"
-title="<%=name%> iCalendar feed URL"
-href="https://download.hebcal.com/ical/<%=basename%>.ics">
-<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar-week"></use></svg> iCalendar</a>
 </div><!-- .btn-toolbar -->
+<div class="input-group input-group-sm mb-3 me-1">
+<input type="text" class="form-control" id="grab-<%=basename%>"
+value="https://download.hebcal.com/ical/<%=basename%>.ics">
+<button id="grabBtn-<%=basename%>" class="btn btn-outline-primary grabBtn" data-clipboard-target="#grab-<%=basename%>">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#clippy"></use></svg>
+Copy
+</button>
+</div>

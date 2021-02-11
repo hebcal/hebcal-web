@@ -534,21 +534,24 @@ export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery
 export const clipboardScript = `
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
 <script>
-var clipboard = new ClipboardJS('#grabBtn', {
-  container: document.getElementsByClassName('modal')[0]
-});
-var grabBtn = document.querySelector('#grabBtn');
-var tooltipBtn=new bootstrap.Tooltip(grabBtn);
-clipboard.on('success', function(e) {
-  e.trigger.setAttribute('data-bs-original-title','Copied!');
-  tooltipBtn.show();
-  e.clearSelection();
-});
-clipboard.on('error', function(e) {
-  var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
-  var fallbackMsg='Press '+modifierKey+'C to copy';
-  e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
-  tooltipBtn.show();
+var grabBtnList = [].slice.call(document.querySelectorAll('.btn.grabBtn'));
+var grabContainer = document.getElementsByClassName('modal');
+grabBtnList.forEach(function (el) {
+  var clipboard = new ClipboardJS('#' + el.id, {
+    container: grabContainer && grabContainer[0]
+  });
+  var tooltipBtn=new bootstrap.Tooltip(el);
+  clipboard.on('success', function(e) {
+    e.trigger.setAttribute('data-bs-original-title','Copied!');
+    tooltipBtn.show();
+    e.clearSelection();
+  });
+  clipboard.on('error', function(e) {
+    var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
+    var fallbackMsg='Press '+modifierKey+'C to copy';
+    e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
+    tooltipBtn.show();
+  });
 });
 </script>
 `;
