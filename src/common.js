@@ -161,7 +161,7 @@ export function makeCookie(query) {
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
-  if (ctx.request.querystring.length === 0) {
+  if (ctx.status === 400 || ctx.request.querystring.length === 0) {
     return false;
   }
   const newCookie = makeCookie(query);
@@ -386,6 +386,8 @@ export function getLocationFromQuery(db, query) {
   } else if (!empty(query.latitude) && !empty(query.longitude)) {
     if (empty(query.tzid)) {
       throw createError(400, 'Timezone required');
+    } else if (query.tzid === 'undefined' || query.tzid === 'null') {
+      throw createError(400, `Invalid time zone specified: ${query.tzid}`);
     }
     let il = query.i === 'on';
     if (query.tzid === 'Asia/Jerusalem') {

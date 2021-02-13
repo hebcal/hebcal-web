@@ -196,6 +196,8 @@ function makeItems(ctx) {
   } catch (err) {
     if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
       ctx.throw(400, err);
+    } else {
+      ctx.status = 400;
     }
     ctx.state.message = err.message;
   }

@@ -53,6 +53,7 @@ export async function hebcalApp(ctx) {
     if (q.cfg === 'json' || q.cfg === 'fc') {
       ctx.throw(400, err);
     } else if (q.v === '1') {
+      ctx.status = 400;
       q.v = '0';
       error = err;
     }
