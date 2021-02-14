@@ -19,11 +19,13 @@ and complete your registration via the button below.</p>
 </button>
 </form>
 <p>Receive annual reminders for:</p>
-<ul>
+<ol>
 <% for (let num = 1; num <= maxId; num++) { -%>
+<%   if (details['date'+num]) { -%>
 <li><%= details['n'+num] || `Person${num}` %>'s <%= details['t'+num] %> - <%= details['date'+num] %>
+<%   } -%>
 <% } -%>
-</ul>
+</ol>
 <h4 class="mt-4">Email Privacy Policy</h4>
 <p>We will never sell or give your email address to anyone.
 <br>We will never use your email address to send you unsolicited offers.</p>

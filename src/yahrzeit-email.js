@@ -32,6 +32,9 @@ export async function yahrzeitEmailVerify(ctx) {
     const maxId = ctx.state.maxId = getMaxYahrzeitId(obj);
     for (let num = 1; num <= maxId; num++) {
       const info = getYahrzeitDetailForId(obj, num);
+      if (info === null) {
+        continue;
+      }
       const afterSunset = (info.sunset === 'on');
       const d = afterSunset ? info.day.subtract(1, 'day') : info.day;
       obj['date'+num] = d.format('D MMM YYYY');
@@ -75,6 +78,9 @@ AND e.calendar_id = y.id`;
         ctx.throw(404, `Subscription key '${q.id}' not found`);
       }
       const info = getYahrzeitDetailForId(results[0].contents, q.num);
+      if (info === null) {
+        ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
+      }
       const type = info.type;
       const typeStr = info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
       return ctx.render('yahrzeit-optout', {
