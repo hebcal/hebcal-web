@@ -4,6 +4,7 @@ import ini from 'ini';
 import Koa from 'koa';
 import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
+import send from 'koa-send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import {join} from 'path';
@@ -66,6 +67,28 @@ app.use(compress({
   br: true,
 }));
 
+const DOCUMENT_ROOT = '/var/www/html';
+
+// Send static files before timeout and regular request dispatch
+app.use(async (ctx, next) => {
+  const rpath = ctx.request.path;
+  if (rpath === '/') {
+    ctx.redirect('https://www.hebcal.com/');
+  } else if (rpath == '/robots.txt') {
+    ctx.body = 'User-agent: *\nAllow: /\n';
+  } else if (rpath === '/ical' || rpath === '/ical/') {
+    ctx.redirect('https://www.hebcal.com/ical/');
+  } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
+    ctx.set('Cache-Control', 'max-age=5184000');
+    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath === '/ping') {
+    ctx.type = 'text/plain';
+    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else {
+    await next();
+  }
+});
+
 // Fix up querystring so we can later use ctx.request.query
 app.use(async (ctx, next) => {
   const path = ctx.request.path;
@@ -103,16 +126,7 @@ app.use(timeout(9000, {status: 503, message: 'Service Unavailable'}));
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  if (rpath === '/') {
-    ctx.redirect('https://www.hebcal.com/');
-  } else if (rpath == '/robots.txt') {
-    ctx.body = 'User-agent: *\nAllow: /\n';
-  } else if (rpath === '/ical' || rpath === '/ical/') {
-    ctx.redirect('https://www.hebcal.com/ical/');
-  } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
-    ctx.set('Cache-Control', 'max-age=5184000');
-    // let serve() handle this file
-  } else if (rpath.startsWith('/v3')) {
+  if (rpath.startsWith('/v3')) {
     await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
@@ -127,7 +141,7 @@ app.use(async (ctx, next) => {
   await next();
 });
 
-app.use(serve('/var/www/html', {defer: true}));
+app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
 process.on('unhandledRejection', (err) => {
   logger.fatal(err);
