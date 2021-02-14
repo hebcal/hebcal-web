@@ -398,7 +398,7 @@ function makeMonthlyDates(events, locale) {
 }
 
 function isFresh(ctx) {
-  ctx.lastModified = ctx.launchUTCString;
+  ctx.lastModified = ctx.launchDate;
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

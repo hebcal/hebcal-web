@@ -29,7 +29,7 @@ const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
-app.context.launchUTCString = new Date().toUTCString();
+app.context.launchDate = new Date();
 
 app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();

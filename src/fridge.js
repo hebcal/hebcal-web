@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 // eslint-disable-next-line require-jsdoc
 export async function fridgeShabbat(ctx) {
   const p = makeProperties(ctx);
-  ctx.lastModified = ctx.launchUTCString;
+  ctx.lastModified = ctx.launchDate;
   return ctx.render('fridge', p);
 }
 

@@ -97,7 +97,7 @@ export async function shabbatBrowse(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   if (rpath === '/shabbat/browse/') {
-    ctx.lastModified = ctx.launchUTCString;
+    ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', 'max-age=2592000');
     return ctx.render('shabbat-browse', {
       title: 'Shabbat candle-lighting times for world cities | Hebcal Jewish Calendar',
@@ -148,7 +148,7 @@ async function countryPage(ctx, countryCode) {
     const listItems = makeAdmin1(admin1);
     const countryUrlToken = makeAnchor(countryName);
     listItems.forEach((a1) => a1.href = countryUrlToken + '-' + a1.id);
-    ctx.lastModified = ctx.launchUTCString;
+    ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', 'max-age=2592000');
     return ctx.render('shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,

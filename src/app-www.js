@@ -55,7 +55,7 @@ const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
-app.context.launchUTCString = new Date().toUTCString();
+app.context.launchDate = new Date();
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
@@ -137,12 +137,12 @@ app.use(bodyParser());
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/robots.txt') {
-    ctx.lastModified = ctx.launchUTCString;
+    ctx.lastModified = ctx.launchDate;
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/') {
     await homepage(ctx);
   } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
-    ctx.lastModified = ctx.launchUTCString;
+    ctx.lastModified = ctx.launchDate;
     await ctx.render('dir-hidden');
   } else if (typeof redirectMap[rpath] !== 'undefined') {
     const destination = redirectMap[rpath];
