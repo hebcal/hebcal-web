@@ -94,7 +94,7 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base}`);
   }
   const holidayAnchor = makeAnchor(holiday);
-  if (year && year < 100) {
+  if (year && (year < 100 || year > 9999)) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
