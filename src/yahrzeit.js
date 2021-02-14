@@ -222,13 +222,11 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  if (details.lastModified) {
-    ctx.lastModified = details.lastModified;
-    ctx.status = 200;
-    if (ctx.fresh) {
-      ctx.status = 304;
-      return;
-    }
+  ctx.lastModified = details.lastModified || ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
   }
   const maxId = getMaxYahrzeitId(query);
   if (ctx.state.ulid) {

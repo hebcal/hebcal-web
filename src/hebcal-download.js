@@ -66,6 +66,14 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
+  ctx.lastModified = new Date();
+  // etag includes actual year because options.year is never 'now'
+  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   let events = makeHebrewCalendar(ctx, options);
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
@@ -76,8 +84,6 @@ export async function hebcalDownload(ctx) {
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
   }
-  ctx.lastModified = ctx.launchDate;
-  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
   if (extension == '.ics') {
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
