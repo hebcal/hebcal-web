@@ -590,10 +590,12 @@ export function getDefaultHebrewYear(hdate) {
  * Perform a 302 redirect to `rpath`.
  * @param {any} ctx
  * @param {string} rpath
+ * @param {number} status
  */
-export function httpRedirect(ctx, rpath) {
+export function httpRedirect(ctx, rpath, status=302) {
   const proto = ctx.get('x-forwarded-proto') || 'http';
   const host = ctx.get('host') || 'www.hebcal.com';
+  ctx.status = status;
   ctx.redirect(`${proto}://${host}${rpath}`);
 }
 

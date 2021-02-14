@@ -154,8 +154,7 @@ app.use(async function router(ctx, next) {
     ctx.status = 301;
     ctx.redirect(destination);
   } else if (needsTrailingSlash[rpath]) {
-    ctx.status = 301;
-    httpRedirect(ctx, `${rpath}/`);
+    httpRedirect(ctx, `${rpath}/`, 301);
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
     ctx.set('Cache-Control', 'max-age=5184000');
     // let serve() handle this file
