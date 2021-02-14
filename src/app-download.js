@@ -9,7 +9,7 @@ import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import {join} from 'path';
 import pino from 'pino';
-import {makeLogInfo} from './common';
+import {makeLogInfo, httpRedirect} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 
@@ -96,12 +96,16 @@ app.use(async (ctx, next) => {
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
       path.startsWith('/hebcal/index.cgi/')) {
     if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
-      ctx.request.querystring = decodeURIComponent(ctx.request.querystring);
+      const qs = decodeURIComponent(ctx.request.querystring);
+      httpRedirect(ctx, `${path}?${qs}`, 301);
+      return;
     } else {
       const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');
       if (encQuery != -1) {
-        ctx.request.querystring = decodeURIComponent(path.substring(encQuery + 7));
-        ctx.request.path = path.substring(0, encQuery + 4);
+        const qs = decodeURIComponent(path.substring(encQuery + 7));
+        const path2 = path.substring(0, encQuery + 4);
+        httpRedirect(ctx, `${path2}?${qs}`, 301);
+        return;
       }
     }
     const semi = ctx.request.querystring.indexOf(';');
