@@ -26,7 +26,7 @@ function expires(ctx) {
   const tzid = ctx.state.location.getTzid();
   const today = dayjs.tz(new Date(), tzid);
   const dt = today.toDate();
-  ctx.set('Last-Modified', dt.toUTCString());
+  ctx.lastModified = dt;
   const sunday = today.day(7);
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());

@@ -137,12 +137,12 @@ app.use(bodyParser());
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/robots.txt') {
-    ctx.set('Last-Modified', ctx.launchUTCString);
+    ctx.lastModified = ctx.launchUTCString;
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/') {
     await homepage(ctx);
   } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
-    ctx.set('Last-Modified', ctx.launchUTCString);
+    ctx.lastModified = ctx.launchUTCString;
     await ctx.render('dir-hidden');
   } else if (typeof redirectMap[rpath] !== 'undefined') {
     const destination = redirectMap[rpath];

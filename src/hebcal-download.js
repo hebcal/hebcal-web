@@ -76,7 +76,7 @@ export async function hebcalDownload(ctx) {
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
   }
-  ctx.set('Last-Modified', ctx.launchUTCString);
+  ctx.lastModified = ctx.launchUTCString;
   ctx.response.etag = etag(JSON.stringify(options), {weak: true});
   if (extension == '.ics') {
     if (!query.subscribe) {

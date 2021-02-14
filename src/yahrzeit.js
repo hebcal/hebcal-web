@@ -223,7 +223,7 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
   if (details.lastModified) {
-    ctx.response.lastModified = details.lastModified;
+    ctx.lastModified = details.lastModified;
     ctx.status = 200;
     if (ctx.fresh) {
       ctx.status = 304;

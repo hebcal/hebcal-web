@@ -15,7 +15,7 @@ export function hdateJavascript(ctx) {
   const rpath = ctx.request.path;
   const dt = new Date();
   const hd = new HDate(dt);
-  ctx.set('Last-Modified', dt.toUTCString());
+  ctx.lastModified = dt;
   expires(ctx, dt);
   ctx.type = 'application/javascript';
   const dateStr = rpath === '/etc/hdate-en.js' ? hd.render() : gematriyaDate(hd);
@@ -47,7 +47,7 @@ export async function hdateXml(ctx) {
     hm: hmToArg[hm] || hm,
     hd: hd.getDate(),
   };
-  ctx.set('Last-Modified', utcString);
+  ctx.lastModified = utcString;
   expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('hdate-xml', props);
@@ -88,7 +88,7 @@ export async function parshaRss(ctx) {
     saturdayDate: saturday.locale(lang).format('D MMMM YYYY'),
     parshaPubDate: saturday.format('ddd, DD MMM YYYY') + ' 12:00:00 GMT',
   };
-  ctx.set('Last-Modified', utcString);
+  ctx.lastModified = utcString;
   expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('parsha-rss', props);

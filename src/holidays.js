@@ -229,7 +229,7 @@ export async function holidayMainIndex(ctx) {
 }
 
 export async function holidaysApp(ctx) {
-  ctx.set('Last-Modified', ctx.launchUTCString);
+  ctx.lastModified = ctx.launchUTCString;
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
