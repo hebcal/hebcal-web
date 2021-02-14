@@ -91,8 +91,11 @@ href="<%=ortUrl%>">
 <% if (reading.haftara) { %>
 <p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
 <a class="outbound" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
-<% if (reading.reason && reading.reason.haftara) { %> - <%= reading.reason.haftara %><% } %>
+<% if (reading.reason && reading.reason.haftara) { %> - <%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %> <% } %>
 </p>
+<%   if (parsha.haftara != reading.haftara) { -%>
+<p class="haftara">Regular Haftarah for <%= parsha.name %>: <a class="outbound" href="<%=parsha.haftaraHref%>"><%=parsha.haftara%></a></p>
+<%   } -%>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
 <p class="lead haftara">Haftarah for Sephardim:

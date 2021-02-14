@@ -119,6 +119,7 @@ export async function parshaDetail(ctx) {
   if (reading.sephardic) {
     reading.sephardicHref = getHaftarahHref(reading.sephardic);
   }
+  parsha.haftaraHref = getHaftarahHref(parsha.haftara);
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   const hasTriennial = !il && hyear >= 5745 && hyear <= 5830 && parshaName !== 'Vezot Haberakhah';
