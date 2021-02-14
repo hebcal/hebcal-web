@@ -26,6 +26,7 @@ export async function holidayPdf(ctx) {
     addHebrewDates: true,
     isHebrewYear,
     il: ctx.state.il,
+    version: HebrewCalendar.version(),
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);

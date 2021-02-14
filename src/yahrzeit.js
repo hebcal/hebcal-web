@@ -8,6 +8,7 @@ import {ulid} from 'ulid';
 import {makeDb} from './makedb';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
+import etag from 'etag';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
@@ -222,6 +223,8 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
+  query.startYear = new HDate().getFullYear();
+  ctx.response.etag = etag(JSON.stringify(query), {weak: true});
   ctx.lastModified = details.lastModified || ctx.launchDate;
   ctx.status = 200;
   if (ctx.fresh) {

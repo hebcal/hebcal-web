@@ -342,6 +342,7 @@ export function makeHebcalOptions(db, query) {
       delete options.candlelighting;
     }
   }
+  options.version = HebrewCalendar.version();
   return options;
 }
 
