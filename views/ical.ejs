@@ -31,42 +31,50 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <div class="row">
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Jewish Holidays</h5>
-<p class="card-text">Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel). <small>10-year perpetual feed.</small></p>
+<p class="card-text">Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).
+<small class="text-muted">10-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Jewish Holidays (all)</h5>
-<p class="card-text">Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule. <small>10-year perpetual feed.</small></p>
+<p class="card-text">Also includes Rosh Chodesh, minor fasts, and special Shabbatot. Diaspora schedule.
+<small class="text-muted">10-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Torah Readings (Diaspora)</h5>
-<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule. <small>3-year perpetual feed.</small></p>
+<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.
+<small class="text-muted">3-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Torah Readings (Diaspora)', basename: 'torah-readings-diaspora'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h4 class="card-title" lang="he" dir="rtl">פרשת השבוע - ישראל</h4>
-<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl">בראשית, נח, לך־לך</span>. Israel schedule. <small>3-year perpetual feed.</small></p>
+<h5 class="card-title" lang="he" dir="rtl" style="font-size: 1.5rem">פרשת השבוע - ישראל</h5>
+<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl">בראשית, נח, לך־לך</span>. Israel schedule.
+<small class="text-muted">3-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'פרשת השבוע - ישראל', basename: 'torah-readings-israel-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Days of the Omer</h5>
-<p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot. <small>2-year perpetual feed.</small></p>
+<p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot.
+<small class="text-muted">2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Days of the Omer', basename: 'omer'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Daf Yomi</h5>
-<p class="card-text">Daily regimen of learning the Talmud. <small>2-year perpetual feed.</small></p>
+<p class="card-text">Daily regimen of learning the Talmud.
+<small class="text-muted">2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Daf Yomi', basename: 'daf-yomi'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (English)</h5>
-<p class="card-text">Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration. <small>2-year perpetual feed.</small></p>
+<p class="card-text">Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.
+<small class="text-muted">2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (English)', basename: 'hdate-en'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (Hebrew)</h5>
-<p class="card-text">Displays the Hebrew date (such as <strong lang="he" dir="rtl">י״ח בטבת תש״ע</strong>) every day of the week. <small>2-year perpetual feed.</small></p>
+<p class="card-text">Displays the Hebrew date (such as <strong lang="he" dir="rtl">י״ח בטבת תש״ע</strong>) every day of the week.
+<small class="text-muted">2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
@@ -80,7 +88,8 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Kindness A Day from <a href="https://www.areyvut.org/">Areyvut</a></h5>
-<p class="card-text">Displays a daily act of kindness and related quotation from Tanach or Rabbinic text. <small>Perpetual feed.</small></p>
+<p class="card-text">Displays a daily act of kindness and related quotation from Tanach or Rabbinic text.
+<small class="text-muted">Perpetual feed.</small></p>
 <p><small>Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>
 <em>"The path of the righteous is like a ray of light" (Proverbs 4:18).</em></small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Kindness A Day', basename: 'kindness'}) -%>
