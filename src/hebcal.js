@@ -18,6 +18,7 @@ import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
 import fs from 'fs';
 import readline from 'readline';
+import etag from 'etag';
 
 dayjs.extend(localeData);
 
@@ -69,6 +70,14 @@ export async function hebcalApp(ctx) {
     q.year = options.year = options.isHebrewYear ?
       getDefaultHebrewYear(new HDate(dt)) :
       dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
+  }
+  if (ctx.status != 400 && q.v === '1') {
+    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
   }
   ctx.state.q = q;
   ctx.state.options = options;
