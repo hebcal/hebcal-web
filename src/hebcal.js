@@ -71,6 +71,7 @@ export async function hebcalApp(ctx) {
       getDefaultHebrewYear(new HDate(dt)) :
       dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
   }
+  options.outputType = q.cfg; // ignored by HebrewCalendar.calendar() and used for ETag
   if (ctx.status != 400 && q.v === '1') {
     ctx.response.etag = etag(JSON.stringify(options), {weak: true});
     ctx.status = 200;

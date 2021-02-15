@@ -256,6 +256,9 @@ function makeOptions(ctx) {
     locale: opts0.locale,
     il: opts0.il,
     sedrot: true,
+    // these two are ignored by HebrewCalendar.calendar() and used for ETag
+    version: HebrewCalendar.version(),
+    outputType: q.cfg,
   };
   q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
   if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {

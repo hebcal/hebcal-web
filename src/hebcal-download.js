@@ -70,6 +70,7 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
+  options.outputType = extension; // used for ETag
   // etag includes actual year because options.year is never 'now'
   ctx.response.etag = etag(JSON.stringify(options), {weak: true});
   ctx.status = 200;
