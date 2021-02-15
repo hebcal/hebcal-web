@@ -9,6 +9,7 @@ import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+import etag from 'etag';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import 'dayjs/locale/es';
@@ -22,11 +23,9 @@ import 'dayjs/locale/ru';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-function expires(ctx) {
-  const tzid = ctx.state.location.getTzid();
+function expires(ctx, tzid) {
   const today = dayjs.tz(new Date(), tzid);
-  const dt = today.toDate();
-  ctx.lastModified = dt;
+  ctx.lastModified = today.toDate();
   const sunday = today.day(7);
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
@@ -41,12 +40,18 @@ export async function shabbatApp(ctx) {
   if (isRedir) {
     return;
   }
-  makeItems(ctx);
+  const {q, options} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
-  if (ctx.request.querystring.length > 0) {
-    expires(ctx);
+  if (ctx.status != 400 && ctx.request.querystring.length > 0) {
+    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
+    expires(ctx, options.location.getTzid());
   }
-  const q = ctx.state.q;
+  makeItems(ctx, options, q);
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe');
   } else if (q.cfg === 'j') {
@@ -183,51 +188,9 @@ function getStartAndEnd(now, tzid) {
   return [midnight, endOfWeek];
 }
 
-function makeItems(ctx) {
-  const q = processCookieAndQuery(
-      ctx.cookies.get('C'),
-      {tgt: '_top'},
-      ctx.request.query,
-  );
-  q.c = q.s = 'on';
-  let opts0 = {};
-  try {
-    opts0 = makeHebcalOptions(ctx.db, q);
-  } catch (err) {
-    if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
-      ctx.throw(400, err);
-    } else {
-      ctx.status = 400;
-    }
-    ctx.state.message = err.message;
-  }
-  const location = opts0.location || ctx.db.lookupLegacyCity('New York');
-  q['city-typeahead'] = location.getName();
-  if (!opts0.location) {
-    q.geonameid = location.getGeoId();
-    q.geo = 'geoname';
-  }
-  const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
-      new Date();
-  const [midnight, endOfWeek] = getStartAndEnd(dt, location.getTzid());
-  const options = {
-    start: new Date(midnight.year(), midnight.month(), midnight.date()),
-    end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),
-    candlelighting: true,
-    location,
-    locale: opts0.locale,
-    il: opts0.il,
-    sedrot: true,
-  };
-  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
-  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
-    options.havdalahMins = opts0.havdalahMins;
-  }
-  if (!isNaN(opts0.candleLightingMins)) {
-    options.candleLightingMins = opts0.candleLightingMins;
-  }
+function makeItems(ctx, options, q) {
   const events = makeHebrewCalendar(ctx, options);
+  const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const titlePrefix = location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times';
   Object.assign(ctx.state, {
@@ -255,6 +218,53 @@ function makeItems(ctx) {
     geoUrlArgs,
     rssUrl: `https://www.hebcal.com/shabbat?cfg=r&${geoUrlArgs}&pubDate=0`,
   });
+}
+
+function makeOptions(ctx) {
+  const q = processCookieAndQuery(
+      ctx.cookies.get('C'),
+      {tgt: '_top'},
+      ctx.request.query,
+  );
+  q.c = q.s = 'on';
+  let opts0 = {};
+  try {
+    opts0 = makeHebcalOptions(ctx.db, q);
+  } catch (err) {
+    if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
+      ctx.throw(400, err);
+    } else {
+      ctx.status = 400;
+    }
+    ctx.state.message = err.message;
+  }
+  const location = opts0.location || ctx.db.lookupLegacyCity('New York');
+  q['city-typeahead'] = location.getName();
+  if (!opts0.location) {
+    q.geonameid = location.getGeoId();
+    q.geo = 'geoname';
+  }
+  const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
+    new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
+    new Date();
+  const [midnight, endOfWeek] = getStartAndEnd(dt, location.getTzid());
+  const options = {
+    start: new Date(midnight.year(), midnight.month(), midnight.date()),
+    end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),
+    candlelighting: true,
+    location,
+    locale: opts0.locale,
+    il: opts0.il,
+    sedrot: true,
+  };
+  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
+  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
+    options.havdalahMins = opts0.havdalahMins;
+  }
+  if (!isNaN(opts0.candleLightingMins)) {
+    options.candleLightingMins = opts0.candleLightingMins;
+  }
+  return {q, options};
 }
 
 function makePropsForFullHtml(ctx) {
