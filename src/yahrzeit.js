@@ -216,8 +216,8 @@ export async function yahrzeitDownload(ctx) {
   const query = Object.assign({}, details, ctx.request.query);
   // Fix for legacy duplicated key/value pairs
   for (const [key, value] of Object.entries(query)) {
-    if (Array.isArray(value) && value.length === 2 && value[0] === value[1]) {
-      query[key] = value[0];
+    if (Array.isArray(value) && value.length === 2) {
+      query[key] = value[1];
     }
   }
   if (query.v !== 'yahrzeit') {

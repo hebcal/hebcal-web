@@ -27,8 +27,8 @@ export async function holidayPdf(ctx) {
     isHebrewYear,
     il: ctx.state.il,
     // used for ETag
-    outputType: '.pdf',
     version: HebrewCalendar.version(),
+    outputType: '.pdf',
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
