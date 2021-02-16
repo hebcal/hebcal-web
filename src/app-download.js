@@ -115,13 +115,11 @@ app.use(async (ctx, next) => {
     }
   } else if (path.startsWith('/v2')) {
     const slash = path.indexOf('/', 6);
-    if (slash != -1) {
-      const data = path.substring(6, slash);
-      const filename = path.substring(slash + 1);
-      const buff = Buffer.from(data, 'base64');
-      const qs = buff.toString('ascii');
-      ctx.request.url = '/export/' + filename + '?' + qs;
-    }
+    const data = (slash === -1) ? path.substring(6) : path.substring(6, slash);
+    const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
+    const buff = Buffer.from(data, 'base64');
+    const qs = buff.toString('ascii');
+    ctx.request.url = '/export/' + filename + '?' + qs;
   }
   await next();
 });
