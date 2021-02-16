@@ -154,9 +154,10 @@ app.use(async function router(ctx, next) {
     ctx.status = 301;
     ctx.redirect(destination);
   } else if (needsTrailingSlash[rpath]) {
+    ctx.set('Cache-Control', 'immutable, max-age=31536000');
     httpRedirect(ctx, `${rpath}/`, 301);
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
-    ctx.set('Cache-Control', 'max-age=5184000');
+    ctx.set('Cache-Control', 'immutable, max-age=31536000');
     // let serve() handle this file
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);

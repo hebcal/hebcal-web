@@ -77,7 +77,7 @@ app.use(async (ctx, next) => {
   } else if (rpath == '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
   } else if (rpath === '/ical' || rpath === '/ical/') {
-    ctx.set('Cache-Control', 'max-age=5184000');
+    ctx.set('Cache-Control', 'immutable, max-age=31536000');
     ctx.redirect('https://www.hebcal.com/ical/', 301);
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', 'max-age=5184000');
@@ -99,7 +99,7 @@ app.use(async (ctx, next) => {
     // note we use unescape() instead of decodeURIComponent() due to ancient latin-1 encoding
     if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
       const qs = unescape(ctx.request.querystring).replace(/;/g, '&');
-      ctx.set('Cache-Control', 'max-age=5184000');
+      ctx.set('Cache-Control', 'immutable, max-age=31536000');
       httpRedirect(ctx, `${path}?redir=1&${qs}`, 301);
       return;
     } else {
@@ -107,7 +107,7 @@ app.use(async (ctx, next) => {
       if (encQuery != -1) {
         const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
         const path2 = path.substring(0, encQuery + 4);
-        ctx.set('Cache-Control', 'max-age=5184000');
+        ctx.set('Cache-Control', 'immutable, max-age=31536000');
         httpRedirect(ctx, `${path2}?redir=1&${qs}`, 301);
         return;
       }
