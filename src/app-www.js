@@ -133,6 +133,8 @@ app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
 app.use(bodyParser());
 
+const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
+
 // request dispatcher
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
@@ -154,10 +156,10 @@ app.use(async function router(ctx, next) {
     ctx.status = 301;
     ctx.redirect(destination);
   } else if (needsTrailingSlash[rpath]) {
-    ctx.set('Cache-Control', 'immutable, max-age=31536000');
+    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     httpRedirect(ctx, `${rpath}/`, 301);
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
-    ctx.set('Cache-Control', 'immutable, max-age=31536000');
+    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     // let serve() handle this file
   } else if (rpath.startsWith('/complete')) {
     await geoAutoComplete(ctx);
