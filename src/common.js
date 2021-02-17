@@ -2,6 +2,7 @@ import {HDate, Location, months, HebrewCalendar} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
+import uuid from 'uuid-random';
 
 export const langTzDefaults = {
   US: ['s', 'America/New_York'],
@@ -144,15 +145,18 @@ function getGeoKeysToRemove(geo) {
  * @param {any} query
  * @return {string}
  */
-export function makeCookie(query) {
-  let ck = 't=' + Math.floor(Date.now() / 1000);
+function makeCookie(query) {
+  let ck = '';
   for (const key of cookieOpts) {
     if (typeof query[key] === 'number' ||
        (typeof query[key] === 'string' && query[key].length > 0)) {
       ck += '&' + key + '=' + encodeURIComponent(query[key]);
     }
   }
-  return ck;
+  if (ck.length === 0) {
+    return false;
+  }
+  return 'uid=' + uuid() + ck;
 }
 
 /**
@@ -164,16 +168,19 @@ export function possiblySetCookie(ctx, query) {
   if (ctx.status === 400 || ctx.request.querystring.length === 0) {
     return false;
   }
+  const prevCookie = ctx.cookies.get('C');
+  if (prevCookie === 'opt_out') {
+    return false;
+  }
   const newCookie = makeCookie(query);
+  if (newCookie === false) {
+    return false;
+  }
   const ampersand = newCookie.indexOf('&');
   if (ampersand === -1) {
     return false;
   }
-  const prevCookie = ctx.cookies.get('C');
   if (prevCookie) {
-    if (prevCookie === 'opt_out') {
-      return false;
-    }
     const prev = prevCookie.substring(prevCookie.indexOf('&'));
     const current = newCookie.substring(ampersand);
     if (prev === current) {
@@ -199,6 +206,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   const query = Object.assign({}, query0);
   const ck = querystring.parse(cookieString || '');
   delete ck.t;
+  delete ck.uid;
   let found = false;
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
