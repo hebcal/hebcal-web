@@ -13,6 +13,7 @@ import pino from 'pino';
 import {makeLogInfo, httpRedirect} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
+import {googleAnalytics} from './analytics';
 
 const app = new Koa();
 
@@ -33,6 +34,7 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 app.context.launchDate = new Date();
 
 app.use(xResponseTime());
+app.use(googleAnalytics('UA-967247-1'));
 
 app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();
@@ -77,6 +79,7 @@ const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, im
 // Send static files before timeout and regular request dispatch
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
+  const visitor = ctx.state.visitor;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
   } else if (rpath == '/robots.txt') {
@@ -87,6 +90,7 @@ app.use(async (ctx, next) => {
   } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', 'max-age=5184000');
     await send(ctx, rpath, {root: DOCUMENT_ROOT});
+    visitor.event('static', 'download', rpath).send();
   } else if (rpath === '/ping') {
     ctx.type = 'text/plain';
     await send(ctx, rpath, {root: DOCUMENT_ROOT});
@@ -138,6 +142,7 @@ app.use(timeout(TIMEOUT, {status: 503, message: 'Service Unavailable'}));
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
+  const visitor = ctx.state.visitor;
   if (rpath.startsWith('/v3')) {
     await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
@@ -146,8 +151,10 @@ app.use(async (ctx, next) => {
     ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
       await yahrzeitDownload(ctx);
+      visitor.event('yahrzeit', 'download', rpath).send();
     } else if (ctx.request.query.v == '1') {
       await hebcalDownload(ctx);
+      visitor.event('hebcal', 'download', rpath).send();
     }
   }
   await next();
