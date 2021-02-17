@@ -7,6 +7,7 @@ import error from 'koa-error';
 import render from 'koa-ejs';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
+import xResponseTime from 'koa-better-response-time';
 import dayjs from 'dayjs';
 import ini from 'ini';
 import maxmind from 'maxmind';
@@ -56,6 +57,8 @@ const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.launchDate = new Date();
+
+app.use(xResponseTime());
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates

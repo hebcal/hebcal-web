@@ -7,6 +7,7 @@ import conditional from 'koa-conditional-get';
 import send from 'koa-send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
+import xResponseTime from 'koa-better-response-time';
 import {join} from 'path';
 import pino from 'pino';
 import {makeLogInfo, httpRedirect} from './common';
@@ -30,6 +31,8 @@ const iniPath = join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.launchDate = new Date();
+
+app.use(xResponseTime());
 
 app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();

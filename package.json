@@ -34,7 +34,7 @@
   "dependencies": {
     "@hebcal/core": "^3.9.0",
     "@hebcal/geo-sqlite": "^3.1.0",
-    "@hebcal/icalendar": "^4.4.0",
+    "@hebcal/icalendar": "^4.4.1",
     "@hebcal/leyning": "^4.3.0",
     "@hebcal/locales": "^3.2.0",
     "@hebcal/rest-api": "^3.3.0",
@@ -47,6 +47,7 @@
     "haversine": "^1.1.1",
     "http-errors": "^1.8.0",
     "koa": "^2.13.1",
+    "koa-better-response-time": "^1.1.0",
     "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.0.1",
     "koa-conditional-get": "^3.0.0",
