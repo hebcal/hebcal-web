@@ -107,6 +107,8 @@ export async function parshaDetail(ctx) {
     parsha.p2 = p2;
     parsha.p1anchor = makeAnchor(p1);
     parsha.p2anchor = makeAnchor(p2);
+    const haftKey = p1 === 'Nitzavim' ? p1 : p2;
+    parsha.haftara = leyning.parshiyot[haftKey].haftara;
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
