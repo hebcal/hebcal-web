@@ -40,6 +40,10 @@ export function wwwRouter() {
       ctx.state.trackPageview = false;
       ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nAllow: /\n';
+    } else if (rpath === '/ping') {
+      ctx.type = 'text/plain';
+      ctx.state.trackPageview = false;
+      // let serve() handle this file
     } else if (rpath === '/') {
       await homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
