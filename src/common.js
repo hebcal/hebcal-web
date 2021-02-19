@@ -174,7 +174,7 @@ export function possiblySetCookie(ctx, query) {
   if (prevCookie === 'opt_out') {
     return false;
   }
-  const uid = prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
+  const uid = prevCookie && prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
   const newCookie = makeCookie(query, uid);
   if (newCookie === false) {
     return false;
