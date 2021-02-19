@@ -12,7 +12,11 @@ export function googleAnalytics(tid) {
     const cookieString = ctx.cookies.get('C');
     const cookie = querystring.parse(cookieString || '');
     const options = {tid, enableBatching: true};
-    if (cookie.uid) {
+    const gaCookie = ctx.cookies.get('_ga');
+    if (gaCookie) {
+      const parts = gaCookie.split('.');
+      options.cid = parts[2] + '.' + parts[3];
+    } else if (cookie.uid) {
       options.cid = cookie.uid;
     }
     const visitor = ctx.state.visitor = ua(options);
