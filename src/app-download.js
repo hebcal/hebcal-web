@@ -34,7 +34,7 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 app.context.launchDate = new Date();
 
 app.use(xResponseTime());
-app.use(googleAnalytics('UA-967247-1'));
+app.use(googleAnalytics('UA-967247-5'));
 
 app.use(async (ctx, next) => {
   ctx.state.startTime = Date.now();
