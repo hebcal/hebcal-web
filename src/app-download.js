@@ -10,7 +10,7 @@ import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import {join} from 'path';
 import pino from 'pino';
-import {makeLogInfo, httpRedirect} from './common';
+import {makeLogInfo, httpRedirect, errorLogger} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
@@ -54,16 +54,7 @@ app.use(async (ctx, next) => {
   }));
 });
 
-app.on('error', (err, ctx) => {
-  if (ctx && ctx.status != 404) {
-    const obj = Object.assign(err, makeLogInfo(ctx));
-    if (ctx.status < 500) {
-      logger.warn(obj);
-    } else {
-      logger.error(obj);
-    }
-  }
-});
+app.on('error', errorLogger());
 
 app.use(conditional());
 app.use(compress({
@@ -79,7 +70,6 @@ const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, im
 // Send static files before timeout and regular request dispatch
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  const visitor = ctx.state.visitor;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
   } else if (rpath == '/robots.txt') {
@@ -87,14 +77,18 @@ app.use(async (ctx, next) => {
   } else if (rpath === '/ical' || rpath === '/ical/') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     ctx.redirect('https://www.hebcal.com/ical/', 301);
-  } else if (rpath === '/favicon.ico' || rpath.startsWith('/ical')) {
+  } else if (rpath === '/favicon.ico') {
+    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
+    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath.startsWith('/ical')) {
+    ctx.state.trackPageview = true;
     ctx.set('Cache-Control', 'max-age=5184000');
     await send(ctx, rpath, {root: DOCUMENT_ROOT});
-    visitor.event('static', 'download', rpath).send();
   } else if (rpath === '/ping') {
     ctx.type = 'text/plain';
     await send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else {
+    ctx.state.trackPageview = true;
     await next();
   }
 });
@@ -142,7 +136,6 @@ app.use(timeout(TIMEOUT, {status: 503, message: 'Service Unavailable'}));
 // request dispatcher
 app.use(async (ctx, next) => {
   const rpath = ctx.request.path;
-  const visitor = ctx.state.visitor;
   if (rpath.startsWith('/v3')) {
     await yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
@@ -151,10 +144,8 @@ app.use(async (ctx, next) => {
     ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
       await yahrzeitDownload(ctx);
-      visitor.event('yahrzeit', 'download', rpath).send();
     } else if (ctx.request.query.v == '1') {
       await hebcalDownload(ctx);
-      visitor.event('hebcal', 'download', rpath).send();
     }
   }
   await next();

@@ -12,8 +12,9 @@ import maxmind from 'maxmind';
 import path from 'path';
 import pino from 'pino';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {makeLogInfo} from './common';
+import {makeLogInfo, errorLogger} from './common';
 import {wwwRouter} from './router';
+import {googleAnalytics} from './analytics';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -34,6 +35,7 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 app.context.launchDate = new Date();
 
 app.use(xResponseTime());
+app.use(googleAnalytics('UA-967247-1'));
 
 app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
@@ -51,16 +53,7 @@ app.use(async (ctx, next) => {
   }));
 });
 
-app.on('error', (err, ctx) => {
-  if (ctx && ctx.status != 404) {
-    const obj = Object.assign(err, makeLogInfo(ctx));
-    if (ctx.status < 500) {
-      logger.warn(obj);
-    } else {
-      logger.error(obj);
-    }
-  }
-});
+app.on('error', errorLogger());
 
 app.use(compress({
   gzip: true,

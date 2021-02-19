@@ -34,8 +34,10 @@ const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, im
 // eslint-disable-next-line require-jsdoc
 export function wwwRouter() {
   return async function router(ctx, next) {
+    ctx.state.trackPageview = true;
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
+      ctx.state.trackPageview = false;
       ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nAllow: /\n';
     } else if (rpath === '/') {
@@ -56,9 +58,11 @@ export function wwwRouter() {
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       httpRedirect(ctx, `${rpath}/`, 301);
     } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
+      ctx.state.trackPageview = false;
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     // let serve() handle this file
     } else if (rpath.startsWith('/complete')) {
+      ctx.state.trackPageview = false;
       await geoAutoComplete(ctx);
     } else if (rpath.startsWith('/zmanim')) {
       await getZmanim(ctx);

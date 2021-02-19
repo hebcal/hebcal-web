@@ -143,9 +143,10 @@ function getGeoKeysToRemove(geo) {
 
 /**
  * @param {any} query
+ * @param {string} uid
  * @return {string}
  */
-function makeCookie(query) {
+function makeCookie(query, uid) {
   let ck = '';
   for (const key of cookieOpts) {
     if (typeof query[key] === 'number' ||
@@ -156,7 +157,8 @@ function makeCookie(query) {
   if (ck.length === 0) {
     return false;
   }
-  return 'uid=' + uuid() + ck;
+  uid = uid || uuid();
+  return 'uid=' + uid + ck;
 }
 
 /**
@@ -172,7 +174,8 @@ export function possiblySetCookie(ctx, query) {
   if (prevCookie === 'opt_out') {
     return false;
   }
-  const newCookie = makeCookie(query);
+  const uid = prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
+  const newCookie = makeCookie(query, uid);
   if (newCookie === false) {
     return false;
   }
@@ -680,4 +683,33 @@ export function setDefautLangTz(ctx) {
   ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
   return q;
+}
+
+/**
+ * Middleware for `app.on('error', errorLogger())`
+ * @return {function}
+ */
+export function errorLogger() {
+  return function(err, ctx) {
+    if (ctx && ctx.status != 404) {
+      const logger = ctx.logger;
+      const visitor = ctx.state.visitor;
+      const obj = Object.assign(err, makeLogInfo(ctx));
+      const message = err.message || err.msg;
+      const params = {
+        ec: ctx.status < 500 ? 'warning' : 'error',
+        ea: `http${ctx.status}`,
+        ev: ctx.status,
+        el: message,
+        p: ctx.request.path,
+      };
+      if (ctx.status < 500) {
+        logger.warn(obj);
+        visitor.event(params).send();
+      } else {
+        logger.error(obj);
+        visitor.event(params).exception(message).send();
+      }
+    }
+  };
 }
