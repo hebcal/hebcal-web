@@ -24,9 +24,11 @@ async function makeQuery(ctx) {
     const db = makeDb(ctx.iniConfig);
     const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
     const results = await db.query(sql, id);
+    await db.close();
     if (results && results[0]) {
-      await db.close();
       return results[0].contents;
+    } else {
+      ctx.throw(404, `Not found: ${id}`);
     }
   }
   const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
@@ -164,6 +166,7 @@ async function makeDownloadProps(ctx) {
   };
   ctx.state.url = {
     ics: dlhref + '.ics?dl=1',
+    ics1year: dlhref + '.ics?dl=1',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
     gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
