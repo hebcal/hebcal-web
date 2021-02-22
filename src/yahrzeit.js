@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
 import {ulid} from 'ulid';
-import {makeDb} from './makedb';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
 import etag from 'etag';
@@ -21,10 +20,9 @@ async function makeQuery(ctx) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/yahrzeit/edit/')) {
     const id = ctx.state.ulid = basename(rpath);
-    const db = makeDb(ctx.iniConfig);
+    const db = ctx.mysql;
     const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
     const results = await db.query(sql, id);
-    await db.close();
     if (results && results[0]) {
       return results[0].contents;
     } else {
@@ -147,7 +145,7 @@ async function makeDownloadProps(ctx) {
   const type = summarizeAnniversaryTypes(q);
   ctx.state.downloadTitle = type;
   const filename = type.toLowerCase();
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   const id = ctx.state.ulid;
   const ip = getIpAddress(ctx);
   const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
@@ -202,7 +200,7 @@ function removeEmptyArgs(q) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 async function getDetailsFromDb(ctx) {
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   const id = ctx.state.ulid = ctx.request.path.substring(4, 30);
   const obj = await getYahrzeitDetailsFromDb(ctx, db, id);
   ctx.state.relcalid = id;

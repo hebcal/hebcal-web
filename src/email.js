@@ -1,5 +1,4 @@
 /* eslint-disable require-jsdoc */
-import {makeDb} from './makedb';
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery, tooltipScript,
   typeaheadScript, validateEmail} from './common';
@@ -12,7 +11,7 @@ export async function emailVerify(ctx) {
   if (!subscriptionId) {
     ctx.throw(400, 'No subscription confirmation key');
   }
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   const sql = `
 SELECT email_address, email_candles_zipcode, email_candles_city, email_candles_geonameid
 FROM hebcal_shabbat_email
@@ -112,7 +111,7 @@ export async function emailForm(ctx) {
   if (typeof q.e === 'string') {
     const buff = Buffer.from(q.e, 'base64');
     q.em = buff.toString('ascii');
-    const db = makeDb(ctx.iniConfig);
+    const db = ctx.mysql;
     const subInfo = await getSubInfo(db, q.em);
     if (subInfo && subInfo.status === 'active') {
       Object.assign(q, subInfo);
@@ -151,7 +150,7 @@ export async function emailForm(ctx) {
       if (q.M === 'on') {
         delete q.m;
       }
-      const db = makeDb(ctx.iniConfig);
+      const db = ctx.mysql;
       if (typeof q.prev === 'string' && q.prev != q.em) {
         const subInfo = await getSubInfo(db, q.prev);
         if (subInfo && subInfo.status === 'active') {
@@ -213,7 +212,7 @@ ${unsubUrl}
 }
 
 async function unsubscribe(ctx, emailAddress, subInfo) {
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   subInfo = subInfo || await getSubInfo(db, emailAddress);
   let success;
   if (!subInfo) {

@@ -14,6 +14,7 @@ import {makeLogInfo, httpRedirect, errorLogger} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
+import {MysqlDb} from './db';
 
 const app = new Koa();
 
@@ -30,6 +31,8 @@ app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
+
+app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 

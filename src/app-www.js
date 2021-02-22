@@ -15,6 +15,7 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {makeLogInfo, errorLogger} from './common';
 import {wwwRouter} from './router';
 import {googleAnalytics} from './analytics';
+import {MysqlDb} from './db';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -31,6 +32,8 @@ app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
 app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
+
+app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 

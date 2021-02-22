@@ -1,5 +1,4 @@
 /* eslint-disable require-jsdoc */
-import {makeDb} from './makedb';
 import {getIpAddress, validateEmail, empty} from './common';
 import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetailsFromDb,
   summarizeAnniversaryTypes} from './common2';
@@ -13,7 +12,7 @@ export async function yahrzeitEmailVerify(ctx) {
   if (key.length !== 26) {
     ctx.throw(400, `Invalid verification key '${key}'`);
   }
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
   const results = await db.query(sql, [key]);
   if (!results || !results[0]) {
@@ -60,7 +59,7 @@ export async function yahrzeitEmailSub(ctx) {
     ctx.response.type = ctx.request.header['accept'] = 'application/json';
   }
   if (!empty(q.id) && !empty(q.num) && q.unsubscribe === '1') {
-    const db = makeDb(ctx.iniConfig);
+    const db = ctx.mysql;
     const sql = 'REPLACE INTO yahrzeit_optout (email_id, num, deactivated) VALUES (?, ?, 1)';
     await db.query(sql, [q.id, q.num]);
     if (q.commit === '1') {
@@ -99,7 +98,7 @@ AND e.calendar_id = y.id`;
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
   const id = ulid().toLowerCase();
-  const db = makeDb(ctx.iniConfig);
+  const db = ctx.mysql;
   const ip = getIpAddress(ctx);
   const sql = `INSERT INTO yahrzeit_email
   (id, email_addr, calendar_id, sub_status, created, ip_addr)
