@@ -233,7 +233,7 @@ function renderHtml(ctx) {
       geoUrlArgs += '&m=' + options.havdalahMins;
     }
     geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
-    const hyear = events[events.length - 1].getDate().getFullYear();
+    const hyear = options.isHebrewYear ? options.year : events[0].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
   const localeConfig = {
