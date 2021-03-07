@@ -1,4 +1,4 @@
-import {HDate, Location, months, HebrewCalendar} from '@hebcal/core';
+import {HDate, Location, months, HebrewCalendar, greg} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -712,4 +712,36 @@ export function errorLogger() {
       }
     }
   };
+}
+
+/**
+ * @param {string} gy Gregorian Year
+ * @param {string} gm Gregorian Month
+ * @param {string} gd Gregorian Day
+ * @return {Date}
+ */
+export function makeGregDate(gy, gm, gd) {
+  const yy = parseInt(gy, 10);
+  const mm = parseInt(gm, 10);
+  const dd = parseInt(gd, 10);
+  if (isNaN(dd)) {
+    throw createError(400, `Gregorian day must be numeric: ${gd}`);
+  } else if (isNaN(mm)) {
+    throw createError(400, `Gregorian month must be numeric: ${gm}`);
+  } else if (isNaN(yy)) {
+    throw createError(400, `Gregorian year must be numeric: ${gy}`);
+  } else if (mm > 12 || mm < 1) {
+    throw createError(400, `Gregorian month out of valid range 1-12: ${gm}`);
+  } else if (yy > 9999 || yy < 1) {
+    throw createError(400, `Gregorian year out of valid range 0001-9999: ${gy}`);
+  }
+  const maxDay = greg.daysInMonth(mm, yy);
+  if (dd < 1 || dd > maxDay) {
+    throw createError(400, `Gregorian day ${dd} out of valid range for ${mm}/${yy}`);
+  }
+  const dt = new Date(yy, mm - 1, dd);
+  if (yy < 100) {
+    dt.setFullYear(yy);
+  }
+  return dt;
 }

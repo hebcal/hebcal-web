@@ -1,4 +1,4 @@
-import {empty, getIpAddress} from './common';
+import {empty, getIpAddress, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import nodemailer from 'nodemailer';
 
@@ -123,7 +123,7 @@ export function getYahrzeitDetailForId(query, id) {
   const type = query[`t${id}`] || 'Yahrzeit';
   const sunset = query[`s${id}`];
   const name = query[`n${id}`] ? query[`n${id}`].trim() : `Person${id}`;
-  let day = dayjs(new Date(yy, mm - 1, dd));
+  let day = dayjs(makeGregDate(yy, mm, dd));
   if (sunset === 'on') {
     day = day.add(1, 'day');
   }

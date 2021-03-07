@@ -1,6 +1,6 @@
-import {HDate, greg, HebrewCalendar, Sedra, ParshaEvent, Locale} from '@hebcal/core';
+import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale} from '@hebcal/core';
 import dayjs from 'dayjs';
-import {empty} from './common';
+import {empty, makeGregDate} from './common';
 import gematriya from 'gematriya';
 
 const heInStr = 'בְּ';
@@ -182,28 +182,7 @@ function parseConverterQuery(ctx) {
       if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
         return g2h(new Date(), gs, true);
       }
-      const gy = parseInt(query.gy, 10);
-      const gd = parseInt(query.gd, 10);
-      const gm = parseInt(query.gm, 10);
-      if (isNaN(gd)) {
-        throw new Error('Gregorian day must be numeric');
-      } else if (isNaN(gm)) {
-        throw new Error('Gregorian month must be numeric');
-      } else if (isNaN(gy)) {
-        throw new Error('Gregorian year must be numeric');
-      } else if (gm > 12 || gm < 1) {
-        throw new Error('Gregorian month out of valid range 1-12');
-      } else if (gy > 9999 || gy < 1) {
-        throw new Error('Gregorian year out of valid range 0001-9999');
-      }
-      const maxDay = greg.daysInMonth(gm, gy);
-      if (gd < 1 || gd > maxDay) {
-        throw new Error(`Gregorian day ${gd} out of valid range for ${gm}/${gy}`);
-      }
-      const dt = new Date(gy, gm - 1, gd);
-      if (gy < 100) {
-        dt.setFullYear(gy);
-      }
+      const dt = makeGregDate(query.gy, query.gm, query.gd);
       return g2h(dt, gs, false);
     } else {
       const dt = (!empty(query.t) && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) ?
