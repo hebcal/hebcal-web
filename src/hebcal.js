@@ -163,7 +163,7 @@ async function getTzids() {
 
 function renderHtml(ctx) {
   const options = ctx.state.options;
-  const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
+  const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? '🇮🇱' : 'Diaspora';
   let shortTitle = 'Jewish Calendar ';
   if (options.month) {
     shortTitle += greg.monthNames[options.month] + ' ';

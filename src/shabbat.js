@@ -247,7 +247,13 @@ function makeOptions(ctx) {
   const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
     new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
     new Date();
-  const [midnight, endOfWeek] = getStartAndEnd(dt, location.getTzid());
+  let startAndEnd;
+  try {
+    startAndEnd = getStartAndEnd(dt, location.getTzid());
+  } catch (err) {
+    ctx.throw(400, err); // RangeError: Invalid time zone specified
+  }
+  const [midnight, endOfWeek] = startAndEnd;
   const options = {
     start: new Date(midnight.year(), midnight.month(), midnight.date()),
     end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),

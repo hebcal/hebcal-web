@@ -58,7 +58,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <div class="table-responsive">
 <table class="table table-striped">
 <thead>
-<tr><th>Holiday</th><th>Starts</th><th>Ends</th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
+<tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
 </thead>
 <tbody>
 <% occursOn.forEach((item) => { %>

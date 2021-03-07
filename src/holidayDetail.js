@@ -165,16 +165,13 @@ function makeNextObserved(item, year, il) {
   const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
   const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
-  let nextObserved = `${verb}${beginsWhen} on ${dateStrShort}`;
+  const where = (item.basename === 'Shavuot' || item.basename === 'Pesach') ?
+    (il ? ' in 🇮🇱' : ' in the Diaspora') : '';
+  const nextObserved = `${verb}${where}${beginsWhen} on ${dateStrShort}`;
   const iso = item.d.format('YYYY-MM-DD');
   const dateStrLong = item.d.format('dddd, D MMMM YYYY');
   // eslint-disable-next-line max-len
-  let nextObservedHtml = `${verb}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
-  if (item.basename === 'Shavuot' || item.basename === 'Pesach') {
-    const suffix = il ? ' in Israel' : ' in the Diaspora';
-    nextObserved += suffix;
-    nextObservedHtml += suffix;
-  }
+  const nextObservedHtml = `${verb}${where}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
   if (!item.duration) {
     return [nextObserved, nextObservedHtml];
   }

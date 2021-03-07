@@ -112,7 +112,9 @@ div.pbba { page-break-before: always }
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
 <h2><%= shortTitle %>
-<% if (q.c === 'on') { %><br><% } %><small class="text-muted"><%= locationName %></small></h2>
+<% if (q.c === 'on') { %><br><% } %><span class="text-muted h4"><%= locationName -%>
+<%  if (options.il && typeof location === 'object' && location.getCountryCode() !== 'IL') { %> (🇮🇱 holiday schedule)<% } -%>
+</span></h2>
 <div class="d-print-none">
   <div class="btn-group me-1" role="group" data-bs-toggle="buttons">
    <label class="btn btn-secondary btn-sm active mb-1">
