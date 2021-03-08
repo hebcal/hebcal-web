@@ -32,7 +32,7 @@ function expires(ctx, tzid) {
 }
 
 export async function shabbatApp(ctx) {
-  if (ctx.request.method === 'POST') {
+  if (ctx.method === 'POST') {
     ctx.set('Allow', 'GET');
     ctx.throw(405, 'POST not allowed; try using GET instead');
   }

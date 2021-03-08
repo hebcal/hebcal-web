@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^3.9.1",
-    "@hebcal/geo-sqlite": "^3.2.0",
+    "@hebcal/geo-sqlite": "^3.3.1",
     "@hebcal/icalendar": "^4.4.1",
     "@hebcal/leyning": "^4.3.0",
     "@hebcal/locales": "^3.2.0",
