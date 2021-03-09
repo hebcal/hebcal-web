@@ -461,8 +461,13 @@ export function getLocationFromQuery(db, query) {
     const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, tzid);
     query.geo = 'pos';
     return new Location(latitude, longitude, il, tzid, cityName);
-  } else if (query.geo === 'pos' && !hasLatLong(query)) {
-    throw createError(400, 'Missing or empty latitude/longitude parameters');
+  } else if (query.geo === 'pos') {
+    if (empty(query.latitude) && empty(query.longitude)) {
+      query.geo = 'none';
+      return null;
+    } else {
+      throw createError(400, 'geo=pos requires latitude, longitude, tzid parameters');
+    }
   }
   return null;
 }
@@ -516,7 +521,7 @@ function makeGeoCityName(latitude, longitude, tzid) {
   const lodeg = longitude < 0 ? Math.ceil(longitude) * -1 : Math.floor(longitude);
   const lomin = Math.floor(60 * (Math.abs(longitude) - lodeg));
 
-  return `${ladeg}°${lamin}′${ladir}, ${lodeg}°${lomin}′${lodir}, ${tzid}`;
+  return `${ladeg}°${lamin}′${ladir} ${lodeg}°${lomin}′${lodir} ${tzid}`;
 }
 
 export const localeMap = {
