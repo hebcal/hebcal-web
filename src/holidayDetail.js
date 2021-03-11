@@ -122,7 +122,10 @@ export async function holidayDetail(ctx) {
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
-  const descrMedium = getHolidayDescription(next.event, false);
+  let descrMedium = getHolidayDescription(next.event, false);
+  if (descrMedium.charAt(descrMedium.length - 1) !== '.') {
+    descrMedium += '.';
+  }
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrLong = wikipediaText || descrMedium;
   const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
