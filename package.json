@@ -60,7 +60,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.5.0",
     "pdfkit": "^0.11.0",
-    "pino": "^6.11.1",
+    "pino": "^6.11.2",
     "random-bigint": "0.0.1",
     "ulid": "^2.3.0",
     "universal-analytics": "^0.4.23",

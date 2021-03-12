@@ -51,11 +51,11 @@ export async function getZmanim(ctx) {
   if (q.cfg !== 'json') {
     throw createError(400, 'Parameter cfg=json is required');
   }
-  const {isRange, startD, endD} = getStartAndEnd(q);
   const loc = ctx.state.location = getLocationFromQuery(ctx.db, q);
   if (loc === null) {
     throw createError(400, 'Location is required');
   }
+  const {isRange, startD, endD} = getStartAndEnd(q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', 'max-age=2592000');
   } else {
@@ -82,7 +82,7 @@ export async function getZmanim(ctx) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function getStartAndEnd(q) {
+function getStartAndEnd(q, tzid) {
   if (!empty(q.start) && empty(q.end)) {
     q.end = q.start;
   } else if (empty(q.start) && !empty(q.end)) {
@@ -94,8 +94,8 @@ function getStartAndEnd(q) {
     delete q.end;
   }
   let isRange = !empty(q.start) && !empty(q.end);
-  const startD = isRange ? isoToDayjs(q.start) : empty(q.date) ? dayjs() : isoToDayjs(q.date);
-  let endD = isRange ? isoToDayjs(q.end) : empty(q.date) ? dayjs() : isoToDayjs(q.date);
+  const startD = isRange ? isoToDayjs(q.start) : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
+  let endD = isRange ? isoToDayjs(q.end) : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
   if (isRange) {
     if (endD.isBefore(startD, 'd')) {
       isRange = false;
@@ -105,6 +105,15 @@ function getStartAndEnd(q) {
     }
   }
   return {isRange, startD, endD};
+}
+
+/**
+ * @param {string} tzid
+ * @return {dayjs.Dayjs}
+ */
+function nowInTimezone(tzid) {
+  const isoDate = Zmanim.formatISOWithTimeZone(tzid, new Date());
+  return dayjs(isoDate.substring(0, 10));
 }
 
 /**
