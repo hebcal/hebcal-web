@@ -387,6 +387,9 @@ function getEventsForId(query, id, startYear, endYear) {
         memo += `\\n\\n${urlPrefix}#row${id}`;
       }
       ev.memo = memo;
+      if (query.ulid) {
+        ev.uid = `hebcal-${hyear}-${query.ulid}-${id}`;
+      }
       events.push(ev);
     }
   }
