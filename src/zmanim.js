@@ -58,6 +58,7 @@ export async function getZmanim(ctx) {
   const {isRange, startD, endD} = getStartAndEnd(q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', 'max-age=2592000');
+    ctx.lastModified = new Date();
   } else {
     expires(ctx);
   }
@@ -73,11 +74,13 @@ export async function getZmanim(ctx) {
         times[key][isoDate] = val;
       }
     }
-    ctx.body = {location: loc, times};
+    const start = startD.format('YYYY-MM-DD');
+    const end = endD.format('YYYY-MM-DD');
+    ctx.body = {date: {start, end}, location: loc, times};
   } else {
     const times = getTimes(startD, loc);
     const isoDate = startD.format('YYYY-MM-DD');
-    ctx.body = {location: loc, date: isoDate, times};
+    ctx.body = {date: isoDate, location: loc, times};
   }
 }
 
@@ -94,8 +97,9 @@ function getStartAndEnd(q, tzid) {
     delete q.end;
   }
   let isRange = !empty(q.start) && !empty(q.end);
-  const startD = isRange ? isoToDayjs(q.start) : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
-  let endD = isRange ? isoToDayjs(q.end) : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
+  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
+  const startD = isRange ? isoToDayjs(q.start) : singleD;
+  let endD = isRange ? isoToDayjs(q.end) : singleD;
   if (isRange) {
     if (endD.isBefore(startD, 'd')) {
       isRange = false;
