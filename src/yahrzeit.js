@@ -1,6 +1,6 @@
 import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
-import {eventsToCsv} from '@hebcal/rest-api';
+import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, clipboardScript, tooltipScript} from './common';
@@ -43,6 +43,10 @@ async function makeQuery(ctx) {
 export async function yahrzeitApp(ctx) {
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
+  if (maxId > 0 && q.cfg === 'json') {
+    ctx.body = renderJson(maxId, q);
+    return;
+  }
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   if (maxId > 0) {
@@ -103,6 +107,23 @@ document.getElementById("newrow").onclick = function() {
 })();
 </script>`,
   });
+}
+
+// eslint-disable-next-line require-jsdoc
+function renderJson(maxId, q) {
+  delete q.ulid;
+  const events = makeYahrzeitEvents(maxId, q);
+  const results = eventsToClassicApi(events, {}, false);
+  for (const item of results.items) {
+    delete item.hebrew;
+    delete item.category;
+    if (typeof item.memo === 'string') {
+      item.memo = item.memo.replace(/\\n/g, '\n');
+    }
+  }
+  results.title = makeCalendarTitle(q);
+  delete results.location;
+  return results;
 }
 
 // eslint-disable-next-line require-jsdoc

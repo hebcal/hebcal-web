@@ -60,20 +60,11 @@ does Hebcal determine an anniversary occurring in Adar?</a>
 <div class="d-print-none">
 <p class="lead" id="form">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 or Hebrew Anniversaries.</p>
-<p>Yahrzeit refers to the anniversary, according to the Hebrew calendar, of the
-day of death of a loved one. Alternative spellings include <em>yahrtzeit</em>,
-<em>yortsayt</em>, and <em>yartzeit</em>. On the anniversary of a death, it is
-the custom to light a candle to commemorate the departure of a loved one.
-<sup><a href="https://en.wikipedia.org/wiki/Bereavement_in_Judaism#Yahrzeit">[1]</a></sup></p>
 <p>In the form below, enter the date of death (or birth or anniversary). Use
 the "+ Add another name" button at the bottom of the page to add additional
 names. After you generate a personal anniversary calendar, you will be able to
 print, subscribe to annual email reminders, or download a multi-year calendar
-feed to Apple, Google, Outlook, or other web, desktop and mobile calendar
-apps.</p>
-<p>If you know the Hebrew but not the Gregorian date, use the <a
-href="/converter">Hebrew Date Converter</a> to get the Gregorian date
-and then come back to this page.</p>
+feed to Apple, Google, Outlook, and other calendar apps.</p>
 </div><!-- .d-print-none -->
 <form class="d-print-none" method="post" action="/yahrzeit">
 <div id="rows">
@@ -106,11 +97,20 @@ and then come back to this page.</p>
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
-
-<p class="d-print-none text-muted mt-3">Would you like to use this calendar for your website? See
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row d-print-none mt-3">
+<p>Yahrzeit refers to the anniversary, according to the Hebrew calendar, of the
+day of death of a loved one. Alternative spellings include <em>yahrtzeit</em>,
+<em>yortsayt</em>, and <em>yartzeit</em>. On the anniversary of a death, it is
+the custom to light a candle to commemorate the departure of a loved one.
+<sup><a href="https://en.wikipedia.org/wiki/Bereavement_in_Judaism#Yahrzeit">[1]</a></sup></p>
+<p>If you know the Hebrew but not the Gregorian date, use the <a
+href="/converter">Hebrew Date Converter</a> to get the Gregorian date
+and then come back to this page.</p>
+<p class="text-muted">Would you like to use this calendar for your website? See
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
-</div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
 <% if (tables !== null) { -%>
