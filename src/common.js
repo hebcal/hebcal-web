@@ -196,6 +196,11 @@ export function possiblySetCookie(ctx, query) {
     overwrite: true,
     httpOnly: false,
   });
+  const visitor = ctx.state.visitor;
+  if (typeof visitor === 'object' && typeof visitor.set === 'function') {
+    const newUuid = newCookie.substring(4, ampersand);
+    visitor.set('uid', newUuid);
+  }
   return true;
 }
 
