@@ -15,6 +15,7 @@ import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
+import {zmanimIcalendar} from './zmanim';
 
 const app = new Koa();
 
@@ -26,7 +27,9 @@ const logger = app.context.logger = pino({
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
-app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+const geoDb = app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+geoDb.cacheZips();
+geoDb.cacheGeonames();
 
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = join(iniDir, 'hebcal-dot-com.ini');
@@ -150,6 +153,8 @@ app.use(async (ctx, next) => {
     } else if (ctx.request.query.v == '1') {
       await hebcalDownload(ctx);
     }
+  } else if (rpath.startsWith('/zmanim')) {
+    await zmanimIcalendar(ctx);
   }
   await next();
 });

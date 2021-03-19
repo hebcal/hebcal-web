@@ -27,7 +27,9 @@ const logger = app.context.logger = pino(dest);
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
-app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+const geoDb = app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+geoDb.cacheZips();
+geoDb.cacheGeonames();
 
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
