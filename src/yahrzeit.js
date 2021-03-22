@@ -22,7 +22,7 @@ async function makeQuery(ctx) {
     const id = ctx.state.ulid = basename(rpath);
     const db = ctx.mysql;
     const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
-    const results = await db.query(sql, id);
+    const results = await db.query({sql, values: [id], timeout: 5000});
     if (results && results[0]) {
       return results[0].contents;
     } else {
@@ -172,7 +172,7 @@ async function makeDownloadProps(ctx) {
   const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';
   delete q.ulid;
-  await db.query(sql, [id, ip, JSON.stringify(q)]);
+  await db.query({sql, values: [id, ip, JSON.stringify(q)], timeout: 5000});
   await db.close();
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
