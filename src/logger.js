@@ -22,11 +22,11 @@ export function makeLogger(logDir) {
     level: process.env.NODE_ENV == 'production' ? 'info' : 'debug',
   }, dest);
 
-  // asynchronously flush every 3 seconds to keep the buffer empty
+  // asynchronously flush every 2 seconds to keep the buffer empty
   // in periods of low activity
   setInterval(() => {
     logger.flush();
-  }, 3000).unref();
+  }, 2000).unref();
 
   // use pino.final to create a special logger that
   // guarantees final tick writes

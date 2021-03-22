@@ -578,6 +578,9 @@ export function makeLogInfo(ctx, attrs={}) {
   if (!empty(cookie)) info.cookie = cookie;
   const enc = ctx.response.get('content-encoding');
   if (!empty(enc)) info.enc = enc;
+  if (ctx.state.timeout === true) {
+    info.timeout = true;
+  }
   return info;
 }
 
