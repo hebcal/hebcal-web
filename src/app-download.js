@@ -8,6 +8,7 @@ import send from 'koa-send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
+import zlib from 'zlib';
 import {join} from 'path';
 import {makeLogger} from './logger';
 import {makeLogInfo, httpRedirect, errorLogger} from './common';
@@ -65,8 +66,13 @@ app.on('error', errorLogger());
 app.use(conditional());
 app.use(compress({
   gzip: true,
-  deflate: true,
-  br: true,
+  deflate: false,
+  br: {
+    params: {
+      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 3,
+    },
+  },
 }));
 
 const DOCUMENT_ROOT = '/var/www/html';

@@ -10,6 +10,7 @@ import xResponseTime from 'koa-better-response-time';
 import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
+import zlib from 'zlib';
 import {makeLogger} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {makeLogInfo, errorLogger} from './common';
@@ -64,8 +65,13 @@ app.on('error', errorLogger());
 
 app.use(compress({
   gzip: true,
-  deflate: true,
-  br: true,
+  deflate: false,
+  br: {
+    params: {
+      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 3,
+    },
+  },
 }));
 
 render(app, {
