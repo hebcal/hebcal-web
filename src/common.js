@@ -585,16 +585,21 @@ grabBtnList.forEach(function (el) {
  * @return {Object}
  */
 export function makeLogInfo(ctx, attrs={}) {
-  return Object.assign({
+  const info = Object.assign({
     status: ctx.response.status,
     length: ctx.response.length,
     ip: ctx.get('x-client-ip') || ctx.request.ip,
     method: ctx.request.method,
     url: ctx.request.originalUrl,
     ua: ctx.get('user-agent'),
-    ref: ctx.get('referer'),
-    cookie: ctx.get('cookie'),
   }, attrs);
+  const ref = ctx.get('referer');
+  if (!empty(ref)) info.ref = ref;
+  const cookie = ctx.get('cookie');
+  if (!empty(cookie)) info.cookie = cookie;
+  const enc = ctx.response.get('content-encoding');
+  if (!empty(enc)) info.enc = enc;
+  return info;
 }
 
 /**
