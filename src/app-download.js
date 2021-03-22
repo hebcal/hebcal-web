@@ -9,7 +9,7 @@ import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import {join} from 'path';
-import pino from 'pino';
+import {makeLogger} from './logger';
 import {makeLogInfo, httpRedirect, errorLogger} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
@@ -19,11 +19,9 @@ import {zmanimIcalendar} from './zmanim';
 
 const app = new Koa();
 
-const logDir = process.env.NODE_ENV == 'production' ? '/var/log/hebcal' : '.';
-const dest = pino.destination(logDir + '/access.log');
-const logger = app.context.logger = pino({
-  level: process.env.NODE_ENV == 'production' ? 'info' : 'debug',
-}, dest);
+const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
+const {logger, dest} = makeLogger(logDir);
+app.context.logger = logger;
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
@@ -163,12 +161,6 @@ app.use(async (ctx, next) => {
 
 app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
-process.on('unhandledRejection', (err) => {
-  logger.fatal(err);
-  console.log(err);
-  process.exit(1);
-});
-
 if (process.env.NODE_ENV == 'production' ) {
   fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
   process.on('SIGHUP', () => dest.reopen());
@@ -176,6 +168,7 @@ if (process.env.NODE_ENV == 'production' ) {
 
 const port = process.env.NODE_PORT || 8080;
 app.listen(port, () => {
-  logger.info('Koa server listening on port ' + port);
-  console.log('Koa server listening on port ' + port);
+  const msg = 'Koa server listening on port ' + port;
+  logger.info(msg);
+  console.log(msg);
 });

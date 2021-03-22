@@ -685,7 +685,7 @@ export function setDefautLangTz(ctx) {
  */
 export function errorLogger() {
   return function(err, ctx) {
-    if (ctx && ctx.status != 404) {
+    if (ctx && ctx.status != 404 && ctx.status != 200) {
       const logger = ctx.logger;
       const visitor = ctx.state.visitor;
       const obj = Object.assign(err, makeLogInfo(ctx));

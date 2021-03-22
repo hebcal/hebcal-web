@@ -10,7 +10,7 @@ import xResponseTime from 'koa-better-response-time';
 import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
-import pino from 'pino';
+import {makeLogger} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {makeLogInfo, errorLogger} from './common';
 import {wwwRouter} from './router';
@@ -22,8 +22,8 @@ const DOCUMENT_ROOT = '/var/www/html';
 const app = new Koa();
 
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
-const dest = pino.destination(logDir + '/access.log');
-const logger = app.context.logger = pino(dest);
+const {logger, dest} = makeLogger(logDir);
+app.context.logger = logger;
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
@@ -116,12 +116,6 @@ app.use(wwwRouter());
 
 app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
-process.on('unhandledRejection', (err) => {
-  logger.fatal(err);
-  console.log(err);
-  process.exit(1);
-});
-
 if (process.env.NODE_ENV === 'production' ) {
   fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
   process.on('SIGHUP', () => dest.reopen());
@@ -129,6 +123,7 @@ if (process.env.NODE_ENV === 'production' ) {
 
 const port = process.env.NODE_PORT || 8080;
 app.listen(port, () => {
-  logger.info('Koa server listening on port ' + port);
-  console.log('Koa server listening on port ' + port);
+  const msg = 'Koa server listening on port ' + port;
+  logger.info(msg);
+  console.log(msg);
 });
