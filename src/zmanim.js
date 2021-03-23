@@ -293,7 +293,13 @@ export async function zmanimIcalendar(ctx) {
     }
   }
   events.sort((a, b) => a.eventTime - b.eventTime);
-  const options = {location, title: `Hebcal Zmanim ${location.getShortName()}`};
+  const options = {
+    location,
+    title: `Hebcal Zmanim ${location.getShortName()}`,
+    ttl: 'PT1D',
+  };
+  ctx.set('Cache-Control', 'max-age=86400');
+  ctx.lastModified = new Date();
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await eventsToIcalendar(events, options);
 }
