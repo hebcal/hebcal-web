@@ -296,7 +296,7 @@ export async function zmanimIcalendar(ctx) {
   const options = {
     location,
     title: `Hebcal Zmanim ${location.getShortName()}`,
-    ttl: 'PT1D',
+    publishedTTL: 'PT1D',
   };
   ctx.set('Cache-Control', 'max-age=86400');
   ctx.lastModified = new Date();
