@@ -3,7 +3,7 @@ import createError from 'http-errors';
 import path from 'path';
 import {
   clipboardScript, getLocationFromQuery,
-  httpRedirect, tooltipScript, typeaheadScript, urlArgs,
+  httpRedirect,
 } from './common';
 import {geoAutoComplete} from './complete';
 import {hebrewDateConverter} from './converter';
@@ -18,6 +18,7 @@ import redirectMap from './redirect.json';
 import {parshaDetail, parshaIndex} from './sedrot';
 import {shabbatApp} from './shabbat';
 import {shabbatBrowse} from './shabbat-browse';
+import {shabbatJsLink} from './shabbat-link';
 import {yahrzeitApp} from './yahrzeit';
 import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 import {getZmanim} from './zmanim';
@@ -116,17 +117,7 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/email')) {
       await emailForm(ctx);
     } else if (rpath.startsWith('/link')) {
-      const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
-      const location0 = getLocationFromQuery(ctx.db, q);
-      const location = location0 || ctx.db.lookupLegacyCity('New York');
-      const geoUrlArgs = urlArgs(q);
-      const geoUrlArgsDbl = geoUrlArgs.replace(/&/g, '&amp;');
-      await ctx.render('link', {
-        q, geoUrlArgs, geoUrlArgsDbl,
-        locationName: location.getName(),
-        title: 'Add weekly Shabbat candle-lighting times to your synagogue website | Hebcal Jewish Calendar',
-        xtra_html: tooltipScript + typeaheadScript,
-      });
+      await shabbatJsLink(ctx);
     } else if (rpath === '/ical/') {
       await ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
