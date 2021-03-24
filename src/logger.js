@@ -31,14 +31,15 @@ export function makeLogger(logDir) {
   // use pino.final to create a special logger that
   // guarantees final tick writes
   const handler = pino.final(logger, (err, finalLogger, evt) => {
-    finalLogger.info(`${evt} caught`);
+    const msg = `Koa server caught ${evt}; exiting...`;
+    console.log(msg);
+    finalLogger.info(msg);
     if (err) finalLogger.fatal(err, 'error caused exit');
     process.exit(err ? 1 : 0);
   });
 
   // catch all the ways node might exit
   process.on('beforeExit', () => handler(null, 'beforeExit'));
-  process.on('exit', () => handler(null, 'exit'));
   process.on('uncaughtException', (err) => handler(err, 'uncaughtException'));
   process.on('unhandledRejection', (err) => handler(err, 'unhandledRejection'));
   process.on('SIGINT', () => handler(null, 'SIGINT'));
