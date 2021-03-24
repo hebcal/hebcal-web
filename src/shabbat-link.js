@@ -9,10 +9,8 @@ export async function shabbatJsLink(ctx) {
   if (q.M === 'on') {
     delete q.m;
   }
-  if (empty(q.lg)) {
-    q.lg = 's';
-  }
-  for (const key of ['b', 'M', 'm', 'a', 'lg']) {
+  q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
+  for (const key of ['b', 'M', 'm', 'lg']) {
     if (!empty(q[key])) {
       geoUrlArgs += `&${key}=${q[key]}`;
     }

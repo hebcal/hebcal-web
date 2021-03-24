@@ -41,14 +41,24 @@ src="https://www.hebcal.com/shabbat?cfg=j&amp;<%= geoUrlArgs %>&amp;tgt=_top">
 <p>Enter a new city to get revised HTML tags for your synagogue's web page.</p>
 
 <form action="<%= rpath %>" autocomplete="off" method="get">
+<div class="form-floating">
+<select name="lg" class="form-select mb-2" id="lg">
+<option <%- (q.lg === 's') ? 'selected' : '' -%> value="s">Sephardic transliterations</option>
+<option <%- (q.lg === 'a') ? 'selected' : '' -%> value="a">Ashkenazis transliterations</option>
+<option <%- (q.lg === 'h') ? 'selected' : '' -%> value="h">Hebrew - עברית</option>
+<option <%- (q.lg === 'es') ? 'selected' : '' -%> value="es">Spanish - español</option>
+<option <%- (q.lg === 'fr') ? 'selected' : '' -%> value="fr">French - français</option>
+<option <%- (q.lg === 'ru') ? 'selected' : '' -%> value="ru">Russian - ру́сский язы́к</option>
+<option <%- (q.lg === 'pl') ? 'selected' : '' -%> value="pl">Polish - język polski</option>
+<option <%- (q.lg === 'fi') ? 'selected' : '' -%> value="fi">Finnish - Suomalainen</option>
+<option <%- (q.lg === 'hu') ? 'selected' : '' -%> value="hu">Hungarian - Magyar nyelv</option>
+</select>
+<label for="lg">Event titles</label>
+</div>
 <input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
 <input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
 <input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
 <%- await include('partials/city-and-havdalah.ejs') -%>
-<div class="form-check mb-3">
-  <input class="form-check-input" type="checkbox" name="a" <%= q.a === 'on' ? 'checked' : '' -%> id="a">
-  <label class="form-check-label" for="a">Use Ashkenazis Hebrew transliterations</label>
-</div>
 <button type="submit" class="btn btn-primary">Get new HTML tags</button>
 </form>
 </div><!-- #change-city -->
