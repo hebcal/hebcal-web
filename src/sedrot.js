@@ -128,6 +128,9 @@ export async function parshaDetail(ctx) {
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
   const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
+  const otherLocationSedra = new Sedra(hyear, !il);
+  const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
+  const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
@@ -140,6 +143,7 @@ export async function parshaDetail(ctx) {
     hasTriennial,
     triennial,
     ortUrl: makeBibleOrtUrl(parsha),
+    israelDiasporaDiffer,
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
@@ -203,10 +207,7 @@ function makeYearEvents(il, date) {
     il: il,
   };
   if (date) {
-    const gy = parseInt(date.substring(0, 4), 10);
-    const gm = parseInt(date.substring(4, 6), 10);
-    const gd = parseInt(date.substring(6, 8), 10);
-    const dt = new Date(gy, gm - 1, gd);
+    const dt = parse8digitDateStr(date);
     options.start = options.end = dt;
   } else {
     const dt = new Date();
@@ -215,6 +216,17 @@ function makeYearEvents(il, date) {
   }
   const events = HebrewCalendar.calendar(options);
   return events;
+}
+
+/**
+ * @param {string} date
+ * @return {Date}
+ */
+function parse8digitDateStr(date) {
+  const gy = parseInt(date.substring(0, 4), 10);
+  const gm = parseInt(date.substring(4, 6), 10);
+  const gd = parseInt(date.substring(6, 8), 10);
+  return new Date(gy, gm - 1, gd);
 }
 
 /**

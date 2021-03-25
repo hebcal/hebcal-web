@@ -14,7 +14,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
-<p class="lead">Read in <%=locationName%> on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>).</p>
+<p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>).</p>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>"
