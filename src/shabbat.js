@@ -3,8 +3,8 @@ import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
   getIpAddress, httpRedirect,
+  getLocationFromGeoIp,
   localeMap, makeHebrewCalendar} from './common';
-import {nearestCity} from './nearestCity';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
@@ -106,58 +106,16 @@ function geoIpRedirect(ctx) {
     }
   }
 
-  const startTime = Date.now();
-  const ip = getIpAddress(ctx);
-  const geoip = ctx.geoipCity.get(ip);
-  if (!geoip) {
-    return false;
-  }
-
-  if (typeof geoip.postal === 'object' &&
-        geoip.postal.code.length === 5 &&
-        typeof geoip.country === 'object' &&
-        geoip.country.iso_code === 'US') {
-    ctx.logger.info({
-      ip,
-      geoip: geoip.postal,
-      duration: Date.now() - startTime,
-    });
-    const dest = `/shabbat?zip=${geoip.postal.code}&geoip=zip`;
+  const geoip = getLocationFromGeoIp(ctx);
+  if (geoip.zip) {
+    const dest = `/shabbat?zip=${geoip.zip}&geoip=zip`;
     redir(ctx, dest);
     return true;
-  }
-
-  if (typeof geoip.city === 'object' &&
-        typeof geoip.city.geoname_id === 'number') {
-    const dest = `/shabbat?geonameid=${geoip.city.geoname_id}&geoip=geonameid`;
-    ctx.logger.info({
-      ip,
-      geoip: geoip.city,
-      duration: Date.now() - startTime,
-    });
+  } else if (geoip.geonameid) {
+    const mode = geoip.nn ? 'nn' : 'geonameid';
+    const dest = `/shabbat?geonameid=${geoip.geonameid}&geoip=${mode}`;
     redir(ctx, dest);
     return true;
-  }
-
-  if (typeof geoip.location === 'object' &&
-        typeof geoip.location.time_zone === 'string' &&
-        typeof geoip.location.latitude === 'number' &&
-        typeof geoip.location.longitude === 'number' &&
-        typeof geoip.country === 'object' &&
-        typeof geoip.country.iso_code === 'string') {
-    const city = nearestCity(ctx.db.geonamesDb, geoip.location.latitude, geoip.location.longitude,
-        geoip.country.iso_code, geoip.location.time_zone);
-    if (city !== null) {
-      ctx.logger.info({
-        ip,
-        geoip: {cc: geoip.country.iso_code, ...geoip.location},
-        nearest: city,
-        duration: Date.now() - startTime,
-      });
-      const dest = `/shabbat?geonameid=${city.geonameid}&geoip=nn`;
-      redir(ctx, dest);
-      return true;
-    }
   }
 
   return false;

@@ -3,6 +3,7 @@ import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
+import {nearestCity} from './nearestCity';
 
 export const langTzDefaults = {
   US: ['s', 'America/New_York'],
@@ -190,7 +191,15 @@ export function possiblySetCookie(ctx, query) {
       return false;
     }
   }
-  // ctx.set('Cache-Control', 'private');
+  setCookie(ctx, newCookie);
+  return true;
+}
+
+/**
+ * @param {any} ctx
+ * @param {string} newCookie
+ */
+function setCookie(ctx, newCookie) {
   ctx.cookies.set('C', newCookie, {
     expires: dayjs().add(1, 'year').toDate(),
     overwrite: true,
@@ -198,10 +207,9 @@ export function possiblySetCookie(ctx, query) {
   });
   const visitor = ctx.state.visitor;
   if (typeof visitor === 'object' && typeof visitor.set === 'function') {
-    const newUuid = newCookie.substring(4, ampersand);
+    const newUuid = newCookie.substring(4, 40);
     visitor.set('uid', newUuid);
   }
-  return true;
 }
 
 /**
@@ -646,8 +654,51 @@ export function validateEmail(email) {
  * @return {any}
  * @param {any} ctx
  */
+export function getLocationFromGeoIp(ctx) {
+  const ip = getIpAddress(ctx);
+  const geoip = ctx.geoipCity.get(ip);
+  if (!geoip) {
+    return {geo: 'none'};
+  }
+  if (typeof geoip.postal === 'object' &&
+        geoip.postal.code.length === 5 &&
+        typeof geoip.country === 'object' &&
+        geoip.country.iso_code === 'US') {
+    return {geo: 'zip', zip: geoip.postal.code};
+  }
+  if (typeof geoip.city === 'object' &&
+        typeof geoip.city.geoname_id === 'number') {
+    return {geo: 'geoname', geonameid: geoip.city.geoname_id};
+  }
+  if (typeof geoip.location === 'object' &&
+        typeof geoip.location.time_zone === 'string' &&
+        typeof geoip.location.latitude === 'number' &&
+        typeof geoip.location.longitude === 'number' &&
+        typeof geoip.country === 'object' &&
+        typeof geoip.country.iso_code === 'string') {
+    const latitude = geoip.location.latitude;
+    const longitude = geoip.location.longitude;
+    const tzid = geoip.location.time_zone;
+    const cc = geoip.country.iso_code;
+    const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, cc, tzid);
+    if (city === null) {
+      return {geo: 'pos', latitude, longitude, tzid, cc};
+    } else {
+      return {geo: 'geoname', geonameid: city.geonameid, nn: true};
+    }
+  }
+  return {geo: 'none'};
+}
+
+/**
+ * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * @return {any}
+ * @param {any} ctx
+ */
 export function setDefautLangTz(ctx) {
-  const q = processCookieAndQuery(ctx.cookies.get('C'), {}, ctx.request.query);
+  ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
+  const prevCookie = ctx.cookies.get('C');
+  const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   let location = getLocationFromQuery(ctx.db, q);
   let cc = 'US';
   let tzid = null;
@@ -673,12 +724,17 @@ export function setDefautLangTz(ctx) {
     }
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  ctx.state.lang = q.lg || ccDefaults[0];
+  const lang = ctx.state.lang = q.lg || ccDefaults[0];
   ctx.state.countryCode = cc;
   ctx.state.timezone = tzid || ccDefaults[1];
   ctx.state.location = location;
-  ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
+  const il = ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
+  if (!prevCookie) {
+    const query = Object.assign({}, q, {lg: lang, geo: 'none', i: il ? 'on' : 'off'});
+    const newCookie = makeCookie(query);
+    setCookie(ctx, newCookie);
+  }
   return q;
 }
 
