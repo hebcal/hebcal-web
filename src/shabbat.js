@@ -2,7 +2,7 @@
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
-  getIpAddress, httpRedirect,
+  httpRedirect,
   getLocationFromGeoIp,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';

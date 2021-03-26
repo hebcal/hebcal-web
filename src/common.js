@@ -661,6 +661,7 @@ export function getLocationFromGeoIp(ctx) {
     return {geo: 'none'};
   }
   if (typeof geoip.postal === 'object' &&
+        typeof geoip.postal.code === 'string' &&
         geoip.postal.code.length === 5 &&
         typeof geoip.country === 'object' &&
         geoip.country.iso_code === 'US') {
@@ -700,28 +701,31 @@ export function setDefautLangTz(ctx) {
   const prevCookie = ctx.cookies.get('C');
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   let location = getLocationFromQuery(ctx.db, q);
+  if (location === null) {
+    // try to infer location fro GeoIP
+    const gloc = getLocationFromGeoIp(ctx);
+    if (gloc.zip || gloc.geonameid) {
+      const geoip = {};
+      for (const [key, val] of Object.entries(gloc)) {
+        geoip[key] = String(val);
+      }
+      try {
+        location = getLocationFromQuery(ctx.db, geoip);
+      } catch (err) {
+        // ignore
+      }
+    } else if (gloc.geo === 'pos') {
+      location = new Location(gloc.latitude, gloc.longitude, gloc.cc === 'IL', gloc.tzid, null, gloc.cc);
+    }
+  }
   let cc = 'US';
   let tzid = null;
   if (location !== null) {
     tzid = location.getTzid();
     cc = location.getCountryCode();
   } else {
-    // try to infer location fro GeoIP
     const ip = getIpAddress(ctx);
-    const geoip = ctx.geoipCity.get(ip);
-    if (geoip && typeof geoip.location === 'object' &&
-                 typeof geoip.location.time_zone === 'string' &&
-                 typeof geoip.location.latitude === 'number' &&
-                 typeof geoip.location.longitude === 'number' &&
-                 typeof geoip.country === 'object' &&
-                 typeof geoip.country.iso_code === 'string') {
-      cc = geoip.country.iso_code;
-      const gloc = geoip.location;
-      tzid = gloc.time_zone;
-      location = new Location(gloc.latitude, gloc.longitude, cc === 'IL', tzid, null, cc);
-    } else {
-      cc = ctx.geoipCountry.get(ip) || 'US';
-    }
+    cc = ctx.geoipCountry.get(ip) || 'US';
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
   const lang = ctx.state.lang = q.lg || ccDefaults[0];
