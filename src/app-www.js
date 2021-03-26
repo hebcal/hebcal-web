@@ -69,7 +69,7 @@ app.use(compress({
   br: {
     params: {
       [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 3,
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 5,
     },
   },
 }));
