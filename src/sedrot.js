@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect} from './common';
+import {httpRedirect, setDefautLangTz} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -282,7 +282,10 @@ export async function parshaIndex(ctx) {
   const saturday = dayjs().day(6);
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
-  const q = ctx.request.query;
+  const q = setDefautLangTz(ctx);
+  if (typeof q.i === 'undefined' && ctx.state.il === true) {
+    q.i = 'on';
+  }
   const il = q.i === 'on';
   const sedra = new Sedra(hyear, il);
   const parsha0 = sedra.lookup(hd);

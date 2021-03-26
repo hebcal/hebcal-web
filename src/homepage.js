@@ -1,10 +1,9 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, Zmanim} from '@hebcal/core';
-import {empty, getDefaultHebrewYear, setDefautLangTz} from './common';
+import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
+import {empty, getDefaultHebrewYear, setDefautLangTz, getBeforeAfterSunsetForLocation} from './common';
 import dayjs from 'dayjs';
 
 export async function homepage(ctx) {
-  ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
   const q = setDefautLangTz(ctx);
   const {dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);
@@ -32,16 +31,7 @@ function getDate(ctx, q) {
     new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10));
   const location = ctx.state.location;
   if (isToday && location !== null) {
-    const tzid = ctx.state.timezone = location.getTzid();
-    const isoDate = Zmanim.formatISOWithTimeZone(tzid, dt);
-    const gy = parseInt(isoDate.substring(0, 4), 10);
-    const gm = parseInt(isoDate.substring(5, 7), 10);
-    const gd = parseInt(isoDate.substring(8, 10), 10);
-    const day = new Date(gy, gm - 1, gd);
-    const zman = new Zmanim(day, location.getLatitude(), location.getLongitude());
-    const sunset = zman.sunset();
-    const afterSunset = Boolean(dt >= sunset);
-    return {dt: day, afterSunset: afterSunset};
+    return getBeforeAfterSunsetForLocation(dt, location);
   }
   return {dt: dt, afterSunset: false};
 }

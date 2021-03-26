@@ -1,4 +1,4 @@
-import {HDate, Location, months, HebrewCalendar, greg} from '@hebcal/core';
+import {HDate, Location, months, HebrewCalendar, greg, Zmanim} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -702,7 +702,7 @@ export function setDefautLangTz(ctx) {
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   let location = getLocationFromQuery(ctx.db, q);
   if (location === null) {
-    // try to infer location fro GeoIP
+    // try to infer location from GeoIP
     const gloc = getLocationFromGeoIp(ctx);
     if (gloc.zip || gloc.geonameid) {
       const geoip = {};
@@ -801,4 +801,22 @@ export function makeGregDate(gy, gm, gd) {
     dt.setFullYear(yy);
   }
   return dt;
+}
+
+/**
+ * @param {Date} dt
+ * @param {Location} location
+ * @return {any}
+ */
+export function getBeforeAfterSunsetForLocation(dt, location) {
+  const tzid = location.getTzid();
+  const isoDate = Zmanim.formatISOWithTimeZone(tzid, dt);
+  const gy = parseInt(isoDate.substring(0, 4), 10);
+  const gm = parseInt(isoDate.substring(5, 7), 10);
+  const gd = parseInt(isoDate.substring(8, 10), 10);
+  const day = new Date(gy, gm - 1, gd);
+  const zman = new Zmanim(day, location.getLatitude(), location.getLongitude());
+  const sunset = zman.sunset();
+  const afterSunset = Boolean(dt >= sunset);
+  return {dt: day, afterSunset: afterSunset, gy, gd, gm};
 }
