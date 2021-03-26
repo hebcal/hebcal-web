@@ -8,7 +8,7 @@ export async function homepage(ctx) {
   const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;
-  Object.assign(ctx.state, {gy, gm, gd, afterSunset})
+  Object.assign(ctx.state, {gy, gm, gd, afterSunset});
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
   const items = ctx.state.items = [];

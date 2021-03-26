@@ -114,7 +114,6 @@ app.use(async (ctx, next) => {
     // note we use unescape() instead of decodeURIComponent() due to ancient latin-1 encoding
     if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
       const qs = unescape(ctx.request.querystring).replace(/;/g, '&');
-      ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       httpRedirect(ctx, `${path}?redir=1&${qs}`, 301);
       return;
     } else {
@@ -122,7 +121,6 @@ app.use(async (ctx, next) => {
       if (encQuery != -1) {
         const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
         const path2 = path.substring(0, encQuery + 4);
-        ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
         httpRedirect(ctx, `${path2}?redir=1&${qs}`, 301);
         return;
       }

@@ -603,6 +603,8 @@ export function getDefaultHebrewYear(hdate) {
   return today > av15 ? hy0 + 1 : hy0;
 }
 
+const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
+
 /**
  * Perform a 302 redirect to `rpath`.
  * @param {any} ctx
@@ -613,6 +615,9 @@ export function httpRedirect(ctx, rpath, status=302) {
   const proto = ctx.get('x-forwarded-proto') || 'http';
   const host = ctx.get('host') || 'www.hebcal.com';
   ctx.status = status;
+  if (status === 301) {
+    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
+  }
   ctx.redirect(`${proto}://${host}${rpath}`);
 }
 

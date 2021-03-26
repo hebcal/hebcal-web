@@ -60,7 +60,6 @@ export function wwwRouter() {
       ctx.status = 301;
       ctx.redirect(destination);
     } else if (needsTrailingSlash[rpath]) {
-      ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       httpRedirect(ctx, `${rpath}/`, 301);
     } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
       ctx.state.trackPageview = false;
