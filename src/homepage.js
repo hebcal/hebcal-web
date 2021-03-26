@@ -5,9 +5,10 @@ import dayjs from 'dayjs';
 
 export async function homepage(ctx) {
   const q = setDefautLangTz(ctx);
-  const {dt, afterSunset} = getDate(ctx, q);
+  const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;
+  Object.assign(ctx.state, {gy, gm, gd, afterSunset})
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
   const items = ctx.state.items = [];
@@ -33,7 +34,7 @@ function getDate(ctx, q) {
   if (isToday && location !== null) {
     return getBeforeAfterSunsetForLocation(dt, location);
   }
-  return {dt: dt, afterSunset: false};
+  return {dt: dt, afterSunset: false, gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
 }
 
 function mastheadDates(items, dt, afterSunset, hd) {
