@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
 
+const CACHE_CONTROL_ONE_YEAR = 'public, max-age=31536000, s-maxage=31536000';
 const heInStr = 'בְּ';
 const monthInPrefix = {
   'Tamuz': 'בְּתַמּוּז',
@@ -63,7 +64,7 @@ export async function hebrewDateConverter(ctx) {
     } else {
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
-        ctx.set('Cache-Control', 'max-age=63072000');
+        ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
       }
       let result = {
         gy: p.gy,
@@ -93,12 +94,15 @@ export async function hebrewDateConverter(ctx) {
       p.writeResp = false;
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
-        ctx.set('Cache-Control', 'max-age=63072000');
+        ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
       }
       ctx.body = await ctx.render('converter-xml', p);
     }
   } else {
-    ctx.lastModified = ctx.launchDate;
+    if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
+      ctx.lastModified = ctx.launchDate;
+      ctx.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
+    }
     return ctx.render('converter', p);
   }
 }
