@@ -98,6 +98,7 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = await ctx.render('converter-xml', p);
     }
   } else {
+    ctx.lastModified = ctx.launchDate;
     return ctx.render('converter', p);
   }
 }
