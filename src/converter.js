@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale} from '@hebcal/core';
+import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, Location} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
@@ -42,13 +42,12 @@ function isset(val) {
 export async function hebrewDateConverter(ctx) {
   if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
     setDefautLangTz(ctx);
-    const location = ctx.state.location;
-    if (location) {
-      const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
-      const gs = afterSunset ? '&gs=on' : '';
-      httpRedirect(ctx, `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}&g2h=1`, 302);
-      return;
-    }
+    const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
+    const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
+    const gs = afterSunset ? '&gs=on' : '';
+    ctx.set('Cache-Control', 'private, max-age=0');
+    httpRedirect(ctx, `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}&g2h=1`, 302);
+    return;
   }
   Locale.useLocale('en');
   const p = makeProperties(ctx);

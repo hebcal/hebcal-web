@@ -122,7 +122,7 @@ function geoIpRedirect(ctx) {
 }
 
 function redir(ctx, dest) {
-  ctx.set('Cache-Control', 'private');
+  ctx.set('Cache-Control', 'private, max-age=0');
   httpRedirect(ctx, dest);
 }
 
