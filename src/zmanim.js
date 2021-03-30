@@ -1,4 +1,4 @@
-import {Zmanim, TimedEvent, HDate, HebrewCalendar} from '@hebcal/core';
+import {Zmanim, TimedEvent, HDate} from '@hebcal/core';
 import {empty, isoDateStringToDate, getLocationFromQuery} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
@@ -6,7 +6,6 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import {eventsToIcalendar} from '@hebcal/icalendar';
-import {getCalendarTitle} from '@hebcal/rest-api';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -280,13 +279,11 @@ export async function zmanimIcalendar(ctx) {
   const endD = today.add(4, 'day');
   const times = getTimesForRange(startD, endD, location, false);
   const events = [];
-  const timeFormat = location.getTimeFormatter();
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
       const hd = new HDate(new Date(isoDate));
-      const eventTimeStr = Zmanim.formatTime(dt, timeFormat);
       const desc = ZMAN_NAMES[zman];
-      const ev = new TimedEvent(hd, desc[0], 0, dt, eventTimeStr);
+      const ev = new TimedEvent(hd, desc[0], 0, dt, location);
       ev.category = zman;
       ev.memo = desc[1];
       events.push(ev);

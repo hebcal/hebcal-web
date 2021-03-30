@@ -24,16 +24,16 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@babel/cli": "^7.13.10",
-    "@babel/core": "^7.13.10",
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
     "@babel/preset-env": "^7.13.12",
-    "@babel/register": "^7.13.8",
-    "eslint": "^7.22.0",
+    "@babel/register": "^7.13.14",
+    "eslint": "^7.23.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.12.0",
-    "@hebcal/geo-sqlite": "^3.4.0",
+    "@hebcal/core": "^3.13.0",
+    "@hebcal/geo-sqlite": "^3.4.1",
     "@hebcal/icalendar": "^4.6.0",
     "@hebcal/leyning": "^4.3.0",
     "@hebcal/locales": "^3.2.0",
