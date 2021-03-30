@@ -567,32 +567,6 @@ grabBtnList.forEach(function (el) {
 `;
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
- * @param {any} [attrs={}]
- * @return {Object}
- */
-export function makeLogInfo(ctx, attrs={}) {
-  const info = Object.assign({
-    status: ctx.response.status,
-    length: ctx.response.length,
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
-    method: ctx.request.method,
-    url: ctx.request.originalUrl,
-    ua: ctx.get('user-agent'),
-  }, attrs);
-  const ref = ctx.get('referer');
-  if (!empty(ref)) info.ref = ref;
-  const cookie = ctx.get('cookie');
-  if (!empty(cookie)) info.cookie = cookie;
-  const enc = ctx.response.get('content-encoding');
-  if (!empty(enc)) info.enc = enc;
-  if (ctx.state.timeout === true) {
-    info.timeout = true;
-  }
-  return info;
-}
-
-/**
  * @param {HDate} hdate today
  * @return {number}
  */
@@ -745,35 +719,6 @@ export function setDefautLangTz(ctx) {
     setCookie(ctx, newCookie);
   }
   return q;
-}
-
-/**
- * Middleware for `app.on('error', errorLogger())`
- * @return {function}
- */
-export function errorLogger() {
-  return function(err, ctx) {
-    if (ctx && ctx.status != 404 && ctx.status != 200) {
-      const logger = ctx.logger;
-      const visitor = ctx.state.visitor;
-      const obj = Object.assign(err, makeLogInfo(ctx));
-      const message = err.message || err.msg;
-      const params = {
-        ec: ctx.status < 500 ? 'warning' : 'error',
-        ea: `http${ctx.status}`,
-        ev: ctx.status,
-        el: message,
-        p: ctx.request.path,
-      };
-      if (ctx.status < 500) {
-        logger.warn(obj);
-        visitor.event(params).send();
-      } else {
-        logger.error(obj);
-        visitor.event(params).exception(message).send();
-      }
-    }
-  };
 }
 
 /**

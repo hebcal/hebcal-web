@@ -10,8 +10,8 @@ import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {join} from 'path';
-import {makeLogger} from './logger';
-import {makeLogInfo, httpRedirect, errorLogger} from './common';
+import {makeLogger, errorLogger, accessLogger} from './logger';
+import {httpRedirect} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
@@ -40,28 +40,26 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 
+app.use(accessLogger(logger));
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-5'));
 
 app.use(async (ctx, next) => {
-  ctx.state.startTime = Date.now();
+  // don't allow compress middleware to assume that a missing
+  // accept-encoding header implies 'accept-encoding: *'
+  if (typeof ctx.get('accept-encoding') === 'undefined') {
+    ctx.request.header['accept-encoding'] = 'identity';
+  }
   try {
-    // don't allow compress middleware to assume that a missing accept-encoding header implies 'accept-encoding: *'
-    if (typeof ctx.get('accept-encoding') == 'undefined') {
-      ctx.request.header['accept-encoding'] = 'identity';
-    }
     await next();
   } catch (err) {
     ctx.status = err.status || 500;
     ctx.body = err.message;
     ctx.app.emit('error', err, ctx);
   }
-  logger.info(makeLogInfo(ctx, {
-    duration: Date.now() - ctx.state.startTime,
-  }));
 });
 
-app.on('error', errorLogger());
+app.on('error', errorLogger(logger));
 
 app.use(conditional());
 app.use(compress({

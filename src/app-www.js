@@ -11,9 +11,8 @@ import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
 import zlib from 'zlib';
-import {makeLogger} from './logger';
+import {makeLogger, errorLogger, accessLogger} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {makeLogInfo, errorLogger} from './common';
 import {wwwRouter} from './router';
 import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
@@ -42,6 +41,7 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 
+app.use(accessLogger(logger));
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-1'));
 
@@ -49,19 +49,15 @@ app.use(async (ctx, next) => {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
   ctx.state.spriteHref = '/i/sprite5.svg';
-  ctx.state.startTime = Date.now();
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
     ctx.request.header['accept-encoding'] = 'identity';
   }
   await next();
-  logger.info(makeLogInfo(ctx, {
-    duration: Date.now() - ctx.state.startTime,
-  }));
 });
 
-app.on('error', errorLogger());
+app.on('error', errorLogger(logger));
 
 app.use(compress({
   gzip: true,

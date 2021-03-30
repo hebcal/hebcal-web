@@ -16,18 +16,24 @@ export function googleAnalytics(tid) {
   return async function(ctx, next) {
     const cookieString = ctx.cookies.get('C');
     const cookie = querystring.parse(cookieString || '');
-    const options = {tid, enableBatching: true};
     const gaCookie = ctx.cookies.get('_ga');
     const userAgent = ctx.get('user-agent');
     const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
+    let visitorId;
     if (gaCookie) {
       const parts = gaCookie.split('.');
-      options.cid = parts[2] + '.' + parts[3];
+      visitorId = parts[2] + '.' + parts[3];
     } else if (cookie.uid) {
-      options.cid = cookie.uid;
+      visitorId = cookie.uid;
     } else {
-      options.cid = await makeUuid(ipAddress, userAgent);
+      visitorId = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
     }
+    ctx.state.visitorId = visitorId;
+    const doNotTrack = ctx.get('dnt');
+    if (doNotTrack === '1') {
+      return next();
+    }
+    const options = {tid, cid: visitorId, enableBatching: true};
     const visitor = ctx.state.visitor = ua(options);
     visitor.set('ua', userAgent);
     visitor.set('dr', ctx.get('referrer'));
@@ -54,10 +60,11 @@ export function googleAnalytics(tid) {
  * @private
  * @param {string} ipAddress
  * @param {string} userAgent
+ * @param {string} acceptLanguage
  * @return {string}
  */
-async function makeUuid(ipAddress, userAgent) {
-  const raw = await murmur128(ipAddress + userAgent);
+async function makeUuid(ipAddress, userAgent, acceptLanguage) {
+  const raw = await murmur128(ipAddress + userAgent + acceptLanguage);
   const buf32 = new Uint32Array(raw);
   const bytes = new Uint8Array(buf32.buffer);
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
