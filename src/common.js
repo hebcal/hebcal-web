@@ -644,30 +644,31 @@ export function getLocationFromGeoIp(ctx) {
         geoip.postal.code.length === 5 &&
         typeof geoip.country === 'object' &&
         geoip.country.iso_code === 'US') {
-    return {geo: 'zip', zip: geoip.postal.code};
+    return {geo: 'zip', zip: geoip.postal.code, details: geoip};
   }
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
-    return {geo: 'geoname', geonameid: geoip.city.geoname_id};
+    return {geo: 'geoname', geonameid: geoip.city.geoname_id, details: geoip};
   }
   if (typeof geoip.location === 'object' &&
         typeof geoip.location.time_zone === 'string' &&
         typeof geoip.location.latitude === 'number' &&
-        typeof geoip.location.longitude === 'number' &&
-        typeof geoip.country === 'object' &&
-        typeof geoip.country.iso_code === 'string') {
+        typeof geoip.location.longitude === 'number') {
+    if (geoip.location.accuracy_radius > 500) {
+      return {geo: 'none', details: geoip};
+    }
     const latitude = geoip.location.latitude;
     const longitude = geoip.location.longitude;
     const tzid = geoip.location.time_zone;
-    const cc = geoip.country.iso_code;
-    const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, cc, tzid);
+    const cc = geoip.country && geoip.country.iso_code;
+    const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, tzid);
     if (city === null) {
-      return {geo: 'pos', latitude, longitude, tzid, cc};
+      return {geo: 'pos', latitude, longitude, tzid, cc, details: geoip};
     } else {
-      return {geo: 'geoname', geonameid: city.geonameid, nn: true};
+      return {geo: 'geoname', geonameid: city.geonameid, nn: true, details: geoip};
     }
   }
-  return {geo: 'none'};
+  return {geo: 'none', details: geoip};
 }
 
 /**
@@ -686,7 +687,9 @@ export function setDefautLangTz(ctx) {
     if (gloc.zip || gloc.geonameid) {
       const geoip = {};
       for (const [key, val] of Object.entries(gloc)) {
-        geoip[key] = String(val);
+        if (key !== 'details') {
+          geoip[key] = String(val);
+        }
       }
       try {
         location = getLocationFromQuery(ctx.db, geoip);

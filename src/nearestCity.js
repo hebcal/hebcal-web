@@ -7,19 +7,19 @@ const cityCache = new Map();
  * @param {Database} geonamesDb
  * @param {number} latitude
  * @param {number} longitude
- * @param {string} countryCode
  * @param {string} tzid
  */
-export function nearestCity(geonamesDb, latitude, longitude, countryCode, tzid) {
+export function nearestCity(geonamesDb, latitude, longitude, tzid) {
   const start = {latitude, longitude};
   let city = cityCache.get(start);
-  if (city) {
+  if (typeof city !== 'undefined') {
     return city;
   }
   const stmt = geonamesDb.prepare(
-      'SELECT geonameid, name, latitude, longitude FROM geoname WHERE country = ? AND timezone = ?');
-  const rows = stmt.all(countryCode, tzid);
+      'SELECT geonameid, name, latitude, longitude FROM geoname WHERE timezone = ?');
+  const rows = stmt.all(tzid);
   if (!rows || !rows.length) {
+    cityCache.set(start, null);
     return null;
   }
   let minDistance = Infinity;
