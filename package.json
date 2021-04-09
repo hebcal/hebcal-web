@@ -28,7 +28,7 @@
     "@babel/core": "^7.13.15",
     "@babel/preset-env": "^7.13.15",
     "@babel/register": "^7.13.14",
-    "eslint": "^7.23.0",
+    "eslint": "^7.24.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
@@ -36,7 +36,7 @@
     "@hebcal/geo-sqlite": "^3.4.1",
     "@hebcal/icalendar": "^4.6.0",
     "@hebcal/leyning": "^4.3.0",
-    "@hebcal/locales": "^3.2.0",
+    "@hebcal/locales": "^3.2.1",
     "@hebcal/rest-api": "^3.3.3",
     "better-sqlite3": "^7.1.4",
     "dayjs": "^1.10.4",

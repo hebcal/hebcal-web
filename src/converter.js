@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, Location} from '@hebcal/core';
+import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
@@ -75,6 +75,9 @@ export async function hebrewDateConverter(ctx) {
         hd: p.hd,
         hebrew: p.hebrew,
       };
+      if (typeof q.i !== 'undefined') {
+        result.il = p.il;
+      }
       if (p.events.length) {
         result.events = p.events.map((ev) => ev.render());
       }
@@ -127,16 +130,19 @@ function makeProperties(ctx) {
   const hdateStr = hdate.render();
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
+  const il = Boolean(ctx.request.query.i === 'on');
   let events = [];
   if (hy >= 3762) {
-    const sedra = sedraCache.get(hy) || new Sedra(hy, false);
+    const yearIl = `${hy}-${il ? 1 : 0}`;
+    const sedra = sedraCache.get(yearIl) || new Sedra(hy, il);
     let pe = [];
     if (sedra.isParsha(saturday)) {
       pe = new ParshaEvent(saturday, sedra.get(saturday));
     }
-    sedraCache.set(hy, sedra);
-    const holidays = HebrewCalendar.getHolidaysOnDate(hdate, false) || [];
-    events = holidays.concat(pe);
+    sedraCache.set(yearIl, sedra);
+    events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];
+    events = events.concat(pe);
+    events = events.concat(makeOmer(hdate));
   }
   return {
     message: props.message,
@@ -155,7 +161,23 @@ function makeProperties(ctx) {
     hmStr: hdate.getMonthName(),
     hd: hdate.getDate(),
     hleap: hdate.isLeapYear(),
+    il,
   };
+}
+
+/**
+ * @private
+ * @param {HDate} hdate
+ * @return {Event[]}
+ */
+function makeOmer(hdate) {
+  const beginOmer = HDate.hebrew2abs(hdate.getFullYear(), months.NISAN, 16);
+  const abs = hdate.abs();
+  if (abs >= beginOmer && abs < (beginOmer + 49)) {
+    const omer = abs - beginOmer + 1;
+    return [new OmerEvent(hdate, omer)];
+  }
+  return [];
 }
 
 /**

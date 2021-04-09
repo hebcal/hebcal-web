@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, getBeforeAfterSunsetForLocation} from './common';
 import dayjs from 'dayjs';
 
@@ -16,6 +16,7 @@ export async function homepage(ctx) {
   const il = ctx.state.il;
   mastheadHolidays(items, hd, il);
   mastheadParsha(items, dt, il);
+  mastheadOmer(items, hd);
   const [blub, longText] = getHolidayGreeting(hd, il);
   if (blub) {
     ctx.state.holidayBlurb = blub;
@@ -68,6 +69,15 @@ function mastheadHolidays(items, hd, il) {
         const desc = ev.render();
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
+}
+
+function mastheadOmer(items, hd) {
+  const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
+  const abs = hd.abs();
+  if (abs >= beginOmer && abs < (beginOmer + 49)) {
+    const omer = abs - beginOmer + 1;
+    items.push(new OmerEvent(hd, omer).render());
+  }
 }
 
 // For the first 7 months of the year, show the current Gregorian year
