@@ -295,6 +295,8 @@ export function makeHebcalOptions(db, query) {
   }
   // Before we parse numberOpts, check for tzeit preference
   if (options.havdalahTzeit) {
+    options.havdalahDeg = 8.5;
+    delete options.havdalahTzeit;
     delete query.m;
   }
   for (const [key, val] of Object.entries(numberOpts)) {

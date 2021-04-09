@@ -293,7 +293,7 @@ export function renderPdf(doc, events, options) {
           PDF_LMARGIN, PDF_HEIGHT - 28);
     }
 
-    const str = 'Provided by www.hebcal.com with a Creative Commons Attribution 3.0 license';
+    const str = 'Provided by www.hebcal.com with a Creative Commons Attribution 4.0 International License';
     const width = doc.widthOfString(str);
     doc.text(str, PDF_WIDTH - PDF_RMARGIN - width, PDF_HEIGHT - 28);
   }
