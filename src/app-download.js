@@ -44,7 +44,7 @@ app.use(accessLogger(logger));
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-5'));
 
-app.use(async (ctx, next) => {
+app.use(async function fixup0(ctx, next) {
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
@@ -78,7 +78,7 @@ const DOCUMENT_ROOT = '/var/www/html';
 const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
 
 // Send static files before timeout and regular request dispatch
-app.use(async (ctx, next) => {
+app.use(async function sendStatic(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
@@ -104,7 +104,7 @@ app.use(async (ctx, next) => {
 });
 
 // Fix up querystring so we can later use ctx.request.query
-app.use(async (ctx, next) => {
+app.use(async function fixup1(ctx, next) {
   const path = ctx.request.path;
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
@@ -142,7 +142,7 @@ const TIMEOUT = 20 * 1000;
 app.use(timeout(TIMEOUT, {status: 503, message: 'Service Unavailable'}));
 
 // request dispatcher
-app.use(async (ctx, next) => {
+app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/v3')) {
     await yahrzeitDownload(ctx);

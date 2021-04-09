@@ -90,7 +90,7 @@ function makeLogInfo(ctx) {
  * @return {function}
  */
 export function accessLogger(logger) {
-  return async function(ctx, next) {
+  return async function accessLog(ctx, next) {
     ctx.state.startTime = Date.now();
     await next();
     logger.info(makeLogInfo(ctx));
@@ -103,7 +103,7 @@ export function accessLogger(logger) {
  * @return {function}
  */
 export function errorLogger(logger) {
-  return function(err, ctx) {
+  return function errorLog(err, ctx) {
     if (ctx && ctx.status != 404 && ctx.status != 200) {
       const visitor = ctx.state.visitor;
       const obj = Object.assign(err, makeLogInfo(ctx));

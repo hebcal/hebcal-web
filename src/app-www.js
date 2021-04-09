@@ -45,7 +45,7 @@ app.use(accessLogger(logger));
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-1'));
 
-app.use(async (ctx, next) => {
+app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
   ctx.state.spriteHref = '/i/sprite5.svg';
@@ -79,7 +79,7 @@ render(app, {
 });
 
 // Fix up querystring so we can later use ctx.request.query
-app.use(async function fixup(ctx, next) {
+app.use(async function fixup1(ctx, next) {
   const qs = ctx.request.querystring;
   if (qs && qs.length) {
     const semi = qs.indexOf(';');

@@ -13,7 +13,7 @@ const murmur128 = util.promisify(mmh3.murmur128);
  * @return {function}
  */
 export function googleAnalytics(tid) {
-  return async function(ctx, next) {
+  return async function googleAnalyticsPageview(ctx, next) {
     const cookieString = ctx.cookies.get('C');
     const cookie = querystring.parse(cookieString || '');
     const gaCookie = ctx.cookies.get('_ga');
