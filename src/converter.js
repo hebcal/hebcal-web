@@ -1,6 +1,6 @@
 import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
-import {empty, makeGregDate, setDefautLangTz, httpRedirect,
+import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
 import './dayjs-locales';
@@ -80,8 +80,7 @@ export async function hebrewDateConverter(ctx) {
         result.il = p.il;
       }
       if (p.events.length) {
-        const lg = q.lg || 's';
-        result.events = p.events.map((ev) => ev.render(lg));
+        result.events = p.events.map((ev) => ev.render(p.locale));
       }
       const cb = q.callback;
       if (typeof cb === 'string' && cb.length) {
@@ -126,13 +125,13 @@ function makeProperties(ctx) {
   }
   const dt = props.dt;
   const query = ctx.request.query;
-  const lg = query.lg || 's';
+  const lg = lgToLocale[query.lg || 's'] || query.lg;
   const locale = localeMap[lg] || 'en';
   const d = dayjs(dt).locale(locale);
   const dateStr = d.format('ddd, D MMMM ') + String(dt.getFullYear()).padStart(4, '0');
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
-  const hdateStr = hdate.render(lg);
+  const hdateStr = hdate.render(locale);
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   const il = Boolean(query.i === 'on');
@@ -167,7 +166,6 @@ function makeProperties(ctx) {
     hd: hdate.getDate(),
     hleap: hdate.isLeapYear(),
     il,
-    lg,
     locale,
   };
 }

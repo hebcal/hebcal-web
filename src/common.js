@@ -21,7 +21,7 @@ export const langTzDefaults = {
   FI: ['fi', 'Europe/Helsinki'],
 };
 
-const lgToLocale = {
+export const lgToLocale = {
   h: 'he',
   a: 'ashkenazi',
   ah: 'ashkenazi',

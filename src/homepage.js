@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
-import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap,
+import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   getBeforeAfterSunsetForLocation} from './common';
 import dayjs from 'dayjs';
 import './dayjs-locales';
@@ -11,7 +11,7 @@ export async function homepage(ctx) {
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;
   Object.assign(ctx.state, {gy, gm, gd, afterSunset});
-  const lg = ctx.state.lg = q.lg || 's';
+  const lg = lgToLocale[q.lg || 's'] || q.lg;
   ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
@@ -49,7 +49,7 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' (after sunset)' : '');
   items.push(
       `<time datetime="${isoDt}">${fmtDt}</time>`,
-      hd.render(ctx.state.lg),
+      hd.render(ctx.state.locale),
   );
 }
 
@@ -62,7 +62,7 @@ function mastheadParsha(ctx, dt, il) {
     const pe = new ParshaEvent(hd, sedra.get(hd));
     const url = pe.url();
     const suffix = il ? '?i=on' : '';
-    items.push(`<a href="${url}${suffix}">${pe.render(ctx.state.lg)}</a>`);
+    items.push(`<a href="${url}${suffix}">${pe.render(ctx.state.locale)}</a>`);
   }
 }
 
@@ -73,7 +73,7 @@ function mastheadHolidays(ctx, hd, il) {
   holidays
       .map((ev) => {
         const url = ev.url();
-        const desc = ev.render(ctx.state.lg);
+        const desc = ev.render(ctx.state.locale);
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
@@ -84,7 +84,7 @@ function mastheadOmer(ctx, hd) {
   const abs = hd.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    items.push(new OmerEvent(hd, omer).render(ctx.state.lg));
+    items.push(new OmerEvent(hd, omer).render(ctx.state.locale));
   }
 }
 
