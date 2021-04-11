@@ -3,8 +3,6 @@
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <style>
-ul.list-inline li:after{content:"\00a0\00b7"}
-ul.list-inline li:last-child:after{content:""}
 .icon-md {
   width: 1.8rem;
   height: 1.8rem;
@@ -45,9 +43,9 @@ a.icon-block {
 <%- await include('partials/navbar.ejs') -%>
 <div class="masthead" tabindex="-1">
 <div class="container">
-<ul class="list-inline">
+<ul class="bullet-list-inline">
 <% items.forEach((item) => { %>
-<li class="list-inline-item"><%- item %></li>
+<li><%- item %></li>
 <% }); %>
 </ul>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
