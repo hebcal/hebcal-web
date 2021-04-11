@@ -1,13 +1,7 @@
 import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
-import 'dayjs/locale/es';
-import 'dayjs/locale/fi';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/he';
-import 'dayjs/locale/hu';
-import 'dayjs/locale/pl';
-import 'dayjs/locale/ru';
+import './dayjs-locales';
 import {localeMap} from './common';
 
 const PDF_WIDTH = 792;

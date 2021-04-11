@@ -9,13 +9,7 @@ import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
-import 'dayjs/locale/es';
-import 'dayjs/locale/fi';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/he';
-import 'dayjs/locale/hu';
-import 'dayjs/locale/pl';
-import 'dayjs/locale/ru';
+import './dayjs-locales';
 import fs from 'fs';
 import readline from 'readline';
 import etag from 'etag';

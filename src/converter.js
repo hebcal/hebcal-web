@@ -1,7 +1,9 @@
 import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
-import {empty, makeGregDate, setDefautLangTz, httpRedirect, getBeforeAfterSunsetForLocation} from './common';
+import {empty, makeGregDate, setDefautLangTz, httpRedirect,
+  localeMap, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
+import './dayjs-locales';
 
 const CACHE_CONTROL_ONE_YEAR = 'public, max-age=31536000, s-maxage=31536000';
 const heInStr = 'בְּ';
@@ -49,7 +51,6 @@ export async function hebrewDateConverter(ctx) {
     httpRedirect(ctx, `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}&g2h=1`, 302);
     return;
   }
-  Locale.useLocale('en');
   const p = makeProperties(ctx);
   if (p.message) {
     ctx.status = 400;
@@ -79,7 +80,8 @@ export async function hebrewDateConverter(ctx) {
         result.il = p.il;
       }
       if (p.events.length) {
-        result.events = p.events.map((ev) => ev.render());
+        const lg = q.lg || 's';
+        result.events = p.events.map((ev) => ev.render(lg));
       }
       const cb = q.callback;
       if (typeof cb === 'string' && cb.length) {
@@ -123,14 +125,17 @@ function makeProperties(ctx) {
     props = Object.assign(g2h(new Date(), false, true), {message: err.message});
   }
   const dt = props.dt;
-  const d = dayjs(dt);
+  const query = ctx.request.query;
+  const lg = query.lg || 's';
+  const locale = localeMap[lg] || 'en';
+  const d = dayjs(dt).locale(locale);
   const dateStr = d.format('ddd, D MMMM ') + String(dt.getFullYear()).padStart(4, '0');
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
-  const hdateStr = hdate.render();
+  const hdateStr = hdate.render(lg);
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
-  const il = Boolean(ctx.request.query.i === 'on');
+  const il = Boolean(query.i === 'on');
   let events = [];
   if (hy >= 3762) {
     const yearIl = `${hy}-${il ? 1 : 0}`;
@@ -162,6 +167,8 @@ function makeProperties(ctx) {
     hd: hdate.getDate(),
     hleap: hdate.isLeapYear(),
     il,
+    lg,
+    locale,
   };
 }
 

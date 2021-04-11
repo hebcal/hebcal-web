@@ -12,13 +12,7 @@ import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
 import etag from 'etag';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import 'dayjs/locale/es';
-import 'dayjs/locale/fi';
-import 'dayjs/locale/fr';
-import 'dayjs/locale/he';
-import 'dayjs/locale/hu';
-import 'dayjs/locale/pl';
-import 'dayjs/locale/ru';
+import './dayjs-locales';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

@@ -40,9 +40,9 @@
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
 <% events.forEach((ev) => { -%>
 <% if (ev.url()) { -%>
-<li><a href="<%= ev.url() %>"><%= ev.render() -%></a></li>
+<li><a href="<%= ev.url() %>"><%= ev.render(locale) -%></a></li>
 <% } else { -%>
-<li><%= ev.render() -%></li>
+<li><%= ev.render(locale) -%></li>
 <% } -%>
 <% }); -%>
 </ul>

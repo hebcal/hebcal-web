@@ -1,7 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
-import {empty, getDefaultHebrewYear, setDefautLangTz, getBeforeAfterSunsetForLocation} from './common';
+import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap,
+  getBeforeAfterSunsetForLocation} from './common';
 import dayjs from 'dayjs';
+import './dayjs-locales';
 
 export async function homepage(ctx) {
   const q = setDefautLangTz(ctx);
@@ -9,14 +11,16 @@ export async function homepage(ctx) {
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;
   Object.assign(ctx.state, {gy, gm, gd, afterSunset});
+  const lg = ctx.state.lg = q.lg || 's';
+  ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
-  const items = ctx.state.items = [];
-  mastheadDates(items, dt, afterSunset, hd);
+  ctx.state.items = [];
+  mastheadDates(ctx, dt, afterSunset, hd);
   const il = ctx.state.il;
-  mastheadHolidays(items, hd, il);
-  mastheadParsha(items, dt, il);
-  mastheadOmer(items, hd);
+  mastheadHolidays(ctx, hd, il);
+  mastheadParsha(ctx, dt, il);
+  mastheadOmer(ctx, hd);
   const [blub, longText] = getHolidayGreeting(hd, il);
   if (blub) {
     ctx.state.holidayBlurb = blub;
@@ -38,17 +42,19 @@ function getDate(ctx, q) {
   return {dt: dt, afterSunset: false, gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
 }
 
-function mastheadDates(items, dt, afterSunset, hd) {
-  const d = dayjs(dt);
+function mastheadDates(ctx, dt, afterSunset, hd) {
+  const items = ctx.state.items;
+  const d = dayjs(dt).locale(ctx.state.locale);
   const isoDt = d.format('YYYY-MM-DD');
   const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' (after sunset)' : '');
   items.push(
       `<time datetime="${isoDt}">${fmtDt}</time>`,
-      hd.render(),
+      hd.render(ctx.state.lg),
   );
 }
 
-function mastheadParsha(items, dt, il) {
+function mastheadParsha(ctx, dt, il) {
+  const items = ctx.state.items;
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(saturday.toDate());
   const sedra = new Sedra(hd.getFullYear(), il);
@@ -56,27 +62,29 @@ function mastheadParsha(items, dt, il) {
     const pe = new ParshaEvent(hd, sedra.get(hd));
     const url = pe.url();
     const suffix = il ? '?i=on' : '';
-    items.push(`<a href="${url}${suffix}">${pe.render()}</a>`);
+    items.push(`<a href="${url}${suffix}">${pe.render(ctx.state.lg)}</a>`);
   }
 }
 
-function mastheadHolidays(items, hd, il) {
+function mastheadHolidays(ctx, hd, il) {
+  const items = ctx.state.items;
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   const suffix = il ? '?i=on' : '';
   holidays
       .map((ev) => {
         const url = ev.url();
-        const desc = ev.render();
+        const desc = ev.render(ctx.state.lg);
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
 
-function mastheadOmer(items, hd) {
+function mastheadOmer(ctx, hd) {
+  const items = ctx.state.items;
   const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
   const abs = hd.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    items.push(new OmerEvent(hd, omer).render());
+    items.push(new OmerEvent(hd, omer).render(ctx.state.lg));
   }
 }
 
