@@ -35,7 +35,7 @@ export async function holidayPdf(ctx) {
   ctx.set('Cache-Control', 'max-age=5184000');
   ctx.response.type = 'application/pdf';
   ctx.response.etag = etag(JSON.stringify(options), {weak: true});
-  const doc = ctx.body = createPdfDoc(title);
+  const doc = ctx.body = createPdfDoc(title, options);
   renderPdf(doc, events, options);
   doc.end();
 }
