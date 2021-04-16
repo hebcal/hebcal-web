@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import createError from 'http-errors';
-import path from 'path';
 import {
   clipboardScript, getLocationFromQuery,
   httpRedirect,
@@ -19,6 +18,7 @@ import {parshaDetail, parshaIndex} from './sedrot';
 import {shabbatApp} from './shabbat';
 import {shabbatBrowse} from './shabbat-browse';
 import {shabbatJsLink} from './shabbat-link';
+import {shortUrlRedir} from './shortUrlRedir';
 import {yahrzeitApp} from './yahrzeit';
 import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 import {getZmanim} from './zmanim';
@@ -108,9 +108,7 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/holidays/')) {
       await holidaysApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/')) {
-      const base = path.basename(rpath);
-      const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
-      httpRedirect(ctx, `/${dest}/${base}?utm_source=redir&utm_medium=redir`);
+      shortUrlRedir(ctx);
     } else if (rpath === '/email/verify.php') {
       await emailVerify(ctx);
     } else if (rpath.startsWith('/email')) {
