@@ -66,17 +66,8 @@ function getWeekdays(d) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function renderPdfMonthGrid(doc, year, month, rtl, locale0, rows, rowheight) {
-  // title at top of page
-  const locale = localeMap[locale0] || 'en';
-  const d = dayjs(new Date(year, month - 1, 1)).locale(locale);
-  const monthTitle = d.format(rtl ? 'YYYY MMMM' : 'MMMM YYYY');
-  const monthFont = rtl ? 'hebrew' : 'semi';
-  doc.fontSize(36)
-      .font(monthFont)
-      .text(monthTitle, 0, PDF_TMARGIN - 24, {align: 'center'});
+function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
   // rectangle of calendar grid
-  doc.markContent('Artifact', {type: 'Layout'});
   doc.lineWidth(1)
       .strokeColor('#cccccc')
       .rect(PDF_LMARGIN,
@@ -85,7 +76,6 @@ function renderPdfMonthGrid(doc, year, month, rtl, locale0, rows, rowheight) {
           PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN)
       .stroke()
       .addContent('n');
-  doc.endMarkedContent();
   // days of the week above 7 columns
   doc.fontSize(10)
       .font(rtl ? 'hebrew' : 'plain');
@@ -102,24 +92,29 @@ function renderPdfMonthGrid(doc, year, month, rtl, locale0, rows, rowheight) {
   for (let c = 1; c < PDF_COLUMNS; c++) {
     const x = PDF_LMARGIN + c * PDF_COLWIDTH;
     // Print a vertical grid line
-    doc.markContent('Artifact', {type: 'Layout'});
     doc.moveTo(x, PDF_BMARGIN)
         .lineTo(x, PDF_HEIGHT - PDF_TMARGIN)
         .stroke()
         .addContent('n');
-    doc.endMarkedContent();
   }
   // Loop through the rows
   for (let r = 1; r < rows; r++) {
     const y = PDF_HEIGHT - PDF_TMARGIN - r * rowheight;
     // Print a horizontal grid line
-    doc.markContent('Artifact', {type: 'Layout'});
     doc.moveTo(PDF_LMARGIN, y)
         .lineTo(PDF_WIDTH - PDF_RMARGIN, y)
         .stroke()
         .addContent('n');
-    doc.endMarkedContent();
   }
+}
+
+// eslint-disable-next-line require-jsdoc
+function renderPdfMonthTitle(doc, d, rtl) {
+  const monthTitle = d.format(rtl ? 'YYYY MMMM' : 'MMMM YYYY');
+  const monthFont = rtl ? 'hebrew' : 'semi';
+  doc.fontSize(36)
+      .font(monthFont)
+      .text(monthTitle, 0, PDF_TMARGIN - 24, {align: 'center'});
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -195,9 +190,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     link += 'utm_medium=document&utm_source=pdf&utm_campaign=pdf-' + evt.getDate().getFullYear();
     textOptions.link = link;
   }
-  doc.markContent('Span');
   doc.text(subj, x, y, textOptions);
-  doc.endMarkedContent();
   if (options.appendHebrewToSubject) {
     const slash = ' / ';
     doc.font('plain');
@@ -215,9 +208,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
       y += 2;
     }
     doc.font('hebrew');
-    doc.markContent('Span', {lang: 'he'});
     doc.text(reverseHebrewWords(hebrew), x, y, {continued: true});
-    doc.endMarkedContent();
   }
   return y + 12; // newline within cell
 }
@@ -247,11 +238,12 @@ export function createPdfDoc(title, options) {
     margin: 0,
     pdfVersion: '1.5',
     displayTitle: true,
-    tagged: true,
-    lang: (options && options.locale) || 'en',
+    lang: (options && options.locale) || 'en-US',
   });
 
   doc.info['Title'] = title;
+  doc.info['Subject'] = title;
+  doc.info['Keywords'] = 'Hebrew calendar, Jewish holidays';
   doc.info['Author'] = 'Hebcal Jewish Calendar (hebcal.com)';
 
   doc.registerFont('plain', './fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
@@ -288,7 +280,12 @@ export function renderPdf(doc, events, options) {
     doc.addPage();
     const pageName = 'cal-' + year + '-' + String(month).padStart(2, '0');
     doc.addNamedDestination(pageName);
-    renderPdfMonthGrid(doc, year, month, rtl, options.locale, rows, rowheight);
+
+    const locale = localeMap[options.locale] || 'en';
+    const d = dayjs(new Date(year, month - 1, 1)).locale(locale);
+    renderPdfMonthTitle(doc, d, rtl);
+
+    renderPdfMonthGrid(doc, d, rtl, rows, rowheight);
 
     let dow = startDayOfWeek;
     let xpos = xposNewRow + (dow * PDF_COLWIDTH) * xposMultiplier;
@@ -300,7 +297,6 @@ export function renderPdf(doc, events, options) {
       const str = String(mday);
       const width = doc.widthOfString(str);
       doc.text(str, xpos - width, ypos); // right-align
-
       // events within day mday
       if (cells[yearMonth][mday]) {
         let y = ypos + 18;
@@ -320,17 +316,13 @@ export function renderPdf(doc, events, options) {
     doc.fillColor('#000000');
     doc.font('plain').fontSize(8);
     if (options.location && options.location.name) {
-      doc.markContent('Artifact', {type: 'Pagination', attached: ['Bottom', 'Left']});
       doc.text(`Candle lighting times for ${options.location.name}`,
           PDF_LMARGIN, PDF_HEIGHT - 28);
-      doc.endMarkedContent();
     }
 
     const str = 'Provided by Hebcal.com with a Creative Commons Attribution 4.0 International License';
     const width = doc.widthOfString(str);
-    doc.markContent('Artifact', {type: 'Pagination', attached: ['Bottom', 'Right']});
     doc.text(str, PDF_WIDTH - PDF_RMARGIN - width, PDF_HEIGHT - 28);
-    doc.endMarkedContent();
   }
 
   return doc;
