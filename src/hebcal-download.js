@@ -106,7 +106,7 @@ export async function hebcalDownload(ctx) {
   } else if (extension == '.pdf') {
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
-    const doc = ctx.body = createPdfDoc(title);
+    const doc = ctx.body = createPdfDoc(title, options);
     renderPdf(doc, events, options);
     doc.end();
   }

@@ -519,6 +519,7 @@ function makeGeoCityName(latitude, longitude, tzid) {
 }
 
 export const localeMap = {
+  'de': 'de',
   'es': 'es',
   'fi': 'fi',
   'fr': 'fr',
