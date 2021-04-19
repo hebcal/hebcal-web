@@ -713,17 +713,13 @@ export function setDefautLangTz(ctx) {
     cc = ctx.geoipCountry.get(ip) || 'US';
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  const lang = ctx.state.lang = q.lg || ccDefaults[0];
+  const lg = ctx.state.lg = q.lg || ccDefaults[0];
+  ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.countryCode = cc;
   ctx.state.timezone = tzid || ccDefaults[1];
   ctx.state.location = location;
-  const il = ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
+  ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
-  if (!prevCookie) {
-    const query = Object.assign({}, q, {lg: lang, geo: 'none', i: il ? 'on' : 'off'});
-    const newCookie = makeCookie(query);
-    setCookie(ctx, newCookie);
-  }
   return q;
 }
 
