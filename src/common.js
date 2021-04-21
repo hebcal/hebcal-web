@@ -6,19 +6,28 @@ import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
 
 export const langTzDefaults = {
-  US: ['s', 'America/New_York'],
-  IL: ['h', 'Asia/Jerusalem'],
-  GB: ['s', 'Europe/London'],
-  CA: ['s', 'America/Toronto'],
+  AR: ['es', 'America/Argentina/Buenos_Aires'],
+  AT: ['de', 'Europe/Vienna'],
   AU: ['s', 'Australia/Sydney'],
-  ZA: ['s', 'Africa/Johannesburg'],
   BR: ['s', 'America/Sao_Paulo'],
+  CA: ['s', 'America/Toronto'],
+  CN: ['s', 'Asia/Shanghai'],
+  DE: ['de', 'Europe/Berlin'],
   ES: ['es', 'Europe/Madrid'],
-  MX: ['es', 'America/Mexico_City'],
-  FR: ['fr', 'Europe/Paris'],
-  RU: ['ru', 'Europe/Moscow'],
-  PL: ['pl', 'Europe/Warsaw'],
   FI: ['fi', 'Europe/Helsinki'],
+  FR: ['fr', 'Europe/Paris'],
+  GB: ['s', 'Europe/London'],
+  HU: ['hu', 'Europe/Budapest'],
+  IL: ['h', 'Asia/Jerusalem'],
+  IN: ['s', 'Asia/Kolkata'],
+  MX: ['es', 'America/Mexico_City'],
+  NL: ['s', 'Europe/Amsterdam'],
+  NZ: ['s', 'Pacific/Auckland'],
+  PL: ['pl', 'Europe/Warsaw'],
+  RO: ['s', 'Europe/Bucharest'],
+  RU: ['ru', 'Europe/Moscow'],
+  US: ['s', 'America/New_York'],
+  ZA: ['s', 'Africa/Johannesburg'],
 };
 
 export const lgToLocale = {
