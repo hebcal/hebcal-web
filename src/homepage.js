@@ -150,7 +150,7 @@ function getHolidayGreeting(hd, il) {
   if (roshChodesh) {
     const monthName = roshChodesh.getDesc().substring(13); // 'Rosh Chodesh '
     const url = roshChodesh.url();
-    return ['Chodesh Tov!',
+    return ['🗓️ Chodesh Tov! 🗓️',
       `We wish you a good new month of <a href="${url}">${monthName}</a>`];
   }
   if (mm == months.AV && dd == 8) {
@@ -164,7 +164,7 @@ begins tonight at sundown. We wish you an easy fast`];
       `We wish you an easy fast.<br><a href="${fastDay.url()}">${fastDay.render()}</a> occurs on ${strtime}`];
   }
   if (holidays[0] && holidays[0].getFlags() & flags.CHANUKAH_CANDLES) {
-    return ['Chag Urim Sameach!',
+    return ['🕎 Chag Urim Sameach! 🕎',
       `We wish you a happy <a href="/holidays/chanukah-${gy}">Chanukah</a>`];
   }
   if (mm == months.KISLEV && dd < 24) {
@@ -173,7 +173,7 @@ begins tonight at sundown. We wish you an easy fast`];
     const dow = erevChanukah.day();
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
-    return ['Happy Chanukah!',
+    return ['🕎 Happy Chanukah! 🕎',
       `Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a> ${when} on ${strtime}`];
   }
   if ((mm == months.TISHREI && dd >= 14 && dd <= 21) ||
@@ -191,7 +191,7 @@ begins tonight at sundown. We wish you an easy fast`];
     const nextYear = yy + 1;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
-    return ['Shana Tova!', `We wish you a happy and healthy New Year.
+    return ['🍏🍯 Shana Tova! 🍯🍏', `We wish you a happy and healthy New Year.
 <br><a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear} begins at sundown on ${strtime}`];
   }
   if (mm == months.TISHREI && dd >= 3 && dd <= 10) {
@@ -209,8 +209,8 @@ begins at sundown on ${strtime}`;
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
-    return ['Chag Purim Sameach!', `<a href="/holidays/purim-${gy}">Purim</a>
-begins at sundown on ${strtime}`];
+    return ['🎭️📜 Chag Purim Sameach! 📜🎭️',
+      `<a href="/holidays/purim-${gy}">Purim</a> begins at sundown on ${strtime}`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
