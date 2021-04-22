@@ -150,21 +150,21 @@ function getHolidayGreeting(hd, il) {
   if (roshChodesh) {
     const monthName = roshChodesh.getDesc().substring(13); // 'Rosh Chodesh '
     const url = roshChodesh.url();
-    return ['Chodesh Tov',
+    return ['Chodesh Tov!',
       `We wish you a good new month of <a href="${url}">${monthName}</a>`];
   }
   if (mm == months.AV && dd == 8) {
-    return ['Tzom Kal', `<a href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
+    return ['Tzom Kal!', `<a href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
 begins tonight at sundown. We wish you an easy fast`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
     const strtime = dayjs(fastDay.getDate().greg()).format(FORMAT_DOW_MONTH_DAY);
-    return ['Tzom Kal',
+    return ['Tzom Kal!',
       `We wish you an easy fast.<br><a href="${fastDay.url()}">${fastDay.render()}</a> occurs on ${strtime}`];
   }
   if (holidays[0] && holidays[0].getFlags() & flags.CHANUKAH_CANDLES) {
-    return ['Chag Urim Sameach',
+    return ['Chag Urim Sameach!',
       `We wish you a happy <a href="/holidays/chanukah-${gy}">Chanukah</a>`];
   }
   if (mm == months.KISLEV && dd < 24) {
@@ -173,24 +173,25 @@ begins tonight at sundown. We wish you an easy fast`];
     const dow = erevChanukah.day();
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
-    return ['Happy Chanukah',
+    return ['Happy Chanukah!',
       `Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a> ${when} on ${strtime}`];
   }
   if ((mm == months.TISHREI && dd >= 14 && dd <= 21) ||
       (mm == months.NISAN && dd >= 14 && dd <= 21)) {
     const holiday = mm == months.TISHREI ? 'Sukkot' : 'Pesach';
-    return ['Moadim L\'Simcha', `We wish you a very happy ${holiday}`];
+    return ['Moadim L\'Simcha!', `We wish you a very happy ${holiday}`];
   }
   if (mm === months.TISHREI && (dd === 1 || dd === 2)) {
-    return ['Chag Sameach',
-      'Shana Tova u\'Metukah!<br>🍏🍯 שנה טובה ומתוקה 🍯🍏<br>We wish you a happy and healthy New Year'];
+    return ['Shana Tova u\'Metukah!',
+      '🍏🍯 <span lang="he" dir="rtl">שנה טובה ומתוקה</span> 🍯🍏' +
+      '<br>We wish you a happy and healthy New Year'];
   }
   if (mm == months.ELUL || (mm == months.AV && dd >= 22)) {
     // for the last week of Av and entire month of Elul
     const nextYear = yy + 1;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
-    return ['Shana Tova', `We wish you a happy and healthy New Year.
+    return ['Shana Tova!', `We wish you a happy and healthy New Year.
 <br><a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear} begins at sundown on ${strtime}`];
   }
   if (mm == months.TISHREI && dd >= 3 && dd <= 10) {
@@ -208,22 +209,28 @@ begins at sundown on ${strtime}`;
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
-    return ['Chag Purim Sameach', `<a href="/holidays/purim-${gy}">Purim</a>
+    return ['Chag Purim Sameach!', `<a href="/holidays/purim-${gy}">Purim</a>
 begins at sundown on ${strtime}`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
     const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
-    return ['Chag Kasher v\'Sameach', `We wish you a happy
+    return ['Chag Kasher v\'Sameach!', `We wish you a happy
 <a href="/holidays/pesach-${gy}">Passover</a>.
 Pesach begins at sundown on ${strtime}`];
+  }
+  if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
+    const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg());
+    const strtime = erevLagBaOmer.format(FORMAT_DOW_MONTH_DAY);
+    return ['🔥 <span lang="he" dir="rtl">ל״ג בעומר שמח</span> 🔥',
+      `<br><a href="/holidays/lag-baomer-${gy}">Lag BaOmer</a> begins at sundown on ${strtime}`];
   }
   if (holidays[0]) {
     const desc = holidays[0].basename();
     if (chagSameach[desc]) {
       const url = holidays[0].url();
-      return ['Chag Sameach', `We wish you a happy <a href="${url}">${desc}</a>`];
+      return ['Chag Sameach!', `We wish you a happy <a href="${url}">${desc}</a>`];
     }
   }
   return [undefined, undefined];
