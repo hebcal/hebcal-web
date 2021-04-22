@@ -176,6 +176,12 @@ begins tonight at sundown. We wish you an easy fast`];
     return ['🕎 Happy Chanukah! 🕎',
       `Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a> ${when} on ${strtime}`];
   }
+  if (mm == months.SIVAN && dd <= 5) {
+    const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
+    const strtime = erevShavuot.format(FORMAT_DOW_MONTH_DAY);
+    return ['🌸🌾⛰️ Chag Shavuot Sameach! ⛰️🌾🌸',
+      `<br><a href="/holidays/shavuot-${gy}">Shavuot</a> begins at sundown on ${strtime}`];
+  }
   if ((mm == months.TISHREI && dd >= 14 && dd <= 21) ||
       (mm == months.NISAN && dd >= 14 && dd <= 21)) {
     const holiday = mm == months.TISHREI ? 'Sukkot' : 'Pesach';
@@ -203,7 +209,7 @@ begins tonight at sundown. We wish you an easy fast`];
       longText += `.\n<br><a href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
 begins at sundown on ${strtime}`;
     }
-    return ['G\'mar Chatima Tova / גְּמַר חֲתִימָה טוֹבָה', longText];
+    return ['✍️📖 G\'mar Chatima Tova / גְּמַר חֲתִימָה טוֹבָה 📖✍️', longText];
   }
   if (mm == purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
