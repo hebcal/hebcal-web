@@ -218,7 +218,7 @@ function makeYearEvents(il, date) {
   } else {
     const dt = new Date();
     options.start = dt;
-    options.end = new Date(dt.getTime() + (365 * 24 * 60 * 60 * 1000));
+    options.end = new Date(dt.getTime() + (386 * 24 * 60 * 60 * 1000));
   }
   const events = HebrewCalendar.calendar(options);
   return events;
