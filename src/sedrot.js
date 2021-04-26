@@ -158,6 +158,9 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     triennial.reading = reading.aliyot;
     triennial.yearNum = reading.yearNum + 1;
     leyning.addSefariaLinksToLeyning(triennial.reading, false);
+    for (const aliyah of Object.values(triennial.reading)) {
+      aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
+    }
   } else {
     const startYear = leyning.Triennial.getCycleStartYear(hyear);
     const tri = leyning.getTriennial(startYear);
@@ -176,6 +179,9 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
           const ev = new ParshaEvent(triReading.date, [parshaName]);
           const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
           leyning.addSefariaLinksToLeyning(triReading2.aliyot, false);
+          for (const aliyah of Object.values(triReading2.aliyot)) {
+            aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
+          }
           triReading2.d = dayjs(triReading.date.greg());
           triennial.readings[yr] = triReading2;
         }
