@@ -72,9 +72,12 @@ function init() {
       continue;
     }
     const country = isoToCountry[cc];
-    const countryA1 = makeAnchor(country) + '-' + makeAnchor(result.asciiname);
+    const countryAnchor = makeAnchor(country);
+    const countryA1 = countryAnchor + '-' + makeAnchor(result.asciiname);
     countryAdmin1[countryA1] = {
       cc,
+      country,
+      countryAnchor,
       admin1: a1id,
       name: result.name,
       asciiname: result.asciiname,
@@ -125,6 +128,7 @@ export async function shabbatBrowse(ctx) {
       friday,
       parsha,
       admin1: {size: 0},
+      countryA1,
     });
   }
   throw createError(404, `Browse page not found: ${base}`);

@@ -1,0 +1,18 @@
+<div class="d-print-none mt-2">
+<div class="d-none d-sm-block">
+<nav>
+<ol class="breadcrumb">
+<li class="breadcrumb-item"><a href="/shabbat">Shabbat</a></li>
+<li class="breadcrumb-item"><a href="/shabbat/browse/">Countries</a></li>
+<% if (typeof results === 'undefined') { %>
+<li class="breadcrumb-item active"><%=countryName%></li>
+<% } else if (typeof countryA1 !== 'undefined') { %>
+<li class="breadcrumb-item"><a href="/shabbat/browse/<%=countryA1.countryAnchor%>"><%=countryA1.country%></a></li>
+<li class="breadcrumb-item active"><%=countryA1.name%></li>
+<% } else { %>
+<li class="breadcrumb-item active"><%=countryName%></li>
+<% } %>
+</ol>
+</nav>
+</div><!-- .d-none d-sm-block -->
+</div><!-- .d-print-none -->

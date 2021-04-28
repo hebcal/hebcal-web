@@ -275,7 +275,7 @@ function getParshaEvent(il, date, parshaName) {
       const event2 = events.find((ev) => ev.getDesc() === descPair);
       return event2;
     } else {
-      const [p1, p2] = parshaName.split('-');
+      const [p1] = parshaName.split('-');
       const descFirst = 'Parashat ' + p1;
       const event3 = events.find((ev) => ev.getDesc() === descFirst);
       return event3;
