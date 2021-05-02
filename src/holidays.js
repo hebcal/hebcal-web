@@ -6,11 +6,13 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {getDefaultHebrewYear} from './common';
-import {categories, getFirstOcccurences} from './holidayCommon';
+import {categories, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
 
 dayjs.extend(isSameOrAfter);
+
+const DoWtiny = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
@@ -29,7 +31,7 @@ export async function holidayYearIndex(ctx) {
   };
   const events0 = HebrewCalendar.calendar(options);
   const events = getFirstOcccurences(events0);
-  const items = makeItems(events, isHebrewYear);
+  const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
@@ -42,73 +44,65 @@ export async function holidayYearIndex(ctx) {
     items,
     RH: dayjs(roshHashana.getDate().greg()),
     il,
+    DoWtiny,
   });
 }
 
-function makeItems(events, showYear) {
+function makeItems(events, il, showYear) {
   const items = {};
   for (const key of Object.keys(categories)) {
     items[key] = [];
   }
   for (const ev of events) {
-    const descrShort = getHolidayDescription(ev, true);
     const eventCategories = getEventCategories(ev);
     const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
-    const holiday = ev.basename();
-    const d = dayjs(ev.getDate().greg());
-    const item = {
-      name: holiday,
-      id: makeAnchor(holiday),
-      descrShort,
-      dates: tableCellObserved(ev, d, showYear),
-      d,
-    };
+    const item = eventToHolidayItem(ev, il);
+    item.dates = tableCellObserved(item, showYear);
+    item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
   }
   return items;
 }
 
 /**
- * @param {Event} ev
- * @param {dayjs.Dayjs} d
+ * @param {any} item
  * @param {boolean} isHebrewYear
  * @return {string}
  */
-function tableCellObserved(ev, d, isHebrewYear) {
-  const f = ev.basename();
-  const mask = ev.getFlags();
+function tableCellObserved(item, isHebrewYear) {
+  const f = item.name;
+  const mask = item.mask;
+  const dur = item.duration;
+  const d = item.d;
   const b0 = '<strong>';
   const b1 = '</strong>';
   if (f === 'Chanukah') {
-    return formatDatePlusDelta(d, 7, isHebrewYear) + shortDayOfWeek(d, 7);
+    return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
   } else if (f === 'Leil Selichot' || mask & flags.MINOR_FAST) {
     return formatSingleDay(d, isHebrewYear) + shortDayOfWeek(d, 0);
   } else if (f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
-    return formatSingleDayHtml(d, isHebrewYear) + shortDayOfWeek(d, 0);
+    return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
   } else {
     switch (f) {
       case 'Shavuot':
       case 'Rosh Hashana':
-        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1);
       case 'Yom Kippur':
       case 'Shmini Atzeret':
       case 'Simchat Torah':
-        return b0 + formatSingleDayHtml(d, isHebrewYear) + b1 + shortDayOfWeek(d, 0);
+        return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur);
       case 'Sukkot':
-        const d2 = d.add(2, 'd');
-        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1) +
+        const d2 = d.add(3, 'd');
+        return b0 + formatDatePlusDelta(d, 2, isHebrewYear) + b1 + shortDayOfWeek(d, 2) +
         '<br>' + formatDatePlusDelta(d2, 4, isHebrewYear) + shortDayOfWeek(d2, 4);
       case 'Pesach':
-        const d3 = d.add(2, 'd');
+        const d3 = d.add(3, 'd');
         const d6 = d.add(6, 'd');
-        return b0 + formatDatePlusDelta(d, 1, isHebrewYear) + b1 + shortDayOfWeek(d, 1) +
-        '<br>' + formatDatePlusDelta(d3, 3, isHebrewYear) + shortDayOfWeek(d3, 3) +
-        '<br>' + b0 + formatDatePlusDelta(d6, 1, isHebrewYear) + b1 + shortDayOfWeek(d6, 1);
+        return b0 + formatDatePlusDelta(d, 2, isHebrewYear) + b1 + shortDayOfWeek(d, 2) +
+        '<br>' + formatDatePlusDelta(d3, 2, isHebrewYear) + shortDayOfWeek(d3, 2) +
+        '<br>' + b0 + formatDatePlusDelta(d6, 2, isHebrewYear) + b1 + shortDayOfWeek(d6, 2);
     }
   }
 }
-
-const DoWtiny = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
 /**
  * @param {dayjs.Dayjs} d
@@ -143,12 +137,9 @@ function formatDateRange(d1, d2, showYear) {
  * @return {string}
  */
 function formatSingleDayHtml(d, showYear) {
-  const d0 = d.subtract(1, 'd');
   const iso = d.format('YYYY-MM-DD');
-  const d0str = formatSingleDay(d0, true);
   const dayStr = formatSingleDay(d, showYear);
-  // eslint-disable-next-line max-len
-  return `<time datetime="${iso}" title="begins at sundown on ${d0str}">${dayStr}</time>`;
+  return `<time datetime="${iso}">${dayStr}</time>`;
 }
 
 /**
@@ -207,7 +198,7 @@ export async function holidayMainIndex(ctx) {
       il,
     });
     const events = getFirstOcccurences(events0);
-    const items0 = makeItems(events, false);
+    const items0 = makeItems(events, il, false);
     for (const [catId, items1] of Object.entries(items0)) {
       for (const item of items1) {
         if (!Array.isArray(items[catId][item.name])) {

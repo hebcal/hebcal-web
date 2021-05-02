@@ -10,9 +10,9 @@
 <p class="d-print-none">Dates of major and minor Jewish holidays. Each
 holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
-<p>All holidays begin at sundown on the evening before the date
+<p>Except for minor fasts, holidays begin at sundown on the date
 specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
+Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <div class="btn-toolbar d-print-none mb-2">
@@ -51,15 +51,20 @@ data-ad-slot="1140358973"></ins>
 <div id="<%=category.id%>">
 <h3><%=category.name%></h3>
 <% if ('major-holidays' === category.id) { %>
-<p>Holidays begin at sundown on the evening before the date specified.</p>
+<p>Holidays begin at sundown on the first date specified and end at nightfall
+on the last date specified.</p>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
+<% } else if ('minor-fasts' === category.id) { %>
+<p>Minor fasts begin at dawn and end at nightfall.</p>
+<p>Tish'a B'Av begins at sundown on the first date specified and ends at
+nightfall on the second date specified.</p>
 <% } // major-holidays %>
 <div class="table-responsive">
 <table class="table table-sm table-striped">
 <colgroup>
-<col style="width:192px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
+<col style="width:200px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 </colgroup>
 <thead>
 <tr><th>Holiday</th>

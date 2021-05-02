@@ -104,7 +104,7 @@ function hebrewDateRange(hd, duration) {
  * @param {boolean} il
  * @return {any}
  */
-export function eventToOccursDict(ev, il) {
+export function eventToHolidayItem(ev, il) {
   const holiday = ev.basename();
   const mask = ev.getFlags();
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
@@ -115,6 +115,8 @@ export function eventToOccursDict(ev, il) {
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
   const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
   return {
+    name: holiday,
+    mask,
     id: makeAnchor(holiday),
     hd,
     beginsWhen,

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {httpRedirect} from './common';
-import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToOccursDict} from './holidayCommon';
+import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
 const OMER_TITLE = 'Days of the Omer';
@@ -24,9 +24,9 @@ function makeOccursOn(events, holiday, mask, il) {
   const nowAbs = greg.greg2abs(new Date());
   const occursOn = events
       .filter((ev) => holiday === ev.basename())
-      .map((ev) => eventToOccursDict(ev, il));
-  for (const obj of occursOn) {
-    obj.ppf = obj.endAbs < nowAbs ? 'past' : 'future';
+      .map((ev) => eventToHolidayItem(ev, il));
+  for (const item of occursOn) {
+    item.ppf = item.endAbs < nowAbs ? 'past' : 'future';
   }
   return occursOn;
 }

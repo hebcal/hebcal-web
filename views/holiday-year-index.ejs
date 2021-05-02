@@ -1,4 +1,14 @@
 <%- await include('partials/header.ejs') -%>
+<style>
+.tbody-striped > tbody {
+  border-bottom-color: #dee2e6;
+  border-bottom-width: 1px;
+}
+.tbody-striped > tbody:nth-of-type(odd) {
+  --bs-table-accent-bg: var(--bs-table-striped-bg);
+  color: var(--bs-table-striped-color);
+}
+</style>
 <% if (year <= 1752 || today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
 <body>
@@ -17,9 +27,9 @@ Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>).
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</p>
 <% if (year <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
-<p>All holidays begin at sundown on the evening before the date
+<p>Except for minor fasts, holidays begin at sundown on the date
 specified in the tables below. For example, if the dates for Rosh
-Hashana were listed as <strong><time datetime="<%=RH.format('YYYY-MM-DD')%>"><%=RH.format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
+Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <div class="btn-toolbar d-print-none mb-2">
@@ -67,24 +77,29 @@ data-ad-slot="1140358973"></ins>
 <div id="<%=category.id%>">
 <h3><%=category.name%></h3>
 <% if ('major-holidays' === category.id) { %>
-<p>Holidays begin at sundown on the evening before the date specified.</p>
+<p>Holidays begin at sundown on the first date specified and end at nightfall
+on the last date specified.</p>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
+<% } else if ('minor-fasts' === category.id) { %>
+<p>Minor fasts begin at dawn and end at nightfall.</p>
+<p>Tish'a B'Av begins at sundown on the first date specified and ends at
+nightfall on the second date specified.</p>
 <% } // major-holidays %>
-<table class="table table-striped table-sm">
+<table class="table table-borderless tbody-striped">
 <colgroup>
-<col style="width:192px"><col style="width:<%=isHebrewYear ? 180 : 156%>px"><col>
+<col style="width:200px"><col style="width:<%=isHebrewYear ? 180 : 156%>px"><col>
 </colgroup>
-<thead><tr><th>Holiday</th><th>Dates</th><th>Description</th></tr></thead>
-<tbody>
+<thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
-<tr><td><a href="<%=item.id%>-<%=item.d.year()%><%=il?'?i=on':''%>"><%=item.name%></a></td>
-<td><%- item.dates %></td>
-<td><%=item.descrShort%></td>
+<tbody>
+<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=item.name%></a></td>
+<td><%-item.dates%></td>
 </tr>
-<% } %>
+<tr><td colspan="2"><em><%=item.descrShort%></em></td></tr>
 </tbody>
+<% } %>
 </table>
 </div><!-- #<%=category.id%> -->
 <% } // ... for %>
