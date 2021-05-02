@@ -6,80 +6,28 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {httpRedirect} from './common';
-import {categories, holidays, events11yearsBegin, getFirstOcccurences} from './holidayCommon';
+import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToOccursDict} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
-// Don't include any 1-day duration holidays (it's the default)
-const holidayDurationIL = {
-  'Rosh Hashana': 2,
-  'Chanukah': 8,
-  'Sukkot': 7,
-  'Pesach': 7,
-};
-
 const OMER_TITLE = 'Days of the Omer';
-holidayDurationIL[OMER_TITLE] = 49;
-
-const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8, Shavuot: 2});
-
-function getHolidayDuration(il, mask, holiday) {
-  const duration = il ? holidayDurationIL : holidayDurationDiaspora;
-  const days = (mask === flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
-    (duration[holiday] || 1);
-  return days;
-}
 
 const holidayYearRe = /^([a-z-]+)-(\d+)$/;
-
-function hebrewDateRange(hd, duration) {
-  if (duration <= 1) {
-    return hd.toString();
-  }
-  const end = new HDate(hd.abs() + duration - 1);
-  const startMonth = hd.getMonthName();
-  const startMday = hd.getDate();
-  const endMonth = end.getMonthName();
-  if (startMonth === endMonth) {
-    return `${startMday}-${end.getDate()} ${startMonth} ${hd.getFullYear()}`;
-  }
-  return `${startMday} ${startMonth} - ${end.toString()}`;
-}
 
 /**
  * @param {Event[]} events
  * @param {string} holiday
  * @param {number} mask
- * @param {Date} now
  * @param {boolean} il
  * @return {any[]}
  */
-function makeOccursOn(events, holiday, mask, now, il) {
-  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-    mask === flags.MINOR_FAST ? 'at dawn' : 'at sundown';
-  const nowAbs = greg.greg2abs(now);
-  const duration0 = getHolidayDuration(il, mask, holiday);
+function makeOccursOn(events, holiday, mask, il) {
+  const nowAbs = greg.greg2abs(new Date());
   const occursOn = events
       .filter((ev) => holiday === ev.basename())
-      .map((ev) => {
-        const hd = ev.getDate();
-        const d0 = dayjs(hd.greg());
-        const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
-        const duration = mask === flags.ROSH_CHODESH && hd.getDate() === 30 ? 2 : duration0;
-        const endAbs = duration ? hd.abs() + duration - 1 : hd.abs();
-        return {
-          id: makeAnchor(holiday),
-          hd,
-          beginsWhen,
-          d,
-          duration,
-          endD: d.add(duration, 'd'),
-          hdRange: hebrewDateRange(hd, duration),
-          desc: ev.render(),
-          basename: ev.basename(),
-          ppf: endAbs < nowAbs ? 'past' : 'future',
-          event: ev,
-        };
-      });
+      .map((ev) => eventToOccursDict(ev, il));
+  for (const obj of occursOn) {
+    obj.ppf = obj.endAbs < nowAbs ? 'past' : 'future';
+  }
   return occursOn;
 }
 
@@ -108,8 +56,7 @@ export async function holidayDetail(ctx) {
     })) : events11yearsBegin;
   const category = categories[meta.category] || {};
   const mask = category.flags || 0;
-  const now = new Date();
-  const occursOn = makeOccursOn(holidayBegin, holiday, mask, now, il);
+  const occursOn = makeOccursOn(holidayBegin, holiday, mask, il);
   const next = dateSuffix && dateSuffix.length === 8 ?
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :
@@ -133,6 +80,7 @@ export async function holidayDetail(ctx) {
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
   const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
+  const now = new Date();
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
   await ctx.render('holiday-detail', {
     title,
