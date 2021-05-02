@@ -254,8 +254,9 @@ function makeBibleOrtUrl(parsha) {
   const chapVerse = parsha.fullkriyah['1'].b;
   const [chapter, verse] = chapVerse.split(':');
   const book = getBookId(parsha.book);
+  const portion = parsha.combined ? parsha.num1 : parsha.num;
   // eslint-disable-next-line max-len
-  return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${parsha.num}`;
+  return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${portion}`;
 }
 
 function getParshaEvent(il, date, parshaName) {
