@@ -7,6 +7,7 @@ import './dayjs-locales';
 
 export async function homepage(ctx) {
   const q = setDefautLangTz(ctx);
+  ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;

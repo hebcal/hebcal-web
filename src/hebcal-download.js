@@ -82,13 +82,7 @@ export async function hebcalDownload(ctx) {
     ctx.status = 304;
     return;
   }
-  let events = makeHebrewCalendar(ctx, options);
-  if (options.noMinorHolidays) {
-    events = events.filter((ev) => {
-      const categories = getEventCategories(ev);
-      return categories.length < 2 || categories[1] !== 'minor';
-    });
-  }
+  const events = makeHebrewCalendar(ctx, options);
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
   }

@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
+import {getEventCategories} from '@hebcal/rest-api';
 
 export const langTzDefaults = {
   AR: ['es', 'America/Argentina/Buenos_Aires'],
@@ -46,6 +47,22 @@ const negativeOpts = {
   mf: 'noMinorFast',
   ss: 'noSpecialShabbat',
 };
+
+/*
+const optsToMask = {
+  maj: flags.YOM_TOV_ENDS | flags.MAJOR_FAST |
+    flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS | flags.CHANUKAH_CANDLES,
+  nx: flags.ROSH_CHODESH,
+  mod: flags.MODERN_HOLIDAY,
+  mf: flags.MINOR_FAST,
+  ss: flags.SPECIAL_SHABBAT | flags.SHABBAT_MEVARCHIM,
+  c: flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS,
+  o: flags.OMER_COUNT,
+  s: flags.PARSHA_HASHAVUA,
+  F: flags.DAF_YOMI,
+  i: flags.IL_ONLY,
+};
+*/
 
 const booleanOpts = {
   d: 'addHebrewDates',
@@ -618,6 +635,12 @@ export function makeHebrewCalendar(ctx, options) {
     events = HebrewCalendar.calendar(options);
   } catch (err) {
     ctx.throw(400, err);
+  }
+  if (options.noMinorHolidays) {
+    events = events.filter((ev) => {
+      const categories = getEventCategories(ev);
+      return categories.length < 2 || categories[1] !== 'minor';
+    });
   }
   return events;
 }
