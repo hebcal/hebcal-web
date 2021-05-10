@@ -16,11 +16,10 @@ const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 /**
  * @param {Event[]} events
  * @param {string} holiday
- * @param {number} mask
  * @param {boolean} il
  * @return {any[]}
  */
-function makeOccursOn(events, holiday, mask, il) {
+function makeOccursOn(events, holiday, il) {
   const nowAbs = greg.greg2abs(new Date());
   const occursOn = events
       .filter((ev) => holiday === ev.basename())
@@ -55,8 +54,7 @@ export async function holidayDetail(ctx) {
       numYears: 10,
     })) : events11yearsBegin;
   const category = categories[meta.category] || {};
-  const mask = category.flags || 0;
-  const occursOn = makeOccursOn(holidayBegin, holiday, mask, il);
+  const occursOn = makeOccursOn(holidayBegin, holiday, il);
   const next = dateSuffix && dateSuffix.length === 8 ?
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :

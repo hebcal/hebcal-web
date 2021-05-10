@@ -16,12 +16,12 @@ const events11years = HebrewCalendar.calendar({
 export const events11yearsBegin = getFirstOcccurences(events11years);
 
 export const categories = {
-  major: {id: 'major-holidays', name: 'Major holidays', flags: 0},
-  minor: {id: 'minor-holidays', name: 'Minor holidays', flags: 0},
-  fast: {id: 'minor-fasts', name: 'Minor fasts', flags: flags.MINOR_FAST},
-  modern: {id: 'modern-holidays', name: 'Modern holidays', flags: flags.MODERN_HOLIDAY},
-  shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot', flags: flags.SPECIAL_SHABBAT},
-  roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh', flags: flags.ROSH_CHODESH},
+  major: {id: 'major-holidays', name: 'Major holidays'},
+  minor: {id: 'minor-holidays', name: 'Minor holidays'},
+  fast: {id: 'minor-fasts', name: 'Minor fasts'},
+  modern: {id: 'modern-holidays', name: 'Modern holidays'},
+  shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot'},
+  roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh'},
 };
 
 /**
