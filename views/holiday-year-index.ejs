@@ -4,6 +4,14 @@
   border-bottom-color: #dee2e6;
   border-bottom-width: 1px;
 }
+.tbody-striped > tbody > :first-child > * {
+  padding-left: 0.5rem;
+  padding-top: 0.6rem;
+}
+.tbody-striped > tbody > :last-child > * {
+  padding-left: 0.5rem;
+  padding-bottom: 0.75rem;
+}
 .tbody-striped > tbody:nth-of-type(odd) {
   --bs-table-accent-bg: var(--bs-table-striped-bg);
   color: var(--bs-table-striped-color);
@@ -87,7 +95,7 @@ is forbidden.</p>
 <p>Tish'a B'Av begins at sundown on the first date specified and ends at
 nightfall on the second date specified.</p>
 <% } // major-holidays %>
-<table class="table table-borderless tbody-striped">
+<table class="table table-borderless table-sm tbody-striped">
 <colgroup>
 <col style="width:200px"><col style="width:<%=isHebrewYear ? 180 : 156%>px"><col>
 </colgroup>
