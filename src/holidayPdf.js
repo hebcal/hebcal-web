@@ -1,10 +1,9 @@
 import {HebrewCalendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
-import etag from 'etag';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf';
-import {lgToLocale, localeMap} from './common';
+import {lgToLocale, localeMap, eTagFromOptions} from './common';
 
 /**
  * @param {any} ctx
@@ -31,15 +30,12 @@ export async function holidayPdf(ctx) {
     isHebrewYear,
     locale,
     il: ctx.state.il,
-    // used for ETag
-    version: HebrewCalendar.version(),
-    outputType: '.pdf',
   };
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
   ctx.set('Cache-Control', 'max-age=5184000');
   ctx.response.type = 'application/pdf';
-  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+  ctx.response.etag = eTagFromOptions(options, {outputType: '.pdf'});
   const doc = ctx.body = createPdfDoc(title, options);
   renderPdf(doc, events, options);
   doc.end();

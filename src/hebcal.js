@@ -2,7 +2,7 @@
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
   getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
-  localeMap} from './common';
+  localeMap, eTagFromOptions} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
@@ -12,7 +12,6 @@ import localeData from 'dayjs/plugin/localeData';
 import './dayjs-locales';
 import fs from 'fs';
 import readline from 'readline';
-import etag from 'etag';
 
 dayjs.extend(localeData);
 
@@ -65,9 +64,8 @@ export async function hebcalApp(ctx) {
       getDefaultHebrewYear(new HDate(dt)) :
       dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
   }
-  options.outputType = q.cfg; // ignored by HebrewCalendar.calendar() and used for ETag
   if (ctx.status != 400 && q.v === '1') {
-    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+    ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
     ctx.status = 200;
     if (ctx.fresh) {
       ctx.status = 304;

@@ -54,7 +54,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 </script>
 </div><!-- .d-flex -->
 
-<h3 id="dates">Dates for <%=holiday%></h3>
+<h3 id="dates">Dates for <%=holiday%><% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></h3>
 <div class="table-responsive">
 <table class="table table-striped">
 <thead>

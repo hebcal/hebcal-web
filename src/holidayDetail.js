@@ -163,6 +163,13 @@ function makeOmerEvents(year) {
   return events;
 }
 
+/**
+ * @param {any} meta
+ * @param {string} holiday
+ * @param {number} year
+ * @param {boolean} il
+ * @param {any} next
+ */
 function makeHolidayReadings(meta, holiday, year, il, next) {
   meta.reading = meta.reading || {};
   if (year) {
@@ -203,6 +210,13 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
   }
 }
 
+/**
+ * @param {string} holiday
+ * @param {string} item
+ * @param {any} meta
+ * @param {leyning.Leyning} reading
+ * @param {Event} ev
+ */
 function makeHolidayReading(holiday, item, meta, reading, ev) {
   if (reading.fullkriyah) {
     leyning.addSefariaLinksToLeyning(reading.fullkriyah, true);
@@ -240,6 +254,11 @@ function makeHolidayReading(holiday, item, meta, reading, ev) {
   }
 }
 
+/**
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {leyning.Leyning}
+ */
 function getReadingForHoliday(ev, il) {
   const hd = ev.getDate();
   const dow = hd.abs() % 7;

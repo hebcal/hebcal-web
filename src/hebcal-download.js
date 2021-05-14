@@ -1,10 +1,9 @@
 import {eventsToIcalendar} from '@hebcal/icalendar';
-import {eventsToCsv, getCalendarTitle, getEventCategories} from '@hebcal/rest-api';
+import {eventsToCsv, getCalendarTitle} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
-import etag from 'etag';
 import {basename} from 'path';
-import {makeHebcalOptions, makeHebrewCalendar} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions} from './common';
 
 const maxNumYear = {
   candlelighting: 4,
@@ -74,9 +73,8 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics' || extension == '.csv') {
     options.numYears = getNumYears(options);
   }
-  options.outputType = extension; // used for ETag
   // etag includes actual year because options.year is never 'now'
-  ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+  ctx.response.etag = eTagFromOptions(options, {outputType: extension});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

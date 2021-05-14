@@ -5,6 +5,7 @@ import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
 import {getEventCategories} from '@hebcal/rest-api';
+import etag from 'etag';
 
 export const langTzDefaults = {
   AR: ['es', 'America/Argentina/Buenos_Aires'],
@@ -394,7 +395,6 @@ export function makeHebcalOptions(db, query) {
       delete options.candlelighting;
     }
   }
-  options.version = HebrewCalendar.version();
   return options;
 }
 
@@ -803,4 +803,16 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
   const sunset = zman.sunset();
   const afterSunset = Boolean(dt >= sunset);
   return {dt: day, afterSunset: afterSunset, gy, gd, gm};
+}
+
+/**
+ * @private
+ * @param {any} options
+ * @param {any} attrs
+ * @return {string}
+ */
+export function eTagFromOptions(options, attrs) {
+  const etagObj = Object.assign({version: HebrewCalendar.version()},
+      options, attrs);
+  return etag(JSON.stringify(etagObj), {weak: true});
 }

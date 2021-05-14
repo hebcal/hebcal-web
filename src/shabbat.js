@@ -4,12 +4,12 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
   httpRedirect,
   getLocationFromGeoIp,
+  eTagFromOptions,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
-import etag from 'etag';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import './dayjs-locales';
@@ -37,7 +37,7 @@ export async function shabbatApp(ctx) {
   const {q, options} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status != 400 && ctx.request.querystring.length > 0) {
-    ctx.response.etag = etag(JSON.stringify(options), {weak: true});
+    ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
     ctx.status = 200;
     if (ctx.fresh) {
       ctx.status = 304;
@@ -214,9 +214,6 @@ function makeOptions(ctx) {
     locale: opts0.locale,
     il: opts0.il,
     sedrot: true,
-    // these two are ignored by HebrewCalendar.calendar() and used for ETag
-    version: HebrewCalendar.version(),
-    outputType: q.cfg,
   };
   q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
   if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
