@@ -47,8 +47,10 @@ export async function hebrewDateConverter(ctx) {
     const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
     const gs = afterSunset ? '&gs=on' : '';
+    const il = location.getIsrael() ? '&i=on' : '';
     ctx.set('Cache-Control', 'private, max-age=0');
-    httpRedirect(ctx, `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}&g2h=1`, 302);
+    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1`;
+    httpRedirect(ctx, url, 302);
     return;
   }
   const p = makeProperties(ctx);
@@ -110,6 +112,9 @@ export async function hebrewDateConverter(ctx) {
   }
 }
 
+/**
+ * @type {Map<string,Sedra>}
+ */
 const sedraCache = new Map();
 
 /**
@@ -141,7 +146,7 @@ function makeProperties(ctx) {
     const sedra = sedraCache.get(yearIl) || new Sedra(hy, il);
     let pe = [];
     if (sedra.isParsha(saturday)) {
-      pe = new ParshaEvent(saturday, sedra.get(saturday));
+      pe = new ParshaEvent(saturday, sedra.get(saturday), il);
     }
     sedraCache.set(yearIl, sedra);
     events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];

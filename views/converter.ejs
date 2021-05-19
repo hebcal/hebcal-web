@@ -83,6 +83,7 @@
   <label class="form-check-label" for="gs">After sunset</label>
 </div><!-- .form-check -->
 </div><!-- .col -->
+<% if (il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col-auto mb-2">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
@@ -122,6 +123,7 @@
 <input type="text" class="form-control" name="hy" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy" pattern="\d*">
 <label for="hy">Year</label>
 </div><!-- .col -->
+<% if (il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col mb-2">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>

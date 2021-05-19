@@ -667,8 +667,9 @@ export function validateEmail(email) {
  * MaxMind geoIP lookup GeoLite2-Country.mmdb
  * @return {any}
  * @param {any} ctx
+ * @param {number} maxAccuracyRadius
  */
-export function getLocationFromGeoIp(ctx) {
+export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
   const ip = getIpAddress(ctx);
   const geoip = ctx.geoipCity.get(ip);
   if (!geoip) {
@@ -689,16 +690,17 @@ export function getLocationFromGeoIp(ctx) {
         typeof geoip.location.time_zone === 'string' &&
         typeof geoip.location.latitude === 'number' &&
         typeof geoip.location.longitude === 'number') {
-    if (geoip.location.accuracy_radius > 500) {
-      return {geo: 'none', details: geoip};
-    }
     const latitude = geoip.location.latitude;
     const longitude = geoip.location.longitude;
     const tzid = geoip.location.time_zone;
     const cc = geoip.country && geoip.country.iso_code;
+    const pos = {geo: 'pos', latitude, longitude, tzid, cc, details: geoip};
+    if (geoip.location.accuracy_radius > maxAccuracyRadius) {
+      return pos;
+    }
     const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, tzid);
     if (city === null) {
-      return {geo: 'pos', latitude, longitude, tzid, cc, details: geoip};
+      return pos;
     } else {
       return {geo: 'geoname', geonameid: city.geonameid, nn: true, details: geoip};
     }
@@ -718,7 +720,7 @@ export function setDefautLangTz(ctx) {
   let location = getLocationFromQuery(ctx.db, q);
   if (location === null) {
     // try to infer location from GeoIP
-    const gloc = getLocationFromGeoIp(ctx);
+    const gloc = getLocationFromGeoIp(ctx, 1000);
     if (gloc.zip || gloc.geonameid) {
       const geoip = {};
       for (const [key, val] of Object.entries(gloc)) {

@@ -349,7 +349,7 @@ function renderEventHtml(ev, options, locale) {
   const memo = memo0 ? ` title="${memo0}"` : '';
   let url = ev.url();
   if (typeof url === 'string' && url.startsWith('https://www.hebcal.com/')) {
-    const suffix = options.il ? '?i=on' : '';
+    const suffix = options.il && url.indexOf('?') === -1 ? '?i=on' : '';
     url = url.substring(22) + suffix;
   }
   const ahref = url ? `<a href="${url}">` : '';

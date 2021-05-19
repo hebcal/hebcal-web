@@ -176,7 +176,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
           triReading.d = dayjs(triReading.date.greg());
           triReading.anchor = makeAnchor(triReading.readTogether);
         } else {
-          const ev = new ParshaEvent(triReading.date, [parshaName]);
+          const ev = new ParshaEvent(triReading.date, [parshaName], false);
           const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
           leyning.addSefariaLinksToLeyning(triReading2.aliyot, false);
           for (const aliyah of Object.values(triReading2.aliyot)) {
@@ -256,7 +256,7 @@ function makeBibleOrtUrl(parsha) {
   const book = getBookId(parsha.book);
   const portion = parsha.combined ? parsha.num1 : parsha.num;
   // eslint-disable-next-line max-len
-  return `http://www.bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${portion}`;
+  return `https://bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${portion}`;
 }
 
 function getParshaEvent(il, date, parshaName) {
@@ -265,7 +265,7 @@ function getParshaEvent(il, date, parshaName) {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
     const mday = il ? 22 : 23;
-    return new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [parshaName]);
+    return new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [parshaName], il);
   }
   const desc = 'Parashat ' + parshaName;
   const event = events.find((ev) => ev.getDesc() === desc);
@@ -303,7 +303,7 @@ export async function parshaIndex(ctx) {
     }
   } else {
     parsha = parsha0.parsha.join('-');
-    const pe = new ParshaEvent(hd, parsha0.parsha);
+    const pe = new ParshaEvent(hd, parsha0.parsha, il);
     parshaHref = pe.url();
   }
   await ctx.render('parsha-index', {

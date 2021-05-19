@@ -311,10 +311,12 @@ function eventToItem(ev, options, locale) {
     obj.isoTime = ev.eventTimeStr;
     obj.fmtTime = hourMin;
   }
-  const url0 = ev.url();
-  const url = url0 && options.il ? url0 + '?i=on' : url0;
+  const url = ev.url();
   if (url) {
     obj.url = url;
+    if (options.il && url.indexOf('?') === -1) {
+      obj.url += '?i=on';
+    }
   }
   return obj;
 }

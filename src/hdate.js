@@ -66,7 +66,7 @@ export async function parshaRss(ctx) {
   const isParsha = sedra.isParsha(hd);
   let ev;
   if (isParsha) {
-    ev = new ParshaEvent(hd, sedra.get(hd));
+    ev = new ParshaEvent(hd, sedra.get(hd), il);
   } else {
     const events = HebrewCalendar.getHolidaysOnDate(saturday.toDate(), il) || [];
     ev = events[0];

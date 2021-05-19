@@ -60,21 +60,20 @@ function mastheadParsha(ctx, dt, il) {
   const hd = new HDate(saturday.toDate());
   const sedra = new Sedra(hd.getFullYear(), il);
   if (sedra.isParsha(hd)) {
-    const pe = new ParshaEvent(hd, sedra.get(hd));
+    const pe = new ParshaEvent(hd, sedra.get(hd), il);
     const url = pe.url();
-    const suffix = il ? '?i=on' : '';
-    items.push(`<a href="${url}${suffix}">${pe.render(ctx.state.locale)}</a>`);
+    items.push(`<a href="${url}">${pe.render(ctx.state.locale)}</a>`);
   }
 }
 
 function mastheadHolidays(ctx, hd, il) {
   const items = ctx.state.items;
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-  const suffix = il ? '?i=on' : '';
   holidays
       .map((ev) => {
         const url = ev.url();
         const desc = ev.render(ctx.state.locale);
+        const suffix = il && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
