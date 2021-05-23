@@ -562,14 +562,14 @@ var tooltipList = tooltipTriggerList.map(function (el) {
 </script>
 `;
 
-export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/typeahead.js@0.10.4/dist/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-app-3.0.min.js"></script>
 <script>hebcalClient.createCityTypeahead(false);</script>
 `;
 
 export const clipboardScript = `
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
 <script>
 var grabBtnList = [].slice.call(document.querySelectorAll('.btn.grabBtn'));
 var grabContainer = document.getElementsByClassName('modal');
