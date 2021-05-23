@@ -219,7 +219,7 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1.9.8/dayjs.min.js"></script>
-<script src="/i/hebcal-app-2.4.min.js"></script>
+<script src="/i/hebcal-app-3.0.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var d = document;
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   document.getElementById('toggle-list').onchange = function() {
     d.querySelectorAll('div.cal').forEach(hide);
-    window['hebcal'].renderMonthTables();
+    hebcalClient.renderMonthTables();
     d.querySelectorAll('div.agenda').forEach(show);
   };
   if (window.outerWidth < 768) {
