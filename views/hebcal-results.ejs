@@ -189,21 +189,24 @@ accurate.
 <div id="hebcal-results">
 <%- await include('partials/pagination.ejs') -%>
 <% let first = true; %>
-<% dates.forEach((d) => { -%>
-<% if (today.isSame(d, 'year') && today.isSame(d, 'month')) { %><div id="cal-current"></div><% } -%>
-<div id="cal-<%= d.format('YYYY-MM') %>">
+<% for (const [yearMonth, tableBody] of Object.entries(tableBodies)) { %>
+<% if (today.isSame(tableBody.d, 'year') && today.isSame(tableBody.d, 'month')) { %><div id="cal-current"></div><% } -%>
+<div id="cal-<%= yearMonth %>">
 <div class="cal<%if(first){%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
-<h3 class="text-center"><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%if(!first){%><a class="d-print-none text-muted" href="#cal-<%= d.subtract(1, 'month').format('YYYY-MM') %>">«</a> <% } %><%= d.locale(locale).format('MMMM YYYY') %> <a class="d-print-none text-muted" href="#cal-<%= d.add(1, 'month').format('YYYY-MM') %>">»</a><% if (locale === 'he') { %></span><% } %></h3>
+<h3 class="text-center"><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } _%>
+<%if(!first){%><a class="d-print-none text-muted" href="#cal-<%= tableBody.prevMonth %>">«</a> <% } %><%= tableBody.d.locale(locale).format('MMMM') + ' ' + tableBody.year %> <a class="d-print-none text-muted" href="#cal-<%= tableBody.nextMonth %>">»</a>
+<% if (locale === 'he') { %></span><% } _%>
+</h3>
 <table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
 <tbody><tr><% localeConfig.weekdaysShort.forEach((s) => { -%><th><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= s %><% if (locale === 'he') { %></span><% } %></th><% }); -%></tr>
-<%- tableBodies[d.format('YYYY-MM')] _%>
+<%- tableBody.html _%>
 </tbody></table>
 </div><!-- .cal -->
 <div class="agenda">
 </div><!-- .agenda -->
-</div><!-- #cal-<%= d.format('YYYY-MM') %> -->
+</div><!-- #cal-<%= yearMonth %> -->
 <%   first = false; -%>
-<% }); -%>
+<% } %>
 <%- await include('partials/pagination.ejs') -%>
 </div><!-- #hebcal-results -->
 <script>

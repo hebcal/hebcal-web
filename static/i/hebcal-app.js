@@ -84,8 +84,9 @@ export const hebcalClient = {
     let prevMonth = '';
     let monthEvents;
     events.forEach((evt) => {
-      const m = dayjs(evt.date);
-      const month = m.format('YYYY-MM');
+      const idxT = evt.date.indexOf('T');
+      const isoDate = idxT == -1 ? evt.date : evt.date.substring(0, idxT);
+      const month = isoDate.substring(0, isoDate.length - 3);
       if (month !== prevMonth) {
         prevMonth = month;
         monthEvents = [];
@@ -148,14 +149,20 @@ export const hebcalClient = {
   },
 
   monthHtml: function(month) {
-    const date = `${month.month}-01`;
-    const m = dayjs(date);
+    const yearStr = month.month.substring(0, month.month.length - 3);
+    const monthStr = month.month.substring(month.month.length - 2);
+    const yy = parseInt(yearStr, 10);
+    const mm = parseInt(monthStr, 10);
+    const dt = new Date(yy, mm - 1, 1);
+    if (yy < 100) {
+      dt.setFullYear(yy);
+    }
     const lang = window['hebcal'].lang || 's';
     const dir = lang === 'h' ? 'rtl' : 'ltr';
     const divBegin = `<div class="month-table" dir="${dir}">`;
     const divEnd = '</div><!-- .month-table -->';
     const localeData = window['hebcal'].localeConfig;
-    const heading = `<h3>${localeData.months[m.month()]} ${m.format('YYYY')}</h3>`;
+    const heading = `<h3>${localeData.months[mm - 1]} ${yearStr}</h3>`;
     const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
     // eslint-disable-next-line max-len
     const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:116px">${timeColumn}<col><tbody>`;

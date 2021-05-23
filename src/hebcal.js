@@ -5,7 +5,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   localeMap, eTagFromOptions} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
-  getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
+  getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -282,7 +282,7 @@ function getNumYears(options) {
 function makeTableBodies(events, months, options, locale) {
   const eventMap = new Map();
   for (const ev of events) {
-    const key = dayjs(ev.date.greg()).format('YYYY-MM-DD');
+    const key = toISOString(ev.date.greg());
     if (eventMap.has(key)) {
       eventMap.get(key).push(ev);
     } else {
@@ -298,7 +298,8 @@ function makeTableBodies(events, months, options, locale) {
     }
     let n = dow;
     const daysInMonth = greg.daysInMonth(d.month() + 1, d.year());
-    const yearMonth = d.format('YYYY-MM');
+    const yearStr = pad4(d.year());
+    const yearMonth = yearStr + '-' + pad2(d.month() + 1);
     for (let i = 1; i <= daysInMonth; i++) {
       html += `<td><p><b>${i}</b></p>`;
       const evs = eventMap.get(yearMonth + '-' + pad2(i)) || [];
@@ -319,7 +320,15 @@ function makeTableBodies(events, months, options, locale) {
     if (html.endsWith('<tr></tr>\n')) {
       html = html.substring(0, html.length - 10);
     }
-    tableBodies[yearMonth] = html;
+    const prev = d.subtract(1, 'month');
+    const next = d.add(1, 'month');
+    tableBodies[yearMonth] = {
+      year: yearStr,
+      d,
+      html,
+      prevMonth: pad4(prev.year()) + '-' + pad2(prev.month() + 1),
+      nextMonth: pad4(next.year()) + '-' + pad2(next.month() + 1),
+    };
   }
   return tableBodies;
 }
