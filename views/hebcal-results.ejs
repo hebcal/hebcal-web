@@ -119,7 +119,7 @@ Perhaps you intended to view the calendar for
 </div><!-- .alert -->
 <% } else if (gy < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
-<% } else if (gy >= 3762) { -%>
+<% } else if (gy >= 3762 && q.yt === 'G') { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Note!</strong>
