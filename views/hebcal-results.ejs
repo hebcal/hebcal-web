@@ -151,7 +151,7 @@ accurate.
 <% if (gy >= 1970) { -%>
 <div class="btn-group me-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
 <% } %>
-<% if (q.c === 'on') { %>
+<% if (q.c === 'on' && gy >= 1970) { %>
 <div class="btn-group me-1" role="group">
   <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-bs-toggle="dropdown" aria-expanded="false">
