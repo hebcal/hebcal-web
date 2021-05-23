@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation} from './common';
 import gematriya from 'gematriya';
+import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
 
 const CACHE_CONTROL_ONE_YEAR = 'public, max-age=31536000, s-maxage=31536000';
@@ -133,7 +134,9 @@ function makeProperties(ctx) {
   const lg = lgToLocale[query.lg || 's'] || query.lg;
   const locale = localeMap[lg] || 'en';
   const d = dayjs(dt).locale(locale);
-  const dateStr = d.format('ddd, D MMMM ') + String(dt.getFullYear()).padStart(4, '0');
+  const gy = dt.getFullYear();
+  const gyStr = gy > 0 ? pad4(gy) : pad4(-gy) + ' B.C.E.';
+  const dateStr = d.format('ddd, D MMMM ') + gyStr;
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render(locale);
@@ -162,7 +165,7 @@ function makeProperties(ctx) {
     second: (props.type === 'g2h') ? hdateStr : dateStr + afterSunset,
     hebrew: gematriyaDate(hdate),
     gs: props.gs,
-    gy: dt.getFullYear(),
+    gy,
     gm: dt.getMonth() + 1,
     gd: dt.getDate(),
     hy: hdate.getFullYear(),
@@ -203,8 +206,8 @@ function parseConverterQuery(ctx) {
       throw new Error('Hebrew day must be numeric');
     } else if (isNaN(hy)) {
       throw new Error('Hebrew year must be numeric');
-    } else if (hy < 3761) {
-      throw new RangeError('Hebrew year must be in the common era (3761 and above)');
+    } else if (hy < 1) {
+      throw new RangeError('Hebrew year must be year 1 or later');
     } else if (hy > 32000) {
       throw new RangeError('Hebrew year is too large');
     }
@@ -215,9 +218,6 @@ function parseConverterQuery(ctx) {
       throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
     }
     const hdate = new HDate(hd, hm, hy);
-    if (hdate.abs() < 1) {
-      throw new RangeError('Hebrew date must be in the common era');
-    }
     const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
   } else {

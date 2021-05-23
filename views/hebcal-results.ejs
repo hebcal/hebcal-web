@@ -107,8 +107,30 @@ div.pbba { page-break-before: always }
 <div id="content">
 <div class="row">
 <div class="col-sm-8">
-<% if (gy < 1752) { -%>
+<% if (gy < 0 && q.yt === 'H') { -%>
+<div class="alert alert-warning alert-dismissible" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Warning!</strong>
+You are viewing <strong>Hebrew year <%=hebrewYear%></strong>,
+which is equivalent to Gregorian year <%=-gy%> B.C.E. (Before the Common Era).
+Hebrew date conversion before year 1 C.E. may be inaccurate.<br>
+Perhaps you intended to view the calendar for
+<a href="<%-sameUrlGregYear%>">Gregorian year <%=hebrewYear%></a>?
+</div><!-- .alert -->
+<% } else if (gy < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
+<% } else if (gy >= 3762) { -%>
+<div class="alert alert-warning alert-dismissible" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Note!</strong>
+You are viewing <strong>Gregorian</strong> year <%=gy%>, which
+is <%=futureYears%> years <em>in the future</em>.<br>
+Did you really intend this? Perhaps you wish to view the calendar
+for <a href="<%-sameUrlHebYear%>">Hebrew year <%=gy%></a>?<br>
+If you really intended to use Gregorian year <%=gy%>, please
+continue. Hebcal.com results this far in the future should be
+accurate.
+</div><!-- .alert -->
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
 <h2><%= shortTitle %>

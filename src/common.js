@@ -350,10 +350,8 @@ export function makeHebcalOptions(db, query) {
       options.year = parseInt(query.year, 10);
       if (isNaN(options.year)) {
         throw new RangeError(`Sorry, invalid year ${query.year}`);
-      } else if (options.isHebrewYear && options.year < 3762) {
-        throw new RangeError('Sorry, Hebrew year must be 3762 or later');
-      } else if (options.year < 1) {
-        throw new RangeError(`Sorry, invalid Gregorian year ${query.year}`);
+      } else if (options.isHebrewYear && options.year < 1) {
+        throw new RangeError('Sorry, Hebrew year must be 1 or later');
       }
     }
   }
@@ -775,8 +773,8 @@ export function makeGregDate(gy, gm, gd) {
     throw createError(400, `Gregorian year must be numeric: ${gy}`);
   } else if (mm > 12 || mm < 1) {
     throw createError(400, `Gregorian month out of valid range 1-12: ${gm}`);
-  } else if (yy > 9999 || yy < 1) {
-    throw createError(400, `Gregorian year out of valid range 0001-9999: ${gy}`);
+  } else if (yy > 9999) {
+    throw createError(400, `Gregorian year cannot be greater than 9999: ${gy}`);
   }
   const maxDay = greg.daysInMonth(mm, yy);
   if (dd < 1 || dd > maxDay) {

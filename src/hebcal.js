@@ -160,7 +160,8 @@ function renderHtml(ctx) {
   if (options.month) {
     shortTitle += greg.monthNames[options.month] + ' ';
   }
-  shortTitle += options.year;
+  const titleYear = options.year >= 0 ? options.year : -options.year + ' B.C.E.';
+  shortTitle += titleYear;
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
@@ -172,10 +173,11 @@ function renderHtml(ctx) {
   }
   const result = eventsToClassicApi(events, options, false);
   // Reduce size of HTML
+  const hebcalPrefix = 'https://www.hebcal.com/';
   result.items.forEach((i) => {
     delete i.memo;
-    if (typeof i.link === 'string' && i.link.startsWith('https://www.hebcal.com/')) {
-      i.link = i.link.substring(22);
+    if (typeof i.link === 'string' && i.link.startsWith(hebcalPrefix)) {
+      i.link = i.link.substring(hebcalPrefix.length - 1);
       const utm = i.link.indexOf('utm_source=');
       if (utm !== -1) {
         i.link = i.link.substring(0, utm - 1);
@@ -229,12 +231,20 @@ function renderHtml(ctx) {
   };
   const endYear = options.year + getNumYears(options) - 1;
   const downloadTitle = `${options.year}-${endYear}`;
+  const gy = months[0].year();
+  if (gy >= 3762 && q.yt === 'G') {
+    ctx.state.futureYears = gy - today.year();
+    ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
+  } else if (gy < 0 && q.yt === 'H') {
+    ctx.state.hebrewYear = options.year;
+    ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
+  }
   return ctx.render('hebcal-results', {
     items: result.items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
     today,
     dates: months,
-    gy: months[0].year(),
+    gy,
     tableBodies: makeTableBodies(events, months, options, locale),
     lang: locale === 'he' ? 'en' : locale, // twbs5 doesn't handle <html lang="he"> well enough yet
     locale,
