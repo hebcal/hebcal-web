@@ -3,6 +3,7 @@ import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 import {localeMap} from './common';
+import {pad4, pad2} from '@hebcal/rest-api';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -15,11 +16,11 @@ const PDF_COLUMNS = 7;
 const PDF_COLWIDTH = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN) / PDF_COLUMNS;
 
 /**
- * @param {Date} d
+ * @param {dayjs.Dayjs} d
  * @return {string}
  */
 function calId(d) {
-  return dayjs(d).format('YYYYMM');
+  return pad4(d.year()) + pad2(d.month() + 1);
 }
 
 /**
@@ -31,7 +32,7 @@ function eventsToCells(events) {
   for (const e of events) {
     const d = e.getDate().greg();
     const mday = d.getDate();
-    const yearMonth = calId(d);
+    const yearMonth = calId(dayjs(d));
     cells[yearMonth] = cells[yearMonth] || {};
     cells[yearMonth][mday] = cells[yearMonth][mday] || [];
     cells[yearMonth][mday].push(e);
@@ -267,10 +268,13 @@ export function renderPdf(doc, events, options) {
   const xposNewRow = rtl ? (PDF_WIDTH - PDF_RMARGIN - 4) : (PDF_LMARGIN + PDF_COLWIDTH - 4);
   const xposMultiplier = rtl ? -1 : 1;
   for (const yearMonth of Object.keys(cells)) {
-    const year = Math.floor(Number(yearMonth) / 100);
-    const month = Number(yearMonth) % 100;
+    const year = parseInt(yearMonth.substring(0, yearMonth.length - 2), 10);
+    const month = parseInt(yearMonth.substring(yearMonth.length - 2), 10);
     const daysInMonth = greg.daysInMonth(month, year);
     const firstDayOfMonth = new Date(year, month - 1, 1);
+    if (year < 100) {
+      firstDayOfMonth.setFullYear(year);
+    }
     const startDayOfWeek = firstDayOfMonth.getDay();
     const rows = (daysInMonth == 31 && startDayOfWeek >= 5) ||
       (daysInMonth == 30 && startDayOfWeek == 6) ? 6 : 5;
@@ -278,11 +282,11 @@ export function renderPdf(doc, events, options) {
     const rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN) / rows;
 
     doc.addPage();
-    const pageName = 'cal-' + year + '-' + String(month).padStart(2, '0');
+    const pageName = 'cal-' + year + '-' + pad2(month);
     doc.addNamedDestination(pageName);
 
     const locale = localeMap[options.locale] || 'en';
-    const d = dayjs(new Date(year, month - 1, 1)).locale(locale);
+    const d = dayjs(firstDayOfMonth).locale(locale);
     renderPdfMonthTitle(doc, d, rtl);
 
     renderPdfMonthGrid(doc, d, rtl, rows, rowheight);
