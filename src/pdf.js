@@ -209,7 +209,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
       y += 2;
     }
     doc.font('hebrew');
-    doc.text(reverseHebrewWords(hebrew), x, y, {continued: true});
+    doc.text(reverseHebrewWords(hebrew), x, y);
   }
   return y + 12; // newline within cell
 }
@@ -309,11 +309,12 @@ export function renderPdf(doc, events, options) {
         }
       }
 
-      xpos += PDF_COLWIDTH * xposMultiplier; // move to the right by one cell
       if (++dow == 7) {
         dow = 0;
         xpos = xposNewRow;
         ypos += rowheight; // move down the page
+      } else {
+        xpos += PDF_COLWIDTH * xposMultiplier; // move to the right by one cell
       }
     }
 
