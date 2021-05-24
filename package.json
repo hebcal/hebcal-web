@@ -34,7 +34,7 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.17.3",
+    "@hebcal/core": "^3.17.4",
     "@hebcal/geo-sqlite": "^3.4.1",
     "@hebcal/icalendar": "^4.6.0",
     "@hebcal/leyning": "^4.4.0",
@@ -61,7 +61,7 @@
     "maxmind": "^4.3.1",
     "murmurhash3": "^0.5.0",
     "mysql2": "^2.2.5",
-    "nodemailer": "^6.6.0",
+    "nodemailer": "^6.6.1",
     "pdfkit": "^0.12.1",
     "pino": "^6.11.3",
     "random-bigint": "0.0.1",
