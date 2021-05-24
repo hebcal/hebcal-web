@@ -5,6 +5,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
+  isoDateStringToDate,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -196,7 +197,8 @@ function makeOptions(ctx) {
     q.geonameid = location.getGeoId();
     q.geo = 'geoname';
   }
-  const dt = (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
+  const dt = !empty(q.dt) ? isoDateStringToDate(q.dt) :
+    (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
     new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
     new Date();
   let startAndEnd;
