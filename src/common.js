@@ -378,6 +378,10 @@ export function makeHebcalOptions(db, query) {
       options.appendHebrewToSubject = true;
     }
   }
+  if (options.candlelighting && typeof options.year === 'number' &&
+      ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
+    options.candlelighting = false;
+  }
   if (options.candlelighting) {
     const location = getLocationFromQuery(db, query);
     if (location) {
