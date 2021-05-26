@@ -231,8 +231,7 @@ function parseConverterQuery(ctx) {
         hdates,
       };
     } else {
-      query.g2h = '1';
-      query.gy = startD;
+      return g2h(startD.toDate(), false, false);
     }
   }
   if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
