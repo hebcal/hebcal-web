@@ -1,7 +1,7 @@
 import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
-  localeMap, getBeforeAfterSunsetForLocation} from './common';
+  localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd} from './common';
 import gematriya from 'gematriya';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
@@ -64,6 +64,15 @@ export async function hebrewDateConverter(ctx) {
     ctx.type = 'json';
     if (p.message) {
       ctx.body = {error: p.message};
+    } else if (typeof p.hdates === 'object') {
+      ctx.lastModified = ctx.launchDate;
+      ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
+      let result = p;
+      const cb = q.callback;
+      if (typeof cb === 'string' && cb.length) {
+        result = cb + '(' + JSON.stringify(result) + ')\n';
+      }
+      ctx.body = result;
     } else {
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
@@ -128,6 +137,9 @@ function makeProperties(ctx) {
     props = parseConverterQuery(ctx);
   } catch (err) {
     props = Object.assign(g2h(new Date(), false, true), {message: err.message});
+  }
+  if (typeof props.hdates === 'object') {
+    return props;
   }
   const dt = props.dt;
   const query = ctx.request.query;
@@ -199,6 +211,30 @@ function makeOmer(hdate) {
  */
 function parseConverterQuery(ctx) {
   const query = ctx.request.query;
+  if (!empty(query.start) && !empty(query.end)) {
+    const {isRange, startD, endD} = getStartAndEnd(query, 'UTC');
+    if (isRange) {
+      const hdates = {};
+      for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
+        const isoDate = d.format('YYYY-MM-DD');
+        const hdate = new HDate(d.toDate());
+        hdates[isoDate] = {
+          hy: hdate.getFullYear(),
+          hm: hdate.getMonthName(),
+          hd: hdate.getDate(),
+          hebrew: gematriyaDate(hdate),
+        };
+      }
+      return {
+        start: startD.format('YYYY-MM-DD'),
+        end: endD.format('YYYY-MM-DD'),
+        hdates,
+      };
+    } else {
+      query.g2h = '1';
+      query.gy = startD;
+    }
+  }
   if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
     const hy = parseInt(query.hy, 10);
     const hd = parseInt(query.hd, 10);
@@ -222,8 +258,8 @@ function parseConverterQuery(ctx) {
     return {type: 'h2g', dt, hdate, gs: false};
   } else {
     const gs = query.gs === 'on' || query.gs === '1';
-    if (typeof query.gx === 'string' && query.gx.length === 10) {
-      return g2h(new Date(query.gx), gs, false);
+    if (typeof query.date === 'string' && query.date.length === 10) {
+      return g2h(new Date(query.date), gs, false);
     } else if (isset(query.gy) && isset(query.gm) && isset(query.gd)) {
       if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
         return g2h(new Date(), gs, true);

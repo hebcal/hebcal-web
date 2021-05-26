@@ -1,5 +1,5 @@
 import {Zmanim, TimedEvent, HDate} from '@hebcal/core';
-import {empty, isoDateStringToDate, getLocationFromQuery} from './common';
+import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -35,8 +35,6 @@ const TZEIT_TIMES = {
   tzeit50min: 50,
   tzeit72min: 72,
 };
-
-const MAX_DAYS = 45;
 
 /**
  * @private
@@ -95,50 +93,6 @@ function getTimesForRange(startD, endD, loc, formatAsString) {
     }
   }
   return times;
-}
-
-// eslint-disable-next-line require-jsdoc
-function getStartAndEnd(q, tzid) {
-  if (!empty(q.start) && empty(q.end)) {
-    q.end = q.start;
-  } else if (empty(q.start) && !empty(q.end)) {
-    q.start = q.end;
-  }
-  if (!empty(q.start) && !empty(q.end) && q.start === q.end) {
-    q.date = q.start;
-    delete q.start;
-    delete q.end;
-  }
-  let isRange = !empty(q.start) && !empty(q.end);
-  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
-  const startD = isRange ? isoToDayjs(q.start) : singleD;
-  let endD = isRange ? isoToDayjs(q.end) : singleD;
-  if (isRange) {
-    if (endD.isBefore(startD, 'd')) {
-      isRange = false;
-      endD = startD;
-    } else if (endD.diff(startD, 'd') > MAX_DAYS) {
-      endD = startD.add(MAX_DAYS, 'd');
-    }
-  }
-  return {isRange, startD, endD};
-}
-
-/**
- * @param {string} tzid
- * @return {dayjs.Dayjs}
- */
-function nowInTimezone(tzid) {
-  const isoDate = Zmanim.formatISOWithTimeZone(tzid, new Date());
-  return dayjs(isoDate.substring(0, 10));
-}
-
-/**
- * @param {string} str
- * @return {dayjs.Dayjs}
- */
-function isoToDayjs(str) {
-  return dayjs(isoDateStringToDate(str));
 }
 
 /**

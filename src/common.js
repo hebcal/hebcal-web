@@ -117,9 +117,9 @@ const dlPrefix = process.env.NODE_ENV == 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
 /**
- * @param {any} q
+ * @param {Object.<string,string>} q
  * @param {string} filename
- * @param {any} override
+ * @param {Object.<string,string>} override
  * @return {string}
  */
 export function downloadHref(q, filename, override={}) {
@@ -132,8 +132,8 @@ export function downloadHref(q, filename, override={}) {
 }
 
 /**
- * @param {any} query
- * @param {any} [override]
+ * @param {Object.<string,string>} query
+ * @param {Object.<string,string>} [override]
  * @return {string}
  */
 export function urlArgs(query, override={}) {
@@ -170,7 +170,7 @@ function getGeoKeysToRemove(geo) {
 }
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @param {string} uid
  * @return {string}
  */
@@ -191,7 +191,7 @@ function makeCookie(query, uid) {
 
 /**
  * @param {any} ctx
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
@@ -241,8 +241,8 @@ function setCookie(ctx, newCookie) {
 
 /**
  * @param {string} cookieString
- * @param {any} defaults
- * @param {any} query0
+ * @param {Object.<string,string>} defaults
+ * @param {Object.<string,string>} query0
  * @return {any}
  */
 export function processCookieAndQuery(cookieString, defaults, query0) {
@@ -296,7 +296,7 @@ export function isoDateStringToDate(str) {
 /**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {HebrewCalendar.Options}
  */
 export function makeHebcalOptions(db, query) {
@@ -412,7 +412,7 @@ const tzidMap = {
 
 /**
  * @param {any} db
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {Location}
  */
 export function getLocationFromQuery(db, query) {
@@ -517,7 +517,7 @@ export function getLocationFromQuery(db, query) {
 
 /**
  * @private
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {boolean}
  */
 function hasLatLongLegacy(query) {
@@ -819,4 +819,61 @@ export function eTagFromOptions(options, attrs) {
   const etagObj = Object.assign({version: HebrewCalendar.version()},
       options, attrs);
   return etag(JSON.stringify(etagObj), {weak: true});
+}
+
+const MAX_DAYS = 45;
+
+/**
+ * @typedef {Object} StartAndEnd
+ * @property {dayjs.Dayjs} startD
+ * @property {dayjs.Dayjs} endD
+ * @property {boolean} isRange
+ */
+
+/**
+ * @param {Object.<string,string>} q
+ * @param {string} tzid
+ * @return {StartAndEnd}
+ */
+export function getStartAndEnd(q, tzid) {
+  if (!empty(q.start) && empty(q.end)) {
+    q.end = q.start;
+  } else if (empty(q.start) && !empty(q.end)) {
+    q.start = q.end;
+  }
+  if (!empty(q.start) && !empty(q.end) && q.start === q.end) {
+    q.date = q.start;
+    delete q.start;
+    delete q.end;
+  }
+  let isRange = !empty(q.start) && !empty(q.end);
+  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
+  const startD = isRange ? isoToDayjs(q.start) : singleD;
+  let endD = isRange ? isoToDayjs(q.end) : singleD;
+  if (isRange) {
+    if (endD.isBefore(startD, 'd')) {
+      isRange = false;
+      endD = startD;
+    } else if (endD.diff(startD, 'd') > MAX_DAYS) {
+      endD = startD.add(MAX_DAYS, 'd');
+    }
+  }
+  return {isRange, startD, endD};
+}
+
+/**
+ * @param {string} tzid
+ * @return {dayjs.Dayjs}
+ */
+export function nowInTimezone(tzid) {
+  const isoDate = Zmanim.formatISOWithTimeZone(tzid, new Date());
+  return dayjs(isoDate.substring(0, 10));
+}
+
+/**
+ * @param {string} str
+ * @return {dayjs.Dayjs}
+ */
+function isoToDayjs(str) {
+  return dayjs(isoDateStringToDate(str));
 }
