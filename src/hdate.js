@@ -1,8 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, Sedra, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
 import {gematriyaDate} from './converter';
-import {pad2, getHolidayDescription} from '@hebcal/rest-api';
-import * as leyning from '@hebcal/leyning';
+import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 
@@ -95,38 +94,14 @@ export async function parshaRss(ctx) {
 }
 
 function createMemo(ev, il) {
+  const memoText = makeTorahMemoText(ev, il);
+  const memoHtml = memoText ? '<p>' + memoText.replace(/\n/g, '</p>\n<p>') + '</p>' : '';
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-    const reading = leyning.getLeyningForParshaHaShavua(ev, il);
-    let memo = `<p>Torah: ${reading.summary}</p>`;
-    if (reading.reason) {
-      for (const num of ['7', 'M']) {
-        if (reading.reason[num]) {
-          const aname = Number(num) ? `${num}th aliyah` : 'Maftir';
-          memo += `\n<p>${aname}: ` +
-            leyning.formatAliyahWithBook(reading.fullkriyah[num]) +
-            ' | ' + reading.reason[num] + '</p>';
-        }
-      }
-    }
-    if (reading.haftara) {
-      memo += '\n<p>Haftarah: ' + reading.haftara;
-      if (reading.reason && reading.reason.haftara) {
-        memo += ' | ' + reading.reason.haftara;
-      }
-      memo += '</p>';
-    }
-    if (reading.sephardic) {
-      memo += `\n<p>Haftarah for Sephardim: ${reading.sephardic}</p>`;
-    }
-    return memo;
+    return memoHtml;
   } else {
     let memo = '<p>' + getHolidayDescription(ev) + '</p>';
-    const reading = leyning.getLeyningForHoliday(ev, il);
-    if (reading && reading.summary) {
-      memo += `\n<p>Torah: ${reading.summary}</p>`;
-    }
-    if (reading && reading.haftara) {
-      memo += `\n<p>Haftarah: ${reading.haftara}`;
+    if (memoHtml) {
+      memo += '\n' + memoHtml;
     }
     return memo;
   }
