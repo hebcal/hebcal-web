@@ -122,6 +122,9 @@ title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</
 <% if (typeof commentary['reformjudaism.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
+<% if (typeof commentary['ajrsem.org'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajrsem.org'].target%>/">Academy for Jewish Religion</a>
+<% } %>
 </ul>
 </div><!-- .d-print-none -->
 
