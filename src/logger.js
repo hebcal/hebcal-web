@@ -33,6 +33,9 @@ export function makeLogger(logDir) {
   const handler = pino.final(logger, (err, finalLogger, evt) => {
     const msg = `Koa server caught ${evt}; exiting...`;
     console.log(msg);
+    if (err) {
+      console.log(err);
+    }
     finalLogger.info(msg);
     if (err) finalLogger.fatal(err, 'error caused exit');
     process.exit(err ? 1 : 0);
