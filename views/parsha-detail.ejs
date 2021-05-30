@@ -24,7 +24,7 @@ href="<%=ortUrl%>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg>
 </a>
 </h4>
-<% if (typeof summary === 'string') { %><p class="lead"><%- summary %> <sup><a class="outbound" title="<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %> from Wikipedia" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">[1]</a></sup></p><% } %>
+<% if (typeof summary === 'string') { %><p><%- summary %> <sup><a class="outbound" title="<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %> from Wikipedia" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
