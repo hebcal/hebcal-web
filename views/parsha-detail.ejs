@@ -16,7 +16,6 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
 <p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>).</p>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
-<% if (typeof commentary['wikipedia'] === 'object' && commentary['wikipedia'].summary) { %><p><%= commentary['wikipedia'].summary %> <sup><a href="https://en.wikipedia.org/wiki/<%- commentary['wikipedia'].target %>">[1]</a></sup></p><% } %>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>"
 title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%></a>
@@ -25,6 +24,7 @@ href="<%=ortUrl%>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg>
 </a>
 </h4>
+<% if (typeof summary === 'string') { %><p class="lead"><%- summary %> <sup><a class="outbound" title="<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %> from Wikipedia" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -144,10 +144,16 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20">The
 Chumash: The Stone Edition (Artscroll Series)</a></em> <small class="text-muted">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
+<% if (hasTriennial) { %>
 <dt><em><a class="outbound"
 href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf">A
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
+<% } %>
+<% if (typeof summary === 'string') { %>
+<dt><a class="outbound" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">"<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %>" in <em>Wikipedia: The Free Encyclopedia</em></a>
+<dd>Wikimedia Foundation Inc.
+<% } %>
 </dl>
 
 </div><!-- .col -->

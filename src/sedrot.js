@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect} from './common';
+import {httpRedirec, wrapHebrewInSpans} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -131,6 +131,8 @@ export async function parshaDetail(ctx) {
   const otherLocationSedra = new Sedra(hyear, !il);
   const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
   const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
+  const summary = drash[parsha.name].wikipedia && drash[parsha.name].wikipedia.summary &&
+    wrapHebrewInSpans(drash[parsha.name].wikipedia.summary);
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
@@ -148,6 +150,7 @@ export async function parshaDetail(ctx) {
     items,
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
+    summary,
   });
 }
 
