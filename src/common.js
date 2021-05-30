@@ -877,3 +877,13 @@ export function nowInTimezone(tzid) {
 function isoToDayjs(str) {
   return dayjs(isoDateStringToDate(str));
 }
+
+const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
+
+/**
+ * @param {string} str
+ * @return {string}
+ */
+export function wrapHebrewInSpans(str) {
+  return str.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
+}

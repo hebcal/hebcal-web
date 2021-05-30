@@ -5,7 +5,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {httpRedirect} from './common';
+import {httpRedirect, wrapHebrewInSpans} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
@@ -73,7 +73,6 @@ export async function holidayDetail(ctx) {
   }
   const wikipediaText = meta.wikipedia && meta.wikipedia.text;
   const descrLong = wikipediaText || descrMedium;
-  const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
@@ -88,7 +87,7 @@ export async function holidayDetail(ctx) {
     hebrew,
     descrShort,
     descrMedium,
-    descrLong: descrLong.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`),
+    descrLong: wrapHebrewInSpans(descrLong),
     categoryId: category.id,
     categoryName: category.name,
     nextObserved,
