@@ -88,11 +88,11 @@ export async function hebrewDateConverter(ctx) {
         hd: p.hd,
         hebrew: p.hebrew,
       };
-      if (typeof q.i !== 'undefined') {
-        result.il = p.il;
-      }
       if (p.events.length) {
         result.events = p.events.map((ev) => ev.render(p.locale));
+        if (typeof q.i !== 'undefined') {
+          result.il = p.il;
+        }
       }
       const cb = q.callback;
       if (typeof cb === 'string' && cb.length) {
@@ -132,6 +132,9 @@ const sedraCache = new Map();
  * @return {Object}
  */
 function makeProperties(ctx) {
+  const query = ctx.request.query;
+  const lg = lgToLocale[query.lg || 's'] || query.lg;
+  const locale = ctx.state.locale = localeMap[lg] || 'en';
   let props;
   try {
     props = parseConverterQuery(ctx);
@@ -142,9 +145,6 @@ function makeProperties(ctx) {
     return props;
   }
   const dt = props.dt;
-  const query = ctx.request.query;
-  const lg = lgToLocale[query.lg || 's'] || query.lg;
-  const locale = localeMap[lg] || 'en';
   const d = dayjs(dt).locale(locale);
   const gy = dt.getFullYear();
   const gyStr = gy > 0 ? pad4(gy) : pad4(-gy) + ' B.C.E.';
@@ -152,22 +152,8 @@ function makeProperties(ctx) {
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render(locale);
-  const saturday = hdate.onOrAfter(6);
-  const hy = saturday.getFullYear();
   const il = Boolean(query.i === 'on');
-  let events = [];
-  if (hy >= 3762) {
-    const yearIl = `${hy}-${il ? 1 : 0}`;
-    const sedra = sedraCache.get(yearIl) || new Sedra(hy, il);
-    let pe = [];
-    if (sedra.isParsha(saturday)) {
-      pe = new ParshaEvent(saturday, sedra.get(saturday), il);
-    }
-    sedraCache.set(yearIl, sedra);
-    events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];
-    events = events.concat(pe);
-    events = events.concat(makeOmer(hdate));
-  }
+  const events = getEvents(hdate, il);
   return {
     message: props.message,
     noCache: Boolean(props.noCache),
@@ -188,6 +174,28 @@ function makeProperties(ctx) {
     il,
     locale,
   };
+}
+
+/**
+ * @param {HDate} hdate
+ * @param {boolean} il
+ * @return {Event[]}
+ */
+function getEvents(hdate, il) {
+  let events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];
+  const saturday = hdate.onOrAfter(6);
+  const hy = saturday.getFullYear();
+  if (hy >= 3762) {
+    const cacheKey = `${hy}-${il ? 1 : 0}`;
+    const sedra = sedraCache.get(cacheKey) || new Sedra(hy, il);
+    if (sedra.isParsha(saturday)) {
+      const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
+      events = events.concat(pe);
+    }
+    sedraCache.set(cacheKey, sedra);
+  }
+  events = events.concat(makeOmer(hdate));
+  return events;
 }
 
 /**
@@ -214,20 +222,31 @@ function parseConverterQuery(ctx) {
   if (!empty(query.start) && !empty(query.end)) {
     const {isRange, startD, endD} = getStartAndEnd(query, 'UTC');
     if (isRange) {
+      const il = Boolean(query.i === 'on');
+      const locale = ctx.state.locale;
       const hdates = {};
       for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
         const isoDate = d.format('YYYY-MM-DD');
         const hdate = new HDate(d.toDate());
-        hdates[isoDate] = {
+        const result = {
           hy: hdate.getFullYear(),
           hm: hdate.getMonthName(),
           hd: hdate.getDate(),
           hebrew: gematriyaDate(hdate),
         };
+        const events = getEvents(hdate, il);
+        if (events.length) {
+          result.events = events.map((ev) => ev.render(locale));
+          if (typeof query.i !== 'undefined') {
+            result.il = il;
+          }
+        }
+        hdates[isoDate] = result;
       }
       return {
         start: startD.format('YYYY-MM-DD'),
         end: endD.format('YYYY-MM-DD'),
+        locale,
         hdates,
       };
     } else {
