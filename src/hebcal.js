@@ -37,7 +37,7 @@ export async function hebcalApp(ctx) {
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ?
     Object.assign({}, hebcalFormDefaults) :
-    ctx.request.query.v === '1' ? ctx.request.query :
+    ctx.request.query.v === '1' ? Object.assign({}, ctx.request.query) :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
   let error;
   let options = {};
@@ -436,6 +436,7 @@ function renderFullCalendar(ctx) {
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
   ctx.set('Cache-Control', 'max-age=604800');
+  ctx.lastModified = new Date();
   ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
 }
 
@@ -451,7 +452,11 @@ function renderJson(ctx) {
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
-  ctx.set('Cache-Control', 'max-age=86400');
+  const orig = ctx.request.query;
+  const yearNow = typeof orig.year === 'undefined' || orig.year === 'now' || orig.month === 'now';
+  const maxAge = yearNow ? 10800 : 604800; // 3 hours or 7 days
+  ctx.set('Cache-Control', `max-age=${maxAge}`);
+  ctx.lastModified = new Date();
   ctx.body = obj;
 }
 
