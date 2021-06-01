@@ -231,8 +231,12 @@ function getHaftarahHref(haftara) {
     return null;
   }
   const book = matches[1].trim().replace(/\s+/g, '_');
-  const verses = matches[2].replace(/;.+$/, '').replace(/:/g, '.').replace(/ - /, '-');
-  return `https://www.sefaria.org/${book}.${verses}`;
+  let verses = matches[2].replace(/;.+$/, '').replace(/:/g, '.').replace(/ - /, '-');
+  const cv = verses.match(/^(\d+)\.(\d+)-(\d+)\.(\d+)$/);
+  if (cv && cv[1] === cv[3]) {
+    verses = `${cv[1]}.${cv[2]}-${cv[4]}`;
+  }
+  return `https://www.sefaria.org/${book}.${verses}?lang=bi`;
 }
 
 /**

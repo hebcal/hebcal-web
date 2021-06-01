@@ -17,7 +17,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>).</p>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
-<a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>"
+<a class="outbound" href="https://www.sefaria.org/<%=parsha.book%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.book%> <%=parsha.verses%></a>
 <a class="outbound d-print-none" data-bs-toggle="tooltip" data-bs-animation="false" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
 href="<%=ortUrl%>">
@@ -115,7 +115,7 @@ title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
 <% } %>
 <% if (typeof commentary['jtsa.edu'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="http://www.jtsa.edu/jts-torah-online?parashah=<%=commentary['jtsa.edu'].cid%><% if (commentary['jtsa.edu'].cid2) {%><%='&parashah=' + commentary['jtsa.edu'].cid2%><% } %>">Jewish Theological Seminary</a>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online?parashah=<%=commentary['jtsa.edu'].cid%><% if (commentary['jtsa.edu'].cid2) {%><%='&parashah=' + commentary['jtsa.edu'].cid2%><% } %>">Jewish Theological Seminary</a>
 <% } %>
 <% if (typeof commentary['chabad.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
