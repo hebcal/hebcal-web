@@ -24,7 +24,7 @@ href="<%=ortUrl%>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg>
 </a>
 </h4>
-<% if (typeof summary === 'string') { %><p><%- summary %> <sup><a class="outbound" title="<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %> from Wikipedia" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">[1]</a></sup></p><% } %>
+<% if (typeof summary === 'object') { %><p><%- summary.html %> <sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -150,8 +150,8 @@ href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/tes
 Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 <% } %>
-<% if (typeof summary === 'string') { %>
-<dt><a class="outbound" href="https://en.wikipedia.org/wiki/<%- commentary.wikipedia.target %>">"<%= decodeURIComponent(commentary.wikipedia.target).replace(/_/g, ' ') %>" in <em>Wikipedia: The Free Encyclopedia</em></a>
+<% if (typeof summary === 'object') { %>
+<dt><a class="outbound" href="<%- summary.link %>">"<%= summary.title %>" in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>

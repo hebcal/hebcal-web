@@ -131,8 +131,6 @@ export async function parshaDetail(ctx) {
   const otherLocationSedra = new Sedra(hyear, !il);
   const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
   const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
-  const summary = drash[parsha.name].wikipedia && drash[parsha.name].wikipedia.summary &&
-    wrapHebrewInSpans(drash[parsha.name].wikipedia.summary);
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
@@ -150,8 +148,41 @@ export async function parshaDetail(ctx) {
     items,
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
-    summary,
+    summary: makeSummaryHtml(parsha),
   });
+}
+
+function makeSummaryHtml(parsha) {
+  function replaceWithName(str, p) {
+    return str.replace(/^(The parashah|It) /, `Parashat ${p} `)
+        .replace(/^In the parashah, /, `In Parashat ${p}, `);
+  }
+  let summary;
+  let target;
+  if (parsha.combined) {
+    const [p1, p2] = parsha.name.split('-');
+    const s1 = drash[p1].wikipedia && drash[p1].wikipedia.summary;
+    const s2 = drash[p2].wikipedia && drash[p2].wikipedia.summary;
+    if (s1 && s2) {
+      summary = replaceWithName(s1, p1) + ' ' + replaceWithName(s2, p2);
+      target = drash[p1].wikipedia.target;
+    } else {
+      return null;
+    }
+  } else {
+    const wikipedia = drash[parsha.name].wikipedia;
+    if (wikipedia && wikipedia.summary) {
+      summary = replaceWithName(wikipedia.summary, parsha.name);
+      target = wikipedia.target;
+    } else {
+      return null;
+    }
+  }
+  return {
+    link: `https://en.wikipedia.org/wiki/${target}`,
+    title: decodeURIComponent(target).replace(/_/g, ' ') + ' from Wikipedia',
+    html: wrapHebrewInSpans(summary),
+  };
 }
 
 function makeTriennial(date, parshaEv, hyear, parshaName) {
