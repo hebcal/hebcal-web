@@ -124,7 +124,7 @@ export async function parshaDetail(ctx) {
   parsha.haftaraHref = getHaftarahHref(parsha.haftara);
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
-  const hasTriennial = !il && hyear >= 5745 && hyear <= 5830 && parshaName !== 'Vezot Haberakhah';
+  const hasTriennial = !il && hyear >= 5745 && hyear <= 5830;
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
   const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
