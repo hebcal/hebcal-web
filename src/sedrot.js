@@ -4,13 +4,18 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirec, wrapHebrewInSpans} from './common';
+import {httpRedirect, wrapHebrewInSpans} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
 const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
 const parshaByBook = new Map();
-torahBookNames.forEach((book) => parshaByBook.set(book, new Map()));
+const BOOK = Array(6);
+for (let i = 0; i < torahBookNames.length; i++) {
+  const book = torahBookNames[i];
+  parshaByBook.set(book, new Map());
+  BOOK[i + 1] = book;
+}
 
 const sedrot = new Map();
 const doubled = new Map();
@@ -23,7 +28,7 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
     doubled.set(p1, parshaName);
     doubled.set(p2, parshaName);
   }
-  const bookId = reading.combined ? 'DoubledParshiyot' : reading.book;
+  const bookId = reading.combined ? 'DoubledParshiyot' : BOOK[reading.book];
   parshaByBook.get(bookId).set(anchor, parshaName);
 }
 
@@ -95,9 +100,12 @@ export async function parshaDetail(ctx) {
     throw createError(500, `Internal error: ${parshaName0}`);
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
-  const parsha = Object.assign(
-      {name: parshaName, anchor: makeAnchor(parshaName)},
-      leyning.parshiyot[parshaName]);
+  const parsha0 = leyning.parshiyot[parshaName];
+  const parsha = Object.assign({
+    name: parshaName,
+    bookName: BOOK[parsha0.book],
+    anchor: makeAnchor(parshaName),
+  }, parsha0);
   if (parsha.combined) {
     const [p1, p2] = parshaName.split('-');
     parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
@@ -273,25 +281,10 @@ function parse8digitDateStr(date) {
   return new Date(gy, gm - 1, gd);
 }
 
-/**
- * @param {string} book
- * @return {number}
- */
-function getBookId(book) {
-  switch (book.toLowerCase()) {
-    case 'genesis': return 1;
-    case 'exodus': return 2;
-    case 'leviticus': return 3;
-    case 'numbers': return 4;
-    case 'deuteronomy': return 5;
-    default: return 0;
-  }
-}
-
 function makeBibleOrtUrl(parsha) {
   const chapVerse = parsha.fullkriyah['1'].b;
   const [chapter, verse] = chapVerse.split(':');
-  const book = getBookId(parsha.book);
+  const book = parsha.book;
   const portion = parsha.combined ? parsha.num1 : parsha.num;
   // eslint-disable-next-line max-len
   return `https://bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${portion}`;

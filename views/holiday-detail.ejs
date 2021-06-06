@@ -90,7 +90,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <%    for (const aliyah of Object.values(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%       if (aliyah.v) { %>
-<small>(<%=aliyah.v%>&nbsp;p'sukim)</small>
+<small class="text-muted">(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%       } // aliyah.v %>
 <%    } // ... for %>
 </ul>
@@ -98,7 +98,9 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% if (reading.haftara) { %>
 <p class="lead haftara">Haftarah:
 <% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"
-href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %></p>
+href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %>
+<% if (reading.haftaraNumV) { %><small class="text-muted">(<%=reading.haftaraNumV%>&nbsp;p'sukim)</small><% } %>
+</p>
 <% } // reading.haftara %>
 <% } // ... for %>
 <% } // meta.reading %>
