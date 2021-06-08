@@ -60,7 +60,7 @@ href="<%=ortUrl%>">
 <% } else { // date %>
 <% for (let yr = 1; yr <= 3; yr++) { 
   const triReading = triennial.readings[yr - 1]; %>
-<div class="col-4 col-sm-3">
+<div class="col-md-3 col-sm-6">
 <h5>Triennial Year&nbsp;<%=yr%>
 <% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><%=triReading.d.format('D MMM YYYY')%></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
