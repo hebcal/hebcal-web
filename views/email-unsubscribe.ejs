@@ -1,19 +1,33 @@
-<%- await include('partials/header-and-navbar.ejs') -%>
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title><%= title %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<style>
+body { background-color: #eee;}
+.container { max-width: 600px; margin-top: 50px;}
+</style>
+</head>
+<body>
+<div class="container">
 <div id="content">
 <div class="row">
-<div class="col">
-<% if (success) { %>
-<div class="alert alert-success">
-<h4>Unsubscribed</h4>
-<strong><%= emailAddress %></strong> has been removed from the email subscription list.
-</div><!-- .alert -->
-<% } else { %>
-<div class="alert alert-warning">
-<h4>Unsubscribed</h4>
-<strong><%= emailAddress %></strong> was previously removed from the email subscription list.
-</div><!-- .alert -->
-<% } %>
+<div class="col-sm">
+<div class="card">
+<div class="card-body">
+  <h3 class="card-title">Unsubscribed</h3>
+  <p class="card-text">
+    <strong><%= emailAddress %></strong>
+    <% if (success) { %> has been <% } else { %> was previously <% } %>
+    removed from the email subscription list.
+  </p>
+</div>
+</div>
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
-<%- await include('partials/footer.ejs') -%>
+</div><!-- .container -->
+</body>
+</html>
+<!-- generated <%= new Date().toISOString() %> -->
