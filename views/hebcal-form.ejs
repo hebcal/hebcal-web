@@ -11,11 +11,6 @@
 <div class="col-sm-12">
 <p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
 <% if (typeof message !== 'undefined') { -%>
-<!-- debug
-<% for (const [k,v] of Object.entries(q)) { -%>
-<%= k %>: <%= v %>
-<% } -%>
--->
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= message %>
@@ -85,16 +80,9 @@
 <fieldset>
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
-<option <%- (q.lg === 's') ? 'selected' : '' -%> value="s">Sephardic transliterations</option>
-<option <%- (q.lg === 'a') ? 'selected' : '' -%> value="a">Ashkenazis transliterations</option>
-<option <%- (q.lg === 'h') ? 'selected' : '' -%> value="h">Hebrew - עברית</option>
-<option <%- (q.lg === 'es') ? 'selected' : '' -%> value="es">Spanish - español</option>
-<option <%- (q.lg === 'fr') ? 'selected' : '' -%> value="fr">French - français</option>
-<option <%- (q.lg === 'de') ? 'selected' : '' -%> value="de">German - Deutsch</option>
-<option <%- (q.lg === 'ru') ? 'selected' : '' -%> value="ru">Russian - ру́сский язы́к</option>
-<option <%- (q.lg === 'pl') ? 'selected' : '' -%> value="pl">Polish - język polski</option>
-<option <%- (q.lg === 'fi') ? 'selected' : '' -%> value="fi">Finnish - Suomalainen</option>
-<option <%- (q.lg === 'hu') ? 'selected' : '' -%> value="hu">Hungarian - Magyar nyelv</option>
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% } -%>
 <option <%- (q.lg === 'sh') ? 'selected' : '' -%> value="sh">Sephardic translit. + Hebrew</option>
 <option <%- (q.lg === 'ah') ? 'selected' : '' -%> value="ah">Ashkenazis translit. + Hebrew</option>
 </select>

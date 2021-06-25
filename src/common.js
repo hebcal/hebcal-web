@@ -7,6 +7,19 @@ import {nearestCity} from './nearestCity';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 
+export const langNames = {
+  s: ['Sephardic transliterations', null],
+  a: ['Ashkenazis transliterations', null],
+  h: ['עברית', 'Hebrew'],
+  es: ['español', 'Spanish'],
+  fr: ['français', 'French'],
+  de: ['Deutsch', 'German'],
+  ru: ['ру́сский язы́к', 'Russian'],
+  pl: ['język polski', 'Polish'],
+  fi: ['Suomalainen', 'Finnish'],
+  hu: ['Magyar nyelv', 'Hungarian'],
+};
+
 export const langTzDefaults = {
   AR: ['es', 'America/Argentina/Buenos_Aires'],
   AT: ['de', 'Europe/Vienna'],

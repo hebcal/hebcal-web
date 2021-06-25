@@ -43,16 +43,9 @@ src="https://www.hebcal.com/shabbat?cfg=j&amp;<%= geoUrlArgs %>&amp;tgt=_top">
 <form action="<%= rpath %>" autocomplete="off" method="get">
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
-<option <%- (q.lg === 's') ? 'selected' : '' -%> value="s">Sephardic transliterations</option>
-<option <%- (q.lg === 'a') ? 'selected' : '' -%> value="a">Ashkenazis transliterations</option>
-<option <%- (q.lg === 'h') ? 'selected' : '' -%> value="h">Hebrew - עברית</option>
-<option <%- (q.lg === 'es') ? 'selected' : '' -%> value="es">Spanish - español</option>
-<option <%- (q.lg === 'fr') ? 'selected' : '' -%> value="fr">French - français</option>
-<option <%- (q.lg === 'de') ? 'selected' : '' -%> value="de">German - Deutsch</option>
-<option <%- (q.lg === 'ru') ? 'selected' : '' -%> value="ru">Russian - ру́сский язы́к</option>
-<option <%- (q.lg === 'pl') ? 'selected' : '' -%> value="pl">Polish - język polski</option>
-<option <%- (q.lg === 'fi') ? 'selected' : '' -%> value="fi">Finnish - Suomalainen</option>
-<option <%- (q.lg === 'hu') ? 'selected' : '' -%> value="hu">Hungarian - Magyar nyelv</option>
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% } -%>
 </select>
 <label for="lg">Event titles</label>
 </div>

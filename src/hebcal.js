@@ -2,7 +2,7 @@
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
   getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
-  localeMap, eTagFromOptions} from './common';
+  localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
@@ -108,6 +108,7 @@ async function renderForm(ctx, error) {
     message,
     title: 'Custom Calendar | Hebcal Jewish Calendar',
     tzids,
+    langNames,
     xtra_html: typeaheadScript + tooltipScript +
 `<script>
 (function() {
