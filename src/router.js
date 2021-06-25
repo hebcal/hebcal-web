@@ -3,6 +3,7 @@ import createError from 'http-errors';
 import {
   clipboardScript, getLocationFromQuery,
   httpRedirect,
+  langNames,
 } from './common';
 import {geoAutoComplete} from './complete';
 import {hebrewDateConverter} from './converter';
@@ -119,6 +120,7 @@ export function wwwRouter() {
       await ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
         xtra_html: clipboardScript,
+        langNames,
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
       hdateJavascript(ctx);
