@@ -374,6 +374,17 @@
    }
   }
  },
+ "Rosh Hashana LaBehemot": {
+  "about": {
+   "href": "https://hazon.org/commit-to-change/holidays/new-year-animals/"
+  },
+  "wikipedia": {
+   "href": "https://en.wikipedia.org/wiki/Rosh_Hashanah_LaBehema",
+   "text": "Rosh Hashanah L'Ma'sar Behemah (Hebrew: ראש השנה למעשר בהמה‎ \"New Year for Tithing Animals\") or Rosh Hashanah LaBehemot (Hebrew: ראש השנה לבהמות‎ \"New Year for (Domesticated) Animals\") is one of the four New Year's day festivals (Rosh Hashanot) in the Jewish calendar as indicated in the Mishnah. During the time of the Temple, this was a day on which shepherds determined which of their mature animals were to be tithed. The day coincides with Rosh Chodesh Elul, the New Moon for the month of Elul, exactly one month before Rosh Hashanah"
+  },
+  "category": "minor",
+  "yomtov": false
+ },
  "Shabbat Chazon": {
   "about": {
    "href": "https://www.ou.org/holidays/the-three-weeks/shabbat_chazon/"
