@@ -139,7 +139,7 @@ function getJsonLD(item, description) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    'name': item.basename,
+    'name': item.basename + ' ' + item.d.format('YYYY'),
     'startDate': item.d.format('YYYY-MM-DD'),
     'endDate': item.endD.format('YYYY-MM-DD'),
     'description': description,
