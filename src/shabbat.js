@@ -242,22 +242,38 @@ function makePropsForFullHtml(ctx) {
   });
   const firstCandles = items.find((i) => i.cat === 'candles');
   const parashaItem = items.find((i) => i.cat === 'parashat');
+  const havdalah = items.find((i) => i.cat === 'havdalah');
   return {
     summary: briefText.join('. '),
     jsonLD: firstCandles && location.getGeoId() ?
-      JSON.stringify(getJsonLD(firstCandles, parashaItem && parashaItem.desc, location)) :
+      JSON.stringify(getJsonLD(firstCandles, havdalah, parashaItem && parashaItem.desc, location)) :
       '',
     locationName: location.getName(),
     xtra_html: typeaheadScript + tooltipScript,
   };
 }
 
-function getJsonLD(item, torahPortion, location) {
+function getJsonLD(candles, havdalah, torahPortion, location) {
+  const candlesSubj = `Light Shabbat candles at ${candles.fmtTime} in ${location.getShortName()}`;
+  const candlesLD = makeJsonLDevent(candles, location, candlesSubj);
+  if (torahPortion) {
+    candlesLD.description = `Torah portion: ${torahPortion}`;
+  }
+  const result = [candlesLD];
+  if (havdalah) {
+    const havdalahSubj = `Shabbat ends at ${havdalah.fmtTime} in ${location.getShortName()}`;
+    const havdalahLD = makeJsonLDevent(havdalah, location, havdalahSubj);
+    result.push(havdalahLD);
+  }
+  return result;
+}
+
+function makeJsonLDevent(item, location, subj) {
   const admin1 = location.admin1 || '';
   const result = {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    'name': `${location.getShortName()} Shabbat candle lighting`,
+    'name': subj,
     'startDate': `${item.isoDate}T${item.isoTime}:00`,
     'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
     'eventStatus': 'https://schema.org/EventScheduled',
@@ -277,9 +293,6 @@ function getJsonLD(item, torahPortion, location) {
       },
     },
   };
-  if (torahPortion) {
-    result.description = `Torah portion: ${torahPortion}`;
-  }
   return result;
 }
 
