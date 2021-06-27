@@ -18,6 +18,8 @@ import './dayjs-locales';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+const BASE_URL = 'https://www.hebcal.com/shabbat';
+
 function expires(ctx, tzid) {
   const today = dayjs.tz(new Date(), tzid);
   ctx.lastModified = today.toDate();
@@ -58,7 +60,7 @@ export async function shabbatApp(ctx) {
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.type = 'application/rss+xml; charset=utf-8';
-    const selfUrl = `https://www.hebcal.com/shabbat?${ctx.state.geoUrlArgs}`;
+    const selfUrl = `${BASE_URL}?${ctx.state.geoUrlArgs}`;
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
@@ -169,7 +171,7 @@ function makeItems(ctx, options, q) {
   geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
   Object.assign(ctx.state, {
     geoUrlArgs,
-    rssUrl: `https://www.hebcal.com/shabbat?cfg=r&${geoUrlArgs}&pubDate=0`,
+    rssUrl: `${BASE_URL}?cfg=r&${geoUrlArgs}&pubDate=0`,
   });
 }
 
@@ -243,40 +245,47 @@ function makePropsForFullHtml(ctx) {
   const firstCandles = items.find((i) => i.cat === 'candles');
   const parashaItem = items.find((i) => i.cat === 'parashat');
   const havdalah = items.find((i) => i.cat === 'havdalah');
+  const jsonLD = firstCandles && location.getGeoId() &&
+    getJsonLD(
+        ctx,
+        firstCandles,
+        havdalah,
+        parashaItem && parashaItem.desc,
+    );
+
   return {
     summary: briefText.join('. '),
-    jsonLD: firstCandles && location.getGeoId() ?
-      JSON.stringify(getJsonLD(firstCandles, havdalah, parashaItem && parashaItem.desc, location)) :
-      '',
+    jsonLD: jsonLD ? JSON.stringify(jsonLD) : '',
     locationName: location.getName(),
     xtra_html: typeaheadScript + tooltipScript,
   };
 }
 
-function getJsonLD(candles, havdalah, torahPortion, location) {
+function getJsonLD(ctx, candles, havdalah, torahPortion) {
+  const location = ctx.state.location;
+  const url = `${BASE_URL}?${ctx.state.geoUrlArgs}&utm_campaign=json-ld`;
   const candlesSubj = `Light Shabbat candles at ${candles.fmtTime} in ${location.getShortName()}`;
-  const candlesLD = makeJsonLDevent(candles, location, candlesSubj);
+  const candlesLD = makeJsonLDevent(candles, location, candlesSubj, url);
   if (torahPortion) {
     candlesLD.description = `Torah portion: ${torahPortion}`;
   }
   const result = [candlesLD];
   if (havdalah) {
     const havdalahSubj = `Shabbat ends at ${havdalah.fmtTime} in ${location.getShortName()}`;
-    const havdalahLD = makeJsonLDevent(havdalah, location, havdalahSubj);
+    const havdalahLD = makeJsonLDevent(havdalah, location, havdalahSubj, url);
     result.push(havdalahLD);
   }
   return result;
 }
 
-function makeJsonLDevent(item, location, subj) {
+function makeJsonLDevent(item, location, subj, url) {
   const admin1 = location.admin1 || '';
   const result = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     'name': subj,
     'startDate': `${item.isoDate}T${item.isoTime}:00`,
-    'eventAttendanceMode': 'https://schema.org/OfflineEventAttendanceMode',
-    'eventStatus': 'https://schema.org/EventScheduled',
+    'url': url,
     'location': {
       '@type': 'Place',
       'name': location.getName(),
@@ -286,13 +295,11 @@ function makeJsonLDevent(item, location, subj) {
         'addressRegion': admin1,
         'addressCountry': countryNames[location.getCountryCode()],
       },
-      'geo': {
-        '@type': 'GeoCoordinates',
-        'latitude': location.getLatitude(),
-        'longitude': location.getLongitude(),
-      },
     },
   };
+  if (typeof location.zip === 'string') {
+    result.location.address.postalCode = location.zip;
+  }
   return result;
 }
 
