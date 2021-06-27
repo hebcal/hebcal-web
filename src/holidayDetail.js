@@ -143,8 +143,6 @@ function getJsonLD(item, description) {
     'startDate': item.d.format('YYYY-MM-DD'),
     'endDate': item.endD.format('YYYY-MM-DD'),
     'description': description,
-    'eventAttendanceMode': 'https://schema.org/MixedEventAttendanceMode',
-    'eventStatus': 'https://schema.org/EventScheduled',
     'location': {
       '@type': 'VirtualLocation',
       'url': item.event.url(),
