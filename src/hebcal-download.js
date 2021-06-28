@@ -85,6 +85,9 @@ export async function hebcalDownload(ctx) {
     ctx.throw(400, 'Please select at least one event option');
   }
   if (extension == '.ics') {
+    if (query.emoji === '1') {
+      options.emoji = true;
+    }
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
