@@ -28,13 +28,13 @@ update_ics_name() {
 
 
 FILE="jewish-holidays"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=1"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "https:\\/\\/www.hebcal.com\\/"
 
 FILE="jewish-holidays-all"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=10&nx=on&mf=on&ss=on"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=10&nx=on&mf=on&ss=on&emoji=1"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "https:\\/\\/www.hebcal.com\\/"
@@ -52,7 +52,7 @@ update_ics_name $FILE \
     "Displays the Hebrew date every day of the week in Hebrew"
 
 FILE="omer"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&o=on&i=off&lg=en&c=off&geo=none&ny=3"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&o=on&i=off&lg=en&c=off&geo=none&ny=3&emoji=1"
 update_ics_name $FILE \
     "Days of the Omer" \
     "7 weeks from the second night of Pesach to the day before Shavuot"
