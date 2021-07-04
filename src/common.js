@@ -136,7 +136,17 @@ const dlPrefix = process.env.NODE_ENV == 'production' ?
  * @return {string}
  */
 export function downloadHref(q, filename, override={}) {
-  const encoded = Buffer.from(urlArgs(q, override))
+  const q2 = urlArgsObj(q, override);
+  for (const [key, val] of Object.entries(q2)) {
+    if (val === 'on') {
+      q2[key] = '1';
+    } else if (val === 'off') {
+      q2[key] = '0';
+    }
+  }
+  delete q2.geo;
+  const queryStr = querystring.stringify(q2);
+  const encoded = Buffer.from(queryStr)
       .toString('base64')
       .replace(/\+/g, '-')
       .replace(/\//g, '_')
@@ -147,9 +157,9 @@ export function downloadHref(q, filename, override={}) {
 /**
  * @param {Object.<string,string>} query
  * @param {Object.<string,string>} [override]
- * @return {string}
+ * @return {Object.<string,string>}
  */
-export function urlArgs(query, override={}) {
+export function urlArgsObj(query, override={}) {
   const q = Object.assign({}, query, override);
   for (const key of getGeoKeysToRemove(q.geo)) {
     delete q[key];
@@ -163,6 +173,16 @@ export function urlArgs(query, override={}) {
       q[key] = 'off';
     }
   }
+  return q;
+}
+
+/**
+ * @param {Object.<string,string>} query
+ * @param {Object.<string,string>} [override]
+ * @return {string}
+ */
+export function urlArgs(query, override={}) {
+  const q = urlArgsObj(query, override);
   return querystring.stringify(q);
 }
 

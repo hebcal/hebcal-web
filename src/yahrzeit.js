@@ -145,7 +145,7 @@ function makeFormResults(ctx) {
       year: dt.getFullYear(),
     };
   });
-  if (q.yizkor !== 'on') {
+  if (q.yizkor !== 'on' && q.yizkor !== '1') {
     return new Map([['', items]]);
   }
   return items.reduce((m, val) => {
@@ -316,7 +316,8 @@ export function makeYahrzeitEvents(maxId, query) {
   for (let id = 1; id <= maxId; id++) {
     events = events.concat(getEventsForId(query, id, startYear, endYear));
   }
-  if (query.yizkor == 'on') {
+  const yizkor = query.yizkor;
+  if (yizkor === 'on' || yizkor === '1') {
     const holidays = makeYizkorEvents(startYear, endYear);
     events = events.concat(holidays);
   }
@@ -354,6 +355,7 @@ function getEventsForId(query, id, startYear, endYear) {
   const name = info.name;
   const day = info.day;
   const urlPrefix = query.ulid ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
+  const appendHebDate = (query.hebdate === 'on' || query.hebdate === '1');
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const origDt = day.toDate();
     const isYahrzeit = (type === 'Yahrzeit');
@@ -365,7 +367,7 @@ function getEventsForId(query, id, startYear, endYear) {
       const hebdate = hd.render('en');
       const nth = calculateAnniversaryNth(origDt, hyear);
       let subj = `${name}'s ${nth} ${typeStr}`;
-      if (query.hebdate === 'on') {
+      if (appendHebDate) {
         const comma = hebdate.indexOf(',');
         subj += ' (' + hebdate.substring(0, comma) + ')';
       }

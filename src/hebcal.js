@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, urlArgs, downloadHref, tooltipScript, typeaheadScript,
+  empty, urlArgsObj, urlArgs, downloadHref, tooltipScript, typeaheadScript,
   getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
   localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
@@ -193,21 +193,32 @@ function renderHtml(ctx) {
   const localeData = today.locale(locale).localeData();
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref(q, dlFilename);
-  const dl1year = downloadHref(q, dlFilename, {ny: 1});
-  const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1}) + '.ics';
+  const dl1year = downloadHref(q, dlFilename, {ny: 1, emoji: 1});
+  const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1, emoji: 1}) + '.ics';
+  const queryObj = urlArgsObj(q);
+  for (const [key, val] of Object.entries(queryObj)) {
+    if (val === 'on') {
+      queryObj[key] = 1;
+    } else if (val === 'off') {
+      queryObj[key] = 0;
+    }
+  }
+  delete queryObj.geo;
   const url = {
     canonical: 'https://www.hebcal.com/hebcal?' + urlArgs(q),
     settings: '/hebcal?' + urlArgs(q, {v: 0}),
     prev: '/hebcal?' + urlArgs(q, {year: options.year - 1}),
     next: '/hebcal?' + urlArgs(q, {year: options.year + 1}),
     pdf: dlhref + '.pdf',
-    ics: dlhref + '.ics',
+    ics: downloadHref(q, dlFilename, {emoji: 1}) + '.ics',
     ics1year: dl1year + '.ics',
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal'),
     gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
     csv_usa: dlhref + '_usa.csv',
     csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
+    dlFilename,
+    icsQ: JSON.stringify(queryObj),
   };
   const filenames = {
     ics: basename(url.ics),
@@ -352,17 +363,17 @@ function renderEventHtml(ev, options, locale) {
     categories.push('timed');
     const colon = title.indexOf(':');
     if (colon !== -1 && !(mask & flags.CHANUKAH_CANDLES)) {
-      title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(locale, title.substring(0, colon));
+      title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title.substring(0, colon));
     } else {
-      title = '<small>' + time + '</small> ' + subjectSpan(locale, title);
+      title = '<small>' + time + '</small> ' + subjectSpan(ev, locale, title);
     }
   } else if (mask & flags.DAF_YOMI) {
     const colon = title.indexOf(':');
     if (colon != -1) {
-      title = subjectSpan(locale, title.substring(colon + 1));
+      title = subjectSpan(ev, locale, title.substring(colon + 1));
     }
   } else {
-    title = subjectSpan(locale, title);
+    title = subjectSpan(ev, locale, title);
   }
   const classes = categories.join(' ');
   const memo0 = getHolidayDescription(ev, true);
@@ -375,21 +386,27 @@ function renderEventHtml(ev, options, locale) {
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   const hebrew = options.appendHebrewToSubject ?
-    '<br>' + subjectSpan('he', ev.renderBrief('he')) : '';
+    '<br>' + subjectSpan(null, 'he', ev.renderBrief('he')) : '';
   // eslint-disable-next-line max-len
   return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}${hebrew}</span>${aclose}</div>\n`;
 }
 
 /**
+ * @param {Event} ev
  * @param {string} locale
  * @param {string} str
  * @return {string}
  */
-function subjectSpan(locale, str) {
+function subjectSpan(ev, locale, str) {
   str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
   if (locale === 'he') {
     return '<span lang="he" dir="rtl">' + Locale.hebrewStripNikkud(str) + '</span>';
   }
+  /*
+  const emoji0 = ev && ev.getEmoji();
+  const emoji = emoji0 ? ' ' + emoji0 : '';
+  return str + emoji;
+  */
   return str;
 }
 
