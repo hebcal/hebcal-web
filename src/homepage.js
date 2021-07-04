@@ -73,7 +73,7 @@ function mastheadHolidays(ctx, hd, il) {
       .map((ev) => {
         const url = ev.url();
         const desc = ev.render(ctx.state.locale);
-        const suffix = il && url.indexOf('?') === -1 ? '?i=on' : '';
+        const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
