@@ -273,7 +273,8 @@ export async function yahrzeitDownload(ctx) {
     const title = makeCalendarTitle(query);
     const relcalid = ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null;
     ctx.response.type = 'text/calendar; charset=utf-8';
-    ctx.body = await eventsToIcalendar(events, {yahrzeit: true, title, relcalid});
+    ctx.body = await eventsToIcalendar(events,
+        {yahrzeit: true, emoji: true, title, relcalid});
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
