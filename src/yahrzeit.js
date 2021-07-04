@@ -369,6 +369,11 @@ function getEventsForId(query, id, startYear, endYear) {
         subj += ' (' + hebdate.substring(0, comma) + ')';
       }
       const ev = new Event(hd, subj, flags.USER_EVENT);
+      if (isYahrzeit) {
+        ev.emoji = '🕯️';
+      } else if (type === 'Birthday') {
+        ev.emoji = '🎂✡️';
+      }
       const observed = dayjs(hd.greg());
       const erev = observed.subtract(1, 'day');
       const verb = isYahrzeit ? 'remembering' : 'honoring';
@@ -403,12 +408,13 @@ function getEventsForId(query, id, startYear, endYear) {
  */
 function makeYizkorEvents(startYear, endYear) {
   const holidays = [];
+  const attrs = {emoji: '🕯️'};
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     holidays.push(
-        new Event(new HDate(22, months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT),
-        new Event(new HDate(7, months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT),
-        new Event(new HDate(10, months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT),
-        new Event(new HDate(22, months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT),
+        new Event(new HDate(22, months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT, attrs),
+        new Event(new HDate(7, months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT, attrs),
+        new Event(new HDate(10, months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT, attrs),
+        new Event(new HDate(22, months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT, attrs),
     );
   }
   return holidays;
