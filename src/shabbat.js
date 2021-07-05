@@ -199,10 +199,7 @@ function makeOptions(ctx) {
     q.geonameid = location.getGeoId();
     q.geo = 'geoname';
   }
-  const dt = !empty(q.dt) ? isoDateStringToDate(q.dt) :
-    (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-    new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
-    new Date();
+  const dt = getTodayDate(q);
   let startAndEnd;
   try {
     startAndEnd = getStartAndEnd(dt, location.getTzid());
@@ -227,6 +224,20 @@ function makeOptions(ctx) {
     options.candleLightingMins = opts0.candleLightingMins;
   }
   return {q, options};
+}
+
+function getTodayDate(q) {
+  if (!empty(q.dt)) {
+    try {
+      const dt = isoDateStringToDate(q.dt);
+      return dt;
+    } catch (err) {
+      return new Date();
+    }
+  }
+  return (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
+      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
+      new Date();
 }
 
 function makePropsForFullHtml(ctx) {
