@@ -7,10 +7,12 @@ href="webcal://download.hebcal.com/ical/<%=basename%>.ics">
 title="Add <%=name%> to Google Calendar"
 href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F<%=basename%>.ics">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google</a>
+<% if (typeof noOutlook === 'undefined') { %>
 <a class="btn btn-outline-primary btn-sm me-1 mb-2 download" id="quick-csv-<%=basename%>"
 title="Download <%=name%> to Microsoft Outlook"
 href="https://download.hebcal.com/ical/<%=basename%>.csv" download="<%=basename%>.csv">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook CSV</a>
+<% } %>
 </div><!-- .btn-toolbar -->
 <div class="input-group input-group-sm mb-3 me-1">
 <input type="text" class="form-control" id="grab-<%=basename%>"

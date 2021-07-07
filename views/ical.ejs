@@ -33,7 +33,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <h5 class="card-title">Jewish Holidays</h5>
 <p class="card-text">Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).
 <small class="text-muted">10-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays-v2'}) -%>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays-v2', noOutlook: true}) -%>
 <p>Without emoji:</p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}) -%>
 </div></div></div>
@@ -41,7 +41,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <h5 class="card-title">Jewish Holidays (all)</h5>
 <p class="card-text">Also includes Rosh Chodesh, minor fasts, modern Israeli holidays, and special Shabbatot. Diaspora schedule.
 <small class="text-muted">8-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all-v2'}) -%>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all-v2', noOutlook: true}) -%>
 <p>Without emoji:</p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all'}) -%>
 </div></div></div>
