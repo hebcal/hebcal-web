@@ -27,14 +27,26 @@ update_ics_name() {
 }
 
 
-FILE="jewish-holidays"
+FILE="jewish-holidays-v2"
 fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=1"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "https:\\/\\/www.hebcal.com\\/"
 
+FILE="jewish-holidays-all-v2"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=8&nx=on&mf=on&ss=on&emoji=1"
+update_ics_name $FILE \
+    "Jewish Holidays" \
+    "https:\\/\\/www.hebcal.com\\/"
+
+FILE="jewish-holidays"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=0"
+update_ics_name $FILE \
+    "Jewish Holidays" \
+    "https:\\/\\/www.hebcal.com\\/"
+
 FILE="jewish-holidays-all"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=10&nx=on&mf=on&ss=on&emoji=1"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=8&nx=on&mf=on&ss=on&emoji=0"
 update_ics_name $FILE \
     "Jewish Holidays" \
     "https:\\/\\/www.hebcal.com\\/"
