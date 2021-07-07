@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect, wrapHebrewInSpans} from './common';
+import {httpRedirect, wrapHebrewInSpans, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -275,10 +275,10 @@ function makeYearEvents(il, date) {
  * @return {Date}
  */
 function parse8digitDateStr(date) {
-  const gy = parseInt(date.substring(0, 4), 10);
-  const gm = parseInt(date.substring(4, 6), 10);
-  const gd = parseInt(date.substring(6, 8), 10);
-  return new Date(gy, gm - 1, gd);
+  const gy = date.substring(0, 4);
+  const gm = date.substring(4, 6);
+  const gd = date.substring(6, 8);
+  return makeGregDate(gy, gm, gd);
 }
 
 function makeBibleOrtUrl(parsha) {

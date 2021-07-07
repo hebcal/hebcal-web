@@ -821,6 +821,12 @@ export function makeGregDate(gy, gm, gd) {
   if (yy < 100) {
     dt.setFullYear(yy);
   }
+  // Hebrew date 1 Tishrei 1 == Gregorian -003760-09-07
+  if (dt.getTime() < -180799747622000) {
+    const s = dt.toISOString();
+    const isoDate = s.substring(0, s.indexOf('T'));
+    throw createError(400, `Gregorian date before Hebrew year 1: ${isoDate}`);
+  }
   return dt;
 }
 
