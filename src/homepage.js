@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
-  getBeforeAfterSunsetForLocation} from './common';
+  getBeforeAfterSunsetForLocation, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 
@@ -34,8 +34,7 @@ export async function homepage(ctx) {
 
 function getDate(ctx, q) {
   const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
-  const dt = isToday ? new Date() :
-    new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10));
+  const dt = isToday ? new Date() : makeGregDate(q.gy, q.gm, q.gd);
   const location = ctx.state.location;
   if (isToday && location !== null) {
     return getBeforeAfterSunsetForLocation(dt, location);

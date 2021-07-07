@@ -6,6 +6,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getLocationFromGeoIp,
   eTagFromOptions,
   isoDateStringToDate,
+  makeGregDate,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -145,6 +146,9 @@ function getStartAndEnd(now, tzid) {
 
 function makeItems(ctx, options, q) {
   const events = makeHebrewCalendar(ctx, options);
+  if (events.length === 0) {
+    ctx.throw(400, 'Bad request: no events');
+  }
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const titlePrefix = location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times';
@@ -235,9 +239,8 @@ function getTodayDate(q) {
       return new Date();
     }
   }
-  return (!empty(q.gy) && !empty(q.gm) && !empty(q.gd)) ?
-      new Date(parseInt(q.gy, 10), parseInt(q.gm, 10) - 1, parseInt(q.gd, 10)) :
-      new Date();
+  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
+  return isToday ? new Date() : makeGregDate(q.gy, q.gm, q.gd);
 }
 
 function makePropsForFullHtml(ctx) {
