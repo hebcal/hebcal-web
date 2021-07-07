@@ -54,7 +54,7 @@ export async function getZmanim(ctx) {
   if (loc === null) {
     throw createError(400, 'Location is required');
   }
-  const {isRange, startD, endD} = getStartAndEnd(q, loc.getTzid());
+  const {isRange, startD, endD} = myGetStartAndEnd(ctx, q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', 'max-age=2592000');
     ctx.lastModified = new Date();
@@ -70,6 +70,22 @@ export async function getZmanim(ctx) {
     const times = getTimes(startD, loc, true);
     const isoDate = startD.format('YYYY-MM-DD');
     ctx.body = {date: isoDate, location: loc, times};
+  }
+}
+
+/**
+ * @private
+ * @param {any} ctx
+ * @param {Object.<string,string>} q
+ * @param {string} tzid
+ * @return {any}
+ */
+function myGetStartAndEnd(ctx, q, tzid) {
+  try {
+    const startAndEnd = getStartAndEnd(q, tzid);
+    return startAndEnd;
+  } catch (err) {
+    ctx.throw(400, err);
   }
 }
 
