@@ -48,7 +48,7 @@ app.use(googleAnalytics('UA-967247-1'));
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
-  ctx.state.spriteHref = '/i/sprite5.svg';
+  ctx.state.spriteHref = '/i/sprite6.svg';
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {

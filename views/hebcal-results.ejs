@@ -141,7 +141,7 @@ accurate.
   <div class="btn-group me-1" role="group" data-bs-toggle="buttons">
    <label class="btn btn-secondary btn-sm active mb-1">
     <input type="radio" name="view" id="toggle-month" checked>
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-calendar"></use></svg> Month
+    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
    </label>
    <label class="btn btn-secondary btn-sm mb-1">
     <input type="radio" name="view" id="toggle-list">
@@ -153,7 +153,7 @@ accurate.
 <% } %>
 <% if (q.c === 'on' && gy >= 1970) { %>
 <div class="btn-group me-1" role="group">
-  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a></div>
+  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-bs-toggle="dropdown" aria-expanded="false">
    <span class="visually-hidden">Toggle Dropdown</span>
   </button>
@@ -162,9 +162,9 @@ accurate.
   <li><a class="dropdown-item" href="<%= url.fridge %>">Candle-lighting times only</a></li>
   </ul>
 </div>
-<div class="btn-group me-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#email-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#gi-envelope"></use></svg> Email</a></div>
+<div class="btn-group me-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#email-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email</a></div>
 <% } else { %>
-<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-print"></use></svg> Print</a></div>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
 <% } %>
 <a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-cogwheel"></use></svg> Settings</a>
 </div><!-- .btn-toolbar -->
