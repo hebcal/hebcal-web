@@ -10,10 +10,10 @@
 <ul class="nav nav-pills" id="download-tabs">
 <li class="nav-item"><a class="nav-link active" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
 <li class="nav-item"><a class="nav-link" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
+<li class="nav-item"><a class="nav-link" href="#icalendar-body" data-bs-toggle="tab">iCalendar</a></li>
 <li class="nav-item"><a class="nav-link" href="#ol-ics-body" data-bs-toggle="tab">Outlook</a></li>
 <li class="nav-item"><a class="nav-link" href="#ol-mac-body" data-bs-toggle="tab">Outlook Mac</a></li>
-<li class="nav-item"><a class="nav-link" href="#ycal-body" data-bs-toggle="tab">iCalendar</a></li>
-<li class="nav-item"><a class="nav-link" href="#ol-csv-body" data-bs-toggle="tab">CSV</a></li>
+<li class="nav-item"><a class="nav-link" href="#csv-body" data-bs-toggle="tab">CSV</a></li>
 <% if (typeof filename.pdf === 'string') { %>
 <li class="nav-item"><a class="nav-link" href="#pdf-body" data-bs-toggle="tab">PDF</a></li>
 <% } %>
@@ -85,10 +85,10 @@ Outlook for Mac</a></p>
 
 </div>
 </div><!-- #ol-mac-body -->
-<div id="ycal-body" class="tab-pane">
+<div id="icalendar-body" class="tab-pane">
 <p>iCalendar feed URL</p>
 <div>
-<p><small>The iCalendar format is used by Outlook 365, Yahoo!, Blackbaud, and
+<p><small>The iCalendar format is used by Outlook.com, Windows 10, Yahoo!, Blackbaud, and
 many desktop and web calendar applications.</small></p>
 <%- await include('emoji-switch.ejs', {id: 'grabLink'}) -%>
 <p>Copy the entire iCalendar URL here:</p>
@@ -104,24 +104,25 @@ Copy
 </div>
 </div>
 <p>Follow additional instructions for 
-<a href="home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
+<a href="/home/1138/outlook-com-windows-live-jewish-calendar-download">Outlook.com and Windows 10</a>,
+<a href="/home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
 or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 
 </div>
-</div><!-- #ycal-body -->
-<div id="ol-csv-body" class="tab-pane">
-<p>Outlook 97, 98, 2000, 2002, 2003 (Windows)</p>
+</div><!-- #icalendar-body -->
+<div id="csv-body" class="tab-pane">
+<p>CSV file for Outlook 97-2003 (Windows)</p>
 <div>
 Select one of:
 <ul class="list-unstyled">
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - USA (month/day/year)</a></li>
-<li><a class="btn btn-secondary download mb-1" id="dl-ol-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - Europe (day/month/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - USA (month/day/year)</a></li>
+<li><a class="btn btn-secondary download mb-1" id="dl-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download CSV - Europe (day/month/year)</a></li>
 </ul>
 Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
-href="/home/12/outlook-csv-jewish-calendar">Import CSV file into Outlook</a>
+href="/home/12/outlook-csv-jewish-holidays">Import CSV file into Outlook 97, 98, 2000, 2002, 2003</a>
 
 </div>
-</div><!-- #ol-csv-body -->
+</div><!-- #csv-body -->
 <% if (typeof filename.pdf === 'string') { %>
 <div id="pdf-body" class="tab-pane">
 <p>Print PDF (formatted for 8.5"x11" paper)</p>
