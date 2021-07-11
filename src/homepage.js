@@ -248,6 +248,6 @@ Pesach begins at sundown on ${strtime}`];
 function getRoshChodeshGreeting(ev) {
   const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
   const url = ev.url();
-  return ['🌒🗓️&nbsp; Chodesh Tov / <span lang="he" dir="rtl">חודש טוב</span> &nbsp;🗓️🌒',
+  return ['🗓️ 🌒&nbsp; Chodesh Tov / <span lang="he" dir="rtl">חודש טוב</span> &nbsp;🌒 🗓️',
     `<br>We wish you a good new month of <a href="${url}">${monthName}</a>`];
 }
