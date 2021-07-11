@@ -88,6 +88,7 @@ export async function hebcalDownload(ctx) {
     if (query.emoji === '1' || query.emoji === 'on') {
       options.emoji = true;
     }
+    options.calendarColor = '#800002';
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }

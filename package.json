@@ -34,9 +34,9 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.21.0",
+    "@hebcal/core": "^3.21.1",
     "@hebcal/geo-sqlite": "^3.4.1",
-    "@hebcal/icalendar": "^4.10.0",
+    "@hebcal/icalendar": "^4.11.0",
     "@hebcal/leyning": "^4.6.2",
     "@hebcal/locales": "^3.3.0",
     "@hebcal/rest-api": "^3.7.0",
@@ -63,7 +63,7 @@
     "mysql2": "^2.2.5",
     "nodemailer": "^6.6.2",
     "pdfkit": "^0.12.1",
-    "pino": "^6.11.3",
+    "pino": "^6.12.0",
     "random-bigint": "0.0.1",
     "ulid": "^2.3.0",
     "universal-analytics": "^0.4.23",
