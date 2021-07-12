@@ -271,13 +271,27 @@ async function writeSubInfo(ctx, db, q) {
     WHERE email_id = ?`;
   await db.query(sql, [
     q.zip || null,
-    q.geonameid || null,
-    q.m || null,
-    q.M === 'on' ? 1 : 0,
-    q.b || 18,
+    parseInt(q.geonameid, 10) || null,
+    getHavdalahMins(q),
+    getHavdalahTzeit(q),
+    getCandleMins(q),
     getIpAddress(ctx),
     ctx.state.subscriptionId,
   ]);
+}
+
+function getHavdalahTzeit(q) {
+  return q.M === 'on' ? 1 : 0;
+}
+
+function getCandleMins(q) {
+  return parseInt(q.b, 10) || 18;
+}
+
+// allow zero as a valid Havdalah minutes past sundown
+function getHavdalahMins(q) {
+  const havdalahMins = parseInt(q.m, 10);
+  return isNaN(havdalahMins) ? null : havdalahMins;
 }
 
 function makeSubscriptionId(ctx) {
@@ -300,9 +314,9 @@ async function writeStagingInfo(ctx, db, q) {
   await db.query(sql, [
     subscriptionId,
     q.em,
-    q.m || null,
-    q.M === 'on' ? 1 : 0,
-    q.b || 18,
+    getHavdalahMins(q),
+    getHavdalahTzeit(q),
+    getCandleMins(q),
     locationValue,
     ip,
   ]);
