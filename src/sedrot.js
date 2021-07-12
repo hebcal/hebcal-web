@@ -101,6 +101,13 @@ export async function parshaDetail(ctx) {
   if (typeof parshaName0 !== 'string') {
     throw createError(404, `Parsha not found: ${base}`);
   }
+  if (date) {
+    const dt = parse8digitDateStr(date);
+    if (dt.getFullYear() > ctx.launchDate.getFullYear() + 1000) {
+      httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
+      return;
+    }
+  }
   const q = ctx.request.query;
   const il = q.i === 'on';
   const parshaEv = getParshaEvent(il, date, parshaName0);
