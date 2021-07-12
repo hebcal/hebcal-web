@@ -89,6 +89,9 @@ const noTriennial = [
   8822, 8823, 8824,
   9194, 9195, 9196,
   9935, 9936, 9937,
+  10676, 10677, 10678,
+  11417, 11418, 11419,
+  13298, 13299, 13300,
 ];
 
 export async function parshaDetail(ctx) {
@@ -234,6 +237,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
         triReading.p2d = dayjs(triReading.date2.greg());
       } else {
         if (triReading.readTogether) {
+          triReading.hyear = startYear + yr;
           triReading.d = dayjs(triReading.date.greg());
           triReading.anchor = makeAnchor(triReading.readTogether);
         } else {

@@ -14,7 +14,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
-<p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>).</p>
+<p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('D MMMM YYYY') %></time> (<%= hd.toString() %>).</p>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
@@ -62,15 +62,15 @@ href="<%=ortUrl%>">
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-md-3 col-sm-6">
 <h5>Triennial Year&nbsp;<%=yr%>
-<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><%=triReading.d.format('D MMM YYYY')%></span><% } %></h5>
+<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
-<p>Read separately. See:</p>
+<p>Read separately in <%=triReading.hyear%></p>
 <ul class="list-unstyled">
-<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%></a> - <span class="text-muted"><%=triReading.p1d.format('D MMM YYYY')%></span>
-<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%></a> - <span class="text-muted"><%=triReading.p2d.format('D MMM YYYY')%></span>
+<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%> <%=triReading.hyear%></a> <span class="text-muted">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
+<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%> <%=triReading.hyear%></a> <span class="text-muted">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>
 </ul>
 <% } else if (triReading.readTogether) { %>
-<p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%></a></small></p>
+<p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></small></p>
 <% } else { %>
 <ol class="list-unstyled">
 <%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
@@ -143,7 +143,7 @@ title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</
 Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <ul class="<%=sometimesDoubled ? 'list-unstyled' : 'bullet-list-inline' %>">
 <% items.forEach((item) => { -%>
-<li><a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.d.format('D MMM YYYY')%></a>
+<li><a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
 <% if (item.desc !== parsha.name) { %> - <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>
