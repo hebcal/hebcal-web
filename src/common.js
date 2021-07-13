@@ -705,6 +705,9 @@ export function validateEmail(email) {
  * @param {number} maxAccuracyRadius
  */
 export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
+  if (!ctx.geoipCity) {
+    return {geo: 'none'};
+  }
   const ip = getIpAddress(ctx);
   const geoip = ctx.geoipCity.get(ip);
   if (!geoip) {
@@ -779,7 +782,7 @@ export function setDefautLangTz(ctx) {
     cc = location.getCountryCode();
   } else {
     const ip = getIpAddress(ctx);
-    cc = ctx.geoipCountry.get(ip) || 'US';
+    cc = ctx.geoipCountry ? ctx.geoipCountry.get(ip) || 'US' : 'US';
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
   const lg = ctx.state.lg = q.lg || ccDefaults[0];

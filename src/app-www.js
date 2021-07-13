@@ -25,6 +25,26 @@ const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
 const {logger, dest} = makeLogger(logDir);
 app.context.logger = logger;
 
+const geoipCountryMmdbPath = 'GeoLite2-Country.mmdb';
+setImmediate(async () => {
+  logger.info(`Opening ${geoipCountryMmdbPath}`);
+  try {
+    app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath);
+  } catch (err) {
+    logger.error(err);
+  }
+});
+
+const geoipCityMmdbPath = 'GeoLite2-City.mmdb';
+setImmediate(async () => {
+  logger.info(`Opening ${geoipCityMmdbPath}`);
+  try {
+    app.context.geoipCity = await maxmind.open(geoipCityMmdbPath);
+  } catch (err) {
+    logger.error(err);
+  }
+});
+
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 const geoDb = app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
@@ -92,14 +112,6 @@ app.use(async function fixup1(ctx, next) {
   const cfg = ctx.request.query.cfg;
   if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
     ctx.request.header['accept'] = 'application/json';
-  }
-  if (!ctx.geoipCountry) {
-    const geoipCountryMmdbPath = 'GeoLite2-Country.mmdb';
-    logger.info(`Opening ${geoipCountryMmdbPath}`);
-    ctx.geoipCountry = app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath);
-    const geoipCityMmdbPath = 'GeoLite2-City.mmdb';
-    logger.info(`Opening ${geoipCityMmdbPath}`);
-    ctx.geoipCity = app.context.geoipCity = await maxmind.open(geoipCityMmdbPath);
   }
   await next();
 });
