@@ -41,6 +41,20 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 app.context.launchDate = new Date();
 
 app.use(accessLogger(logger));
+app.on('error', errorLogger(logger));
+
+function stopIfTimedOut() {
+  return async (ctx, next) => {
+    if (!ctx.state.timeout) {
+      await next();
+    }
+  }
+}
+
+app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+
+app.use(stopIfTimedOut());
+
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-5'));
 
@@ -59,8 +73,6 @@ app.use(async function fixup0(ctx, next) {
   }
 });
 
-app.on('error', errorLogger(logger));
-
 app.use(conditional());
 app.use(compress({
   gzip: true,
@@ -73,11 +85,13 @@ app.use(compress({
   },
 }));
 
+app.use(stopIfTimedOut());
+
 const DOCUMENT_ROOT = '/var/www/html';
 
 const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
 
-// Send static files before timeout and regular request dispatch
+// Send static files before regular request dispatch
 app.use(async function sendStatic(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/') {
@@ -102,6 +116,8 @@ app.use(async function sendStatic(ctx, next) {
     await next();
   }
 });
+
+app.use(stopIfTimedOut());
 
 // Fix up querystring so we can later use ctx.request.query
 app.use(async function fixup1(ctx, next) {
@@ -138,8 +154,7 @@ app.use(async function fixup1(ctx, next) {
   await next();
 });
 
-const TIMEOUT = 20 * 1000;
-app.use(timeout(TIMEOUT, {status: 503, message: 'Service Unavailable'}));
+app.use(stopIfTimedOut());
 
 // request dispatcher
 app.use(async function router(ctx, next) {
@@ -160,6 +175,8 @@ app.use(async function router(ctx, next) {
   }
   await next();
 });
+
+app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: true}));
 

@@ -62,6 +62,20 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 app.context.launchDate = new Date();
 
 app.use(accessLogger(logger));
+app.on('error', errorLogger(logger));
+
+function stopIfTimedOut() {
+  return async (ctx, next) => {
+    if (!ctx.state.timeout) {
+      await next();
+    }
+  }
+}
+
+app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+
+app.use(stopIfTimedOut());
+
 app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-1'));
 
@@ -77,18 +91,18 @@ app.use(async function fixup0(ctx, next) {
   await next();
 });
 
-app.on('error', errorLogger(logger));
-
 app.use(compress({
   gzip: true,
   deflate: false,
   br: {
     params: {
       [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 5,
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
     },
   },
 }));
+
+app.use(stopIfTimedOut());
 
 render(app, {
   root: path.join(__dirname, 'views'),
@@ -121,12 +135,16 @@ app.use(error({
   template: path.join(__dirname, 'views', 'error.ejs'),
 }));
 
-app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+app.use(stopIfTimedOut());
 
 app.use(bodyParser());
 
+app.use(stopIfTimedOut());
+
 // request dispatcher
 app.use(wwwRouter());
+
+app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
