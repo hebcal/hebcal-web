@@ -16,6 +16,7 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router';
 import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
+import {stopIfTimedOut} from './common';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -63,14 +64,6 @@ app.context.launchDate = new Date();
 
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
-
-function stopIfTimedOut() {
-  return async (ctx, next) => {
-    if (!ctx.state.timeout) {
-      await next();
-    }
-  }
-}
 
 app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 

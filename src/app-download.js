@@ -11,7 +11,7 @@ import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger} from './logger';
-import {httpRedirect} from './common';
+import {httpRedirect, stopIfTimedOut} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
@@ -42,14 +42,6 @@ app.context.launchDate = new Date();
 
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
-
-function stopIfTimedOut() {
-  return async (ctx, next) => {
-    if (!ctx.state.timeout) {
-      await next();
-    }
-  }
-}
 
 app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
