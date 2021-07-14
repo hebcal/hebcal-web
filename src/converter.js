@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd} from './common';
 import gematriya from 'gematriya';
+import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
 
@@ -39,6 +40,8 @@ function isset(val) {
   return typeof val === 'string';
 }
 
+const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
@@ -55,10 +58,13 @@ export async function hebrewDateConverter(ctx) {
     return;
   }
   const p = makeProperties(ctx);
+  const q = ctx.request.query;
   if (p.message) {
     ctx.status = 400;
+  } else if (typeof p.hdates === 'object' && q.cfg !== 'json') {
+    ctx.status = 400;
+    p.message = RANGE_REQUIRES_CFG_JSON;
   }
-  const q = ctx.request.query;
   if (q.cfg === 'json') {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'json';
@@ -103,9 +109,6 @@ export async function hebrewDateConverter(ctx) {
   } else if (q.cfg === 'xml') {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'text/xml';
-    if (typeof p.hdates === 'object') {
-      p.message = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
-    }
     if (p.message) {
       ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
     } else {
@@ -116,6 +119,8 @@ export async function hebrewDateConverter(ctx) {
       }
       ctx.body = await ctx.render('converter-xml', p);
     }
+  } else if (typeof p.hdates === 'object') {
+    throw createError(400, RANGE_REQUIRES_CFG_JSON);
   } else {
     if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
       ctx.lastModified = ctx.launchDate;
