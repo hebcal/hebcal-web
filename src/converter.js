@@ -103,6 +103,9 @@ export async function hebrewDateConverter(ctx) {
   } else if (q.cfg === 'xml') {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'text/xml';
+    if (typeof p.hdates === 'object') {
+      p.message = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
+    }
     if (p.message) {
       ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
     } else {
