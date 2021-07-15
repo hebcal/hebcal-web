@@ -1,0 +1,43 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div id="content">
+<div class="row">
+<div class="col">
+<h1>Hebrew days calculator</h1>
+</div><!-- .col -->
+</div><!-- .row -->
+
+<div class="row">
+<h3>Days between two dates</h3>
+<form action="/calc" method="get">
+<div class="col">
+<p>Start Date</p>
+<%- await include('partials/hebdate-picker.ejs', {
+  hd: q.hd1,
+  hm: hm1,
+  hy: q.hy1,
+  hleap: hleap1,
+  suffix: 1,
+}) -%>
+</div><!-- .col -->
+
+<div class="col">
+<p>End Date</p>
+<%- await include('partials/hebdate-picker.ejs', {
+  hd: q.hd2,
+  hm: hm2,
+  hy: q.hy2,
+  hleap: hleap2,
+  suffix: 2,
+}) -%>
+</div><!-- .col -->
+<button type="submit" class="btn btn-primary">Calculate Date Difference</button>
+</form>
+
+</div><!-- .row -->
+
+<div class="row">
+<h3>Add to or subtract from a Hebrew date</h3>
+</div><!-- .row -->
+
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') -%>

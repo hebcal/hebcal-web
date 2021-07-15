@@ -23,6 +23,7 @@ import {shortUrlRedir} from './shortUrlRedir';
 import {yahrzeitApp} from './yahrzeit';
 import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 import {getZmanim} from './zmanim';
+import {hebrewDateCalc} from './calc';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -137,6 +138,8 @@ export function wwwRouter() {
       } else {
         await parshaDetail(ctx);
       }
+    } else if (rpath.startsWith('/calc')) {
+      await hebrewDateCalc(ctx);
     }
     await next();
   };
