@@ -834,6 +834,33 @@ export function makeGregDate(gy, gm, gd) {
 }
 
 /**
+ * @param {string} hyStr Hebrew Year
+ * @param {string} hmStr Hebrew Month
+ * @param {string} hdStr Hebrew Day
+ * @return {HDate}
+ */
+export function makeHebDate(hyStr, hmStr, hdStr) {
+  const hy = parseInt(hyStr, 10);
+  const hd = parseInt(hdStr, 10);
+  if (isNaN(hd)) {
+    throw new Error('Hebrew day must be numeric');
+  } else if (isNaN(hy)) {
+    throw new Error('Hebrew year must be numeric');
+  } else if (hy < 1) {
+    throw new RangeError('Hebrew year must be year 1 or later');
+  } else if (hy > 32000) {
+    throw new RangeError('Hebrew year is too large');
+  }
+  const hm = HDate.monthFromName(hmStr);
+  const maxDay = HDate.daysInMonth(hm, hy);
+  if (hd < 1 || hd > maxDay) {
+    const monthName = HDate.getMonthName(hm, hy);
+    throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
+  }
+  return new HDate(hd, hm, hy);
+}
+
+/**
  * @param {Date} dt
  * @param {Location} location
  * @return {any}

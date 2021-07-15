@@ -1,7 +1,7 @@
 import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
-  localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd} from './common';
+  localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate} from './common';
 import gematriya from 'gematriya';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
@@ -254,24 +254,7 @@ function parseConverterQuery(ctx) {
     }
   }
   if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
-    const hy = parseInt(query.hy, 10);
-    const hd = parseInt(query.hd, 10);
-    if (isNaN(hd)) {
-      throw new Error('Hebrew day must be numeric');
-    } else if (isNaN(hy)) {
-      throw new Error('Hebrew year must be numeric');
-    } else if (hy < 1) {
-      throw new RangeError('Hebrew year must be year 1 or later');
-    } else if (hy > 32000) {
-      throw new RangeError('Hebrew year is too large');
-    }
-    const hm = HDate.monthFromName(query.hm);
-    const maxDay = HDate.daysInMonth(hm, hy);
-    if (hd < 1 || hd > maxDay) {
-      const monthName = HDate.getMonthName(hm, hy);
-      throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
-    }
-    const hdate = new HDate(hd, hm, hy);
+    const hdate = makeHebDate(query.hy, query.hm, query.hd);
     const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
   } else {
