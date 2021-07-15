@@ -956,3 +956,11 @@ const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
 export function wrapHebrewInSpans(str) {
   return str.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
 }
+
+export function stopIfTimedOut() {
+  return async function stopIfTimedOut0(ctx, next) {
+    if (!ctx.state.timeout) {
+      await next();
+    }
+  }
+}
