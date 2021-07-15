@@ -7,15 +7,15 @@
 </div>
 <div class="modal-body">
 <p>First, select your calendar app:</p>
-<ul class="nav nav-pills" id="download-tabs">
-<li class="nav-item"><a class="nav-link active" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
-<li class="nav-item"><a class="nav-link" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
-<li class="nav-item"><a class="nav-link" href="#icalendar-body" data-bs-toggle="tab">iCalendar</a></li>
-<li class="nav-item"><a class="nav-link" href="#ol-ics-body" data-bs-toggle="tab">Outlook</a></li>
-<li class="nav-item"><a class="nav-link" href="#ol-mac-body" data-bs-toggle="tab">Outlook Mac</a></li>
-<li class="nav-item"><a class="nav-link" href="#csv-body" data-bs-toggle="tab">CSV</a></li>
+<ul class="nav nav-pills" id="download-tabs" role="tablist">
+<li class="nav-item" role="presentation"><a class="nav-link active" style="padding: 0.25rem 0.5rem" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#icalendar-body" data-bs-toggle="tab">iCalendar</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-ics-body" data-bs-toggle="tab">Outlook</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-mac-body" data-bs-toggle="tab">Outlook Mac</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#csv-body" data-bs-toggle="tab">CSV</a></li>
 <% if (typeof filename.pdf === 'string') { %>
-<li class="nav-item"><a class="nav-link" href="#pdf-body" data-bs-toggle="tab">PDF</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#pdf-body" data-bs-toggle="tab">PDF</a></li>
 <% } %>
 </ul><!-- #download-tabs -->
 <div class="tab-content mt-2">
