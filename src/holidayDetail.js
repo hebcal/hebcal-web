@@ -5,7 +5,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {httpRedirect, wrapHebrewInSpans} from './common';
+import {httpRedirect, wrapHebrewInSpans, getHaftarahHref} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
@@ -230,11 +230,15 @@ function makeHolidayReading(holiday, item, meta, reading, ev) {
     itemReading.torahHref = meta.links.torah[item];
   } else if (meta.about.torah) {
     itemReading.torahHref = meta.about.torah;
+  } else if (itemReading.summary) {
+    itemReading.torahHref = getHaftarahHref(itemReading.summary) + '&aliyot=0';
   }
   if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
     itemReading.haftaraHref = meta.links.haftara[item];
   } else if (meta.about.haftara) {
     itemReading.haftaraHref = meta.about.haftara;
+  } else if (itemReading.haftara) {
+    itemReading.haftaraHref = getHaftarahHref(itemReading.haftara);
   }
   if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {

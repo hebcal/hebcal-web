@@ -957,10 +957,31 @@ export function wrapHebrewInSpans(str) {
   return str.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
 }
 
+// eslint-disable-next-line require-jsdoc
 export function stopIfTimedOut() {
   return async function stopIfTimedOut0(ctx, next) {
     if (!ctx.state.timeout) {
       await next();
     }
+  };
+}
+
+/**
+ * @private
+ * @param {string} haftara
+ * @return {string}
+ */
+export function getHaftarahHref(haftara) {
+  haftara = haftara.replace(/;.+$/, '');
+  const matches = haftara.match(/^([^\d]+)(\d.+)$/);
+  if (matches === null) {
+    return null;
   }
+  const book = matches[1].trim().replace(/\s+/g, '_');
+  let verses = matches[2].replace(/:/g, '.').replace(/\s+-\s+/, '-');
+  const cv = verses.match(/^(\d+)\.(\d+)-(\d+)\.(\d+)$/);
+  if (cv && cv[1] === cv[3]) {
+    verses = `${cv[1]}.${cv[2]}-${cv[4]}`;
+  }
+  return `https://www.sefaria.org/${book}.${verses}?lang=bi`;
 }

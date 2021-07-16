@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect, wrapHebrewInSpans, makeGregDate} from './common';
+import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -254,20 +254,6 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     }
   }
   return triennial;
-}
-
-function getHaftarahHref(haftara) {
-  const matches = haftara.match(/^([^\d]+)(\d.+)$/);
-  if (matches === null) {
-    return null;
-  }
-  const book = matches[1].trim().replace(/\s+/g, '_');
-  let verses = matches[2].replace(/;.+$/, '').replace(/:/g, '.').replace(/ - /, '-');
-  const cv = verses.match(/^(\d+)\.(\d+)-(\d+)\.(\d+)$/);
-  if (cv && cv[1] === cv[3]) {
-    verses = `${cv[1]}.${cv[2]}-${cv[4]}`;
-  }
-  return `https://www.sefaria.org/${book}.${verses}?lang=bi`;
 }
 
 /**

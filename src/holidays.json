@@ -1,8 +1,7 @@
 {
  "Asara B'Tevet": {
   "about": {
-   "href": "https://www.ou.org/holidays/asarah-btevet/asara_btevet/",
-   "torah": "https://www.sefaria.org/Exodus.32.11-34.10?lang=en&aliyot=0"
+   "href": "https://www.ou.org/holidays/asarah-btevet/asara_btevet/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tenth_of_Tevet",
@@ -13,8 +12,7 @@
  },
  "Chanukah": {
   "about": {
-   "href": "https://jewfaq.org/holiday7.htm",
-   "torah": "https://www.jtsa.edu/hanukkah"
+   "href": "https://jewfaq.org/holiday7.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Hanukkah",
@@ -163,25 +161,11 @@
     "Pesach I": "https://www.jtsa.edu/pesah-day-1",
     "Pesach I (on Shabbat)": "https://www.jtsa.edu/pesah-day-1",
     "Pesach II": "https://www.jtsa.edu/pesah-day-2",
-    "Pesach Chol ha-Moed Day 1": "https://www.sefaria.org/Exodus.13.1-16?lang=en&aliyot=0",
-    "Pesach Chol ha-Moed Day 2": "https://www.sefaria.org/Exodus.22.24-23.19?lang=en&aliyot=0",
-    "Pesach Chol ha-Moed Day 3": "https://www.sefaria.org/Exodus.34.1-26?lang=en&aliyot=0",
-    "Pesach Chol ha-Moed Day 4": "https://www.sefaria.org/Numbers.9.1-14?lang=en&aliyot=0",
     "Pesach Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-pesah",
     "Pesach VII": "https://www.jtsa.edu/pesah-day-7",
     "Pesach VII (on Shabbat)": "https://www.jtsa.edu/pesah-day-7",
     "Pesach VIII": "https://www.jtsa.edu/pesah-day-8",
     "Pesach VIII (on Shabbat)": "https://www.jtsa.edu/pesah-day-8"
-   },
-   "haftara": {
-    "Pesach I": "https://www.jtsa.edu/pesah-day-1-1",
-    "Pesach I (on Shabbat)": "https://www.jtsa.edu/pesah-day-1-1",
-    "Pesach II": "https://www.jtsa.edu/pesah-day-2-haftarah",
-    "Pesach Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-pesah-haftarah",
-    "Pesach VII": "https://www.jtsa.edu/pesah-day-7-haftarah",
-    "Pesach VII (on Shabbat)": "https://www.jtsa.edu/pesah-day-7-haftarah",
-    "Pesach VIII": "https://www.jtsa.edu/pesah-day-8-haftarah",
-    "Pesach VIII (on Shabbat)": "https://www.jtsa.edu/pesah-day-8-haftarah"
    }
   }
  },
@@ -194,8 +178,7 @@
  },
  "Purim": {
   "about": {
-   "href": "https://jewfaq.org/holiday9.htm",
-   "torah": "https://www.sefaria.org/Exodus.17.8-16?lang=en&aliyot=0"
+   "href": "https://jewfaq.org/holiday9.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Purim",
@@ -366,11 +349,6 @@
     "Rosh Hashana I": "https://www.jtsa.edu/rosh-hashanah-day-1-torah",
     "Rosh Hashana I (on Shabbat)": "https://www.jtsa.edu/rosh-hashanah-day-1-torah",
     "Rosh Hashana II": "https://www.jtsa.edu/rosh-hashanah-day-2-torah"
-   },
-   "haftara": {
-    "Rosh Hashana I": "https://www.jtsa.edu/rosh-hashanah-day-1",
-    "Rosh Hashana I (on Shabbat)": "https://www.jtsa.edu/rosh-hashanah-day-1",
-    "Rosh Hashana II": "https://www.jtsa.edu/rosh-hashanah-day-2"
    }
   }
  },
@@ -398,8 +376,7 @@
  },
  "Shabbat HaChodesh": {
   "about": {
-   "href": "https://www.ou.org/holidays/shabbat/four-shabbatot/",
-   "haftara": "https://www.jtsa.edu/shabbat-hahodesh"
+   "href": "https://www.ou.org/holidays/shabbat/four-shabbatot/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaChodesh",
@@ -414,8 +391,7 @@
  },
  "Shabbat HaGadol": {
   "about": {
-   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol",
-   "haftara": "https://www.jtsa.edu/shabbat-hagadol"
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol",
@@ -426,15 +402,13 @@
  },
  "Shabbat Machar Chodesh": {
   "about": {
-   "href": "https://judaism.stackexchange.com/questions/57591/why-is-there-a-special-haftarah-for-machar-chodesh",
-   "haftara": "https://www.jtsa.edu/shabbat-mahar-hodesh"
+   "href": "https://judaism.stackexchange.com/questions/57591/why-is-there-a-special-haftarah-for-machar-chodesh"
   },
   "category": "shabbat"
  },
  "Shabbat Nachamu": {
   "about": {
-   "href": "https://jewfaq.org/special.htm#Nachamu",
-   "haftara": "https://www.jtsa.edu/PreBuilt/ParashahArchives/jpstext/vaethannan_haft.shtml"
+   "href": "https://jewfaq.org/special.htm#Nachamu"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Nachamu",
@@ -445,8 +419,7 @@
  },
  "Shabbat Parah": {
   "about": {
-   "href": "https://www.ou.org/holidays/four-shabbatot/parshat-parah/",
-   "haftara": "https://www.jtsa.edu/shabbat-parah"
+   "href": "https://www.ou.org/holidays/four-shabbatot/parshat-parah/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Parah",
@@ -458,15 +431,13 @@
  "Shabbat Rosh Chodesh": {
   "about": {
    "href": "https://www.chabad.org/parshah/article_cdo/aid/3572702/jewish/Shabbat-Rosh-Chodesh-Haftarah-in-a-Nutshell.htm",
-   "torah": "https://www.jtsa.edu/shabbat-rosh-hodesh-maftir",
-   "haftara": "https://www.jtsa.edu/shabbat-rosh-hodesh"
+   "torah": "https://www.jtsa.edu/shabbat-rosh-hodesh-maftir"
   },
   "category": "shabbat"
  },
  "Shabbat Shekalim": {
   "about": {
-   "href": "https://www.ou.org/holidays/four-shabbatot/shabbat-shekalim/",
-   "haftara": "https://www.jtsa.edu/shabbat-shekalim"
+   "href": "https://www.ou.org/holidays/four-shabbatot/shabbat-shekalim/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim",
@@ -492,8 +463,7 @@
  },
  "Shabbat Shuva": {
   "about": {
-   "href": "https://www.chabad.org/library/article_cdo/aid/4828/jewish/Shabbat-Shuvah.htm",
-   "haftara": "https://www.jtsa.edu/shabbat-shuvah"
+   "href": "https://www.chabad.org/library/article_cdo/aid/4828/jewish/Shabbat-Shuvah.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah",
@@ -504,8 +474,7 @@
  },
  "Shabbat Zachor": {
   "about": {
-   "href": "https://www.ou.org/holidays/four-shabbatot/parshat-zachor/",
-   "haftara": "https://www.jtsa.edu/shabbat-zakhor"
+   "href": "https://www.ou.org/holidays/four-shabbatot/parshat-zachor/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor",
@@ -553,20 +522,13 @@
       "Shavuot I": "https://www.jtsa.edu/shavuot-day-1",
       "Shavuot II": "https://www.jtsa.edu/shavuot-day-2",
       "Shavuot II (on Shabbat)": "https://www.jtsa.edu/shavuot-day-2"
-    },
-    "haftara": {
-      "Shavuot": "https://www.jtsa.edu/shavuot-day-1-haftarah",
-      "Shavuot I": "https://www.jtsa.edu/shavuot-day-1-haftarah",
-      "Shavuot II": "https://www.jtsa.edu/shavuot-day-2-haftarah",
-      "Shavuot II (on Shabbat)": "https://www.jtsa.edu/shavuot-day-2-haftarah"
     }
   }
  },
  "Shmini Atzeret": {
   "about": {
    "href": "https://jewfaq.org/holiday6.htm",
-   "torah": "https://www.jtsa.edu/shemini-atzeret",
-   "haftara": "https://www.jtsa.edu/shemini-atzeret-haftarah"
+   "torah": "https://www.jtsa.edu/shemini-atzeret"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Shemini_Atzeret",
@@ -581,8 +543,7 @@
  },
  "Shushan Purim": {
   "about": {
-   "href": "http://www.askmoses.com/en/article/99,56435/What-is-Shushan-Purim.html",
-   "torah": "https://www.sefaria.org/Exodus.17.8-16?lang=en&aliyot=0"
+   "href": "http://www.askmoses.com/en/article/99,56435/What-is-Shushan-Purim.html"
   },
   "category": "minor",
   "yomtov": false
@@ -601,8 +562,7 @@
  "Simchat Torah": {
   "about": {
    "href": "https://jewfaq.org/holiday6.htm",
-   "torah": "https://www.jtsa.edu/simhat-torah",
-   "haftara": "https://www.jtsa.edu/simhat-torah-haftarah"
+   "torah": "https://www.jtsa.edu/simhat-torah"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Simchat_Torah",
@@ -654,24 +614,13 @@
     "Sukkot I": "https://www.jtsa.edu/sukkot-day-1-2",
     "Sukkot I (on Shabbat)": "https://www.jtsa.edu/sukkot-day-1-2",
     "Sukkot II": "https://www.jtsa.edu/sukkot-day-1-2",
-    "Sukkot Chol ha-Moed Day 1": "https://www.sefaria.org/Numbers.29.17-25?lang=en&aliyot=0",
-    "Sukkot Chol ha-Moed Day 2": "https://www.sefaria.org/Numbers.29.20-28?lang=en&aliyot=0",
-    "Sukkot Chol ha-Moed Day 3": "https://www.sefaria.org/Numbers.29.23-31?lang=en&aliyot=0",
-    "Sukkot Chol ha-Moed Day 4": "https://www.sefaria.org/Numbers.29.26-34?lang=en&aliyot=0",
-    "Sukkot Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-sukkot",
-    "Sukkot Final Day (Hoshana Raba)": "https://www.sefaria.org/Numbers.29.26-34?lang=en&aliyot=0"
-   },
-   "haftara": {
-    "Sukkot I": "https://www.jtsa.edu/sukkot-day-1-2-haftarah",
-    "Sukkot I (on Shabbat)": "https://www.jtsa.edu/sukkot-day-1-2-haftarah",
-    "Sukkot II": "https://www.jtsa.edu/sukkot-day-2"
+    "Sukkot Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-sukkot"
    }
   }
  },
  "Ta'anit Bechorot": {
   "about": {
-   "href": "https://jewfaq.org/holidaye.htm",
-   "torah": "https://www.sefaria.org/Exodus.32.11-34.10?lang=en&aliyot=0"
+   "href": "https://jewfaq.org/holidaye.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_the_Firstborn",
@@ -682,8 +631,7 @@
  },
  "Ta'anit Esther": {
   "about": {
-   "href": "https://jewfaq.org/holidaye.htm",
-   "torah": "https://www.sefaria.org/Exodus.32.11-34.10?lang=en&aliyot=0"
+   "href": "https://jewfaq.org/holidaye.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_Esther",
@@ -694,9 +642,7 @@
  },
  "Tish'a B'Av": {
   "about": {
-   "href": "https://jewfaq.org/holidayd.htm",
-   "torah": "https://www.sefaria.org/Deuteronomy.4.25-40?lang=en&aliyot=0",
-   "haftara": "https://www.sefaria.org/Jeremiah.8.13-9.23"
+   "href": "https://jewfaq.org/holidayd.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tish%27a_B%27Av",
@@ -768,8 +714,7 @@
  },
  "Tzom Gedaliah": {
   "about": {
-   "href": "https://www.aish.com/h/hh/rh/guide/Fast_of_Gedalia.html",
-   "torah": "https://www.sefaria.org/Exodus.32.11-34.10?lang=en&aliyot=0"
+   "href": "https://www.aish.com/h/hh/rh/guide/Fast_of_Gedalia.html"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_Gedalia",
@@ -780,8 +725,7 @@
  },
  "Tzom Tammuz": {
   "about": {
-   "href": "https://www.ou.org/holidays/fast_of_shiva_asar_btammuz/",
-   "torah": "https://www.sefaria.org/Exodus.32.11-34.10?lang=en&aliyot=0"
+   "href": "https://www.ou.org/holidays/fast_of_shiva_asar_btammuz/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Seventeenth_of_Tammuz",
@@ -843,8 +787,7 @@
  "Yom Kippur": {
   "about": {
    "href": "https://jewfaq.org/holiday4.htm",
-   "torah": "https://www.jtsa.edu/yom-kippur",
-   "haftara": "https://www.jtsa.edu/yom-kippur-morning-haftarah"
+   "torah": "https://www.jtsa.edu/yom-kippur"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_Kippur",
@@ -879,17 +822,7 @@
    "Yom Kippur (on Shabbat)",
    "Yom Kippur (Mincha, Traditional)",
    "Yom Kippur (Mincha, Alternate)"
-  ],
-  "links": {
-   "torah": {
-    "Yom Kippur (Mincha, Traditional)": "https://www.sefaria.org/Leviticus.18.1-30?lang=en&aliyot=0",
-    "Yom Kippur (Mincha, Alternate)": "https://www.sefaria.org/Leviticus.19.1-18?lang=en&aliyot=0"
-   },
-   "haftara": {
-    "Yom Kippur (Mincha, Traditional)": "https://www.sefaria.org/Jonah.1?lang=en&aliyot=0",
-    "Yom Kippur (Mincha, Alternate)": "https://www.sefaria.org/Jonah.1?lang=en&aliyot=0"
-   }
-  }
+  ]
  },
  "Yom Yerushalayim": {
   "about": {
