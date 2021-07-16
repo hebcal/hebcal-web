@@ -972,7 +972,7 @@ export function stopIfTimedOut() {
  * @return {string}
  */
 export function getHaftarahHref(haftara) {
-  haftara = haftara.replace(/;.+$/, '');
+  haftara = haftara.replace(/[;,].+$/, '');
   const matches = haftara.match(/^([^\d]+)(\d.+)$/);
   if (matches === null) {
     return null;
