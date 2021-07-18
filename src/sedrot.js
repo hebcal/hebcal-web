@@ -34,7 +34,7 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
 
 const options15yr = {
   year: new Date().getFullYear() - 2,
-  numYears: 16,
+  numYears: 20,
   noHolidays: true,
   sedrot: true,
 };
@@ -142,10 +142,17 @@ export async function parshaDetail(ctx) {
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
+  const chapVerse = parsha.fullkriyah['1'].b;
+  const [chapter, verse] = chapVerse.split(':');
+  const book = parsha.book;
+  const portion = parsha.combined ? parsha.num1 : parsha.num;
+  parsha.ids = {portion, book, chapter, verse};
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items0 = items15map.get(parshaName);
   const items = items0.items;
-  const reading = leyning.getLeyningForParshaHaShavua(parshaEv, il);
+  const reading = date ?
+    leyning.getLeyningForParshaHaShavua(parshaEv, il) :
+    leyning.getLeyningForParsha(parshaName);
   leyning.addSefariaLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHref = getHaftarahHref(reading.haftara);
   if (reading.sephardic) {
@@ -172,7 +179,6 @@ export async function parshaDetail(ctx) {
     date,
     hasTriennial,
     triennial,
-    ortUrl: makeBibleOrtUrl(parsha),
     israelDiasporaDiffer,
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
@@ -288,15 +294,6 @@ function parse8digitDateStr(date) {
   const gm = date.substring(4, 6);
   const gd = date.substring(6, 8);
   return makeGregDate(gy, gm, gd);
-}
-
-function makeBibleOrtUrl(parsha) {
-  const chapVerse = parsha.fullkriyah['1'].b;
-  const [chapter, verse] = chapVerse.split(':');
-  const book = parsha.book;
-  const portion = parsha.combined ? parsha.num1 : parsha.num;
-  // eslint-disable-next-line max-len
-  return `https://bible.ort.org/books/torahd5.asp?action=displaypage&book=${book}&chapter=${chapter}&verse=${verse}&portion=${portion}`;
 }
 
 function getParshaEvent(il, date, parshaName) {

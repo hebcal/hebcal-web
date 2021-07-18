@@ -20,9 +20,8 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.bookName%> <%=parsha.verses%></a>
 <a class="outbound d-print-none" data-bs-toggle="tooltip" data-bs-animation="false" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
-href="<%=ortUrl%>">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg>
-</a>
+href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=parsha.ids.book%>&amp;chapter=<%=parsha.ids.chapter%>&amp;verse=<%=parsha.ids.verse%>&amp;portion=<%=parsha.ids.portion%>">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
 </h4>
 <% if (typeof summary === 'object') { %><p><%- summary.html %> <sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
@@ -35,6 +34,9 @@ href="<%=ortUrl%>">
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
+href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
+<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <%       if (aliyah.v) { %>
 <small class="text-muted">(<%=aliyah.v%>&nbsp;p'sukim)</small>
 <%       } // aliyah.v %>
