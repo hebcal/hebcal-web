@@ -180,15 +180,14 @@ function makeItems(ctx, options, q) {
 }
 
 function makeOptions(ctx) {
-  const q = processCookieAndQuery(
-      ctx.cookies.get('C'),
-      {tgt: '_top'},
-      ctx.request.query,
-  );
-  q.c = q.s = 'on';
-  let opts0 = {};
+  const q0 = Object.assign({}, ctx.request.query);
+  for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
+    q0[k] = 'on';
+  }
+  const q = processCookieAndQuery(ctx.cookies.get('C'), {tgt: '_top'}, q0);
+  let options = {};
   try {
-    opts0 = makeHebcalOptions(ctx.db, q);
+    options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
     if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
       ctx.throw(400, err);
@@ -197,9 +196,12 @@ function makeOptions(ctx) {
     }
     ctx.state.message = err.message;
   }
-  const location = opts0.location || ctx.db.lookupLegacyCity('New York');
+  const location = options.location || ctx.db.lookupLegacyCity('New York');
   q['city-typeahead'] = location.getName();
-  if (!opts0.location) {
+  if (!options.location) {
+    options.location = location;
+    options.candlelighting = true;
+    options.sedrot = true;
     q.geonameid = location.getGeoId();
     q.geo = 'geoname';
   }
@@ -211,22 +213,8 @@ function makeOptions(ctx) {
     ctx.throw(400, err); // RangeError: Invalid time zone specified
   }
   const [midnight, endOfWeek] = startAndEnd;
-  const options = {
-    start: new Date(midnight.year(), midnight.month(), midnight.date()),
-    end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),
-    candlelighting: true,
-    location,
-    locale: opts0.locale,
-    il: opts0.il,
-    sedrot: true,
-  };
-  q.M = typeof opts0.havdalahMins === 'undefined' ? 'on' : 'off';
-  if (q.M === 'off' && !isNaN(opts0.havdalahMins)) {
-    options.havdalahMins = opts0.havdalahMins;
-  }
-  if (!isNaN(opts0.candleLightingMins)) {
-    options.candleLightingMins = opts0.candleLightingMins;
-  }
+  options.start = new Date(midnight.year(), midnight.month(), midnight.date());
+  options.end = new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date());
   return {q, options};
 }
 
