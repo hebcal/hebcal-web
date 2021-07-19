@@ -10,7 +10,7 @@ DOWNLOAD_URL="http://127.0.0.1:8080"
 fetch_urls () {
     file=$1
     args=$2
-    rm -f "${file}.ics" "${file}.csv"
+    rm -f "${file}.ics" "${file}.csv" "${file}.ics.br" "${file}.csv.br" "${file}.ics.gz" "${file}.csv.gz"
     curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.ics?${args}" && cp $TMPFILE "${file}.ics"
     curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.csv?${args}" && cp $TMPFILE "${file}.csv"
     chmod 0644 "${file}.ics" "${file}.csv"
@@ -24,6 +24,8 @@ update_ics_name() {
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
     perl -pi -e "s/^X-PUBLISHED-TTL:PT7D/X-PUBLISHED-TTL:PT30D/" "${file}.ics"
     perl -pi -e "s,^X-ORIGINAL-URL:.*,X-ORIGINAL-URL:${DOWNLOAD_URL}/ical/${file}.ics\r," "${file}.ics"
+    nice brotli --keep --best "${file}.ics" "${file}.csv"
+    nice gzip --keep --best "${file}.ics" "${file}.csv"
 }
 
 

@@ -17,6 +17,7 @@ import {wwwRouter} from './router';
 import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
 import {stopIfTimedOut} from './common';
+import pkg from '../package.json';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -75,7 +76,7 @@ app.use(googleAnalytics('UA-967247-1'));
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
-  ctx.state.spriteHref = '/i/sprite7b.svg';
+  ctx.state.spriteHref = '/i/' + pkg.config.sprite;
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
