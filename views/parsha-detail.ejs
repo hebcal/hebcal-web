@@ -28,16 +28,17 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 </div><!-- .row -->
 
 <div class="row">
-<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-md-3'%>">
+<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-lg-3'%>">
 <h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
+<span class="text-muted">&middot;</span>
 <a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
 </ol>
@@ -50,9 +51,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(triennial.reading)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%       if (aliyah.v) { %>
-<small class="text-muted">(<%=aliyah.v%>&nbsp;v.)</small>
-<%       } // aliyah.v %>
+<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%    } // ... for %>
 </ol>
@@ -60,7 +59,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <% } else { // date %>
 <% for (let yr = 1; yr <= 3; yr++) { 
   const triReading = triennial.readings[yr - 1]; %>
-<div class="col-md-3 col-sm-6">
+<div class="col-lg-3 col-sm-6">
 <h5>Triennial Year&nbsp;<%=yr%>
 <% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
@@ -75,9 +74,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <ol class="list-unstyled">
 <%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%     if (aliyah.v) { %>
-<small class="text-muted">(<%=aliyah.v%>&nbsp;v.)</small>
-<%     } // aliyah.v %>
+<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
 <%   } // ... for aliyah %>
 </ol>
