@@ -51,6 +51,10 @@ app.use(xResponseTime());
 app.use(googleAnalytics('UA-967247-5'));
 
 app.use(async function fixup0(ctx, next) {
+  if (ctx.method !== 'GET' && ctx.method !== 'HEAD') {
+    ctx.set('Allow', 'GET');
+    ctx.throw(405, `Method ${ctx.method} not allowed; try using GET`);
+  }
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {

@@ -50,10 +50,6 @@ function getNumYears(options) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebcalDownload(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const query = ctx.request.query;
   if (query.v !== '1') {
     return;

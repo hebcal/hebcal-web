@@ -233,10 +233,6 @@ async function getDetailsFromDb(ctx) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function yahrzeitDownload(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const rpath = ctx.request.path;
   const details = rpath.startsWith('/v3') ? await getDetailsFromDb(ctx) : {};
   const query = Object.assign({}, details, ctx.request.query);

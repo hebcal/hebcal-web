@@ -236,10 +236,6 @@ const ZMAN_NAMES = {
  * @param {any} ctx
  */
 export async function zmanimIcalendar(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const location = getLocationFromQuery(ctx.db, ctx.request.query);
   if (location === null) {
     throw createError(400, 'Location is required');
