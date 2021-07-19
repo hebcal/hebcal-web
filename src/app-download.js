@@ -92,24 +92,27 @@ app.use(async function sendStatic(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
+    return;
   } else if (rpath == '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
+    return;
   } else if (rpath === '/ical' || rpath === '/ical/') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     ctx.redirect('https://www.hebcal.com/ical/', 301);
+    return;
   } else if (rpath === '/favicon.ico') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
-    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/ical')) {
     ctx.state.trackPageview = true;
     ctx.set('Cache-Control', 'max-age=5184000');
-    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath === '/ping') {
     ctx.type = 'text/plain';
-    await send(ctx, rpath, {root: DOCUMENT_ROOT});
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else {
     ctx.state.trackPageview = true;
-    await next();
+    return next();
   }
 });
 
@@ -156,18 +159,18 @@ app.use(stopIfTimedOut());
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/v3')) {
-    await yahrzeitDownload(ctx);
+    return yahrzeitDownload(ctx);
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {
     ctx.set('Cache-Control', 'max-age=2592000');
     if (ctx.request.query.v == 'yahrzeit') {
-      await yahrzeitDownload(ctx);
+      return yahrzeitDownload(ctx);
     } else if (ctx.request.query.v == '1') {
-      await hebcalDownload(ctx);
+      return hebcalDownload(ctx);
     }
   } else if (rpath.startsWith('/zmanim')) {
-    await zmanimIcalendar(ctx);
+    return zmanimIcalendar(ctx);
   }
   await next();
 });
