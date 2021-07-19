@@ -19,9 +19,14 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.bookName%> <%=parsha.verses%></a>
-<a class="outbound d-print-none" data-bs-toggle="tooltip" data-bs-animation="false" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
+<span class="d-print-none">
+<a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" title="Tikkun.io - <%=parsha.name%>"
+href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=parsha.ids.chapter%>-<%=parsha.ids.verse%>">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
+<a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
 href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=parsha.ids.book%>&amp;chapter=<%=parsha.ids.chapter%>&amp;verse=<%=parsha.ids.verse%>&amp;portion=<%=parsha.ids.portion%>">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
+</span>
 </h4>
 <% if (typeof summary === 'object') { %><p><%- summary.html %> <sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
@@ -35,7 +40,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-muted">&middot;</span>
+<span class="text-muted d-print-none">&middot;</span>
 <a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
@@ -60,7 +65,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <% for (let yr = 1; yr <= 3; yr++) { 
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-lg-3 col-sm-6">
-<h5>Triennial Year&nbsp;<%=yr%>
+<h5><span class="text-nowrap">Triennial Year <%=yr%></span>
 <% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
 <p>Read separately in <%=triReading.hyear%></p>
