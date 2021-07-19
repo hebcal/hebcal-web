@@ -37,9 +37,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<%       if (aliyah.v) { %>
-<small class="text-muted">(<%=aliyah.v%>&nbsp;p'sukim)</small>
-<%       } // aliyah.v %>
+<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
 </ol>
@@ -99,19 +97,19 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <% if (reading.haftara) { %>
 <p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
 <a class="outbound" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
-<% if (reading.haftaraNumV) { %><small class="text-muted">(<%=reading.haftaraNumV%>&nbsp;p'sukim)</small><% } %>
+<%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
 <% if (reading.reason && reading.reason.haftara) { %> - <%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %> <% } %>
 </p>
 <%   if (parsha.haftara != reading.haftara) { -%>
 <p class="haftara">Regular Haftarah for <%= parsha.name %>: <a class="outbound" href="<%=parsha.haftaraHref%>"><%=parsha.haftara%></a>
-<% if (parsha.haftaraNumV) { %><small class="text-muted">(<%=parsha.haftaraNumV%>&nbsp;p'sukim)</small><% } %>
+<%- await include('partials/numverses.ejs', {v: parsha.haftaraNumV}) -%>
 </p>
 <%   } -%>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
 <p class="lead haftara">Haftarah for Sephardim:
 <a class="outbound" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
-<% if (reading.sephardicNumV) { %><small class="text-muted">(<%=reading.sephardicNumV%>&nbsp;p'sukim)</small><% } %>
+<%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
 </p>
 <% } // reading.sephardic %>
 
