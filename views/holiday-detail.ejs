@@ -89,9 +89,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <ul class="list-unstyled">
 <%    for (const aliyah of Object.values(reading.fullkriyah)) {  %>
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%       if (aliyah.v) { %>
-<small class="text-muted">(<%=aliyah.v%>&nbsp;p'sukim)</small>
-<%       } // aliyah.v %>
+<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <%    } // ... for %>
 </ul>
 <% } // reading.fullkriyah %>
@@ -99,7 +97,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <p class="lead haftara">Haftarah:
 <% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"
 href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %>
-<% if (reading.haftaraNumV) { %><small class="text-muted">(<%=reading.haftaraNumV%>&nbsp;p'sukim)</small><% } %>
+<%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
 </p>
 <% } // reading.haftara %>
 <% } // ... for %>
