@@ -1,0 +1,9 @@
+<% if (aliyot) { %>
+<ol class="list-unstyled">
+<% for (const aliyah of Object.values(aliyot)) {  %>
+<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<%- await include('numverses.ejs', {v: aliyah.v}) -%>
+<% if (aliyah.reason) { %><small> // <%= aliyah.reason %></small><% } %>
+<% } %>
+</ol>
+<% } %>

@@ -85,14 +85,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
 href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ? '</a>' : '' %></p>
 <% } // reading.summary %>
-<% if (reading.fullkriyah) { %>
-<ul class="list-unstyled">
-<%    for (const aliyah of Object.values(reading.fullkriyah)) {  %>
-<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<%    } // ... for %>
-</ul>
-<% } // reading.fullkriyah %>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
 <% if (reading.haftara) { %>
 <p class="lead haftara">Haftarah:
 <% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"

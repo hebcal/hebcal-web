@@ -44,7 +44,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<% if (reading.reason && reading.reason[num]) { %><small class="text-muted"> - <%= reading.reason[num] %></small><% } %>
+<% if (reading.reason && reading.reason[num]) { %><small> // <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
 </ol>
 <% } // reading.fullkriyah %>
@@ -52,14 +52,8 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <% if (hasTriennial) { %>
 <% if (date) { %>
 <div class="col-sm-6">
-<h5>Triennial<small class="text-muted"> - year <%=triennial.yearNum%></small></h5>
-<ol class="list-unstyled">
-<%    for (const [num, aliyah] of Object.entries(triennial.reading)) {  %>
-<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
-<%    } // ... for %>
-</ol>
+<h5>Triennial <small class="text-muted">year <%=triennial.yearNum%></small></h5>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 </div>
 <% } else { // date %>
 <% for (let yr = 1; yr <= 3; yr++) { 
@@ -76,13 +70,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <% } else if (triReading.readTogether) { %>
 <p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></small></p>
 <% } else { %>
-<ol class="list-unstyled">
-<%  for (const [num, aliyah] of Object.entries(triReading.aliyot)) { %>
-<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<% if (aliyah.reason) { %><small class="text-muted"> - <%= aliyah.reason %></small><% } %>
-<%   } // ... for aliyah %>
-</ol>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
@@ -100,7 +88,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
 <a class="outbound" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading.reason && reading.reason.haftara) { %> - <%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %> <% } %>
+<% if (reading.reason && reading.reason.haftara) { %> // <%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %> <% } %>
 </p>
 <%   if (parsha.haftara != reading.haftara) { -%>
 <p class="haftara">Regular Haftarah for <%= parsha.name %>: <a class="outbound" href="<%=parsha.haftaraHref%>"><%=parsha.haftara%></a>
@@ -146,7 +134,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <ul class="<%=sometimesDoubled ? 'list-unstyled' : 'bullet-list-inline' %>">
 <% items.forEach((item) => { -%>
 <li><a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
-<% if (item.desc !== parsha.name) { %> - <small><%=item.desc%></small><% } %>
+<% if (item.desc !== parsha.name) { %> &middot; <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>
 
