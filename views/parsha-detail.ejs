@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs') -%>
-<meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> (<%= hd.toString() %>) in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
+<meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.book%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <style>
 ol.list-unstyled li {margin-bottom: 0.33em}
 </style>
@@ -14,7 +14,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פרשת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
-<p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('D MMMM YYYY') %></time> (<%= hd.toString() %>).</p>
+<p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('D MMMM YYYY') %></time> / <%= hd.toString() %>.</p>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
@@ -41,7 +41,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
-<a class="outbound d-print-none text-muted" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
+<a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <% if (reading.reason && reading.reason[num]) { %><small> // <%= reading.reason[num] %></small><% } %>
@@ -137,6 +137,17 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <% if (item.desc !== parsha.name) { %> &middot; <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>
+<form method="GET" action="/sedrot/<%=parshaAnchor%>">
+<label for="gy">Look up the date of Parashat <%=parsha.name%> in a past or future year</label>
+<div class="row gx-2 mb-3">
+<div class="col-auto mb-2">
+<input type="text" class="form-control" name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d\d\d\d">
+</div><!-- .col -->
+<div class="col-auto mb-2">
+<button type="submit" class="btn btn-primary">Go</button>
+</div><!-- .col -->
+</div>
+</form>
 
 <h4 id="ref">References</h4>
 <dl>

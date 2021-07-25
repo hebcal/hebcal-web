@@ -72,6 +72,19 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 </tbody>
 </table>
 </div>
+<% if (holiday !== 'Asara B\'Tevet') { %>
+<form method="GET" action="/holidays/<%=holidayAnchor%>">
+<label for="gy">Look up the date of <%=holiday%> in a past or future year</label>
+<div class="row gx-2 mb-3">
+<div class="col-auto mb-2">
+<input type="text" class="form-control" name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d\d\d\d">
+</div><!-- .col -->
+<div class="col-auto mb-2">
+<button type="submit" class="btn btn-primary">Go</button>
+</div><!-- .col -->
+</div>
+</form>
+<% } %>
 
 <% if (typeof meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-3">Tanakh</h3>

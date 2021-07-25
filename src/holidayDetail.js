@@ -5,7 +5,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {httpRedirect, wrapHebrewInSpans, getHaftarahHref} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
 
@@ -46,12 +46,20 @@ export async function holidayDetail(ctx) {
     return;
   }
   const il = ctx.state.il;
+  const q = ctx.request.query;
+  if (!empty(q.gy)) {
+    const year = parseInt(q.gy, 10);
+    if (year >= 1000 && year <= 9999) {
+      httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
+      return;
+    }
+  }
   const meta = getHolidayMeta(holiday, year, il);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
       year: year - 3,
       isHebrewYear: false,
-      numYears: 10,
+      numYears: 8,
     })) : events11yearsBegin;
   const category = categories[meta.category] || {};
   const occursOn = makeOccursOn(holidayBegin, holiday, il);

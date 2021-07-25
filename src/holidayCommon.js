@@ -11,7 +11,7 @@ for (const key of Object.keys(holidayMeta)) {
 const events11years = HebrewCalendar.calendar({
   year: new HDate().getFullYear() - 1,
   isHebrewYear: true,
-  numYears: 11,
+  numYears: 8,
 });
 export const events11yearsBegin = getFirstOcccurences(events11years);
 

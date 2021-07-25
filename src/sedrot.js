@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref} from './common';
+import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref, empty} from './common';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -104,6 +104,22 @@ export async function parshaDetail(ctx) {
   if (typeof parshaName0 !== 'string') {
     throw createError(404, `Parsha not found: ${base}`);
   }
+  const q = ctx.request.query;
+  const il = q.i === 'on';
+  if (!empty(q.gy)) {
+    const year = parseInt(q.gy, 10);
+    if (year >= 1000 && year <= 9999) {
+      const events = HebrewCalendar.calendar({year, il, sedrot: true, noHolidays: true});
+      const parshaEv = findParshaEvent(events, parshaName0, il);
+      if (parshaEv) {
+        const dateStr = dayjs(parshaEv.getDate().greg()).format('YYYYMMDD');
+        const suffix = il ? '?i=on' : '';
+        const anchor = makeAnchor(parshaEv.getDesc().substring(9));
+        httpRedirect(ctx, `/sedrot/${anchor}-${dateStr}${suffix}`);
+        return;
+      }
+    }
+  }
   if (date) {
     const dt = parse8digitDateStr(date);
     if (dt.getFullYear() > ctx.launchDate.getFullYear() + 1000) {
@@ -111,8 +127,6 @@ export async function parshaDetail(ctx) {
       return;
     }
   }
-  const q = ctx.request.query;
-  const il = q.i === 'on';
   const parshaEv = getParshaEvent(il, date, parshaName0);
   if (!parshaEv) {
     if (date) {
@@ -171,6 +185,7 @@ export async function parshaDetail(ctx) {
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
+    parshaAnchor,
     reading,
     il,
     iSuffix: il ? '?i=on' : '',
@@ -298,6 +313,10 @@ function parse8digitDateStr(date) {
 
 function getParshaEvent(il, date, parshaName) {
   const events = makeYearEvents(il, date);
+  return findParshaEvent(events, parshaName, il);
+}
+
+function findParshaEvent(events, parshaName, il) {
   if (parshaName === 'Vezot Haberakhah') {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
@@ -310,13 +329,11 @@ function getParshaEvent(il, date, parshaName) {
     const pair = doubled.get(parshaName);
     if (pair) {
       const descPair = 'Parashat ' + pair;
-      const event2 = events.find((ev) => ev.getDesc() === descPair);
-      return event2;
+      return events.find((ev) => ev.getDesc() === descPair);
     } else {
       const [p1] = parshaName.split('-');
       const descFirst = 'Parashat ' + p1;
-      const event3 = events.find((ev) => ev.getDesc() === descFirst);
-      return event3;
+      return events.find((ev) => ev.getDesc() === descFirst);
     }
   }
   return event;
