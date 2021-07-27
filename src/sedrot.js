@@ -280,19 +280,23 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
 /**
  * @param {boolean} il
  * @param {string} date
+ * @param {string} parshaName
  * @return {Event[]}
  */
-function makeYearEvents(il, date) {
+function makeYearEvents(il, date, parshaName) {
   const options = {
     noHolidays: true,
     sedrot: true,
     il: il,
   };
-  if (date) {
-    const dt = parse8digitDateStr(date);
+  const dt = date ? parse8digitDateStr(date) : new Date();
+  if (date && parshaName === 'Vezot Haberakhah') {
+    const hd = new HDate(dt);
+    options.year = hd.getFullYear();
+    options.isHebrewYear = true;
+  } else if (date) {
     options.start = options.end = dt;
   } else {
-    const dt = new Date();
     options.start = dt;
     options.end = new Date(dt.getTime() + (386 * 24 * 60 * 60 * 1000));
   }
@@ -312,7 +316,7 @@ function parse8digitDateStr(date) {
 }
 
 function getParshaEvent(il, date, parshaName) {
-  const events = makeYearEvents(il, date);
+  const events = makeYearEvents(il, date, parshaName);
   return findParshaEvent(events, parshaName, il);
 }
 
