@@ -170,9 +170,11 @@ function makeItems(ctx, options, q) {
     geoUrlArgs += '&b=' + options.candleLightingMins;
   }
   if (typeof options.havdalahMins !== 'undefined') {
-    geoUrlArgs += '&m=' + options.havdalahMins;
+    geoUrlArgs += '&M=off&m=' + options.havdalahMins;
+  } else {
+    geoUrlArgs += '&M=on';
   }
-  geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
+  geoUrlArgs += `&lg=` + (q.lg || 's');
   Object.assign(ctx.state, {
     geoUrlArgs,
     rssUrl: `${BASE_URL}?cfg=r&${geoUrlArgs}&pubDate=0`,
