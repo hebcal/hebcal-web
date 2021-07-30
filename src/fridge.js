@@ -37,7 +37,7 @@ function makeProperties(ctx) {
     return desc != 'Havdalah' && !desc.startsWith('Chanukah');
   });
   const items = makeContents(events, options);
-  const itemsHtml = formatItemsAsTable(items, options);
+  const itemsRows = formatItemsAsTable(items, options);
   let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
   for (const opt of ['a', 'i', 'b', 'm', 'M', 'lg']) {
     if (query[opt]) {
@@ -54,7 +54,7 @@ function makeProperties(ctx) {
     hyear,
     gregYear1: events[0].getDate().greg().getFullYear(),
     gregYear2: events[events.length - 1].getDate().greg().getFullYear(),
-    itemsHtml,
+    itemsRows,
     url,
     candleLightingStr: Locale.gettext('Candle lighting'),
     q: query,
@@ -110,16 +110,15 @@ function makeContents(events, options) {
 
 /**
  * @param {any[]} items
- * @return {string}
+ * @return {any[]}
  */
 function formatItemsAsTable(items) {
   const half = Math.ceil(items.length / 2);
-  let html = '';
+  const rows = [];
   for (let i = 0; i < half; i++) {
-    html += '<tr>' + row(items[i], false) + '\n<td></td>\n';
-    html += row(items[i + half], true) + '</tr>\n';
+    rows.push([row(items[i], false), row(items[i + half], true)]);
   }
-  return html;
+  return rows;
 }
 
 /**
