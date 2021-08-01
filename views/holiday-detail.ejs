@@ -15,6 +15,9 @@
 <%- await include('partials/holiday-detail-breadcrumb.ejs') -%>
 
 <h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
+<% if (year && year < 1752) { -%>
+<%- await include('partials/warning-1752.ejs') -%>
+<% } -%>
 <p class="lead"><%=holiday%> (<%=descrShort%>)
 for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.</p>
 <p><%-descrLong%></p>
@@ -77,7 +80,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <label for="gy">Look up the date of <%=holiday%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
-<input type="text" class="form-control" name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d\d\d\d">
+<input type="text" class="form-control" required name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d\d\d\d">
 </div><!-- .col -->
 <div class="col-auto mb-2">
 <button type="submit" class="btn btn-primary">Go</button>
@@ -91,7 +94,7 @@ or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=m
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
 <h4 id="reading-<%=reading.id%>"><%=item%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
-<% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd, D MMMM YYYY')%> / <%=reading.hd.toString()%></time><% } %>
+<% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
