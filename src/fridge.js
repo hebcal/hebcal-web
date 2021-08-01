@@ -15,7 +15,10 @@ export async function fridgeShabbat(ctx) {
  * @return {Object}
  */
 function makeProperties(ctx) {
-  const query = Object.assign({c: 'on', maj: 'on', s: 'on'}, ctx.request.query);
+  const query = Object.assign({}, ctx.request.query);
+  for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
+    query[k] = 'on';
+  }
   let options;
   try {
     options = makeHebcalOptions(ctx.db, query);
@@ -32,17 +35,24 @@ function makeProperties(ctx) {
   }
   options.start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   options.end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
+  const havdalah = query.havdalah === '1';
   const events = makeHebrewCalendar(ctx, options).filter((ev) => {
     const desc = ev.getDesc();
-    return desc != 'Havdalah' && !desc.startsWith('Chanukah');
+    if (desc.startsWith('Chanukah') || (!havdalah && desc === 'Havdalah')) {
+      return false;
+    }
+    return true;
   });
-  const items = makeContents(events, options);
-  const itemsRows = formatItemsAsTable(items, options);
+  const items = makeContents(events, options, havdalah);
+  const itemsRows = formatItemsAsTable(items, options, havdalah);
   let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
   for (const opt of ['a', 'i', 'b', 'm', 'M', 'lg']) {
     if (query[opt]) {
       url += `&amp;${opt}=${query[opt]}`;
     }
+  }
+  if (havdalah) {
+    url += '&amp;havdalah=1';
   }
   const locale = Locale.getLocaleName();
   const lang = localeMap[locale] || 'en';
@@ -58,21 +68,28 @@ function makeProperties(ctx) {
     url,
     candleLightingStr: Locale.gettext('Candle lighting'),
     q: query,
+    havdalah,
   };
 }
 
 /**
  * @param {Event[]} events
  * @param {HebrewCalendar.Options} options
+ * @param {boolean} havdalah
  * @return {any[]}
  */
-function makeContents(events, options) {
+function makeContents(events, options, havdalah) {
   const locale0 = Locale.getLocaleName();
   const locale = localeMap[locale0] || 'en';
   const objs = [];
   for (let i = 0; i < events.length; i++) {
     const ev = events[i];
-    if (ev.getDesc() != 'Candle lighting') {
+    const desc = ev.getDesc();
+    if (havdalah && desc === 'Havdalah' && objs.length) {
+      objs[objs.length - 1].havdalah = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options);
+      continue;
+    }
+    if (desc !== 'Candle lighting') {
       continue;
     }
     const hd = ev.getDate();
@@ -110,27 +127,30 @@ function makeContents(events, options) {
 
 /**
  * @param {any[]} items
+ * @param {boolean} havdalah
  * @return {any[]}
  */
-function formatItemsAsTable(items) {
+function formatItemsAsTable(items, havdalah) {
   const half = Math.ceil(items.length / 2);
   const rows = [];
   for (let i = 0; i < half; i++) {
-    rows.push([row(items[i], false), row(items[i + half], true)]);
+    rows.push([row(items[i], false, havdalah), row(items[i + half], true, havdalah)]);
   }
   return rows;
 }
 
+const BLANK_ROW = '<td></td><td></td><td></td><td></td>';
+
 /**
  * @param {any} item
  * @param {boolean} right
+ * @param {boolean} havdalah
  * @return {string}
  */
-function row(item, right) {
+function row(item, right, havdalah) {
   if (!item) {
-    return '<td></td><td></td><td></td><td></td>';
+    return havdalah ? BLANK_ROW + '<td></td>' : BLANK_ROW;
   }
-  const locale = Locale.getLocaleName();
   const cl = [];
   if (item.yomtov) {
     cl.push('yomtov');
@@ -140,7 +160,7 @@ function row(item, right) {
   const subj = item.reason;
   if (lang == 'he') {
     narrow.push('text-right');
-  } else if (locale === 'ru' && subj.length > 10) {
+  } else if (lang === 'ru' && subj.length > 10) {
     narrow.push('narrow');
   } else if (subj.length > 14) {
     narrow.push('narrow');
@@ -149,13 +169,14 @@ function row(item, right) {
   const timeClass = cl.slice();
   timeClass.push('text-right');
   if (right) {
-    const dir = locale === 'he' ? 'right' : 'left';
+    const dir = lang === 'he' ? 'right' : 'left';
     monthClass.push(`${dir}pad`);
   }
-  return td(monthClass, item.date.format('MMM')) +
+  const str = td(monthClass, item.date.format('MMM')) +
     td(cl.concat(['text-right']), item.date.format('D')) +
     td(cl.concat(narrow), subj) +
     td(timeClass, item.time);
+  return havdalah ? str + td(timeClass, item.havdalah || '') : str;
 }
 
 /**

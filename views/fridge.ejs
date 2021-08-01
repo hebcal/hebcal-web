@@ -32,11 +32,13 @@ table {border-spacing: 0; border-collapse: collapse;}
 <h3><%= candleLightingStr %> - <%= location.getShortName() %>
 <br>Hebrew Year <%= hyear %> (<%= gregYear1 %> - <%= gregYear2 %>)</h3>
 <p style="margin:0 0 4px">www.hebcal.com</p>
-<table style="width:524px" id="fridge-table">
+<table style="width:<%=havdalah?620:524%>px" id="fridge-table">
 <colgroup>
 <col><col><col><col>
+<% if (havdalah) { %><col><% } %>
 <col style="border-right:1px solid #999">
 <col><col><col><col>
+<% if (havdalah) { %><col><% } %>
 </colgroup>
 <tbody>
 <% for (const row of itemsRows) { -%>

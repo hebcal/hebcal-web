@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -33,16 +33,16 @@
     "@babel/preset-env": "^7.14.8",
     "@babel/register": "^7.14.5",
     "babel-plugin-transform-modules-iife": "^1.0.0",
-    "eslint": "^7.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
     "@hebcal/core": "^3.23.0",
     "@hebcal/geo-sqlite": "^3.4.2",
-    "@hebcal/icalendar": "^4.11.0",
+    "@hebcal/icalendar": "^4.12.0",
     "@hebcal/leyning": "^4.8.3",
     "@hebcal/locales": "^3.3.0",
-    "@hebcal/rest-api": "^3.7.2",
+    "@hebcal/rest-api": "^3.8.0",
     "better-sqlite3": "^7.4.1",
     "dayjs": "^1.10.6",
     "ejs": "^3.1.6",
