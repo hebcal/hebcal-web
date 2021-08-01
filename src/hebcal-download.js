@@ -85,6 +85,9 @@ export async function hebcalDownload(ctx) {
       options.emoji = true;
     }
     options.calendarColor = '#800002';
+    if (query.utm_source) options.utmSource = query.utm_source;
+    if (query.utm_medium) options.utmMedium = query.utm_medium;
+    if (query.utm_campaign) options.utmCampaign = query.utm_campaign;
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
