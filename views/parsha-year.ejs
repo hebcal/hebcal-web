@@ -7,8 +7,19 @@
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div id="content">
-<div class="row mt-3">
+<div class="row">
 <div class="col">
+<div class="d-print-none mt-2">
+<div class="d-none d-sm-block">
+<nav>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a href="/sedrot/<%=il?'?i=on':''%>">Torah Readings</a></li>
+  <li class="breadcrumb-item active"><%=hyear%></li>
+</ol>
+</nav>
+</div><!-- .d-none d-sm-block -->
+</div><!-- .d-print-none -->
+
 <h2>Torah Readings <%=hyear%> <span class="h4 small text-muted"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
 
 <% for (const item of items) { %>
