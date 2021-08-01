@@ -1,0 +1,32 @@
+<%- await include('partials/header.ejs') -%>
+<style>
+.text-big {font-size: larger}
+</style>
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div id="content">
+<div class="row mt-3">
+<div class="col">
+<h2>Torah Readings <%=hyear%> <span class="h4 small text-muted"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
+
+<% for (const item of items) { %>
+<ul class="list-unstyled">
+<li id="<%=item.anchor%>"><a class="text-big"
+href="<%=item.event.url()%>"><%=item.title%> /
+<span lang="he" dir="rtl" class="text-nowrap"><%=item.hebrew%></span></a>
+<li><time class="text-nowrap" datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('dddd, MMMM D, YYYY')%></time>
+&middot;
+<span class="text-nowrap"><%=item.hd.getDate()%> <%=item.hd.getMonthName()%></span>
+<% if (item.reading.reason) { %><li class="text-success"><%=item.reading.reason.M ||item.reading.reason.haftara%><% } %>
+<li><%=item.reading.summary%>
+<% if (item.reading.haftara) { %><li>Haftarah: <%=item.reading.haftara%><% } %>
+<% if (item.reading.sephardic) { %><li>Haftarah for Sephardim: <%=item.reading.sephardic%><% } %>
+</ul>
+<% } // items %>
+  
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') -%>

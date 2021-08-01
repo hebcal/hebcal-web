@@ -16,6 +16,7 @@ import {homepage} from './homepage';
 import {parshaCsv} from './parsha-csv';
 import redirectMap from './redirect.json';
 import {parshaIndex} from './parshaIndex';
+import {parshaYear} from './parshaYear';
 import {parshaDetail} from './sedrot';
 import {shabbatApp} from './shabbat';
 import {shabbatBrowse} from './shabbat-browse';
@@ -141,6 +142,10 @@ export function wwwRouter() {
         ctx.set('Cache-Control', 'max-age=5184000');
         return parshaCsv(ctx);
       } else {
+        const charCode = rpath.charCodeAt(8);
+        if (charCode >= 48 && charCode <= 57) {
+          return parshaYear(ctx);
+        }
         return parshaDetail(ctx);
       }
     } else if (rpath.startsWith('/calc')) {
