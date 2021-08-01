@@ -5,32 +5,9 @@ import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref, empty} from './common';
+import {torahBookNames, sedrot, doubled} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
-
-const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
-const parshaByBook = new Map();
-const BOOK = Array(6);
-for (let i = 0; i < torahBookNames.length; i++) {
-  const book = torahBookNames[i];
-  parshaByBook.set(book, new Map());
-  BOOK[i + 1] = book;
-}
-
-const sedrot = new Map();
-const doubled = new Map();
-for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
-  const anchor = makeAnchor(parshaName);
-  sedrot.set(anchor, parshaName);
-  sedrot.set(anchor.replace(/-/g, ''), parshaName);
-  if (reading.combined) {
-    const [p1, p2] = parshaName.split('-');
-    doubled.set(p1, parshaName);
-    doubled.set(p2, parshaName);
-  }
-  const bookId = reading.combined ? 'DoubledParshiyot' : BOOK[reading.book];
-  parshaByBook.get(bookId).set(anchor, parshaName);
-}
 
 const options15yr = {
   year: new Date().getFullYear() - 2,
@@ -139,7 +116,7 @@ export async function parshaDetail(ctx) {
   const parsha0 = leyning.parshiyot[parshaName];
   const parsha = Object.assign({
     name: parshaName,
-    bookName: BOOK[parsha0.book],
+    bookName: torahBookNames[parsha0.book - 1],
     anchor: makeAnchor(parshaName),
   }, parsha0);
   if (parsha.combined) {
@@ -341,38 +318,4 @@ function findParshaEvent(events, parshaName, il) {
     }
   }
   return event;
-}
-
-export async function parshaIndex(ctx) {
-  const saturday = dayjs().day(6);
-  const hd = new HDate(saturday.toDate());
-  const hyear = hd.getFullYear();
-  const q = ctx.request.query;
-  const il = q.i === 'on';
-  const sedra = new Sedra(hyear, il);
-  const parsha0 = sedra.lookup(hd);
-  let parsha = null;
-  let parshaHref = null;
-  if (parsha0.chag) {
-    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-    if (events.length > 0) {
-      parsha = events[0].basename();
-      parshaHref = events[0].url();
-    }
-  } else {
-    parsha = parsha0.parsha.join('-');
-    const pe = new ParshaEvent(hd, parsha0.parsha, il);
-    parshaHref = pe.url();
-  }
-  await ctx.render('parsha-index', {
-    title: 'Torah Readings | Hebcal Jewish Calendar',
-    il,
-    saturday,
-    hyear,
-    triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
-    parsha,
-    parshaHref,
-    parshaByBook,
-    torahBookNames,
-  });
 }
