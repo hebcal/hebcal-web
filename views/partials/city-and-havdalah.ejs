@@ -6,7 +6,7 @@
 </div>
 <div class="row gx-2 mb-3">
   <div class="col-auto">
-    <input class="form-control" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
+    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
@@ -22,5 +22,5 @@
   &nbsp; <span id="M0t" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
 <div class="mb-3">
-  <input type="text" class="form-control" id="m1" name="m" value="<%= q.m %>" size="2" maxlength="2" placeholder="minutes" pattern="\d*">
+  <input type="text" inputmode="numeric" class="form-control" id="m1" name="m" value="<%= q.m %>" size="2" maxlength="2" placeholder="minutes" pattern="\d*">
 </div><!-- .mb-3 -->

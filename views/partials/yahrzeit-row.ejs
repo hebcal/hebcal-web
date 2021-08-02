@@ -8,7 +8,7 @@
  <option <%= (q['t'+num] == 'Anniversary') ? 'selected' : '' %>>Anniversary</option>
 </select>
 <label class="form-label" for="t<%=num%>">Type</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
 <label class="form-label" for="d<%=num%>">Day</label></div>
 <div class="col-auto form-floating"><select name="m<%=num%>" id="m<%=num%>" class="form-select">
  <option <%= (q['m'+num] == 1) ? 'selected' : '' %> value="1">January</option>
@@ -25,7 +25,7 @@
  <option <%= (q['m'+num] == 12) ? 'selected' : '' %> value="12">December</option>
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
 <label class="form-label" for="y<%=num%>">Year</label></div>
 <div class="col-auto form-check m-2">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' %> value="off">

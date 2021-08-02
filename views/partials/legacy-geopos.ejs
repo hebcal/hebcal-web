@@ -2,10 +2,10 @@
 <input type="hidden" name="c" value="on">
 <input type="hidden" name="geo" value="pos">
 <div class="col-auto form-floating">
-<input type="text" name="ladeg" value="<%= q.ladeg || '' %>" size="3" maxlength="2" class="form-control" id="ladeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="ladeg">deg</label>
+<input type="text" inputmode="numeric" name="ladeg" value="<%= q.ladeg || '' %>" size="3" maxlength="2" class="form-control" id="ladeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="ladeg">deg</label>
 </div>
 <div class="col-auto form-floating">
-<input type="text" name="lamin" value="<%= q.lamin || '' %>" size="2" maxlength="2" class="form-control" id="lamin" pattern="\d*" placeholder="min"> <label class="form-label" for="lamin">min</label>
+<input type="text" inputmode="numeric" name="lamin" value="<%= q.lamin || '' %>" size="2" maxlength="2" class="form-control" id="lamin" pattern="\d*" placeholder="min"> <label class="form-label" for="lamin">min</label>
 </div>
 <div class="col-auto form-floating">
 <select name="ladir" class="form-select mb-2" id="ladir">
@@ -17,10 +17,10 @@
 </div><!-- .mb-2 -->
 <div class="row gy-1 gx-2 mb-2">
 <div class="col-auto form-floating">
-<input type="text" name="lodeg" value="<%= q.lodeg || '' %>" size="3" maxlength="3" class="form-control" id="lodeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="lodeg">deg</label>
+<input type="text" inputmode="numeric" name="lodeg" value="<%= q.lodeg || '' %>" size="3" maxlength="3" class="form-control" id="lodeg" pattern="\d*" placeholder="deg"> <label class="form-label" for="lodeg">deg</label>
 </div>
 <div class="col-auto form-floating">
-<input type="text" name="lomin" value="<%= q.lomin || '' %>" size="2" maxlength="2" class="form-control" id="lomin" pattern="\d*" placeholder="min"> <label class="form-label" for="lomin">min</label>
+<input type="text" inputmode="numeric" name="lomin" value="<%= q.lomin || '' %>" size="2" maxlength="2" class="form-control" id="lomin" pattern="\d*" placeholder="min"> <label class="form-label" for="lomin">min</label>
 </div>
 <div class="col-auto form-floating">
 <select name="lodir" class="form-select mb-2" id="lodir">

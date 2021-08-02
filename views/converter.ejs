@@ -57,7 +57,7 @@
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Gregorian to Hebrew</h5>
 <div class="form-floating col-auto mb-2">
-<input type="text" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
+<input type="text" inputmode="numeric" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
 <label for="gd">Day</label>
 </div><!-- .col -->
 <div class="form-floating col-auto mb-2">
@@ -78,7 +78,7 @@
 <label for="gm">Month</label>
 </div><!-- .col -->
 <div class="form-floating col-auto mb-2">
-<input type="text" class="form-control" name="gy" placeholder="year" value="<%= gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*">
+<input type="text" inputmode="numeric" class="form-control" name="gy" placeholder="year" value="<%= gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*">
 <label for="gy">Year</label>
 </div><!-- .col -->
 <div class="col-auto mb-2">

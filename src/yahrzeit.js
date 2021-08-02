@@ -75,7 +75,7 @@ function yahrzeitRow(n) {
   '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option></select>'+
   '<label class="form-label" for="t<%=num%>">Type</label></div>'+
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\\\d*" placeholder="Day">'+
+  '<input class="form-control" type="text" inputmode="numeric" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\\\d*" placeholder="Day">'+
   '<label class="form-label" for="d<%=num%>">Day</label></div>'+
   '<div class="col-auto form-floating"><select name="m'+n+'" id="m'+n+'" class="form-select">'+
   '<option value="1">January</option><option value="2">February</option><option value="3">March</option>'+
@@ -85,7 +85,7 @@ function yahrzeitRow(n) {
   '</select>'+
   '<label class="form-label" for="m<%=num%>">Month</label></div>'+
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" name="y'+n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\\\d*" placeholder="Year">'+
+  '<input class="form-control" type="text" inputmode="numeric" name="y'+n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\\\d*" placeholder="Year">'+
   '<label class="form-label" for="y<%=num%>">Year</label></div>'+
   '<div class="col-auto form-check m-2">'+
   '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off">'+

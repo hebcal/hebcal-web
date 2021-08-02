@@ -61,7 +61,7 @@
 </div>
 <div class="row align-items-center gx-3 mt-3">
 <div class="form-floating col-auto mb-1">
-<input type="text" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
+<input type="text" inputmode="numeric" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
 <label for="year">Year</label>
 </div><!-- .col-sm-4 -->
 <div class="col-auto">
@@ -115,7 +115,7 @@
 </div>
 <div class="row gx-2 mb-3">
   <div class="col-auto">
-    <input class="form-control" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
+    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
@@ -131,7 +131,7 @@
   &nbsp;<span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
 <div class="mb-3">
-  <input type="text" class="form-control" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
+  <input type="text" inputmode="numeric" class="form-control" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
 </div><!-- .mb-3 -->
 </fieldset>
 </div><!-- .col-sm-6 -->
