@@ -39,11 +39,15 @@
 <li class="big-list"><span class="text-nowrap"><%- first.replace(/ \(after sunset\)/, '</span> <span class="smaller text-nowrap">(after sunset)') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
 <% events.forEach((ev) => { -%>
+<li>
+<%= ev.getEmoji() || '' %>
 <% if (ev.url()) { -%>
-<li><a href="<%= ev.url() %>"><%= ev.render(locale) -%></a></li>
+<a href="<%= ev.url() %>"><%= ev.render(locale) -%></a>
 <% } else { -%>
-<li><%= ev.render(locale) -%></li>
+<%= ev.render(locale) -%>
 <% } -%>
+<%= ev.getEmoji() || '' %>
+</li>
 <% }); -%>
 </ul>
 </div><!-- #converter-results -->
