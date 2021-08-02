@@ -350,7 +350,7 @@ function getEventsForId(query, id, startYear, endYear) {
   const type = info.type;
   const name = info.name;
   const day = info.day;
-  const urlPrefix = query.ulid ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
+  const urlPrefix = query.ulid && query.dl !== '1' ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
   const appendHebDate = (query.hebdate === 'on' || query.hebdate === '1');
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     const origDt = day.toDate();
