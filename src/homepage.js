@@ -147,20 +147,22 @@ function getMastheadGreeting(hd, il) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   if (holidays.find((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
     return ['Tzom Kal!', `<a href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
-begins tonight at sundown. We wish you an easy fast`];
+ begins tonight at sundown. We wish you an easy fast`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
     const strtime = dayjs(fastDay.getDate().greg()).format(FORMAT_DOW_MONTH_DAY);
     return ['Tzom Kal!',
-      `We wish you an easy fast.<br><a href="${fastDay.url()}">${fastDay.render()}</a> occurs on ${strtime}`];
+      `We wish you an easy fast.<br><a href="${fastDay.url()}">${fastDay.render()}</a>
+ occurs on <span class="text-nowrap">${strtime}</span>`];
   }
 
   if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
     const strtime = erevShavuot.format(FORMAT_DOW_MONTH_DAY);
     return ['🌸 ⛰️ Chag Shavuot Sameach! ⛰️ 🌸',
-      `<br><a href="/holidays/shavuot-${gy}">Shavuot</a> begins at sundown on ${strtime}`];
+      `<br><a href="/holidays/shavuot-${gy}">Shavuot</a>
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if ((mm == months.TISHREI && dd >= 16 && dd <= 21) ||
       (mm == months.NISAN && dd >= 16 && dd <= 21)) {
     const holiday = mm == months.TISHREI ? 'Sukkot' : 'Pesach';
@@ -178,7 +180,7 @@ begins tonight at sundown. We wish you an easy fast`];
       const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
       const strtime = erevYK.format(FORMAT_DOW_MONTH_DAY);
       longText += `.\n<br><a href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
-begins at sundown on ${strtime}`;
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`;
     }
     return ['✍️ 📖 G\'mar Chatima Tova / גְּמַר חֲתִימָה טוֹבָה 📖 ✍️', longText];
   }
@@ -210,7 +212,8 @@ begins at sundown on ${strtime}`;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
     return ['🍏 🍯 Shana Tova! 🍯 🍏', `We wish you a happy and healthy New Year.
-<br><a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear} begins at sundown on ${strtime}`];
+ <br><a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear}
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm == months.KISLEV && dd < 24) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg());
@@ -218,26 +221,28 @@ begins at sundown on ${strtime}`;
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
     return ['🕎 Happy Chanukah! 🕎',
-      `<br>Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a> ${when} on ${strtime}`];
+      `<br>Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a>
+ ${when} on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
     const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg());
     const strtime = erevLagBaOmer.format(FORMAT_DOW_MONTH_DAY);
     return ['🔥 <span lang="he" dir="rtl">ל״ג בעומר שמח</span> 🔥',
-      `<br><a href="/holidays/lag-baomer-${gy}">Lag BaOmer</a> begins at sundown on ${strtime}`];
+      `<br><a href="/holidays/lag-baomer-${gy}">Lag BaOmer</a>
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm === months.AV && dd >= 23) {
     // for the last week of Av
     const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg());
     const strtime = erevRHLaBehemot.format(FORMAT_DOW_MONTH_DAY);
-    return ['🐄 🐑 <span lang="he" dir="rtl">ראש השנה למעשר בהמה שמח</span> 🐑 🐄',
-      `<br><a href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a> (New Year for Tithing Animals)` +
-      `<br>begins at sundown on ${strtime}`];
+    return ['🐄 🐑 <span lang="he" dir="rtl">ראש השנה לבהמות שמח</span> 🐑 🐄',
+      `<br><a href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a> (New Year for Tithing Animals)
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm === months.SHVAT && dd >= 2 && dd <= 13) {
     // first 2 weeks of Shvat
     const erevTuBiShvat = dayjs(new HDate(14, months.SHVAT, yy).greg());
     const strtime = erevTuBiShvat.format(FORMAT_DOW_MONTH_DAY);
     return ['🌳 🌱 <span lang="he" dir="rtl">ט״ו בשבט שמח</span> 🌱 🌳',
-      `<br><a href="/holidays/tu-bishvat-${gy}">Tu BiShvat</a> (New Year for Trees)` +
-        `<br>begins at sundown on ${strtime}`];
+      `<br><a href="/holidays/tu-bishvat-${gy}">Tu BiShvat</a> (New Year for Trees)
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
 
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
@@ -246,15 +251,16 @@ begins at sundown on ${strtime}`;
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
     return ['🎭️ 📜 Chag Purim Sameach! 📜 🎭️',
-      `<a href="/holidays/purim-${gy}">Purim</a> begins at sundown on ${strtime}`];
+      `<a href="/holidays/purim-${gy}">Purim</a>
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
     const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
     return ['Chag Kasher v\'Sameach!', `We wish you a happy
-<a href="/holidays/pesach-${gy}">Passover</a>.
-Pesach begins at sundown on ${strtime}`];
+ <a href="/holidays/pesach-${gy}">Passover</a>. Pesach
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
 
   return [null, null];
