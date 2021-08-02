@@ -17,8 +17,10 @@ const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebca
  */
 async function makeQuery(ctx) {
   ctx.state.ulid = '';
+  ctx.state.isEditPage = false;
   const rpath = ctx.request.path;
   if (rpath.startsWith('/yahrzeit/edit/')) {
+    ctx.state.isEditPage = true;
     const id = ctx.state.ulid = basename(rpath);
     const db = ctx.mysql;
     const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
