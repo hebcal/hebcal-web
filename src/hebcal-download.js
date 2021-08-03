@@ -1,5 +1,5 @@
 import {eventsToIcalendar} from '@hebcal/icalendar';
-import {eventsToCsv, getCalendarTitle} from '@hebcal/rest-api';
+import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
@@ -85,9 +85,9 @@ export async function hebcalDownload(ctx) {
       options.emoji = true;
     }
     options.calendarColor = '#800002';
-    if (query.utm_source) options.utmSource = query.utm_source;
-    if (query.utm_medium) options.utmMedium = query.utm_medium;
-    if (query.utm_campaign) options.utmCampaign = query.utm_campaign;
+    options.utmSource = query.utm_source || 'ical';
+    options.utmMedium = query.utm_medium || 'icalendar';
+    options.utmCampaign = query.utm_campaign || campaignName(events, options);
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
@@ -105,4 +105,15 @@ export async function hebcalDownload(ctx) {
     renderPdf(doc, events, options);
     doc.end();
   }
+}
+
+/**
+ * @private
+ * @param {Event[]} events
+ * @param {HebrewCalendar.Options} options
+ * @return {string}
+ */
+function campaignName(events, options) {
+  const title = getCalendarTitle(events, options);
+  return 'ical-' + makeAnchor(title.substring(title.indexOf(' ') + 1));
 }
