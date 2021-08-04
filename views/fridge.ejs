@@ -13,32 +13,39 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 <% } %>
 <style>
 body {font-family:'<%= locale == 'he' ? 'SBL Hebrew' : 'Open Sans' %>', sans-serif}
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+.text-center {text-align:center}
 h3 {font-weight: 600; margin:24px 0 0;}
-table {border-spacing: 0; border-collapse: collapse;}
+table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-right: auto;}
 #fridge-table td {padding: 0px 4px;}
 #fridge-table td.leftpad {padding: 0 0 0 12px;}
 #fridge-table td.rightpad {padding: 0 12px 0 0;}
 .text-right {text-align: right;}
 .yomtov { font-weight:600 }
 .narrow { font-family: 'Open Sans Condensed', sans-serif }
+.havdalah {display:none}
 @media print{
  a[href]:after{content:""}
- .goto {display:none}
+ .nav {display:none}
 }
 </style>
 </head>
 <body>
-<div align="center">
-<h3><%= candleLightingStr %> - <%= location.getShortName() %>
+<div class="container">
+<h3 class="text-center"><%= candleLightingStr %> - <%= location.getShortName() %>
 <br>Hebrew Year <%= hyear %> (<%= gregYear1 %> - <%= gregYear2 %>)</h3>
-<p style="margin:0 0 4px">www.hebcal.com</p>
-<table style="width:<%=havdalah?620:524%>px" id="fridge-table">
+<p class="text-center" style="margin:0 0 4px">www.hebcal.com</p>
+<table style="width:524px" id="fridge-table">
 <colgroup>
-<col><col><col><col>
-<% if (havdalah) { %><col><% } %>
+<col><col><col><col><col class="havdalah">
 <col style="border-right:1px solid #999">
-<col><col><col><col>
-<% if (havdalah) { %><col><% } %>
+<col><col><col><col><col class="havdalah">
 </colgroup>
 <tbody>
 <% for (const row of itemsRows) { -%>
@@ -47,10 +54,36 @@ table {border-spacing: 0; border-collapse: collapse;}
 <%- row[1] %></tr>
 <% } -%>
 </tbody></table>
-<p dir="ltr"><a class="goto" title="Previous" rel="nofollow"
-href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Candle-lighting times are <%= q.b || 18 %> minutes before sunset.&nbsp;&nbsp;&nbsp;<a class="goto" title="Next"
+<div dir="ltr" class="text-center" style="margin-top: 0.75rem">
+<form class="nav">
+  <input type="checkbox" style="width:1.25rem; height:1.25rem; vertical-align: middle" id="toggle-havdalah">
+  <label for="toggle-havdalah" style="vertical-align: middle">Show Havdalah times</label>
+</form>
+<p><a class="nav" title="Previous" rel="nofollow"
+href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Candle-lighting times are <%= q.b || 18 %> minutes before sunset.&nbsp;&nbsp;&nbsp;<a class="nav" title="Next"
 href="<%- url %>&amp;year=<%= hyear + 1 %>" rel="nofollow"><%= hyear + 1 %>&nbsp;&rarr;</a></p>
-</div><!-- align=center -->
+</div>
+</div><!-- .container -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var checked = false;
+  var havdalahTd = [].slice.call(document.querySelectorAll('td.havdalah'));
+  var havdalahCol = [].slice.call(document.querySelectorAll('col.havdalah'));
+  var checkbox = document.getElementById('toggle-havdalah');
+  var fridgeTable = document.getElementById('fridge-table');
+  checkbox.addEventListener('change', function() {
+    if (this.checked) {
+      fridgeTable.style.width = '620px';
+      havdalahTd.forEach(function (el) {el.style.display = 'table-cell';});
+      havdalahCol.forEach(function (el) {el.style.display = 'table-column';});
+    } else {
+      fridgeTable.style.width = '524px';
+      havdalahTd.forEach(function (el) {el.style.display = 'none';});
+      havdalahCol.forEach(function (el) {el.style.display = 'none';});
+    }
+  });
+});
+</script>
 </body>
 </html>
 <!-- generated <%= new Date().toISOString() %> -->

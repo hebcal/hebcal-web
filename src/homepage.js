@@ -233,7 +233,7 @@ function getMastheadGreeting(hd, il) {
     // for the last week of Av
     const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg());
     const strtime = erevRHLaBehemot.format(FORMAT_DOW_MONTH_DAY);
-    return ['🐄 🐑 <span lang="he" dir="rtl">ראש השנה לבהמות שמח</span> 🐑 🐄',
+    return ['🐑 🐓 <span lang="he" dir="rtl">ראש השנה לבהמות שמח</span> 🐓 🐑',
       `<br><a href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a> (New Year for Tithing Animals)
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm === months.SHVAT && dd >= 2 && dd <= 13) {
