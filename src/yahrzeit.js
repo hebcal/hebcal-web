@@ -247,7 +247,7 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  query.startYear = new HDate().getFullYear();
+  query.startYear = parseInt(query.start, 10) || new HDate().getFullYear();
   ctx.response.etag = eTagFromOptions(query, {});
   ctx.lastModified = details.lastModified || ctx.launchDate;
   ctx.status = 200;
@@ -308,8 +308,8 @@ function makeCalendarTitle(query) {
  */
 export function makeYahrzeitEvents(maxId, query) {
   const years = parseInt(query.years, 10) || 20;
-  const startYear = new HDate().getFullYear();
-  const endYear = startYear + years;
+  const startYear = parseInt(query.start, 10) || new HDate().getFullYear();
+  const endYear = parseInt(query.end, 10) || (startYear + years - 1);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
     events = events.concat(getEventsForId(query, id, startYear, endYear));
