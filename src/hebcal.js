@@ -154,6 +154,15 @@ async function getTzids() {
   });
 }
 
+function getSubFilename(location) {
+  let fileName = 'hebcal';
+  if (location) {
+    const name = location.zip || location.asciiname || location.getShortName();
+    fileName += '-' + name.replace(/[^A-Za-z0-9]/g, '-');
+  }
+  return fileName;
+}
+
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? '🇮🇱' : 'Diaspora';
@@ -194,7 +203,8 @@ function renderHtml(ctx) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref(q, dlFilename);
   const dl1year = downloadHref(q, dlFilename, {ny: 1, emoji: 1});
-  const subical = downloadHref(q, dlFilename, {year: 'now', subscribe: 1, emoji: 1}) + '.ics';
+  const subFilename = getSubFilename(options.location);
+  const subical = downloadHref(q, subFilename, {year: 'now', subscribe: 1, emoji: 1}) + '.ics';
   const queryObj = urlArgsObj(q);
   for (const [key, val] of Object.entries(queryObj)) {
     if (val === 'on') {
