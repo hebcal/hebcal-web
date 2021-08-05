@@ -95,7 +95,7 @@ export async function hebrewDateConverter(ctx) {
         hebrew: p.hebrew,
       };
       if (p.events.length) {
-        result.events = p.events.map((ev) => ev.render(p.locale));
+        result.events = p.events.map(renameChanukah(p.locale));
         if (typeof q.i !== 'undefined') {
           result.il = p.il;
         }
@@ -135,6 +135,16 @@ export async function hebrewDateConverter(ctx) {
  */
 const sedraCache = new Map();
 
+// eslint-disable-next-line require-jsdoc
+function renameChanukah(locale) {
+  return (ev) => {
+    if (ev.chanukahDay) {
+      return Locale.gettext('Chanukah', locale) + ' Day ' + ev.chanukahDay;
+    }
+    return ev.render(locale);
+  };
+}
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
@@ -165,7 +175,7 @@ function makeProperties(ctx) {
   return {
     message: props.message,
     noCache: Boolean(props.noCache),
-    events,
+    events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
     first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
     second: (props.type === 'g2h') ? hdateStr : dateStr + afterSunset,
@@ -244,7 +254,7 @@ function parseConverterQuery(ctx) {
         };
         const events = getEvents(hdate, il);
         if (events.length) {
-          result.events = events.map((ev) => ev.render(locale));
+          result.events = events.map(renameChanukah(locale));
           if (typeof query.i !== 'undefined') {
             result.il = il;
           }

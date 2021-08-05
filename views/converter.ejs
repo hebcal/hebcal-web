@@ -40,6 +40,9 @@
 <li dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
 <% events.forEach((ev) => { -%>
 <li>
+<% if (ev.chanukahDay) { -%>
+🕎 <a href="<%= ev.url() %>">Chanukah Day <%=ev.chanukahDay%></a> 🕎
+<% } else { -%>
 <%= ev.getEmoji() || '' %>
 <% if (ev.url()) { -%>
 <a href="<%= ev.url() %>"><%= ev.render(locale) -%></a>
@@ -47,6 +50,7 @@
 <%= ev.render(locale) -%>
 <% } -%>
 <%= ev.getEmoji() || '' %>
+<% } -%>
 </li>
 <% }); -%>
 </ul>
