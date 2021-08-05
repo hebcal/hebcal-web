@@ -118,7 +118,7 @@ export async function holidayDetail(ctx) {
 function makeNextObserved(item, year, il) {
   const now = dayjs();
   const isPast = year ? !item.d.isSameOrAfter(now, 'd') : false;
-  const verb = isPast ? (item.duration ? 'began' : 'ocurred') : (item.duration ? 'begins' : 'ocurrs');
+  const verb = isPast ? (item.duration ? 'began' : 'occurred') : (item.duration ? 'begins' : 'occurs');
   const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
   const where = (item.basename === 'Shavuot' || item.basename === 'Pesach') ?
