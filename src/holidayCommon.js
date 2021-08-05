@@ -74,9 +74,13 @@ const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8,
  * @return {number}
  */
 export function getHolidayDuration(il, mask, holiday) {
+  if (mask & flags.MINOR_FAST ||
+      holiday === 'Leil Selichot' ||
+      holiday === 'Yom HaAliyah School Observance') {
+    return 0;
+  }
   const duration = il ? holidayDurationIL : holidayDurationDiaspora;
-  const days = (mask & flags.MINOR_FAST || holiday === 'Leil Selichot') ? 0 :
-    (duration[holiday] || 1);
+  const days = duration[holiday] || 1;
   return days;
 }
 
@@ -107,9 +111,9 @@ function hebrewDateRange(hd, duration) {
 export function eventToHolidayItem(ev, il) {
   const holiday = ev.basename();
   const mask = ev.getFlags();
-  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-    Boolean(mask & flags.MINOR_FAST) ? 'at dawn' : 'at sundown';
   const duration0 = getHolidayDuration(il, mask, holiday);
+  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+    duration0 === 0 ? 'at dawn' : 'at sundown';
   const hd = ev.getDate();
   const d0 = dayjs(hd.greg());
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;

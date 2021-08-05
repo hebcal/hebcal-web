@@ -740,7 +740,18 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_HaAliyah",
-   "text": "Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday celebrated annually on the seventh of the Hebrew month of Cheshvan, to commemorate the historic events which happened on the tenth of the Hebrew month of Nisan (Hebrew: י’ ניסן). The holiday was established to acknowledge Aliyah, immigration to the Jewish state, as a core value of the State of Israel, and honor the ongoing contributions of Olim to Israeli society."
+   "text": "Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Nisan to commemorate the Jewish people entering the Land of Israel as written in the Hebrew Bible. The holiday was established to acknowledge Aliyah, immigration to the Jewish state, as a core value of the State of Israel, and honor the ongoing contributions of Olim to Israeli society."
+  },
+  "category": "modern",
+  "yomtov": false
+ },
+ "Yom HaAliyah School Observance": {
+  "about": {
+   "href": "http://amyisraelfoundation.org/yom-haaliyah/"
+  },
+  "wikipedia": {
+   "href": "https://en.wikipedia.org/wiki/Yom_HaAliyah",
+   "text": "Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday observed in Israeli schools on the seventh of the Hebrew month of Cheshvan, to commemorate the historic events which happened on the tenth of the Hebrew month of Nisan."
   },
   "category": "modern",
   "yomtov": false
