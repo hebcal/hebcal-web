@@ -1,12 +1,37 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
+  processCookieAndQuery, urlArgs,
   getBeforeAfterSunsetForLocation, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 
+const hebcalFormDefaultsDiaspora = {
+  maj: 'on',
+  min: 'on',
+  nx: 'on',
+  mf: 'off',
+  ss: 'off',
+  mod: 'off',
+  i: 'off',
+};
+
+const hebcalFormDefaultsIL = {
+  maj: 'on',
+  min: 'on',
+  nx: 'on',
+  mf: 'on',
+  ss: 'on',
+  mod: 'on',
+  i: 'on',
+};
+
 export async function homepage(ctx) {
-  const q = setDefautLangTz(ctx);
+  const q0 = setDefautLangTz(ctx);
+  const cookie = ctx.cookies.get('C');
+  const defaults = q0.i === 'on' ? hebcalFormDefaultsIL : hebcalFormDefaultsDiaspora;
+  const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
+  ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);

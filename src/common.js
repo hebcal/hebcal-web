@@ -107,8 +107,7 @@ const geoposLegacy = {
 const primaryGeoKeys = ['geonameid', 'zip', 'city'];
 const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'tzid']);
 const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy)).concat(['city-typeahead']);
-const cookieOpts = geoKeys.concat(['geo', 'lg'],
-    Object.keys(numberOpts), Object.keys(booleanOpts));
+const cookieOpts = geoKeys.concat(['geo', 'lg'], Object.keys(numberOpts));
 
 /**
  * @param {string} val
@@ -208,18 +207,27 @@ function getGeoKeysToRemove(geo) {
  * @return {string}
  */
 function makeCookie(query, uid) {
-  let ck = '';
+  const ck = {};
+  for (const key of Object.keys(negativeOpts)) {
+    ck[key] = off(query[key]) ? 'off' : 'on';
+  }
+  for (const key of Object.keys(booleanOpts)) {
+    if (key === 'euro') {
+      continue;
+    }
+    ck[key] = (query[key] === 'on' || query[key] == '1') ? 'on' : 'off';
+  }
   for (const key of cookieOpts) {
     if (typeof query[key] === 'number' ||
        (typeof query[key] === 'string' && query[key].length > 0)) {
-      ck += '&' + key + '=' + encodeURIComponent(query[key]);
+      ck[key] = query[key];
     }
   }
-  if (ck.length === 0) {
+  if (Object.keys(ck).length === 0) {
     return false;
   }
   uid = uid || uuid();
-  return 'uid=' + uid + ck;
+  return 'uid=' + uid + '&' + querystring.stringify(ck);
 }
 
 /**
