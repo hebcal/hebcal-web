@@ -158,7 +158,7 @@ function getSubFilename(location) {
   let fileName = 'hebcal';
   if (location) {
     const name = location.zip || location.asciiname || location.getShortName();
-    fileName += '-' + name.replace(/[^A-Za-z0-9]/g, '-');
+    fileName += '_' + name.replace(/[^A-Za-z0-9]/g, '_');
   }
   return fileName;
 }
