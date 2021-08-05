@@ -5,6 +5,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
+  makeAnchor,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import {basename} from 'path';
 import dayjs from 'dayjs';
@@ -158,7 +159,7 @@ function getSubFilename(location) {
   let fileName = 'hebcal';
   if (location) {
     const name = location.zip || location.asciiname || location.getShortName();
-    fileName += '_' + name.replace(/[^A-Za-z0-9]/g, '_');
+    fileName += '_' + makeAnchor(name).replace(/[-]/g, '_');
   }
   return fileName;
 }
