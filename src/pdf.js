@@ -3,7 +3,7 @@ import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 import {localeMap} from './common';
-import {pad4, pad2} from '@hebcal/rest-api';
+import {pad4, pad2, appendIsraelAndTracking} from '@hebcal/rest-api';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -182,14 +182,10 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const textOptions = {};
   const url = evt.url();
   if (url) {
-    let link = url;
-    const hebcalUrl = url.startsWith('https://www.hebcal.com/');
-    link += (url.indexOf('?') === -1) ? '?' : '&';
-    if (options && options.il && hebcalUrl) {
-      link += 'i=on&';
-    }
-    link += 'utm_medium=document&utm_source=pdf&utm_campaign=pdf-' + evt.getDate().getFullYear();
-    textOptions.link = link;
+    const utmSource = options.utmSource || 'pdf';
+    const utmMedium = options.utmMedium || 'document';
+    const utmCampaign = options.utmCampaign || 'pdf-' + evt.getDate().getFullYear();
+    textOptions.link = appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);
   }
   doc.text(subj, x, y, textOptions);
   if (options.appendHebrewToSubject) {
