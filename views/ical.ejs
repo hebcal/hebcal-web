@@ -38,7 +38,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Jewish Holidays (all) ✡️ 🌒 🌳 🎭️ 🔥</h5>
+<h5 class="card-title">Jewish Holidays (all) <span class="text-nowrap">✡️ 🌒 🌳 🎭️ 🔥</span></h5>
 <p class="card-text">Also includes Rosh Chodesh; minor holidays like Purim, Tu BiShvat, Lag BaOmer; fasts, modern Israeli holidays; and special Shabbatot. Diaspora schedule.
 <br><small class="text-muted">~95 calendar events per year. 8-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all-v2', noOutlook: true}) -%>
@@ -74,13 +74,13 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (English)</h5>
-<p class="card-text">Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.
+<p class="card-text">Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (English)', basename: 'hdate-en'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (Hebrew)</h5>
-<p class="card-text">Displays the Hebrew date (such as <span lang="he" dir="rtl">י״ח בטבת תש״ע</span>) every day of the week.
+<p class="card-text">Displays the Hebrew date (such as <span lang="he" dir="rtl" class="text-nowrap">י״ח בטבת תש״ע</span>) every day of the week.
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
 </div></div></div>
