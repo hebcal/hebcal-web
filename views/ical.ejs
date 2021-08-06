@@ -93,6 +93,16 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
+<h5 class="card-title">Yom Kippur Katan</h5>
+<p class="card-text"><span lang="he" dir="rtl">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.
+<br><small class="text-muted">9 calendar events per year. 10-year perpetual feed.</small></p>
+<p class="small">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),
+Tishrei (Yom Kippur has just passed), Kislev (due to Chanukah) or Nisan (fasting not permitted during Nisan).
+When Rosh Chodesh occurs on Shabbat or Sunday, Yom Kippur Katan is observed on the preceding Thursday.
+<sup><a class="outbound" href="https://en.wikipedia.org/wiki/Yom_Kippur_Katan#Practices">[1]</a></sup></p>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Yom Kippur Katan', basename: 'yom-kippur-katan'}) -%>
+</div></div></div>
+<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Kindness A Day from <a href="https://www.areyvut.org/">Areyvut</a></h5>
 <p class="card-text">Displays a daily act of kindness and related quotation from Tanach or Rabbinic text.
 <br><small class="text-muted">365 calendar events per year. Perpetual feed.</small></p>

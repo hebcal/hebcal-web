@@ -40,7 +40,6 @@ for (let year = startYear; year <= endYear; year++) {
     if (nextMonth === months.TISHREI || nextMonth === months.CHESHVAN || nextMonth === months.TEVET) {
       continue;
     }
-    const nextMonthName = HDate.getMonthName(nextMonth, year);
     let ykk = new HDate(29, month, year);
     const dow = ykk.getDay();
     if (dow === FRI || dow === SAT) {
@@ -48,6 +47,7 @@ for (let year = startYear; year <= endYear; year++) {
     }
 
     const ev = new Event(ykk, 'Yom Kippur Katan', flags.MINOR_FAST);
+    const nextMonthName = HDate.getMonthName(nextMonth, year);
     ev.memo = `Minor Day of Atonement on the day preceeding Rosh Chodesh ${nextMonthName}`;
     events.push(ev);
   }
