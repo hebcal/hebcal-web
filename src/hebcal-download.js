@@ -58,12 +58,7 @@ export async function hebcalDownload(ctx) {
   if (query.year !== 'now') {
     ctx.lastModified = ctx.launchDate;
   }
-  let options;
-  try {
-    options = makeHebcalOptions(ctx.db, query);
-  } catch (err) {
-    ctx.throw(400, err.message);
-  }
+  const options = makeHebcalOptions(ctx.db, query);
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
   if (extension == '.ics' || extension == '.csv') {

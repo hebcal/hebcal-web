@@ -19,12 +19,7 @@ function makeProperties(ctx) {
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     query[k] = 'on';
   }
-  let options;
-  try {
-    options = makeHebcalOptions(ctx.db, query);
-  } catch (err) {
-    ctx.throw(400, err.message);
-  }
+  const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
   if (!location) {
     ctx.throw(400, 'Location required: geonameid, zip, city');

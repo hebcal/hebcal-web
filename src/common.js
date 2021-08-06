@@ -322,7 +322,7 @@ const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
  */
 export function isoDateStringToDate(str) {
   if (!reIsoDate.test(str)) {
-    throw new SyntaxError(`Date must match format YYYY-MM-DD: ${str}`);
+    throw createError(400, `Date must match format YYYY-MM-DD: ${str}`);
   }
   const yy = parseInt(str, 10);
   const mm = parseInt(str.substring(5, 7), 10);
@@ -390,9 +390,9 @@ export function makeHebcalOptions(db, query) {
     } else {
       options.year = parseInt(query.year, 10);
       if (isNaN(options.year)) {
-        throw new RangeError(`Sorry, invalid year ${query.year}`);
+        throw createError(400, `Sorry, invalid year ${query.year}`);
       } else if (options.isHebrewYear && options.year < 1) {
-        throw new RangeError('Sorry, Hebrew year must be 1 or later');
+        throw createError(400, 'Sorry, Hebrew year must be 1 or later');
       }
     }
   }
@@ -523,7 +523,7 @@ export function getLocationFromQuery(db, query) {
     }
     for (const [key, max] of Object.entries(geoposLegacy)) {
       if (empty(query[key]) || parseInt(query[key], 10) > max) {
-        throw new RangeError(`Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
+        throw createError(400, `Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
       }
     }
     let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
@@ -851,19 +851,19 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
   const hy = parseInt(hyStr, 10);
   const hd = parseInt(hdStr, 10);
   if (isNaN(hd)) {
-    throw new Error('Hebrew day must be numeric');
+    throw createError(400, 'Hebrew day must be numeric');
   } else if (isNaN(hy)) {
-    throw new Error('Hebrew year must be numeric');
+    throw createError(400, 'Hebrew year must be numeric');
   } else if (hy < 1) {
-    throw new RangeError('Hebrew year must be year 1 or later');
+    throw createError(400, 'Hebrew year must be year 1 or later');
   } else if (hy > 32000) {
-    throw new RangeError('Hebrew year is too large');
+    throw createError(400, 'Hebrew year is too large');
   }
   const hm = HDate.monthFromName(hmStr);
   const maxDay = HDate.daysInMonth(hm, hy);
   if (hd < 1 || hd > maxDay) {
     const monthName = HDate.getMonthName(hm, hy);
-    throw new RangeError(`Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
+    throw createError(400, `Hebrew day out of valid range 1-${maxDay} for ${monthName} ${hy}`);
   }
   return new HDate(hd, hm, hy);
 }

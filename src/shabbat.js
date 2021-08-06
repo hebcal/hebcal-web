@@ -187,6 +187,8 @@ function makeOptions(ctx) {
     q0[k] = 'on';
   }
   const q = processCookieAndQuery(ctx.cookies.get('C'), {tgt: '_top'}, q0);
+  delete q.d;
+  delete q.D;
   let options = {};
   try {
     options = makeHebcalOptions(ctx.db, q);
