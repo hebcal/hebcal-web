@@ -16,7 +16,7 @@ const preamble = [
   `PRODID:-//hebcal.com/NONSGML Hebcal Calendar v1${version}//EN`,
   'CALSCALE:GREGORIAN',
   'METHOD:PUBLISH',
-  'X-PUBLISHED-TTL:PT7D',
+  'X-PUBLISHED-TTL:PT30D',
   `X-WR-CALNAME:${title}`,
   `X-WR-CALDESC:${caldesc}`,
 ].map(IcalEvent.fold).join('\r\n');
@@ -46,17 +46,18 @@ icalStream.close();
 const events = [];
 const gyear = new Date().getFullYear();
 for (const [monthDay, arr] of Object.entries(kindness)) {
-  const {ev, month} = makeEvent(gyear, monthDay, arr);
+  const {ev} = makeEvent(gyear, monthDay, arr);
   events.push(ev);
 }
 for (const [monthDay, arr] of Object.entries(kindness)) {
-  const {ev, month} = makeEvent(gyear+1, monthDay, arr);
+  const {ev} = makeEvent(gyear+1, monthDay, arr);
   events.push(ev);
 }
 
 csvStream.write(eventsToCsv(events, {}));
 csvStream.close();
 
+// eslint-disable-next-line require-jsdoc
 function makeEvent(gyear, monthDay, arr) {
   const [monthStr, mday] = monthDay.split('-');
   const month = parseInt(monthStr, 10);

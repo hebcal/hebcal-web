@@ -7,13 +7,24 @@ YEAR0=`date +'%Y'`
 YEAR=`expr ${YEAR0} - 1`
 DOWNLOAD_URL="http://127.0.0.1:8080"
 
+remove_file() {
+    file=$1
+    rm -f "${file}.ics" "${file}.csv" "${file}.ics.br" "${file}.csv.br" "${file}.ics.gz" "${file}.csv.gz"
+}
+
 fetch_urls () {
     file=$1
     args=$2
-    rm -f "${file}.ics" "${file}.csv" "${file}.ics.br" "${file}.csv.br" "${file}.ics.gz" "${file}.csv.gz"
+    remove_file $file
     curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.ics?${args}" && cp $TMPFILE "${file}.ics"
     curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.csv?${args}" && cp $TMPFILE "${file}.csv"
     chmod 0644 "${file}.ics" "${file}.csv"
+}
+
+compress_file() {
+    file=$1
+    nice brotli --keep --best "${file}.ics" "${file}.csv"
+    nice gzip --keep --best "${file}.ics" "${file}.csv"
 }
 
 update_ics_name() {
@@ -24,10 +35,8 @@ update_ics_name() {
     perl -pi -e "s/^X-WR-CALDESC:.*/X-WR-CALDESC:${desc}\r/" "${file}.ics"
     perl -pi -e "s/^X-PUBLISHED-TTL:PT7D/X-PUBLISHED-TTL:PT30D/" "${file}.ics"
     perl -pi -e "s,^X-ORIGINAL-URL:.*,X-ORIGINAL-URL:${DOWNLOAD_URL}/ical/${file}.ics\r," "${file}.ics"
-    nice brotli --keep --best "${file}.ics" "${file}.csv"
-    nice gzip --keep --best "${file}.ics" "${file}.csv"
+    compress_file $file
 }
-
 
 FILE="jewish-holidays-v2"
 fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}"
@@ -94,5 +103,15 @@ fetch_urls $FILE "year=${YEAR}&yt=G&v=1&F=on&i=off&lg=en&c=off&geo=none&ny=3"
 update_ics_name $FILE \
     "Daf Yomi" \
     "Daily regimen of learning the Talmud"
+
+FILE="kindness"
+remove_file $FILE
+node dist/kindness.js
+compress_file $FILE
+
+FILE="yom-kippur-katan"
+remove_file $FILE
+node dist/yk-katan.js
+compress_file $FILE
 
 rm -f $TMPFILE
