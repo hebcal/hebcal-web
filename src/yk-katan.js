@@ -22,7 +22,7 @@ const logger = pino({
 const THU = 4;
 const FRI = 5;
 const SAT = 6;
-const caldesc = 'Minor Day of Atonement on the day preceeding each Rosh Chodesh';
+const caldesc = 'יוֹם כִּפּוּר קָטָן, minor day of atonement on the day preceeding each Rosh Chodesh';
 
 const startYear = new HDate().getFullYear() - 1;
 const endYear = startYear + 10;
@@ -62,6 +62,7 @@ logger.info(`Created ${events.length} YKK events`);
     title: 'Yom Kippur Katan',
     caldesc: caldesc,
     relcalid: '457ce561-311f-4eeb-9033-65561b7f7503',
+    publishedTTL: 'PT30D',
   });
 
   const filename = 'yom-kippur-katan.ics';
