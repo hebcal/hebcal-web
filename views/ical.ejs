@@ -50,11 +50,15 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <p class="card-text">Create a custom calendar with event titles in different languages, candle lighting times for Shabbat and holidays, Israeli holiday schedule, etc.</p>
 <ul class="bullet-list-inline">
 <% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<%   if (langName != 's') { -%>
-<li><a title="<%=desc[1]||desc[0]%>" href="/hebcal?lg=<%=langName%>"><%=desc[0]%></a></li>
-<%   } -%>
+<li><a title="<%=desc[1]||desc[0]%>" href="/hebcal?lg=<%=langName%>"><%=desc[0].replace('transliterations', 'translit')%></a></li>
 <% } -%>
 </ul>
+</div></div></div>
+<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
+<h5 class="card-title">Days of the Omer 4️⃣ 9️⃣</h5>
+<p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot.
+<br><small class="text-muted">49 calendar events per year. 2-year perpetual feed.</small></p>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Days of the Omer', basename: 'omer'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Torah Readings (Diaspora) 🕍</h5>
@@ -69,18 +73,6 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'פרשת השבוע - ישראל', basename: 'torah-readings-israel-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Days of the Omer 4️⃣9️⃣</h5>
-<p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot.
-<br><small class="text-muted">49 calendar events per year. 2-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Days of the Omer', basename: 'omer'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Daf Yomi</h5>
-<p class="card-text">Daily regimen of learning the Talmud.
-<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Daf Yomi', basename: 'daf-yomi'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (English)</h5>
 <p class="card-text">Displays the Hebrew date (such as <strong>18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
@@ -91,6 +83,12 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <p class="card-text">Displays the Hebrew date (such as <span lang="he" dir="rtl">י״ח בטבת תש״ע</span>) every day of the week.
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
+</div></div></div>
+<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
+<h5 class="card-title">Daf Yomi 📖</h5>
+<p class="card-text">Daily regimen of learning the Talmud.
+<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Daf Yomi', basename: 'daf-yomi'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Yom Kippur Katan</h5>
