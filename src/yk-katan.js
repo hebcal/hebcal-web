@@ -53,6 +53,8 @@ for (let year = startYear; year <= endYear; year++) {
   }
 }
 
+events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
+
 logger.info(`Created ${events.length} YKK events`);
 
 (async () => {
