@@ -178,7 +178,10 @@ export async function emailForm(ctx) {
       });
     }
   }
-  await ctx.render('email', {
+  if (defaultUnsubscribe) {
+    return ctx.render('email-pre-unsub', {q});
+  }
+  return ctx.render('email', {
     q,
     xtra_html: tooltipScript + typeaheadScript,
     defaultUnsubscribe,

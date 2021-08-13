@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title><%= title %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<%- await include('partials/bootstrap-css.ejs') -%>
+<style>
+body { background-color: #eee;}
+.container { max-width: 600px; margin-top: 50px;}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm">
+<div class="card">
+<div class="card-body">
+  <h3 class="card-title">Unsubscribe from Hebcal email</h3>
+  <p class="card-text">Enter your email address below if you wish to stop
+    receiving weekly Shabbat candle lighting times.</p>
+<div id="email-form">
+<form action="<%= rpath %>" method="post">
+<input type="hidden" name="v" value="1">
+<% if (q.status === 'active') { -%>
+<%   if (q.em) { %><input type="hidden" name="prev" value="<%= q.em %>"><% } -%>
+<%   if (q.k) { %><input type="hidden" name="k" value="<%= q.k %>"><% } -%>
+<% } -%>
+<div class="mt-4 mb-3">
+<label class="form-label" for="em">E-mail address</label>
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
+</div>
+<button type="submit" class="btn btn-primary" name="unsubscribe" value="1">Unsubscribe</button>
+</form>
+</div><!-- #email-form -->
+</div><!-- .card-body -->
+</div><!-- .card -->
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+</div><!-- .container -->
+</body>
+</html>
+<!-- generated <%= new Date().toISOString() %> -->
