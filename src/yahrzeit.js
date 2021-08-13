@@ -18,25 +18,37 @@ const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebca
 async function makeQuery(ctx) {
   ctx.state.ulid = '';
   ctx.state.isEditPage = false;
-  const rpath = ctx.request.path;
-  if (rpath.startsWith('/yahrzeit/edit/')) {
-    ctx.state.isEditPage = true;
-    const id = ctx.state.ulid = basename(rpath);
-    const db = ctx.mysql;
-    const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
-    const results = await db.query({sql, values: [id], timeout: 5000});
-    if (results && results[0]) {
-      return results[0].contents;
-    } else {
-      ctx.throw(404, `Not found: ${id}`);
-    }
+  const isPost = ctx.request.body && ctx.request.body.v === 'yahrzeit';
+  const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: 20};
+  const query = Object.assign(defaults, ctx.request.body, ctx.request.query);
+  if (isPost) {
+    return query;
   }
-  const defaults = (ctx.request.body && ctx.request.body.v === 'yahrzeit') ? {} : {
-    hebdate: 'on',
-    yizkor: 'off',
-    years: 20,
-  };
-  return Object.assign(defaults, ctx.request.body, ctx.request.query);
+  const rpath = ctx.request.path;
+  const yahrzeitCookie = ctx.cookies.get('Y');
+  if (rpath.startsWith('/yahrzeit/edit/')) {
+    const id = basename(rpath);
+    return lookupFromDb(ctx, id);
+  } else if (ctx.method === 'GET' && yahrzeitCookie) {
+    const ids = yahrzeitCookie.split('|');
+    return lookupFromDb(ctx, ids[0]);
+  } else {
+    return query;
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+async function lookupFromDb(ctx, id) {
+  const db = ctx.mysql;
+  const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
+  const results = await db.query({sql, values: [id], timeout: 5000});
+  if (results && results[0]) {
+    ctx.state.ulid = id;
+    ctx.state.isEditPage = true;
+    return results[0].contents;
+  } else {
+    ctx.throw(404, `Not found: ${id}`);
+  }
 }
 
 /**
@@ -56,6 +68,7 @@ export async function yahrzeitApp(ctx) {
     q.ulid = ctx.state.ulid = id;
     const tables = ctx.state.tables = makeFormResults(ctx);
     if (tables !== null) {
+      setYahrzeitCookie(ctx);
       await makeDownloadProps(ctx);
     }
   } else {
@@ -109,6 +122,29 @@ document.getElementById("newrow").onclick = function() {
 })();
 </script>`,
   });
+}
+
+// eslint-disable-next-line require-jsdoc
+function setYahrzeitCookie(ctx) {
+  if (ctx.state.yahrzeitCookieSet) {
+    return false;
+  } else if (ctx.cookies.get('C') === 'opt_out') {
+    return false;
+  }
+  const yahrzeitCookie = ctx.cookies.get('Y');
+  const prevIds = yahrzeitCookie ? yahrzeitCookie.split('|') : [];
+  const ids = new Set(prevIds);
+  ids.add(ctx.state.ulid);
+  const newCookie = Array.from(ids).join('|');
+  ctx.set('Cache-Control', 'private');
+  ctx.cookies.set('Y', newCookie, {
+    path: '/yahrzeit',
+    expires: dayjs().add(1, 'year').toDate(),
+    overwrite: true,
+    httpOnly: false,
+  });
+  ctx.state.yahrzeitCookieSet = true;
+  return true;
 }
 
 // eslint-disable-next-line require-jsdoc
