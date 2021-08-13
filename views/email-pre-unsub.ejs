@@ -16,7 +16,7 @@ body { background-color: #eee;}
 <div class="col-sm">
 <div class="card">
 <div class="card-body">
-  <h3 class="card-title">Unsubscribe from Hebcal email</h3>
+  <h3 class="card-title">Hebcal email unsubscribe</h3>
   <p class="card-text">Enter your email address below if you wish to stop
     receiving weekly Shabbat candle lighting times.</p>
 <div id="email-form">
@@ -27,7 +27,7 @@ body { background-color: #eee;}
 <%   if (q.k) { %><input type="hidden" name="k" value="<%= q.k %>"><% } -%>
 <% } -%>
 <div class="mt-4 mb-3">
-<label class="form-label" for="em">E-mail address</label>
+<label class="form-label" for="em">Email address</label>
 <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
 </div>
 <button type="submit" class="btn btn-primary" name="unsubscribe" value="1">Unsubscribe</button>
