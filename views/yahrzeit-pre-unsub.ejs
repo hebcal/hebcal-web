@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<title><%= title %></title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<%- await include('partials/bootstrap-css.ejs') -%>
+<style>
+body { background-color: #eee;}
+.container { max-width: 600px; margin-top: 50px;}
+</style>
+</head>
+<body>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm">
+<div class="card">
+<div class="card-body">
+  <h3 class="card-title"><%=info.typeStr%> email unsubscribe</h3>
+  <p class="card-text">Do you wish to stop receiving annual email reminders
+    of <strong><%= info.name %>'s <%= info.typeStr %></strong>
+    sent from Hebcal to <strong><%= emailAddress %></strong>?</p>
+<form action="<%= rpath %>" method="post">
+<input type="hidden" name="id" value="<%=q.id%>">
+<input type="hidden" name="num" value="<%=q.num%>">
+<input type="hidden" name="commit" value="1">
+<input type="hidden" name="cfg" value="html">
+<div class="mt-4 mb-3">
+<button type="submit" class="btn btn-primary" name="unsubscribe" value="1">Unsubscribe</button>
+</div>
+</form>
+</div><!-- .card-body -->
+</div><!-- .card -->
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+</div><!-- .container -->
+</body>
+</html>
+<!-- generated <%= new Date().toISOString() %> -->

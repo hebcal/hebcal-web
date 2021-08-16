@@ -59,32 +59,27 @@ export async function yahrzeitEmailSub(ctx) {
     ctx.response.type = ctx.request.header['accept'] = 'application/json';
   }
   if (!empty(q.id) && !empty(q.num) && q.unsubscribe === '1') {
+    if (q.commit !== '1') {
+      const {info, emailAddress} = await lookupSub(ctx, q);
+      return ctx.render('yahrzeit-pre-unsub', {
+        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+        emailAddress,
+        info,
+        q,
+      });
+    }
     const db = ctx.mysql;
     const sql = 'REPLACE INTO yahrzeit_optout (email_id, num, deactivated) VALUES (?, ?, 1)';
     await db.query(sql, [q.id, q.num]);
-    if (q.commit === '1') {
+    if (q.cfg === 'json') {
       ctx.body = {ok: true};
       await db.close();
       return;
     } else {
-      const sql2 = `SELECT e.email_addr, y.contents
-FROM yahrzeit_email e, yahrzeit y
-WHERE e.id = ?
-AND e.calendar_id = y.id`;
-      const results = await db.query(sql2, [q.id]);
-      await db.close();
-      if (!results || !results[0]) {
-        ctx.throw(404, `Subscription key '${q.id}' not found`);
-      }
-      const info = getYahrzeitDetailForId(results[0].contents, q.num);
-      if (info === null) {
-        ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
-      }
-      const type = info.type;
-      const typeStr = info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+      const {info, emailAddress} = await lookupSub(ctx, q);
       return ctx.render('yahrzeit-optout', {
-        title: `${typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
-        emailAddress: results[0].email_addr,
+        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+        emailAddress,
         info,
       });
     }
@@ -135,4 +130,24 @@ please accept our apologies and ignore this message.</div>
   };
   await mySendMail(ctx, message);
   ctx.body = {ok: true};
+}
+
+async function lookupSub(ctx, q) {
+  const db = ctx.mysql;
+  const sql2 = `SELECT e.email_addr, y.contents
+FROM yahrzeit_email e, yahrzeit y
+WHERE e.id = ?
+AND e.calendar_id = y.id`;
+  const results = await db.query(sql2, [q.id]);
+  await db.close();
+  if (!results || !results[0]) {
+    ctx.throw(404, `Subscription key '${q.id}' not found`);
+  }
+  const info = getYahrzeitDetailForId(results[0].contents, q.num);
+  if (info === null) {
+    ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
+  }
+  const type = info.type;
+  info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+  return {info, emailAddress: results[0].email_addr};
 }
