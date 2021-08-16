@@ -134,7 +134,7 @@ please accept our apologies and ignore this message.</div>
 
 async function lookupSub(ctx, q) {
   const db = ctx.mysql;
-  const sql2 = `SELECT e.email_addr, y.contents
+  const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
@@ -149,5 +149,6 @@ AND e.calendar_id = y.id`;
   }
   const type = info.type;
   info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+  info.calendarId = results[0].calendar_id;
   return {info, emailAddress: results[0].email_addr};
 }
