@@ -38,14 +38,13 @@ export async function mySendMail(ctx, message) {
 
 /**
  * @param {*} ctx
- * @param {*} db
  * @param {string} id
  */
-export async function getYahrzeitDetailsFromDb(ctx, db, id) {
+export async function getYahrzeitDetailsFromDb(ctx, id) {
+  const db = ctx.mysql;
   const sql = 'SELECT contents, updated, downloaded FROM yahrzeit WHERE id = ?';
   const results = await db.query({sql, values: [id], timeout: 5000});
   if (!results || !results[0]) {
-    await db.close();
     ctx.throw(404, `Yahrzeit/Anniversary id not found: ${id}`);
   }
   const row = results[0];

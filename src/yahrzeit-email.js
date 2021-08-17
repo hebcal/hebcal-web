@@ -8,25 +8,19 @@ import {basename} from 'path';
 export async function yahrzeitEmailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
-  const key = basename(ctx.request.path);
-  if (key.length !== 26) {
-    ctx.throw(400, `Invalid verification key '${key}'`);
+  const subscriptionId = basename(ctx.request.path);
+  if (subscriptionId.length !== 26) {
+    ctx.throw(400, `Invalid anniversary subscription key '${subscriptionId}'`);
   }
-  const db = ctx.mysql;
-  const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
-  const results = await db.query(sql, [key]);
-  if (!results || !results[0]) {
-    await db.close();
-    ctx.throw(404, `Verification key '${key}' not found`);
-  }
-  const row = results[0];
+  const {emailAddress, calendarId} = await lookupSubscription(ctx, subscriptionId);
   const confirmed = (q.commit === '1');
   if (confirmed) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
-    await db.query(sqlUpdate, [ip, key]);
+    const db = ctx.mysql;
+    await db.query(sqlUpdate, [ip, subscriptionId]);
   } else {
-    const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, db, row.calendar_id);
+    const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, calendarId);
     ctx.state.anniversaryType = summarizeAnniversaryTypes(obj, true);
     const maxId = ctx.state.maxId = getMaxYahrzeitId(obj);
     for (let num = 1; num <= maxId; num++) {
@@ -42,14 +36,27 @@ export async function yahrzeitEmailVerify(ctx) {
       }
     }
   }
-  await db.close();
   const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
   await ctx.render('yahrzeit-verify', {
     title: `${title} | Hebcal Jewish Calendar`,
     confirmed,
-    subscriptionId: key,
-    emailAddress: row.email_addr,
+    subscriptionId,
+    emailAddress,
   });
+}
+
+async function lookupSubscription(ctx, subscriptionId) {
+  const db = ctx.mysql;
+  const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
+  const results = await db.query(sql, [subscriptionId]);
+  if (!results || !results[0]) {
+    ctx.throw(404, `Anniversary subscription key '${subscriptionId}' not found`);
+  }
+  const row = results[0];
+  return {
+    emailAddress: row.email_addr,
+    calendarId: row.calendar_id,
+  };
 }
 
 export async function yahrzeitEmailSub(ctx) {
@@ -60,7 +67,7 @@ export async function yahrzeitEmailSub(ctx) {
   }
   if (!empty(q.id) && !empty(q.num) && q.unsubscribe === '1') {
     if (q.commit !== '1') {
-      const {info, emailAddress} = await lookupSub(ctx, q);
+      const {info, emailAddress} = await lookupSubNum(ctx, q);
       return ctx.render('yahrzeit-pre-unsub', {
         title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
         emailAddress,
@@ -70,13 +77,13 @@ export async function yahrzeitEmailSub(ctx) {
     }
     const db = ctx.mysql;
     const sql = 'REPLACE INTO yahrzeit_optout (email_id, num, deactivated) VALUES (?, ?, 1)';
-    await db.query(sql, [q.id, q.num]);
+    const num = q.num === 'all' ? 0 : +num;
+    await db.query(sql, [q.id, num]);
     if (q.cfg === 'json') {
       ctx.body = {ok: true};
-      await db.close();
       return;
     } else {
-      const {info, emailAddress} = await lookupSub(ctx, q);
+      const {info, emailAddress} = await lookupSubNum(ctx, q);
       return ctx.render('yahrzeit-optout', {
         title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
         emailAddress,
@@ -101,7 +108,6 @@ export async function yahrzeitEmailSub(ctx) {
   await db.query(sql, [id, q.em, q.ulid, ip]);
   const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
   await db.query(sqlUpdate, q.ulid);
-  await db.close();
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const message = {
@@ -132,23 +138,25 @@ please accept our apologies and ignore this message.</div>
   ctx.body = {ok: true};
 }
 
-async function lookupSub(ctx, q) {
+async function lookupSubNum(ctx, q) {
   const db = ctx.mysql;
   const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
   const results = await db.query(sql2, [q.id]);
-  await db.close();
   if (!results || !results[0]) {
     ctx.throw(404, `Subscription key '${q.id}' not found`);
   }
-  const info = getYahrzeitDetailForId(results[0].contents, q.num);
+  const row = results[0];
+  const info = getYahrzeitDetailForId(row.contents, q.num);
   if (info === null) {
     ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
   }
   const type = info.type;
   info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
-  info.calendarId = results[0].calendar_id;
-  return {info, emailAddress: results[0].email_addr};
+  info.calendarId = row.calendar_id;
+  info.maxId = getMaxYahrzeitId(row.contents);
+  info.anniversaryType = summarizeAnniversaryTypes(row.contents, false);
+  return {info, emailAddress: row.email_addr};
 }

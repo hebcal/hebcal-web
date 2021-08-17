@@ -18,16 +18,22 @@ body { background-color: #eee;}
 <div class="card-body">
   <h3 class="card-title"><%=info.typeStr%> email unsubscribe</h3>
   <p class="card-text">Do you wish to stop receiving annual email reminders
-    of <strong><%= info.name %>'s <%= info.typeStr %></strong>
+    <% if (info.maxId === 1) { %>of <strong><%= info.name %>'s <%= info.typeStr %></strong><% } %>
     sent from Hebcal to <strong><%= emailAddress %></strong>?</p>
 <form action="<%= rpath %>" method="post">
 <input type="hidden" name="id" value="<%=q.id%>">
-<input type="hidden" name="num" value="<%=q.num%>">
+<input type="hidden" name="unsubscribe" value="1">
 <input type="hidden" name="commit" value="1">
 <input type="hidden" name="cfg" value="html">
-<div class="mt-4 mb-3">
-<button type="submit" class="btn btn-primary" name="unsubscribe" value="1">Unsubscribe</button>
-<a class="btn btn-secondary ms-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">Edit Calendar</a>
+<div class="mt-4">
+<button type="submit" class="btn btn-primary mb-2 me-2" name="num" value="<%=q.num%>">
+  Unsubscribe
+  <% if (info.maxId > 1) { %> only <%= info.name %>'s <%= info.typeStr %> Reminders<% } %>
+</button>
+<% if (info.maxId > 1) { %>
+<div><button type="submit" class="btn btn-primary mb-2 me-2" name="num" value="all">Unsubscribe all (<%=info.maxId%>) <%=info.anniversaryType%> Reminders</button></div>
+<% } %>
+<a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">Edit Calendar</a>
 </div>
 </form>
 </div><!-- .card-body -->

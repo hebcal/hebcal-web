@@ -211,7 +211,6 @@ async function makeDownloadProps(ctx) {
   q.v = 'yahrzeit';
   delete q.ulid;
   await db.query({sql, values: [id, ip, JSON.stringify(q)], timeout: 5000});
-  await db.close();
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
   const usaCSV = '_usa.csv';
@@ -259,11 +258,9 @@ function removeEmptyArgs(q) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 async function getDetailsFromDb(ctx) {
-  const db = ctx.mysql;
   const id = ctx.state.ulid = ctx.request.path.substring(4, 30);
-  const obj = await getYahrzeitDetailsFromDb(ctx, db, id);
+  const obj = await getYahrzeitDetailsFromDb(ctx, id);
   ctx.state.relcalid = id;
-  await db.close();
   return obj;
 }
 

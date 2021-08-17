@@ -18,7 +18,6 @@ FROM hebcal_shabbat_email
 WHERE email_id = ?`;
   const results = await db.query(sql, subscriptionId);
   if (!results || !results[0]) {
-    await db.close();
     ctx.throw(404, `Subscription confirmation key ${subscriptionId} not found`);
   }
   const row = results[0];
@@ -28,7 +27,6 @@ WHERE email_id = ?`;
   if (confirmed) {
     await updateDbAndEmail(ctx, db);
   }
-  await db.close();
   const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
   await ctx.render('verify', {
     title: `${title} | Hebcal Jewish Calendar`,
@@ -116,7 +114,6 @@ export async function emailForm(ctx) {
     if (subInfo && subInfo.status === 'active') {
       Object.assign(q, subInfo);
     }
-    await db.close();
     defaultUnsubscribe = q.unsubscribe === '1';
   } else {
     q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
@@ -166,13 +163,11 @@ export async function emailForm(ctx) {
       }
       if (subInfo && subInfo.status === 'active') {
         await updateActiveSub(ctx, db, q);
-        db.close();
         return ctx.render('email-success', {
           updated: true,
         });
       }
       await writeStagingInfo(ctx, db, q);
-      db.close();
       return ctx.render('email-success', {
         updated: false,
       });
@@ -233,7 +228,6 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = true;
     success = true;
   }
-  await db.close();
   return success;
 }
 
