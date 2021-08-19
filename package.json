@@ -37,9 +37,9 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.24.0",
+    "@hebcal/core": "^3.24.1",
     "@hebcal/geo-sqlite": "^3.4.2",
-    "@hebcal/icalendar": "^4.13.0",
+    "@hebcal/icalendar": "^4.13.1",
     "@hebcal/leyning": "^4.8.4",
     "@hebcal/locales": "^3.3.0",
     "@hebcal/rest-api": "^3.8.3",
@@ -54,7 +54,7 @@
     "koa": "^2.13.1",
     "koa-better-response-time": "^1.1.0",
     "koa-bodyparser": "^4.3.0",
-    "koa-compress": "^5.0.1",
+    "koa-compress": "^5.1.0",
     "koa-conditional-get": "^3.0.0",
     "koa-ejs": "^4.3.0",
     "koa-error": "^3.2.0",
