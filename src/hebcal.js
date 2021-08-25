@@ -1,13 +1,11 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, urlArgsObj, urlArgs, downloadHref, tooltipScript, typeaheadScript,
+  empty, makeDownloadProps, urlArgs, tooltipScript, typeaheadScript,
   getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
   localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
-import {eventsToClassicApi, eventToFullCalendar, pad2, getDownloadFilename,
-  makeAnchor,
+import {eventsToClassicApi, eventToFullCalendar, pad2,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
-import {basename} from 'path';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import './dayjs-locales';
@@ -155,15 +153,6 @@ async function getTzids() {
   });
 }
 
-function getSubFilename(location) {
-  let fileName = 'hebcal';
-  if (location) {
-    const name = location.zip || location.asciiname || location.getShortName();
-    fileName += '_' + makeAnchor(name).replace(/[-]/g, '_');
-  }
-  return fileName;
-}
-
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? '🇮🇱' : 'Diaspora';
@@ -201,42 +190,12 @@ function renderHtml(ctx) {
   }
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
-  const dlFilename = getDownloadFilename(options);
-  const dlhref = downloadHref(q, dlFilename);
-  const dl1year = downloadHref(q, dlFilename, {ny: 1, emoji: 1});
-  const subFilename = getSubFilename(options.location);
-  const subical = downloadHref(q, subFilename, {year: 'now', subscribe: 1, emoji: 1}) + '.ics';
-  const queryObj = urlArgsObj(q);
-  for (const [key, val] of Object.entries(queryObj)) {
-    if (val === 'on') {
-      queryObj[key] = 1;
-    } else if (val === 'off') {
-      queryObj[key] = 0;
-    }
-  }
-  delete queryObj.geo;
-  const url = {
-    canonical: 'https://www.hebcal.com/hebcal?' + urlArgs(q),
-    settings: '/hebcal?' + urlArgs(q, {v: 0}),
-    prev: '/hebcal?' + urlArgs(q, {year: options.year - 1}),
-    next: '/hebcal?' + urlArgs(q, {year: options.year + 1}),
-    pdf: dlhref + '.pdf',
-    ics: downloadHref(q, dlFilename, {emoji: 1}) + '.ics',
-    ics1year: dl1year + '.ics',
-    subical: subical,
-    webcal: subical.replace(/^https/, 'webcal'),
-    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
-    csv_usa: dlhref + '_usa.csv',
-    csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
-    dlFilename,
-    icsQ: JSON.stringify(queryObj),
-  };
-  const filenames = {
-    ics: basename(url.ics),
-    pdf: basename(url.pdf),
-    csv_usa: basename(url.csv_usa),
-    csv_eur: basename(url.csv_eur),
-  };
+  makeDownloadProps(ctx, q, options);
+  const url = ctx.state.url;
+  url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
+  url.settings = '/hebcal?' + urlArgs(q, {v: 0});
+  url.prev ='/hebcal?' + urlArgs(q, {year: options.year - 1});
+  url.next = '/hebcal?' + urlArgs(q, {year: options.year + 1});
   if (options.candlelighting) {
     const location = ctx.state.location;
     let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
@@ -274,8 +233,6 @@ function renderHtml(ctx) {
     localeConfig,
     prevTitle: options.year - 1,
     nextTitle: options.year + 1,
-    url,
-    filename: filenames,
     downloadTitle,
     shortTitle,
     locationName,

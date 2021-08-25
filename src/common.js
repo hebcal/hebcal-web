@@ -4,7 +4,8 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
-import {getEventCategories} from '@hebcal/rest-api';
+import {getEventCategories, makeAnchor, getDownloadFilename} from '@hebcal/rest-api';
+import {basename} from 'path';
 import etag from 'etag';
 
 export const langNames = {
@@ -623,10 +624,13 @@ grabBtnList.forEach(function (el) {
   var clipboard = new ClipboardJS('#' + el.id, {
     container: grabContainer && grabContainer[0]
   });
-  var tooltipBtn=new bootstrap.Tooltip(el);
+  var tooltipBtn=new bootstrap.Tooltip(el, {
+    trigger: 'manual',
+  });
   clipboard.on('success', function(e) {
     e.trigger.setAttribute('data-bs-original-title','Copied!');
     tooltipBtn.show();
+    setTimeout(function(){tooltipBtn.hide()}, 2000);
     e.clearSelection();
   });
   clipboard.on('error', function(e) {
@@ -634,6 +638,7 @@ grabBtnList.forEach(function (el) {
     var fallbackMsg='Press '+modifierKey+'C to copy';
     e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
     tooltipBtn.show();
+    setTimeout(function(){tooltipBtn.hide()}, 2000);
   });
 });
 </script>
@@ -993,4 +998,57 @@ export function getHaftarahHref(haftara) {
     verses = `${cv[1]}.${cv[2]}-${cv[4]}`;
   }
   return `https://www.sefaria.org/${book}.${verses}?lang=bi`;
+}
+
+/**
+ * @param {Location} location
+ * @return {string}
+ */
+function getSubFilename(location) {
+  let fileName = 'hebcal';
+  if (location) {
+    const name = location.zip || location.asciiname || location.getShortName();
+    fileName += '_' + makeAnchor(name).replace(/[-]/g, '_');
+  }
+  return fileName;
+}
+
+/**
+ * @param {any} ctx
+ * @param {any} q
+ * @param {HebrewCalendar.Options} options
+ */
+export function makeDownloadProps(ctx, q, options) {
+  const dlFilename = getDownloadFilename(options);
+  const dlhref = downloadHref(q, dlFilename);
+  const dl1year = downloadHref(q, dlFilename, {ny: 1, emoji: 1});
+  const subFilename = getSubFilename(options.location);
+  const subical = downloadHref(q, subFilename, {year: 'now', subscribe: 1, emoji: 1}) + '.ics';
+  const queryObj = urlArgsObj(q);
+  for (const [key, val] of Object.entries(queryObj)) {
+    if (val === 'on') {
+      queryObj[key] = 1;
+    } else if (val === 'off') {
+      queryObj[key] = 0;
+    }
+  }
+  delete queryObj.geo;
+  const url = ctx.state.url = {
+    pdf: dlhref + '.pdf',
+    ics: downloadHref(q, dlFilename, {emoji: 1}) + '.ics',
+    ics1year: dl1year + '.ics',
+    subical: subical,
+    webcal: subical.replace(/^https/, 'webcal'),
+    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    csv_usa: dlhref + '_usa.csv',
+    csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
+    dlFilename,
+    icsQ: JSON.stringify(queryObj),
+  };
+  ctx.state.filename = {
+    ics: basename(url.ics),
+    pdf: basename(url.pdf),
+    csv_usa: basename(url.csv_usa),
+    csv_eur: basename(url.csv_eur),
+  };
 }

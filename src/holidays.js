@@ -1,11 +1,11 @@
 /* eslint-disable require-jsdoc */
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
-import {getEventCategories, getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
+import {getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear} from './common';
+import {getDefaultHebrewYear, makeDownloadProps, clipboardScript} from './common';
 import {categories, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
@@ -33,6 +33,7 @@ export async function holidayYearIndex(ctx) {
   const events = getFirstOcccurences(events0);
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
+  const q = makeQueryAndDownloadProps(ctx, options);
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
@@ -45,7 +46,23 @@ export async function holidayYearIndex(ctx) {
     RH: dayjs(roshHashana.getDate().greg()),
     il,
     DoWtiny,
+    q,
+    xtra_html: clipboardScript,
   });
+}
+
+function makeQueryAndDownloadProps(ctx, options) {
+  const q = {v: '1'};
+  for (const k of ['maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
+    q[k] = 'on';
+  }
+  q.i = ctx.state.il ? 'on' : 'off';
+  q.year = String(options.year);
+  q.yt = options.isHebrewYear ? 'H' : 'G';
+  Object.assign(q, ctx.request.query);
+  makeDownloadProps(ctx, q, options);
+  delete ctx.state.filename.pdf;
+  return q;
 }
 
 function makeItems(events, il, showYear) {
@@ -208,6 +225,7 @@ export async function holidayMainIndex(ctx) {
       }
     }
   }
+  const q = makeQueryAndDownloadProps(ctx, {year: hyear, isHebrewYear: true, il});
   await ctx.render('holiday-main-index', {
     title: 'Jewish Holidays | Hebcal Jewish Calendar',
     RH: dayjs(tishrei1.greg()),
@@ -216,6 +234,8 @@ export async function holidayMainIndex(ctx) {
     categories,
     items,
     il,
+    q,
+    xtra_html: clipboardScript,
   });
 }
 
