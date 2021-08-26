@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, Sedra, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
-import {gematriyaDate} from './converter';
+import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
@@ -36,10 +36,11 @@ export async function hdateXml(ctx) {
   const utcString = dt.toUTCString();
   const hebrew = rpath === '/etc/hdate-he.xml';
   const hm = hd.getMonthName();
+  const lang = hebrew ? 'he' : 'en';
   const props = {
     writeResp: false,
-    title: hebrew ? gematriyaDate(hd) : hd.render(),
-    lang: hebrew ? 'he' : 'en',
+    title: hebrew ? gematriyaDate(hd) : hd.render(lang),
+    lang,
     lastBuildDate: utcString,
     year: dt.getFullYear(),
     hy: hd.getFullYear(),

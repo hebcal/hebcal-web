@@ -1,0 +1,25 @@
+import {Locale} from '@hebcal/core';
+import gematriya from 'gematriya';
+
+const heInStr = 'בְּ';
+const monthInPrefix = {
+  'Tamuz': 'בְּתַמּוּז',
+  'Elul': 'בֶּאֱלוּל',
+  'Tishrei': 'בְּתִשְׁרֵי',
+  'Kislev': 'בְּכִסְלֵו',
+  'Sh\'vat': 'בִּשְׁבָט',
+  'Adar': 'בַּאֲדָר',
+  'Adar I': 'בַּאֲדָר א׳',
+  'Adar II': 'בַּאֲדָר ב׳',
+};
+/**
+ * @param {HDate} hdate
+ * @return {string}
+ */
+export function gematriyaDate(hdate) {
+  const d = hdate.getDate();
+  const monthName = hdate.getMonthName();
+  const m = monthInPrefix[monthName] || heInStr + Locale.gettext(monthName, 'he');
+  const y = hdate.getFullYear();
+  return gematriya(d) + ' ' + m + ' ' + gematriya(y, {limit: 3});
+}
