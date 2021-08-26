@@ -17,7 +17,7 @@ export function hdateJavascript(ctx) {
   ctx.lastModified = dt;
   expires(ctx, dt);
   ctx.type = 'application/javascript';
-  const dateStr = rpath === '/etc/hdate-en.js' ? hd.render() : gematriyaDate(hd);
+  const dateStr = rpath === '/etc/hdate-en.js' ? hd.render('en') : gematriyaDate(hd);
   ctx.body = 'document.write("' + dateStr + '");\n';
 }
 
