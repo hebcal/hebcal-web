@@ -4,21 +4,56 @@ import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
+import fs from 'fs/promises';
 
 function expires(ctx, dt) {
   const exp = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, 0, 0, 0);
   ctx.set('Expires', exp.toUTCString());
 }
 
-export function hdateJavascript(ctx) {
-  const rpath = ctx.request.path;
-  const dt = new Date();
-  const hd = new HDate(dt);
-  ctx.lastModified = dt;
-  expires(ctx, dt);
-  ctx.type = 'application/javascript';
-  const dateStr = rpath === '/etc/hdate-en.js' ? hd.render('en') : gematriyaDate(hd);
-  ctx.body = 'document.write("' + dateStr + '");\n';
+const hdateMinJsPath = '/var/www/node_modules/@hebcal/core/dist/hdate-bundle.min.js';
+const bodySuffix = '\n})();\n';
+const bodyEn = 'document.write(hd.render(\'en\'));';
+const bodyHebrew = `var heInStr = 'בְּ';
+var monthInPrefix = {
+  'Tamuz': 'בְּתַמּוּז',
+  'Elul': 'בֶּאֱלוּל',
+  'Tishrei': 'בְּתִשְׁרֵי',
+  'Kislev': 'בְּכִסְלֵו',
+  "Sh'vat": 'בִּשְׁבָט',
+  'Adar': 'בַּאֲדָר',
+  'Adar I': 'בַּאֲדָר א׳',
+  'Adar II': 'בַּאֲדָר ב׳',
+};
+var dd = hd.getDate();
+var monthName = hd.getMonthName();
+var mm = monthInPrefix[monthName] || heInStr + hebcal.Locale.gettext(monthName, 'he');
+var yy = hd.getFullYear();
+var dateStr = hebcal.gematriya(dd) + ' ' + mm + ' ' + hebcal.gematriya(yy);
+document.write(dateStr);`;
+
+export async function hdateJavascript(ctx) {
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
+  const hdateMinJs = await fs.readFile(hdateMinJsPath);
+  const isoDate = ctx.launchDate.toISOString();
+  const bodyPrefix = '(function(){\n' + hdateMinJs + `
+/* ${isoDate} */
+
+var dt = new Date();
+var hd = new hebcal.HDate(dt);
+if (dt.getHours() > 19) {
+  hd = hd.next();
+}
+`;
+  const hebrew = ctx.request.path.startsWith('/etc/hdate-he.js');
+  const bodyInner = hebrew ? bodyHebrew : bodyEn;
+  ctx.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
+  ctx.body = bodyPrefix + bodyInner + bodySuffix;
 }
 
 const hmToArg = {

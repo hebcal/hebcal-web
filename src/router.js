@@ -130,7 +130,7 @@ export function wwwRouter() {
         langNames,
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
-      hdateJavascript(ctx);
+      return hdateJavascript(ctx);
     } else if (rpath === '/etc/hdate-he.xml' || rpath === '/etc/hdate-en.xml') {
       return hdateXml(ctx);
     } else if (rpath === '/sedrot/index.xml' || rpath === '/sedrot/israel.xml' || rpath === '/sedrot/israel-he.xml') {
