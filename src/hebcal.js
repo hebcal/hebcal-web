@@ -453,6 +453,7 @@ function renderLegacyJavascript(ctx) {
   const options = ctx.state.options;
   options.numYears = 2;
   const events = makeHebrewCalendar(ctx, options);
+  ctx.type = 'text/javascript';
   if (ctx.state.q.cfg === 'e') {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());

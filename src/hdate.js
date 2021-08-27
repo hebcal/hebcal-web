@@ -53,6 +53,7 @@ if (dt.getHours() > 19) {
   const hebrew = ctx.request.path.startsWith('/etc/hdate-he.js');
   const bodyInner = hebrew ? bodyHebrew : bodyEn;
   ctx.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
+  ctx.type = 'text/javascript';
   ctx.body = bodyPrefix + bodyInner + bodySuffix;
 }
 
