@@ -799,7 +799,7 @@ export function setDefautLangTz(ctx) {
     cc = ctx.geoipCountry ? ctx.geoipCountry.get(ip) || 'US' : 'US';
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  const lg = ctx.state.lg = q.lg || ccDefaults[0];
+  const lg = ctx.state.lg = q.lg = q.lg || ccDefaults[0];
   ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.countryCode = cc;
   ctx.state.timezone = tzid || ccDefaults[1];
