@@ -192,7 +192,8 @@ function getMastheadGreeting(hd, il) {
       (mm == months.NISAN && dd >= 16 && dd <= 21)) {
     const holiday = mm == months.TISHREI ? 'Sukkot' : 'Pesach';
     return ['Moadim L\'Simcha!', `We wish you a very happy ${holiday}`];
-  } else if (mm === months.TISHREI && (dd === 1 || dd === 2)) {
+  } else if ((mm === months.ELUL && dd === 29) ||
+             (mm === months.TISHREI && (dd === 1 || dd === 2))) {
     return ['Shana Tova u\'Metukah!',
       '🍏 🍯 <span lang="he" dir="rtl">שנה טובה ומתוקה</span> 🍯 🍏' +
       '<br>We wish you a happy and healthy New Year'];
