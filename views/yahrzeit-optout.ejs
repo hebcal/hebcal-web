@@ -4,7 +4,11 @@
 <div class="col">
 <p>Thanks for using the Hebcal Yahrzeit, Birthay and Anniversary Calendar.</p>
 <div class="alert alert-success">
-Annual reminders of <strong><%= info.name %>'s <%= info.typeStr %></strong>
+<svg class="icon m-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+Annual reminders
+<% if (typeof info === 'object') { -%>
+of <strong><%= info.name %>'s <%= info.typeStr %></strong>
+<% } -%>
 will no longer be sent to <strong><%= emailAddress %></strong>.
 </div><!-- .alert -->
 <p>To generate a new list of Yahrzeit (memorial) and Yizkor dates, Hebrew Birthdays,

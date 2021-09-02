@@ -83,12 +83,20 @@ export async function yahrzeitEmailSub(ctx) {
       ctx.body = {ok: true};
       return;
     } else {
-      const {info, emailAddress} = await lookupSubNum(ctx, q);
-      return ctx.render('yahrzeit-optout', {
-        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
-        emailAddress,
-        info,
-      });
+      if (q.num === 'all') {
+        const {emailAddress} = await lookupSubscription(ctx, q.id);
+        return ctx.render('yahrzeit-optout', {
+          title: `Anniversary Email Unsubscribe | Hebcal Jewish Calendar`,
+          emailAddress,
+        });
+      } else {
+        const {info, emailAddress} = await lookupSubNum(ctx, q);
+        return ctx.render('yahrzeit-optout', {
+          title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+          emailAddress,
+          info,
+        });
+      }
     }
   }
   ['em', 'ulid', 'type'].forEach((key) => {
