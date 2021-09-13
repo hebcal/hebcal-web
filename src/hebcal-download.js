@@ -3,7 +3,7 @@ import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
-import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions, empty} from './common';
 
 const maxNumYear = {
   candlelighting: 4,
@@ -78,6 +78,11 @@ export async function hebcalDownload(ctx) {
   if (extension == '.ics') {
     if (query.emoji === '1' || query.emoji === 'on') {
       options.emoji = true;
+    }
+    for (const key of ['title', 'caldesc', 'publishedTTL']) {
+      if (!empty(query[key])) {
+        options[key] = query[key];
+      }
     }
     options.calendarColor = '#800002';
     options.utmSource = query.utm_source || 'ical';
