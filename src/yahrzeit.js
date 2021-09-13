@@ -120,6 +120,15 @@ document.getElementById("newrow").onclick = function() {
   return false;
 }
 })();
+document.addEventListener('DOMContentLoaded', function() {
+  var checkbox = document.getElementById('yizkor');
+  var radio0 = document.getElementById('i0');
+  var radio1 = document.getElementById('i1');
+  checkbox.addEventListener('change', function() {
+    radio0.disabled = !this.checked;
+    radio1.disabled = !this.checked;
+  });
+});
 </script>`,
   });
 }
@@ -349,7 +358,7 @@ export function makeYahrzeitEvents(maxId, query) {
   }
   const yizkor = query.yizkor;
   if (yizkor === 'on' || yizkor === '1') {
-    const holidays = makeYizkorEvents(startYear, endYear);
+    const holidays = makeYizkorEvents(startYear, endYear, query.i === 'on');
     events = events.concat(holidays);
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
@@ -438,15 +447,20 @@ function getEventsForId(query, id, startYear, endYear) {
 /**
  * @param {number} startYear
  * @param {number} endYear
+ * @param {boolean} il
  * @return {Event[]}
  */
-function makeYizkorEvents(startYear, endYear) {
+function makeYizkorEvents(startYear, endYear, il) {
   const holidays = [];
   const attrs = {emoji: '🕯️'};
+  const pesachDay = il ? 21 : 22;
+  const pesachDesc = il ? 'Yizkor (Pesach VII)' : 'Yizkor (Pesach VIII)';
+  const shavuotDay = il ? 6 : 7;
+  const shavuotDesc = il ? 'Yizkor (Shavuot)' : 'Yizkor (Shavuot II)';
   for (let hyear = startYear; hyear <= endYear; hyear++) {
     holidays.push(
-        new Event(new HDate(22, months.NISAN, hyear), 'Yizkor (Pesach VIII)', flags.USER_EVENT, attrs),
-        new Event(new HDate(7, months.SIVAN, hyear), 'Yizkor (Shavuot II)', flags.USER_EVENT, attrs),
+        new Event(new HDate(pesachDay, months.NISAN, hyear), pesachDesc, flags.USER_EVENT, attrs),
+        new Event(new HDate(shavuotDay, months.SIVAN, hyear), shavuotDesc, flags.USER_EVENT, attrs),
         new Event(new HDate(10, months.TISHREI, hyear), 'Yizkor (Yom Kippur)', flags.USER_EVENT, attrs),
         new Event(new HDate(22, months.TISHREI, hyear), 'Yizkor (Shmini Atzeret)', flags.USER_EVENT, attrs),
     );
