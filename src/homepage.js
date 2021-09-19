@@ -2,7 +2,7 @@
 import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
-  getBeforeAfterSunsetForLocation, makeGregDate} from './common';
+  getBeforeAfterSunsetForLocation, getTodayDate} from './common';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 
@@ -59,7 +59,7 @@ export async function homepage(ctx) {
 
 function getDate(ctx, q) {
   const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
-  const dt = isToday ? new Date() : makeGregDate(q.gy, q.gm, q.gd);
+  const dt = getTodayDate(q);
   const location = ctx.state.location;
   if (isToday && location !== null) {
     return getBeforeAfterSunsetForLocation(dt, location);

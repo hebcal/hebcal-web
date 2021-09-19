@@ -1,12 +1,11 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, typeaheadScript, tooltipScript, getDefaultHebrewYear,
+  typeaheadScript, tooltipScript, getDefaultHebrewYear,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
-  isoDateStringToDate,
-  makeGregDate,
+  getTodayDate,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -220,19 +219,6 @@ function makeOptions(ctx) {
   options.start = new Date(midnight.year(), midnight.month(), midnight.date());
   options.end = new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date());
   return {q, options};
-}
-
-function getTodayDate(q) {
-  if (!empty(q.dt)) {
-    try {
-      const dt = isoDateStringToDate(q.dt);
-      return dt;
-    } catch (err) {
-      return new Date();
-    }
-  }
-  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
-  return isToday ? new Date() : makeGregDate(q.gy, q.gm, q.gd);
 }
 
 function makePropsForFullHtml(ctx) {

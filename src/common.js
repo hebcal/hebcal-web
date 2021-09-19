@@ -336,6 +336,24 @@ export function isoDateStringToDate(str) {
 }
 
 /**
+ * Returns the date in the query string or today
+ * @param {Object.<string,string>} query
+ * @return {Date}
+ */
+export function getTodayDate(query) {
+  if (!empty(query.dt)) {
+    try {
+      const dt = isoDateStringToDate(query.dt);
+      return dt;
+    } catch (err) {
+      return new Date();
+    }
+  }
+  const isToday = Boolean(empty(query.gy) || empty(query.gm) || empty(query.gd));
+  return isToday ? new Date() : makeGregDate(query.gy, query.gm, query.gd);
+}
+
+/**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {Object.<string,string>} query
