@@ -68,7 +68,7 @@ fetch_urls $FILE "year=${YEAR}&yt=G&v=1&s=on&i=on&lg=h&c=off&geo=none&ny=5&utm_s
 compress_file $FILE
 
 FILE="daf-yomi"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&F=on&i=off&lg=en&c=off&geo=none&ny=3&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud"
+fetch_urls $FILE "year=${YEAR}&yt=G&v=1&F=on&i=off&lg=en&c=off&geo=none&ny=3&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud"
 compress_file $FILE
 
 FILE="kindness"

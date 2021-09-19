@@ -208,7 +208,14 @@ function getMastheadGreeting(hd, il) {
       longText += `.\n<br><a href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
  begins at sundown on <span class="text-nowrap">${strtime}</span>`;
     }
-    return ['✍️ 📖 G\'mar Chatima Tova / גְּמַר חֲתִימָה טוֹבָה 📖 ✍️', longText];
+    return ['✍️ 📖 G\'mar Chatima Tova / <span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span> 📖 ✍️', longText];
+  } else if (mm == months.TISHREI && dd >= 11 && dd <= 13) {
+    const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg());
+    const strtime = erevSukkot.format(FORMAT_DOW_MONTH_DAY);
+    const blurb = '🌿 🍋 Chag Sukkot Sameach / <span lang="he" dir="rtl">חג סוכות שמח</span> 🍋 🌿';
+    const longText = `<br><a href="/holidays/sukkot-${gy}">Sukkot</a>
+ begins at sundown on <span class="text-nowrap">${strtime}</span>`;
+    return [blurb, longText];
   }
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
