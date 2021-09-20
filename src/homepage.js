@@ -209,12 +209,14 @@ function getMastheadGreeting(hd, il) {
  begins at sundown on <span class="text-nowrap">${strtime}</span>`;
     }
     return ['✍️ 📖 G\'mar Chatima Tova / <span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span> 📖 ✍️', longText];
-  } else if (mm == months.TISHREI && dd >= 11 && dd <= 13) {
+  } else if (mm == months.TISHREI && dd >= 11 && dd <= 14) {
     const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg());
     const strtime = erevSukkot.format(FORMAT_DOW_MONTH_DAY);
+    const when = (dd === 14) ? 'tonight at sundown' :
+      ` at sundown on <span class="text-nowrap">${strtime}</span>`;
     const blurb = '🌿 🍋 Chag Sukkot Sameach / <span lang="he" dir="rtl">חג סוכות שמח</span> 🍋 🌿';
     const longText = `<br><a href="/holidays/sukkot-${gy}">Sukkot</a>
- begins at sundown on <span class="text-nowrap">${strtime}</span>`;
+ begins ${when}`;
     return [blurb, longText];
   }
 
