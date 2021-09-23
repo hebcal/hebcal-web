@@ -5,7 +5,7 @@ import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref, empty} from './common';
-import {torahBookNames, sedrot, doubled} from './parshaCommon';
+import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -144,13 +144,13 @@ export async function parshaDetail(ctx) {
   const reading = date ?
     leyning.getLeyningForParshaHaShavua(parshaEv, il) :
     leyning.getLeyningForParsha(parshaName);
-  leyning.addSefariaLinksToLeyning(reading.fullkriyah, false);
+  addLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHref = getHaftarahHref(reading.haftara);
   if (reading.sephardic) {
     reading.sephardicHref = getHaftarahHref(reading.sephardic);
   }
   if (reading.weekday) {
-    leyning.addSefariaLinksToLeyning(reading.weekday, false);
+    addLinksToLeyning(reading.weekday, false);
     for (const aliyah of Object.values(reading.weekday)) {
       aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
     }
@@ -268,7 +268,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
     triennial.reading = reading.aliyot;
     triennial.yearNum = reading.yearNum + 1;
-    leyning.addSefariaLinksToLeyning(triennial.reading, false);
+    addLinksToLeyning(triennial.reading, false);
     for (const aliyah of Object.values(triennial.reading)) {
       aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
     }
@@ -290,7 +290,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
         } else {
           const ev = new ParshaEvent(triReading.date, [parshaName], false);
           const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
-          leyning.addSefariaLinksToLeyning(triReading2.aliyot, false);
+          addLinksToLeyning(triReading2.aliyot, false);
           for (const aliyah of Object.values(triReading2.aliyot)) {
             aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
           }

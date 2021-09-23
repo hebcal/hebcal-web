@@ -46,7 +46,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
-href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
+href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <% if (reading.reason && reading.reason[num]) { %><small> // <%= reading.reason[num] %></small><% } %>
 <%    } // ... for %>
@@ -116,7 +116,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> weekday aliyah <%=aliyah.num%>"
-href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
+href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <%    } // ... for %>
 </ol>

@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {flags, greg, HDate, HebrewCalendar, Locale, months, HolidayEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
+import {addLinksToLeyning} from './parshaCommon';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -215,14 +216,6 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
   }
 }
 
-const bookId = {
-  Genesis: 1,
-  Exodus: 2,
-  Leviticus: 3,
-  Numbers: 4,
-  Deuteronomy: 5,
-};
-
 /**
  * @param {string} holiday
  * @param {string} item
@@ -232,10 +225,7 @@ const bookId = {
  */
 function makeHolidayReading(holiday, item, meta, reading, ev) {
   if (reading.fullkriyah) {
-    leyning.addSefariaLinksToLeyning(reading.fullkriyah, true);
-    for (const aliyah of Object.values(reading.fullkriyah)) {
-      aliyah.bookId = bookId[aliyah.k];
-    }
+    addLinksToLeyning(reading.fullkriyah, true);
   }
   const itemReading = meta.reading[item] = reading;
   const hebrew = Locale.lookupTranslation(item, 'he');

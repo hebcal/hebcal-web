@@ -5,7 +5,7 @@
 <%- await include('numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
 <a class="outbound d-print-none" title="Tikkun.io - <%=aliyah.verses%>"
-href="https://tikkun.io/#/r/<%=aliyah.bookId%>-<%=aliyah.b.split(':')[0]%>-<%=aliyah.b.split(':')[1]%>">
+href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <% if (aliyah.reason) { %><small> // <%= aliyah.reason %></small><% } %>
 <% } %>
