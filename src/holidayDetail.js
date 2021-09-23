@@ -215,6 +215,14 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
   }
 }
 
+const bookId = {
+  Genesis: 1,
+  Exodus: 2,
+  Leviticus: 3,
+  Numbers: 4,
+  Deuteronomy: 5,
+};
+
 /**
  * @param {string} holiday
  * @param {string} item
@@ -225,6 +233,9 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
 function makeHolidayReading(holiday, item, meta, reading, ev) {
   if (reading.fullkriyah) {
     leyning.addSefariaLinksToLeyning(reading.fullkriyah, true);
+    for (const aliyah of Object.values(reading.fullkriyah)) {
+      aliyah.bookId = bookId[aliyah.k];
+    }
   }
   const itemReading = meta.reading[item] = reading;
   const hebrew = Locale.lookupTranslation(item, 'he');
