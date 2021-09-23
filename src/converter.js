@@ -121,6 +121,12 @@ function renameChanukah(locale) {
   };
 }
 
+const hmonthArg = {
+  'Sh\'vat': 'Shvat',
+  'Adar I': 'Adar1',
+  'Adar II': 'Adar2',
+};
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
@@ -148,22 +154,35 @@ function makeProperties(ctx) {
   const hdateStr = hdate.render(locale);
   const il = Boolean(query.i === 'on');
   const events = getEvents(hdate, il);
+  const gm = dt.getMonth() + 1;
+  const gd = dt.getDate();
+  const hy = hdate.getFullYear();
+  const hmonthName = hdate.getMonthName();
+  const hmStr = hmonthArg[hmonthName] || hmonthName;
+  const g2h = props.type === 'g2h';
+  const gsStr = props.gs ? '&gs=on' : '';
+  const ilStr = il ? '&i=on' : '';
+  const hd = hdate.getDate();
+  const canonical = g2h ?
+    `gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1` :
+    `hd=${hd}&hm=${hmStr}&hy=${hy}${ilStr}&h2g=1`;
   return {
     message: props.message,
     noCache: Boolean(props.noCache),
     events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
-    first: (props.type === 'g2h') ? dateStr + afterSunset : hdateStr,
-    second: (props.type === 'g2h') ? hdateStr : dateStr + afterSunset,
+    canonical,
+    first: g2h ? dateStr + afterSunset : hdateStr,
+    second: g2h ? hdateStr : dateStr,
     hebrew: gematriyaDate(hdate),
     gs: props.gs,
     gy,
-    gm: dt.getMonth() + 1,
-    gd: dt.getDate(),
-    hy: hdate.getFullYear(),
+    gm,
+    gd,
+    hy,
     hm: hdate.getMonth(),
-    hmStr: hdate.getMonthName(),
-    hd: hdate.getDate(),
+    hmStr: hmonthName,
+    hd: hd,
     hleap: hdate.isLeapYear(),
     il,
     locale,
