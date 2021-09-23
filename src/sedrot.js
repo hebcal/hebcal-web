@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale, Sedra} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, Locale, Sedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
@@ -149,9 +149,16 @@ export async function parshaDetail(ctx) {
   if (reading.sephardic) {
     reading.sephardicHref = getHaftarahHref(reading.sephardic);
   }
+  if (reading.weekday) {
+    leyning.addSefariaLinksToLeyning(reading.weekday, false);
+    for (const aliyah of Object.values(reading.weekday)) {
+      aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
+    }
+  }
   parsha.haftaraHref = getHaftarahHref(parsha.haftara);
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
+  makePrevNext(parsha, date, hyear, il);
   const hasTriennial = !il && hyear >= 5744 && noTriennial.indexOf(hyear) === -1;
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
   const titleYear = date ? ' ' + hyear : '';
@@ -178,6 +185,48 @@ export async function parshaDetail(ctx) {
     commentary: drash[parsha.name],
     summary: makeSummaryHtml(parsha),
   });
+}
+
+function makePrevNext(parsha, date, hyear, il) {
+  const prevNum = parsha.combined ? leyning.parshiyot[parsha.p1].num - 2 : parsha.num - 2;
+  const nextNum = parsha.combined ? leyning.parshiyot[parsha.p2].num : parsha.num;
+  const prevName = parshiot[prevNum];
+  const nextName = parshiot[nextNum];
+  if (date) {
+    const events = HebrewCalendar.calendar({
+      year: hyear,
+      isHebrewYear: true,
+      noHolidays: true,
+      sedrot: true,
+      il: il,
+    });
+    parsha.prev = prevName && findParshaDate(events, prevName, il);
+    parsha.next = nextName && findParshaDate(events, nextName, il);
+  } else {
+    parsha.prev = prevName && makeAnchor(prevName);
+    parsha.next = nextName && makeAnchor(nextName);
+  }
+}
+
+function findParshaDate(events, name, il) {
+  if (name) {
+    const ev = findParshaEvent(events, name, il);
+    if (ev) {
+      return getParshaDateAnchor(ev);
+    }
+  }
+  return null;
+}
+
+/**
+ * @private
+ * @param {Event} ev
+ * @return {string}
+ */
+function getParshaDateAnchor(ev) {
+  const dateStr = dayjs(ev.getDate().greg()).format('YYYYMMDD');
+  const desc = makeAnchor(ev.getDesc().substring(9));
+  return desc + '-' + dateStr;
 }
 
 function makeSummaryHtml(parsha) {
