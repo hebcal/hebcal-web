@@ -1,15 +1,15 @@
 import {Locale, gematriya} from '@hebcal/core';
 
-const heInStr = 'בְּ';
+const heInStr = 'בְּ';
 const monthInPrefix = {
-  'Tamuz': 'בְּתַמּוּז',
-  'Elul': 'בֶּאֱלוּל',
-  'Tishrei': 'בְּתִשְׁרֵי',
-  'Kislev': 'בְּכִסְלֵו',
-  'Sh\'vat': 'בִּשְׁבָט',
-  'Adar': 'בַּאֲדָר',
-  'Adar I': 'בַּאֲדָר א׳',
-  'Adar II': 'בַּאֲדָר ב׳',
+  'Tamuz': 'בְּתַמּוּז',
+  'Elul': 'בֶּאֱלוּל',
+  'Tishrei': 'בְּתִשְׁרֵי',
+  'Kislev': 'בְּכִסְלֵו',
+  'Sh\'vat': 'בִּשְׁבָט',
+  'Adar': 'בַּאֲדָר',
+  'Adar I': 'בַּאֲדָר א׳',
+  'Adar II': 'בַּאֲדָר ב׳',
 };
 /**
  * @param {HDate} hdate
