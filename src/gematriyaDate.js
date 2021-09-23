@@ -1,5 +1,4 @@
-import {Locale} from '@hebcal/core';
-import gematriya from 'gematriya';
+import {Locale, gematriya} from '@hebcal/core';
 
 const heInStr = 'בְּ';
 const monthInPrefix = {
@@ -21,5 +20,6 @@ export function gematriyaDate(hdate) {
   const monthName = hdate.getMonthName();
   const m = monthInPrefix[monthName] || heInStr + Locale.gettext(monthName, 'he');
   const y = hdate.getFullYear();
-  return gematriya(d) + ' ' + m + ' ' + gematriya(y, {limit: 3});
+  const str = gematriya(d) + ' ' + m + ' ' + gematriya(y);
+  return str.normalize();
 }
