@@ -12,7 +12,7 @@
 <div id="content">
 <div class="row">
 <div class="col-md-10">
-<%- await include('partials/holiday-detail-breadcrumb.ejs') -%>
+<%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 
 <h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <% if (year && year < 1752) { -%>
@@ -20,13 +20,15 @@
 <% } -%>
 <p class="lead"><%=holiday%> (<%=descrShort%>)
 for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.</p>
-<p><%-descrLong%></p>
-
-<p class="d-print-none"><em>Read more from <a class="outbound" title="More about <%=holiday%> from <%=meta.about.name%>" href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
+<p><%-descrLong%>
+<br><small class="d-print-none"><em>Read more from <a class="outbound"
+title="More about <%=holiday%> from <%=meta.about.name%>"
+href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
 <% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-or <a class="outbound" title="More about <%=holiday%> from Wikipedia" href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
+or <a class="outbound" title="More about <%=holiday%> from Wikipedia"
+href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <% } // wikipedia %>
-</em></p>
+</em></small></p>
 
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-muted mb-1">Advertisement</h6>
@@ -159,7 +161,7 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 </div><!-- .row -->
 
 <div class="row">
-<%- await include('partials/holiday-detail-breadcrumb.ejs') -%>
+<%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 </div>
 </div><!-- #content -->
 

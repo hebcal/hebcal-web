@@ -76,11 +76,8 @@ export async function holidayDetail(ctx) {
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
-  let descrMedium = getHolidayDescription(next.event, false);
-  if (descrMedium.charAt(descrMedium.length - 1) !== '.') {
-    descrMedium += '.';
-  }
-  const wikipediaText = meta.wikipedia && meta.wikipedia.text;
+  const descrMedium = appendPeriod(getHolidayDescription(next.event, false));
+  const wikipediaText = appendPeriod(meta.wikipedia && meta.wikipedia.text);
   const descrLong = wikipediaText || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
@@ -88,7 +85,7 @@ export async function holidayDetail(ctx) {
   const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
   const now = new Date();
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
-  await ctx.render('holiday-detail', {
+  await ctx.render('holidayDetail', {
     title,
     year,
     holiday,
@@ -108,6 +105,12 @@ export async function holidayDetail(ctx) {
     jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
     il,
   });
+}
+
+function appendPeriod(str) {
+  if (!str) return str;
+  if (str.charAt(str.length - 1) !== '.') return str + '.';
+  return str;
 }
 
 /**
