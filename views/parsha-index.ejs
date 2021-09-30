@@ -105,6 +105,28 @@ spreadsheet program.</p>
 </ul>
 </div>
 
+<div class="btn-group me-1 mb-2">
+<button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  Diaspora Weekday <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
+<li><small><a class="dropdown-item download" id="weekday-diaspora-<%=yr%>" href="weekday-diaspora-<%=yr%>.csv" download="weekday-diaspora-<%=yr%>.csv">weekday-diaspora-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
+</div>
+
+<div class="btn-group me-1 mb-2">
+<button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  Israel Weekday <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
+<li><small><a class="dropdown-item download" id="weekday-il-<%=yr%>" href="weekday-il-<%=yr%>.csv" download="weekday-il-<%=yr%>.csv">weekday-il-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
+</div>
+
 </div><!-- .btn-toolbar -->
 
 <p>Example content:</p>
