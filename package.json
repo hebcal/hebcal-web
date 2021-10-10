@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/hebcal/hebcal-web#readme",
   "config": {
-    "sprite": "sprite7b.svg"
+    "sprite": "sprite8.svg"
   },
   "scripts": {
     "build": "npm run build:cp-json && npm run build:babel",

@@ -69,45 +69,35 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
 <div class="btn-toolbar">
-<div class="btn-group me-1 mb-2">
+<span class="me-3">Diaspora</span>
+<div class="btn-group me-2 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  Diaspora Full Kriyah <span class="caret"></span>
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Full Kriyah <span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7VDc0TWp2cDdvQU0">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
 <% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
 <li><small><a class="dropdown-item download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" download="fullkriyah-<%=yr%>.csv">fullkriyah-<%=yr%>.csv</a></small></li>
 <% } %>
 </ul>
 </div>
 
-<div class="btn-group me-1 mb-2">
+<div class="btn-group me-2 mb-2">
  <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  Israel Full Kriyah <span class="caret"></span>
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Triennial<span class="caret"></span>
  </button>
  <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7aUxXSXZiY3FTNDA">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
-<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
-<li><small><a class="dropdown-item download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
-<% } %>
-</ul>
-</div>
-
-<div class="btn-group me-1 mb-2">
- <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  Triennial (Diaspora) <span class="caret"></span>
- </button>
- <ul class="dropdown-menu" role="menu">
-<li><a class="dropdown-item" href="https://drive.google.com/folderview?id=0B3OlPVknpjg7SXhHUjdXYzM4Y0E">Google Drive spreadsheets</a><li class="dropdown-divider"></li>
 <% for (let yr = triCycleStartYear - 3; yr < triCycleStartYear + 12; yr += 3) { %>
-<li><a class="dropdown-item download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" download="triennial-<%=yr%>-<%=yr+2%>.csv">triennial-<%=yr%>-<%=yr+2%>.csv</a></li>
+<li><small><a class="dropdown-item download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" download="triennial-<%=yr%>-<%=yr+2%>.csv">triennial-<%=yr%>-<%=yr+2%>.csv</a></small></li>
 <% } %>
 </ul>
 </div>
 
-<div class="btn-group me-1 mb-2">
+<div class="btn-group me-2 mb-2">
 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  Diaspora Weekday <span class="caret"></span>
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Weekday <span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
@@ -115,10 +105,26 @@ spreadsheet program.</p>
 <% } %>
 </ul>
 </div>
+</div><!-- .btn-toolbar -->
 
-<div class="btn-group me-1 mb-2">
+<div class="btn-toolbar">
+<span class="me-3">Israel</span>
+<div class="btn-group me-2 mb-2">
 <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  Israel Weekday <span class="caret"></span>
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Full Kriyah <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
+<li><small><a class="dropdown-item download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
+<% } %>
+</ul>
+</div>
+
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Weekday <span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
