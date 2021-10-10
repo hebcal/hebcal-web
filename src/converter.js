@@ -159,11 +159,11 @@ function makeProperties(ctx) {
   const hy = hdate.getFullYear();
   const hmonthName = hdate.getMonthName();
   const hmStr = hmonthArg[hmonthName] || hmonthName;
-  const g2h = props.type === 'g2h';
+  const greg2heb = props.type === 'g2h';
   const gsStr = props.gs ? '&gs=on' : '';
   const ilStr = il ? '&i=on' : '';
   const hd = hdate.getDate();
-  const canonical = g2h ?
+  const canonical = greg2heb ?
     `gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1` :
     `hd=${hd}&hm=${hmStr}&hy=${hy}${ilStr}&h2g=1`;
   return {
@@ -172,8 +172,8 @@ function makeProperties(ctx) {
     events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
     title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
     canonical,
-    first: g2h ? dateStr + afterSunset : hdateStr,
-    second: g2h ? hdateStr : dateStr,
+    first: greg2heb ? dateStr + afterSunset : hdateStr,
+    second: greg2heb ? hdateStr : dateStr,
     hebrew: gematriyaDate(hdate),
     gs: props.gs,
     gy,
