@@ -1,4 +1,6 @@
 <%- await include('partials/header.ejs') -%>
+<% if (hyear >= 5500) { %><link rel="prev" href="/sedrot/<%=hyear - 1%><%=il?'?i=on':''%>"><%}%>
+<% if (hyear <= 6100) { %><link rel="next" href="/sedrot/<%=hyear + 1%><%=il?'?i=on':''%>"><%}%>
 <style>
 .text-big {font-size: larger}
 </style>
@@ -21,6 +23,34 @@
 </div><!-- .d-print-none -->
 
 <h2>Torah Readings <%=hyear%> <span class="h4 small text-muted"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
+<div class="btn-toolbar d-print-none mb-2">
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="<%-dlhref%>" download="<%=dlfilename%>">
+<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+Download Calendar .ics</a>
+<% if (il) { %>
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="fullkriyah-il-<%=hyear%>.csv" download="fullkriyah-il-<%=hyear%>.csv">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Download Leyning</a>
+<% } else { %>
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="fullkriyah-<%=hyear%>.csv" download="fullkriyah-<%=hyear%>.csv">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Download Full Kriyah</a>
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv" download="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Download Triennial</a>
+<% } %>
+</div>
+
+<nav class="d-print-none mb-3">
+<ul class="pagination pagination-sm">
+<li class="page-item"><a class="page-link" href="<%=hyear - 3%><%=il?'?i=on':''%>" rel="nofollow">&laquo;&nbsp;<%=hyear - 3%></a></li>
+<% for (let i = hyear - 2; i <= hyear + 2; i++) { %>
+<li class="page-item<%= i == hyear ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=il?'?i=on':''%>"<%- (i > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+<% } %>
+<li class="page-item
+"><a class="page-link" href="<%=hyear + 3%><%=il?'?i=on':''%>"<%- (hyear+3 > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=hyear + 3%>&nbsp;&raquo;</a></li>
+</ul>
+</nav>
 
 <% for (const item of items) { %>
 <ul class="list-unstyled">

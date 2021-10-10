@@ -4,12 +4,13 @@ import * as leyning from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
-import {processCookieAndQuery, localeMap} from './common';
+import {processCookieAndQuery, localeMap, downloadHref} from './common';
 
 export async function parshaYear(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
-  const hyear = parseInt(base, 10) || new HDate().getFullYear();
+  const todayHebYear = new HDate().getFullYear();
+  const hyear = parseInt(base, 10) || todayHebYear;
   const cookie = ctx.cookies.get('C');
   if (cookie) {
     ctx.set('Cache-Control', 'private');
@@ -62,10 +63,24 @@ export async function parshaYear(ctx) {
     };
     items.push(item);
   }
+  const dlfilename = `hebcal_${hyear}h.ics`;
+  const q0 = {
+    v: '1',
+    s: 'on',
+    i: il ? 'on' : 'off',
+    year: String(hyear),
+    yt: 'H',
+    ny: 1,
+  };
+  const dlhref = downloadHref(q0, dlfilename);
   await ctx.render('parsha-year', {
     title: `Torah Readings ${hyear} | Hebcal Jewish Calendar`,
     hyear,
     il,
     items,
+    todayHebYear,
+    dlfilename,
+    dlhref,
+    triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
   });
 }
