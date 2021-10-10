@@ -34,10 +34,12 @@ Download Calendar .ics</a>
 <% } else { %>
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="fullkriyah-<%=hyear%>.csv" download="fullkriyah-<%=hyear%>.csv">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
-  Download Full Kriyah</a>
+  Download Leyning (Full Kriyah)</a>
+<%   if (triCycleStartYear) { %>
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" href="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv" download="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
-  Download Triennial</a>
+  Download Leyning (Triennial)</a>
+<%   } %>
 <% } %>
 </div>
 

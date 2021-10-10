@@ -81,6 +81,6 @@ export async function parshaYear(ctx) {
     todayHebYear,
     dlfilename,
     dlhref,
-    triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
+    triCycleStartYear: hyear >= 5744 ? leyning.Triennial.getCycleStartYear(hyear) : null,
   });
 }
