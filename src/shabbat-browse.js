@@ -5,7 +5,6 @@ import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {typeaheadScript} from './common';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
@@ -28,8 +27,6 @@ const COUNTRY_ADMIN_SQL = `SELECT g.geonameid, g.name, g.asciiname, g.latitude, 
 FROM geoname g
 WHERE g.country = ? AND g.admin1 = ?
 ORDER BY g.name`;
-
-const myTypeaheadScript = typeaheadScript.replace('createCityTypeahead(false)', 'createCityTypeahead(true)');
 
 const CONTINENTS = {
   EU: 'Europe',
@@ -105,7 +102,6 @@ export async function shabbatBrowse(ctx) {
     return ctx.render('shabbat-browse', {
       title: 'Shabbat candle-lighting times for world cities | Hebcal Jewish Calendar',
       continents: Object.values(continents),
-      xtra_html: myTypeaheadScript,
     });
   }
   const iso = countryIdToIso[base];

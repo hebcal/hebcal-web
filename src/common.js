@@ -619,12 +619,6 @@ export const localeMap = {
   'ru': 'ru',
 };
 
-export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/typeahead.js@0.10.4/dist/typeahead.bundle.min.js"></script>
-<script src="/i/hebcal-app-3.0.min.js"></script>
-<script>hebcalClient.createCityTypeahead(false);</script>
-`;
-
 /**
  * @param {HDate} hdate today
  * @return {number}

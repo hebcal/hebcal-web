@@ -38,4 +38,8 @@
 <% } -%>
 </div><!-- .row -->
 </div><!-- #content -->
-<%- await include('partials/footer.ejs') _%>
+<% const typeaheadScript = await include('partials/script-typeahead.ejs'); %>
+<%- await include('partials/footer.ejs', {
+  footerScripts: {tooltip: true},
+  xtra_html: typeaheadScript.replace('createCityTypeahead(false)', 'createCityTypeahead(true)'),
+}) _%>
