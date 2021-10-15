@@ -21,7 +21,8 @@ import {zmanimIcalendar} from './zmanim';
 const app = new Koa();
 
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
-const {logger, dest} = makeLogger(logDir);
+const logger = makeLogger(logDir);
+logger.info('Koa server: starting up');
 app.context.logger = logger;
 
 const zipsFilename = 'zips.sqlite3';
@@ -179,9 +180,9 @@ app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: true}));
 
-if (process.env.NODE_ENV == 'production' ) {
+if (process.env.NODE_ENV == 'production') {
   fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
-  process.on('SIGHUP', () => dest.reopen());
+  process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
 }
 
 const port = process.env.NODE_PORT || 8080;

@@ -1,32 +1,17 @@
 import pino from 'pino';
 
 /**
- * @typedef {Object} MakeLoggerResult
- * @property {pino.Logger} logger
- * @property {SonicBoom} dest
- * @private
- */
-
-/**
  * @private
  * @param {string} logDir
- * @return {MakeLoggerResult}
+ * @return {pino.Logger}
  */
 export function makeLogger(logDir) {
-  const dest = pino.destination({
-    dest: logDir + '/access.log',
-    minLength: 8192, // Buffer before writing
-    sync: false, // Asynchronous logging
-  });
-  const logger = pino({
+  const transport = pino.transport({
+    target: 'pino/file',
     level: process.env.NODE_ENV == 'production' ? 'info' : 'debug',
-  }, dest);
-
-  // asynchronously flush every 2 seconds to keep the buffer empty
-  // in periods of low activity
-  setInterval(() => {
-    logger.flush();
-  }, 2000).unref();
+    options: {destination: logDir + '/access.log'},
+  });
+  const logger = pino(transport);
 
   // use pino.final to create a special logger that
   // guarantees final tick writes
@@ -49,7 +34,7 @@ export function makeLogger(logDir) {
   process.on('SIGQUIT', () => handler(null, 'SIGQUIT'));
   process.on('SIGTERM', () => handler(null, 'SIGTERM'));
 
-  return {logger, dest};
+  return logger;
 }
 
 /**
