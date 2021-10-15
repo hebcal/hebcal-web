@@ -619,47 +619,10 @@ export const localeMap = {
   'ru': 'ru',
 };
 
-export const tooltipScript = `<script>
-var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-var tooltipList = tooltipTriggerList.map(function (el) {
-  return new bootstrap.Tooltip(el);
-});
-</script>
-`;
-
 export const typeaheadScript = `<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/typeahead.js@0.10.4/dist/typeahead.bundle.min.js"></script>
 <script src="/i/hebcal-app-3.0.min.js"></script>
 <script>hebcalClient.createCityTypeahead(false);</script>
-`;
-
-export const clipboardScript = `
-<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js"></script>
-<script>
-var grabBtnList = [].slice.call(document.querySelectorAll('.btn.grabBtn'));
-var grabContainer = document.getElementsByClassName('modal');
-grabBtnList.forEach(function (el) {
-  var clipboard = new ClipboardJS('#' + el.id, {
-    container: grabContainer && grabContainer[0]
-  });
-  var tooltipBtn=new bootstrap.Tooltip(el, {
-    trigger: 'manual',
-  });
-  clipboard.on('success', function(e) {
-    e.trigger.setAttribute('data-bs-original-title','Copied!');
-    tooltipBtn.show();
-    setTimeout(function(){tooltipBtn.hide()}, 2000);
-    e.clearSelection();
-  });
-  clipboard.on('error', function(e) {
-    var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
-    var fallbackMsg='Press '+modifierKey+'C to copy';
-    e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
-    tooltipBtn.show();
-    setTimeout(function(){tooltipBtn.hide()}, 2000);
-  });
-});
-</script>
 `;
 
 /**

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear, makeDownloadProps, clipboardScript} from './common';
+import {getDefaultHebrewYear, makeDownloadProps} from './common';
 import {categories, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
@@ -47,7 +47,6 @@ export async function holidayYearIndex(ctx) {
     il,
     DoWtiny,
     q,
-    xtra_html: clipboardScript,
   });
 }
 
@@ -235,7 +234,6 @@ export async function holidayMainIndex(ctx) {
     items,
     il,
     q,
-    xtra_html: clipboardScript,
   });
 }
 

@@ -1,4 +1,7 @@
 <%- await include('partials/header.ejs') -%>
+<!--
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.css">
+-->
 <style>
 .tbody-striped > tbody {
   border-bottom-color: #dee2e6;
@@ -51,6 +54,17 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 <a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%>"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .btn-toolbar -->
+<!--
+<div class="d-print-none btn-group me-1" role="group" data-bs-toggle="buttons">
+  <label class="btn btn-secondary btn-sm mb-2">
+  <input type="radio" name="view" id="toggle-list" checked>
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-list-ul"></use></svg> List
+  </label>
+  <label class="btn btn-secondary btn-sm active mb-2">
+  <input type="radio" name="view" id="toggle-month">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
+  </label>
+</div> !-- .btn-group -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none mb-1">
@@ -117,4 +131,7 @@ nightfall on the second date specified.</p>
 </div><!-- #content -->
 <%- await include('partials/download-modal.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
-<%- await include('partials/footer.ejs') _%>
+<%- await include('partials/footer.ejs', {
+  footerScripts: {clipboard: true},
+  // xtra_html: `<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>`
+}) _%>

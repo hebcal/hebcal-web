@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery, tooltipScript, typeaheadScript, empty, langNames} from './common';
+import {getLocationFromQuery, empty, langNames} from './common';
 
 export async function shabbatJsLink(ctx) {
   const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};
@@ -20,7 +20,6 @@ export async function shabbatJsLink(ctx) {
     q, geoUrlArgs, geoUrlArgsDbl,
     locationName: location.getName(),
     title: 'Add weekly Shabbat candle-lighting times to your synagogue website | Hebcal Jewish Calendar',
-    xtra_html: tooltipScript + typeaheadScript,
     langNames,
   });
 }

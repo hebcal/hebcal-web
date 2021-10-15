@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  typeaheadScript, tooltipScript, getDefaultHebrewYear,
+  getDefaultHebrewYear,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
@@ -249,7 +249,6 @@ function makePropsForFullHtml(ctx) {
     summary: briefText.join('. '),
     jsonLD: jsonLD ? JSON.stringify(jsonLD) : '',
     locationName: location.getName(),
-    xtra_html: typeaheadScript + tooltipScript,
   };
 }
 

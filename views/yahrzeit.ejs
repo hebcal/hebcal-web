@@ -168,3 +168,7 @@ instructions</a>.</p>
 <%- await include('partials/email-modal-script.ejs', {resource: '/yahrzeit/email'}) -%>
 <% } -%>
 <%- await include('partials/footer.ejs') _%>
+<%- await include('partials/footer.ejs', {
+  footerScripts: {tooltip: true, clipboard: tables !== null},
+  xtra_html: await include('partials/script-yahrzeit-form.ejs'),
+}) _%>

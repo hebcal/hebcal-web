@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
-import {getIpAddress, getLocationFromQuery, processCookieAndQuery, tooltipScript,
-  typeaheadScript, validateEmail} from './common';
+import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
+  validateEmail} from './common';
 import {mySendMail} from './common2';
 
 export async function emailVerify(ctx) {
@@ -178,7 +178,6 @@ export async function emailForm(ctx) {
   }
   return ctx.render('email', {
     q,
-    xtra_html: tooltipScript + typeaheadScript,
     defaultUnsubscribe,
   });
 }

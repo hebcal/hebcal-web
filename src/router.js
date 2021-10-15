@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {
-  clipboardScript, getLocationFromQuery,
+  getLocationFromQuery,
   httpRedirect,
   langNames,
 } from './common';
@@ -126,7 +126,6 @@ export function wwwRouter() {
     } else if (rpath === '/ical/') {
       return ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
-        xtra_html: clipboardScript,
         langNames,
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {

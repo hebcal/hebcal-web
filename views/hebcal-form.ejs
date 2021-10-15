@@ -141,4 +141,7 @@
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 </div><!-- #content -->
-<%- await include('partials/footer.ejs') _%>
+<%- await include('partials/footer.ejs', {
+  footerScripts: {tooltip: true, typeahead: true},
+  xtra_html: await include('partials/script-hebcal-form.ejs'),
+}) _%>

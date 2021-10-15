@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, makeDownloadProps, urlArgs, tooltipScript, typeaheadScript,
-  getDefaultHebrewYear, makeHebrewCalendar, clipboardScript,
+  empty, makeDownloadProps, urlArgs,
+  getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
@@ -108,26 +108,8 @@ async function renderForm(ctx, error) {
     title: 'Custom Calendar | Hebcal Jewish Calendar',
     tzids,
     langNames,
-    xtra_html: typeaheadScript + tooltipScript +
-`<script>
-(function() {
-var d=document,d1=d.getElementById("d1"),d2=d.getElementById("d2");
-d1.onclick=function(){if(this.checked){d2.checked=false;}}
-d2.onclick=function(){if(this.checked){d1.checked=false;}}
-d.getElementById("ytH").onclick=function(){d.f1.year.value=${defaultYearHeb};}
-d.getElementById("ytG").onclick=function(){d.f1.year.value=${defaultYear};}
-d.getElementById("maj").onclick=function(){
- if (this.checked == false) {
-  ["nx","mf","ss","min","mod"].forEach(function(x){
-   d.f1[x].checked = false;
-  });
- }
-};
-["nx","mf","ss","min","mod"].forEach(function(x){
- d.getElementById(x).onclick=function(){if(this.checked==true){d.f1.maj.checked=true;}}
-});
-})();
-</script>`,
+    defaultYear,
+    defaultYearHeb,
   });
 }
 
@@ -237,7 +219,6 @@ function renderHtml(ctx) {
     shortTitle,
     locationName,
     title: shortTitle + ' ' + locationName + ' | Hebcal',
-    xtra_html: clipboardScript,
   });
 }
 
