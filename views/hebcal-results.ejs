@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
     d.querySelectorAll('div.agenda').forEach(hide);
     d.querySelectorAll('div.cal').forEach(show);
   };
-  document.getElementById('toggle-list').onchange = function() {
+  toggleList.onchange = function() {
     d.querySelectorAll('div.cal').forEach(hide);
     hebcalClient.renderMonthTables();
     d.querySelectorAll('div.agenda').forEach(show);

@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
-import {getEventCategories, getHolidayDescription} from '@hebcal/rest-api';
+import {getEventCategories, getHolidayDescription, eventToFullCalendar} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
@@ -34,6 +34,18 @@ export async function holidayYearIndex(ctx) {
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, options);
+  // Reduce size of HTML
+  const fcEvents = events0.map((ev) => eventToFullCalendar(ev, null, il));
+  const hebcalPrefix = 'https://www.hebcal.com/';
+  for (const fce of fcEvents) {
+    if (typeof fce.url === 'string' && fce.url.startsWith(hebcalPrefix)) {
+      fce.url = fce.url.substring(hebcalPrefix.length - 1);
+      const utm = fce.url.indexOf('utm_source=');
+      if (utm !== -1) {
+        fce.url = fce.url.substring(0, utm - 1);
+      }
+    }
+  }
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
@@ -47,6 +59,7 @@ export async function holidayYearIndex(ctx) {
     il,
     DoWtiny,
     q,
+    fcEvents,
   });
 }
 

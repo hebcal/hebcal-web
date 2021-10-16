@@ -37,6 +37,10 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
+    "@fullcalendar/core": "^5.10.0",
+    "@fullcalendar/daygrid": "^5.10.0",
+    "@fullcalendar/list": "^5.10.0",
+    "@fullcalendar/timegrid": "^5.10.0",
     "@hebcal/core": "^3.26.4",
     "@hebcal/geo-sqlite": "^3.4.3",
     "@hebcal/icalendar": "^4.13.1",
