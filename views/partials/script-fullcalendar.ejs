@@ -1,10 +1,4 @@
-<!--
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.js"></script>
--->
-<script>
-<%- await include('/var/www/node_modules/@fullcalendar/core/main.global.js') %>
-<%- await include('/var/www/node_modules/@fullcalendar/daygrid/main.global.js') %>
-</script>
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
@@ -13,21 +7,26 @@ window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   calendarEl.style.display = 'none';
+  var events = window['hebcal'].fcEvents;
+  var lastEvent = events[events.length - 1];
+  var lastEvDate = lastEvent.start;
+  var lastYear = parseInt(lastEvDate.substring(0, 4), 10);
+  var lastMonth = parseInt(lastEvDate.substring(5, 7), 10);
+  var firstOfNextMonth = new Date(lastYear, lastMonth, 1);
   var calendar = window['hebcalFullCalendar'] = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'title',
       right: 'prev,next',
     },
-    events: window['hebcal'].fcEvents,
-    initialDate: window['hebcal'].fcEvents[0].start,
-    validRange: null,
+    events: events,
+    initialDate: events[0].start,
+    validRange: {
+        start: events[0].start.substring(0, 7) + '-01',
+        end: firstOfNextMonth,
+    },
 /*
     eventDidMount: function(info) {
-      if (info.event.extendedProps.hebrew) {
-        info.el.querySelector('.fc-event-title').innerHTML = info.event.title +
-        '<br><span lang="he" dir="rtl">' + info.event.extendedProps.hebrew + '</span>';
-      }
       if (info.event.extendedProps.description) {
         tippy(info.el, {
           content: info.event.extendedProps.description.replace(/\n/g, '<br>'),
@@ -44,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
     calendarEl.style.display = 'block';
     calendar.render();
     listViewEl.style.display = 'none';
+    toggleMonth.blur();
   };
   var toggleList = document.getElementById('toggle-list');
   toggleList.onchange = function() {

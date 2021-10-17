@@ -20,75 +20,6 @@ div.pbba { page-break-before: always }
 .fc-emulated-table tr td {
   height: 90px;
 }
-.fc-event {
-    display: block; /* make the <a> tag block */
-    font-size: .85em;
-    line-height: 1.3;
-    border-radius: 3px;
-    color: #fff;
-    border: 1px solid #3a87ad; /* default BORDER color */
-    background-color: #3a87ad; /* default BACKGROUND color */
-    margin: 1px 2px 0; /* spacing between events and edges */
-    padding: 0 1px;
-}
-.fc-time {
-  font-weight: bold;
-}
-.fc-event a {
-    color: #fff;
-}
-.fc-event a:hover,
-.fc-event a:focus {
-    color: #fff;
-}
-.fc-event.hebdate, .fc-event.omer {
-  background-color:#FFF;
-  border-color:#FFF;
-  color:#999;
-}
-.fc-event.dafyomi,
-.fc-event.dafyomi a {
-  background-color:#FFF;
-  border-color:#FFF;
-  color:#08c;
-}
-.fc-event.dafyomi a:hover,
-.fc-event.dafyomi a:focus {
-    color: #005580;
-}
-.fc-event.holiday,
-.fc-event.holiday.timed {
-  background-color:#3a87ad;
-  border-color:#3a87ad;
-  color:#FFF;
-}
-.fc-event.timed,
-.fc-event.holiday.timed.fast {
-  background-color:#FFF;
-  border-color:#FFF;
-  color:#333;
-}
-.fc-event.holiday.yomtov,
-.fc-event.holiday.yomtov a {
-  background-color:#ffd446;
-  border-color:#ffd446;
-  color:#333;
-}
-.fc-event.parashat {
-  background-color:#257e4a;
-  border-color:#257e4a;
-  color:#FFF;
-}
-.fc-event.hebrew .fc-title {
-  font-family:'SBL Hebrew',David;
-  font-size:115%;
-  font-weight:normal;
-  direction:rtl;
-}
-.fc-event.hebrew .fc-time {
-  direction:ltr;
-  unicode-bidi: bidi-override;
-}
 .label-lightgrey {
   background-color: #e7e7e7;
   background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
@@ -100,6 +31,7 @@ div.pbba { page-break-before: always }
   background:#ff9;
 }
 </style>
+<%- await include('partials/style-fullcalendar.ejs') -%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
