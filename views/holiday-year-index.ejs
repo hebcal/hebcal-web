@@ -18,6 +18,11 @@
   --bs-table-accent-bg: var(--bs-table-striped-bg);
   color: var(--bs-table-striped-color);
 }
+.well {
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  padding: 0.333rem 0.333rem;
+}
 </style>
 <% if (year <= 1752 || today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
@@ -46,10 +51,10 @@ then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
-<div class="d-flex justify-content-center d-print-none mb-1">
-<h6 class="text-muted">Advertisement</h6>
+<div class="d-flex justify-content-center d-print-none">
+<h6 class="text-muted mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
-<div class="d-flex justify-content-center d-print-none mb-2">
+<div class="d-print-none mb-2">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <!-- 300x250, created 10/14/10 -->
@@ -63,7 +68,7 @@ data-ad-slot="1140358973"></ins>
 </div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
-<div class="row gx-3 d-print-none">
+<div class="row gx-3 mt-2 d-print-none">
 <div class="col-auto">
 <div class="btn-group me-1 mb-2" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=isHebrewYear?calendarYear:year%>" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
@@ -76,18 +81,17 @@ data-ad-slot="1140358973"></ins>
 </div>
 </div><!-- .col-auto -->
 <div class="col-auto">
-<div class="btn-group" role="group" data-bs-toggle="buttons">
-<label class="btn btn-secondary btn-sm mb-2">
-<input type="radio" name="view" id="toggle-list" checked>
-<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-list-ul"></use></svg> List
+<div class="well">
+<div class="form-check form-switch">
+<input class="form-check-input" type="checkbox" role="switch" id="toggle-month">
+<label class="form-check-label" for="toggle-month">
+  Month view
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
 </label>
-<label class="btn btn-secondary btn-sm active mb-2">
-<input type="radio" name="view" id="toggle-month">
-<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
-</label>
-</div><!-- .btn-group -->
+</div><!-- .form-switch -->
+</div><!-- .well -->
 </div><!-- .col-auto -->
-<div class="col-auto"><label for="nav-year1" class="col-form-label">Year</label></div>
+<div class="col-auto mb-3"><label for="nav-year1" class="col-form-label">Year</label></div>
 <div class="col-auto gx-1">
 <select class="form-select nav-year" id="nav-year1" aria-label="Year selector">
 <% for (let i = year4 - 2; i <= year4 + 10; i++) { %>

@@ -37,18 +37,12 @@ document.addEventListener('DOMContentLoaded', function() {
 */
   });
   var listViewEl = document.getElementById('list-view');
-  listViewEl.style.display = 'block';
   var toggleMonth = document.getElementById('toggle-month');
   toggleMonth.onchange = function() {
-    calendarEl.style.display = 'block';
-    calendar.render();
-    listViewEl.style.display = 'none';
+    calendarEl.style.display = this.checked ? 'block' : 'none';
+    listViewEl.style.display = this.checked ? 'none' : 'block';
+    if (this.checked) { calendar.render(); }
     toggleMonth.blur();
-  };
-  var toggleList = document.getElementById('toggle-list');
-  toggleList.onchange = function() {
-    calendarEl.style.display = 'none';
-    listViewEl.style.display = 'block';
   };
   document.addEventListener('keydown', function(e) {
     if (e.keyCode == 37) {
