@@ -7,31 +7,22 @@
 <div class="row">
 <div class="col-sm-8">
 <h2>Jewish Holidays</h2>
-<p class="d-print-none">Dates of major and minor Jewish holidays. Each
-holiday page includes a brief overview of special observances and
-customs, and any special Torah readings.</p>
-<p>Except for minor fasts, holidays begin at sundown on the date
-specified in the tables below. For example, if the dates for Rosh
+<p>Dates of major and minor Jewish holidays.
+<span class="d-print-none">
+Each holiday page includes a brief overview of special observances and
+customs, and any special Torah readings.</span></p>
+<p>Except for minor fasts,
+holidays begin at sundown on the first date specified and end at nightfall
+on the last date specified. For example, if the dates for Rosh
 Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
-<div class="btn-toolbar d-print-none mb-2">
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
-</div>
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
-</div>
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
-</div>
-</div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
-<div class="d-flex justify-content-center d-print-none mb-1">
-<h6 class="text-muted">Advertisement</h6>
+<div class="d-flex justify-content-center d-print-none">
+<h6 class="text-muted mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
-<div class="d-flex justify-content-center d-print-none mb-2">
+<div class="d-print-none mb-2">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <!-- 300x250, created 10/14/10 -->
@@ -45,15 +36,25 @@ data-ad-slot="1140358973"></ins>
 </div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
+<div class="row mt-2 d-print-none">
+<div class="col-auto">
+<div class="btn-group me-1 mb-2" role="group">
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+</div>
+<div class="btn-group me-1 mb-2" role="group">
+<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+</div>
+<div class="btn-group me-1 mb-2" role="group">
+<a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
+</div>
+</div><!-- .col-auto -->
+</div><!-- .row -->
 <div class="row mt-2">
 <div class="col">
-
 <% for (const [catId, category] of Object.entries(categories)) { %>
 <div id="<%=category.id%>">
 <h3><%=category.name%></h3>
 <% if ('major-holidays' === category.id) { %>
-<p>Holidays begin at sundown on the first date specified and end at nightfall
-on the last date specified.</p>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
 is forbidden.</p>
