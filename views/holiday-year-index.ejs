@@ -87,10 +87,10 @@ data-ad-slot="1140358973"></ins>
 </label>
 </div><!-- .btn-group -->
 </div><!-- .col-auto -->
-<div class="col-auto"><label for="nav-year" class="col-form-label">Year</label></div>
+<div class="col-auto"><label for="nav-year1" class="col-form-label">Year</label></div>
 <div class="col-auto gx-1">
-<select class="form-select" id="nav-year" aria-label="Year selector">
-<% for (let i = year4 - 4; i <= year4 + 4; i++) { %>
+<select class="form-select nav-year" id="nav-year1" aria-label="Year selector">
+<% for (let i = year4 - 2; i <= year4 + 10; i++) { %>
 <option <%= i == year4 ? ' selected' : ''%>><%=i%></option>
 <% } %>
 </select>
@@ -132,26 +132,25 @@ nightfall on the second date specified.</p>
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
-<div class="col-auto">
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%=year4 - 3%><%=il?'?i=on':''%>" rel="nofollow">&laquo;&nbsp;<%=year4 - 3%></a></li>
-<% for (let i = year4 - 2; i <= year4 + 2; i++) { %>
-<li class="page-item<%= i == year ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=il?'?i=on':''%>"<%- (i > today.year()+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+<div class="col-auto"><label for="nav-year2" class="col-form-label">Year</label></div>
+<div class="col-auto gx-1">
+<select class="form-select nav-year" id="nav-year2" aria-label="Year selector">
+<% for (let i = year4 - 2; i <= year4 + 10; i++) { %>
+<option <%= i == year4 ? ' selected' : ''%>><%=i%></option>
 <% } %>
-<li class="page-item
-"><a class="page-link" href="<%=year4 + 3%><%=il?'?i=on':''%>"<%- (year4+3 > today.year()+20) ? ' rel="nofollow"' : '' %>><%=year4 + 3%>&nbsp;&raquo;</a></li>
-</ul>
-</nav>
+</select>
+</div><!-- .col-auto -->
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
 <script>
-var selectElement = document.querySelector('#nav-year');
-selectElement.addEventListener('change', function(event) {
-  var url = event.target.value + location.search;
-  location = url;
-});
+var navYears = [].slice.call(document.querySelectorAll('.nav-year'));
+for (let i = 0; i < navYears.length; i++) {
+  navYears[i].addEventListener('change', function(event) {
+    var url = event.target.value + location.search;
+    location = url;
+  });
+}
 </script>
 <%- await include('partials/download-modal.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
