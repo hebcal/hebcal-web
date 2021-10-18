@@ -86,7 +86,7 @@ function makeItems(events, il, showYear) {
     const eventCategories = getEventCategories(ev);
     const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
     const item = eventToHolidayItem(ev, il);
-    item.dates = tableCellObserved(item, showYear);
+    item.dates = tableCellObserved(item, il, showYear);
     item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
   }
@@ -95,10 +95,11 @@ function makeItems(events, il, showYear) {
 
 /**
  * @param {any} item
+ * @param {boolean} il
  * @param {boolean} isHebrewYear
  * @return {string}
  */
-function tableCellObserved(item, isHebrewYear) {
+function tableCellObserved(item, il, isHebrewYear) {
   const f = item.name;
   const mask = item.mask;
   const dur = item.duration;
@@ -112,6 +113,7 @@ function tableCellObserved(item, isHebrewYear) {
   } else if (f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
     return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
   } else {
+    const yomTovDays = il ? 1 : 2;
     switch (f) {
       case 'Shavuot':
       case 'Rosh Hashana':
@@ -120,15 +122,17 @@ function tableCellObserved(item, isHebrewYear) {
       case 'Simchat Torah':
         return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur);
       case 'Sukkot':
-        const d2 = d.add(3, 'd');
-        return b0 + formatDatePlusDelta(d, 2, isHebrewYear) + b1 + shortDayOfWeek(d, 2) +
-        '<br>' + formatDatePlusDelta(d2, 4, isHebrewYear) + shortDayOfWeek(d2, 4);
+        const d2 = d.add(il ? 2 : 3, 'd');
+        const sukkotChmDays = il ? 5 : 4;
+        return b0 + formatDatePlusDelta(d, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d, yomTovDays) +
+        '<br>' + formatDatePlusDelta(d2, sukkotChmDays, isHebrewYear) + shortDayOfWeek(d2, sukkotChmDays);
       case 'Pesach':
-        const d3 = d.add(3, 'd');
+        const d3 = d.add(il ? 2 : 3, 'd');
         const d6 = d.add(6, 'd');
-        return b0 + formatDatePlusDelta(d, 2, isHebrewYear) + b1 + shortDayOfWeek(d, 2) +
-        '<br>' + formatDatePlusDelta(d3, 2, isHebrewYear) + shortDayOfWeek(d3, 2) +
-        '<br>' + b0 + formatDatePlusDelta(d6, 2, isHebrewYear) + b1 + shortDayOfWeek(d6, 2);
+        const pesachChmDays = il ? 4 : 3;
+        return b0 + formatDatePlusDelta(d, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d, yomTovDays) +
+        '<br>' + formatDatePlusDelta(d3, pesachChmDays, isHebrewYear) + shortDayOfWeek(d3, pesachChmDays) +
+        '<br>' + b0 + formatDatePlusDelta(d6, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d6, yomTovDays);
     }
   }
 }

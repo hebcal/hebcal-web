@@ -35,10 +35,9 @@
 <h2>Jewish Holidays <%=year%></h2>
 <p>Dates of major and minor Jewish holidays for
 <% if (isHebrewYear) { %>
-Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>).
-<% } else { %>
-<%=year%>.
-<% } %>
+Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>)
+<% } else { %><%=year%><% } %>
+as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</span></p>
