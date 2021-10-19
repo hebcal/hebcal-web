@@ -148,7 +148,7 @@ function renderHtml(ctx) {
   if (events.length === 0) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
-  const locale = localeMap[Locale.getLocaleName()] || 'en';
+  const locale = localeMap[options.locale] || 'en';
   const months = makeMonthlyDates(events, locale);
   if (months.length > 14) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
@@ -294,6 +294,8 @@ function makeTableBodies(events, months, options, locale) {
   return tableBodies;
 }
 
+const BRIEF_FLAGS = flags.DAF_YOMI | flags.HEBREW_DATE;
+
 /**
  * @param {Event} ev
  * @param {HebrewCalendar.Options} options
@@ -306,21 +308,11 @@ function renderEventHtml(ev, options, locale) {
   if (categories[0] == 'holiday' && mask & flags.CHAG) {
     categories.push('yomtov');
   }
-  let title = ev.render(options.locale);
   const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
+  let title = time || (mask & BRIEF_FLAGS) ? ev.renderBrief(locale) : ev.render(locale);
   if (time) {
     categories.push('timed');
-    const colon = title.indexOf(':');
-    if (colon !== -1 && !(mask & flags.CHANUKAH_CANDLES)) {
-      title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title.substring(0, colon));
-    } else {
-      title = '<small>' + time + '</small> ' + subjectSpan(ev, locale, title);
-    }
-  } else if (mask & flags.DAF_YOMI) {
-    const colon = title.indexOf(':');
-    if (colon != -1) {
-      title = subjectSpan(ev, locale, title.substring(colon + 1));
-    }
+    title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title);
   } else {
     title = subjectSpan(ev, locale, title);
   }
