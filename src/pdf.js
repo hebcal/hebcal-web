@@ -130,6 +130,8 @@ function eventColor(evt) {
   }
 }
 
+const BRIEF_FLAGS = flags.DAF_YOMI | flags.HEBREW_DATE;
+
 /**
  * @param {PDFDocument} doc
  * @param {Event} evt
@@ -150,24 +152,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     doc.text(str, x, y);
     x += width;
   }
-  let subj = evt.render();
-  const desc = evt.getDesc();
-  let fontStyle = evt.getFlags() & flags.CHAG ? 'bold' : 'plain';
-  const colon = subj.indexOf(': ');
-  if (evt.getFlags() & flags.DAF_YOMI) {
-    subj = subj.substring(colon + 2);
-  } else if (subj.startsWith('Shabbat Mevarchim')) {
-    subj = subj.substring(8);
-  } else if (colon !== -1) {
-    switch (desc) {
-      case 'Candle lighting':
-      case 'Havdalah':
-      case 'Fast begins':
-      case 'Fast ends':
-        subj = subj.substring(0, colon);
-        fontStyle = 'plain';
-        break;
-    }
+  const locale = options && options.locale;
+  const mask = evt.getFlags();
+  let subj = timed || (mask & BRIEF_FLAGS) ? evt.renderBrief(locale) : evt.render(locale);
+  let fontStyle = mask & flags.CHAG ? 'bold' : 'plain';
+  if (mask & flags.SHABBAT_MEVARCHIM) {
+    const space = subj.indexOf(' ');
+    subj = subj.substring(space + 1);
   }
   if (rtl) {
     fontStyle = 'hebrew';
@@ -260,7 +251,9 @@ export function createPdfDoc(title, options) {
  */
 export function renderPdf(doc, events, options) {
   const cells = eventsToCells(events);
-  const rtl = Boolean(options && options.locale && options.locale == 'he');
+  const locale0 = options && options.locale;
+  const locale = localeMap[locale0] || 'en';
+  const rtl = Boolean(locale === 'he');
   const xposNewRow = rtl ? (PDF_WIDTH - PDF_RMARGIN - 4) : (PDF_LMARGIN + PDF_COLWIDTH - 4);
   const xposMultiplier = rtl ? -1 : 1;
   for (const yearMonth of Object.keys(cells)) {
@@ -281,7 +274,6 @@ export function renderPdf(doc, events, options) {
     const pageName = 'cal-' + year + '-' + pad2(month);
     doc.addNamedDestination(pageName);
 
-    const locale = localeMap[options.locale] || 'en';
     const d = dayjs(firstDayOfMonth).locale(locale);
     renderPdfMonthTitle(doc, d, rtl);
 

@@ -306,7 +306,7 @@ function renderEventHtml(ev, options, locale) {
   if (categories[0] == 'holiday' && mask & flags.CHAG) {
     categories.push('yomtov');
   }
-  let title = ev.render();
+  let title = ev.render(options.locale);
   const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
   if (time) {
     categories.push('timed');
@@ -439,7 +439,7 @@ function renderLegacyJavascript(ctx) {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());
       const fmtDt = d.format('YYYYMMDD');
-      const desc = ev.render();
+      const desc = ev.render(options.locale);
       const url = ev.url() || '';
       return `DefineEvent(${fmtDt},"${desc}","${url}","",0,0);`;
     });
@@ -448,7 +448,7 @@ function renderLegacyJavascript(ctx) {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());
       const url = ev.url();
-      const obj = {d: d.format('YYYYMMDD'), s: ev.render()};
+      const obj = {d: d.format('YYYYMMDD'), s: ev.render(options.locale)};
       if (url) {
         obj.u = url;
       }
