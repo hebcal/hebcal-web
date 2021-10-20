@@ -34,8 +34,13 @@ export async function holidayYearIndex(ctx) {
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, options);
-  // Reduce size of HTML
-  const fcEvents = events0.map((ev) => eventToFullCalendar(ev, null, il));
+  const events2 = HebrewCalendar.calendar({
+    year: calendarYear,
+    isHebrewYear,
+    il,
+    addHebrewDatesForEvents: true,
+  });
+  const fcEvents = events2.map((ev) => eventToFullCalendar(ev, null, il));
   const hebcalPrefix = 'https://www.hebcal.com/';
   for (const fce of fcEvents) {
     if (typeof fce.url === 'string' && fce.url.startsWith(hebcalPrefix)) {
