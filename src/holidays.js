@@ -79,10 +79,21 @@ function makeQueryAndDownloadProps(ctx, options) {
     q[k] = 'on';
   }
   q.i = ctx.state.il ? 'on' : 'off';
-  q.year = String(options.year);
-  q.yt = options.isHebrewYear ? 'H' : 'G';
+  const year = options.year;
+  q.year = String(year);
+  const isHebYr = options.isHebrewYear;
+  q.yt = isHebYr ? 'H' : 'G';
   Object.assign(q, ctx.request.query);
   makeDownloadProps(ctx, q, options);
+  if ((isHebYr && year !== new HDate().getFullYear()) ||
+      (!isHebYr && year !== new Date().getFullYear())) {
+    // modify download URLs to replace subscription year=now to actual year
+    const url = ctx.state.url;
+    const ics1year = url.ics1year;
+    url.subical = ics1year;
+    url.webcal = ics1year.replace(/^https/, 'webcal');
+    url.gcal = encodeURIComponent(ics1year.replace(/^https/, 'http'));
+  }
   delete ctx.state.filename.pdf;
   return q;
 }
