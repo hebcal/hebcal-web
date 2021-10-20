@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var dlPrefix = 'https://download.hebcal.com/v2/h/';
   var dlFilename = '<%- url.dlFilename -%>';
   var icsQ = <%- url.icsQ -%>;
+  var doSub = <%= url.doSub ? 'true' : 'false' %>;
   var buildDownloadUrl = function (args) {
     var str = '';
     for (var prop in args) {
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
       for (var prop in icsQ) {
         src[prop] = icsQ[prop];
       }
-      if (srcType != 'ics') {
+      if (doSub && srcType != 'ics') {
         src.year = 'now';
         src.subscribe = '1';
       }

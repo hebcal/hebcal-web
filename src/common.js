@@ -1019,6 +1019,7 @@ export function makeDownloadProps(ctx, q, options) {
     csv_eur: downloadHref(q, dlFilename, {euro: 1}) + '_eur.csv',
     dlFilename,
     icsQ: JSON.stringify(queryObj),
+    doSub: true,
   };
   ctx.state.filename = {
     ics: basename(url.ics),

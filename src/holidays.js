@@ -93,6 +93,7 @@ function makeQueryAndDownloadProps(ctx, options) {
     url.subical = ics1year;
     url.webcal = ics1year.replace(/^https/, 'webcal');
     url.gcal = encodeURIComponent(ics1year.replace(/^https/, 'http'));
+    url.doSub = false;
   }
   delete ctx.state.filename.pdf;
   return q;
