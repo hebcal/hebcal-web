@@ -309,7 +309,7 @@ function renderEventHtml(ev, options, locale) {
     categories.push('yomtov');
   }
   const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-  let title = time || (mask & BRIEF_FLAGS) ? ev.renderBrief(locale) : ev.render(locale);
+  let title = time || (mask & BRIEF_FLAGS) ? ev.renderBrief(options.locale) : ev.render(options.locale);
   if (time) {
     categories.push('timed');
     title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title);
