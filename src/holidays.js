@@ -51,11 +51,16 @@ export async function holidayYearIndex(ctx) {
       }
     }
   }
+  const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
+  const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
   await ctx.render('holiday-year-index', {
     title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
     year,
-    year4: +year.substring(0, 4),
+    greg1,
+    greg2,
+    prev: isHebrewYear ? `${greg1 - 1}-${greg1}` : yearNum - 1,
+    next: isHebrewYear ? `${greg2}-${greg2 + 1}` : yearNum + 1,
     isHebrewYear,
     calendarYear,
     categories,

@@ -24,7 +24,9 @@
   padding: 0.333rem 0.333rem;
 }
 </style>
-<% if (year <= 1752 || today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=il?'?i=on':''%>"><%}%>
+<% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=il?'?i=on':''%>"><%}%>
+<% if (greg1 <= 1752 || greg1 > today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -41,7 +43,7 @@ as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</span></p>
-<% if (year <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
+<% if (greg1 <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
 <p>Except for minor fasts,
 holidays begin at sundown on the first date specified and end at nightfall
 on the last date specified. For example, if the dates for Rosh
@@ -93,8 +95,14 @@ data-ad-slot="1140358973"></ins>
 <div class="col-auto mb-3"><label for="nav-year1" class="col-form-label">Year</label></div>
 <div class="col-auto gx-1">
 <select class="form-select nav-year" id="nav-year1" aria-label="Year selector">
-<% for (let i = year4 - 2; i <= year4 + 10; i++) { %>
-<option <%= i == year4 ? ' selected' : ''%>><%=i%></option>
+<% if (isHebrewYear) { %>
+<%   for (let i = calendarYear - 2; i <= calendarYear + 10; i++) { %>
+<option <%= i === calendarYear ? ' selected' : ''%>><%=i-3761%>-<%=i-3760%></option>
+<%   } %>
+<% } else { %>
+<%   for (let i = greg1 - 2; i <= greg1+6; i++) { %>
+<option <%= i == greg1 ? ' selected' : ''%>><%=i%></option>
+<%   } %>
 <% } %>
 </select>
 </div><!-- .col-auto -->
@@ -135,14 +143,16 @@ nightfall on the second date specified.</p>
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
-<div class="col-auto"><label for="nav-year2" class="col-form-label">Year</label></div>
-<div class="col-auto gx-1">
-<select class="form-select nav-year" id="nav-year2" aria-label="Year selector">
-<% for (let i = year4 - 2; i <= year4 + 10; i++) { %>
-<option <%= i == year4 ? ' selected' : ''%>><%=i%></option>
+<div class="col">
+<nav>
+<ul class="pagination pagination-sm">
+<li class="page-item"><a class="page-link" href="<%=greg1 - 3%><%=il?'?i=on':''%>"<%- (greg1 - 3 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 3%></a></li>
+<% for (let i = greg1 - 2; i < greg1+6; i++) { %>
+<li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=il?'?i=on':''%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
-</select>
-</div><!-- .col-auto -->
+<li class="page-item"><a class="page-link" href="<%=greg1+6%><%=il?'?i=on':''%>"<%- (greg1+6 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+6%>&nbsp;&raquo;</a></li>
+</ul>
+</nav>
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- #content -->
