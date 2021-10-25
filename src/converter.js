@@ -175,6 +175,7 @@ function makeProperties(ctx) {
     first: greg2heb ? dateStr + afterSunset : hdateStr,
     second: greg2heb ? hdateStr : dateStr,
     hebrew: gematriyaDate(hdate),
+    hebrewNoNikkud: Locale.hebrewStripNikkud(hdate.renderGematriya()),
     gs: props.gs,
     gy,
     gm,
