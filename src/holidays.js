@@ -43,6 +43,9 @@ export async function holidayYearIndex(ctx) {
   const fcEvents = events2.map((ev) => eventToFullCalendar(ev, null, il));
   const hebcalPrefix = 'https://www.hebcal.com/';
   for (const fce of fcEvents) {
+    delete fce.description; // not showing tooltips just yet
+    delete fce.hebrew; // not showing tooltips just yet
+    delete fce.allDay; // not needed
     if (typeof fce.url === 'string' && fce.url.startsWith(hebcalPrefix)) {
       fce.url = fce.url.substring(hebcalPrefix.length - 1);
       const utm = fce.url.indexOf('utm_source=');
