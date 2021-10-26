@@ -105,7 +105,6 @@ async function renderForm(ctx, error) {
   const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
   return ctx.render('hebcal-form', {
     message,
-    title: 'Custom Calendar | Hebcal Jewish Calendar',
     tzids,
     langNames,
     defaultYear,
@@ -218,7 +217,6 @@ function renderHtml(ctx) {
     downloadTitle,
     shortTitle,
     locationName,
-    title: shortTitle + ' ' + locationName + ' | Hebcal',
   });
 }
 

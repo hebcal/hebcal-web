@@ -74,7 +74,6 @@ export async function parshaYear(ctx) {
   };
   const dlhref = downloadHref(q0, dlfilename);
   await ctx.render('parsha-year', {
-    title: `Torah Readings ${hyear} | Hebcal Jewish Calendar`,
     hyear,
     il,
     items,

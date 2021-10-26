@@ -28,7 +28,6 @@ export async function parshaIndex(ctx) {
     parshaHref = pe.url();
   }
   await ctx.render('parsha-index', {
-    title: 'Torah Readings | Hebcal Jewish Calendar',
     il,
     saturday,
     hyear,

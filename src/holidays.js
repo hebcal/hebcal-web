@@ -57,7 +57,6 @@ export async function holidayYearIndex(ctx) {
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
   await ctx.render('holiday-year-index', {
-    title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
     today: dayjs(),
     year,
     greg1,
@@ -268,7 +267,6 @@ export async function holidayMainIndex(ctx) {
   }
   const q = makeQueryAndDownloadProps(ctx, {year: hyear, isHebrewYear: true, il});
   await ctx.render('holiday-main-index', {
-    title: 'Jewish Holidays | Hebcal Jewish Calendar',
     RH: dayjs(tishrei1.greg()),
     today: dayjs(dt),
     hyear,

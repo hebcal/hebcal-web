@@ -170,7 +170,7 @@ function makeProperties(ctx) {
     message: props.message,
     noCache: Boolean(props.noCache),
     events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
-    title: `Hebrew Date Converter - ${hdateStr} | Hebcal Jewish Calendar`,
+    hdateStr,
     canonical,
     first: greg2heb ? dateStr + afterSunset : hdateStr,
     second: greg2heb ? hdateStr : dateStr,
