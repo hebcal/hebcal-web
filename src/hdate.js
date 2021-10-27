@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, Sedra, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
+import {HDate, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
+import {getSedra} from './common';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -98,7 +99,7 @@ export async function parshaRss(ctx) {
   const utcString = dt.toUTCString();
   const hebrew = rpath === '/sedrot/israel-he.xml';
   const il = rpath.startsWith('/sedrot/israel');
-  const sedra = new Sedra(hy, il);
+  const sedra = getSedra(hy, il);
   const isParsha = sedra.isParsha(hd);
   let ev;
   if (isParsha) {

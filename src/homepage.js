@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, Sedra, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
-  processCookieAndQuery, urlArgs,
+  processCookieAndQuery, urlArgs, getSedra,
   getBeforeAfterSunsetForLocation, getTodayDate} from './common';
 import dayjs from 'dayjs';
 import './dayjs-locales';
@@ -82,7 +82,7 @@ function mastheadParsha(ctx, dt, il) {
   const items = ctx.state.items;
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(saturday.toDate());
-  const sedra = new Sedra(hd.getFullYear(), il);
+  const sedra = getSedra(hd.getFullYear(), il);
   if (sedra.isParsha(hd)) {
     const pe = new ParshaEvent(hd, sedra.get(hd), il);
     const url = pe.url();

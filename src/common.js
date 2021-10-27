@@ -1,4 +1,4 @@
-import {HDate, Location, months, HebrewCalendar, greg, Zmanim} from '@hebcal/core';
+import {HDate, Location, months, HebrewCalendar, greg, Zmanim, Sedra} from '@hebcal/core';
 import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -1027,4 +1027,25 @@ export function makeDownloadProps(ctx, q, options) {
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
+}
+
+/**
+ * @type {Map<string,Sedra>}
+ */
+const sedraCache = new Map();
+
+/**
+ * @private
+ * @param {number} hyear
+ * @param {boolean} il
+ * @return {Sedra}
+ */
+export function getSedra(hyear, il) {
+  const cacheKey = `${hyear}-${il ? 1 : 0}`;
+  let sedra = sedraCache.get(cacheKey);
+  if (!sedra) {
+    sedra = new Sedra(hyear, il);
+    sedraCache.set(cacheKey, sedra);
+  }
+  return sedra;
 }

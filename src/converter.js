@@ -1,7 +1,8 @@
-import {HDate, HebrewCalendar, Sedra, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
-  localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate} from './common';
+  localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
+  getSedra} from './common';
 import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
@@ -106,11 +107,6 @@ export async function hebrewDateConverter(ctx) {
   }
 }
 
-/**
- * @type {Map<string,Sedra>}
- */
-const sedraCache = new Map();
-
 // eslint-disable-next-line require-jsdoc
 function renameChanukah(locale) {
   return (ev) => {
@@ -200,13 +196,11 @@ function getEvents(hdate, il) {
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   if (hy >= 3762) {
-    const cacheKey = `${hy}-${il ? 1 : 0}`;
-    const sedra = sedraCache.get(cacheKey) || new Sedra(hy, il);
+    const sedra = getSedra(hy, il);
     if (sedra.isParsha(saturday)) {
       const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
       events = events.concat(pe);
     }
-    sedraCache.set(cacheKey, sedra);
   }
   events = events.concat(makeOmer(hdate));
   return events;

@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, Location, Sedra} from '@hebcal/core';
+import {HDate, HebrewCalendar, Location} from '@hebcal/core';
+import {getSedra} from './common';
 import {makeAnchor} from '@hebcal/rest-api';
 import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
@@ -195,7 +196,7 @@ function makeCandleLighting(ctx, results, countryCode) {
 function getParsha(saturday, il) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
-  const sedra = new Sedra(hyear, il);
+  const sedra = getSedra(hyear, il);
   const parsha0 = sedra.lookup(hd);
   let parsha = null;
   if (parsha0.chag) {

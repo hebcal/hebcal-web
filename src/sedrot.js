@@ -1,10 +1,11 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale, Sedra, parshiot} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref, empty} from './common';
+import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref,
+  empty, getSedra} from './common';
 import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
@@ -163,7 +164,7 @@ export async function parshaDetail(ctx) {
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
   const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
-  const otherLocationSedra = new Sedra(hyear, !il);
+  const otherLocationSedra = getSedra(hyear, !il);
   const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
   const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
   await ctx.render('parsha-detail', {
