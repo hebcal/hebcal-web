@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
 import holidayMeta from './holidays.json';
 import {makeAnchor} from '@hebcal/rest-api';
+import {getSedra} from './common';
 
 export const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
@@ -118,7 +119,7 @@ export function eventToHolidayItem(ev, il) {
   const d0 = dayjs(hd.greg());
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
   const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
-  return {
+  const item = {
     name: holiday,
     mask,
     id: makeAnchor(holiday),
@@ -133,4 +134,12 @@ export function eventToHolidayItem(ev, il) {
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
     event: ev,
   };
+  if (mask & flags.SPECIAL_SHABBAT) {
+    const sedra = getSedra(hd.getFullYear(), il);
+    const parsha0 = sedra.lookup(hd);
+    if (!parsha0.chag) {
+      item.parsha = parsha0.parsha;
+    }
+  }
+  return item;
 }

@@ -96,6 +96,7 @@ export async function holidayDetail(ctx) {
     descrLong: wrapHebrewInSpans(descrLong),
     categoryId: category.id,
     categoryName: category.name,
+    currentItem: next,
     nextObserved,
     nextObservedHtml,
     upcomingHebrewYear: next.hd.getFullYear(),
