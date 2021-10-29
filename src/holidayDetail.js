@@ -194,7 +194,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       if (typeof reading !== 'undefined') {
         const key = leyning.getLeyningKeyForEvent(ev, il) || ev.getDesc();
         meta.items.push(key);
-        makeHolidayReading(holiday, key, meta, reading, ev);
+        makeHolidayReading(holiday, key, meta, reading, ev, il);
         const hd = reading.hd = ev.getDate();
         reading.d = dayjs(hd.greg());
       }
@@ -226,8 +226,9 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
  * @param {any} meta
  * @param {leyning.Leyning} reading
  * @param {Event} ev
+ * @param {boolean} il
  */
-function makeHolidayReading(holiday, item, meta, reading, ev) {
+function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   if (reading.fullkriyah) {
     addLinksToLeyning(reading.fullkriyah, true);
   }
@@ -265,6 +266,15 @@ function makeHolidayReading(holiday, item, meta, reading, ev) {
     }
   } else {
     itemReading.shortName = item;
+  }
+  if (ev && ev.getDate().getDay() === 6 &&
+      (holiday === 'Chanukah' || ev.getFlags() & flags.SPECIAL_SHABBAT)) {
+    const hd = ev.getDate();
+    const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+    const parsha = sedra.lookup(hd);
+    if (!parsha.chag) {
+      itemReading.parsha = parsha.parsha;
+    }
   }
 }
 

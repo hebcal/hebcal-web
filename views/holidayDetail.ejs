@@ -108,6 +108,7 @@ data-ad-slot="5342180883"></ins>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
+<% if (reading.parsha) { %>Parashat <%= reading.parsha.join('-') %> &middot; <% } %>
 <% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
 href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ? '</a>' : '' %></p>
 <% } // reading.summary %>
