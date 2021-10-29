@@ -1028,24 +1028,3 @@ export function makeDownloadProps(ctx, q, options) {
     csv_eur: basename(url.csv_eur),
   };
 }
-
-/**
- * @type {Map<string,Sedra>}
- */
-const sedraCache = new Map();
-
-/**
- * @private
- * @param {number} hyear
- * @param {boolean} il
- * @return {Sedra}
- */
-export function getSedra(hyear, il) {
-  const cacheKey = `${hyear}-${il ? 1 : 0}`;
-  let sedra = sedraCache.get(cacheKey);
-  if (!sedra) {
-    sedra = new Sedra(hyear, il);
-    sedraCache.set(cacheKey, sedra);
-  }
-  return sedra;
-}

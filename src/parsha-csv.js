@@ -4,7 +4,6 @@ import {PassThrough} from 'stream';
 import * as leyning from '@hebcal/leyning';
 import createError from 'http-errors';
 import {HebrewCalendar, HDate, months} from '@hebcal/core';
-import {getSedra} from './common';
 
 const reFullKriyahIL = /^fullkriyah-il-(\d+).csv$/;
 const reFullKriyahDiaspora = /^fullkriyah-(\d+).csv$/;
@@ -45,7 +44,7 @@ function sendCsv(ctx, filename, hyear, il, callback) {
  */
 function writeWeekdayCsv(stream, hyear, il) {
   stream.write('"Date","Parashah","Weekday Aliyah","Reading","Verses"\r\n');
-  const sedra = getSedra(hyear, il);
+  const sedra = HebrewCalendar.getSedra(hyear, il);
   const startDate = new HDate(1, months.TISHREI, hyear);
   const startAbs = startDate.abs();
   const endAbs = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;

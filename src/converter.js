@@ -2,7 +2,7 @@ import {HDate, HebrewCalendar, ParshaEvent, Locale, months, OmerEvent} from '@he
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
-  getSedra} from './common';
+} from './common';
 import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
@@ -196,7 +196,7 @@ function getEvents(hdate, il) {
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   if (hy >= 3762) {
-    const sedra = getSedra(hy, il);
+    const sedra = HebrewCalendar.getSedra(hy, il);
     if (sedra.isParsha(saturday)) {
       const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
       events = events.concat(pe);

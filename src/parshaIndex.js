@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
-import {getTodayDate, getSedra} from './common';
+import {getTodayDate} from './common';
 import {parshaByBook, torahBookNames} from './parshaCommon';
 import dayjs from 'dayjs';
 
@@ -12,7 +12,7 @@ export async function parshaIndex(ctx) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
   const il = q.i === 'on';
-  const sedra = getSedra(hyear, il);
+  const sedra = HebrewCalendar.getSedra(hyear, il);
   const parsha0 = sedra.lookup(hd);
   let parsha = null;
   let parshaHref = null;
