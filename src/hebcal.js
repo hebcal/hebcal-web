@@ -5,6 +5,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   localeMap, eTagFromOptions, langNames} from './common';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
+  shouldRenderBrief,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -292,8 +293,6 @@ function makeTableBodies(events, months, options, locale) {
   return tableBodies;
 }
 
-const BRIEF_FLAGS = flags.DAF_YOMI | flags.HEBREW_DATE;
-
 /**
  * @param {Event} ev
  * @param {HebrewCalendar.Options} options
@@ -307,7 +306,7 @@ function renderEventHtml(ev, options, locale) {
     categories.push('yomtov');
   }
   const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-  let title = time || (mask & BRIEF_FLAGS) ? ev.renderBrief(options.locale) : ev.render(options.locale);
+  let title = shouldRenderBrief(ev) ? ev.renderBrief(options.locale) : ev.render(options.locale);
   if (time) {
     categories.push('timed');
     title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title);

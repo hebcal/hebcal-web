@@ -3,7 +3,7 @@ import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales';
 import {localeMap} from './common';
-import {pad4, pad2, appendIsraelAndTracking} from '@hebcal/rest-api';
+import {pad4, pad2, appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -130,8 +130,6 @@ function eventColor(evt) {
   }
 }
 
-const BRIEF_FLAGS = flags.DAF_YOMI | flags.HEBREW_DATE;
-
 /**
  * @param {PDFDocument} doc
  * @param {Event} evt
@@ -154,7 +152,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   }
   const locale = options && options.locale;
   const mask = evt.getFlags();
-  let subj = timed || (mask & BRIEF_FLAGS) ? evt.renderBrief(locale) : evt.render(locale);
+  let subj = shouldRenderBrief(evt) ? evt.renderBrief(locale) : evt.render(locale);
   let fontStyle = mask & flags.CHAG ? 'bold' : 'plain';
   if (mask & flags.SHABBAT_MEVARCHIM) {
     const space = subj.indexOf(' ');
