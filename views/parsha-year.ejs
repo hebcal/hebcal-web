@@ -1,8 +1,8 @@
 <%- await include('partials/header.ejs', {
   title: `Torah Readings ${hyear} | Hebcal Jewish Calendar`,
 }) -%>
-<% if (hyear >= 5500) { %><link rel="prev" href="/sedrot/<%=hyear - 1%><%=il?'?i=on':''%>"><%}%>
-<% if (hyear <= 6100) { %><link rel="next" href="/sedrot/<%=hyear + 1%><%=il?'?i=on':''%>"><%}%>
+<% if (hyear >= 5500) { %><link rel="prev" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><%}%>
+<% if (hyear <= 6100) { %><link rel="next" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%}%>
 <style>
 .text-big {font-size: larger}
 </style>
@@ -17,7 +17,7 @@
 <div class="d-none d-sm-block">
 <nav>
 <ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/sedrot/<%=il?'?i=on':''%>">Torah Readings</a></li>
+  <li class="breadcrumb-item"><a href="/sedrot/?i=<%=il?'on':'off'%>">Torah Readings</a></li>
   <li class="breadcrumb-item active"><%=hyear%></li>
 </ol>
 </nav>
@@ -47,12 +47,12 @@ Download Calendar .ics</a>
 
 <nav class="d-print-none mb-3">
 <ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%=hyear - 3%><%=il?'?i=on':''%>" rel="nofollow">&laquo;&nbsp;<%=hyear - 3%></a></li>
+<li class="page-item"><a class="page-link" href="<%=hyear - 3%>?i=<%=il?'on':'off'%>" rel="nofollow">&laquo;&nbsp;<%=hyear - 3%></a></li>
 <% for (let i = hyear - 2; i <= hyear + 2; i++) { %>
-<li class="page-item<%= i == hyear ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=il?'?i=on':''%>"<%- (i > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+<li class="page-item<%= i == hyear ? ' active' : '' %>"><a class="page-link" href="<%=i%>?i=<%=il?'on':'off'%>"<%- (i > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
 <li class="page-item
-"><a class="page-link" href="<%=hyear + 3%><%=il?'?i=on':''%>"<%- (hyear+3 > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=hyear + 3%>&nbsp;&raquo;</a></li>
+"><a class="page-link" href="<%=hyear + 3%>?i=<%=il?'on':'off'%>"<%- (hyear+3 > todayHebYear+20) ? ' rel="nofollow"' : '' %>><%=hyear + 3%>&nbsp;&raquo;</a></li>
 </ul>
 </nav>
 
