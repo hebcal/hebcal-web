@@ -168,7 +168,7 @@ function makeItems(ctx, options, q) {
   if (typeof options.candleLightingMins !== 'undefined') {
     geoUrlArgs += '&b=' + options.candleLightingMins;
   }
-  if (typeof options.havdalahMins !== 'undefined') {
+  if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
     geoUrlArgs += '&M=off&m=' + options.havdalahMins;
   } else {
     geoUrlArgs += '&M=on';

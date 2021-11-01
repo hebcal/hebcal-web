@@ -366,6 +366,11 @@ export function makeHebcalOptions(db, query) {
     Object.keys(negativeOpts).filter((x) => x !== 'nx').forEach((x) => query[x] = 'on');
     delete query.nh;
   }
+  // translate lowercase &m=on to &M=on before proceessing booleanOpts
+  if (query.m === 'on') {
+    query.M = 'on';
+    delete query.m;
+  }
   for (const [key, val] of Object.entries(booleanOpts)) {
     if (typeof query[key] === 'string' &&
       (query[key] === 'on' || query[key] === '1')) {

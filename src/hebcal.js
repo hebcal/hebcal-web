@@ -181,7 +181,7 @@ function renderHtml(ctx) {
   if (options.candlelighting) {
     const location = ctx.state.location;
     let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
-    if (typeof options.havdalahMins !== 'undefined') {
+    if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
       geoUrlArgs += '&m=' + options.havdalahMins;
     }
     geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
