@@ -74,7 +74,8 @@ const noTriennial = [
 
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
-  const base = basename(rpath);
+  const base0 = basename(rpath);
+  const base = base0.toLowerCase();
   const matches = base.match(parshaDateRe);
   const date = matches && matches[2];
   const parshaAnchor = matches === null ? base : matches[1];
@@ -112,6 +113,12 @@ export async function parshaDetail(ctx) {
       return;
     }
     throw createError(500, `Internal error: ${parshaName0}`);
+  }
+  if (base0 !== base) {
+    // fix capitalization
+    const suffix = il ? '?i=on' : '';
+    httpRedirect(ctx, `/sedrot/${base}${suffix}`);
+    return;
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha0 = leyning.parshiyot[parshaName];

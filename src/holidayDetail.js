@@ -33,7 +33,8 @@ function makeOccursOn(events, holiday, il) {
 
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
-  const base = basename(rpath);
+  const base0 = basename(rpath);
+  const base = base0.toLowerCase();
   const matches = base.match(holidayYearRe);
   const dateSuffix = matches && matches[2];
   const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
@@ -44,6 +45,11 @@ export async function holidayDetail(ctx) {
   const holidayAnchor = makeAnchor(holiday);
   if (year && (year < 100 || year > 9999)) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
+    return;
+  }
+  if (base0 !== base) {
+    // fix capitalization
+    httpRedirect(ctx, `/holidays/${base}`);
     return;
   }
   const il = ctx.state.il;
