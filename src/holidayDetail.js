@@ -31,6 +31,8 @@ function makeOccursOn(events, holiday, il) {
   return occursOn;
 }
 
+const allHolidays = Array.from(holidays.keys());
+
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = basename(rpath);
@@ -38,8 +40,15 @@ export async function holidayDetail(ctx) {
   const matches = base.match(holidayYearRe);
   const dateSuffix = matches && matches[2];
   const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
-  const holiday = matches === null ? holidays.get(base) : holidays.get(matches[1]);
+  const base1 = matches === null ? base : matches[1];
+  const holiday = holidays.get(base1);
   if (typeof holiday !== 'string') {
+    const candidate = closest(base1, allHolidays);
+    const editDist = distance(base1, candidate);
+    if (editDist < 2) {
+      httpRedirect(ctx, `/holidays/${candidate}?redir=spelling`);
+      return;
+    }
     throw createError(404, `Holiday not found: ${base}`);
   }
   const holidayAnchor = makeAnchor(holiday);

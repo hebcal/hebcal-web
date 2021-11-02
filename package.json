@@ -47,6 +47,7 @@
     "dayjs": "^1.10.7",
     "ejs": "^3.1.6",
     "etag": "^1.8.1",
+    "fastest-levenshtein": "^1.0.12",
     "geolite2-redist": "^1.0.7",
     "haversine": "^1.1.1",
     "http-errors": "^1.8.0",

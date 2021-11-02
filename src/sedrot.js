@@ -9,6 +9,7 @@ import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref,
 import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
+import {distance, closest} from 'fastest-levenshtein';
 
 const options15yr = {
   year: new Date().getFullYear() - 2,
@@ -72,6 +73,8 @@ const noTriennial = [
   13298, 13299, 13300,
 ];
 
+const allParshaAnchors = Array.from(sedrot.keys());
+
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = basename(rpath);
@@ -81,6 +84,12 @@ export async function parshaDetail(ctx) {
   const parshaAnchor = matches === null ? base : matches[1];
   const parshaName0 = sedrot.get(parshaAnchor);
   if (typeof parshaName0 !== 'string') {
+    const candidate = closest(parshaAnchor, allParshaAnchors);
+    const editDist = distance(parshaAnchor, candidate);
+    if (editDist < 2) {
+      httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);
+      return;
+    }
     throw createError(404, `Parsha not found: ${base}`);
   }
   const q = ctx.request.query;
