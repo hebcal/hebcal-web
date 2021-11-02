@@ -4,18 +4,14 @@ import * as leyning from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
-import {processCookieAndQuery, localeMap, downloadHref} from './common';
+import {localeMap, downloadHref} from './common';
 
 export async function parshaYear(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   const todayHebYear = new HDate().getFullYear();
   const hyear = parseInt(base, 10) || todayHebYear;
-  const cookie = ctx.cookies.get('C');
-  if (cookie) {
-    ctx.set('Cache-Control', 'private');
-  }
-  const q = processCookieAndQuery(cookie, {}, ctx.request.query);
+  const q = ctx.request.query;
   const il = q.i === 'on';
   const lang = q.lg || 's';
   const events = HebrewCalendar.calendar({
