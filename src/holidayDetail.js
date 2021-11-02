@@ -9,6 +9,7 @@ import {basename} from 'path';
 import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
+import {distance, closest} from 'fastest-levenshtein';
 
 const OMER_TITLE = 'Days of the Omer';
 
