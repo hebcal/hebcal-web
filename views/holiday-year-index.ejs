@@ -1,6 +1,13 @@
 <%- await include('partials/header.ejs', {
-  title: `Jewish Holidays ${year} | Hebcal Jewish Calendar`,
+  title: isHebrewYear ?
+    `Jewish Holidays ${calendarYear} (${calendarYear-3761}-${calendarYear-3760}) for ${locationName} | Hebcal` :
+    `Jewish Holidays ${year} for ${locationName} | Hebcal`,
 }) -%>
+<% if (isHebrewYear) { %>
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>">
+<% } else { %>
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>">
+<% } %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.0/main.min.css">
 <%- await include('partials/style-fullcalendar.ejs') -%>
 <style>
@@ -26,8 +33,8 @@
   padding: 0.333rem 0.333rem;
 }
 </style>
-<% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=il?'?i=on':''%>"><%}%>
-<% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=il?'?i=on':''%>"><%}%>
+<% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=iSuffix%>"><%}%>
+<% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=iSuffix%>"><%}%>
 <% if (greg1 <= 1752 || greg1 > today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
 <body>
@@ -41,7 +48,7 @@
 <% if (isHebrewYear) { %>
 Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>)
 <% } else { %><%=year%><% } %>
-as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
+as observed in <%= locationName %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</span></p>
@@ -74,7 +81,7 @@ data-ad-slot="1140358973"></ins>
 <div class="row gx-3 mt-2 d-print-none">
 <div class="col-auto">
 <div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=isHebrewYear?calendarYear:year%>" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=isHebrewYear?calendarYear:year%>" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 </div>
 <div class="btn-group me-1 mb-2" role="group">
 <a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
@@ -132,7 +139,7 @@ nightfall on the second date specified.</p>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
 <tbody>
-<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=item.name%></a></td>
+<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a></td>
 <td><%-item.dates%></td>
 </tr>
 <tr><td colspan="2"><em><%=item.descrShort%></em></td></tr>
@@ -148,11 +155,11 @@ nightfall on the second date specified.</p>
 <div class="col">
 <nav>
 <ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%=greg1 - 3%><%=il?'?i=on':''%>"<%- (greg1 - 3 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 3%></a></li>
+<li class="page-item"><a class="page-link" href="<%=greg1 - 3%><%=iSuffix%>"<%- (greg1 - 3 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 3%></a></li>
 <% for (let i = greg1 - 2; i < greg1+6; i++) { %>
-<li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=il?'?i=on':''%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+<li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
-<li class="page-item"><a class="page-link" href="<%=greg1+6%><%=il?'?i=on':''%>"<%- (greg1+6 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+6%>&nbsp;&raquo;</a></li>
+<li class="page-item"><a class="page-link" href="<%=greg1+6%><%=iSuffix%>"<%- (greg1+6 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+6%>&nbsp;&raquo;</a></li>
 </ul>
 </nav>
 </div><!-- .col -->

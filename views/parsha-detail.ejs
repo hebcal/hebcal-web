@@ -1,4 +1,5 @@
 <%- await include('partials/header.ejs') -%>
+<link rel="canonical" href="https://www.hebcal.com/sedrot/<%= parsha.anchor %><%= date ? ('-' + date) : '' %><%=iSuffix%>">
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev%>"><%}%>
 <% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next%>"><%}%>
@@ -156,7 +157,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <% if (item.desc !== parsha.name) { %> &middot; <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>
-<form method="GET" action="/sedrot/<%=parshaAnchor%>">
+<form method="GET" action="/sedrot/<%=parsha.anchor%>">
 <label for="gy">Look up the date of Parashat <%=parsha.name%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">

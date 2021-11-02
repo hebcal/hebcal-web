@@ -69,6 +69,8 @@ export async function holidayYearIndex(ctx) {
     items,
     RH: dayjs(roshHashana.getDate().greg()),
     il,
+    locationName: il ? 'Israel' : 'the Diaspora',
+    iSuffix: il ? '?i=on' : '',
     DoWtiny,
     q,
     fcEvents,

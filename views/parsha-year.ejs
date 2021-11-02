@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: `Torah Readings ${hyear} | Hebcal Jewish Calendar`,
 }) -%>
+<link rel="canonical" href="https://www.hebcal.com/sedrot/<%=hyear%>?i=<%=il?'on':'off'%>">
 <% if (hyear >= 5500) { %><link rel="prev" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><%}%>
 <% if (hyear <= 6100) { %><link rel="next" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%}%>
 <style>
