@@ -55,7 +55,7 @@ export async function holidayDetail(ctx) {
       return;
     }
   }
-  const meta = getHolidayMeta(holiday, year, il);
+  const meta = getHolidayMeta(holiday);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
       year: year - 3,
@@ -311,7 +311,7 @@ function sourceName(href) {
   return primarySource[domain] || domain;
 }
 
-function getHolidayMeta(holiday, year, il) {
+function getHolidayMeta(holiday) {
   const meta0 = holidayMeta[holiday];
   if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
