@@ -7,6 +7,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import {langTzDefaults} from './common';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -93,6 +94,10 @@ function expires(ctx, today, tzid) {
 }
 
 async function render(ctx, view, options) {
+  const cc = options.countryCode || 'US';
+  const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
+  options.lg = ccDefaults[0];
+  options.cc = cc;
   if (basename(ctx.request.path).endsWith('.xml')) {
     const results = options.results;
     const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
@@ -100,11 +105,9 @@ async function render(ctx, view, options) {
     ctx.response.remove('Cache-Control');
     expires(ctx, today, tzid);
     ctx.type = 'text/xml';
-    ctx.body = await ctx.render('shabbat-browse-country-xml', {
-      writeResp: false,
-      results,
-      lastmod: today.toDate().toISOString(),
-    });
+    options.writeResp = false;
+    options.lastmod = today.toDate().toISOString();
+    ctx.body = await ctx.render('shabbat-browse-country-xml', options);
     return;
   }
   return ctx.render(view, options);
@@ -181,6 +184,7 @@ async function countryPage(ctx, countryCode) {
     ctx.set('Cache-Control', 'max-age=2592000');
     return render(ctx, 'shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      countryCode,
       countryName,
       admin1: listItems,
       results,
@@ -192,6 +196,7 @@ async function countryPage(ctx, countryCode) {
   if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size) < 1.25) {
     return render(ctx, 'shabbat-browse-country-small', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      countryCode,
       countryName,
       results,
       admin1,
@@ -202,6 +207,7 @@ async function countryPage(ctx, countryCode) {
     const listItems = makeAdmin1(admin1);
     return render(ctx, 'shabbat-browse-country', {
       title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      countryCode,
       countryName,
       results,
       admin1: listItems,
