@@ -4,7 +4,8 @@ import * as leyning from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
-import {localeMap, downloadHref} from './common';
+import {localeMap} from './common';
+import {downloadHref2} from './makeDownloadProps';
 
 export async function parshaYear(ctx) {
   const rpath = ctx.request.path;
@@ -68,7 +69,7 @@ export async function parshaYear(ctx) {
     yt: 'H',
     ny: 1,
   };
-  const dlhref = downloadHref(q0, dlfilename);
+  const dlhref = downloadHref2(q0, dlfilename);
   await ctx.render('parsha-year', {
     hyear,
     il,

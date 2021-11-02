@@ -20,6 +20,7 @@
     "build-static": "babel --no-babelrc --minified --presets '@babel/preset-env' --plugins babel-plugin-transform-modules-iife static/i/hebcal-app.js > static/i/hebcal-app.min.js",
     "deploy": "brotli -f --keep --best ./static/i/$npm_package_config_sprite && gzip -f --keep --best ./static/i/$npm_package_config_sprite && rsync -av ./fonts/ /var/www/fonts/ && rsync -av ./static/ /var/www/html/ && rsync -av ./package.json /var/www/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/",
     "start": "node dist/app-www.js",
+    "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto",
     "test": "echo \"OK: no test specified\" && exit 0"
   },
   "keywords": [
@@ -49,6 +50,7 @@
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.12",
     "geolite2-redist": "^1.0.7",
+    "google-protobuf": "^3.19.1",
     "haversine": "^1.1.1",
     "http-errors": "^1.8.0",
     "koa": "^2.13.4",

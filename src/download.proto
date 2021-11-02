@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+message Download {
+  bool major = 1;
+  bool minor = 2;
+  bool roshChodesh = 3;
+  bool modern = 4;
+  bool minorFast = 5;
+  bool specialShabbat = 6;
+  bool israel = 7;
+  bool havdalahTzeit = 8;
+  bool isHebrewYear = 9;
+  bool candlelighting = 10;
+
+  int32 geonameid = 11;
+  int32 year = 12;
+  string locale = 13;
+  int32 havdalahMins = 14;
+  int32 candleLightingMins = 15;
+
+  bool emoji = 16;
+  bool sedrot = 17;
+  string zip = 18;
+  bool yearNow = 19;
+  bool subscribe = 20;
+
+  bool addHebrewDates = 23;
+  bool addHebrewDatesForEvents = 24;
+  bool omer = 25;
+  bool dafyomi = 26;
+  bool euro = 27;
+
+  int32 month = 30;
+  int32 numYears = 31;
+  double latitude = 32;
+  double longitude = 33;
+  string tzid = 34;
+  string start = 35;
+  string end = 36;
+}

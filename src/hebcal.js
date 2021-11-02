@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, makeDownloadProps, urlArgs,
+  empty, urlArgs,
   getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
+import {makeDownloadProps} from './makeDownloadProps';
 import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   shouldRenderBrief,
