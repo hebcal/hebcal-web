@@ -1,40 +1,14 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var dlPrefix = 'https://download.hebcal.com/v2/h/';
-  var dlFilename = '<%- url.dlFilename -%>';
-  var icsQ = <%- url.icsQ -%>;
-  var doSub = <%= url.doSub ? 'true' : 'false' %>;
-  var buildDownloadUrl = function (args) {
-    var str = '';
-    for (var prop in args) {
-      str += '&' + prop + '=' + encodeURIComponent(args[prop]);
-    }
-    str = str.substring(1);
-    var encoded = btoa(str)
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-    return dlPrefix + encoded + '/' + dlFilename + '.ics';
-  };
+  var dlURLs = <%- JSON.stringify(url) %>;
   document.querySelectorAll(".emoji-checkbox .form-check-input").forEach(function(el) {
     var inputId = el.id.substring(2);
     el.addEventListener('change', function(event) {
       var btn = document.getElementById(inputId);
       var srcType = btn.dataset.hebcalSrc;
-      var src = {};
-      for (var prop in icsQ) {
-        src[prop] = icsQ[prop];
-      }
-      if (doSub && srcType != 'ics') {
-        src.year = 'now';
-        src.subscribe = '1';
-      }
-      src.emoji = event.target.checked ? 1 : 0;
-      var href = buildDownloadUrl(src);
-      if (srcType == 'webcal') {
-        href = href.replace(/^https/, 'webcal');
-      } else if (srcType == 'gcal') {
-        href = href.replace(/^https/, 'http');
+      var suffix = event.target.checked ? '' : '?emoji=0';
+      var href = dlURLs[srcType] + suffix;
+      if (srcType == 'gcal') {
         href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
       }
       btn[btn.dataset.hebcalAttr] = href;

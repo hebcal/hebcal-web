@@ -179,8 +179,8 @@ async function makeDownloadProps(ctx) {
     ics: dlhref + '.ics?dl=1',
     ics1year: dlhref + '.ics?dl=1',
     subical: subical,
-    webcal: subical.replace(/^https/, 'webcal'),
-    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
+    gcal: subical.replace(/^https/, 'http'),
     csv_usa: dlhref + usaCSV + '?dl=1',
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
   };

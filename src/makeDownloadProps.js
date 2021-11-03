@@ -89,30 +89,18 @@ function getSubFilename(location) {
 export function makeDownloadProps(ctx, q, options) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref2(q, dlFilename);
-  const dl1year = downloadHref2(q, dlFilename, {ny: '1', emoji: '1'});
   const subFilename = getSubFilename(options.location);
   const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji: '1'}) + '.ics';
-  const queryObj = urlArgsObj(q);
-  for (const [key, val] of Object.entries(queryObj)) {
-    if (val === 'on') {
-      queryObj[key] = 1;
-    } else if (val === 'off') {
-      queryObj[key] = 0;
-    }
-  }
-  delete queryObj.geo;
   const url = ctx.state.url = {
     pdf: dlhref + '.pdf',
     ics: downloadHref2(q, dlFilename, {emoji: '1'}) + '.ics',
-    ics1year: dl1year + '.ics',
-    subical: subical,
-    webcal: subical.replace(/^https/, 'webcal'),
-    gcal: encodeURIComponent(subical.replace(/^https/, 'http')),
+    ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji: '1'}) + '.ics',
+    subical,
+    webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
+    gcal: subical.replace(/^https/, 'http'),
     csv_usa: dlhref + '_usa.csv',
     csv_eur: downloadHref2(q, dlFilename, {euro: '1'}) + '_eur.csv',
     dlFilename,
-    icsQ: JSON.stringify(queryObj),
-    doSub: true,
   };
   ctx.state.filename = {
     ics: basename(url.ics),

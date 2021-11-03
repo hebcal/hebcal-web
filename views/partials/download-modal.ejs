@@ -60,7 +60,7 @@ and then import manually into Microsoft Outlook.</p>
 <div><a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
 title="Add <%= filename.ics %> to Google Calendar"
 data-hebcal-attr="href" data-hebcal-src="gcal"
-href="https://www.google.com/calendar/render?cid=<%= url.gcal %>">
+href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
 <svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Add to Google Calendar</a></div>
 </div>
 <p>Alternate option:
