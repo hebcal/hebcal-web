@@ -13,18 +13,17 @@ export function makeLogger(logDir) {
   });
   const logger = pino(transport);
 
-  // use pino.final to create a special logger that
-  // guarantees final tick writes
-  const handler = pino.final(logger, (err, finalLogger, evt) => {
+  // eslint-disable-next-line require-jsdoc
+  function handler(err, evt) {
     const msg = `Koa server caught ${evt}; exiting...`;
     console.log(msg);
+    logger.info(msg);
     if (err) {
       console.log(err);
+      logger.fatal(err, 'error caused exit');
     }
-    finalLogger.info(msg);
-    if (err) finalLogger.fatal(err, 'error caused exit');
     process.exit(err ? 1 : 0);
-  });
+  }
 
   // catch all the ways node might exit
   process.on('beforeExit', () => handler(null, 'beforeExit'));
