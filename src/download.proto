@@ -30,6 +30,7 @@ message Download {
   bool dafyomi = 26;
   bool euro = 27;
 
+  bool geoPos = 29;
   int32 month = 30;
   int32 numYears = 31;
   double latitude = 32;

@@ -7,6 +7,18 @@ const dlPrefix = process.env.NODE_ENV == 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
 /**
+ * @param {string} str
+ * @return {number}
+ */
+function getInt(str) {
+  const n = parseInt(str, 10);
+  if (isNaN(n)) {
+    return null;
+  }
+  return n;
+}
+
+/**
  * @param {Object.<string,string>} query
  * @param {string} filename
  * @param {Object.<string,string>} override
@@ -22,7 +34,6 @@ export function downloadHref2(query, filename, override={}) {
   if (q.mf === 'on') msg.setMinorfast(true);
   if (q.ss === 'on') msg.setSpecialshabbat(true);
   if (q.i === 'on') msg.setIsrael(true);
-  if (q.M === 'on') msg.setHavdalahtzeit(true);
   if (q.yt === 'H') msg.setIshebrewyear(true);
   if (q.c === 'on') msg.setCandlelighting(true);
   if (!empty(q.geonameid)) msg.setGeonameid(q.geonameid);
@@ -30,16 +41,25 @@ export function downloadHref2(query, filename, override={}) {
     if (q.year === 'now') {
       msg.setYearnow(true);
     } else {
-      msg.setYear(+q.year);
+      const year = getInt(q.year);
+      if (year === null) {
+        msg.setYearnow(true);
+      } else {
+        msg.setYear(year);
+      }
     }
   }
   if (!empty(q.lg)) msg.setLocale(q.lg);
-  if (!empty(q.m)) msg.setHavdalahmins(+q.m);
-  if (!empty(q.b)) msg.setCandlelightingmins(+q.b);
+  const m = getInt(q.m);
+  if (m !== null) msg.setHavdalahmins(m);
+  if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
+  const b = getInt(q.b);
+  if (b !== null) msg.setCandlelightingmins(b);
   if (q.emoji) msg.setEmoji(true);
   if (q.euro) msg.setEuro(true);
   if (q.subscribe) msg.setSubscribe(true);
-  if (q.ny) msg.setNumyears(+q.ny);
+  const ny = getInt(q.ny);
+  if (ny !== null) msg.setNumyears(ny);
   if (!empty(q.zip)) msg.setZip(q.zip);
 
   if (q.s === 'on') msg.setSedrot(true);
@@ -50,11 +70,15 @@ export function downloadHref2(query, filename, override={}) {
   if (q.D === 'on') msg.setAddhebrewdatesforevents(true);
 
   if (!empty(q.month) && q.month != 'x') {
-    msg.setMonth(+q.month);
+    const month = getInt(q.month);
+    if (month !== null) msg.setMonth(month);
   }
 
-  if (!empty(q.latitude)) msg.setLatitude(+q.latitude);
-  if (!empty(q.longitude)) msg.setLongitude(+q.longitude);
+  if (q.geo === 'pos') msg.setGeopos(true);
+  const latitude = parseFloat(q.latitude);
+  if (!isNaN(latitude)) msg.setLatitude(latitude);
+  const longitude = parseFloat(q.longitude);
+  if (!isNaN(longitude)) msg.setLongitude(longitude);
   if (!empty(q.tzid)) msg.setTzid(q.tzid);
   if (!empty(q.start)) msg.setStart(q.start);
   if (!empty(q.end)) msg.setEnd(q.end);

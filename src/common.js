@@ -393,7 +393,12 @@ export function makeHebcalOptions(db, query) {
   }
   for (const [key, val] of Object.entries(numberOpts)) {
     if (typeof query[key] === 'string' && query[key].length) {
-      options[val] = parseInt(query[key], 10);
+      const num = parseInt(query[key], 10);
+      if (isNaN(num)) {
+        delete query[key];
+      } else {
+        options[val] = num;
+      }
     }
   }
   if (!empty(query.yt)) {

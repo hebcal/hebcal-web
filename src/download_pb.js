@@ -94,6 +94,7 @@ proto.Download.toObject = function(includeInstance, msg) {
     omer: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
     dafyomi: jspb.Message.getBooleanFieldWithDefault(msg, 26, false),
     euro: jspb.Message.getBooleanFieldWithDefault(msg, 27, false),
+    geopos: jspb.Message.getBooleanFieldWithDefault(msg, 29, false),
     month: jspb.Message.getFieldWithDefault(msg, 30, 0),
     numyears: jspb.Message.getFieldWithDefault(msg, 31, 0),
     latitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 32, 0.0),
@@ -236,6 +237,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 27:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setEuro(value);
+      break;
+    case 29:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setGeopos(value);
       break;
     case 30:
       var value = /** @type {number} */ (reader.readInt32());
@@ -466,6 +471,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       27,
+      f
+    );
+  }
+  f = message.getGeopos();
+  if (f) {
+    writer.writeBool(
+      29,
       f
     );
   }
@@ -968,6 +980,24 @@ proto.Download.prototype.getEuro = function() {
  */
 proto.Download.prototype.setEuro = function(value) {
   return jspb.Message.setProto3BooleanField(this, 27, value);
+};
+
+
+/**
+ * optional bool geoPos = 29;
+ * @return {boolean}
+ */
+proto.Download.prototype.getGeopos = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 29, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setGeopos = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 29, value);
 };
 
 
