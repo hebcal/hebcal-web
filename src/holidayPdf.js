@@ -31,11 +31,16 @@ export async function holidayPdf(ctx) {
     locale,
     il: ctx.state.il,
   };
-  const events = HebrewCalendar.calendar(options);
-  const title = getCalendarTitle(events, options);
   ctx.set('Cache-Control', 'max-age=5184000');
   ctx.response.type = 'application/pdf';
   ctx.response.etag = eTagFromOptions(options, {outputType: '.pdf'});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
+  const events = HebrewCalendar.calendar(options);
+  const title = getCalendarTitle(events, options);
   const doc = ctx.body = createPdfDoc(title, options);
   renderPdf(doc, events, options);
   doc.end();
