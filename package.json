@@ -40,7 +40,7 @@
   "dependencies": {
     "@hebcal/core": "^3.27.0",
     "@hebcal/geo-sqlite": "^3.4.4",
-    "@hebcal/icalendar": "^4.14.3",
+    "@hebcal/icalendar": "^4.14.4",
     "@hebcal/leyning": "^4.10.2",
     "@hebcal/locales": "^3.3.1",
     "@hebcal/rest-api": "^3.8.6",
