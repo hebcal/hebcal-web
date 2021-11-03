@@ -22,8 +22,12 @@ export function deserializeDownload(data) {
   q.yt = msg.getIshebrewyear() ? 'H' : 'G';
   if (msg.getCandlelighting()) q.c = 'on';
   q.geonameid = msg.getGeonameid() || undefined;
-  const year = msg.getYearnow() ? 'now' : msg.getYear();
-  q.year = year || 'now';
+  if (msg.getYearnow()) {
+    q.year = 'now';
+  } else {
+    const year = msg.getYear();
+    if (year) q.year = year;
+  }
   q.lg = msg.getLocale() || 's';
   q.b = msg.getCandlelightingmins() || undefined;
   q.emoji = msg.getEmoji() ? 1 : 0;

@@ -36,18 +36,13 @@ export function downloadHref2(query, filename, override={}) {
   if (q.i === 'on') msg.setIsrael(true);
   if (q.yt === 'H') msg.setIshebrewyear(true);
   if (q.c === 'on') msg.setCandlelighting(true);
-  if (!empty(q.geonameid)) msg.setGeonameid(q.geonameid);
-  if (!empty(q.year)) {
-    if (q.year === 'now') {
-      msg.setYearnow(true);
-    } else {
-      const year = getInt(q.year);
-      if (year === null) {
-        msg.setYearnow(true);
-      } else {
-        msg.setYear(year);
-      }
-    }
+  const geonameid = getInt(q.geonameid);
+  if (geonameid !== null) msg.setGeonameid(geonameid);
+  const year = getInt(q.year);
+  if (year !== null) {
+    msg.setYear(year);
+  } else if (q.year === 'now') {
+    msg.setYearnow(true);
   }
   if (!empty(q.lg)) msg.setLocale(q.lg);
   const m = getInt(q.m);
