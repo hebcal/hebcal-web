@@ -310,7 +310,10 @@ function renderEventHtml(ev, options, locale) {
   let title = shouldRenderBrief(ev) ? ev.renderBrief(options.locale) : ev.render(options.locale);
   if (time) {
     categories.push('timed');
-    title = '<small class="text-muted">' + time + '</small> ' + subjectSpan(ev, locale, title);
+    const timeHtml = mask & flags.CHANUKAH_CANDLES ?
+     '<small>' + time + '</small>' :
+     '<small class="text-muted">' + time + '</small>';
+    title = timeHtml + ' ' + subjectSpan(ev, locale, title);
   } else {
     title = subjectSpan(ev, locale, title);
   }
