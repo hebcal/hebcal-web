@@ -106,9 +106,11 @@ export const hebcalClient = {
     const dt = evt.date;
     const cat = evt.category;
     const localeData = window['hebcal'].localeConfig;
-    const dateStr = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
-    const allDay = !dt.includes('T');
     const lang = window['hebcal'].lang || 's';
+    const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+    const dateStr0 = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
+    const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr0}</span>` : dateStr0;
+    const allDay = !dt.includes('T');
     let subj = evt.title;
     let timeStr = '';
     const className = self.getEventClassName(evt);
@@ -133,13 +135,10 @@ export const hebcalClient = {
       }
     }
     const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
-    if (evt.hebrew) {
-      const hebrewHtml = `<span lang="he" dir="rtl">${evt.hebrew}</span>`;
-      if (lang == 'h') {
-        subj = hebrewHtml;
-      } else if (lang.includes('h')) {
-        subj += ` / ${hebrewHtml}`;
-      }
+    if (isHebrew) {
+      subj = `<span lang="he" dir="rtl">${subj}</span>`;
+    } else if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
+      subj += ` / <span lang="he" dir="rtl">${evt.hebrew}</span>`;
     }
     if (evt.link) {
       const atitle = evt.memo ? ` title="${evt.memo}"` : '';
@@ -158,11 +157,14 @@ export const hebcalClient = {
       dt.setFullYear(yy);
     }
     const lang = window['hebcal'].lang || 's';
-    const dir = lang === 'h' ? 'rtl' : 'ltr';
+    const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+    const dir = isHebrew ? 'rtl' : 'ltr';
     const divBegin = `<div class="month-table" dir="${dir}">`;
     const divEnd = '</div><!-- .month-table -->';
     const localeData = window['hebcal'].localeConfig;
-    const heading = `<h3>${localeData.months[mm - 1]} ${yearStr}</h3>`;
+    const titleText = `${localeData.months[mm - 1]} ${yearStr}`;
+    const titleSpan = isHebrew ? `<span lang="he" dir="rtl">${titleText}</span>` : titleText;
+    const heading = `<h3>${titleSpan}</h3>`;
     const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
     // eslint-disable-next-line max-len
     const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:116px">${timeColumn}<col><tbody>`;

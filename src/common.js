@@ -8,16 +8,17 @@ import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 
 export const langNames = {
-  s: ['Sephardic transliterations', null],
-  a: ['Ashkenazis transliterations', null],
-  h: ['עברית', 'Hebrew'],
-  es: ['español', 'Spanish'],
-  fr: ['français', 'French'],
-  de: ['Deutsch', 'German'],
-  ru: ['ру́сский язы́к', 'Russian'],
-  pl: ['język polski', 'Polish'],
-  fi: ['Suomalainen', 'Finnish'],
-  hu: ['Magyar nyelv', 'Hungarian'],
+  's': ['Sephardic transliterations', null],
+  'a': ['Ashkenazis transliterations', null],
+  'he-x-NoNikud': ['עברית', 'Hebrew'],
+  'h': ['עִברִית', 'Hebrew with nikud'],
+  'es': ['español', 'Spanish'],
+  'fr': ['français', 'French'],
+  'de': ['Deutsch', 'German'],
+  'ru': ['ру́сский язы́к', 'Russian'],
+  'pl': ['język polski', 'Polish'],
+  'fi': ['Suomalainen', 'Finnish'],
+  'hu': ['Magyar nyelv', 'Hungarian'],
 };
 
 export const langTzDefaults = {
@@ -623,6 +624,8 @@ export const localeMap = {
   'fi': 'fi',
   'fr': 'fr',
   'he': 'he',
+  'he-x-NoNikud': 'he',
+  'he-x-nonikud': 'he',
   'hu': 'hu',
   'h': 'he',
   'pl': 'pl',

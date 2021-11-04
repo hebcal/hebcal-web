@@ -68,19 +68,27 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title" lang="he" dir="rtl" style="font-size: 1.5rem">פרשת השבוע - ישראל 🕍 🇮🇱</h5>
-<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl">בראשית, נח, לך־לך</span>. Israel schedule.
+<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl" class="big">בראשית, נח, לך־לך</span>. Israel schedule.
 <br><small class="text-muted">~50 calendar events per year. 3-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'פרשת השבוע - ישראל', basename: 'torah-readings-israel-he'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (English)</h5>
-<p class="card-text">Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet, 5770</strong>) every day of the week. Sephardic transliteration.
+<p class="card-text">Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet</strong>) every day of the week. Sephardic transliteration.
+Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap">1st of Kislev, 5782</strong>).
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (English)', basename: 'hdate-en'}) -%>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Hebrew calendar dates (Hebrew)</h5>
-<p class="card-text">Displays the Hebrew date (such as <span lang="he" dir="rtl" class="text-nowrap">י״ח בטבת תש״ע</span>) every day of the week.
+<p class="card-text">Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טבת</span>) every day of the week.
+Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap big">א׳ כסלו תשפ״ב</span>).
+<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
+<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he-v2'}) -%>
+</div></div></div>
+<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
+<h5 class="card-title">Hebrew calendar dates (Hebrew with nikud)</h5>
+<p class="card-text">Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טֵבֵת</span>) every day of the week.
 <br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
 <%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
 </div></div></div>
@@ -92,7 +100,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 </div></div></div>
 <div class="col-sm-6"><div class="card mb-3"><div class="card-body">
 <h5 class="card-title">Yom Kippur Katan</h5>
-<p class="card-text"><span lang="he" dir="rtl">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.
+<p class="card-text"><span lang="he" dir="rtl" class="big">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.
 <br><small class="text-muted">9 calendar events per year. 10-year perpetual feed.</small></p>
 <p class="small">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),
 Tishrei (Yom Kippur has just passed), Kislev (due to Chanukah) or Nisan (fasting not permitted during Nisan).

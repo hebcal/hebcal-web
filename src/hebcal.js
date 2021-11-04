@@ -328,7 +328,7 @@ function renderEventHtml(ev, options, locale) {
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   const hebrew = options.appendHebrewToSubject ?
-    '<br>' + subjectSpan(null, 'he', ev.renderBrief('he')) : '';
+    '<br>' + subjectSpan(null, 'he', ev.renderBrief('he-x-NoNikud')) : '';
   // eslint-disable-next-line max-len
   return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}${hebrew}</span>${aclose}</div>\n`;
 }
@@ -342,7 +342,7 @@ function renderEventHtml(ev, options, locale) {
 function subjectSpan(ev, locale, str) {
   str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
   if (locale === 'he') {
-    return '<span lang="he" dir="rtl">' + Locale.hebrewStripNikkud(str) + '</span>';
+    return '<span lang="he" dir="rtl">' + str + '</span>';
   }
   /*
   const emoji0 = ev && ev.getEmoji();

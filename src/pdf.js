@@ -160,12 +160,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   }
   if (rtl) {
     fontStyle = 'hebrew';
+    doc.fontSize(10);
     subj = reverseHebrewWords(subj);
   }
   doc.font(fontStyle);
   let width = doc.widthOfString(subj);
   if (width > (PDF_COLWIDTH - 20)) {
-    doc.fontSize(7);
+    doc.fontSize(rtl ? 8 : 7);
     width = doc.widthOfString(subj);
   }
   const textOptions = {};
@@ -176,24 +177,24 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     const utmCampaign = options.utmCampaign || 'pdf-' + evt.getDate().getFullYear();
     textOptions.link = appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);
   }
-  doc.text(subj, x, y, textOptions);
+  doc.text(subj, x, rtl ? y + 0.65 : y, textOptions);
   if (options.appendHebrewToSubject) {
     const slash = ' / ';
     doc.font('plain');
     const widthSlash = doc.widthOfString(slash);
     const hebrew = evt.renderBrief('he');
-    doc.font('hebrew');
+    doc.font('hebrew').fontSize(9);
     const hebrewWidth = doc.widthOfString(hebrew);
-    if ((width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 22)) {
+    if ((width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 23)) {
       y += 12;
     } else {
       x += width;
-      doc.font('plain');
+      doc.font('plain').fontSize(8);
       doc.text(slash, x, y);
       x += widthSlash;
-      y += 2;
+      y += 1.35;
     }
-    doc.font('hebrew');
+    doc.font('hebrew').fontSize(9);
     doc.text(reverseHebrewWords(hebrew), x, y);
   }
   return y + 12; // newline within cell

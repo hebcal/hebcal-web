@@ -142,7 +142,8 @@ function row(item, right) {
     cl.push('yomtov');
   }
   const narrow = [];
-  const lang = Locale.getLocaleName();
+  const locale = Locale.getLocaleName();
+  const lang = localeMap[locale] || 'en';
   const subj = item.reason;
   if (lang == 'he') {
     narrow.push('text-right');

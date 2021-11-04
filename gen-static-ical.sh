@@ -51,6 +51,10 @@ FILE="hdate-he"
 fetch_urls $FILE "year=${YEAR0}&yt=G&v=1&i=off&lg=h&d=on&c=off&geo=none&ny=2&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
 compress_file $FILE
 
+FILE="hdate-he-v2"
+fetch_urls $FILE "year=${YEAR0}&yt=G&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&ny=2&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
+compress_file $FILE
+
 FILE="omer"
 fetch_urls $FILE "year=${YEAR}&yt=G&v=1&o=on&i=off&lg=en&c=off&geo=none&ny=3&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot"
 compress_file $FILE
