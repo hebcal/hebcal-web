@@ -72,14 +72,14 @@ accurate.
 <%  if (options.il && typeof location === 'object' && location.getCountryCode() !== 'IL') { %> (🇮🇱 holiday schedule)<% } -%>
 </span></h2>
 <div class="d-print-none">
-  <div class="btn-group me-1" role="group" data-bs-toggle="buttons">
-   <label class="btn btn-secondary btn-sm active mb-1">
-    <input type="radio" name="view" id="toggle-month" checked>
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
+  <div class="btn-group me-1" role="group">
+    <input type="radio" class="btn-check" name="view" id="toggle-month" autocomplete="off" checked>
+    <label class="btn btn-secondary btn-sm mb-1" for="toggle-month">
+      <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
    </label>
-   <label class="btn btn-secondary btn-sm mb-1">
-    <input type="radio" name="view" id="toggle-list">
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-list-ul"></use></svg> List
+    <input type="radio" class="btn-check" name="view" id="toggle-list" autocomplete="off">
+    <label class="btn btn-secondary btn-sm mb-1" for="toggle-list">
+      <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-list-ul"></use></svg> List
    </label>
   </div><!-- .btn-group -->
 <% if (gy >= 1970) { -%>
