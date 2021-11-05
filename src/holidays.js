@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear} from './common';
+import {getDefaultHebrewYear, getNumYears} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {categories, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
@@ -34,7 +34,7 @@ export async function holidayYearIndex(ctx) {
   const events = getFirstOcccurences(events0);
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
-  const q = makeQueryAndDownloadProps(ctx, options);
+  const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const events2 = HebrewCalendar.calendar({
     year: calendarYear,
     isHebrewYear,
@@ -79,7 +79,7 @@ export async function holidayYearIndex(ctx) {
 }
 
 function makeQueryAndDownloadProps(ctx, options) {
-  const q = {v: '1'};
+  const q = Object.assign({v: '1', ny: 5}, ctx.request.query);
   for (const k of ['maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q[k] = 'on';
   }
@@ -88,17 +88,11 @@ function makeQueryAndDownloadProps(ctx, options) {
   q.year = String(year);
   const isHebYr = options.isHebrewYear;
   q.yt = isHebYr ? 'H' : 'G';
-  Object.assign(q, ctx.request.query);
   makeDownloadProps(ctx, q, options);
-  if ((isHebYr && year !== new HDate().getFullYear()) ||
-      (!isHebYr && year !== new Date().getFullYear())) {
-    // modify download URLs to replace subscription year=now to actual year
-    const url = ctx.state.url;
-    const ics1year = url.ics1year;
-    url.subical = ics1year;
-    url.webcal = ics1year.replace(/^https/, 'webcal').replace(/^http/, 'webcal');
-    url.gcal = ics1year.replace(/^https/, 'http');
-  }
+  ctx.state.downloadAltTitle = `${year} only`;
+  ctx.state.numYears = getNumYears(options);
+  const today = isHebYr ? new HDate() : new Date();
+  ctx.state.currentYear = today.getFullYear();
   delete ctx.state.filename.pdf;
   return q;
 }
@@ -267,7 +261,12 @@ export async function holidayMainIndex(ctx) {
       }
     }
   }
-  const q = makeQueryAndDownloadProps(ctx, {year: hyear, isHebrewYear: true, il});
+  const q = makeQueryAndDownloadProps(ctx, {
+    year: hyear,
+    isHebrewYear: true,
+    il,
+    numYears: 5,
+  });
   await ctx.render('holiday-main-index', {
     RH: dayjs(tishrei1.greg()),
     today: dayjs(dt),

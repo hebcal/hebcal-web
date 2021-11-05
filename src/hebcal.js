@@ -1,10 +1,10 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  empty, urlArgs,
+  empty, urlArgs, getNumYears,
   getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
-import {HebrewCalendar, Locale, greg, flags, HDate} from '@hebcal/core';
+import {HebrewCalendar, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   shouldRenderBrief,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
@@ -194,8 +194,6 @@ function renderHtml(ctx) {
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
   };
-  const endYear = options.year + getNumYears(options) - 1;
-  const downloadTitle = `${options.year}-${endYear}`;
   const gy = months[0].year();
   if (gy >= 3762 && q.yt === 'G') {
     ctx.state.futureYears = gy - today.year();
@@ -216,28 +214,12 @@ function renderHtml(ctx) {
     localeConfig,
     prevTitle: options.year - 1,
     nextTitle: options.year + 1,
-    downloadTitle,
     shortTitle,
     locationName,
+    currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
+    downloadAltTitle: `${options.year} only`,
+    numYears: getNumYears(options),
   });
-}
-
-const maxNumYear = {
-  candlelighting: 4,
-  omer: 4,
-  addHebrewDatesForEvents: 3,
-  addHebrewDates: 2,
-  dafyomi: 2,
-};
-
-function getNumYears(options) {
-  let numYears = 5;
-  for (const [key, ny] of Object.entries(maxNumYear)) {
-    if (options[key] && ny < numYears) {
-      numYears = ny;
-    }
-  }
-  return numYears;
 }
 
 function makeTableBodies(events, months, options, locale) {

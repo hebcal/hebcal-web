@@ -3,48 +3,8 @@ import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
-import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions, empty} from './common';
-
-const maxNumYear = {
-  candlelighting: 4,
-  omer: 4,
-  addHebrewDatesForEvents: 3,
-  addHebrewDates: 2,
-  dafyomi: 2,
-};
-
-/**
- * Parse HebcalOptions to determine ideal numYears
- * @param {HebcalOptions} options
- * @return {number}
- */
-function getNumYears(options) {
-  if (options.numYears) {
-    return options.numYears;
-  }
-
-  if ((!options.isHebrewYear && options.year < 2016) ||
-      (options.isHebrewYear && options.year < 5776)) {
-    return 1;
-  }
-
-  let numYears = 5;
-  for (const [key, ny] of Object.entries(maxNumYear)) {
-    if (options[key] && ny < numYears) {
-      numYears = ny;
-    }
-  }
-  // Shabbat plus Hebrew Event every day can get very big
-  const hebrewDates = options.addHebrewDates || options.addHebrewDatesForEvents;
-  if (options.candlelighting && hebrewDates) {
-    numYears = 2;
-  }
-  // reduce size of file for truly crazy people who specify both Daf Yomi and Hebrew Date every day
-  if (options.dafyomi && hebrewDates) {
-    numYears = 1;
-  }
-  return numYears;
-}
+import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
+  empty, getNumYears} from './common';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx

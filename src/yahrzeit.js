@@ -157,7 +157,10 @@ async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
   removeEmptyArgs(q);
   const type = summarizeAnniversaryTypes(q);
-  ctx.state.downloadTitle = type;
+  ctx.state.anniversaryType = type;
+  ctx.state.downloadAltTitle = `${type}.ics`;
+  ctx.state.numYears = parseInt(q.years, 10) || 20;
+  ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = type.toLowerCase();
   const db = ctx.mysql;
   const id = ctx.state.ulid;

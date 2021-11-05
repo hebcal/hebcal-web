@@ -6,7 +6,7 @@
   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-<p>First, select your calendar app:</p>
+<p class="small text-muted mb-2">Select your calendar app:</p>
 <ul class="nav nav-pills" id="download-tabs" role="tablist">
 <li class="nav-item" role="presentation"><a class="nav-link active" style="padding: 0.25rem 0.5rem" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
@@ -20,73 +20,105 @@
 </ul><!-- #download-tabs -->
 <div class="tab-content mt-2">
 <div id="ios-body" class="tab-pane active">
-<p>Apple iPhone, iPad &amp; macOS</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Apple iPhone, iPad &amp; macOS
+</h6>
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ios-sub'}) -%>
-<div><a class="btn btn-secondary download mb-2" id="dl-ios-sub" data-hebcal-attr="href" data-hebcal-src="webcal" rel="nofollow" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> Subscribe on iPhone, iPad &amp; macOS</a></div>
+<div>
+  <a class="btn btn-secondary download mb-2" id="dl-ios-sub" data-hebcal-attr="href" data-hebcal-src="webcal" rel="nofollow" href="<%= url.webcal %>">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
+  Subscribe on iPhone, iPad &amp; macOS</a></div>
+<%- await include('download-modal-numyears.ejs') -%>
 </div>
-<p>Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
-href="/home/77/iphone-ipad-jewish-calendar">iPhone &amp; iPad</a></p>
-<p>Step-by-step: <a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
+<div>
+  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ical-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
+  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  Download <%= downloadAltTitle %></a>
+  <p class="small">Use this download alternative if you prefer to manually import
+  calendar events into Apple macOS Calendar.app.</p>
+</div>
+<p class="mb-0">Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
+href="/home/77/iphone-ipad-jewish-calendar">iPhone &amp; iPad</a>,
+<a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS desktop Calendar.app</a></p>
-<p>Alternate option: <a class="download" id="dl-ical-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
-and then import manually into Apple macOS Calendar.app.</p>
 </div>
 </div><!-- #ios-body -->
 <div id="ol-ics-body" class="tab-pane">
-<p>Outlook 365 Internet Calendar Subscription (Windows)</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Outlook 365 Internet Calendar Subscription (Windows)
+</h6>
 <div>
-<p><small>To keep the imported calendar up-to-date, subscribe to the
-Hebcal calendar in Outlook. Our calendar subscription feeds include
-2+ years of events.</small></p>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ol-ics'}) -%>
-<div><a class="btn btn-secondary download mb-2" id="dl-ol-ics" data-hebcal-attr="href" data-hebcal-src="webcal" title="<%= filename.ics %>" rel="nofollow" href="<%= url.webcal %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook Internet Calendar Subscription</a></div>
+<div>
+  <a class="btn btn-secondary download mb-2" id="dl-ol-ics" data-hebcal-attr="href" data-hebcal-src="webcal" title="<%= filename.ics %>" rel="nofollow" href="<%= url.webcal %>">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
+  Outlook Internet Calendar Subscription</a></div>
+<%- await include('download-modal-numyears.ejs') -%>
 </div>
-<p>Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+<div>
+  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
+  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  Download <%= downloadAltTitle %></a>
+  <p class="small">Use this download alternative if you prefer to manually import
+  calendar events into Microsoft Outlook.</p>
+</div>
+<p class="mb-0">Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
 href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
 ICS (Internet Calendar Subscription) file into Outlook</a></p>
-<p>Alternate option: <a class="download" id="dl-ol-ics-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
-and then import manually into Microsoft Outlook.</p>
-
 </div>
 </div><!-- #ol-ics-body -->
 <div id="gcal-body" class="tab-pane">
-<p>Google Calendar</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Google Calendar
+</h6>
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-gcal-sub'}) -%>
-<div><a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
+<div>
+  <a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
 title="Add <%= filename.ics %> to Google Calendar"
 data-hebcal-attr="href" data-hebcal-src="gcal"
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
-<svg class="icon icon-google"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Add to Google Calendar</a></div>
+<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
+Add to Google Calendar</a></div>
+<%- await include('download-modal-numyears.ejs') -%>
 </div>
-<p>Alternate option:
-<a class="download" id="dl-gcal-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">Download <%= filename.ics %></a>
-and then <a
-title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
-href="/home/59/google-calendar-alternative-instructions">follow
-our Google Calendar import instructions</a>.</p>
-
+<div>
+  <a class="btn btn-secondary btn-sm download mb-2" id="dl-gcal-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
+  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  Download <%= downloadAltTitle %></a>
+  <p class="small">Use this download alternative if you prefer to manually import
+  calendar events into Google Calendar (<a title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
+  href="/home/59/google-calendar-alternative-instructions">import instructions</a>).
+</div>
+<p class="mb-0"></p>
 </div>
 </div><!-- #gcal-body -->
 <div id="ol-mac-body" class="tab-pane">
-<p>Outlook for Mac</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Outlook for Mac
+</h6>
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ol-mac'}) -%>
-<div><a class="btn btn-secondary download mb-2" id="dl-ol-mac" data-hebcal-attr="href" data-hebcal-src="ics" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics %>" download="<%= filename.ics %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Download to Outlook for Mac</a></div>
+<div>
+  <a class="btn btn-secondary download mb-2" id="dl-ol-mac" data-hebcal-attr="href" data-hebcal-src="ics" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics %>" download="<%= filename.ics %>">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
+  Download to Outlook for Mac</a></div>
 </div>
-<p>Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
+<p class="mb-0">Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
 href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
 Outlook for Mac</a></p>
 
 </div>
 </div><!-- #ol-mac-body -->
 <div id="icalendar-body" class="tab-pane">
-<p>iCalendar feed URL</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  iCalendar feed URL
+</h6>
 <div>
 <p><small>The iCalendar format is used by Outlook.com, Windows 10, Yahoo!, Blackbaud, and
 many desktop and web calendar applications.</small></p>
@@ -102,8 +134,9 @@ value="<%= url.subical %>">
 Copy
 </button>
 </div>
+<%- await include('download-modal-numyears.ejs') -%>
 </div>
-<p>Follow additional instructions for 
+<p class="mb-0">Follow additional instructions for
 <a href="/home/1138/outlook-com-windows-live-jewish-calendar-download">Outlook.com and Windows 10</a>,
 <a href="/home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
 or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
@@ -111,7 +144,9 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 </div>
 </div><!-- #icalendar-body -->
 <div id="csv-body" class="tab-pane">
-<p>CSV file for Outlook 97-2003 (Windows)</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  CSV file for Outlook 97-2003 (Windows)
+</h6>
 <div>
 <p class="small">Pick the CSV file that matches your computer's date format:</p>
 <ul class="list-unstyled">
@@ -120,14 +155,16 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 <li><a class="btn btn-secondary download me-1 mb-2" id="dl-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
   <small><code>dd/mm/yyyy</code></small></li>
 </ul>
-Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
-href="/home/12/outlook-csv-jewish-holidays">Import CSV file into Outlook 97, 98, 2000, 2002, 2003</a>
+<p class="mb-0">Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+href="/home/12/outlook-csv-jewish-holidays">Import CSV file into Outlook for Windows</a></p>
 
 </div>
 </div><!-- #csv-body -->
 <% if (typeof filename.pdf === 'string') { %>
 <div id="pdf-body" class="tab-pane">
-<p>Print PDF (formatted for 8.5"x11" paper)</p>
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Print PDF (formatted for 8.5"x11" paper)
+</h6>
 <div>
 <p><a class="btn btn-secondary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" rel="nofollow" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
 
