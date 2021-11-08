@@ -126,35 +126,6 @@ export function off(val) {
   return typeof val === 'undefined' || val === 'off' || val == '0';
 }
 
-const dlPrefix = process.env.NODE_ENV == 'production' ?
-  'https://download.hebcal.com' : 'http://127.0.0.1:8081';
-
-/**
- * @deprecated
- * @param {Object.<string,string>} q
- * @param {string} filename
- * @param {Object.<string,string>} override
- * @return {string}
- */
-export function downloadHref(q, filename, override={}) {
-  const q2 = urlArgsObj(q, override);
-  for (const [key, val] of Object.entries(q2)) {
-    if (val === 'on') {
-      q2[key] = '1';
-    } else if (val === 'off') {
-      q2[key] = '0';
-    }
-  }
-  delete q2.geo;
-  const queryStr = querystring.stringify(q2);
-  const encoded = Buffer.from(queryStr)
-      .toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
-  return `${dlPrefix}/v2/h/${encoded}/${filename}`;
-}
-
 /**
  * @param {Object.<string,string>} query
  * @param {Object.<string,string>} [override]

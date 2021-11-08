@@ -39,7 +39,7 @@ export async function hebcalDownload(ctx) {
     if (query.emoji === '1' || query.emoji === 'on') {
       options.emoji = true;
     }
-    for (const key of ['title', 'caldesc', 'publishedTTL']) {
+    for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
       if (!empty(query[key])) {
         options[key] = query[key];
       }

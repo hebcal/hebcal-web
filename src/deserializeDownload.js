@@ -30,9 +30,9 @@ export function deserializeDownload(data) {
   }
   q.lg = msg.getLocale() || 's';
   q.b = msg.getCandlelightingmins() || undefined;
-  q.emoji = msg.getEmoji() ? 1 : 0;
-  q.euro = msg.getEuro() ? 1 : 0;
-  q.subscribe = msg.getSubscribe() ? 1 : 0;
+  q.emoji = msg.getEmoji() ? '1' : '0';
+  q.euro = msg.getEuro() ? '1' : '0';
+  q.subscribe = msg.getSubscribe() ? '1' : '0';
   q.ny = msg.getNumyears() || undefined;
   q.zip = msg.getZip() || undefined;
   if (msg.getSedrot()) q.s = 'on';
