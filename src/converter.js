@@ -147,7 +147,7 @@ function makeProperties(ctx) {
   const dateStr = d.format('ddd, D MMMM ') + gyStr;
   const afterSunset = props.gs ? ' (after sunset)' : '';
   const hdate = props.hdate;
-  const hdateStr = hdate.render(locale);
+  const hdateStr = hdate.render(lg);
   const il = Boolean(query.i === 'on');
   const events = getEvents(hdate, il);
   const gm = dt.getMonth() + 1;
