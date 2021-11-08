@@ -853,8 +853,8 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
 
 /**
  * @private
- * @param {any} options
- * @param {any} attrs
+ * @param {Object.<string,string>} options
+ * @param {Object.<string,string>} attrs
  * @return {string}
  */
 export function eTagFromOptions(options, attrs) {

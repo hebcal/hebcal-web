@@ -21,11 +21,17 @@ export async function hebcalDownload(ctx) {
   const options = makeHebcalOptions(ctx.db, query);
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
-  if (extension == '.ics' || extension == '.csv') {
+  const ics = extension === '.ics';
+  const csv = extension === '.csv';
+  if (ics || csv) {
     options.numYears = getNumYears(options);
   }
   // etag includes actual year because options.year is never 'now'
-  ctx.response.etag = eTagFromOptions(options, {outputType: extension});
+  let icalOpt;
+  if (ics) {
+    icalOpt = makeIcalOpts(options, query);
+  }
+  ctx.response.etag = eTagFromOptions(ics ? icalOpt : options, {outputType: extension});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
@@ -35,25 +41,17 @@ export async function hebcalDownload(ctx) {
   if (!events.length) {
     ctx.throw(400, 'Please select at least one event option');
   }
-  if (extension == '.ics') {
-    if (query.emoji === '1' || query.emoji === 'on') {
-      options.emoji = true;
-    }
-    for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
-      if (!empty(query[key])) {
-        options[key] = query[key];
-      }
-    }
-    options.calendarColor = '#800002';
-    options.utmSource = query.utm_source || 'ical';
-    options.utmMedium = query.utm_medium || 'icalendar';
-    options.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, options);
+  if (ics) {
+    icalOpt.calendarColor = '#800002';
+    icalOpt.utmSource = query.utm_source || 'ical';
+    icalOpt.utmMedium = query.utm_medium || 'icalendar';
+    icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
     ctx.response.type = 'text/calendar; charset=utf-8';
-    ctx.body = await eventsToIcalendar(events, options);
-  } else if (extension == '.csv') {
+    ctx.body = await eventsToIcalendar(events, icalOpt);
+  } else if (csv) {
     const csv = eventsToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
@@ -68,6 +66,25 @@ export async function hebcalDownload(ctx) {
     renderPdf(doc, events, options);
     doc.end();
   }
+}
+
+/**
+ * @private
+ * @param {HebrewCalendar.Options} options
+ * @param {Object.<string,string>} query
+ * @return {Object.<string,string>}
+ */
+function makeIcalOpts(options, query) {
+  const icalOpts = Object.assign({}, options);
+  if (query.emoji === '1' || query.emoji === 'on') {
+    icalOpts.emoji = true;
+  }
+  for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
+    if (!empty(query[key])) {
+      icalOpts[key] = query[key];
+    }
+  }
+  return icalOpts;
 }
 
 /**
