@@ -134,9 +134,6 @@ title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</
 <% if (typeof commentary['torah.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
 <% } %>
-<% if (typeof commentary['jtsa.edu'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online?parashah=<%=commentary['jtsa.edu'].cid%><% if (commentary['jtsa.edu'].cid2) {%><%='&parashah=' + commentary['jtsa.edu'].cid2%><% } %>">Jewish Theological Seminary</a>
-<% } %>
 <% if (typeof commentary['chabad.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
 <% } %>
@@ -145,6 +142,12 @@ title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</
 <% } %>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
+<% } %>
+<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
+<% } %>
+<% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
 <% } %>
 </ul>
 </div><!-- .d-print-none -->
