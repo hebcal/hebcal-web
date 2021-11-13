@@ -1,5 +1,4 @@
 import ua from 'universal-analytics';
-import querystring from 'querystring';
 import mmh3 from 'murmurhash3';
 import util from 'util';
 
@@ -15,7 +14,7 @@ const murmur128 = util.promisify(mmh3.murmur128);
 export function googleAnalytics(tid) {
   return async function googleAnalyticsPageview(ctx, next) {
     const cookieString = ctx.cookies.get('C');
-    const cookie = querystring.parse(cookieString || '');
+    const cookie = new URLSearchParams(cookieString || '');
     const gaCookie = ctx.cookies.get('_ga');
     const userAgent = ctx.get('user-agent');
     const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
@@ -23,23 +22,19 @@ export function googleAnalytics(tid) {
     if (gaCookie) {
       const parts = gaCookie.split('.');
       visitorId = parts[2] + '.' + parts[3];
-    } else if (cookie.uid) {
-      visitorId = cookie.uid;
+    } else if (cookie.has('uid')) {
+      visitorId = cookie.get('uid');
     } else {
       visitorId = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
     }
     ctx.state.visitorId = visitorId;
-    const doNotTrack = ctx.get('dnt');
-    if (doNotTrack === '1') {
-      return next();
-    }
-    const options = {tid, cid: visitorId, enableBatching: true};
+    const options = {tid: ctx.state.trackingId || tid, cid: visitorId, enableBatching: true};
     const visitor = ctx.state.visitor = ua(options);
     visitor.set('ua', userAgent);
     visitor.set('dr', ctx.get('referrer'));
     visitor.set('uip', ipAddress);
-    if (cookie.uid) {
-      visitor.set('uid', cookie.uid);
+    if (cookie.has('uid')) {
+      visitor.set('uid', cookie.get('uid'));
     }
     await next();
     if (ctx.state.trackPageview === true && ctx.status === 200) {

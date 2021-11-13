@@ -72,7 +72,6 @@ app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 app.use(stopIfTimedOut());
 
 app.use(xResponseTime());
-app.use(googleAnalytics('UA-967247-1'));
 
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
@@ -83,8 +82,23 @@ app.use(async function fixup0(ctx, next) {
   if (typeof ctx.get('accept-encoding') === 'undefined') {
     ctx.request.header['accept-encoding'] = 'identity';
   }
+  // Fix up querystring so we can later use ctx.request.query
+  const qs = ctx.request.querystring;
+  if (qs && qs.length) {
+    const semi = qs.indexOf(';');
+    if (semi !== -1) {
+      ctx.request.querystring = qs.replace(/;/g, '&');
+    }
+  }
+  const cfg = ctx.request.query.cfg;
+  if (typeof cfg === 'string' && cfg !== 'html') {
+    ctx.state.trackingId = 'UA-967247-6';
+    ctx.state.trackPageview = true;
+  }
   await next();
 });
+
+app.use(googleAnalytics('UA-967247-1'));
 
 app.use(compress({
   gzip: true,
@@ -107,15 +121,7 @@ render(app, {
   async: true,
 });
 
-// Fix up querystring so we can later use ctx.request.query
 app.use(async function fixup1(ctx, next) {
-  const qs = ctx.request.querystring;
-  if (qs && qs.length) {
-    const semi = qs.indexOf(';');
-    if (semi != -1) {
-      ctx.request.querystring = qs.replace(/;/g, '&');
-    }
-  }
   // force error middleware to use proper json response type
   const accept = ctx.get('accept');
   const cfg = ctx.request.query.cfg;
