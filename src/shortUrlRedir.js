@@ -1,9 +1,8 @@
 import path from 'path';
-import querystring from 'querystring';
 
 // eslint-disable-next-line require-jsdoc
 export function shortUrlRedir(ctx) {
-  const qs = querystring.parse(ctx.request.querystring || '');
+  const qs = Object.assign({}, ctx.request.query);
   if (qs.us) {
     qs.utm_source = qs.us;
     delete qs.us;
@@ -28,7 +27,7 @@ export function shortUrlRedir(ctx) {
   const rpath = ctx.request.path;
   const base = path.basename(rpath);
   const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
-  const destUrl = `https://www.hebcal.com/${dest}/${base}?` + querystring.stringify(qs);
+  const destUrl = `https://www.hebcal.com/${dest}/${base}?` + new URLSearchParams(qs).toString();
   ctx.set('Cache-Control', 'private, max-age=0');
   ctx.redirect(destUrl);
 }
