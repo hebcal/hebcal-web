@@ -153,13 +153,14 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const locale = options && options.locale;
   const mask = evt.getFlags();
   let subj = shouldRenderBrief(evt) ? evt.renderBrief(locale) : evt.render(locale);
-  let fontStyle = mask & flags.CHAG ? 'bold' : 'plain';
+  const isChag = Boolean(mask & flags.CHAG) && !timed;
+  let fontStyle = isChag ? 'bold' : 'plain';
   if (mask & flags.SHABBAT_MEVARCHIM) {
     const space = subj.indexOf(' ');
     subj = subj.substring(space + 1);
   }
   if (rtl) {
-    fontStyle = 'hebrew';
+    fontStyle = isChag ? 'hebrew-bold' : 'hebrew';
     doc.fontSize(10);
     subj = reverseHebrewWords(subj);
   }
@@ -180,21 +181,22 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   doc.text(subj, x, rtl ? y + 0.65 : y, textOptions);
   if (options.appendHebrewToSubject) {
     const slash = ' / ';
-    doc.font('plain');
+    doc.font(fontStyle);
     const widthSlash = doc.widthOfString(slash);
     const hebrew = evt.renderBrief('he');
-    doc.font('hebrew').fontSize(9);
+    const heFontName = isChag ? 'hebrew-bold' : 'hebrew';
+    doc.font(heFontName).fontSize(9);
     const hebrewWidth = doc.widthOfString(hebrew);
     if ((width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 23)) {
       y += 12;
     } else {
       x += width;
-      doc.font('plain').fontSize(8);
+      doc.font(fontStyle).fontSize(8);
       doc.text(slash, x, y);
       x += widthSlash;
       y += 1.35;
     }
-    doc.font('hebrew').fontSize(9);
+    doc.font(heFontName).fontSize(9);
     doc.text(reverseHebrewWords(hebrew), x, y);
   }
   return y + 12; // newline within cell
@@ -236,7 +238,8 @@ export function createPdfDoc(title, options) {
   doc.registerFont('plain', './fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
   doc.registerFont('semi', './fonts/Source_Sans_Pro/SourceSansPro-SemiBold.ttf');
   doc.registerFont('bold', './fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
-  doc.registerFont('hebrew', './fonts/SBL_Hebrew/SBL_Hbrw.ttf');
+  doc.registerFont('hebrew', './fonts/Adobe_Hebrew/adobehebrew-regular.otf');
+  doc.registerFont('hebrew-bold', './fonts/Adobe_Hebrew/adobehebrew-bold.otf');
 
   return doc;
 }
