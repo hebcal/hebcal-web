@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   getBeforeAfterSunsetForLocation, getTodayDate} from './common';
@@ -146,6 +146,7 @@ function setDefaultYear(ctx, dt, hdate) {
 const FORMAT_DOW_MONTH_DAY = 'ddd, D MMMM YYYY';
 
 const chagSameach = {
+  'Chanukah': true,
   'Sukkot': true,
   'Pesach': true,
   'Shavuot': true,
@@ -311,13 +312,17 @@ function getHolidayGreeting(ev, today) {
   const url = ev.url();
   const mask = ev.getFlags();
   const title = ev.basename();
-  let longText = `<br>We wish you a happy <a href="${url}">${title}</a>`;
   if (today && (mask & flags.CHANUKAH_CANDLES)) {
-    return [`${emoji}&nbsp; Chag Urim Sameach! / <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;${emoji}`, longText];
+    const dow = ev.getDate().getDay();
+    const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at sundown';
+    const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
+    const nth = Locale.ordinal(candles);
+    return [`${emoji}&nbsp; Chag Urim Sameach! / <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;${emoji}`,
+    `<br>Light the ${nth} <a href="${url}">Chanukah</a> candle tonight ${when}`];
   }
-  if (!today) {
-    longText = `<br><a href="${url}">${title}</a> begins tonight at sundown`;
-  }
+  const longText = today ?
+    `<br>We wish you a happy <a href="${url}">${title}</a>` :
+    `<br><a href="${url}">${title}</a> begins tonight at sundown`;
   return [`${emoji}&nbsp; Chag Sameach! &nbsp;${emoji}`, longText];
 }
 
