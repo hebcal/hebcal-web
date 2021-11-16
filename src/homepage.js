@@ -37,7 +37,8 @@ export async function homepage(ctx) {
   const hdate = new HDate(dt);
   const hd = afterSunset ? hdate.next() : hdate;
   Object.assign(ctx.state, {gy, gm, gd, afterSunset});
-  const lg = lgToLocale[q.lg || 's'] || q.lg;
+  ctx.state.lg = q.lg || 's';
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   setDefaultYear(ctx, dt, hd);
@@ -72,10 +73,8 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   const d = dayjs(dt).locale(ctx.state.locale);
   const isoDt = d.format('YYYY-MM-DD');
   const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' (after sunset)' : '');
-  items.push(
-      `<time datetime="${isoDt}">${fmtDt}</time>`,
-      hd.render(ctx.state.locale),
-  );
+  items.push(`<time datetime="${isoDt}">${fmtDt}</time>`);
+  items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(ctx.state.lg));
 }
 
 function mastheadParsha(ctx, dt, il) {
@@ -86,7 +85,7 @@ function mastheadParsha(ctx, dt, il) {
   if (sedra.isParsha(hd)) {
     const pe = new ParshaEvent(hd, sedra.get(hd), il);
     const url = pe.url();
-    items.push(`<a href="${url}">${pe.render(ctx.state.locale)}</a>`);
+    items.push(`<a href="${url}">${pe.render(ctx.state.lg)}</a>`);
   }
 }
 
@@ -96,7 +95,7 @@ function mastheadHolidays(ctx, hd, il) {
   holidays
       .map((ev) => {
         const url = ev.url();
-        const desc = ev.render(ctx.state.locale);
+        const desc = ev.render(ctx.state.lg);
         const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
@@ -108,7 +107,7 @@ function mastheadOmer(ctx, hd) {
   const abs = hd.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    items.push(new OmerEvent(hd, omer).render(ctx.state.locale));
+    items.push(new OmerEvent(hd, omer).render(ctx.state.lg));
   }
 }
 

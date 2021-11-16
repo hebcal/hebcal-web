@@ -43,13 +43,11 @@ a.icon-block {
 <%- await include('partials/navbar.ejs') -%>
 <div class="masthead" tabindex="-1">
 <div class="container">
-<% if (lg === 'h' || lg === 'he') { %><div lang="he" dir="rtl"><% } %>
-<ul class="bullet-list-inline">
+<ul class="bullet-list-inline" lang="<%=locale%>" dir="<%=locale==='he'?'rtl':'ltr'%>">
 <% items.forEach((item) => { %>
 <li><%- item %></li>
 <% }); %>
 </ul>
-<% if (lg === 'h' || lg === 'he') { %></div><% } %>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
 <% if (holidayBlurb) { -%>
 <div class="row">
