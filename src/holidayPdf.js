@@ -31,7 +31,7 @@ export async function holidayPdf(ctx) {
     locale,
     il: ctx.state.il,
   };
-  ctx.set('Cache-Control', 'max-age=5184000');
+  ctx.set('Cache-Control', 'public, max-age=5184000');
   ctx.response.type = 'application/pdf';
   ctx.response.etag = eTagFromOptions(options, {outputType: '.pdf'});
   ctx.status = 200;

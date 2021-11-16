@@ -46,7 +46,7 @@ export function wwwRouter() {
       ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nAllow: /\n';
       return;
-    } else if (rpath === '/ping') {
+    } else if (rpath === '/ping' || rpath === '/ads.txt') {
       ctx.type = 'text/plain';
       ctx.state.trackPageview = false;
       // let serve() handle this file
@@ -57,7 +57,9 @@ export function wwwRouter() {
       return ctx.render('dir-hidden');
     } else if (typeof redirectMap[rpath] !== 'undefined') {
       const destination = redirectMap[rpath];
-      if (destination === null) {
+      if (typeof destination === 'number') {
+        throw createError(destination);
+      } else if (destination === null) {
         throw createError(410,
             'The requested resource is no longer available on this server and there is no forwarding address. ' +
         'Please remove all references to this resource.');
