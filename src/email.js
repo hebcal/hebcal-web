@@ -118,10 +118,14 @@ export async function emailForm(ctx) {
   } else {
     q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
   }
+  const isJSON = q.cfg === 'json';
   let location;
   try {
     location = getLocationFromQuery(ctx.db, q);
   } catch (err) {
+    if (isJSON) {
+      ctx.throw(err.status, err.message);
+    }
     ctx.state.message = err.message;
     ctx.status = err.status;
   }
@@ -131,18 +135,36 @@ export async function emailForm(ctx) {
     if (!q.em) {
       ctx.state.message = 'Please enter your email address.';
       ctx.status = 400;
+      if (isJSON) {
+        ctx.throw(ctx.status, ctx.state.message);
+      }
     } else if (!validateEmail(q.em)) {
       ctx.state.message = `Invalid email address ${q.em}`;
       ctx.status = 400;
+      if (isJSON) {
+        ctx.throw(ctx.status, ctx.state.message);
+      }
     } else if (q.unsubscribe === '1') {
       ctx.state.emailAddress = q.em;
       const ok = await unsubscribe(ctx, q.em);
       if (ok) {
+        if (isJSON) {
+          ctx.body = {unsubscribe: true, emailAddress: ctx.state.emailAddress};
+          return;
+        }
         return ctx.render('email-unsubscribe');
+      } else {
+        ctx.status = 404;
+        if (isJSON) {
+          ctx.throw(ctx.status, ctx.state.message);
+        }
       }
     } else if (q.modify === '1' && !location) {
       ctx.state.message = 'Please enter your location.';
       ctx.status = 400;
+      if (isJSON) {
+        ctx.throw(ctx.status, ctx.state.message);
+      }
     } else if (q.modify === '1' && !ctx.state.message) {
       if (q.M === 'on') {
         delete q.m;
