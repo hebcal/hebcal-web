@@ -5,7 +5,7 @@ import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref,
-  empty} from './common';
+  empty, langNames} from './common';
 import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
@@ -183,6 +183,17 @@ export async function parshaDetail(ctx) {
   const otherLocationSedra = HebrewCalendar.getSedra(hyear, !il);
   const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
   const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
+  const translations0 = Object.keys(langNames)
+      .map((lang) => {
+        const str = Locale.lookupTranslation(parsha.name, lang);
+        if (str) {
+          return Locale.lookupTranslation('Parashat', lang) + ' ' + str;
+        }
+        return str;
+      })
+      .filter((s) => typeof s === 'string')
+      .concat('Parashat ' + parsha.name);
+  const translations = Array.from(new Set(translations0)).sort();
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
@@ -201,6 +212,7 @@ export async function parshaDetail(ctx) {
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
     summary: makeSummaryHtml(parsha),
+    translations,
   });
 }
 

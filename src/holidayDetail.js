@@ -6,7 +6,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref, langNames} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
@@ -102,6 +102,11 @@ export async function holidayDetail(ctx) {
   const now = new Date();
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
   const upcomingHebrewYear = next.hd.getFullYear();
+  const translations0 = Object.keys(langNames)
+      .map((lang) => Locale.lookupTranslation(holiday, lang))
+      .filter((s) => typeof s === 'string')
+      .concat(holiday);
+  const translations = Array.from(new Set(translations0)).sort();
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -123,6 +128,7 @@ export async function holidayDetail(ctx) {
     jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
     il,
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
+    translations,
   });
 }
 
