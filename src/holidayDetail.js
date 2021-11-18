@@ -101,6 +101,7 @@ export async function holidayDetail(ctx) {
   const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
   const now = new Date();
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
+  const upcomingHebrewYear = next.hd.getFullYear();
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -115,12 +116,13 @@ export async function holidayDetail(ctx) {
     currentItem: next,
     nextObserved,
     nextObservedHtml,
-    upcomingHebrewYear: next.hd.getFullYear(),
+    upcomingHebrewYear,
     occursOn,
     meta,
     noindex,
     jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
     il,
+    chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
   });
 }
 
@@ -187,6 +189,33 @@ function makeOmerEvents(year) {
     events.push(new HolidayEvent(hd, OMER_TITLE, flags.OMER_COUNT));
   }
   return events;
+}
+
+/**
+ * @param {number} hyear
+ * @return {any[]}
+ */
+function makeChanukahItems(hyear) {
+  const nowHd = new HDate();
+  if (hyear < nowHd.getFullYear()) {
+    return null;
+  }
+  const nowAbs = nowHd.abs();
+  const events = HebrewCalendar.calendar({year: hyear, isHebrewYear: true, il: false});
+  const items = events
+      .filter((ev) => ev.basename() === 'Chanukah')
+      .filter((ev) => ev.getDesc() !== 'Chanukah: 8th Day')
+      .map((ev) => {
+        const hd = ev.getDate();
+        const d = dayjs(hd.greg());
+        const dow = hd.getDay();
+        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at sundown';
+        const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
+        const abs = hd.abs();
+        const ppf = abs === nowAbs ? 'current' : abs < nowAbs ? 'past' : 'future';
+        return {hd, d, candles, when, ppf, desc: ev.render(), event: ev};
+      });
+  return items;
 }
 
 /**

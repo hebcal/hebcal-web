@@ -35,6 +35,24 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <% } // wikipedia %>
 </em></small></p>
 
+<% if (holiday === 'Chanukah' && chanukahItems !== null) { %>
+<div class="table-responsive">
+<table class="table table-striped">
+<thead>
+<tr><th>Date</th><th>Chanukah candles</th></tr>
+</thead>
+<tbody>
+<% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
+<tr class="<%=item.ppf%>">
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <span class="text-nowrap"><%=item.d.format('MMMM D')%><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></span></time></td>
+<td>Light <%= item.candles %> candle<%= item.candles === 1 ? '' : 's' %> <%= item.when %></td>
+</tr>
+<% } %>
+</tbody>
+</table>
+</div><!-- chanukah -->
+<% } %>
+
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-muted mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
