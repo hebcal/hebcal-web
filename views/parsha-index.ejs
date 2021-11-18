@@ -16,6 +16,10 @@ both traditional (full kriyah) and <a
 href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading schemes.</p>
 <% if (parsha !== null) { %>
 <p>This week's Torah Portion is <a href="<%=parshaHref%>"><%=parsha%></a> (read in <%=il ? 'Israel' : 'the Diaspora'%> on <%=saturday.format('D MMMM YYYY')%>).</p>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Event","name":"<%=parsha%>",
+"startDate":"<%=saturday.format('YYYY-MM-DD')%>","endDate":"<%=saturday.format('YYYY-MM-DD')%>",
+"url":"<%=parshaHref%>"}</script>
 <% } %>
 
 </div><!-- .col -->
