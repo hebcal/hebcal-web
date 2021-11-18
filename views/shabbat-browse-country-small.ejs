@@ -14,7 +14,7 @@ ul.list-unstyled li {margin-bottom: 0.5em}
 <p class="lead"><time datetime="<%= friday.format('YYYY-MM-DD') %>"><%= friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= parsha %></a></p>
 <ul class="list-unstyled">
 <% for (const r of results) { -%>
-<li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=s"><%= r.name %></a><% if (admin1.size > 1 && r.name != r.admin1) { %>, <small><%=r.admin1%></small><% } %> <time datetime="<%= r.isoDate %>T<%= r.isoTime %>:00"><%= r.fmtTime %></time></li>
+<li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=s"><%= r.name %></a><% if (admin1.size > 1 && r.name != r.admin1) { %>, <small><%=r.admin1%></small><% } %> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>
 </ul>
 </div><!-- .col -->

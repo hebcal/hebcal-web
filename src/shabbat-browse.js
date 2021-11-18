@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, Location} from '@hebcal/core';
+import {HDate, HebrewCalendar, Location, Zmanim} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
@@ -269,8 +269,9 @@ function addCandleTime(friday, city) {
   });
   if (events.length && typeof events[0].eventTimeStr === 'string') {
     const timeStr = events[0].eventTimeStr;
-    city.isoTime = timeStr;
     city.isoDate = friday.format('YYYY-MM-DD');
     city.fmtTime = HebrewCalendar.reformatTimeStr(timeStr, 'pm', {location});
+    const tzid = location.getTzid();
+    city.isoDateTime = Zmanim.formatISOWithTimeZone(tzid, events[0].eventTime);
   }
 }

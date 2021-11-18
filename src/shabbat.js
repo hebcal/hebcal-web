@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale} from '@hebcal/core';
+import {HebrewCalendar, Locale, Zmanim} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getDefaultHebrewYear,
   httpRedirect,
@@ -275,7 +275,7 @@ function makeJsonLDevent(item, location, subj, url) {
     '@context': 'https://schema.org',
     '@type': 'Event',
     'name': subj,
-    'startDate': `${item.isoDate}T${item.isoTime}:00`,
+    'startDate': item.isoDateTime,
     'url': url,
     'location': {
       '@type': 'Place',
@@ -320,9 +320,9 @@ function eventToItem(ev, options, locale) {
   };
   const timed = Boolean(ev.eventTime);
   if (timed) {
-    const hourMin = timed && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-    obj.isoTime = ev.eventTimeStr;
-    obj.fmtTime = hourMin;
+    obj.fmtTime = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
+    const tzid = ev.location.getTzid();
+    obj.isoDateTime = Zmanim.formatISOWithTimeZone(tzid, ev.eventTime);
   }
   const url = ev.url();
   if (url) {
