@@ -39,6 +39,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <% if (holiday === 'Chanukah' && chanukahItems !== null) { %>
 <div class="table-responsive">
 <table class="table table-striped">
+<colgroup><col><col></colgroup>
 <thead>
 <tr><th>Date</th><th>Chanukah candles</th></tr>
 </thead>
@@ -47,6 +48,15 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <tr class="<%=item.ppf%>">
 <td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <span class="text-nowrap"><%=item.d.format('MMMM D')%><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></span></time></td>
 <td>Light <%= item.candles %> candle<%= item.candles === 1 ? '' : 's' %> <%= item.when %></td>
+</tr>
+<% } %>
+<% {
+const item = Object.assign({}, chanukahItems[chanukahItems.length - 1]);
+item.d = item.d.add(1, 'day');
+%>
+<tr class="<%=item.ppf%>">
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <span class="text-nowrap"><%=item.d.format('MMMM D')%><% if (item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></span></time></td>
+<td>Chanukah: 8th day</td>
 </tr>
 <% } %>
 </tbody>
@@ -88,6 +98,7 @@ data-ad-slot="5342180883"></ins>
 <h3 id="dates">Dates for <%=holiday%><% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></h3>
 <div class="table-responsive">
 <table class="table table-striped">
+<colgroup><col><col><col></colgroup>
 <thead>
 <tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
 </thead>
