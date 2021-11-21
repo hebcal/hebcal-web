@@ -41,22 +41,17 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
 <thead>
-<tr><th>Date</th><th>Chanukah candles</th></tr>
+<tr><th>Date</th><th>Chanukah candles 🕎</th></tr>
 </thead>
 <tbody>
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
 <tr class="<%=item.ppf%>">
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <span class="text-nowrap"><%=item.d.format('MMMM D')%><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></span></time></td>
-<td>Light <%= item.candles %> candle<%= item.candles === 1 ? '' : 's' %> <%= item.when %></td>
-</tr>
-<% } %>
-<% {
-const item = Object.assign({}, chanukahItems[chanukahItems.length - 1]);
-item.d = item.d.add(1, 'day');
-%>
-<tr class="<%=item.ppf%>">
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <span class="text-nowrap"><%=item.d.format('MMMM D')%><% if (item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></span></time></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></time></td>
+<%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
+<%   } else { %>
+<td><span class="d-inline d-sm-none"><%=item.digit%> 🕯️</span> <span class="d-none d-sm-inline">Light <%= item.candles %> candle<%= item.candles === 1 ? '' : 's' %></span> <%= item.when %></td>
+<%   } %>
 </tr>
 <% } %>
 </tbody>
@@ -108,8 +103,8 @@ data-ad-slot="5342180883"></ins>
 <td><a href="<%=item.id%>-<%=holiday === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=holiday%> <%=item.d.format('YYYY')%><% if (holiday === 'Asara B\'Tevet') {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('ddd') %>, <span class="text-nowrap"><%=item.d.format('MMM D')%></span></time></td>
-<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%= item.endD.format('ddd') %>, <span class="text-nowrap"><%=item.endD.format('MMM D')%></span></time></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
 <td class="small"><%=item.hdRange%></td>
 </tr>
 <% }); %>

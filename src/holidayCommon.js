@@ -118,6 +118,7 @@ export function eventToHolidayItem(ev, il) {
   const d0 = dayjs(hd.greg());
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
   const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
+  const endD = d.add(duration, 'd');
   const item = {
     name: holiday,
     mask,
@@ -125,8 +126,12 @@ export function eventToHolidayItem(ev, il) {
     hd,
     beginsWhen,
     d,
+    startDowHtml: wrapDisplaySpans('md', d.format('ddd'), d.format('dddd')),
+    startMonDayHtml: wrapDisplaySpans('md', d.format('MMM D'), d.format('MMMM D')),
     duration,
-    endD: d.add(duration, 'd'),
+    endD,
+    endDowHtml: wrapDisplaySpans('lg', endD.format('ddd'), endD.format('dddd')),
+    endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
     hdRange: hebrewDateRange(hd, duration),
     desc: ev.render(),
     basename: ev.basename(),
@@ -141,4 +146,16 @@ export function eventToHolidayItem(ev, il) {
     }
   }
   return item;
+}
+
+/**
+ *
+ * @param {string} breakpoint
+ * @param {string} short
+ * @param {string} long
+ * @return {string}
+ */
+export function wrapDisplaySpans(breakpoint, short, long) {
+  return `<span class="d-none d-${breakpoint}-inline text-nowrap">${long}</span>` +
+    `<span class="d-inline d-${breakpoint}-none text-nowrap">${short}</span>`;
 }

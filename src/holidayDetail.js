@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref, langNames} from './common';
-import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
+import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
+  wrapDisplaySpans} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
 
@@ -197,6 +198,11 @@ function makeOmerEvents(year) {
   return events;
 }
 
+const KEYCAP_DIGITS = [
+  '0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣',
+  '5️⃣', '6️⃣', '7️⃣', '8️⃣', '9️⃣',
+];
+
 /**
  * @param {number} hyear
  * @return {any[]}
@@ -210,7 +216,6 @@ function makeChanukahItems(hyear) {
   const events = HebrewCalendar.calendar({year: hyear, isHebrewYear: true, il: false});
   const items = events
       .filter((ev) => ev.basename() === 'Chanukah')
-      .filter((ev) => ev.getDesc() !== 'Chanukah: 8th Day')
       .map((ev) => {
         const hd = ev.getDate();
         const d = dayjs(hd.greg());
@@ -219,8 +224,19 @@ function makeChanukahItems(hyear) {
         const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
         const abs = hd.abs();
         const ppf = abs === nowAbs ? 'current' : abs < nowAbs ? 'past' : 'future';
-        return {hd, d, candles, when, ppf, desc: ev.render(), event: ev};
+        return {
+          hd,
+          d,
+          candles,
+          when,
+          ppf,
+          desc: ev.render(),
+          event: ev,
+          digit: KEYCAP_DIGITS[candles],
+          monthDayHtml: wrapDisplaySpans('sm', d.format('MMM D'), d.format('MMMM D')),
+        };
       });
+  items[8].day8 = true;
   return items;
 }
 
