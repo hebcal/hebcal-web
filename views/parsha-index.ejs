@@ -19,7 +19,9 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> reading 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=parsha%>",
 "startDate":"<%=saturday.format('YYYY-MM-DD')%>","endDate":"<%=saturday.format('YYYY-MM-DD')%>",
-"url":"<%=parshaHref%>"}</script>
+"url":"<%=parshaHref%>",
+"location":{"@type": "VirtualLocation",
+"url":"<%=parshaHref%>"}}</script>
 <% } %>
 
 </div><!-- .col -->
