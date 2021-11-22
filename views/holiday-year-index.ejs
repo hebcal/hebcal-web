@@ -42,41 +42,14 @@
 <div class="container">
 <div id="content">
 <div class="row">
-<div class="col-sm-8">
-<h2>Jewish Holidays <%=year%></h2>
-<p>Dates of major and minor Jewish holidays for
-<% if (isHebrewYear) { %>
-Hebrew Year <%=calendarYear%> (<%=calendarYear-3761%>-<%=calendarYear-3760%>)
-<% } else { %><%=year%><% } %>
-as observed in <%= locationName %>.
-<span class="d-print-none">
-Each holiday page includes a brief overview of special observances and
-customs, and any special Torah readings.</span></p>
+<div class="col">
+<h2>Jewish Holidays <%=year%>
+<% if (isHebrewYear && year.indexOf('-') !== -1) { -%>
+<span class="small text-muted text-nowrap">(Hebrew year <%=calendarYear%>)</span>
+<% } -%>
+</h2>
 <% if (greg1 <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
-<p>Except for minor fasts,
-holidays begin at sundown on the first date specified and end at nightfall
-on the last date specified. For example, if the dates for Rosh
-Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
-then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
-and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
-</div><!-- .col-sm-8 -->
-<div class="col-sm-4 d-print-none">
-<div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mb-1">Advertisement</h6>
-</div><!-- .d-flex -->
-<div class="d-print-none mb-2">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
-crossorigin="anonymous"></script>
-<!-- 300x250, created 10/14/10 -->
-<ins class="adsbygoogle"
-style="display:inline-block;width:300px;height:250px"
-data-ad-client="ca-pub-7687563417622459"
-data-ad-slot="1140358973"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .d-flex -->
-</div><!-- .col-sm-4 -->
+</div><!-- .col -->
 </div><!-- .row -->
 <div class="row gx-3 mt-2 d-print-none">
 <div class="col-auto">
@@ -116,12 +89,19 @@ data-ad-slot="1140358973"></ins>
 </select>
 </div><!-- .col-auto -->
 </div><!-- .row -->
-<div class="row">
-<div class="col">
 <div id="calendar"></div>
 <div id="list-view">
+<div class="row"><div class="col">
+<p>Except for minor fasts, holidays begin at sundown on the first date specified and
+end at nightfall on the last date specified.
+<br>For example, if the dates for Rosh Hashana are listed as
+<strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
+then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
+and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
+</div></div>
 <% for (const [catId, category] of Object.entries(categories)) { %>
-<div id="<%=category.id%>">
+<div class="row mt-2" id="<%=category.id%>">
+<div class="col">
 <h3><%=category.name%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
@@ -143,7 +123,9 @@ nightfall on the second date specified.</p>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%>",
 "startDate":"<%=item.d.format('YYYY-MM-DD')%>","endDate":"<%=item.endD.format('YYYY-MM-DD')%>",
-"url":"<%=item.event.url()%>"}</script>
+"url":"<%=item.event.url()%>",
+"location":{"@type": "VirtualLocation",
+"url":"<%=item.event.url()%>"}}</script>
 </td>
 <td><%-item.dates%></td>
 </tr>
@@ -151,11 +133,28 @@ nightfall on the second date specified.</p>
 </tbody>
 <% } %>
 </table>
-</div><!-- #<%=category.id%> -->
+<% if ('major-holidays' === category.id) { -%>
+<div class="d-flex justify-content-center d-print-none">
+<h6 class="text-muted mb-1">Advertisement</h6>
+</div><!-- .d-flex -->
+<div class="d-print-none mb-2">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+style="display:block; text-align:center;"
+data-ad-layout="in-article"
+data-ad-format="fluid"
+data-ad-client="ca-pub-7687563417622459"
+data-ad-slot="5342180883"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .d-print-none -->
+<% } -%>
+</div><!-- .col -->
+</div><!-- .row #<%=category.id%> -->
 <% } // ... for %>
 </div><!-- #list-view -->
-</div><!-- .col -->
-</div><!-- .row -->
 <div class="row d-print-none mt-3">
 <div class="col">
 <nav>
