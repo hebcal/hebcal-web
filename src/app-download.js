@@ -148,9 +148,13 @@ app.use(async function fixup1(ctx, next) {
     const slash = path.indexOf('/', 4);
     const data = (slash === -1) ? path.substring(4) : path.substring(4, slash);
     const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
-    const q = deserializeDownload(data);
-    ctx.request.query = Object.assign(q, ctx.request.query);
-    ctx.request.path = '/export/' + filename;
+    try {
+      const q = deserializeDownload(data);
+      ctx.request.query = Object.assign(q, ctx.request.query);
+      ctx.request.path = '/export/' + filename;
+    } catch (err) {
+      ctx.throw(400, `Invalid download URL: ${data}`);
+    }
   } else if (path.startsWith('/v2')) {
     const slash = path.indexOf('/', 6);
     const data = (slash === -1) ? path.substring(6) : path.substring(6, slash);
