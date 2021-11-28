@@ -59,6 +59,17 @@ async function lookupSubscription(ctx, subscriptionId) {
   };
 }
 
+async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
+  const db = ctx.mysql;
+  const sql = `SELECT id FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
+  const results = await db.query(sql, [emailAddress, calendarId]);
+  if (!results || !results[0]) {
+    return false;
+  }
+  return results[0].id;
+}
+
+
 export async function yahrzeitEmailSub(ctx) {
   ctx.set('Cache-Control', 'private');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
@@ -107,15 +118,18 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
-  const id = ulid().toLowerCase();
-  const db = ctx.mysql;
+  let id = existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
   const ip = getIpAddress(ctx);
-  const sql = `INSERT INTO yahrzeit_email
-  (id, email_addr, calendar_id, sub_status, created, ip_addr)
-  VALUES (?, ?, ?, 'pending', NOW(), ?)`;
-  await db.query(sql, [id, q.em, q.ulid, ip]);
-  const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-  await db.query(sqlUpdate, q.ulid);
+  if (id === false) {
+    id = ulid().toLowerCase();
+    const db = ctx.mysql;
+    const sql = `INSERT INTO yahrzeit_email
+    (id, email_addr, calendar_id, sub_status, created, ip_addr)
+    VALUES (?, ?, ?, 'pending', NOW(), ?)`;
+    await db.query(sql, [id, q.em, q.ulid, ip]);
+    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
+    await db.query(sqlUpdate, q.ulid);
+  }
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const message = {

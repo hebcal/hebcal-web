@@ -68,6 +68,9 @@ function makeLogInfo(ctx) {
   if (ctx.state.timeout === true) {
     info.timeout = true;
   }
+  if (typeof ctx.request.body === 'object' && Object.keys(ctx.request.body).length !== 0) {
+    info.postBody = ctx.request.body;
+  }
   return info;
 }
 
