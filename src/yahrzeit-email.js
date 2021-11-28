@@ -118,7 +118,7 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
-  let id = existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
+  let id = await existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
   const ip = getIpAddress(ctx);
   if (id === false) {
     id = ulid().toLowerCase();
