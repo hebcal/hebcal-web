@@ -686,37 +686,50 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
   if (!geoip) {
     return {geo: 'none'};
   }
+  const gloc = {details: geoip};
+  if (typeof geoip.location === 'object' &&
+        typeof geoip.location.time_zone === 'string' &&
+        typeof geoip.location.latitude === 'number' &&
+        typeof geoip.location.longitude === 'number') {
+    gloc.latitude = geoip.location.latitude;
+    gloc.longitude = geoip.location.longitude;
+    gloc.tzid = geoip.location.time_zone;
+    gloc.cc = geoip.country && geoip.country.iso_code;
+    gloc.accuracy_radius = geoip.location.accuracy_radius;
+  }
   if (typeof geoip.postal === 'object' &&
         typeof geoip.postal.code === 'string' &&
         geoip.postal.code.length === 5 &&
         typeof geoip.country === 'object' &&
         geoip.country.iso_code === 'US') {
-    return {geo: 'zip', zip: geoip.postal.code, details: geoip};
+    gloc.geo = 'zip';
+    gloc.zip = geoip.postal.code;
+    return gloc;
   }
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
-    return {geo: 'geoname', geonameid: geoip.city.geoname_id, details: geoip};
+    gloc.geo = 'geoname';
+    gloc.geonameid = geoip.city.geoname_id;
+    return gloc;
   }
   if (typeof geoip.location === 'object' &&
         typeof geoip.location.time_zone === 'string' &&
         typeof geoip.location.latitude === 'number' &&
         typeof geoip.location.longitude === 'number') {
-    const latitude = geoip.location.latitude;
-    const longitude = geoip.location.longitude;
-    const tzid = geoip.location.time_zone;
-    const cc = geoip.country && geoip.country.iso_code;
-    const pos = {geo: 'pos', latitude, longitude, tzid, cc, details: geoip};
+    gloc.geo = 'pos';
     if (geoip.location.accuracy_radius > maxAccuracyRadius) {
-      return pos;
+      return gloc;
     }
     const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, tzid);
-    if (city === null) {
-      return pos;
-    } else {
-      return {geo: 'geoname', geonameid: city.geonameid, nn: true, details: geoip};
+    if (city !== null) {
+      gloc.geo = 'geoname';
+      gloc.geonameid = city.geonameid;
+      gloc.nn = true;
     }
+    return gloc;
   }
-  return {geo: 'none', details: geoip};
+  gloc.geo = 'none';
+  return gloc;
 }
 
 /**
@@ -728,26 +741,7 @@ export function setDefautLangTz(ctx) {
   ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
   const prevCookie = ctx.cookies.get('C');
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
-  let location = getLocationFromQuery(ctx.db, q);
-  if (location === null) {
-    // try to infer location from GeoIP
-    const gloc = getLocationFromGeoIp(ctx, 1000);
-    if (gloc.zip || gloc.geonameid) {
-      const geoip = {};
-      for (const [key, val] of Object.entries(gloc)) {
-        if (key !== 'details') {
-          geoip[key] = String(val);
-        }
-      }
-      try {
-        location = getLocationFromQuery(ctx.db, geoip);
-      } catch (err) {
-        // ignore
-      }
-    } else if (gloc.geo === 'pos') {
-      location = new Location(gloc.latitude, gloc.longitude, gloc.cc === 'IL', gloc.tzid, null, gloc.cc);
-    }
-  }
+  const location = getLocationFromQueryOrGeoIp(ctx, q);
   let cc = 'US';
   let tzid = null;
   if (location !== null) {
@@ -769,6 +763,38 @@ export function setDefautLangTz(ctx) {
   ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
   return q;
+}
+
+/**
+ * @param {any} ctx
+ * @param {any} q
+ * @return {any}
+ */
+function getLocationFromQueryOrGeoIp(ctx, q) {
+  let location = getLocationFromQuery(ctx.db, q);
+  if (location !== null) {
+    return location;
+  }
+  // try to infer location from GeoIP
+  const gloc = getLocationFromGeoIp(ctx, 1000);
+  if (gloc.zip || gloc.geonameid) {
+    const geoip = {};
+    for (const [key, val] of Object.entries(gloc)) {
+      if (key !== 'details') {
+        geoip[key] = String(val);
+      }
+    }
+    try {
+      location = getLocationFromQuery(ctx.db, geoip);
+      return location;
+    } catch (err) {
+      // ignore
+    }
+  }
+  if (typeof gloc.latitude === 'number') {
+    return new Location(gloc.latitude, gloc.longitude, gloc.cc === 'IL', gloc.tzid, null, gloc.cc);
+  }
+  return null;
 }
 
 /**
