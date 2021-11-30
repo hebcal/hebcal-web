@@ -53,7 +53,6 @@ export async function homepage(ctx) {
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, dt, il);
   mastheadOmer(ctx, hd);
-  console.log(ctx.state);
   const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.timezone);
   if (blub) {
     ctx.state.holidayBlurb = blub;

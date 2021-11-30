@@ -38,11 +38,11 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.29.3",
+    "@hebcal/core": "^3.29.4",
     "@hebcal/geo-sqlite": "^3.4.4",
     "@hebcal/icalendar": "^4.14.5",
     "@hebcal/leyning": "^4.10.3",
-    "@hebcal/locales": "^3.3.1",
+    "@hebcal/locales": "^3.3.2",
     "@hebcal/rest-api": "^3.9.0",
     "better-sqlite3": "^7.4.5",
     "dayjs": "^1.10.7",
