@@ -71,6 +71,9 @@ function makeLogInfo(ctx) {
   if (typeof ctx.request.body === 'object' && Object.keys(ctx.request.body).length !== 0) {
     info.postBody = ctx.request.body;
   }
+  if (typeof ctx.state.geoip === 'object') {
+    info.geoip = ctx.state.geoip;
+  }
   return info;
 }
 

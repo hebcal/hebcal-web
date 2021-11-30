@@ -776,7 +776,7 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
     return location;
   }
   // try to infer location from GeoIP
-  const gloc = getLocationFromGeoIp(ctx, 1000);
+  const gloc = ctx.state.geoip = getLocationFromGeoIp(ctx, 1000);
   if (gloc.zip || gloc.geonameid) {
     const geoip = {};
     for (const [key, val] of Object.entries(gloc)) {

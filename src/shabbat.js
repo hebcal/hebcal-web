@@ -103,7 +103,7 @@ function geoIpRedirect(ctx) {
     }
   }
 
-  const geoip = getLocationFromGeoIp(ctx);
+  const geoip = ctx.state.geoip = getLocationFromGeoIp(ctx);
   if (geoip.zip) {
     const dest = `/shabbat?zip=${geoip.zip}&geoip=zip`;
     redir(ctx, dest);

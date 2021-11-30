@@ -168,3 +168,9 @@ Hebrew Birthdays and Anniversaries for the next 20 years.
   
 </div><!-- #content -->
 <%- await include('partials/footer.ejs') _%>
+<% if (typeof geoip === 'object') { -%>
+<!-- <%- JSON.stringify(geoip) %> -->
+<% } -%>
+<% if (location !== null) { -%>
+<!-- <%- JSON.stringify(location) %> -->
+<% } -%>
