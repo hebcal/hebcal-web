@@ -114,3 +114,6 @@ ul.list-unstyled.nav-list li {
 </div><!-- #content -->
 <%- await include('partials/email-candles-modal.ejs') _%>
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, typeahead: true}}) _%>
+<% if (typeof geoip === 'object') { -%>
+<!-- <%- JSON.stringify(geoip) %> -->
+<% } -%>
