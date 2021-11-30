@@ -77,6 +77,11 @@ function makeLogInfo(ctx) {
       for (const val of Object.values(geoip.details)) {
         delete val.names;
       }
+      if (Array.isArray(geoip.details.subdivisions)) {
+        for (const subdivision of geoip.details.subdivisions) {
+          delete subdivision.names;
+        }
+      }
     }
   }
   return info;
