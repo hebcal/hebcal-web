@@ -220,7 +220,7 @@ function makeChanukahItems(hyear) {
         const hd = ev.getDate();
         const d = dayjs(hd.greg());
         const dow = hd.getDay();
-        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at sundown';
+        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
         const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
         const abs = hd.abs();
         const ppf = abs === nowAbs ? 'current' : abs < nowAbs ? 'past' : 'future';
