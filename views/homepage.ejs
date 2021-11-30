@@ -43,9 +43,9 @@ a.icon-block {
 <%- await include('partials/navbar.ejs') -%>
 <div class="masthead" tabindex="-1">
 <div class="container">
-<ul class="bullet-list-inline" lang="<%=locale%>" dir="<%=locale==='he'?'rtl':'ltr'%>">
+<ul class="bullet-list-inline" dir="<%=locale==='he'?'rtl':'ltr'%>">
 <% items.forEach((item) => { %>
-<li><%- item %></li>
+<li><span lang="<%=locale%>"><%- item %></span></li>
 <% }); %>
 </ul>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>

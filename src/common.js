@@ -753,6 +753,9 @@ export function setDefautLangTz(ctx) {
   if (location !== null) {
     tzid = location.getTzid();
     cc = location.getCountryCode();
+    if (location.getIsrael()) {
+      q.i = 'on';
+    }
   } else {
     const ip = getIpAddress(ctx);
     cc = ctx.geoipCountry ? ctx.geoipCountry.get(ip) || 'US' : 'US';

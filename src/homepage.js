@@ -53,7 +53,8 @@ export async function homepage(ctx) {
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, dt, il);
   mastheadOmer(ctx, hd);
-  const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.location);
+  console.log(ctx.state);
+  const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.timezone);
   if (blub) {
     ctx.state.holidayBlurb = blub;
     ctx.state.holidayLongText = longText;
@@ -100,7 +101,10 @@ function mastheadHolidays(ctx, hd, il) {
   holidays
       .map((ev) => {
         const url = ev.url();
-        const desc = ev.chanukahDay ? `Chanukah Day ${ev.chanukahDay}` : ev.render(ctx.state.lg);
+        const desc = ev.chanukahDay ?
+          Locale.gettext('Chanukah', ctx.state.lg) + ' ' +
+          Locale.gettext('day', ctx.state.lg) + ' ' + ev.chanukahDay :
+          ev.render(ctx.state.lg);
         const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
@@ -168,7 +172,7 @@ const chagSameach = {
   'Simchat Torah': true,
 };
 
-function getMastheadGreeting(hd, il, location) {
+function getMastheadGreeting(hd, il, tzid) {
   const mm = hd.getMonth();
   const dd = hd.getDate();
   const yy = hd.getFullYear();
@@ -213,14 +217,14 @@ function getMastheadGreeting(hd, il, location) {
       longText += `.\n<br><a href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
  begins at sundown on <span class="text-nowrap">${strtime}</span>`;
     }
-    return ['✍️ 📖&nbsp; G\'mar Chatima Tova / <span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span> &nbsp;📖 ✍️',
+    return ['✡️&nbsp; G\'mar Chatima Tova &middot; <span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span> &nbsp;✡️',
       longText];
   } else if (mm == months.TISHREI && dd >= 11 && dd <= 14) {
     const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg());
     const strtime = erevSukkot.format(FORMAT_DOW_MONTH_DAY);
     const when = (dd === 14) ? 'tonight at sundown' :
       ` at sundown on <span class="text-nowrap">${strtime}</span>`;
-    const blurb = '🌿 🍋&nbsp; Chag Sukkot Sameach / <span lang="he" dir="rtl">חג סוכות שמח</span> &nbsp;🍋 🌿';
+    const blurb = '🌿 🍋&nbsp; Chag Sukkot Sameach &middot; <span lang="he" dir="rtl">חג סוכות שמח</span> &nbsp;🍋 🌿';
     const longText = `<br><a href="/holidays/sukkot-${gy}">Sukkot</a>
  begins ${when}`;
     return [blurb, longText];
@@ -228,13 +232,13 @@ function getMastheadGreeting(hd, il, location) {
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
   if (chagToday) {
-    return getHolidayGreeting(chagToday, true, location);
+    return getHolidayGreeting(chagToday, il, true, tzid);
   }
 
   const tomorrow = HebrewCalendar.getHolidaysOnDate(hd.next(), il) || [];
   const chagTomorrow = tomorrow.find((ev) => !(ev.getFlags() & flags.EREV) && chagSameach[ev.basename()]);
   if (chagTomorrow) {
-    return getHolidayGreeting(chagTomorrow, false);
+    return getHolidayGreeting(chagTomorrow, il, false);
   }
 
   const roshChodeshToday = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
@@ -261,7 +265,7 @@ function getMastheadGreeting(hd, il, location) {
     const dow = erevChanukah.day();
     const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
-    return ['🕎&nbsp; Happy Chanukah! / <span lang="he" dir="rtl">חנוכה שמח</span> &nbsp;🕎',
+    return ['🕎&nbsp; Happy Chanukah! &middot; <span lang="he" dir="rtl">חנוכה שמח</span> &nbsp;🕎',
       `<br>Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a>
  ${when} on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
@@ -310,26 +314,26 @@ function getMastheadGreeting(hd, il, location) {
 /**
  * @private
  * @param {Event} ev
+ * @param {boolean} il
  * @param {boolean} today
- * @param {Location} location
+ * @param {string} tzid
  * @return {any}
  */
-function getHolidayGreeting(ev, today, location) {
+function getHolidayGreeting(ev, il, today, tzid) {
   const url = ev.url();
   const mask = ev.getFlags();
   if (today && (mask & flags.CHANUKAH_CANDLES)) {
-    const tzid = location === null ? 'America/New_York' : location.getTzid();
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
-    const holidays = HebrewCalendar.getHolidaysOnDate(hd, false);
+    const holidays = HebrewCalendar.getHolidaysOnDate(hd, il);
     ev = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
     const dow = d.day();
     const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
     const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
     const nth = Locale.ordinal(candles);
     const dowStr = d.format('dddd');
-    return [`🕎&nbsp; Chag Urim Sameach! / <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;🕎`,
+    return [`🕎&nbsp; Chag Urim Sameach &middot; <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;🕎`,
       `<br>Light the ${nth} <a href="${url}">Chanukah candle</a> ${dowStr} evening ${when}`];
   }
   const title = ev.basename();
@@ -340,7 +344,7 @@ function getHolidayGreeting(ev, today, location) {
   return [`${emoji}&nbsp; Chag Sameach! &nbsp;${emoji}`, longText];
 }
 
-const roshChodeshBlurb = '🗓️ 🌒&nbsp; Chodesh Tov / <span lang="he" dir="rtl">חודש טוב</span> &nbsp;🌒 🗓️';
+const roshChodeshBlurb = '🗓️ 🌒&nbsp; Chodesh Tov &middot; <span lang="he" dir="rtl">חודש טוב</span> &nbsp;🌒 🗓️';
 
 function getRoshChodeshGreeting(hd, ev) {
   const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
