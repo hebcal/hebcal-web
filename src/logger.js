@@ -72,7 +72,12 @@ function makeLogInfo(ctx) {
     info.postBody = ctx.request.body;
   }
   if (typeof ctx.state.geoip === 'object') {
-    info.geoip = ctx.state.geoip;
+    const geoip = info.geoip = ctx.state.geoip;
+    if (typeof geoip.details === 'object') {
+      for (const val of Object.values(geoip.details)) {
+        delete val.names;
+      }
+    }
   }
   return info;
 }
