@@ -720,7 +720,10 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
     if (geoip.location.accuracy_radius > maxAccuracyRadius) {
       return gloc;
     }
-    const city = nearestCity(ctx.db.geonamesDb, latitude, longitude, tzid);
+    const city = nearestCity(ctx.db.geonamesDb,
+        geoip.location.latitude,
+        geoip.location.longitude,
+        geoip.location.time_zone);
     if (city !== null) {
       gloc.geo = 'geoname';
       gloc.geonameid = city.geonameid;
