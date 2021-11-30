@@ -332,7 +332,7 @@ function getHolidayGreeting(ev, il, today, tzid) {
     const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
     const nth = Locale.ordinal(candles);
     const dowStr = d.format('dddd');
-    return [`🕎&nbsp; Chag Urim Sameach &middot; <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;🕎`,
+    return [`🕎&nbsp; Happy Chanukah! &middot; <span lang="he" dir="rtl">חג אורים שמח</span> &nbsp;🕎`,
       `<br>Light the ${nth} <a href="${url}">Chanukah candle</a> ${dowStr} evening ${when}`];
   }
   const title = ev.basename();
