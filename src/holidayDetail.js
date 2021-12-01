@@ -326,8 +326,8 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
       itemReading.shortName = 'Tanakh';
     } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
       itemReading.shortName = item.substring(holiday.length + 1);
-    } else if (item.startsWith(`${holiday} (`)) {
-      itemReading.shortName = item.substring(holiday.length + 2, item.length - 1);
+    } else if (item.startsWith(`${holiday} Day`)) {
+      itemReading.shortName = item.substring(holiday.length + 1);
     } else {
       itemReading.shortName = 'Day ' + item.substring(holiday.length + 1);
     }
@@ -354,6 +354,9 @@ function getReadingForHoliday(ev, il) {
   const hd = ev.getDate();
   const dow = hd.abs() % 7;
   const desc = ev.getDesc();
+  if (desc === 'Chanukah: 1 Candle') {
+    return undefined;
+  }
   if (desc.startsWith('Shabbat ') || (desc.startsWith('Chanukah') && dow === 6)) {
     const parshaEv = HebrewCalendar.calendar({start: hd, end: hd,
       il, noHolidays: true, sedrot: true});

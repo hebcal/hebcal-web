@@ -44,14 +44,18 @@
   "yomtov": false,
   "items": [
    "Chanukah",
-   "Chanukah (Day 1)",
-   "Chanukah (Day 2)",
-   "Chanukah (Day 3)",
-   "Chanukah (Day 4)",
-   "Chanukah (Day 5)",
-   "Chanukah (Day 6)",
-   "Chanukah (Day 7)",
-   "Chanukah (Day 8)"
+   "Chanukah Day 1",
+   "Chanukah Day 2",
+   "Chanukah Day 3",
+   "Chanukah Day 4",
+   "Chanukah Day 5",
+   "Chanukah Day 6",
+   "Chanukah Day 7",
+   "Chanukah Day 7 (on Rosh Chodesh)",
+   "Chanukah Day 8",
+   "Shabbat Chanukah",
+   "Shabbat Rosh Chodesh Chanukah",
+   "Shabbat Chanukah II"
   ]
  },
  "Days of the Omer": {
