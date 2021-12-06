@@ -7,6 +7,7 @@ import {makeDownloadProps} from './makeDownloadProps';
 import {HebrewCalendar, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   shouldRenderBrief,
+  getCalendarTitle,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -179,6 +180,9 @@ function renderHtml(ctx) {
   url.settings = '/hebcal?' + urlArgs(q, {v: 0});
   url.prev ='/hebcal?' + urlArgs(q, {year: options.year - 1});
   url.next = '/hebcal?' + urlArgs(q, {year: options.year + 1});
+  const optsTmp = Object.assign({}, options);
+  optsTmp.subscribe = '1';
+  url.title = getCalendarTitle(events, optsTmp);
   if (options.candlelighting) {
     const location = ctx.state.location;
     let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;

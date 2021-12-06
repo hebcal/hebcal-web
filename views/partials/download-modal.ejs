@@ -11,7 +11,8 @@
 <li class="nav-item" role="presentation"><a class="nav-link active" style="padding: 0.25rem 0.5rem" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#icalendar-body" data-bs-toggle="tab">iCalendar</a></li>
-<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-ics-body" data-bs-toggle="tab">Outlook</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#olcom-body" data-bs-toggle="tab">Outlook.com</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-ics-body" data-bs-toggle="tab">Outlook Windows</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-mac-body" data-bs-toggle="tab">Outlook Mac</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#csv-body" data-bs-toggle="tab">CSV</a></li>
 <% if (typeof filename.pdf === 'string') { %>
@@ -95,7 +96,6 @@ Add to Google Calendar</a></div>
   (<a title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
   href="/home/59/google-calendar-alternative-instructions">import instructions</a>).
 </div>
-<p class="mb-0"></p>
 </div>
 </div><!-- #gcal-body -->
 <div id="ol-mac-body" class="tab-pane">
@@ -144,6 +144,24 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 
 </div>
 </div><!-- #icalendar-body -->
+<div id="olcom-body" class="tab-pane">
+<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
+  Outlook.com
+</h6>
+<div>
+<div class="mb-3">
+<%- await include('emoji-switch.ejs', {id: 'dl-olcom'}) -%>
+<div>
+<a class="btn btn-secondary download mb-2" id="dl-olcom" rel="nofollow"
+title="Add <%= filename.ics %> to Outlook.com"
+data-hebcal-attr="href" data-hebcal-src="olcom"
+href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(url.gcal) %>&amp;name=<%=encodeURIComponent(url.title)%>&amp;mkt=en-001">
+<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
+Add to Outlook.com</a></div>
+<%- await include('download-modal-numyears.ejs') -%>
+</div>
+</div>
+</div><!-- #olcom-body -->
 <div id="csv-body" class="tab-pane">
 <h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
   CSV file for Outlook 97-2003 (Windows)

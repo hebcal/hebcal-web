@@ -10,6 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
       var href = dlURLs[srcType] + suffix;
       if (srcType == 'gcal') {
         href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
+      } else if (srcType == 'olcom') {
+        var httpURL = dlURLs.gcal + suffix;
+        href = 'https://outlook.live.com/calendar/addfromweb?url=' +
+          encodeURIComponent(httpURL) + '&name=' + encodeURIComponent(dlURLs.title) +
+          '&mkt=en-001';
       }
       btn[btn.dataset.hebcalAttr] = href;
     }, false);
