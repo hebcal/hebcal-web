@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/register": "^7.16.0",
     "babel-plugin-transform-modules-iife": "^1.0.0",
-    "eslint": "^8.3.0",
+    "eslint": "^8.4.0",
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
