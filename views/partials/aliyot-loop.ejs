@@ -7,7 +7,7 @@
 <a class="outbound d-print-none" title="Tikkun.io - <%=aliyah.verses%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<% if (aliyah.reason) { %><small> // <%= aliyah.reason %></small><% } %>
+<% if (aliyah.reason) { %> <span class="text-success">☞&nbsp;<small><%= aliyah.reason %></small>&nbsp;☜</span><% } %>
 <% } %>
 </ol>
 <% } %>

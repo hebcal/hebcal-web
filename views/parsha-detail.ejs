@@ -20,7 +20,9 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <% if (date && d.year() < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
+<% if (date) { -%>
 <p class="lead">Read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap"><%= hd.toString() %></span>.</p>
+<% } -%>
 <p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.</p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
@@ -50,7 +52,7 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<% if (reading.reason && reading.reason[num]) { %><small> // <%= reading.reason[num] %></small><% } %>
+<% if (reading.reason && reading.reason[num]) { %> <span class="text-success">☞&nbsp;<small><%= reading.reason[num] %></small>&nbsp;☜</span><% } %>
 <%    } // ... for %>
 </ol>
 <% } // reading.fullkriyah %>
@@ -94,7 +96,7 @@ href="<%-aliyah.tikkun%>">
 <p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
 <a class="outbound" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading.reason && reading.reason.haftara) { %> // <%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %> <% } %>
+<% if (reading.reason && reading.reason.haftara) { %> <span class="text-success">☞&nbsp;<small><%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></small>&nbsp;☜</span> <% } %>
 </p>
 <%   if (parsha.haftara != reading.haftara) { -%>
 <p class="haftara">Regular Haftarah for <%= parsha.name %>: <a class="outbound" href="<%=parsha.haftaraHref%>"><%=parsha.haftara%></a>
