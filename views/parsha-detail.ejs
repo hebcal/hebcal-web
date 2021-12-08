@@ -79,6 +79,13 @@ href="<%-aliyah.tikkun%>">
 <p><small>See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></small></p>
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
+<% if (triReading.reason && triReading.reason.haftara) { -%>
+<p class="haftara">Haftarah:
+<a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
+<%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
+<span class="text-success">☞&nbsp;<small><%= triReading.reason.haftara %></small>&nbsp;☜</span>
+</p>
+<% } -%>
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>

@@ -322,14 +322,33 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
           addLinksToLeyning(triReading2.aliyot, false);
           for (const aliyah of Object.values(triReading2.aliyot)) {
             aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
+            if (parshaName === 'Vezot Haberakhah') {
+              delete aliyah.reason;
+            }
           }
           triReading2.d = dayjs(triReading.date.greg());
+          addSpecialHaftarahToTriennial(ev, triReading2);
           triennial.readings[yr] = triReading2;
         }
       }
     }
   }
   return triennial;
+}
+
+function addSpecialHaftarahToTriennial(ev, triReading2) {
+  const parshaName = ev.parsha[0];
+  if (parshaName === 'Vezot Haberakhah') {
+    return;
+  }
+  const fk = leyning.getLeyningForParshaHaShavua(ev, false);
+  if (fk.reason && fk.reason.haftara) {
+    triReading2.haftara = fk.haftara;
+    triReading2.haftaraHref = getHaftarahHref(fk.haftara);
+    triReading2.haftaraNumV = fk.haftaraNumV;
+    triReading2.reason = triReading2.reason || {};
+    triReading2.reason.haftara = fk.reason.haftara;
+  }
 }
 
 /**
