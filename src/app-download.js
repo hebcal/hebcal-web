@@ -177,6 +177,7 @@ app.use(async function router(ctx, next) {
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {
     ctx.set('Cache-Control', 'max-age=2592000');
+    ctx.state.logQuery = true;
     if (ctx.request.query.v == 'yahrzeit') {
       return yahrzeitDownload(ctx);
     } else if (ctx.request.query.v == '1') {

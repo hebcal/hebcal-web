@@ -71,6 +71,19 @@ function makeLogInfo(ctx) {
   if (typeof ctx.request.body === 'object' && Object.keys(ctx.request.body).length !== 0) {
     info.postBody = ctx.request.body;
   }
+  if (ctx.state.logQuery) {
+    const query = ctx.request.query;
+    const qkeys = Object.keys(query);
+    if (qkeys.length !== 0) {
+      const q = Object.assign({}, query);
+      for (const key of qkeys) {
+        if (key.startsWith('utm_')) {
+          delete q[key];
+        }
+      }
+      info.q = q;
+    }
+  }
   if (typeof ctx.state.geoip === 'object') {
     const geoip = info.geoip = ctx.state.geoip;
     if (typeof geoip.details === 'object') {
