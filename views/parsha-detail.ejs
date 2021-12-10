@@ -105,11 +105,6 @@ href="<%-aliyah.tikkun%>">
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
 <% if (reading.reason && reading.reason.haftara) { %> <span class="text-success">☞&nbsp;<small><%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></small>&nbsp;☜</span> <% } %>
 </p>
-<%   if (parsha.haftara != reading.haftara) { -%>
-<p class="haftara">Regular Haftarah for <%= parsha.name %>: <a class="outbound" href="<%=parsha.haftaraHref%>"><%=parsha.haftara%></a>
-<%- await include('partials/numverses.ejs', {v: parsha.haftaraNumV}) -%>
-</p>
-<%   } -%>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
 <p class="lead haftara">Haftarah for Sephardim:
