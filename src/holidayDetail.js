@@ -6,7 +6,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, getHaftarahHref, langNames} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans} from './holidayCommon';
 import holidayMeta from './holidays.json';
@@ -311,15 +311,21 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     itemReading.torahHref = meta.links.torah[item];
   } else if (meta.about.torah) {
     itemReading.torahHref = meta.about.torah;
+  } else if (itemReading.summaryParts) {
+    itemReading.summaryParts.map((part) => part.href = sefariaAliyahHref(part, false));
+    itemReading.torahHref = itemReading.summaryParts[0].href;
   } else if (itemReading.summary) {
-    itemReading.torahHref = getHaftarahHref(itemReading.summary) + '&aliyot=0';
+    const matches = itemReading.summary.match(/^([^\d]+)(\d.+)$/);
+    const book = matches[1].trim();
+    const verses = matches[2].replace(/:/g, '.').replace(/\s/g, '');
+    itemReading.torahHref = `https://www.sefaria.org/${book}.${verses}?lang=bi`;
   }
   if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
     itemReading.haftaraHref = meta.links.haftara[item];
   } else if (meta.about.haftara) {
     itemReading.haftaraHref = meta.about.haftara;
   } else if (itemReading.haftara) {
-    itemReading.haftaraHref = getHaftarahHref(itemReading.haftara);
+    itemReading.haftaraHref = sefariaAliyahHref(itemReading.haft, false);
   }
   if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {

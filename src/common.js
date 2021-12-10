@@ -971,24 +971,32 @@ export function stopIfTimedOut() {
   };
 }
 
+export const bookId = {
+  Genesis: 1,
+  Exodus: 2,
+  Leviticus: 3,
+  Numbers: 4,
+  Deuteronomy: 5,
+};
+
 /**
  * @private
- * @param {string} haftara
+ * @param {Aliyah|Aliyah[]} aliyah
+ * @param {boolean} sefAliyot
  * @return {string}
  */
-export function getHaftarahHref(haftara) {
-  haftara = haftara.replace(/[;,].+$/, '');
-  const matches = haftara.match(/^([^\d]+)(\d.+)$/);
-  if (matches === null) {
-    return null;
+export function sefariaAliyahHref(aliyah, sefAliyot) {
+  if (Array.isArray(aliyah)) {
+    aliyah = aliyah[0];
   }
-  const book = matches[1].trim().replace(/\s+/g, '_');
-  let verses = matches[2].replace(/:/g, '.').replace(/\s+-\s+/, '-');
-  const cv = verses.match(/^(\d+)\.(\d+)-(\d+)\.(\d+)$/);
-  if (cv && cv[1] === cv[3]) {
-    verses = `${cv[1]}.${cv[2]}-${cv[4]}`;
-  }
-  return `https://www.sefaria.org/${book}.${verses}?lang=bi`;
+  const beginStr = aliyah.b.replace(':', '.');
+  const cv1 = beginStr.split('.');
+  const end = aliyah.e.replace(':', '.');
+  const cv2 = end.split('.');
+  const endStr = cv1[0] === cv2[0] ? cv2[1] : end;
+  const book = aliyah.k;
+  const suffix = bookId[book] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
+  return `https://www.sefaria.org/${aliyah.k}.${beginStr}-${endStr}?lang=bi${suffix}`;
 }
 
 const maxNumYear = {

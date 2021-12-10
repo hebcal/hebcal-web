@@ -1,5 +1,6 @@
 import * as leyning from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
+import {bookId, sefariaAliyahHref} from './common';
 
 export const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
 export const parshaByBook = new Map();
@@ -22,14 +23,6 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
   parshaByBook.get(bookId).set(anchor, parshaName);
 }
 
-const bookId = {
-  Genesis: 1,
-  Exodus: 2,
-  Leviticus: 3,
-  Numbers: 4,
-  Deuteronomy: 5,
-};
-
 /**
  * Makes Sefaria links by adding `href` and Tikkun.io link by adding `tikkun`.
  * Also adds `verses` and `num` attributes to each aliyah.
@@ -47,10 +40,7 @@ export function addLinksToLeyning(aliyot, showBook) {
     const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
     const verses = `${aliyah.b}-${endChapVerse}`;
     aliyah.verses = showBook || (book1 != aliyah.k) ? `${aliyah.k} ${verses}` : verses;
-    const sefariaVerses = verses.replace(/:/g, '.');
-    const sefAliyot = showBook ? '0' : '1';
-    const url = `https://www.sefaria.org/${aliyah.k}.${sefariaVerses}?lang=bi&aliyot=${sefAliyot}`;
-    aliyah.href = url;
+    aliyah.href = sefariaAliyahHref(aliyah, !showBook);
     const bid = bookId[aliyah.k];
     aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
   });

@@ -4,7 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import * as leyning from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
-import {httpRedirect, wrapHebrewInSpans, makeGregDate, getHaftarahHref,
+import {httpRedirect, wrapHebrewInSpans, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
 import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
 import dayjs from 'dayjs';
@@ -162,9 +162,9 @@ export async function parshaDetail(ctx) {
     leyning.getLeyningForParshaHaShavua(parshaEv, il) :
     leyning.getLeyningForParsha(parshaName);
   addLinksToLeyning(reading.fullkriyah, false);
-  reading.haftaraHref = getHaftarahHref(reading.haftara);
+  reading.haftaraHref = sefariaAliyahHref(reading.haft, false);
   if (reading.sephardic) {
-    reading.sephardicHref = getHaftarahHref(reading.sephardic);
+    reading.sephardicHref = sefariaAliyahHref(reading.seph, false);
   }
   if (reading.weekday) {
     addLinksToLeyning(reading.weekday, false);
@@ -172,7 +172,7 @@ export async function parshaDetail(ctx) {
       aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
     }
   }
-  parsha.haftaraHref = getHaftarahHref(parsha.haftara);
+  parsha.haftaraHref = sefariaAliyahHref(parsha.haft, false);
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hyear, il);
@@ -344,7 +344,7 @@ function addSpecialHaftarahToTriennial(ev, triReading2) {
   const fk = leyning.getLeyningForParshaHaShavua(ev, false);
   if (fk.reason && fk.reason.haftara) {
     triReading2.haftara = fk.haftara;
-    triReading2.haftaraHref = getHaftarahHref(fk.haftara);
+    triReading2.haftaraHref = sefariaAliyahHref(fk.haft);
     triReading2.haftaraNumV = fk.haftaraNumV;
     triReading2.reason = triReading2.reason || {};
     triReading2.reason.haftara = fk.reason.haftara;
