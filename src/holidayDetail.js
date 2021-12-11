@@ -287,6 +287,24 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
   }
 }
 
+function makeHtmlFromParts(parts) {
+  if (!Array.isArray(parts)) {
+    parts = [parts];
+  }
+  let prev = parts[0];
+  let summary = '<a href="' + sefariaAliyahHref(prev, false) + '">' +
+    leyning.formatAliyahShort(prev, true) + '</a>';
+  for (let i = 1; i < parts.length; i++) {
+    const part = parts[i];
+    const showBook = (part.k !== prev.k);
+    const delim = showBook ? '; ' : ', ';
+    summary += delim + '<a class="outbound" href="' + sefariaAliyahHref(part, false) + '">' +
+      leyning.formatAliyahShort(part, showBook) + '</a>';
+    prev = part;
+  }
+  return summary;
+}
+
 /**
  * @param {string} holiday
  * @param {string} item
@@ -312,8 +330,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else if (meta.about.torah) {
     itemReading.torahHref = meta.about.torah;
   } else if (itemReading.summaryParts) {
-    itemReading.summaryParts.map((part) => part.href = sefariaAliyahHref(part, false));
-    itemReading.torahHref = itemReading.summaryParts[0].href;
+    itemReading.torahHtml = makeHtmlFromParts(itemReading.summaryParts);
   } else if (itemReading.summary) {
     const matches = itemReading.summary.match(/^([^\d]+)(\d.+)$/);
     const book = matches[1].trim();
@@ -324,6 +341,8 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     itemReading.haftaraHref = meta.links.haftara[item];
   } else if (meta.about.haftara) {
     itemReading.haftaraHref = meta.about.haftara;
+  } else if (itemReading.haft) {
+    itemReading.haftaraHtml = makeHtmlFromParts(itemReading.haft);
   } else if (itemReading.haftara) {
     itemReading.haftaraHref = sefariaAliyahHref(itemReading.haft, false);
   }
