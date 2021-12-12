@@ -87,7 +87,8 @@ function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
       PDF_LMARGIN + edgeOffset;
     const str = dowNames[i];
     const width = doc.widthOfString(str);
-    doc.text(str, x - (width / 2), PDF_TMARGIN + 24);
+    doc.fillColor('#0000cc')
+        .text(str, x - (width / 2), PDF_TMARGIN + 24);
   }
   // Loop through the columns
   for (let c = 1; c < PDF_COLUMNS; c++) {
@@ -120,14 +121,26 @@ function renderPdfMonthTitle(doc, d, rtl) {
 
 // eslint-disable-next-line require-jsdoc
 function eventColor(evt) {
-  switch (evt.getFlags()) {
-    case flags.DAF_YOMI:
-    case flags.OMER_COUNT:
-    case flags.HEBREW_DATE:
-      return '#666666';
-    default:
-      return '#000000';
+  const f = evt.getFlags();
+  if (f & (flags.DAF_YOMI | flags.OMER_COUNT | flags.HEBREW_DATE)) {
+    return '#666666';
   }
+  if (f & flags.ROSH_CHODESH) {
+    return '#660099';
+  }
+  if (f & flags.MINOR_FAST) {
+    return '#FF3300';
+  }
+  if (f & flags.PARSHA_HASHAVUA) {
+    return '#009900';
+  }
+  if (f & (flags.SPECIAL_SHABBAT | flags.MODERN_HOLIDAY | flags.MINOR_HOLIDAY)) {
+    return '#006699';
+  }
+  if (f & (flags.CHAG | flags.EREV | flags.CHOL_HAMOED | flags.MAJOR_FAST)) {
+    return '#990000';
+  }
+  return '#000000';
 }
 
 /**
