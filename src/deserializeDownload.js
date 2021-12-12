@@ -1,41 +1,5 @@
 import DownloadProtoBuf from './download_pb';
 
-const objToQmap = {
-  major: 'min',
-  minor: 'min',
-  roshchodesh: 'nx',
-  modern: 'mod',
-  minorfast: 'mf',
-  specialshabbat: 'ss',
-  israel: 'i',
-  havdalahtzeit: 'M',
-  // ishebrewyear: true,
-  candlelighting: 'c',
-  geonameid: 'geonameid',
-  year: 'year',
-  // locale: 'lg',
-  // havdalahmins: 'm',
-  candlelightingmins: 'b',
-  // emoji: 'emoji',
-  sedrot: 's',
-  zip: 'zip',
-  // yearnow: false,
-  // subscribe: 'subscribe',
-  addhebrewdates: 'd',
-  addhebrewdatesforevents: 'D',
-  omer: 'o',
-  dafyomi: 'F',
-  // euro: 'euro',
-  // geopos: false,
-  month: 'month',
-  numyears: 'ny',
-  latitude: 'latitude',
-  longitude: 'longitude',
-  tzid: 'tzid',
-  start: 'start',
-  end: 'end',
-};
-
 /**
  * @param {string} data
  * @return {Object<string, string>}
@@ -43,44 +7,47 @@ const objToQmap = {
 export function deserializeDownload(data) {
   const buff = Buffer.from(data, 'base64');
   const msg = DownloadProtoBuf.Download.deserializeBinary(buff);
-  const obj = DownloadProtoBuf.Download.toObject(false, msg);
   const q = {v: '1'};
-  for (const [src, dest] of Object.entries(objToQmap)) {
-    const val = obj[src];
-    const valType = typeof val;
-    switch (valType) {
-      case 'boolean':
-        q[dest] = val ? 'on' : 'off';
-        break;
-      case 'string':
-        if (val.length !== 0) {
-          q[dest] = val;
-        }
-        break;
-      case 'number':
-        if (val !== 0) {
-          q[dest] = val;
-        }
-        break;
-      default:
-        break;
-    }
-  }
+  if (msg.getMajor()) q.maj = 'on';
+  if (msg.getMinor()) q.min = 'on';
+  if (msg.getRoshchodesh()) q.nx = 'on';
+  if (msg.getModern()) q.mod = 'on';
+  if (msg.getMinorfast()) q.mf = 'on';
+  if (msg.getSpecialshabbat()) q.ss = 'on';
+  if (msg.getIsrael()) q.i = 'on';
+  q.M = msg.getHavdalahtzeit() ? 'on' : 'off';
   if (q.M === 'off') {
-    q.m = obj.havdalahmins;
+    q.m = msg.getHavdalahmins();
   }
-  q.yt = obj.ishebrewyear ? 'H' : 'G';
-  if (obj.yearnow) {
+  q.yt = msg.getIshebrewyear() ? 'H' : 'G';
+  if (msg.getCandlelighting()) q.c = 'on';
+  q.geonameid = msg.getGeonameid() || undefined;
+  if (msg.getYearnow()) {
     q.year = 'now';
+  } else {
+    const year = msg.getYear();
+    if (year) q.year = year;
   }
-  q.lg = obj.locale || 's';
-  q.emoji = obj.emoji ? '1' : '0';
-  q.euro = obj.euro ? '1' : '0';
-  q.subscribe = obj.subscribe ? '1' : '0';
-  if (obj.geopos) {
-    q.latitude = obj.latitude;
-    q.longitude = obj.longitude;
+  q.lg = msg.getLocale() || 's';
+  q.b = msg.getCandlelightingmins() || undefined;
+  q.emoji = msg.getEmoji() ? '1' : '0';
+  q.euro = msg.getEuro() ? '1' : '0';
+  q.subscribe = msg.getSubscribe() ? '1' : '0';
+  q.ny = msg.getNumyears() || undefined;
+  q.zip = msg.getZip() || undefined;
+  if (msg.getSedrot()) q.s = 'on';
+  if (msg.getOmer()) q.o = 'on';
+  if (msg.getDafyomi()) q.F = 'on';
+  if (msg.getAddhebrewdates()) q.d = 'on';
+  if (msg.getAddhebrewdatesforevents()) q.D = 'on';
+  q.month = msg.getMonth() || undefined;
+  if (msg.getGeopos()) {
+    q.latitude = msg.getLatitude();
+    q.longitude = msg.getLongitude();
     q.geo = 'pos';
   }
+  q.tzid = msg.getTzid() || undefined;
+  q.start = msg.getStart() || undefined;
+  q.end = msg.getEnd() || undefined;
   return q;
 }
