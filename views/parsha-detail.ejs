@@ -15,7 +15,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <div class="row">
 <div class="col">
 <%- await include('partials/parsha-detail-breadcrumb.ejs') -%>
-<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name%> <%= date ? hd.getFullYear() : '' %> /
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name.replace(/'/g, '’')%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
 <% if (date && d.year() < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>

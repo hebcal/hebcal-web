@@ -16,7 +16,7 @@
 <div class="col-md-10">
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 
-<h2><%=holiday%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
+<h2><%=holiday.replace(/'/g, '’')%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <% if (year && year < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
@@ -90,7 +90,7 @@ data-ad-slot="5342180883"></ins>
 </div>
 <% } // meta.reading %>
 
-<h3 id="dates">Dates for <%=holiday%><% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></h3>
+<h3 id="dates">Dates for <%=holiday.replace(/'/g, '’')%><% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in 🇮🇱<%}%></h3>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup><col><col><col></colgroup>
@@ -128,7 +128,7 @@ data-ad-slot="5342180883"></ins>
 <% if (typeof meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-3">Tanakh</h3>
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
-<h4 id="reading-<%=reading.id%>"><%=item%>
+<h4 id="reading-<%=reading.id%>"><%=item.replace(/'/g, '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
 </h4>
