@@ -8,6 +8,7 @@ import {HebrewCalendar, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
   shouldRenderBrief,
   getCalendarTitle,
+  eventsToCsv,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -46,7 +47,7 @@ export async function hebcalApp(ctx) {
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
-    if (q.cfg === 'json' || q.cfg === 'fc') {
+    if (q.cfg === 'json' || q.cfg === 'fc' || q.cfg === 'csv') {
       ctx.throw(400, err);
     } else if (q.v === '1') {
       ctx.status = 400;
@@ -83,6 +84,8 @@ export async function hebcalApp(ctx) {
     renderFullCalendar(ctx);
   } else if (q.cfg === 'e' || q.cfg === 'e2') {
     ctx.body = renderLegacyJavascript(ctx);
+  } else if (q.cfg === 'csv') {
+    ctx.body = renderCsv(ctx);
   } else {
     if (q.v === '1') {
       return renderHtml(ctx);
@@ -90,6 +93,17 @@ export async function hebcalApp(ctx) {
       return renderForm(ctx, error);
     }
   }
+}
+
+function renderCsv(ctx) {
+  if (isFresh(ctx)) {
+    return;
+  }
+  const options = ctx.state.options;
+  const events = makeHebrewCalendar(ctx, options);
+  const csv = eventsToCsv(events, options);
+  ctx.response.type = 'text/x-csv; charset=utf-8';
+  return csv;
 }
 
 async function renderForm(ctx, error) {
