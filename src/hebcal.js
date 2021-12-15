@@ -50,12 +50,23 @@ export async function hebcalApp(ctx) {
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
-    if (q.cfg === 'json' || q.cfg === 'fc' || q.cfg === 'csv') {
-      ctx.throw(400, err);
-    } else if (q.v === '1') {
-      ctx.status = 400;
-      q.v = '0';
-      error = err;
+    switch (q.cfg) {
+      case 'json':
+      case 'fc':
+      case 'e':
+      case 'e2':
+      case 'csv':
+      case 'rss':
+      case 'ics':
+        ctx.throw(400, err);
+        break;
+      default:
+        if (q.v === '1') {
+          ctx.status = 400;
+          q.v = '0';
+          error = err;
+        }
+        break;
     }
   }
   if (options.il) {
@@ -135,6 +146,7 @@ function renderRss(ctx) {
   options.selfUrl = 'https://www.hebcal.com/hebcal?' + urlArgs(ctx.state.q);
   options.utmSource = 'api';
   options.utmMedium = 'rss';
+  options.evPubDate = true;
   const rss = eventsToRss2(events, options);
   ctx.response.type = 'application/rss+xml; charset=utf-8';
   return rss;
