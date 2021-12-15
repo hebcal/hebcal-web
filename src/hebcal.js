@@ -10,6 +10,7 @@ import {eventsToClassicApi, eventToFullCalendar, pad2,
   shouldRenderBrief,
   getCalendarTitle,
   eventsToCsv,
+  eventsToRss2,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
@@ -94,6 +95,9 @@ export async function hebcalApp(ctx) {
     case 'csv':
       ctx.body = renderCsv(ctx);
       break;
+    case 'rss':
+      ctx.body = renderRss(ctx);
+      break;
     case 'ics':
       return renderIcal(ctx);
     default:
@@ -114,7 +118,26 @@ async function renderIcal(ctx) {
   }
   const events = makeHebrewCalendar(ctx, options);
   ctx.response.type = 'text/calendar; charset=utf-8';
+  icalOpt.utmSource = 'api';
+  icalOpt.utmMedium = 'icalendar';
   ctx.body = await eventsToIcalendar(events, icalOpt);
+}
+
+function renderRss(ctx) {
+  if (isFresh(ctx)) {
+    return;
+  }
+  const options = ctx.state.options;
+  const events = makeHebrewCalendar(ctx, options);
+  const q = Object.assign({}, ctx.state.q);
+  delete q.cfg;
+  options.mainUrl = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
+  options.selfUrl = 'https://www.hebcal.com/hebcal?' + urlArgs(ctx.state.q);
+  options.utmSource = 'api';
+  options.utmMedium = 'rss';
+  const rss = eventsToRss2(events, options);
+  ctx.response.type = 'application/rss+xml; charset=utf-8';
+  return rss;
 }
 
 function renderCsv(ctx) {
