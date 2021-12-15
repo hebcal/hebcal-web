@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, getNumYears,
+  makeIcalOpts,
   getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
@@ -10,6 +11,7 @@ import {eventsToClassicApi, eventToFullCalendar, pad2,
   getCalendarTitle,
   eventsToCsv,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
+import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import './dayjs-locales';
@@ -78,21 +80,41 @@ export async function hebcalApp(ctx) {
   ctx.state.q = q;
   ctx.state.options = options;
   ctx.state.location = options.location;
-  if (q.cfg === 'json') {
-    renderJson(ctx);
-  } else if (q.cfg === 'fc') {
-    renderFullCalendar(ctx);
-  } else if (q.cfg === 'e' || q.cfg === 'e2') {
-    ctx.body = renderLegacyJavascript(ctx);
-  } else if (q.cfg === 'csv') {
-    ctx.body = renderCsv(ctx);
-  } else {
-    if (q.v === '1') {
-      return renderHtml(ctx);
-    } else {
-      return renderForm(ctx, error);
-    }
+  switch (q.cfg) {
+    case 'json':
+      renderJson(ctx);
+      break;
+    case 'fc':
+      renderFullCalendar(ctx);
+      break;
+    case 'e':
+    case 'e2':
+      ctx.body = renderLegacyJavascript(ctx);
+      break;
+    case 'csv':
+      ctx.body = renderCsv(ctx);
+      break;
+    case 'ics':
+      return renderIcal(ctx);
+    default:
+      if (q.v === '1') {
+        return renderHtml(ctx);
+      } else {
+        return renderForm(ctx, error);
+      }
   }
+}
+
+async function renderIcal(ctx) {
+  const options = ctx.state.options;
+  const icalOpt = makeIcalOpts(options, ctx.state.q);
+  ctx.response.etag = eTagFromOptions(icalOpt, {outputType: '.ics'});
+  if (isFresh(ctx)) {
+    return;
+  }
+  const events = makeHebrewCalendar(ctx, options);
+  ctx.response.type = 'text/calendar; charset=utf-8';
+  ctx.body = await eventsToIcalendar(events, icalOpt);
 }
 
 function renderCsv(ctx) {

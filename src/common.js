@@ -1039,3 +1039,22 @@ export function getNumYears(options) {
   }
   return numYears;
 }
+
+/**
+ * @private
+ * @param {HebrewCalendar.Options} options
+ * @param {Object.<string,string>} query
+ * @return {Object.<string,string>}
+ */
+export function makeIcalOpts(options, query) {
+  const icalOpts = Object.assign({}, options);
+  if (query.emoji === '1' || query.emoji === 'on') {
+    icalOpts.emoji = true;
+  }
+  for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
+    if (!empty(query[key])) {
+      icalOpts[key] = query[key];
+    }
+  }
+  return icalOpts;
+}

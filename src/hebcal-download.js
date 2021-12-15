@@ -4,7 +4,7 @@ import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
-  empty, getNumYears} from './common';
+  makeIcalOpts, getNumYears} from './common';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -66,25 +66,6 @@ export async function hebcalDownload(ctx) {
     renderPdf(doc, events, options);
     doc.end();
   }
-}
-
-/**
- * @private
- * @param {HebrewCalendar.Options} options
- * @param {Object.<string,string>} query
- * @return {Object.<string,string>}
- */
-function makeIcalOpts(options, query) {
-  const icalOpts = Object.assign({}, options);
-  if (query.emoji === '1' || query.emoji === 'on') {
-    icalOpts.emoji = true;
-  }
-  for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
-    if (!empty(query[key])) {
-      icalOpts[key] = query[key];
-    }
-  }
-  return icalOpts;
 }
 
 /**
