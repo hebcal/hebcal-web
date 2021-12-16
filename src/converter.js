@@ -111,7 +111,12 @@ export async function hebrewDateConverter(ctx) {
 function renameChanukah(locale) {
   return (ev) => {
     if (ev.chanukahDay) {
-      return Locale.gettext('Chanukah', locale) + ' Day ' + ev.chanukahDay;
+      const str = Locale.lookupTranslation(`Chanukah Day ${ev.chanukahDay}`, locale);
+      if (str) {
+        return str;
+      }
+      return Locale.gettext('Chanukah', locale) + ' ' +
+        Locale.gettext('day', locale) + ' ' + ev.chanukahDay;
     }
     return ev.render(locale);
   };
