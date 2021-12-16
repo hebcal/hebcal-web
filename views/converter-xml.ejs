@@ -4,8 +4,14 @@
 <hebrew year="<%= hy %>" month="<%= hmStr %>" day="<%= hd %>" str="<%= hebrew %>" />
 <% if (events.length) { -%>
 <events>
-<%   events.forEach((ev) => { -%>
- <event name="<%= ev.render() %>" href="<%= ev.url() %>" />
+<%   dateItems.both.forEach((item) => { -%>
+ <event name="<%= item.desc %>" diaspora="1" israel="1" <% if (item.url) { %>href="<%= item.url %>"<% } %> />
+<% }); -%>
+<%   dateItems.diasporaOnly.forEach((item) => { -%>
+ <event name="<%= item.desc %>" diaspora="1" israel="0" href="<%= item.url %>" />
+<% }); -%>
+<%   dateItems.israelOnly.forEach((item) => { -%>
+ <event name="<%= item.desc %>" diaspora="0" israel="1" href="<%= item.url %>" />
 <% }); -%>
 </events>
 <% } -%>

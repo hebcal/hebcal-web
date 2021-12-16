@@ -171,6 +171,7 @@ function makeProperties(ctx) {
     message: props.message,
     noCache: Boolean(props.noCache),
     events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
+    dateItems: makeDiasporaIsraelItems(ctx, hdate),
     hdateStr,
     canonical,
     first: greg2heb ? dateStr + afterSunset : hdateStr,
@@ -188,6 +189,36 @@ function makeProperties(ctx) {
     hleap: hdate.isLeapYear(),
     il,
     locale,
+  };
+}
+
+// eslint-disable-next-line require-jsdoc
+function eventToItem(ctx, ev) {
+  const locale = ctx.state.locale;
+  const desc = renameChanukah(locale)(ev);
+  const emoji = ev.chanukahDay ? '🕎' : ev.omer ? '' : ev.getEmoji() || '';
+  const url = ev.url();
+  return {desc, emoji, url};
+}
+
+/**
+ * @param {any} ctx
+ * @param {HDate} hdate
+ * @return {any}
+ */
+function makeDiasporaIsraelItems(ctx, hdate) {
+  const diaspora = getEvents(hdate, false)
+      .filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
+  const israel = getEvents(hdate, true)
+      .filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
+  const both = diaspora.filter((a) => israel.find((b) => a.getDesc() === b.getDesc()));
+  const diasporaOnly = diaspora.filter((ev) => !both.includes(ev));
+  const bothIL = israel.filter((a) => diaspora.find((b) => a.getDesc() === b.getDesc()));
+  const israelOnly = israel.filter((ev) => !bothIL.includes(ev));
+  return {
+    both: both.map((ev) => eventToItem(ctx, ev)),
+    diasporaOnly: diasporaOnly.map((ev) => eventToItem(ctx, ev)),
+    israelOnly: israelOnly.map((ev) => eventToItem(ctx, ev)),
   };
 }
 

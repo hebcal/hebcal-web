@@ -39,21 +39,12 @@
 <ul class="list-unstyled">
 <li class="big-list"><span class="text-nowrap"><%- first.replace(/ \(after sunset\)/, '</span> <span class="smaller text-nowrap">(after sunset)') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
 <li id="jumbo-hebdate" dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
-<% events.forEach((ev) => { -%>
-<li>
-<% if (ev.chanukahDay) { -%>
-🕎 <a href="<%= ev.url() %>">Chanukah Day <%=ev.chanukahDay%></a> 🕎
-<% } else { -%>
-<%= ev.getEmoji() || '' %>
-<% if (ev.url()) { -%>
-<a href="<%= ev.url() %>"><%= ev.render(locale) -%></a>
-<% } else { -%>
-<%= ev.render(locale) -%>
-<% } -%>
-<%= ev.getEmoji() || '' %>
-<% } -%>
-</li>
-<% }); -%>
+<%- await include('partials/converter-inner.ejs', {
+  items: dateItems.both, location: false}) -%>
+<%- await include('partials/converter-inner.ejs', {
+  items: dateItems.diasporaOnly, location: 'the Diaspora'}) -%>
+<%- await include('partials/converter-inner.ejs', {
+  items: dateItems.israelOnly, location: 'Israel'}) -%>
 </ul>
 </div><!-- #converter-results -->
 </div><!-- .col -->

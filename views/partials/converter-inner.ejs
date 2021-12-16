@@ -1,0 +1,14 @@
+<!-- location: <%= location %> -->
+<!-- items: <%= JSON.stringify(items, null, 1) %> -->
+<% items.forEach((item) => { -%>
+<li>
+<%= item.emoji %>
+<% if (item.url) { -%>
+<a href="<%= item.url %>"><%= item.desc -%></a>
+<% } else { -%>
+<%= item.desc -%>
+<% } -%>
+<%= item.emoji %>
+<% if (location) { %> <span class="text-muted">in <%= location %></span><% } -%>
+</li>
+<% }); -%>
