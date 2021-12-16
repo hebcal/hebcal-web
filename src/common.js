@@ -895,7 +895,7 @@ export function eTagFromOptions(options, attrs) {
   return etag(JSON.stringify(etagObj), {weak: true});
 }
 
-const MAX_DAYS = 45;
+const MAX_DAYS = 180;
 
 /**
  * @typedef {Object} StartAndEnd
