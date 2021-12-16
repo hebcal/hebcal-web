@@ -1,7 +1,5 @@
-<!-- location: <%= location %> -->
-<!-- items: <%= JSON.stringify(items, null, 1) %> -->
 <% items.forEach((item) => { -%>
-<li>
+<li <% if (locale == 'he') { %> lang="he" dir="rtl"<% } -%>>
 <%= item.emoji %>
 <% if (item.url) { -%>
 <a href="<%= item.url %>"><%= item.desc -%></a>
