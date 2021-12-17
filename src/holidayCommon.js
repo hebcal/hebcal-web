@@ -16,12 +16,12 @@ const events11years = HebrewCalendar.calendar({
 export const events11yearsBegin = getFirstOcccurences(events11years);
 
 export const categories = {
-  major: {id: 'major-holidays', name: 'Major holidays'},
-  minor: {id: 'minor-holidays', name: 'Minor holidays'},
-  fast: {id: 'minor-fasts', name: 'Minor fasts'},
-  modern: {id: 'modern-holidays', name: 'Modern holidays'},
-  shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot'},
-  roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh'},
+  major: {id: 'major-holidays', name: 'Major holidays', emoji: '✡️'},
+  minor: {id: 'minor-holidays', name: 'Minor holidays', emoji: '✡️'},
+  fast: {id: 'minor-fasts', name: 'Minor fasts', emoji: '✡️'},
+  modern: {id: 'modern-holidays', name: 'Modern holidays', emoji: '🇮🇱'},
+  shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot', emoji: '🕍'},
+  roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh', emoji: '🌒'},
 };
 
 /**
@@ -119,6 +119,8 @@ export function eventToHolidayItem(ev, il) {
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
   const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
   const endD = d.add(duration, 'd');
+  const emoji = Boolean(mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) ? '' :
+    holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
   const item = {
     name: holiday,
     mask,
@@ -137,6 +139,7 @@ export function eventToHolidayItem(ev, il) {
     basename: ev.basename(),
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
     event: ev,
+    emoji,
   };
   if (mask & flags.SPECIAL_SHABBAT) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);

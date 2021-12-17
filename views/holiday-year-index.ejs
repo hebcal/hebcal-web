@@ -102,7 +102,7 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 <% for (const [catId, category] of Object.entries(categories)) { %>
 <div class="row mt-2" id="<%=category.id%>">
 <div class="col">
-<h3><%=category.name%></h3>
+<h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
@@ -119,7 +119,7 @@ nightfall on the second date specified.</p>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
 <tbody>
-<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a>
+<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%>",
 "startDate":"<%=item.d.format('YYYY-MM-DD')%>","endDate":"<%=item.endD.format('YYYY-MM-DD')%>",
