@@ -20,8 +20,8 @@
 <% if (year && year < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<p class="lead"><%=holiday%> (<%=descrShort%>)
-for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
+<h4 class="text-muted"><%=descrShort%>&nbsp;<%=emoji%></h4>
+<p class="lead"><%=holiday%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
 <% if (currentItem.parsha) { %>
  This corresponds to Parashat <%= currentItem.parsha.join('-') %>.
 <% } %>

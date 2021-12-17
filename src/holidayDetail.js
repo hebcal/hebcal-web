@@ -130,6 +130,7 @@ export async function holidayDetail(ctx) {
     il,
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
     translations,
+    emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
   });
 }
 
