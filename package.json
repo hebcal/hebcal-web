@@ -52,7 +52,7 @@
     "geolite2-redist": "^1.0.7",
     "google-protobuf": "^3.19.1",
     "haversine": "^1.1.1",
-    "http-errors": "^1.8.1",
+    "http-errors": "^2.0.0",
     "koa": "^2.13.4",
     "koa-better-response-time": "^1.1.0",
     "koa-bodyparser": "^4.3.0",
