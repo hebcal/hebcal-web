@@ -55,35 +55,35 @@ fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=e
 compress_file $FILE
 
 FILE="hdate-en"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he-v2"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="omer"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&o=on&i=off&lg=en&c=off&geo=none&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&o=on&i=off&lg=en&c=off&geo=none&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot&color=%23FF9F0A"
 compress_file $FILE
 
 FILE="torah-readings-diaspora"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=off&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=off&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="torah-readings-israel"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="torah-readings-israel-he"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="daf-yomi"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="kindness"

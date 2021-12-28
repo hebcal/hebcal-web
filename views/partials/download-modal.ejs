@@ -27,6 +27,12 @@
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ios-sub'}) -%>
+<div class="row g-2 mb-2">
+  <div class="col-auto"><label for="cal-color>">Color</label></div>
+  <div class="col-2">
+  <input class="form-control" type="color" id="cal-color" value="#e66465">
+ </div>
+</div>
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-ios-sub" data-hebcal-attr="href" data-hebcal-src="webcal" rel="nofollow" href="<%= url.webcal %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>

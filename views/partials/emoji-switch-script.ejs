@@ -1,22 +1,37 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var dlURLs = <%- JSON.stringify(url) %>;
+  var calColor = '';
+  var emojiChecked = true;
+  function changeButtonTarget(id) {
+    var btn = document.getElementById(id);
+    var srcType = btn.dataset.hebcalSrc;
+    var suffix = emojiChecked ? '' : '?emoji=0';
+    if (calColor && id == 'dl-ios-sub') {
+      var param = 'color=' + encodeURIComponent(calColor);
+      suffix = suffix ? (suffix + '&' + param) : ('?' + param);
+    }
+    var href = dlURLs[srcType] + suffix;
+    if (srcType == 'gcal') {
+      href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
+    } else if (srcType == 'olcom') {
+      var httpURL = dlURLs.gcal + suffix;
+      href = 'https://outlook.live.com/calendar/addfromweb?url=' +
+        encodeURIComponent(httpURL) + '&name=' + encodeURIComponent(dlURLs.title) +
+        '&mkt=en-001';
+    }
+    btn[btn.dataset.hebcalAttr] = href;
+  }
+  var ccEl = document.getElementById('cal-color');
+  ccEl.addEventListener('change', function(event) {
+    calColor = event.target.value;
+    changeButtonTarget('dl-ios-sub');
+  }, false);
   document.querySelectorAll(".emoji-checkbox .form-check-input").forEach(function(el) {
     var inputId = el.id.substring(2);
     el.addEventListener('change', function(event) {
-      var btn = document.getElementById(inputId);
-      var srcType = btn.dataset.hebcalSrc;
-      var suffix = event.target.checked ? '' : '?emoji=0';
-      var href = dlURLs[srcType] + suffix;
-      if (srcType == 'gcal') {
-        href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
-      } else if (srcType == 'olcom') {
-        var httpURL = dlURLs.gcal + suffix;
-        href = 'https://outlook.live.com/calendar/addfromweb?url=' +
-          encodeURIComponent(httpURL) + '&name=' + encodeURIComponent(dlURLs.title) +
-          '&mkt=en-001';
-      }
-      btn[btn.dataset.hebcalAttr] = href;
+      emojiChecked = event.target.checked;
+      changeButtonTarget(inputId);
     }, false);
   });
 });

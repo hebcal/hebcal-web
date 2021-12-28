@@ -42,7 +42,8 @@ export async function hebcalDownload(ctx) {
     ctx.throw(400, 'Please select at least one event option');
   }
   if (ics) {
-    icalOpt.calendarColor = '#800002';
+    icalOpt.calendarColor = typeof query.color === 'string' && query.color.length ?
+      query.color.toUpperCase() : '#800002';
     icalOpt.utmSource = query.utm_source || 'ical';
     icalOpt.utmMedium = query.utm_medium || 'icalendar';
     icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
