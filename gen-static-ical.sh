@@ -5,6 +5,17 @@ set -x
 TMPFILE=`mktemp /tmp/hebcal.XXXXXX`
 YEAR0=`date +'%Y'`
 YEAR=`expr ${YEAR0} - 1`
+ENDY2=`expr ${YEAR} + 2`
+END2="${ENDY2}-12-31"
+ENDY3=`expr ${YEAR} + 3`
+END3="${ENDY3}-12-31"
+ENDY5=`expr ${YEAR} + 5`
+END5="${ENDY5}-12-31"
+ENDY8=`expr ${YEAR} + 8`
+END8="${ENDY8}-12-31"
+ENDY10=`expr ${YEAR} + 10`
+END10="${ENDY10}-12-31"
+START="${YEAR}-12-01"
 DOWNLOAD_URL="http://127.0.0.1:8080"
 
 remove_file() {
@@ -28,51 +39,51 @@ compress_file() {
 }
 
 FILE="jewish-holidays-v2"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays-all-v2"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=8&nx=on&mf=on&ss=on&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&ny=10&nx=off&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays-all"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&ny=8&nx=on&mf=on&ss=on&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="hdate-en"
-fetch_urls $FILE "year=${YEAR0}&yt=G&v=1&i=off&lg=en&d=on&c=off&geo=none&ny=2&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration"
 compress_file $FILE
 
 FILE="hdate-he"
-fetch_urls $FILE "year=${YEAR0}&yt=G&v=1&i=off&lg=h&d=on&c=off&geo=none&ny=2&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
 compress_file $FILE
 
 FILE="hdate-he-v2"
-fetch_urls $FILE "year=${YEAR0}&yt=G&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&ny=2&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew"
 compress_file $FILE
 
 FILE="omer"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&o=on&i=off&lg=en&c=off&geo=none&ny=3&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&o=on&i=off&lg=en&c=off&geo=none&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot"
 compress_file $FILE
 
 FILE="torah-readings-diaspora"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&s=on&i=off&lg=en&c=off&geo=none&ny=5&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=off&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
 compress_file $FILE
 
 FILE="torah-readings-israel"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&s=on&i=on&lg=en&c=off&geo=none&ny=5&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
 compress_file $FILE
 
 FILE="torah-readings-israel-he"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&s=on&i=on&lg=h&c=off&geo=none&ny=5&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com"
 compress_file $FILE
 
 FILE="daf-yomi"
-fetch_urls $FILE "year=${YEAR}&yt=G&v=1&F=on&i=off&lg=en&c=off&geo=none&ny=3&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud"
 compress_file $FILE
 
 FILE="kindness"
