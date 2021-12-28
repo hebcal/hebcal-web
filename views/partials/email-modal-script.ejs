@@ -1,5 +1,5 @@
 <script>
-(function () {
+document.addEventListener('DOMContentLoaded', function() {
 function show(el) { el.style.display = 'block' }
 function hide(el) { el.style.display = 'none' }
 var resource = '<%=resource%>';
@@ -74,5 +74,5 @@ function doSubscribe(event) {
 };
 emailForm.addEventListener('submit', doSubscribe);
 emailSubscribeBtn.addEventListener('click', doSubscribe);
-})();
+});
 </script>

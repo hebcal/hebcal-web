@@ -1,5 +1,5 @@
 <script>
-(function() {
+document.addEventListener('DOMContentLoaded', function() {
 var count=<%=count%>;
 function yahrzeitRow(n) {
   return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1"><div class="col-auto form-floating">'+
@@ -38,8 +38,7 @@ document.getElementById("newrow").onclick = function() {
   parentDiv.insertBefore(newNode, null);
   return false;
 }
-})();
-document.addEventListener('DOMContentLoaded', function() {
+
   var checkbox = document.getElementById('yizkor');
   var radio0 = document.getElementById('i0');
   var radio1 = document.getElementById('i1');
