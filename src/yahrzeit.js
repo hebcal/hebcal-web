@@ -72,6 +72,7 @@ export async function yahrzeitApp(ctx) {
     }
   } else {
     ctx.state.tables = null;
+    ctx.state.url = {};
   }
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
