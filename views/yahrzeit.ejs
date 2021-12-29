@@ -167,7 +167,7 @@ instructions</a>.</p>
 </div><!-- .modal -->
 <%- await include('partials/email-modal-script.ejs', {resource: '/yahrzeit/email'}) -%>
 <% } -%>
-<%- await include('partials/emoji-switch-script.ejs') -%>
+<%- await include('partials/emoji-switch-script.ejs', {url: {}}) -%>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, clipboard: tables !== null},
   xtra_html: await include('partials/script-yahrzeit-form.ejs'),
