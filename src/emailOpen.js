@@ -10,9 +10,9 @@ export async function emailOpen(ctx) {
   const visitor = ctx.state.visitor;
   if (visitor) {
     const params = {
-      ec: 'email',
-      ea: 'open',
-      el: ctx.request.query['utm_campaign'],
+      ec: 'email-open',
+      ea: ctx.request.query['utm_campaign'],
+      el: ctx.request.query['loc'],
       p: ctx.request.path,
       dh: ctx.get('host') || 'www.hebcal.com',
     };
