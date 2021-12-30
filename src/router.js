@@ -8,6 +8,7 @@ import {
 import {geoAutoComplete} from './complete';
 import {hebrewDateConverter} from './converter';
 import {emailForm, emailVerify} from './email';
+import {emailOpen} from './emailOpen';
 import {fridgeShabbat} from './fridge';
 import {hdateJavascript, hdateXml, parshaRss} from './hdate';
 import {hebcalApp} from './hebcal';
@@ -121,6 +122,8 @@ export function wwwRouter() {
       shortUrlRedir(ctx);
     } else if (rpath === '/email/verify.php') {
       return emailVerify(ctx);
+    } else if (rpath === '/email/open') {
+      return emailOpen(ctx);
     } else if (rpath.startsWith('/email')) {
       return emailForm(ctx);
     } else if (rpath.startsWith('/link')) {
