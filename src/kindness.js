@@ -23,8 +23,9 @@ const preamble = [
 icalStream.write(preamble);
 icalStream.write('\r\n');
 
+const gyear = new Date().getFullYear();
 for (const [monthDay, arr] of Object.entries(kindness)) {
-  const {ev, month} = makeEvent(2021, monthDay, arr);
+  const {ev, month} = makeEvent(gyear, monthDay, arr);
   const ical = new IcalEvent(ev, {});
   const lines = ical.getLongLines();
   const triggerIdx = lines.findIndex((line) => line.startsWith('TRIGGER'));
@@ -44,7 +45,6 @@ icalStream.write('END:VCALENDAR\r\n');
 icalStream.close();
 
 const events = [];
-const gyear = new Date().getFullYear();
 for (const [monthDay, arr] of Object.entries(kindness)) {
   const {ev} = makeEvent(gyear, monthDay, arr);
   events.push(ev);
