@@ -77,7 +77,7 @@ function makeLogInfo(ctx) {
     if (qkeys.length !== 0) {
       const q = Object.assign({}, query);
       for (const key of qkeys) {
-        if (key.startsWith('utm_')) {
+        if (q[key].length === 0 || key.startsWith('utm_')) {
           delete q[key];
         }
       }
