@@ -708,9 +708,16 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
   }
   if (typeof geoip.city === 'object' &&
         typeof geoip.city.geoname_id === 'number') {
-    gloc.geo = 'geoname';
-    gloc.geonameid = geoip.city.geoname_id;
-    return gloc;
+    const geonameid = geoip.city.geoname_id;
+    const location = ctx.db.lookupGeoname(geonameid);
+    if (location === null) {
+      // log the id and fall through to next test
+      gloc.raw_geonameid = geonameid;
+    } else {
+      gloc.geo = 'geoname';
+      gloc.geonameid = geonameid;
+      return gloc;
+    }
   }
   if (typeof geoip.location === 'object' &&
         typeof geoip.location.time_zone === 'string' &&
