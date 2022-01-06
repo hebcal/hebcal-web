@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^3.32.0",
-    "@hebcal/geo-sqlite": "^3.4.4",
+    "@hebcal/geo-sqlite": "^3.6.2",
     "@hebcal/icalendar": "^4.14.5",
     "@hebcal/leyning": "^4.12.1",
     "@hebcal/locales": "^3.3.2",
@@ -51,7 +51,7 @@
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.12",
     "geolite2-redist": "^1.0.7",
-    "google-protobuf": "^3.19.1",
+    "google-protobuf": "^3.19.2",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
     "koa": "^2.13.4",
