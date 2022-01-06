@@ -10,8 +10,8 @@ const cityCache = new Map();
  * @param {string} tzid
  */
 export function nearestCity(geonamesDb, latitude, longitude, tzid) {
-  const start = {latitude, longitude};
-  let city = cityCache.get(start);
+  const key = latitude + '|' + longitude;
+  let city = cityCache.get(key);
   if (typeof city !== 'undefined') {
     return city;
   }
@@ -19,11 +19,12 @@ export function nearestCity(geonamesDb, latitude, longitude, tzid) {
       'SELECT geonameid, name, latitude, longitude FROM geoname WHERE timezone = ?');
   const rows = stmt.all(tzid);
   if (!rows || !rows.length) {
-    cityCache.set(start, null);
+    cityCache.set(key, null);
     return null;
   }
   let minDistance = Infinity;
   for (const location of rows) {
+    const start = {latitude, longitude};
     const distance = haversine(start, location);
     if (distance < minDistance) {
       city = location;
@@ -31,6 +32,6 @@ export function nearestCity(geonamesDb, latitude, longitude, tzid) {
     }
   }
   city.distance = minDistance;
-  cityCache.set(start, city);
+  cityCache.set(key, city);
   return city;
 }
