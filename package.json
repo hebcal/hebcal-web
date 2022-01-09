@@ -64,7 +64,7 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
-    "maxmind": "^4.3.3",
+    "maxmind": "^4.3.4",
     "murmurhash3": "^0.5.0",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",

@@ -187,6 +187,7 @@ async function makeDownloadProps(ctx) {
     gcal: subical.replace(/^https/, 'http'),
     csv_usa: dlhref + usaCSV + '?dl=1',
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
+    title: makeCalendarTitle(q),
   };
 }
 
