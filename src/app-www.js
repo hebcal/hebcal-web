@@ -77,6 +77,7 @@ app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
   ctx.state.spriteHref = '/i/' + pkg.config.sprite;
+  ctx.state.clientAppHref = '/i/' + pkg.config.clientapp;
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
