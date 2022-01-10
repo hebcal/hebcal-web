@@ -11,9 +11,8 @@
 <li class="nav-item" role="presentation"><a class="nav-link active" style="padding: 0.25rem 0.5rem" href="#ios-body" data-bs-toggle="tab">Apple</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#gcal-body" data-bs-toggle="tab">Google</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#icalendar-body" data-bs-toggle="tab">iCalendar</a></li>
-<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#olcom-body" data-bs-toggle="tab">Outlook.com</a></li>
-<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-ics-body" data-bs-toggle="tab">Outlook Windows</a></li>
-<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-mac-body" data-bs-toggle="tab">Outlook Mac</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#olcom-body" data-bs-toggle="tab">Outlook Web</a></li>
+<li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#ol-ics-body" data-bs-toggle="tab">Outlook PC</a></li>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#csv-body" data-bs-toggle="tab">CSV</a></li>
 <% if (typeof filename.pdf === 'string') { %>
 <li class="nav-item" role="presentation"><a class="nav-link" style="padding: 0.25rem 0.5rem" href="#pdf-body" data-bs-toggle="tab">PDF</a></li>
@@ -104,31 +103,13 @@ Add to Google Calendar</a></div>
 </div>
 </div>
 </div><!-- #gcal-body -->
-<div id="ol-mac-body" class="tab-pane">
-<h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
-  Outlook for Mac
-</h6>
-<div>
-<div class="mb-3">
-<%- await include('emoji-switch.ejs', {id: 'dl-ol-mac'}) -%>
-<div>
-  <a class="btn btn-secondary download mb-2" id="dl-ol-mac" data-hebcal-attr="href" data-hebcal-src="ics" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics %>" download="<%= filename.ics %>">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
-  Download to Outlook for Mac</a></div>
-</div>
-<p class="mb-0">Step-by-step: <a title="Outlook for Mac - import Hebcal Jewish calendar"
-href="/home/186/outlook-2011-mac-jewish-holidays">Import .ics file into
-Outlook for Mac</a></p>
-
-</div>
-</div><!-- #ol-mac-body -->
 <div id="icalendar-body" class="tab-pane">
 <h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
   iCalendar feed URL
 </h6>
 <div>
-<p><small>The iCalendar format is used by Outlook.com, Windows 10, Yahoo!, Blackbaud, and
-many desktop and web calendar applications.</small></p>
+<p class="small">The iCalendar format is used by many 3rd party calendar
+  applications on web, mobile and desktop.</p>
 <%- await include('emoji-switch.ejs', {id: 'grabLink'}) -%>
 <p>Copy the entire iCalendar URL here:</p>
 <div class="mb-3">
@@ -144,7 +125,6 @@ Copy
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 <p class="mb-0">Follow additional instructions for
-<a href="/home/1138/outlook-com-windows-live-jewish-calendar-download">Outlook.com and Windows 10</a>,
 <a href="/home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
 or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 
@@ -152,9 +132,11 @@ or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 </div><!-- #icalendar-body -->
 <div id="olcom-body" class="tab-pane">
 <h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
-  Outlook.com
+  Outlook Web (Outlook.com)
 </h6>
 <div>
+<p class="small">Outlook.com calendars are used by Windows 10 &amp; 11, Outlook Mac, and
+  Microsoft email accounts such as Hotmail.com, MSN.com and Live.com</p>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-olcom'}) -%>
 <div>
@@ -170,10 +152,10 @@ Add to Outlook.com</a></div>
 </div><!-- #olcom-body -->
 <div id="csv-body" class="tab-pane">
 <h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
-  CSV file for Outlook 97-2003 (Windows)
+  Comma Separated Values (CSV)
 </h6>
 <div>
-<p class="small">Pick the CSV file that matches your computer's date format:</p>
+<p class="small">CSV is a legacy Outlook 97-2003 calendar file format. Pick the file that matches your computer's date format:</p>
 <ul class="list-unstyled">
 <li><a class="btn btn-secondary download me-1 mb-2" id="dl-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
   <small><code>mm/dd/yyyy</code></small></li>
