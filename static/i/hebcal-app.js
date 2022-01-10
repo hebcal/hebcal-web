@@ -196,7 +196,6 @@ export const hebcalClient = {
         url: '/complete.php?q=%QUERY',
         wildcard: '%QUERY',
       },
-      limit: 8,
     });
 
     hebcalCities.initialize();
@@ -213,6 +212,7 @@ export const hebcalClient = {
       name: 'hebcal-city',
       displayKey: 'value',
       source: hebcalCities.ttAdapter(),
+      limit: 8,
       templates: {
         empty: function({query}) {
           const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
