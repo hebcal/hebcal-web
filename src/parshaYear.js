@@ -47,7 +47,7 @@ export async function parshaYear(ctx) {
     const desc = ev.basename();
     const title0 = ev.render();
     const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : Locale.gettext(key, lang);
-    const hebrew0 = ev.render('he');
+    const hebrew0 = Locale.lookupTranslation(key, 'he') || ev.render('he');
     const hebrew = isParsha ? hebrew0.substring(hebrew0.indexOf(' ') + 1) : hebrew0;
     const item = {
       event: ev,
