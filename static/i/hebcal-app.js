@@ -192,7 +192,10 @@ export const hebcalClient = {
     const hebcalCities = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: '/complete.php?q=%QUERY',
+      remote: {
+        url: '/complete.php?q=%QUERY',
+        wildcard: '%QUERY',
+      },
       limit: 8,
     });
 
@@ -235,10 +238,22 @@ export const hebcalClient = {
           }
         },
       },
-    }).on('typeahead:selected', (obj, {geo, id}, name) => {
-      if (typeof geo === 'string' && geo == 'zip') {
+    }).bind('typeahead:render', function(ev, suggestions, isAsync, name) {
+      if (suggestions.length == 1) {
+        const suggestion = suggestions[0];
+        if (typeof suggestion.geo == 'string' && suggestion.geo == 'zip') {
+          $('#geo').val('zip');
+          $('#zip').val(suggestion.id);
+        } else {
+          $('#geo').val('geoname');
+          $('#geonameid').val(suggestion.id);
+        }
+        $('#c').val('on');
+      }
+    }).bind('typeahead:select', function(ev, suggestion, name) {
+      if (typeof suggestion.geo === 'string' && suggestion.geo == 'zip') {
         $('#geo').val('zip');
-        $('#zip').val(id);
+        $('#zip').val(suggestion.id);
         if (autoSubmit) {
           $('#geonameid').remove();
         } else {
@@ -248,7 +263,7 @@ export const hebcalClient = {
         }
       } else {
         $('#geo').val('geoname');
-        $('#geonameid').val(id);
+        $('#geonameid').val(suggestion.id);
         if (autoSubmit) {
           $('#zip').remove();
         } else {
