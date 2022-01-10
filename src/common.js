@@ -1024,11 +1024,6 @@ export function getNumYears(options) {
     return options.numYears;
   }
 
-  if ((!options.isHebrewYear && options.year < 2016) ||
-    (options.isHebrewYear && options.year < 5776)) {
-    return 1;
-  }
-
   let numYears = 5;
   for (const [key, ny] of Object.entries(maxNumYear)) {
     if (options[key] && ny < numYears) {

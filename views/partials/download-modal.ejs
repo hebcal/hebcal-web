@@ -37,6 +37,10 @@
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
   Subscribe on iPhone, iPad &amp; macOS</a></div>
 <%- await include('download-modal-numyears.ejs') -%>
+<p class="small">Step-by-step instructions: <a title="iPhone and iPad - import Hebcal Jewish calendar"
+href="/home/77/iphone-ipad-jewish-calendar">iPhone / iPad</a> or
+<a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
+href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </div>
 <div>
   <a class="btn btn-secondary btn-sm download mb-2" id="dl-ical-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
@@ -45,10 +49,6 @@
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events and merge with your own calendar.</p>
 </div>
-<p class="mb-0">Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
-href="/home/77/iphone-ipad-jewish-calendar">iPhone &amp; iPad</a>,
-<a title="Apple macOS Calendar.app - import Hebcal Jewish calendar"
-href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS desktop Calendar.app</a></p>
 </div>
 </div><!-- #ios-body -->
 <div id="ol-ics-body" class="tab-pane">
@@ -63,17 +63,18 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS desktop Calendar.
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook Internet Calendar Subscription</a></div>
 <%- await include('download-modal-numyears.ejs') -%>
+<p class="mb-0 small">Step-by-step instructions: <a 
+title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
+href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
+into Outlook 365 for Windows</a></p>
 </div>
 <div>
   <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
   <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
-  the calendar events and merge with your own calendar.</p>
+  the calendar events into Outlook and merge with your own calendar.</p>
 </div>
-<p class="mb-0">Step-by-step: <a title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 2007, Outlook 2010"
-href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Import
-ICS (Internet Calendar Subscription) file into Outlook</a></p>
 </div>
 </div><!-- #ol-ics-body -->
 <div id="gcal-body" class="tab-pane">
@@ -97,9 +98,9 @@ Add to Google Calendar</a></div>
   <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
-  the calendar events and merge with your own calendar
-  (<a title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
-  href="/home/59/google-calendar-alternative-instructions">import instructions</a>).
+  the calendar events into Google Calendar and merge with your own calendar
+  (see <a title="Google Calendar alternative instructions - import Hebcal Jewish calendar"
+  href="/home/59/google-calendar-alternative-instructions">instructions</a>).
 </div>
 </div>
 </div><!-- #gcal-body -->
@@ -124,9 +125,6 @@ Copy
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
-<p class="mb-0">Follow additional instructions for
-<a href="/home/1411/blackbaud-jewish-holiday-calendar">Blackbaud</a>
-or <a href="/home/193/yahoo-calendar-jewish-holidays">Yahoo! Calendar</a></p>
 
 </div>
 </div><!-- #icalendar-body -->
@@ -155,14 +153,15 @@ Add to Outlook.com</a></div>
   Comma Separated Values (CSV)
 </h6>
 <div>
-<p class="small">CSV is a legacy Outlook 97-2003 calendar file format. Pick the file that matches your computer's date format:</p>
+<p class="small">CSV is a legacy calendar file format for Outlook 97-2003.
+  Select the file that matches your computer's date format:</p>
 <ul class="list-unstyled">
 <li><a class="btn btn-secondary download me-1 mb-2" id="dl-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
   <small><code>mm/dd/yyyy</code></small></li>
 <li><a class="btn btn-secondary download me-1 mb-2" id="dl-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
   <small><code>dd/mm/yyyy</code></small></li>
 </ul>
-<p class="mb-0">Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
+<p class="mb-0 small">Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
 href="/home/12/outlook-csv-jewish-holidays">Import CSV file into Outlook for Windows</a></p>
 
 </div>
