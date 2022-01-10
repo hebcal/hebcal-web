@@ -208,7 +208,7 @@ export const hebcalClient = {
       $('#city').val('');
     };
 
-    $('#city-typeahead').typeahead(null, {
+    $('#city-typeahead').typeahead({autoselect: true}, {
       name: 'hebcal-city',
       displayKey: 'value',
       source: hebcalCities.ttAdapter(),
