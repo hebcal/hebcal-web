@@ -112,6 +112,14 @@ app.use(async function sendStatic(ctx, next) {
   } else if (rpath === '/ping') {
     ctx.type = 'text/plain';
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath.startsWith('/cal/')) {
+    const path = rpath.substring(5);
+    httpRedirect(ctx, `/ical/${path}`, 302);
+    return;
+  } else if (rpath.startsWith('/index.php/ical/')) {
+    const path = rpath.substring(16);
+    httpRedirect(ctx, `/ical/${path}`, 302);
+    return;
   } else {
     ctx.state.trackPageview = true;
     return next();
