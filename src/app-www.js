@@ -148,7 +148,7 @@ app.use(wwwRouter());
 
 app.use(stopIfTimedOut());
 
-app.use(serve(DOCUMENT_ROOT, {defer: false}));
+app.use(serve(DOCUMENT_ROOT, {defer: false, maxage: 604800000}));
 
 if (process.env.NODE_ENV === 'production') {
   fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
