@@ -62,6 +62,7 @@ export async function yahrzeitApp(ctx) {
   }
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
+  ctx.state.url = {};
   if (maxId > 0) {
     const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
     q.ulid = ctx.state.ulid = id;
@@ -72,7 +73,6 @@ export async function yahrzeitApp(ctx) {
     }
   } else {
     ctx.state.tables = null;
-    ctx.state.url = {};
   }
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
