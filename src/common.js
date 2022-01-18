@@ -6,6 +6,7 @@ import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
+import {find as geoTzFind} from 'geo-tz';
 
 export const langNames = {
   's': ['Sephardic transliterations', null],
@@ -482,6 +483,21 @@ export function getLocationFromQuery(db, query) {
     query.geonameid = location.getGeoId();
     return location;
   } else if (!empty(query.latitude) && !empty(query.longitude)) {
+    const latitude = parseFloat(query.latitude);
+    if (isNaN(latitude) || latitude > 90 || latitude < -90) {
+      throw createError(400, `Invalid latitude specified: ${query.latitude}`);
+    }
+    const longitude = parseFloat(query.longitude);
+    if (isNaN(longitude) || longitude > 180 || longitude < -180) {
+      throw createError(400, `Invalid longitude specified: ${query.longitude}`);
+    }
+    if (empty(query.tzid)) {
+      // attempt to guess timezone based on shape data
+      const tzids = geoTzFind(latitude, longitude);
+      if (tzids.length) {
+        query.tzid = tzids[0];
+      }
+    }
     if (empty(query.tzid)) {
       throw createError(400, 'Timezone required');
     } else if (query.tzid === 'undefined' || query.tzid === 'null') {
@@ -499,30 +515,10 @@ export function getLocationFromQuery(db, query) {
       }
     }
     query.tzid = tzidMap[query.tzid] || query.tzid;
-    const latitude = parseFloat(query.latitude);
-    if (isNaN(latitude)) {
-      throw createError(400, `Invalid latitude specified: ${query.latitude}`);
-    }
-    const longitude = parseFloat(query.longitude);
-    if (isNaN(longitude)) {
-      throw createError(400, `Invalid longitude specified: ${query.longitude}`);
-    }
     const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
     return new Location(latitude, longitude, il, query.tzid, cityName);
   } else if (hasLatLongLegacy(query)) {
-    let tzid = query.tzid;
-    if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
-      tzid = Location.legacyTzToTzid(query.tz, query.dst);
-      if (!tzid && query.dst === 'none') {
-        const tz = parseInt(query.tz, 10);
-        const plus = tz > 0 ? '+' : '';
-        tzid = `Etc/GMT${plus}${tz}`;
-      }
-    }
-    if (!tzid) {
-      throw createError(400, 'Timezone required');
-    }
     for (const [key, max] of Object.entries(geoposLegacy)) {
       if (empty(query[key]) || parseInt(query[key], 10) > max) {
         throw createError(400, `Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
@@ -535,6 +531,25 @@ export function getLocationFromQuery(db, query) {
     }
     if (query.lodir === 'w') {
       longitude *= -1;
+    }
+    let tzid = query.tzid;
+    if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
+      tzid = Location.legacyTzToTzid(query.tz, query.dst);
+      if (!tzid && query.dst === 'none') {
+        const tz = parseInt(query.tz, 10);
+        const plus = tz > 0 ? '+' : '';
+        tzid = `Etc/GMT${plus}${tz}`;
+      }
+    }
+    if (empty(tzid)) {
+      // attempt to guess timezone based on shape data
+      const tzids = geoTzFind(latitude, longitude);
+      if (tzids.length) {
+        tzid = tzids[0];
+      }
+    }
+    if (!tzid) {
+      throw createError(400, 'Timezone required');
     }
     let il = query.i === 'on';
     if (tzid === 'Asia/Jerusalem') {
