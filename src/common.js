@@ -378,7 +378,7 @@ export function makeHebcalOptions(db, query) {
     options.isHebrewYear = Boolean(query.yt === 'H');
   }
   if (!empty(query.year)) {
-    if (query.year === 'now') {
+    if (query.year === 'now' || query.year === 'x') {
       if (options.isHebrewYear) {
         options.year = new HDate().getFullYear();
       } else {
