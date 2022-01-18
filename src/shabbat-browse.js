@@ -14,7 +14,10 @@ dayjs.extend(timezone);
 
 const geonamesFilename = 'geonames.sqlite3';
 
-const CONTINENT_SQL = 'SELECT Continent, ISO, Country FROM country WHERE Country <> \'\' ORDER BY Continent, Country';
+const CONTINENT_SQL = `SELECT Continent, ISO, Country FROM country
+WHERE Continent <> 'AN'
+AND ISO NOT IN ('', 'AN', 'AQ', 'BV', 'CS', 'HM', 'IO', 'PS', 'UM')
+ORDER BY Continent, Country`;
 
 const COUNTRY_SQL = `SELECT g.geonameid, g.name, g.asciiname,
 a.name as admin1, a.asciiname as admin1ascii,
@@ -36,7 +39,6 @@ const CONTINENTS = {
   OC: 'Oceania',
   AS: 'Asia',
   AF: 'Africa',
-  AN: 'Antarctica',
 };
 
 let didInit = false;
@@ -57,19 +59,24 @@ function init() {
   }
   for (const result of results) {
     const country = result.Country;
+    const continent = result.Continent;
+    if (!country || !continents[continent]) {
+      continue;
+    }
     const id = makeAnchor(country);
-    continents[result.Continent].countries.push({name: country, href: id});
-    countryIdToIso[id] = result.ISO;
-    isoToCountry[result.ISO] = result.Country;
+    continents[continent].countries.push({name: country, href: id});
+    const iso = result.ISO;
+    countryIdToIso[id] = iso;
+    isoToCountry[iso] = result.Country;
   }
   const stmt2 = geonamesDb.prepare('SELECT key,name,asciiname FROM admin1');
   const results2 = stmt2.all();
   for (const result of results2) {
     const [cc, a1id] = result.key.split('.');
-    if (cc === 'PS') {
+    const country = isoToCountry[cc];
+    if (!country) {
       continue;
     }
-    const country = isoToCountry[cc];
     const countryAnchor = makeAnchor(country);
     const countryA1 = countryAnchor + '-' + makeAnchor(result.asciiname);
     countryAdmin1[countryA1] = {
