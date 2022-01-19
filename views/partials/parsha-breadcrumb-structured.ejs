@@ -1,0 +1,34 @@
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Torah Readings",
+  "item": "https://www.hebcal.com/sedrot/<%=iSuffix%>"
+ },{
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=parsha.bookName%>",
+  "item": "https://www.hebcal.com/sedrot/<%=iSuffix%>#<%=parsha.bookName%>"
+ },{
+<% if (date) { -%>
+  "@type": "ListItem",
+  "position": 3,
+  "name": "<%=parsha.name%>",
+  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%><%=iSuffix%>"
+ },{
+  "@type": "ListItem",
+  "position": 4,
+  "name": "<%=parsha.name%> <%=hd.getFullYear()%>",
+  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%>-<%=date%><%=iSuffix%>"
+<% } else { -%>
+  "@type": "ListItem",
+  "position": 3,
+  "name": "<%=parsha.name%>",
+  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%><%=iSuffix%>"
+<% } -%>
+ }]
+}
+</script>

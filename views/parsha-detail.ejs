@@ -1,5 +1,6 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%= parsha.anchor %><%= date ? ('-' + date) : '' %><%=iSuffix%>">
+<%- await include('partials/parsha-breadcrumb-structured.ejs') -%>
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev%>"><%}%>

@@ -1,0 +1,34 @@
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Holidays",
+  "item": "https://www.hebcal.com/holidays/<%=il?'?i=on':''%>"
+ },{
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=categoryName%>",
+  "item": "https://www.hebcal.com/holidays/<%=il?'?i=on':''%>#<%=categoryId%>"
+ },{
+<% if (year) { -%>
+  "@type": "ListItem",
+  "position": 3,
+  "name": "<%=holiday%>",
+  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%><%=il?'?i=on':''%>"
+ },{
+  "@type": "ListItem",
+  "position": 4,
+  "name": "<%=holiday%> <%=year%> (<%=upcomingHebrewYear%>)",
+  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%>-<%=year%><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>"
+<% } else { -%>
+  "@type": "ListItem",
+  "position": 3,
+  "name": "<%=holiday%>",
+  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>"
+<% } -%>
+ }]
+}
+</script>

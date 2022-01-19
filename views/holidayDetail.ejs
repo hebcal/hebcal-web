@@ -1,5 +1,6 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>">
+<%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
