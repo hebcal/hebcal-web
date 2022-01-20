@@ -1,0 +1,34 @@
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Holidays",
+  "item": "https://www.hebcal.com/shabbat"
+ },{
+<% if (typeof results === 'undefined') { -%>
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=countryName%>",
+  "item": "https://www.hebcal.com/shabbat/browse/"
+<% } else if (typeof countryA1 !== 'undefined') { -%>
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=countryA1.country%>",
+  "item": "https://www.hebcal.com/shabbat/browse/<%=countryA1.countryAnchor%>"
+  "@type": "ListItem",
+ },{
+  "position": 2,
+  "name": "<%=countryA1.name%>",
+  "item": "https://www.hebcal.com/shabbat/browse/"
+<% } else { -%>
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=countryName%>",
+  "item": "https://www.hebcal.com/shabbat/browse/"
+<% } -%>
+ }]
+}
+</script>

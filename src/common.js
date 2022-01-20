@@ -89,6 +89,7 @@ const booleanOpts = {
   i: 'il',
   s: 'sedrot',
   F: 'dafyomi',
+  myomi: 'mishnaYomi',
   euro: 'euro',
   M: 'havdalahTzeit',
 };
@@ -1027,6 +1028,7 @@ const maxNumYear = {
   addHebrewDatesForEvents: 3,
   addHebrewDates: 2,
   dafyomi: 2,
+  mishnaYomi: 2,
 };
 
 /**
@@ -1051,7 +1053,7 @@ export function getNumYears(options) {
     numYears = 2;
   }
   // reduce size of file for truly crazy people who specify both Daf Yomi and Hebrew Date every day
-  if (options.dafyomi && hebrewDates) {
+  if (hebrewDates && (options.dafyomi || options.mishnaYomi)) {
     numYears = 1;
   }
   return numYears;

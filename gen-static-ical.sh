@@ -86,6 +86,10 @@ FILE="daf-yomi"
 fetch_urls $FILE "start=${START}&end=${END3}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud&color=%23BF5AF2"
 compress_file $FILE
 
+FILE="mishna-yomi"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23BF5AF2"
+compress_file $FILE
+
 FILE="kindness"
 remove_file $FILE
 node dist/kindness.js
