@@ -256,6 +256,26 @@ function setCookie(ctx, newCookie) {
 }
 
 /**
+ * @param {string} str
+ * @return {boolean}
+ */
+function is5DigitZip(str) {
+  if (typeof str !== 'string') {
+    return false;
+  }
+  const s = str.trim();
+  if (s.length < 5) {
+    return false;
+  }
+  for (let i = 0; i < 5; i++) {
+    if (s.charCodeAt(i) > 57 || s.charCodeAt(i) < 48) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
  * @param {string} cookieString
  * @param {Object.<string,string>} defaults
  * @param {Object.<string,string>} query0
@@ -267,13 +287,9 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   delete ck.t;
   delete ck.uid;
   let found = false;
-  const cityTypeahead = (query['city-typeahead'] || '').trim();
-  if (empty(query.zip) && empty(query.geonameid) &&
-        cityTypeahead.length >= 5 &&
-        cityTypeahead.charCodeAt(0) <= 57 &&
-        cityTypeahead.charCodeAt(0) >= 48 &&
-        /^\d\d\d\d\d/.test(cityTypeahead)) {
-    query.zip = cityTypeahead;
+  const cityTypeahead = query['city-typeahead'];
+  if (is5DigitZip(cityTypeahead)) {
+    query.zip = cityTypeahead.trim();
   }
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
@@ -430,25 +446,27 @@ export function makeHebcalOptions(db, query) {
       options.appendHebrewToSubject = true;
     }
   }
+  const location = getLocationFromQuery(db, query);
+  if (location) {
+    options.location = location;
+    options.candlelighting = true;
+    if (query.c === 'off') {
+      query.c = 'on';
+    }
+    if (location.getIsrael()) {
+      options.il = true;
+      if (location.getShortName() === 'Jerusalem' &&
+          (typeof options.candleLightingMins !== 'number' ||
+          options.candleLightingMins === 18)) {
+        options.candleLightingMins = 40;
+      }
+    }
+  } else {
+    delete options.candlelighting;
+  }
   if (options.candlelighting && typeof options.year === 'number' &&
       ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
-  }
-  if (options.candlelighting) {
-    const location = getLocationFromQuery(db, query);
-    if (location) {
-      options.location = location;
-      if (location.getIsrael()) {
-        options.il = true;
-        if (location.getShortName() === 'Jerusalem' &&
-            (typeof options.candleLightingMins !== 'number' ||
-            options.candleLightingMins === 18)) {
-          options.candleLightingMins = 40;
-        }
-      }
-    } else {
-      delete options.candlelighting;
-    }
   }
   return options;
 }
@@ -469,6 +487,10 @@ const tzidMap = {
  * @return {Location}
  */
 export function getLocationFromQuery(db, query) {
+  const cityTypeahead = query['city-typeahead'];
+  if (is5DigitZip(cityTypeahead)) {
+    query.zip = cityTypeahead.trim();
+  }
   if (!empty(query.geonameid)) {
     const location = db.lookupGeoname(parseInt(query.geonameid, 10));
     if (location == null) {
@@ -527,7 +549,7 @@ export function getLocationFromQuery(db, query) {
       }
     }
     query.tzid = tzidMap[query.tzid] || query.tzid;
-    const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, query.tzid);
+    const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
     return new Location(latitude, longitude, il, query.tzid, cityName);
   } else if (hasLatLongLegacy(query)) {
@@ -576,7 +598,7 @@ export function getLocationFromQuery(db, query) {
     query.latitude = latitude;
     query.longitude = longitude;
     query.tzid = tzid;
-    const cityName = query['city-typeahead'] || makeGeoCityName(latitude, longitude, tzid);
+    const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, tzid);
     query.geo = 'pos';
     return new Location(latitude, longitude, il, tzid, cityName);
   } else if (query.geo === 'pos') {
@@ -1069,8 +1091,10 @@ export function getNumYears(options) {
   if (options.candlelighting && hebrewDates) {
     numYears = 2;
   }
-  // reduce size of file for truly crazy people who specify both Daf Yomi and Hebrew Date every day
-  if (hebrewDates && (options.dafyomi || options.mishnaYomi)) {
+  // reduce duration if 2+ daily options are specified
+  const daily = (options.addHebrewDates ? 1 : 0) +
+    (options.dafyomi ? 1 : 0) + (options.mishnaYomi ? 1 : 0);
+  if (daily > 1) {
     numYears = 1;
   }
   return numYears;
