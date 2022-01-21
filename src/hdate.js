@@ -2,6 +2,7 @@
 import {HDate, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
+import {CACHE_CONTROL_7DAYS} from './common';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import fs from 'fs/promises';
@@ -52,7 +53,7 @@ if (dt.getHours() > 19) {
 `;
   const hebrew = ctx.request.path.startsWith('/etc/hdate-he.js');
   const bodyInner = hebrew ? bodyHebrew : bodyEn;
-  ctx.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.type = 'text/javascript';
   ctx.body = bodyPrefix + bodyInner + bodySuffix;
 }

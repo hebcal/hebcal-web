@@ -2,6 +2,7 @@
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, getNumYears,
   makeIcalOpts,
+  CACHE_CONTROL_7DAYS,
   getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
@@ -452,7 +453,7 @@ function renderFullCalendar(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
-  ctx.set('Cache-Control', 'max-age=604800');
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.lastModified = new Date();
   ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
 }
@@ -471,8 +472,10 @@ function renderJson(ctx) {
   }
   const orig = ctx.request.query;
   const yearNow = typeof orig.year === 'undefined' || orig.year === 'now' || orig.month === 'now';
-  const maxAge = yearNow ? 10800 : 604800; // 3 hours or 7 days
-  ctx.set('Cache-Control', `max-age=${maxAge}`);
+  const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
+  const cacheControl = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
+    'public, max-age=10800, s-maxage=10800';
+  ctx.set('Cache-Control', cacheControl);
   ctx.lastModified = new Date();
   ctx.body = obj;
 }

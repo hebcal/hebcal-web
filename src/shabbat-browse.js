@@ -7,7 +7,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import {langTzDefaults} from './common';
+import {langTzDefaults, CACHE_CONTROL_7DAYS} from './common';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -135,7 +135,7 @@ export async function shabbatBrowse(ctx) {
   }
   if (rpath === '/shabbat/browse/sitemap.xml') {
     ctx.type = 'text/xml';
-    ctx.set('Cache-Control', 'public, max-age=604800'); // 7 days
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
       countries: Object.keys(countryIdToIso),

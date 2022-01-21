@@ -631,6 +631,7 @@ export function getDefaultHebrewYear(hdate) {
 }
 
 const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
+export const CACHE_CONTROL_7DAYS = 'public, max-age=604800, s-maxage=604800';
 
 /**
  * Perform a 302 redirect to `rpath`.

@@ -2,6 +2,7 @@ import {HDate, HebrewCalendar, ParshaEvent, Locale, months, OmerEvent} from '@he
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
+  CACHE_CONTROL_7DAYS,
 } from './common';
 import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
@@ -101,7 +102,7 @@ export async function hebrewDateConverter(ctx) {
   } else {
     if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
       ctx.lastModified = ctx.launchDate;
-      ctx.set('Cache-Control', 'public, max-age=604800, s-maxage=604800');
+      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     }
     return ctx.render('converter', p);
   }
