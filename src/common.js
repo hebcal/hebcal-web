@@ -501,8 +501,11 @@ export function getLocationFromQuery(db, query) {
     }
     if (empty(query.tzid)) {
       throw createError(400, 'Timezone required');
-    } else if (query.tzid === 'undefined' || query.tzid === 'null') {
-      throw createError(400, `Invalid time zone specified: ${query.tzid}`);
+    }
+    try {
+      new Intl.DateTimeFormat('en-US', {timeZone: query.tzid});
+    } catch (err) {
+      throw createError(400, err, {expose: true});
     }
     let il = query.i === 'on';
     if (query.tzid === 'Asia/Jerusalem') {
@@ -551,6 +554,11 @@ export function getLocationFromQuery(db, query) {
     }
     if (!tzid) {
       throw createError(400, 'Timezone required');
+    }
+    try {
+      new Intl.DateTimeFormat('en-US', {timeZone: tzid});
+    } catch (err) {
+      throw createError(400, err, {expose: true});
     }
     let il = query.i === 'on';
     if (tzid === 'Asia/Jerusalem') {
