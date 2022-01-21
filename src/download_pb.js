@@ -13,7 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 goog.exportSymbol('proto.Download', null, global);
 /**
@@ -94,6 +100,7 @@ proto.Download.toObject = function(includeInstance, msg) {
     omer: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
     dafyomi: jspb.Message.getBooleanFieldWithDefault(msg, 26, false),
     euro: jspb.Message.getBooleanFieldWithDefault(msg, 27, false),
+    mishnayomi: jspb.Message.getBooleanFieldWithDefault(msg, 28, false),
     geopos: jspb.Message.getBooleanFieldWithDefault(msg, 29, false),
     month: jspb.Message.getFieldWithDefault(msg, 30, 0),
     numyears: jspb.Message.getFieldWithDefault(msg, 31, 0),
@@ -237,6 +244,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 27:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setEuro(value);
+      break;
+    case 28:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setMishnayomi(value);
       break;
     case 29:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -471,6 +482,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       27,
+      f
+    );
+  }
+  f = message.getMishnayomi();
+  if (f) {
+    writer.writeBool(
+      28,
       f
     );
   }
@@ -980,6 +998,24 @@ proto.Download.prototype.getEuro = function() {
  */
 proto.Download.prototype.setEuro = function(value) {
   return jspb.Message.setProto3BooleanField(this, 27, value);
+};
+
+
+/**
+ * optional bool mishnaYomi = 28;
+ * @return {boolean}
+ */
+proto.Download.prototype.getMishnayomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 28, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setMishnayomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 28, value);
 };
 
 

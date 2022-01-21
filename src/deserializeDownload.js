@@ -38,6 +38,7 @@ export function deserializeDownload(data) {
   if (msg.getSedrot()) q.s = 'on';
   if (msg.getOmer()) q.o = 'on';
   if (msg.getDafyomi()) q.F = 'on';
+  if (msg.getMishnayomi()) q.myomi = 'on';
   if (msg.getAddhebrewdates()) q.d = 'on';
   if (msg.getAddhebrewdatesforevents()) q.D = 'on';
   q.month = msg.getMonth() || undefined;

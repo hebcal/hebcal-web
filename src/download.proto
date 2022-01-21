@@ -29,6 +29,7 @@ message Download {
   bool omer = 25;
   bool dafyomi = 26;
   bool euro = 27;
+  bool mishnaYomi = 28;
 
   bool geoPos = 29;
   int32 month = 30;
