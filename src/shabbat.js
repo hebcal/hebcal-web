@@ -261,7 +261,7 @@ function getJsonLD(ctx, candles, havdalah, torahPortion) {
     candlesLD.description = `Torah portion: ${torahPortion}`;
   }
   const breadCrumbLD = makeBreadCrumbLD(location, ctx.state.geoUrlArgs);
-  const result = [breadCrumbLD, candlesLD];
+  const result = breadCrumbLD ? [breadCrumbLD, candlesLD] : [candlesLD];
   if (havdalah) {
     const havdalahSubj = `Shabbat ends at ${havdalah.fmtTime} in ${location.getShortName()}`;
     const havdalahLD = makeJsonLDevent(havdalah, location, havdalahSubj, url);
@@ -272,6 +272,9 @@ function getJsonLD(ctx, candles, havdalah, torahPortion) {
 
 function makeBreadCrumbLD(location, geoUrlArgs) {
   const country = countryNames[location.getCountryCode()];
+  if (!country) {
+    return null;
+  }
   const countryUrl = 'https://www.hebcal.com/shabbat/browse/' + makeAnchor(country);
   const elems = [{
     '@type': 'ListItem',
