@@ -267,6 +267,14 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   delete ck.t;
   delete ck.uid;
   let found = false;
+  const cityTypeahead = (query['city-typeahead'] || '').trim();
+  if (empty(query.zip) && empty(query.geonameid) &&
+        cityTypeahead.length >= 5 &&
+        cityTypeahead.charCodeAt(0) <= 57 &&
+        cityTypeahead.charCodeAt(0) >= 48 &&
+        /^\d\d\d\d\d/.test(cityTypeahead)) {
+    query.zip = cityTypeahead;
+  }
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
       for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
