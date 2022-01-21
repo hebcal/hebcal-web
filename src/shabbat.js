@@ -260,13 +260,50 @@ function getJsonLD(ctx, candles, havdalah, torahPortion) {
   if (torahPortion) {
     candlesLD.description = `Torah portion: ${torahPortion}`;
   }
-  const result = [candlesLD];
+  const breadCrumbLD = makeBreadCrumbLD(location, ctx.state.geoUrlArgs);
+  const result = [breadCrumbLD, candlesLD];
   if (havdalah) {
     const havdalahSubj = `Shabbat ends at ${havdalah.fmtTime} in ${location.getShortName()}`;
     const havdalahLD = makeJsonLDevent(havdalah, location, havdalahSubj, url);
     result.push(havdalahLD);
   }
   return result;
+}
+
+function makeBreadCrumbLD(location, geoUrlArgs) {
+  const country = countryNames[location.getCountryCode()];
+  const countryUrl = 'https://www.hebcal.com/shabbat/browse/' + makeAnchor(country);
+  const elems = [{
+    '@type': 'ListItem',
+    'position': 1,
+    'name': 'Shabbat',
+    'item': 'https://www.hebcal.com/shabbat',
+  }, {
+    '@type': 'ListItem',
+    'position': 2,
+    'name': country,
+    'item': countryUrl,
+  }];
+  let position = 3;
+  if (location.admin1) {
+    elems.push({
+      '@type': 'ListItem',
+      'position': position++,
+      'name': location.admin1,
+      'item': countryUrl + '-' + makeAnchor(location.admin1),
+    });
+  }
+  elems.push({
+    '@type': 'ListItem',
+    'position': position,
+    'name': location.getShortName(),
+    'item': 'https://www.hebcal.com/shabbat?' + geoUrlArgs,
+  });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': elems,
+  };
 }
 
 function makeJsonLDevent(item, location, subj, url) {
