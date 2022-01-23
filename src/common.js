@@ -499,14 +499,16 @@ export function getLocationFromQuery(db, query) {
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {
-    const location = db.lookupZip(query.zip);
+    const zip = query.zip.trim().substring(0, 5); // truncate ZIP+4 to 5-digit ZIP
+    const location = db.lookupZip(zip);
     if (location == null) {
       throw createError(404, `Sorry, can't find ZIP code: ${query.zip}`);
     }
+    query.zip = zip;
     query.geo = 'zip';
     return location;
   } else if (!empty(query.city)) {
-    const location = db.lookupLegacyCity(query.city);
+    const location = db.lookupLegacyCity(query.city.trim());
     if (location == null) {
       throw createError(404, `Invalid legacy city specified: ${query.city}`);
     }
