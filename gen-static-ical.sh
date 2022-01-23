@@ -83,11 +83,11 @@ fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&u
 compress_file $FILE
 
 FILE="daf-yomi"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Talmud&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="mishna-yomi"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
 compress_file $FILE
 
 FILE="kindness"
