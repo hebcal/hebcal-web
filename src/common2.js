@@ -1,7 +1,6 @@
 import {empty, getIpAddress, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import nodemailer from 'nodemailer';
-import createError from 'http-errors';
 
 /**
  * @param {Object<string,any>} iniConfig
@@ -44,12 +43,7 @@ export async function mySendMail(ctx, message) {
 export async function getYahrzeitDetailsFromDb(ctx, id) {
   const db = ctx.mysql;
   const sql = 'SELECT contents, updated, downloaded FROM yahrzeit WHERE id = ?';
-  let results;
-  try {
-    results = await db.query({sql, values: [id], timeout: 5000});
-  } catch (err) {
-    throw createError(503, err, {expose: true});
-  }
+  const results = await db.query({sql, values: [id], timeout: 5000});
   if (!results || !results[0]) {
     ctx.throw(404, `Yahrzeit/Anniversary id not found: ${id}`);
   }

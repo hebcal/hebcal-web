@@ -1,4 +1,5 @@
 import mysql from 'mysql2';
+import createError from 'http-errors';
 
 /** Represents a MySQL database pool */
 export class MysqlDb {
@@ -26,13 +27,21 @@ export class MysqlDb {
   }
   /** */
   async query(...params) {
-    const [rows, fields] = await this.pool.query(...params);
-    return rows;
+    try {
+      const [rows, fields] = await this.pool.query(...params);
+      return rows;
+    } catch (err) {
+      throw createError(503, err, {expose: true});
+    }
   }
   /** */
   async execute(...params) {
-    const [rows, fields] = await this.pool.execute(...params);
-    return rows;
+    try {
+      const [rows, fields] = await this.pool.execute(...params);
+      return rows;
+    } catch (err) {
+      throw createError(503, err, {expose: true});
+    }
   }
   /** */
   async close() {
