@@ -150,7 +150,15 @@ function makeItems(ctx, options, q) {
   }
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
+  const items = events.map((ev) => eventToItem(ev, options, locale));
+  const parashaItem = items.find((i) => i.cat === 'parashat');
   const titlePrefix = location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times';
+  let title = titlePrefix;
+  if (parashaItem) {
+    const parsha = parashaItem.desc;
+    title += ' | ' + parsha.substring(parsha.indexOf(' ') + 1);
+  }
+  title += ' | Hebcal';
   Object.assign(ctx.state, {
     events,
     options,
@@ -158,9 +166,9 @@ function makeItems(ctx, options, q) {
     location,
     locale,
     hyear: getDefaultHebrewYear(events[0].getDate()),
-    items: events.map((ev) => eventToItem(ev, options, locale)),
+    items,
     h3title: titlePrefix,
-    title: titlePrefix + ' | Hebcal Jewish Calendar',
+    title,
     Shabbat: Locale.gettext('Shabbat'),
   });
 
