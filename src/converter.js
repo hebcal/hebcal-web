@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
@@ -223,6 +223,22 @@ function makeDiasporaIsraelItems(ctx, hdate) {
   };
 }
 
+class PesudoParshaEvent extends Event {
+  constructor(ev) {
+    super(ev.getDate(), 'Parashat ' + ev.basename(), ev.getFlags());
+    this.ev = ev;
+  }
+  basename() {
+    return this.ev.basename();
+  }
+  url() {
+    return this.ev.url();
+  }
+  render(locale) {
+    return Locale.gettext('Parashat', locale) + ' ' + Locale.gettext(this.basename(), locale);
+  }
+}
+
 /**
  * @param {HDate} hdate
  * @param {boolean} il
@@ -234,9 +250,16 @@ function getEvents(hdate, il) {
   const hy = saturday.getFullYear();
   if (hy >= 3762) {
     const sedra = HebrewCalendar.getSedra(hy, il);
-    if (sedra.isParsha(saturday)) {
-      const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
+    const parsha = sedra.lookup(saturday);
+    if (!parsha.chag) {
+      const pe = new ParshaEvent(saturday, parsha.parsha, il);
       events = events.concat(pe);
+    } else if (saturday.abs() != hdate.abs()) {
+      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+      for (const ev of satHolidays) {
+        const pe = new PesudoParshaEvent(ev);
+        events = events.concat(pe);
+      }
     }
   }
   events = events.concat(makeOmer(hdate));
