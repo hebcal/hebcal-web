@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
+  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   getBeforeAfterSunsetForLocation, getTodayDate} from './common';
@@ -53,6 +54,7 @@ export async function homepage(ctx) {
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, dt, il);
   mastheadOmer(ctx, hd);
+  mastheadDafYomi(ctx, hd);
   const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.timezone);
   if (blub) {
     ctx.state.holidayBlurb = blub;
@@ -117,6 +119,16 @@ function mastheadOmer(ctx, hd) {
     const omer = abs - beginOmer + 1;
     items.push(new OmerEvent(hd, omer).render(ctx.state.lg));
   }
+}
+
+function mastheadDafYomi(ctx, hd) {
+  const items = ctx.state.items;
+  const dy = new DafYomiEvent(hd);
+  items.push('<small>Daf Yomi: <a href="' + dy.url() + '">' + dy.renderBrief(ctx.state.lg) + '</a></small>');
+  const myomiIndex = new MishnaYomiIndex();
+  const mishnaYomi = myomiIndex.lookup(hd);
+  const my = new MishnaYomiEvent(hd, mishnaYomi);
+  items.push('<small>Mishna Yomi: <a href="' + my.url() + '">' + my.render(ctx.state.lg) + '</a></small>');
 }
 
 // For the first 7 months of the year, show the current Gregorian year
