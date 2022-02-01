@@ -3,6 +3,18 @@ import path from 'path';
 // eslint-disable-next-line require-jsdoc
 export function shortUrlRedir(ctx) {
   const qs = Object.assign({}, ctx.request.query);
+  if (qs.uc) {
+    qs.utm_campaign = qs.uc;
+    if (qs.uc.startsWith('pdf-')) {
+      if (!qs.us && !qs.utm_source) {
+        qs.utm_source = 'pdf';
+      }
+      if (!qs.um && !qs.utm_medium) {
+        qs.utm_medium = 'document';
+      }
+    }
+    delete qs.uc;
+  }
   if (qs.us) {
     qs.utm_source = qs.us;
     delete qs.us;
@@ -10,10 +22,6 @@ export function shortUrlRedir(ctx) {
   if (qs.um) {
     qs.utm_medium = qs.um;
     delete qs.um;
-  }
-  if (qs.uc) {
-    qs.utm_campaign = qs.uc;
-    delete qs.uc;
   }
   const ref = ctx.get('referer');
   if (!qs.utm_source && ref && ref.length) {

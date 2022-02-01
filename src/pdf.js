@@ -196,6 +196,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
       link = link.replace('utm_source=', 'us=');
       link = link.replace('utm_medium=', 'um=');
       link = link.replace('utm_campaign=', 'uc=');
+      link = link.replace('?us=pdf&um=document&uc=pdf-', '?uc=pdf-');
     }
     textOptions.link = link;
   }
