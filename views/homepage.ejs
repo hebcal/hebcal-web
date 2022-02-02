@@ -27,22 +27,12 @@ a.icon-block {
   color: #666;
   text-decoration: none;
 }
-.masthead {
-  text-align: center;
-}
-.first-row {
-  padding-top: 24px;
-}
-.pad-bot {
-  padding-bottom: 32px;
-}
 </style>
 <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
-<div class="masthead" tabindex="-1">
-<div class="container">
+<div class="container text-center">
 <ul class="bullet-list-inline" dir="<%=locale==='he'?'rtl':'ltr'%>">
 <% items.forEach((item) => { %>
 <li><span lang="<%=locale%>"><%- item %></span></li>
@@ -60,16 +50,15 @@ a.icon-block {
 </div><!-- .row -->
 <% } -%>
 </div><!-- .container -->
-</div><!-- .masthead -->
 <div class="container">
-<div id="content" class="first-row">
+<div id="content" class="pt-2">
 <div class="row gx-2">
 <div class="col-sm-8">
 <p class="lead">Holidays, candle lighting times, and Torah readings for
 any year, past or present.
 Download to Apple, Google, Microsoft Outlook and more.</p>
 </div>
-<div class="col-sm-4 text-center pad-bot">
+<div class="col-sm-4 text-center pb-4">
 <p><a class="btn btn-primary btn-lg" href="<%=calendarUrl + yearArgs %>">
   <svg class="icon icon-md align-top"><use xlink:href="<%=spriteHref%>#gi-calendar"></use></svg>
   <%= gregRange %> Calendar</a>
@@ -80,11 +69,25 @@ Download to Apple, Google, Microsoft Outlook and more.</p>
 <div class="col-sm-8">
 <p class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</p>
 </div>
-<div class="col-sm-4 text-center pad-bot">
+<div class="col-sm-4 text-center pb-3">
 <p><a class="btn btn-secondary btn-lg" href="/converter?gd=<%=gd%>&gm=<%=gm%>&gy=<%=gy%><%=afterSunset?'&gs=on':''%><%=il?'&i=on':''%>&g2h=1">
   <svg class="icon icon-md align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
   Date Converter</a></p>
 </div>
+</div><!-- .row -->
+<div class="row">
+ <div class="col-6">
+  <ul class="list-unstyled text-center">
+   <li class="lead"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg> Daf Yomi</li>
+   <li><a href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
+  </ul>
+ </div>
+ <div class="col-6">
+  <ul class="list-unstyled text-center">
+    <li class="lead"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg> Mishna Yomi</li>
+    <li><a href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
+  </ul>
+ </div>
 </div><!-- .row -->
 
 <div class="row">

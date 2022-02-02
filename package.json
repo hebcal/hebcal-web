@@ -20,7 +20,7 @@
     "build:babel": "babel src --out-dir dist",
     "build:cp-json": "mkdir -p ./dist && cp ./src/*.json ./dist",
     "build-static": "babel --no-babelrc --minified --presets '@babel/preset-env' --plugins babel-plugin-transform-modules-iife static/i/hebcal-app.js > static/i/$npm_package_config_clientapp",
-    "download-geolite": "node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\"",
+    "download-geolite": "if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\"; fi",
     "compress-static": "brotli -f --keep --best ./static/i/$npm_package_config_sprite && gzip -f --keep --best ./static/i/$npm_package_config_sprite && brotli -f --keep --best ./static/i/$npm_package_config_clientapp && gzip -f --keep --best ./static/i/$npm_package_config_clientapp && brotli -f --keep --best ./static/i/$npm_package_config_typeaheadcss && gzip -f --keep --best ./static/i/$npm_package_config_typeaheadcss",
     "deploy-rsync": "rsync -av ./fonts/ /var/www/fonts/ && rsync -av ./static/ /var/www/html/ && rsync -av ./package.json /var/www/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/",
     "deploy": "npm run download-geolite && npm run compress-static && npm run deploy-rsync",

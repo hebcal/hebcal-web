@@ -41,7 +41,7 @@ export async function homepage(ctx) {
   ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
   const hdate = new HDate(dt);
-  const hd = afterSunset ? hdate.next() : hdate;
+  const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
   Object.assign(ctx.state, {gy, gm, gd, afterSunset});
   ctx.state.lg = q.lg || 's';
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
@@ -122,13 +122,10 @@ function mastheadOmer(ctx, hd) {
 }
 
 function mastheadDafYomi(ctx, hd) {
-  const items = ctx.state.items;
-  const dy = new DafYomiEvent(hd);
-  items.push('<small>Daf Yomi: <a href="' + dy.url() + '">' + dy.renderBrief(ctx.state.lg) + '</a></small>');
+  ctx.state.dafYomi = new DafYomiEvent(hd);
   const myomiIndex = new MishnaYomiIndex();
   const mishnaYomi = myomiIndex.lookup(hd);
-  const my = new MishnaYomiEvent(hd, mishnaYomi);
-  items.push('<small>Mishna Yomi: <a href="' + my.url() + '">' + my.render(ctx.state.lg) + '</a></small>');
+  ctx.state.mishnaYomi = new MishnaYomiEvent(hd, mishnaYomi);
 }
 
 // For the first 7 months of the year, show the current Gregorian year
