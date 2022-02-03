@@ -7,26 +7,6 @@
   width: 1.8rem;
   height: 1.8rem;
 }
-.icon-lg {
-  width: 2.7rem;
-  height: 2.7rem;
-}
-.icon-block {
-  display: block;
-  width: 90px;
-  height: 90px;
-  margin-right: auto;
-  margin-top: 12px;
-  margin-bottom: 6px;
-  margin-left: auto;
-  padding: 20px;
-  border: 3px solid #e4ebeb;
-  border-radius: 200px;
-}
-a.icon-block {
-  color: #666;
-  text-decoration: none;
-}
 </style>
 <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
 </head>
@@ -75,25 +55,11 @@ Download to Apple, Google, Microsoft Outlook and more.</p>
   Date Converter</a></p>
 </div>
 </div><!-- .row -->
-<div class="row">
- <div class="col-6">
-  <ul class="list-unstyled text-center">
-   <li class="lead"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg> Daf Yomi</li>
-   <li><a href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
-  </ul>
- </div>
- <div class="col-6">
-  <ul class="list-unstyled text-center">
-    <li class="lead"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg> Mishna Yomi</li>
-    <li><a href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
-  </ul>
- </div>
-</div><!-- .row -->
 
 <div class="row">
-<div class="col-sm-4">
-<a class="icon-block" href="/shabbat">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#gi-candle"></use></svg>
+<div class="col-sm-4 mb-3">
+<a href="/shabbat">
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#candle"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-dark" href="/shabbat">Candle lighting</a></h3>
 <p>Shabbat and holiday candle-lighting &amp; Havdalah times for over 50,000
@@ -103,9 +69,9 @@ Start and end times for fast days.
 at-a-glance &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
-<div class="col-sm-4">
-<a class="icon-block" href="/yahrzeit">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<div class="col-sm-4 mb-3">
+<a href="/yahrzeit">
+  <svg width="80" height="65" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#couple"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-dark" href="/yahrzeit">Yahrzeits and Birthdays</a></h3>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
@@ -114,9 +80,9 @@ Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
-<div class="col-sm-4">
-<a class="icon-block" href="/sedrot/">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#gi-book-open-text"></use></svg>
+<div class="col-sm-4 mb-3">
+<a href="/sedrot/">
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#torah-235339"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-dark" href="/sedrot/">Torah readings</a></h3>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
@@ -127,9 +93,9 @@ Spreadsheets for <em>leyning</em> coordinators.
 </div><!-- .row -->
 
 <div class="row">
-<div class="col-sm-4">
-<a class="icon-block" href="/holidays/">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#bi-calendar-week"></use></svg>
+<div class="col-sm-4 mb-3">
+<a href="/holidays/">
+  <svg width="64" height="64" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#calendar"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-dark" href="/holidays/">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
@@ -137,9 +103,21 @@ Spreadsheets for <em>leyning</em> coordinators.
 <a href="/holidays/"><%= gregYr1 + '-' + (gregYr1 + 5) %> table</a></p>
 </div><!-- .col-sm-4 -->
 
-<div class="col-sm-4">
-<a class="icon-block" href="/ical/">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+<div class="col-sm-4 mb-3">
+<svg width="80" height="69" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#book"></use></svg>
+<h3 class="text-center" class="text-dark">Daily learning</h3>
+<ul class="list-unstyled text-center">
+  <li><%= hd.render(lg, true) %></li>
+  <li><span class="text-nowrap">Daf Yomi</span> &middot;
+  <a class="text-nowrap" href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
+   <li><span class="text-nowrap">Mishna Yomi</span> &middot;
+   <a class="text-nowrap" href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
+ </ul>
+</div><!-- .col-sm-4 -->
+
+<div class="col-sm-4 mb-3">
+<a href="/ical/">
+  <svg width="80" height="53" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#download"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-dark" href="/ical/">Download</a></h3>
 <p>Download Jewish holidays and Hebrew dates for iPhone, iPad, Android
@@ -147,22 +125,13 @@ Spreadsheets for <em>leyning</em> coordinators.
 app that supports iCalendar (.ics) feeds.
 <br><a href="/ical/">Get started &raquo;</a></p>
 </div><!-- .col-sm-4 -->
-
-<div class="col-sm-4">
-<a class="icon-block" href="/email/">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
-</a>
-<h3 class="text-center"><a class="text-dark" href="/email/">Email</a></h3>
-<p>Subscribe to weekly Shabbat candle lighting times and Torah portion by email.
-<br><a href="https://www.hebcal.com/email/">Sign up &raquo;</a></p>
-</div><!-- .col-sm-4 -->
 </div><!-- .row -->
 
 
-<div class="row" style="margin-top:40px">
+<div class="row">
 <div class="col-sm-2">
-<a class="icon-block" href="/home/developer-apis">
-  <svg class="icon icon-lg"><use xlink:href="<%=spriteHref%>#bi-code-slash"></use></svg>
+<a href="/home/developer-apis">
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="/i/color-icons1.svg#code"></use></svg>
 </a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">

@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
     "build:cp-json": "mkdir -p ./dist && cp ./src/*.json ./dist",
     "build-static": "babel --no-babelrc --minified --presets '@babel/preset-env' --plugins babel-plugin-transform-modules-iife static/i/hebcal-app.js > static/i/$npm_package_config_clientapp",
     "download-geolite": "if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\"; fi",
-    "compress-static": "brotli -f --keep --best ./static/i/$npm_package_config_sprite && gzip -f --keep --best ./static/i/$npm_package_config_sprite && brotli -f --keep --best ./static/i/$npm_package_config_clientapp && gzip -f --keep --best ./static/i/$npm_package_config_clientapp && brotli -f --keep --best ./static/i/$npm_package_config_typeaheadcss && gzip -f --keep --best ./static/i/$npm_package_config_typeaheadcss",
+    "compress-static": "brotli -f --keep --best ./static/i/$npm_package_config_sprite && gzip -f --keep --best ./static/i/$npm_package_config_sprite && brotli -f --keep --best ./static/i/$npm_package_config_clientapp && gzip -f --keep --best ./static/i/$npm_package_config_clientapp && brotli -f --keep --best ./static/i/$npm_package_config_typeaheadcss && gzip -f --keep --best ./static/i/$npm_package_config_typeaheadcss && brotli -f --keep --best ./static/i/color-icons1.svg && gzip -f --keep --best ./static/i/color-icons1.svg",
     "deploy-rsync": "rsync -av ./fonts/ /var/www/fonts/ && rsync -av ./static/ /var/www/html/ && rsync -av ./package.json /var/www/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/",
     "deploy": "npm run download-geolite && npm run compress-static && npm run deploy-rsync",
     "start": "node dist/app-www.js",
@@ -34,10 +34,10 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@babel/cli": "^7.16.8",
-    "@babel/core": "^7.16.12",
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@babel/register": "^7.16.9",
+    "@babel/register": "^7.17.0",
     "babel-plugin-transform-modules-iife": "^1.0.0",
     "eslint": "^8.8.0",
     "eslint-config-google": "^0.14.0"
@@ -70,7 +70,7 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
-    "maxmind": "^4.3.4",
+    "maxmind": "^4.3.5",
     "murmurhash3": "^0.5.0",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
