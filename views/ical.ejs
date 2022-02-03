@@ -16,114 +16,124 @@
 <div class="container">
 <div id="content">
 <div class="row">
-<div class="col-sm-12">
+<div class="col">
 <h1>Jewish Holiday downloads <small class="text-muted">for desktop, mobile and web calendars</small></h1>
 
 <p class="lead">Free Jewish holidays for Microsoft
 Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar),
 or to any desktop program that supports
 iCalendar (.ics) files.</p>
-
-<p>Click the buttons below to download/subscribe in your device or web/desktop
+<p>Expand the sections below to download/subscribe in your device or web/desktop
 application. Subscribers to these feeds receive perpetual updates.</p>
-</div><!-- .col-sm-12 -->
+<p>For step-by-step instructions, see our <a href="/home/category/import">help importing into apps</a>.</p>
+</div><!-- .col -->
 </div><!-- .row -->
 <div class="row">
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Jewish Holidays ✡️</h5>
-<p class="card-text">Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah. Diaspora schedule (for Jews living anywhere outside of modern Israel).
-<br><small class="text-muted">~40 calendar events per year. 10-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays-v2', noOutlook: true}) -%>
-<p>Without emoji:</p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Jewish Holidays (all) <span class="text-nowrap">✡️ 🌒 🌳 🎭️ 🔥</span></h5>
-<p class="card-text">Also includes Rosh Chodesh; minor holidays like Purim, Tu BiShvat, Lag BaOmer; fasts, modern Israeli holidays; and special Shabbatot. Diaspora schedule.
-<br><small class="text-muted">~95 calendar events per year. 8-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all-v2', noOutlook: true}) -%>
-<p>Without emoji:</p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Customize</h5>
-<p class="card-text">Create a custom calendar with event titles in different languages, candle lighting times for Shabbat and holidays, Israeli holiday schedule, etc.</p>
-<ul class="bullet-list-inline">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<li><a title="<%=desc[1]||desc[0]%>" href="/hebcal?lg=<%=langName%>"><%=desc[0].replace('transliterations', 'translit')%></a></li>
-<% } -%>
-</ul>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Days of the Omer 4️⃣ 9️⃣</h5>
-<p class="card-text">7 weeks from the second night of Pesach to the day before Shavuot.
-<br><small class="text-muted">49 calendar events per year. 3-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Days of the Omer', basename: 'omer'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Torah Readings (Diaspora) 🕍</h5>
-<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha. Diaspora schedule.
-<br><small class="text-muted">~50 calendar events per year. 5-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Torah Readings (Diaspora)', basename: 'torah-readings-diaspora'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title" lang="he" dir="rtl" style="font-size: 1.5rem">פרשת השבוע - ישראל 🕍</h5>
-<p class="card-text">Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl" class="big">בראשית, נח, לך־לך</span>. Israel schedule. 🇮🇱
-<br><small class="text-muted">~50 calendar events per year. 5-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'פרשת השבוע - ישראל', basename: 'torah-readings-israel-he'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Hebrew calendar dates (English)</h5>
-<p class="card-text">Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet</strong>) every day of the week. Sephardic transliteration.
-Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap">1st of Kislev, 5782</strong>).
-<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (English)', basename: 'hdate-en'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Hebrew calendar dates (Hebrew)</h5>
-<p class="card-text">Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טבת</span>) every day of the week.
-Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap big">א׳ כסלו תשפ״ב</span>).
-<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he-v2'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Hebrew calendar dates (Hebrew with nikud)</h5>
-<p class="card-text">Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טֵבֵת</span>) every day of the week.
-<br><small class="text-muted">365 calendar events per year. 2-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Hebrew calendar dates (Hebrew)', basename: 'hdate-he'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Daf Yomi 📖</h5>
-<p class="card-text">Daily regimen of learning the Talmud.
-<br><small class="text-muted">365 calendar events per year. 5-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Daf Yomi', basename: 'daf-yomi'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Mishna Yomi 📖</h5>
-<p class="card-text"> A program of daily learning in which participants study two Mishnayot
-each day in order to finish the entire Mishnah in ~6 years.
-<br><small class="text-muted">365 calendar events per year. 5-year perpetual feed.</small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Mishna Yomi', basename: 'mishna-yomi'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Yom Kippur Katan</h5>
-<p class="card-text"><span lang="he" dir="rtl" class="big">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.
-<br><small class="text-muted">9 calendar events per year. 10-year perpetual feed.</small></p>
+<div class="col">
+<div class="accordion" id="ical-accordion">
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Jewish Holidays', id: 'jewish-holidays-v2',
+  emoji: '✡️',
+  summary: `<p>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah.</p>
+<p>Diaspora schedule (for Jews living anywhere outside of modern Israel)</p>`,
+  feedLength: '~40 calendar events per year · 10-year perpetual feed',
+  noCSV: true,
+  moreInfo: `<p>Without emoji:</p>` + await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}),
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Jewish Holidays (all)', id: 'jewish-holidays-all-v2',
+  emoji: '✡️ 🌒 🌳 🎭️ 🔥',
+  summary: `<p>Major, minor, modern Israeli holidays, fast days and more.
+<br>Diaspora schedule (for Jews living anywhere outside of modern Israel)</p>
+<ul>
+<li>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah</li>
+<li>Rosh Chodesh</li>
+<li>Minor holidays like Purim, Tu BiShvat, Lag BaOmer</li>
+<li>Fasts days</li>
+<li>Modern Israeli holidays</li>
+<li>Special Shabbatot</li>
+</ul>`,
+  feedLength: '~95 calendar events per year · 8-year perpetual feed',
+  noCSV: true,
+  moreInfo: `<p>Without emoji:</p>` + await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays (all)', basename: 'jewish-holidays-all'}),
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Customize event language', id: 'lang',
+  emoji: '🌐',
+  summary: `<p>Create a custom calendar with event titles in different languages, candle lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
+<ul>` + Object.entries(langNames).map(([langName, desc]) => {
+  return `<li><a title="${desc[1]||desc[0]}" href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a></li>`;
+}).join('\n') + `</ul>`,
+  noToolbar: true,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Torah Readings (Diaspora)', id: 'torah-readings-diaspora',
+  emoji: '🕍',
+  summary: '<p>Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha.</p><p>Diaspora schedule</p>',
+  feedLength: '~50 calendar events per year · 5-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'פרשת השבוע - ישראל', id: 'torah-readings-israel-he',
+  he: true,
+  emoji: '🕍',
+  summary: `Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl" class="big">בראשית, נח, לך־לך</span>.</p>
+<p>Israel schedule 🇮🇱</p>`,
+  feedLength: '~50 calendar events per year · 5-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Hebrew calendar dates (English)', id: 'hdate-en',
+  summary: `<p>Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet</strong>) every day of the week. Sephardic transliteration.</p>
+<p>Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap">1st of Kislev, 5782</strong>)</p>`,
+  feedLength: '365 calendar events per year · 2-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Hebrew calendar dates (Hebrew)', id: 'hdate-he-v2',
+  summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טבת</span>) every day of the week.</p>
+<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap big">א׳ כסלו תשפ״ב</span>)</p>`,
+  feedLength: '365 calendar events per year · 2-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Hebrew calendar dates (Hebrew with nikud)', id: 'hdate-he',
+  summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טֵבֵת</span>) every day of the week</p>`,
+  feedLength: '365 calendar events per year · 2-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Days of the Omer', id: 'omer',
+  emoji: '4️⃣ 9️⃣',
+  summary: '<p>7 weeks from the second night of Pesach to the day before Shavuot</p>',
+  feedLength: '49 calendar events per year · 3-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Daf Yomi', id: 'daf-yomi',
+  emoji: '📖',
+  summary: '<p>Daily regimen of learning the Talmud</p>',
+  feedLength: '365 calendar events per year · 5-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Mishna Yomi', id: 'mishna-yomi',
+  emoji: '📖',
+  summary: `<p>A program of daily learning in which participants study two Mishnayot
+each day in order to finish the entire Mishnah in ~6 years</p>`,
+  feedLength: '365 calendar events per year · 5-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Yom Kippur Katan', id: 'yom-kippur-katan',
+  summary: `<p><span lang="he" dir="rtl" class="big">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.</p>
 <p class="small">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),
 Tishrei (Yom Kippur has just passed), Kislev (due to Chanukah) or Nisan (fasting not permitted during Nisan).
 When Rosh Chodesh occurs on Shabbat or Sunday, Yom Kippur Katan is observed on the preceding Thursday.
-<sup><a class="outbound" href="https://en.wikipedia.org/wiki/Yom_Kippur_Katan#Practices">[1]</a></sup></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Yom Kippur Katan', basename: 'yom-kippur-katan'}) -%>
-</div></div></div>
-<div class="col-sm-6"><div class="card mb-3"><div class="card-body">
-<h5 class="card-title">Kindness A Day from <a href="https://www.areyvut.org/">Areyvut</a></h5>
-<p class="card-text">Displays a daily act of kindness and related quotation from Tanach or Rabbinic text.
-<br><small class="text-muted">365 calendar events per year. Perpetual feed.</small></p>
-<p><small>Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>
-<em>"The path of the righteous is like a ray of light" (Proverbs 4:18).</em></small></p>
-<%- await include('partials/ical-toolbar.ejs', {name: 'Kindness A Day', basename: 'kindness'}) -%>
-</div></div></div>
-<p class="lead">See our <a href="/home/category/import">help importing into apps</a> for step-by-step instructions.</p>  
+<sup><a class="outbound" href="https://en.wikipedia.org/wiki/Yom_Kippur_Katan#Practices">[1]</a></sup></p>`,
+  feedLength: '9 calendar events per year · 10-year perpetual feed',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Kindness A Day', id: 'kindness',
+  summary: `<p><a href="https://www.areyvut.org/">Areyvut</a>'s daily act of kindness and related quotation from Tanach or Rabbinic text.</p>
+<p class="small">Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>
+<em>"The path of the righteous is like a ray of light" (Proverbs 4:18).</em></p>`,
+  feedLength: '365 calendar events per year · Perpetual feed',
+}) -%>
+</div><!-- .accordion -->
+</div><!-- .col -->
 </div><!-- .row -->
 
 </div><!-- #content -->
