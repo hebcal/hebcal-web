@@ -8,7 +8,7 @@
 <div id="body-<%=id%>" class="accordion-collapse collapse" aria-labelledby="heading-<%=id%>" data-bs-parent="#ical-accordion">
 <div class="accordion-body">
 <%-summary%>
-<% if (typeof feedLength === 'string') { %><p class="text-muted"><%=feedLength%></p><% } %>
+<% if (typeof feedLength !== 'undefined') { %><p class="text-muted"><%=feedLength%> events per year · <span class="text-nowrap"><%=years%>-year perpetual feed</span></p><% } %>
 <% if (typeof noToolbar === 'undefined') { %><%- await include('ical-toolbar.ejs', {
   name: name,
   basename: id,
