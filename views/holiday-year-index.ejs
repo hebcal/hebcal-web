@@ -119,7 +119,7 @@ nightfall on the second date specified.</p>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
 <tbody>
-<tr><td><a href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
+<tr><td><a class="lead" href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%>",
 "startDate":"<%=item.d.format('YYYY-MM-DD')%>","endDate":"<%=item.endD.format('YYYY-MM-DD')%>",
