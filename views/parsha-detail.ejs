@@ -132,8 +132,12 @@ href="<%-aliyah.tikkun%>">
 <div class="d-print-none">
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
-<li><a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>"
-title="Parashat <%=parsha.name%> text and commentary from Sefaria.org">Sefaria</a>
+<% if (typeof commentary['sefaria'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
+<% } %>
+<% if (typeof commentary['wikipedia'] === 'object') { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
+<% } %>
 <% if (typeof commentary['ou.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>">OU Torah</a>
 <% } %>
@@ -191,8 +195,8 @@ Complete Triennial System for Reading the Torah</a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly
 <% } %>
 <% if (typeof summary === 'object') { %>
-<dt><a class="outbound" href="<%- summary.link %>">"<%= summary.title %>" in <em>Wikipedia: The Free Encyclopedia</em></a>
-<dd>Wikimedia Foundation Inc.
+<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parsha.name%> from Sefaria.org</a>
+<dd>Sefaria, Inc.
 <% } %>
 </dl>
 

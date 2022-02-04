@@ -7,6 +7,7 @@
  "reformjudaism.org":{"target":"breishit"},
  "chabad.org":{"target":"7781"},
  "learntefillah.com":"bereshit",
+ "sefaria":{"target":"bereishit","summary":"Bereishit (‘In the Beginning”), the first parashah in the annual Torah reading cycle, begins with God’s creation of the world. The first people, Adam and Eve, eat from the Tree of Knowledge and are banished from the Garden of Eden. Their elder son, Cain, kills their younger son, Abel, and Cain is destined to a life of wandering."},
  "wikipedia":{"target":"Bereshit_(parashah)","summary":"In the parashah, God creates the heavens, the world, Adam and Eve, and Sabbath. A serpent convinces Eve, who then invites Adam, to eat the fruit of tree of the knowledge of good and evil, which God had forbidden to them. So God curses them and expels them from the Garden of Eden. One of their sons, Cain, becomes the first murderer, killing his brother Abel out of jealousy. Adam and Eve have other children, whose descendants populate the Earth. Each generation becomes more and more degenerate until God, despairing, decides to destroy humanity. Only one man, Noah, finds God's favor."},
  "uscj.org":{"target":"Bereshit"}
 },
@@ -18,6 +19,7 @@
  "reformjudaism.org":{"target":"noach"},
  "chabad.org":{"target":"9168"},
  "learntefillah.com":"noach",
+ "sefaria":{"target":"noach","summary":"Noach (“Noah”) begins as God decides to destroy mankind with a flood. At God’s command, the righteous Noah builds an ark, where Noah, his family, and select animals survive the flood. Noah’s children bear children, and several generations develop. God confounds the speech of people building the Tower of Babel."},
  "wikipedia":{"target":"Noach_(parashah)","summary":"The parashah tells the stories of the Flood and Noah's Ark, of Noah's subsequent drunkenness and cursing of Canaan, and of the Tower of Babel."},
  "uscj.org":{"target":"Noah"}
 },
@@ -29,6 +31,7 @@
  "reformjudaism.org":{"target":"lech-lcha"},
  "chabad.org":{"target":"9169"},
  "learntefillah.com":"lech-lecha",
+ "sefaria":{"target":"lech-lecha","summary":"Lech Lecha (“Go Forth”) recounts Abraham’s (here known as Abram) first encounter with God, his journey to Canaan, the birth of his son Ishmael, the covenant between him, his descendants, and God, and God’s commandment to circumcise the males of his household."},
  "wikipedia":{"target":"Lech-Lecha","summary":"The parashah tells the stories of God's calling of Abram (who would become Abraham), Abram's passing off his wife Sarai as his sister, Abram's dividing the land with his nephew Lot, the war between the four kings and the five, the covenant between the pieces, Sarai's tensions with her maid Hagar and Hagar's son Ishmael, and the covenant of circumcision (brit milah)."},
  "uscj.org":{"target":"LekhLekha"}
 },
@@ -40,6 +43,7 @@
  "reformjudaism.org":{"target":"vayeira"},
  "chabad.org":{"target":"9170"},
  "learntefillah.com":"vayera",
+ "sefaria":{"target":"vayera","summary":"Vayera (“He Appeared”) opens as guests inform Abraham that Sarah will give birth. Despite Abraham’s attempts to convince God otherwise, God destroys the cities of Sodom and Gomorrah. Sarah gives birth to Isaac, and Abraham sends away Hagar and Ishmael. At God’s command, Abraham prepares to sacrifice Isaac, but an angel of God tells Abraham to offer a ram instead."},
  "wikipedia":{"target":"Vayeira","summary":"The parashah tells the stories of Abraham's three visitors, Abraham's bargaining with God over Sodom and Gomorrah, Lot's two visitors, Lot's bargaining with the Sodomites, the flight of Lot, the destruction of Sodom and Gomorrah, how Lot's daughters became pregnant by their father, how Abraham once again passed off his wife Sarah as his sister, the birth of Isaac, the expulsion of Hagar, disputes over wells, and the binding of Isaac (הָעֲקֵידָה, the Akedah)."},
  "uscj.org":{"target":"Vayera"}
 },
@@ -51,6 +55,7 @@
  "reformjudaism.org":{"target":"chayei-sarah"},
  "chabad.org":{"target":"9171"},
  "learntefillah.com":"chaye-sarah",
+ "sefaria":{"target":"chayei-sara","summary":"Chayei Sarah (“The Life of Sarah”) opens as Sarah dies and Abraham buys the Cave of Machpelah to bury her. Abraham sends his servant to find a wife for Isaac. The servant meets Rebecca at a well, and Rebecca returns with the servant to marry Isaac. Abraham remarries, has more children, and dies at age 175."},
  "wikipedia":{"target":"Chayei_Sarah","summary":"The parashah tells the stories of Abraham's negotiations to purchase a burial place for his wife Sarah and his servant's mission to find a wife for Abraham's son Isaac."},
  "uscj.org":{"target":"HayeSarah"}
 },
@@ -62,6 +67,7 @@
  "reformjudaism.org":{"target":"toldot"},
  "chabad.org":{"target":"9172"},
  "learntefillah.com":"toledot",
+ "sefaria":{"target":"toldot","summary":"Toldot (“Generations”) opens with the births of Isaac and Rebecca’s twins, Jacob and Esau. Esau sells his birthright to Jacob in exchange for soup. Isaac and Rebecca travel to Gerar, where Isaac makes a peace treaty with King Abimelech. Isaac gives Jacob the blessing meant for Esau, and Jacob runs away to his uncle Laban."},
  "wikipedia":{"target":"Toledot","summary":"The parashah tells of the conflict between Jacob and Esau, Isaac's passing off his wife Rebekah as his sister, and Isaac's blessing of his sons."},
  "uscj.org":{"target":"Toldot"}
 },
@@ -73,6 +79,7 @@
  "reformjudaism.org":{"target":"vayeitzei"},
  "chabad.org":{"target":"9173"},
  "learntefillah.com":"vayetse",
+ "sefaria":{"target":"vayetzei","summary":"Vayetzei (“He Went Out”) opens as Jacob dreams about angels going up and down a ladder, and then continues on his journey toward the home of his uncle Laban. During years of indentured servitude, Jacob marries Laban’s daughters Leah and Rachel, bearing children with them and with their maidservants, Bilhah and Zilpah."},
  "wikipedia":{"target":"Vayetze","summary":"The parashah tells of Jacob's travels to, life in, and return from Haran. The parashah recounts Jacob's dream of a ladder to heaven, Jacob's meeting of Rachel at the well, Jacob's time working for Laban and living with Rachel and Leah, the birth of Jacob's children, and the departure of Jacob's family from Laban."},
  "uscj.org":{"target":"Vayetze"}
 },
@@ -84,6 +91,7 @@
  "reformjudaism.org":{"target":"vayishlach"},
  "chabad.org":{"target":"15554"},
  "learntefillah.com":"vayishlach",
+ "sefaria":{"target":"vayishlach","summary":"Vayishlach (“He Sent”) follows Jacob and his family as Jacob wrestles with a man (commonly understood as an angel), is renamed Israel, and reconciles with his brother, Esau. Jacob’s daughter, Dina, is raped by a Hivite prince, and her brothers sack a city in response. Rachel dies as she gives birth to Jacob's youngest child, Benjamin."},
  "wikipedia":{"target":"Vayishlach","summary":"In the parashah, Jacob reconciles with Esau after wrestling with a \"man\". The prince Shechem rapes Dinah, whose brothers sack the city of Shechem in revenge. In the family's subsequent flight, Rachel gives birth to Benjamin and dies in childbirth."},
  "uscj.org":{"target":"Vayishlah"}
 },
@@ -95,6 +103,7 @@
  "reformjudaism.org":{"target":"vayeishev"},
  "chabad.org":{"target":"15555"},
  "learntefillah.com":"vayeshev",
+ "sefaria":{"target":"vayeshev","summary":"Vayeshev (“He Settled”) begins the story of Joseph, describing his rivalry with his brothers, slavery in Egypt, and imprisonment after his master’s wife frames him in response to Joseph’s refusal of her advances. It also contains the story of Tamar, her husbands, and her father-in-law, Judah."},
  "wikipedia":{"target":"Vayeshev","summary":"The parashah tells the stories of how Jacob's other sons sold Joseph into captivity in Egypt, how Judah wronged his daughter-in-law Tamar who then tricked him into fulfilling his oath, and how Joseph served Potiphar and was imprisoned when falsely accused of assaulting Potiphar's wife."},
  "uscj.org":{"target":"Vayeshev"}
 },
@@ -106,6 +115,7 @@
  "reformjudaism.org":{"target":"mikeitz"},
  "chabad.org":{"target":"15556"},
  "learntefillah.com":"mikets",
+ "sefaria":{"target":"miketz","summary":"Miketz (“After”) follows Joseph as he interprets Pharaoh's dreams and rises to become second-in-command to Pharaoh. When Joseph’s brothers come to Egypt seeking food during a famine, Joseph accuses them of spying. He insists that they return with their youngest brother, Benjamin, and later plants a goblet in Benjamin’s bag."},
  "wikipedia":{"target":"Miketz","summary":"The parashah tells of Joseph's interpretation of Pharaoh's dreams, Joseph's rise to power in Egypt, and Joseph's testing of his brothers."},
  "uscj.org":{"target":"Miketz"}
 },
@@ -117,6 +127,7 @@
  "reformjudaism.org":{"target":"vayigash"},
  "chabad.org":{"target":"15557"},
  "learntefillah.com":"vayigash",
+ "sefaria":{"target":"vayigash","summary":"Vayigash (“He Approached”) opens as Judah pleads with Joseph not to keep Benjamin as a prisoner. Joseph reveals his true identity to his brothers, crying and kissing them. The brothers bring Jacob from Canaan to Egypt, and Jacob and his children settle in Goshen. The portion ends as Joseph buys most of Egypt’s land in exchange for food."},
  "wikipedia":{"target":"Vayigash","summary":"In the parashah, Judah pleads on behalf of his brother Benjamin, Joseph reveals himself to his brothers, Jacob comes down to Egypt, and Joseph's administration of Egypt saves lives but transforms all the Egyptians into bondmen."},
  "uscj.org":{"target":"Vayigash"}
 },
@@ -128,6 +139,7 @@
  "reformjudaism.org":{"target":"va-ychi"},
  "chabad.org":{"target":"15558"},
  "learntefillah.com":"vayechi",
+ "sefaria":{"target":"vayechi","summary":"Vayechi (“He Lived”) is the final Torah portion in the Book of Genesis. It opens as Jacob prepares for his death, making his son Joseph swear to bury him in the Cave of Machpelah. Jacob blesses Joseph’s two sons and his own 12 sons and then dies. Jacob’s sons bury him. The portion ends with Joseph’s death."},
  "wikipedia":{"target":"Vaychi","summary":"The parashah tells of Jacob's request for burial in Canaan, Jacob's blessing of Joseph's sons Ephraim and Manasseh, Jacob's blessing of his sons, Jacob's death and burial, and Joseph's death."},
  "uscj.org":{"target":"Vayehi"}
 },
@@ -139,6 +151,7 @@
  "reformjudaism.org":{"target":"shmot"},
  "chabad.org":{"target":"15559"},
  "learntefillah.com":"shemot",
+ "sefaria":{"target":"shemot","summary":"Shemot (“Names”) is the first Torah reading in the Book of Exodus. It opens describing the enslavement of the Israelites in Egypt. Moses is born, placed in a basket on the Nile, and adopted into Pharaoh’s household. He later encounters God at a burning bush and begins his mission of demanding that Pharoah let the Israelites go."},
  "wikipedia":{"target":"Shemot_(parsha)","summary":"The parashah tells of the Israelites' affliction in Egypt, the hiding and rescuing of the infant Moses, Moses in Midian, the calling of Moses, circumcision on the way, meeting the elders, and Moses before Pharaoh."},
  "uscj.org":{"target":"Shemot"}
 },
@@ -150,6 +163,7 @@
  "reformjudaism.org":{"target":"va-eira"},
  "chabad.org":{"target":"15560"},
  "learntefillah.com":"vaera",
+ "sefaria":{"target":"vaera","summary":"Vaera (“I Appeared”) opens as God promises to redeem the enslaved Israelites and bring them to the Promised Land. When Pharaoh repeatedly refuses to let the Israelites go, God sends a series of plagues: water turning to blood, frogs, lice, wild animals, death of livestock, boils, and hail."},
  "wikipedia":{"target":"Va%27eira","summary":"The parashah tells of the first seven Plagues of Egypt."},
  "uscj.org":{"target":"Vaera"}
 },
@@ -161,6 +175,7 @@
  "reformjudaism.org":{"target":"bo"},
  "chabad.org":{"target":"15561"},
  "learntefillah.com":"bo",
+ "sefaria":{"target":"bo","summary":"Bo (“Come”) recounts the last three plagues that God inflicts on the Egyptians: locusts, darkness, and death of firstborns. God commands the Israelites to offer a Passover lamb sacrifice. After the last plague, Pharaoh and the Egyptians demand that the Israelites leave."},
  "wikipedia":{"target":"Bo_(parsha)","summary":"The parashah tells of the last three plagues on Egypt and the first Passover."},
  "uscj.org":{"target":"Bo"}
 },
@@ -172,6 +187,7 @@
  "reformjudaism.org":{"target":"bshalach"},
  "chabad.org":{"target":"15562"},
  "learntefillah.com":"beshalach",
+ "sefaria":{"target":"beshalach","summary":"Beshalach (“When He Let Go”) describes the splitting of the Red Sea and the song the Israelites sing upon crossing through. In the desert, God sweetens bitter water and provides manna and quail. The portion ends recounting the victory of the Israelites against an attack by the Amalekites."},
  "wikipedia":{"target":"Beshalach","summary":"In this parashah, Pharaoh changes his mind and chases after the Israelite people with his army, trapping them at the Sea of Reeds. God commands Moses to split the sea, allowing them to pass, then closes the sea back upon the Egyptian army. There are the miracles of manna and clean water. The nation of Amalek attacks and the Israelite people are victorious."},
  "uscj.org":{"target":"Beshalah"}
 },
@@ -183,6 +199,7 @@
  "reformjudaism.org":{"target":"yitro"},
  "chabad.org":{"target":"15563"},
  "learntefillah.com":"yitro",
+ "sefaria":{"target":"yitro","summary":"Yitro (“Jethro”) begins as Moses reunites with his father-in-law Yitro and accepts his advice to appoint judges who will help govern the Israelites. The Israelites prepare to encounter God at Mount Sinai. God descends amidst fire, smoke, thunder, and the blast of a shofar and gives the Ten Commandments."},
  "wikipedia":{"target":"Yitro_(parsha)","summary":"The parashah tells of Jethro's organizational counsel to Moses and God's revelation of the Ten Commandments to the Israelites at Mount Sinai."},
  "uscj.org":{"target":"Yitro"}
 },
@@ -194,6 +211,7 @@
  "reformjudaism.org":{"target":"mishpatim"},
  "chabad.org":{"target":"15564"},
  "learntefillah.com":"mishpatim",
+ "sefaria":{"target":"mishpatim","summary":"Mishpatim (“Laws”) recounts a series of God’s laws that Moses gives to the Israelites. These include laws about treatment of slaves, damages, loans, returning lost property, the Sabbath, the sabbatical year, holidays, and destroying idolatry. The portion ends as Moses ascends Mount Sinai for 40 days."},
  "wikipedia":{"target":"Mishpatim","summary":"The parashah sets out a series of laws, which some scholars call the Covenant Code. It reports the people's acceptance of the covenant with God."},
  "uscj.org":{"target":"Mishpatim"}
 },
@@ -205,6 +223,7 @@
  "reformjudaism.org":{"target":"trumah"},
  "chabad.org":{"target":"15565"},
  "learntefillah.com":"teruma",
+ "sefaria":{"target":"terumah","summary":"Terumah (“Donation”) opens as God tells Moses to collect donated materials in order to build a dwelling place for God called the Mishkan (Tabernacle). God describes how to build the vessels that will fill the Mishkan - including the ark, table, menorah, and sacrificial altar - as well as the Mishkan’s walls and curtains."},
  "wikipedia":{"target":"Terumah_(parsha)","summary":"The parashah tells of God's instructions to make the Tabernacle and its furnishings."},
  "uscj.org":{"target":"Terumah"}
 },
@@ -216,6 +235,7 @@
  "reformjudaism.org":{"target":"ttzaveh"},
  "chabad.org":{"target":"15566"},
  "learntefillah.com":"tetsave",
+ "sefaria":{"target":"tetzaveh","summary":"Tetzaveh (“You Shall Command”) opens as God instructs Moses to appoint Aaron and his sons as priests. God details how to make the priestly clothing, how to sanctify the priests and offer sacrifices during the seven days of inauguration in the Mishkan (Tabernacle), and how to build the golden altar."},
  "wikipedia":{"target":"Tetzaveh","summary":"The parashah reports God's commands to bring olive oil for the lamp, make sacred garments for the priests, conduct an ordination ceremony, and make an incense altar."},
  "uscj.org":{"target":"Tetzavah"}
 },
@@ -227,6 +247,7 @@
  "reformjudaism.org":{"target":"ki-tisa"},
  "chabad.org":{"target":"15567"},
  "learntefillah.com":"ki-tissa",
+ "sefaria":{"target":"ki-tisa","summary":"Ki-Tisa (“When You Elevate”) opens as God tells Moses to collect a half-shekel donation from all Israelites and to anoint the Mishkan (Tabernacle), its vessels, and the priests. The Israelites worship the golden calf and Moses breaks the tablets. Moses beseeches God to forgive, and returns with a second set of tablets."},
  "wikipedia":{"target":"Ki_Tissa","summary":"The parashah tells of building the Tabernacle, the incident of the Golden calf, the request of Moses for God to reveal God's Attributes, and how Moses became radiant."},
  "uscj.org":{"target":"KiTissa"}
 },
@@ -238,6 +259,7 @@
  "reformjudaism.org":{"target":"vayakheil"},
  "chabad.org":{"target":"15568"},
  "learntefillah.com":"vaykhel",
+ "sefaria":{"target":"vayakhel","summary":"Vayakhel (“He Assembled”) opens as God commands the Israelites to observe the Sabbath. Moses asks for material donations for the building of the Mishkan (Tabernacle), and the people donate. A group of artisans designated by God begin building the Mishkan and its vessels."},
  "wikipedia":{"target":"Vayakhel","summary":"The parashah tells of the making of the Tabernacle and its sacred vessels."},
  "uscj.org":{"target":"Vayakhel"}
 },
@@ -249,6 +271,7 @@
  "reformjudaism.org":{"target":"pkudei"},
  "chabad.org":{"target":"15570"},
  "learntefillah.com":"pekude",
+ "sefaria":{"target":"pekudei","summary":"Pekudei (“Accountings Of”) is the final Torah reading in the Book of Exodus. It describes the making of priestly garments worn in the Mishkan (Tabernacle) and the completion of its construction. At God’s command, Moses erects the Mishkan and puts its vessels in place, and God's presence fills the Mishkan."},
  "wikipedia":{"target":"Pekudei","summary":"The parashah tells of the setting up of the Tabernacle."},
  "uscj.org":{"target":"Pekudei"}
 },
@@ -260,6 +283,7 @@
  "reformjudaism.org":{"target":"vayikra"},
  "chabad.org":{"target":"15574"},
  "learntefillah.com":"vayicra",
+ "sefaria":{"target":"vayikra","summary":"In Vayikra (“He Called”), the first Torah portion in the Book of Leviticus, God tells Moses about the sacrifices offered in the Mishkan (Tabernacle). Among these are sacrifices entirely burnt on the altar, meal offerings made of flour and oil, peace offerings, and sacrifices brought for sinning inadvertently."},
  "wikipedia":{"target":"Vayikra_(parsha)","summary":"The parashah lays out the laws of sacrifices (קָרְבָּנוֹת, korbanot)."},
  "uscj.org":{"target":"Vayikra"}
 },
@@ -271,6 +295,7 @@
  "reformjudaism.org":{"target":"tzav"},
  "chabad.org":{"target":"15575"},
  "learntefillah.com":"tsav",
+ "sefaria":{"target":"tzav","summary":"In Tzav (“Command”), God tells Moses about the sacrifices offered in the Mishkan (Tabernacle), including a meal offering brought by the high priest, guilt offerings, and offerings of thanks. Moses initiates Aaron and Aaron’s sons for priestly service in the Mishkan."},
  "wikipedia":{"target":"Tzav","summary":"The parashah teaches how the priests performed the sacrifices and describes the ordination of Aaron and his sons."},
  "uscj.org":{"target":"Tzav"}
 },
@@ -282,6 +307,7 @@
  "reformjudaism.org":{"target":"shmini"},
  "chabad.org":{"target":"15576"},
  "learntefillah.com":"shemini",
+ "sefaria":{"target":"shemini","summary":"Shemini (“Eighth”) opens with the consecration of the Mishkan (Tabernacle). Two of Aaron’s sons are consumed by a fire sent from God when they attempt to offer a “strange fire.” God describes the animals, birds, and fish that are permissible and prohibited for consumption, as well as some laws of ritual purity."},
  "wikipedia":{"target":"Shemini_(parsha)","summary":"Parashah Shemini tells of the consecration of the Tabernacle, the deaths of Nadab and Abihu, and the dietary laws of kashrut (כַּשְׁרוּת)."},
  "uscj.org":{"target":"Shemini"}
 },
@@ -293,6 +319,7 @@
  "reformjudaism.org":{"target":"tazria"},
  "chabad.org":{"target":"15577"},
  "learntefillah.com":"tazria",
+ "sefaria":{"target":"tazria","summary":"Tazria (“She Bears Seed”) opens by describing the purification process for a woman after childbirth. It then describes different forms of tzaraat, a discoloration condition on skin or clothing, and the requirement of an infected person to dwell alone outside the camp and be inspected by a priest."},
  "wikipedia":{"target":"Tazria","summary":"The parashah deals with ritual impurity."},
  "uscj.org":{"target":"Tazria"}
 },
@@ -303,6 +330,7 @@
  "reformjudaism.org":{"target":"mtzora"},
  "chabad.org":{"target":"15579"},
  "learntefillah.com":"metsora",
+ "sefaria":{"target":"metzora","summary":"Metzora opens by describing the purification process and accompanying sacrifices for one infected with tzaraat, a discoloration condition on the skin. It then describes the process of treating a house infected with tzaraat and the ritual impurity generated by certain bodily discharges."},
  "wikipedia":{"target":"Metzora_(parsha)","summary":"The parashah deals with ritual impurity. It addresses cleansing from skin disease (צָּרַעַת, tzara'at), houses with an eruptive plague, male genital discharges, and menstruation."},
  "uscj.org":{"target":"Metzora"}
 },
@@ -314,6 +342,7 @@
  "reformjudaism.org":{"target":"acharei-mot"},
  "chabad.org":{"target":"15580"},
  "learntefillah.com":"achare-mot",
+ "sefaria":{"target":"achrei-mot","summary":"Achrei Mot (“After The Death”) opens by describing the ritual service of Yom Kippur, the Day of Atonement. It then details the prohibitions of offering sacrifices outside of the Mishkan (Tabernacle) and of eating animal blood, and ends with a list of forbidden sexual relations."},
  "wikipedia":{"target":"Acharei_Mot","summary":"The parashah sets forth the law of the Yom Kippur ritual, centralized offerings, blood, and sexual practices."},
  "uscj.org":{"target":"AhareiMot"}
 },
@@ -325,6 +354,7 @@
  "reformjudaism.org":{"target":"kdoshim"},
  "chabad.org":{"target":"15582"},
  "learntefillah.com":"kedoshim",
+ "sefaria":{"target":"kedoshim","summary":"Kedoshim (“Holy”) opens by instructing the Israelites to be holy. It details dozens of laws regulating all aspects of life, including observing Shabbat, loving one’s neighbor, and leaving portions of a field for the poor. It ends by detailing punishments for certain types of idolatry and sexual misconduct."},
  "wikipedia":{"target":"Kedoshim","summary":"The parashah tells of the laws of holiness and ethical behavior, repeats the ten commandments, and describes penalties for sexual transgressions."},
  "uscj.org":{"target":"Kedoshim"}
 },
@@ -336,6 +366,7 @@
  "reformjudaism.org":{"target":"emor"},
  "chabad.org":{"target":"15583"},
  "learntefillah.com":"emor",
+ "sefaria":{"target":"emor","summary":"Emor (“Say”) opens with laws regulating priestly behavior, working in the Mishkan (Tabernacle), and consuming sacrifices and priestly food. It describes the biblical holidays of Passover, Shavuot, Rosh Hashanah, Yom Kippur, and Sukkot, and ends with a story about a blasphemer and his punishment."},
  "wikipedia":{"target":"Emor","summary":"The parashah describes purity rules for priests (כֹּהֲנִים, Kohanim), recounts the holy days, describes the preparations for the lights and bread in the sanctuary, and tells the story of a blasphemer and his punishment."},
  "uscj.org":{"target":"Emor"}
 },
@@ -347,6 +378,7 @@
  "reformjudaism.org":{"target":"bhar"},
  "chabad.org":{"target":"15584"},
  "learntefillah.com":"behar",
+ "sefaria":{"target":"behar","summary":"Behar (“On The Mountain”) details the laws of the sabbatical year (Shemita), when working the land is prohibited and debts are forgiven. It also sets out laws of indentured servitude and of the Jubilee year (Yovel), when property reverts to its original ownership."},
  "wikipedia":{"target":"Behar","summary":"The parashah tells the laws of the Sabbatical year (שמיטה, Shmita) and limits on debt servitude."},
  "uscj.org":{"target":"Behar"}
 },
@@ -358,6 +390,7 @@
  "reformjudaism.org":{"target":"bchukotai"},
  "chabad.org":{"target":"15586"},
  "learntefillah.com":"bechucotai",
+ "sefaria":{"target":"bechukotai","summary":"Bechukotai (“In My Laws”) is the final Torah portion in the Book of Leviticus. It begins describing blessings that follow obedience to God's laws and curses that come with desecration of them. It ends with laws of vows and consecration of people and property."},
  "wikipedia":{"target":"Bechukotai","summary":"The parashah addresses blessings for obeying the law, curses for disobeying it, and vows."},
  "uscj.org":{"target":"Behukotai"}
 },
@@ -369,6 +402,7 @@
  "reformjudaism.org":{"target":"bmidbar"},
  "chabad.org":{"target":"36466"},
  "learntefillah.com":"bamidbar",
+ "sefaria":{"target":"bamidbar","summary":"Bamidbar (“In The Desert”) is the first Torah portion in the Book of Numbers. It describes God's command to take a census and details the camping formation of the Israelites in the desert. It also begins to enumerate the responsibilities of the Levites when transporting the Mishkan (Tabernacle)."},
  "wikipedia":{"target":"Bemidbar_(parsha)","summary":"The parashah tells of the census and the priests' duties."},
  "uscj.org":{"target":"Bamidbar"}
 },
@@ -380,6 +414,7 @@
  "reformjudaism.org":{"target":"naso"},
  "chabad.org":{"target":"39589"},
  "learntefillah.com":"nasso",
+ "sefaria":{"target":"naso","summary":"Naso (“Take A Census”), the longest portion in the Torah, opens by detailing responsibilities of the Levites. It also describes laws of a woman suspected of adultery (sotah), the Nazirite, and the priestly blessing. The portion ends by listing the gifts that heads of tribes bring to the Mishkan (Tabernacle)."},
  "wikipedia":{"target":"Naso_(parsha)","summary":"The parashah addresses priestly duties, camp purification, restitution for wrongs committed, the wife accused of unfaithfulness (סוטה, sotah), the nazirite, the Priestly Blessing, and consecration of the Tabernacle."},
  "uscj.org":{"target":"Naso"}
 },
@@ -390,6 +425,7 @@
  "reformjudaism.org":{"target":"bhaalotcha"},
  "chabad.org":{"target":"36744"},
  "learntefillah.com":"behaalotecha",
+ "sefaria":{"target":"behaalotcha","summary":"Beha’alotekha (“When You Raise”) opens with God instructing Moses to inaugurate the Levites for service in the Mishkan (Tabernacle). It also recounts the stories of people who request a second chance to offer the Passover sacrifice, complaints of the Israelites and their punishments, and a disease that affects Miriam."},
  "wikipedia":{"target":"Behaalotecha","summary":"The parashah tells of the Menorah in the Tabernacle, the consecration of the Levites, the Second Passover, how a cloud and fire led the Israelites, the silver trumpets, how the Israelites set out on their journeys, the complaints of the Israelites, and how Miriam and Aaron questioned Moses."},
  "uscj.org":{"target":"Behaalotekha"}
 },
@@ -400,6 +436,7 @@
  "reformjudaism.org":{"target":"shlach-lcha"},
  "chabad.org":{"target":"45586"},
  "learntefillah.com":"shelach",
+ "sefaria":{"target":"shelach","summary":"Shelach (“Send”) tells the story of Israelite spies journeying into Canaan, the negative report they bring back, and the resulting punishment decreed upon the Israelites: to wander and die in the desert over forty years. It ends with laws about sacrifices, the story of a man who desecrates Shabbat, and the commandment to wear ritual fringes."},
  "wikipedia":{"target":"Shlach","summary":"The parashah tells the story of the twelve spies sent to assess the promised land, commandments about offerings, the story of the Sabbath violator, and the commandment of the fringes (צִיצִת, tzitzit)."},
  "uscj.org":{"target":"ShelachLekha"}
 },
@@ -411,6 +448,7 @@
  "reformjudaism.org":{"target":"korach"},
  "chabad.org":{"target":"45591"},
  "learntefillah.com":"corach",
+ "sefaria":{"target":"korach","summary":"Parashat Korach recounts the rebellion of Korach (a cousin of Moses and Aaron), Dathan, Abiram, and 250 of their followers. Some rebels are swallowed by the ground, while others are consumed by a fire from God and others die in a plague. The portion ends by describing gifts given to priests and Levites."},
  "wikipedia":{"target":"Korach_(parsha)","summary":"It tells of Korah's failed attempt to overthrow Moses."},
  "uscj.org":{"target":"Korach"}
 },
@@ -422,6 +460,7 @@
  "reformjudaism.org":{"target":"chukat"},
  "chabad.org":{"target":"45612"},
  "learntefillah.com":"chukat",
+ "sefaria":{"target":"chukat","summary":"Chukat (“Law Of”) opens by describing the process of burning the red heifer and using its ashes for purification. It also tells the stories of the deaths of Miriam and Aaron, Moses’ striking of a rock to bring forth water, a plague of venomous snakes, and battles against the Emorite kings Sihon and Og."},
  "wikipedia":{"target":"Chukat","summary":"The parashah sets out the laws of corpse contamination (tumat hamet) and purification with the water of lustration prepared with the Red Cow (פָרָה אֲדֻמָּה, parah adumah, also called the “Red Heifer”). It also reports the deaths of Miriam and Aaron, the failure of Moses at the Waters of Meribah, and the conquest of Arad, the Amorites, and Bashan."},
  "uscj.org":{"target":"Hukkat"}
 },
@@ -433,6 +472,7 @@
  "reformjudaism.org":{"target":"balak"},
  "chabad.org":{"target":"45614"},
  "learntefillah.com":"balac",
+ "sefaria":{"target":"balak","summary":"Balak tells the story of the Moabite king Balak, who hires Balaam to curse the Israelites. Balaam’s donkey speaks along the way, and Balaam ends up blessing the Israelites. The portion ends with a story about Israelite men sinning with Moabite women and the stabbing of an Israelite and a Midianite."},
  "wikipedia":{"target":"Balak_(parsha)","summary":"In the parashah, Balak son of Zippor, king of Moab, tries to hire Balaam to curse Israel, Balaam's donkey speaks to Balaam, and Balaam blesses Israel instead."},
  "uscj.org":{"target":"Balak"}
 },
@@ -444,6 +484,7 @@
  "reformjudaism.org":{"target":"pinchas"},
  "chabad.org":{"target":"45615"},
  "learntefillah.com":"pinechas",
+ "sefaria":{"target":"pinchas","summary":"Pinchas opens with God’s promise of a “covenant of peace” for the zealot Pinchas, followed by a census. The daughters of Tzelofchad request and receive new laws regarding inheritance. God instructs Moses to prepare Joshua for leadership, and God describes sacrifices brought daily and on special occasions."},
  "wikipedia":{"target":"Pinechas_(parsha)","summary":"It tells of Phinehas's killing of a couple, ending a plague, and of the daughters of Zelophehad's successful plea for land rights."},
  "uscj.org":{"target":"Pinhas"}
 },
@@ -455,6 +496,7 @@
  "reformjudaism.org":{"target":"matot"},
  "chabad.org":{"target":"52598"},
  "learntefillah.com":"matot",
+ "sefaria":{"target":"matot","summary":"Matot (“Tribes”) opens with laws about vows, and continues to describe the Israelites’ war against the Midianites and the allocation of spoils. The tribes of Reuben and Gad request to dwell outside of the Land of Israel, and Moses acquiesces on the condition that they help conquer it."},
  "wikipedia":{"target":"Matot","summary":"It discusses laws of vows, the destruction of Midianite towns, and negotiations of the Reubanites and Gadites to settle land outside of Israel."},
  "uscj.org":{"target":"Mattot"}
 },
@@ -466,6 +508,7 @@
  "reformjudaism.org":{"target":"mas-ei"},
  "chabad.org":{"target":"52600"},
  "learntefillah.com":"masse",
+ "sefaria":{"target":"masei","summary":"Masei (“Travels”), the final Torah portion in the Book of Numbers, opens with a list of places that the Israelites traveled in the desert. God commands the Israelites to destroy idolatry in the Land of Israel, outlines Israel’s boundaries, and details the laws of cities of refuge for accidental killers."},
  "wikipedia":{"target":"Masei","summary":"The parashah discusses the stations of the Israelites' journeys, instructions for taking the land of Israel, cities for the Levites and refuge, and the daughters of Zelophehad."},
  "uscj.org":{"target":"Massey"}
 },
@@ -477,6 +520,7 @@
  "reformjudaism.org":{"target":"dvarim"},
  "chabad.org":{"target":"36232"},
  "learntefillah.com":"devarim",
+ "sefaria":{"target":"devarim","summary":"Devarim (“Words”) is the first Torah portion in the Book of Deuteronomy, the final book of the Torah. In it, Moses recounts events from the Israelites’ travels in the desert, like the appointment of judges, the sin of the spies, and the wars with the Emorite kings Sihon and Og."},
  "wikipedia":{"target":"Devarim_(parsha)","summary":"The parashah recounts how Moses appointed chiefs, the episode of the Twelve Spies, encounters with the Edomites and Ammonites, the conquest of Sihon and Og, and the assignment of land for the tribes of Reuben, Gad, and Manasseh."},
  "uscj.org":{"target":"Devarim"}
 },
@@ -487,6 +531,7 @@
  "reformjudaism.org":{"target":"va-etchanan"},
  "chabad.org":{"target":"36233"},
  "learntefillah.com":"vaetchanan",
+ "sefaria":{"target":"vaetchanan","summary":"Vaetchanan (“I Pleaded”) opens as Moses describes his pleading with God to be allowed into the Land of Israel. Moses warns the Israelites not to pursue idolatry and recounts the giving of the Ten Commandments. The portion also contains the Shema, a declaration of faith and a central text in Jewish prayer."},
  "wikipedia":{"target":"Va%27etchanan","summary":"The parashah tells how Moses asked to see the Land of Israel, made arguments to obey the law, recounted setting up the Cities of Refuge, recited the Ten Commandments and the Shema, and gave instructions for the Israelites' conquest of the Land."},
  "uscj.org":{"target":"Vaethanan"}
 },
@@ -497,6 +542,7 @@
  "reformjudaism.org":{"target":"eikev"},
  "chabad.org":{"target":"36234"},
  "learntefillah.com":"ekev",
+ "sefaria":{"target":"eikev","summary":"In Eikev (“As a Result”), Moses recounts events that happened in the desert, including the manna, the golden calf, and Aaron's death. Moses describes the blessings God will bestow upon the Israelites if they follow God’s law and the punishments they will encounter if they disobey."},
  "wikipedia":{"target":"Eikev","summary":"The parashah tells of the blessings of obedience to God, the dangers of forgetting God, and directions for taking the Land of Israel. Moses recalls the making and re-making of the Tablets of Stone, the incident of the Golden Calf, Aaron's death, the Levites' duties, and exhortations to serve God."},
  "uscj.org":{"target":"Ekev"}
 },
@@ -508,6 +554,7 @@
  "reformjudaism.org":{"target":"reih"},
  "chabad.org":{"target":"36235"},
  "learntefillah.com":"ree",
+ "sefaria":{"target":"reeh","summary":"Re’eh (“See”) details a series of laws in advance of the Israelites’ entrance into the Land of Israel. These include the obligation to destroy idolatry, laws of tithing and charity, dietary laws, holiday laws, and the prohibition of offering sacrifices outside of the place designated by God."},
  "wikipedia":{"target":"Re%27eh","summary":"In the parashah, Moses set before the Israelites the choice between blessing and curse. Moses instructed the Israelites in the laws that they were to observe, including the law of a single centralized place of worship. Moses warned against following other gods and their prophets and set forth the laws of kashrut, tithes, the Sabbatical year, the Hebrew slave, firstborn animals, and the three pilgrim festivals."},
  "uscj.org":{"target":"Reeh"}
 },
@@ -518,6 +565,7 @@
  "reformjudaism.org":{"target":"shoftim"},
  "chabad.org":{"target":"36236"},
  "learntefillah.com":"shofetim",
+ "sefaria":{"target":"shoftim","summary":"Shoftim (“Judges”) discusses guidelines of leadership, opening with a command to appoint judges and continuing to detail laws of kings, priests, and prophets. It also describes laws relating to cities of refuge for accidental killers, false witnesses, warfare, and the rite performed in a case of unsolved murder."},
  "wikipedia":{"target":"Shofetim_(parsha)","summary":"The parashah provides a constitution — a basic societal structure — for the Israelites. The parashah sets out rules for judges, kings, Levites, prophets, cities of refuge, witnesses, war, and unsolved murders."},
  "uscj.org":{"target":"Shoftim"}
 },
@@ -528,6 +576,7 @@
  "reformjudaism.org":{"target":"ki-teitzei"},
  "chabad.org":{"target":"36237"},
  "learntefillah.com":"ki-tetse",
+ "sefaria":{"target":"ki-teitzei","summary":"Ki Teitzei (“When You Go Out”) contains numerous laws, more than appear in any other Torah portion. These include laws about the treatment of a captive woman, returning lost objects, forbidden mixtures, the erection of a rooftop fence, rape, collateral, and workers’ wages."},
  "wikipedia":{"target":"Ki_Teitzei","summary":"The parashah sets out a series of miscellaneous laws, mostly governing civil and domestic life, including ordinances regarding a beautiful captive of war, inheritance among the sons of two wives, a wayward son, the corpse of an executed person, found property, coming upon another in distress, rooftop safety, prohibited mixtures, sexual offenses, membership in the congregation, camp hygiene, runaway slaves, prostitution, usury, vows, gleaning, kidnapping, repossession, prompt payment of wages, vicarious liability, flogging, treatment of domestic animals, levirate marriage (יִבּוּם, yibbum), weights and measures, and wiping out the memory of Amalek."},
  "uscj.org":{"target":"KiTetze"}
 },
@@ -538,6 +587,7 @@
  "reformjudaism.org":{"target":"ki-tavo"},
  "chabad.org":{"target":"36238"},
  "learntefillah.com":"ki-tavo",
+ "sefaria":{"target":"ki-tavo","summary":"Ki Tavo (“When You Come”) opens by describing the ceremony of the first fruit offering (bikkurim) and the declaration made upon the completion of tithing. It concludes with a detailed description of blessings that follow obedience to God's laws and curses that come with their desecration."},
  "wikipedia":{"target":"Ki_Tavo","summary":"The parashah tells of the ceremony of the first fruits (בִּכּוּרִים, bikkurim), tithes, and the blessings from observance and curses (תוֹכֵחָה, tocheichah) from violation of the law."},
  "uscj.org":{"target":"KiTavo"}
 },
@@ -548,6 +598,7 @@
  "reformjudaism.org":{"target":"nitzavim"},
  "chabad.org":{"target":"36239"},
  "learntefillah.com":"nitsavim",
+ "sefaria":{"target":"nitzavim","summary":"In Nitzavim (“Standing”), Moses addresses the Israelites, emphasizing the importance of following God’s covenant and of not worshiping other gods. He describes the process of repentance and returning to God, and stresses that God’s commandments are achievable and “not in the heavens.”"},
  "wikipedia":{"target":"Nitzavim","summary":"In the parashah, Moses told the Israelites that all the people stood before God to enter into the covenant, violation of which would bring on curses, but if they returned to God and heeded God's commandments, then God would take them back in love and bring them together again from the ends of the world. Moses taught that this Instruction was not beyond reach, and Moses put before the Israelites life and death, blessing and curse, and exhorted them to choose life by loving God and heeding the commandments."},
  "uscj.org":{"target":"Nitzavim"}
 },
@@ -558,6 +609,7 @@
  "reformjudaism.org":{"target":"vayeilech"},
  "chabad.org":{"target":"36240"},
  "learntefillah.com":"vayelech",
+ "sefaria":{"target":"vayeilech","summary":"Vayeilech (“He Went”) opens as Moses tells the Israelites that he will not lead them into the Land of Israel, and that Joshua will take over. He instructs the Israelites to gather and read Torah publicly every seven years. At God’s command, Moses writes a poem bearing witness to God’s covenant with the Israelites."},
  "wikipedia":{"target":"Vayelech","summary":"In the parashah, Moses told the Israelites to be strong and courageous, as God and Joshua would soon lead them into the Promised Land. Moses commanded the Israelites to read the law to all the people every seven years. God told Moses that his death was approaching, that the people would break the covenant, and that God would thus hide God's face from them, so Moses should therefore write a song to serve as a witness for God against them."},
  "uscj.org":{"target":"Vayelekh"}
 },
@@ -568,6 +620,7 @@
  "reformjudaism.org":{"target":"haazinu"},
  "chabad.org":{"target":"36241"},
  "learntefillah.com":"haazinu",
+ "sefaria":{"target":"haazinu","summary":"In Ha’azinu (“Listen”) , Moses recites a poem praising God and criticizing the sins of the Israelites. He describes the misfortunes that the Israelites will face and the damage God will ultimately wreak on their oppressors. The portion ends as God commands Moses to ascend Mount Nebo, where he is to die."},
  "wikipedia":{"target":"Haazinu","summary":"The parashah sets out the Song of Moses — an indictment of the Israelites' sins, a prophecy of their punishment, and a promise of God's ultimate redemption of them."},
  "uscj.org":{"target":"Haazinu"}
 },
@@ -577,6 +630,7 @@
  "ou.org":{"target":"V'zot Habracha","cid":"1428"},
  "reformjudaism.org":{"target":"vzot-habrachah"},
  "learntefillah.com":"vezot-haberacha",
+ "sefaria":{"target":"vzot-haberachah","summary":"V’Zot HaBerachah is the final portion in the annual cycle of Torah reading. In it, Moses blesses each of the tribes, excluding the tribe of Simeon. He then ascends Mount Nebo, sees the Land of Israel, and dies at the age of 120. The Israelites mourn, and the portion ends highlighting Moses’ unparalleled greatness."},
  "wikipedia":{"target":"V%27Zot_HaBerachah","summary":"The parashah sets out the farewell Blessing of Moses for the 12 Tribes of Israel and concludes with the death of Moses."},
  "chabad.org":{"target":"36242"}
 },

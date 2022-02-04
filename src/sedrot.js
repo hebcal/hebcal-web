@@ -259,35 +259,31 @@ function getParshaDateAnchor(ev) {
 }
 
 function makeSummaryHtml(parsha) {
-  function replaceWithName(str, p) {
-    return str.replace(/^(The parashah|It) /, `Parashat ${p} `)
-        .replace(/^In the parashah, /, `In Parashat ${p}, `);
-  }
   let summary;
   let target;
   if (parsha.combined) {
     const [p1, p2] = parsha.name.split('-');
-    const s1 = drash[p1].wikipedia && drash[p1].wikipedia.summary;
-    const s2 = drash[p2].wikipedia && drash[p2].wikipedia.summary;
+    const s1 = drash[p1].sefaria && drash[p1].sefaria.summary;
+    const s2 = drash[p2].sefaria && drash[p2].sefaria.summary;
     if (s1 && s2) {
-      summary = replaceWithName(s1, p1) + ' ' + replaceWithName(s2, p2);
-      target = drash[p1].wikipedia.target;
+      summary = s1 + '\n ' + s2;
+      target = drash[p1].sefaria.target;
     } else {
       return null;
     }
   } else {
-    const wikipedia = drash[parsha.name].wikipedia;
-    if (wikipedia && wikipedia.summary) {
-      summary = replaceWithName(wikipedia.summary, parsha.name);
-      target = wikipedia.target;
+    const sefaria = drash[parsha.name].sefaria;
+    if (sefaria && sefaria.summary) {
+      summary = sefaria.summary;
+      target = sefaria.target;
     } else {
       return null;
     }
   }
   return {
-    link: `https://en.wikipedia.org/wiki/${target}`,
-    title: decodeURIComponent(target).replace(/_/g, ' ') + ' from Wikipedia',
-    html: wrapHebrewInSpans(summary),
+    link: `https://www.sefaria.org/topics/parashat-${target}?tab=sources`,
+    title: 'Parashat ' + parsha.name + ' from Sefaria',
+    html: summary,
   };
 }
 
