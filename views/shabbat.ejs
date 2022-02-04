@@ -17,9 +17,6 @@ ul.hebcal-results li {
   font-weight: 300;
   line-height: normal;
 }
-ul.list-unstyled.nav-list li {
-  margin-bottom: 6px;
-}
 </style>
 </head>
 <body>
@@ -38,8 +35,25 @@ ul.list-unstyled.nav-list li {
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
 <%- await include('partials/shabbat-items.ejs') -%>
+<div class="mt-4">
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>
+    Print <%= hyear %></a>
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" href="#email-modal" data-bs-toggle="modal" data-bs-target="#email-modal">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+  Weekly email</a>
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <%= new Date().getFullYear() %> calendar</a>
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="RSS feed of candle lighting times" href="<%= rssUrl %>">
+  <svg class="icon" style="width:1rem;height:1rem"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  RSS feed</a>
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="/link/?<%= geoUrlArgs %>">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-code-slash"></use></svg>
+  Developer API</a>
+</div>
 <div class="d-print-none">
-<hr class="mt-5">
+<hr class="mt-3">
 <form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
@@ -74,27 +88,6 @@ ul.list-unstyled.nav-list li {
 </div><!-- .d-print-none -->
 </div><!-- .col-md-9 -->
 <div class="col-md-3 d-print-none" role="complementary">
-<div style="padding-bottom:16px">
-<h5><%= location.getShortName() %></h5>
-<ul class="list-unstyled nav-list">
-  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>
-    <a title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>"> Print <%= hyear %></a>
-  </li>
-  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
-    <a href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">Monthly calendar</a>
-  </li>
-  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
-    <a href="#email-modal" data-bs-toggle="modal" data-bs-target="#email-modal">Weekly email</a>
-  </li>
-  <li>
-  <li><svg class="icon" style="width:1rem;height:1rem"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-    <a title="RSS feed of candle lighting times" href="<%= rssUrl %>">RSS feed</a>
-  </li>
-  <li><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-code-slash"></use></svg>
-    <a rel="nofollow" title="Candle lighting and Torah portion for your synagogue site" href="/link/?<%= geoUrlArgs %>">Developer API</a>
-  </li>
-</ul>
-</div>
 <h6 class="text-muted mb-1">Advertisement</h6>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
      crossorigin="anonymous"></script>
