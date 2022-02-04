@@ -139,7 +139,7 @@ href="<%-aliyah.tikkun%>">
 <li><a class="outbound" title="Parashat <%=parsha.name%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
 <% } %>
 <% if (typeof commentary['ou.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>">OU Torah</a>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
 <% } %>
 <% if (typeof commentary['torah.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
