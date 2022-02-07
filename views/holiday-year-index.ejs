@@ -100,7 +100,7 @@ then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 </div></div>
 <% for (const [catId, category] of Object.entries(categories)) { %>
-<div class="row mt-2" id="<%=category.id%>">
+<div class="row mt-3" id="<%=category.id%>">
 <div class="col">
 <h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>

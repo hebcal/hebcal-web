@@ -40,6 +40,7 @@ export async function homepage(ctx) {
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
+  ctx.state.gy = gy;
   const hdate = new HDate(dt);
   const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
   Object.assign(ctx.state, {gy, gm, gd, afterSunset});
@@ -153,6 +154,7 @@ function setDefaultYear(ctx, dt, hdate) {
     gregRange = gregYr1 + '-' + gregYr2;
   }
   Object.assign(ctx.state, {
+    hy,
     gregRange,
     yearArgs,
     gregYr1,

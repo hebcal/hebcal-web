@@ -40,13 +40,13 @@ data-ad-slot="1140358973"></ins>
 </div><!-- .row -->
 <div class="row mt-2 d-print-none">
 <div class="col-auto">
-<div class="btn-group me-1 mb-2" role="group">
+<div class="btn-group me-1 mb-1" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 </div>
-<div class="btn-group me-1 mb-2" role="group">
+<div class="btn-group me-1 mb-1" role="group">
 <a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
-<div class="btn-group me-1 mb-2" role="group">
+<div class="btn-group me-1 mb-1" role="group">
 <a class="btn btn-secondary btn-sm" title="Candle lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .col-auto -->
@@ -54,7 +54,7 @@ data-ad-slot="1140358973"></ins>
 <div class="row mt-2">
 <div class="col">
 <% for (const [catId, category] of Object.entries(categories)) { %>
-<div id="<%=category.id%>">
+<div id="<%=category.id%>" class="mt-3">
 <h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
