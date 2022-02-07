@@ -34,6 +34,9 @@ ul.hebcal-results li {
 </div><!-- .alert -->
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
+<div class="float-start">
+  <svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#candles"></use></svg>
+</div>
 <%- await include('partials/shabbat-items.ejs') -%>
 <div class="mt-4">
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>">
@@ -60,7 +63,9 @@ ul.hebcal-results li {
 <input type="hidden" name="city" value="<%= q.city %>" id="city">
 <input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
 <%- await include('partials/city-and-havdalah.ejs') -%>
-  <button type="submit" class="btn btn-primary">Get Shabbat Times</button>
+  <button type="submit" class="btn btn-primary">
+    <svg class="icon mb-1"><use xlink:href="<%=spriteHref%>#gi-candle"></use></svg>
+    Get Shabbat Times</button>
 </form>
 <hr>
 <p><%= Shabbat %> times for world cities</p>
