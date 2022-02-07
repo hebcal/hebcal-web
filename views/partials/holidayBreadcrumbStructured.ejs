@@ -11,12 +11,12 @@
 <% if (year) { -%>
   "@type": "ListItem",
   "position": 2,
-  "name": "<%=holiday%>",
-  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%><%=il?'?i=on':''%>"
+  "name": "<%=year%>",
+  "item": "https://www.hebcal.com/holidays/<%=year%><%=il?'?i=on':''%>"
  },{
   "@type": "ListItem",
   "position": 3,
-  "name": "<%=year%> (<%=upcomingHebrewYear%>)",
+  "name": "<%=holiday%>",
   "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%>-<%=year%><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>"
 <% } else { -%>
   "@type": "ListItem",

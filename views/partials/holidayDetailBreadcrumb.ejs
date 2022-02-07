@@ -3,11 +3,11 @@
 <nav>
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a href="/holidays/<%=il?'?i=on':''%>">Holidays</a></li>
-  <li class="breadcrumb-item"><a href="/holidays/<%=il?'?i=on':''%>#<%=categoryId%>"><%=categoryName%></a></li>
 <% if (year) { %>
-  <li class="breadcrumb-item"><a href="<%=holidayAnchor%><%=il?'?i=on':''%>"><%=holiday%></a></li>
-  <li class="breadcrumb-item active"><%=year%> (<%=upcomingHebrewYear%>)</li>
+  <li class="breadcrumb-item"><a href="/holidays/<%=upcomingHebrewYear-3761%>-<%=upcomingHebrewYear-3760%><%=il?'?i=on':''%>"><%=upcomingHebrewYear%></a></li>
+  <li class="breadcrumb-item active"><%=holiday%></a></li>
 <% } else { %>
+  <li class="breadcrumb-item"><a href="/holidays/<%=il?'?i=on':''%>#<%=categoryId%>"><%=categoryName%></a></li>
   <li class="breadcrumb-item active"><%=holiday%></li>
 <% } %>
 </ol>
