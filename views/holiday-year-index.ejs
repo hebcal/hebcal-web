@@ -151,7 +151,7 @@ nightfall on the second date specified.</p>
 "location":{"@type": "VirtualLocation",
 "url":"<%=item.event.url()%>"}}</script>
 </td>
-<td><%-item.dates%></td>
+<td><%-item.dates%><br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small></td>
 </tr>
 <tr><td colspan="2"><em><%=item.descrShort%></em></td></tr>
 </tbody>

@@ -87,20 +87,23 @@ export function getHolidayDuration(il, mask, holiday) {
 /**
  * @param {HDate} hd
  * @param {number} duration
+ * @param {boolean} showYear
  * @return {string}
  */
-function hebrewDateRange(hd, duration) {
-  if (duration <= 1) {
-    return hd.toString();
-  }
-  const end = new HDate(hd.abs() + duration - 1);
+function hebrewDateRange(hd, duration, showYear=true) {
   const startMonth = hd.getMonthName();
   const startMday = hd.getDate();
-  const endMonth = end.getMonthName();
-  if (startMonth === endMonth) {
-    return `${startMday}-${end.getDate()} ${startMonth} ${hd.getFullYear()}`;
+  const yearSuffix = showYear ? ' ' + hd.getFullYear() : '';
+  if (duration <= 1) {
+    return `${startMday} ${startMonth}${yearSuffix}`;
   }
-  return `${startMday} ${startMonth} - ${end.toString()}`;
+  const end = new HDate(hd.abs() + duration - 1);
+  const endMonth = end.getMonthName();
+  const endMday = end.getDate();
+  if (startMonth === endMonth) {
+    return `${startMday}-${endMday} ${startMonth}${yearSuffix}`;
+  }
+  return `${startMday} ${startMonth} - ${endMday} ${endMonth}${yearSuffix}`;
 }
 
 /**
@@ -134,7 +137,8 @@ export function eventToHolidayItem(ev, il) {
     endD,
     endDowHtml: wrapDisplaySpans('lg', endD.format('ddd'), endD.format('dddd')),
     endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
-    hdRange: hebrewDateRange(hd, duration),
+    hdRange: hebrewDateRange(hd, duration, true),
+    hdRangeNoYear: hebrewDateRange(hd, duration, false),
     desc: ev.render(),
     basename: ev.basename(),
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
