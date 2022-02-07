@@ -123,7 +123,9 @@ function renderJson(maxId, q) {
 // eslint-disable-next-line require-jsdoc
 function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events = makeYahrzeitEvents(ctx.state.maxId, q);
+  const events0 = makeYahrzeitEvents(ctx.state.maxId, q);
+  const todayAbs = new HDate().abs();
+  const events = events0.filter((ev) => ev.getDate().abs() >= todayAbs);
   if (events.length === 0) {
     return null;
   }
