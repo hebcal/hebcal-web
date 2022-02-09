@@ -22,6 +22,7 @@ body { background-color: #eee;}
     sent from Hebcal to <strong><%= emailAddress %></strong>?</p>
 <form action="<%= rpath %>" method="post">
 <input type="hidden" name="id" value="<%=q.id%>">
+<input type="hidden" name="hash" value="<%=q.hash||''%>">
 <input type="hidden" name="unsubscribe" value="1">
 <input type="hidden" name="commit" value="1">
 <input type="hidden" name="cfg" value="html">
