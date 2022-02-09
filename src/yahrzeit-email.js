@@ -94,7 +94,8 @@ export async function yahrzeitEmailSub(ctx) {
     }
     const sql = 'REPLACE INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
     const num = q.num === 'all' ? 0 : parseInt(q.num, 10);
-    await db.query(sql, [q.id, q.hash || null, num]);
+    const nameHash = num == 0 ? null : (q.hash || null);
+    await db.query(sql, [q.id, nameHash, num]);
     if (q.cfg === 'json') {
       ctx.body = {ok: true};
       return;
