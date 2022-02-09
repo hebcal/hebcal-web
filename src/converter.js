@@ -190,6 +190,7 @@ function makeProperties(ctx) {
     hleap: hdate.isLeapYear(),
     il,
     locale,
+    todayHd: new HDate(),
   };
 }
 
@@ -223,17 +224,27 @@ function makeDiasporaIsraelItems(ctx, hdate) {
   };
 }
 
+/** @private */
 class PesudoParshaEvent extends Event {
+  /**
+   * @param {Event} ev
+   */
   constructor(ev) {
     super(ev.getDate(), 'Parashat ' + ev.basename(), ev.getFlags());
     this.ev = ev;
   }
+  /** @return {string} */
   basename() {
     return this.ev.basename();
   }
+  /** @return {string} */
   url() {
     return this.ev.url();
   }
+  /**
+   * @param {string} locale
+   * @return {string}
+   */
   render(locale) {
     return Locale.gettext('Parashat', locale) + ' ' + Locale.gettext(this.basename(), locale);
   }

@@ -46,6 +46,12 @@
 <%- await include('partials/converter-inner.ejs', {
   items: dateItems.israelOnly, location: 'Israel'}) -%>
 </ul>
+<% if (hmStr.startsWith('Adar')) {
+const todayHebYear = todayHd.getFullYear();
+const isPast = hy < todayHebYear;
+-%>
+<p class="small text-muted">Hebrew year <strong><%= hy %></strong> <%= isPast ? 'was' : 'is' %> <%= hleap ? '' : 'not ' %> a leap year (note month: <strong><%= hmStr %></strong>)</p>
+<% } -%>
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
