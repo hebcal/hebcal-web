@@ -93,6 +93,7 @@ async function renderCalPicker(ctx, ids) {
     const title = makeCalendarTitle(row.contents, 100);
     return {id: row.id, title, names};
   });
+  ctx.set('Cache-Control', 'private');
   return ctx.render('yahrzeit-calpicker', {
     calendars,
   });
