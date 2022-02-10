@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/hebcal/hebcal-web#readme",
   "config": {
-    "sprite": "sprite8.svg",
+    "sprite": "sprite9.svg",
     "csprite": "color-icons2.svg",
     "clientapp": "hebcal-app-3.4.min.js",
     "typeaheadcss": "typeahead1.css"

@@ -66,7 +66,7 @@ and Hebrew Anniversaries.</p>
 <p>Print, subscribe to annual email reminders, and download a multi-year
 calendar feed to Apple, Google, Outlook, and more.</p>
 <p>In the form below, enter the date of death (or birth or anniversary).
-Use the "+ Add another name" button at the bottom of the page to add
+Use the "<span class="text-success"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg> Add another name</span>" button at the bottom of the page to add
 additional names.</p>
 </div><!-- .d-print-none -->
 <form class="d-print-none" method="post" action="/yahrzeit">
@@ -77,7 +77,9 @@ additional names.</p>
 </div><!-- #rows -->
 <div class="clearfix">
 <p class="text-end float-sm-end">
- <button class="btn btn-success btn-sm mt-2" id="newrow">+ Add another name</button>
+ <button class="btn btn-success mt-2" id="newrow">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+  Add another name</button>
 </p>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
