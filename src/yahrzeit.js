@@ -293,7 +293,7 @@ export async function yahrzeitDownload(ctx) {
   }
   const lastModDt = details.lastModified;
   const lastModMs = lastModDt ? lastModDt.getTime() : 0;
-  const firstEventDt = events[0].getDate.greg();
+  const firstEventDt = events[0].getDate().greg();
   const firstEventMs = firstEventDt.getTime();
   ctx.lastModified = lastModMs > firstEventMs ? lastModDt : firstEventDt;
   if (ctx.fresh) {
