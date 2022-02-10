@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
+import {HebrewCalendar, HDate, Event, flags, months, Locale, greg} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -27,6 +27,8 @@ async function makeQuery(ctx) {
   if (rpath.startsWith('/yahrzeit/edit/')) {
     const id = basename(rpath);
     return lookupFromDb(ctx, id);
+  } else if (typeof query.id === 'string' && query.id.length === 26) {
+    return lookupFromDb(ctx, query.id);
   } else {
     return query;
   }
@@ -52,7 +54,8 @@ async function lookupFromDb(ctx, id) {
 export async function yahrzeitApp(ctx) {
   const rpath = ctx.request.path;
   const yahrzeitCookie = ctx.cookies.get('Y');
-  if (ctx.method === 'GET' && yahrzeitCookie && yahrzeitCookie.length &&
+  if (ctx.method === 'GET' && !ctx.request.querystring &&
+    yahrzeitCookie && yahrzeitCookie.length &&
     !rpath.startsWith('/yahrzeit/edit/') && !rpath.startsWith('/yahrzeit/new')) {
     const ids = yahrzeitCookie.split('|');
     return renderCalPicker(ctx, ids);
@@ -143,8 +146,7 @@ function renderJson(maxId, q) {
 function makeFormResults(ctx) {
   const q = ctx.state.q;
   const events0 = makeYahrzeitEvents(ctx.state.maxId, q);
-  const todayAbs = new HDate().abs();
-  const events = events0.filter((ev) => ev.getDate().abs() >= todayAbs);
+  const events = filterRecentEvents(events0, 90);
   if (events.length === 0) {
     return null;
   }
@@ -172,6 +174,19 @@ function makeFormResults(ctx) {
     }
     return m;
   }, new Map());
+}
+
+/**
+ * @param {Event[]} events
+ * @param {number} daysAgo
+ * @return {Event[]}
+ */
+function filterRecentEvents(events, daysAgo) {
+  const now = new Date();
+  const nowAbs = greg.greg2abs(now);
+  const janOne = greg.greg2abs(new Date(now.getFullYear(), 0, 1));
+  const startAbs = Math.min(janOne, nowAbs - daysAgo);
+  return events.filter((ev) => ev.getDate().abs() >= startAbs);
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -261,9 +276,8 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  query.startYear = parseInt(query.start, 10) || new HDate().getFullYear();
-  ctx.response.etag = eTagFromOptions(query, {});
-  ctx.lastModified = details.lastModified || ctx.launchDate;
+  const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
+  ctx.response.etag = eTagFromOptions(query, {startYear});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
@@ -276,6 +290,15 @@ export async function yahrzeitDownload(ctx) {
   const events = makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
+  }
+  const lastModDt = details.lastModified;
+  const lastModMs = lastModDt ? lastModDt.getTime() : 0;
+  const firstEventDt = events[0].getDate.greg();
+  const firstEventMs = firstEventDt.getTime();
+  ctx.lastModified = lastModMs > firstEventMs ? lastModDt : firstEventDt;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
   }
   const extension = rpath.substring(rpath.length - 4);
   if (query.dl == '1') {
@@ -337,7 +360,7 @@ function getCalendarNames(query) {
  */
 export function makeYahrzeitEvents(maxId, query) {
   const years = parseInt(query.years, 10) || 20;
-  const startYear = parseInt(query.start, 10) || new HDate().getFullYear();
+  const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
