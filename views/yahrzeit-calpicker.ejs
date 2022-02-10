@@ -1,0 +1,35 @@
+<%- await include('partials/header.ejs', {
+  title: 'Yahrzeit + Anniversary Calendar | Hebcal',
+}) -%>
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col">
+<p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
+and Hebrew Anniversaries.</p>
+<div class="float-start">
+<svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+</div>
+<p>Print, subscribe to annual email reminders, and download a multi-year calendar feed to
+Apple, Google, Outlook, and more.</p>
+<p>Welcome back!</p>
+<p class="lead">View or edit an existing personal calendar</p>
+<ol>
+<% calendars.forEach((cal) => { -%>
+<li><a href="/yahrzeit/edit/<%=cal.id%>"><%=cal.title%></a>
+<% }); -%>
+</ol>
+<p class="lead">Or, create a new personal calendar</p>
+<p><a class="btn btn-primary" href="/yahrzeit/new">New calendar &raquo;</a></p>
+<p>Yahrzeit refers to the anniversary, according to the Hebrew calendar, of the
+day of death of a loved one. Alternative spellings include <em>yahrtzeit</em>,
+<em>yortsayt</em>, and <em>yartzeit</em>. On the anniversary of a death, it is
+the custom to light a candle to commemorate the departure of a loved one.
+<sup><a href="https://en.wikipedia.org/wiki/Bereavement_in_Judaism#Yahrzeit">[1]</a></sup></p>
+</div><!-- .col -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') -%>

@@ -24,13 +24,9 @@ async function makeQuery(ctx) {
     return query;
   }
   const rpath = ctx.request.path;
-  const yahrzeitCookie = ctx.cookies.get('Y');
   if (rpath.startsWith('/yahrzeit/edit/')) {
     const id = basename(rpath);
     return lookupFromDb(ctx, id);
-  } else if (ctx.method === 'GET' && yahrzeitCookie) {
-    const ids = yahrzeitCookie.split('|');
-    return lookupFromDb(ctx, ids[0]);
   } else {
     return query;
   }
@@ -54,6 +50,13 @@ async function lookupFromDb(ctx, id) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function yahrzeitApp(ctx) {
+  const rpath = ctx.request.path;
+  const yahrzeitCookie = ctx.cookies.get('Y');
+  if (ctx.method === 'GET' && yahrzeitCookie && yahrzeitCookie.length &&
+    !rpath.startsWith('/yahrzeit/edit/') && !rpath.startsWith('/yahrzeit/new')) {
+    const ids = yahrzeitCookie.split('|');
+    return renderCalPicker(ctx, ids);
+  }
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (maxId > 0 && q.cfg === 'json') {
@@ -77,6 +80,21 @@ export async function yahrzeitApp(ctx) {
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     count,
+  });
+}
+
+// eslint-disable-next-line require-jsdoc
+async function renderCalPicker(ctx, ids) {
+  const db = ctx.mysql;
+  const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
+  const results = await db.query({sql, values: ids, timeout: 5000});
+  const calendars = results.map((row) => {
+    const names = getCalendarNames(row.contents);
+    const title = makeCalendarTitle(row.contents, 100);
+    return {id: row.id, title, names};
+  });
+  return ctx.render('yahrzeit-calpicker', {
+    calendars,
   });
 }
 
@@ -115,7 +133,7 @@ function renderJson(maxId, q) {
       item.memo = item.memo.replace(/\\n/g, '\n');
     }
   }
-  results.title = makeCalendarTitle(q);
+  results.title = makeCalendarTitle(q, 255);
   delete results.location;
   return results;
 }
@@ -189,7 +207,7 @@ async function makeDownloadProps(ctx) {
     gcal: subical.replace(/^https/, 'http'),
     csv_usa: dlhref + usaCSV + '?dl=1',
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
-    title: makeCalendarTitle(q),
+    title: makeCalendarTitle(q, 64),
   };
 }
 
@@ -267,7 +285,7 @@ export async function yahrzeitDownload(ctx) {
     const icalOpt = {
       yahrzeit: true,
       emoji: true,
-      title: makeCalendarTitle(query),
+      title: makeCalendarTitle(query, 64),
       relcalid: ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null,
     };
     if (typeof query.color === 'string' && query.color.length) {
@@ -284,22 +302,31 @@ export async function yahrzeitDownload(ctx) {
 
 /**
  * @param {any} query
+ * @param {number} maxlen
  * @return {string}
  */
-function makeCalendarTitle(query) {
-  const names = Object.entries(query)
-      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
-      .map((x) => x[1])
-      .filter((str) => str.length > 0);
+function makeCalendarTitle(query, maxlen) {
+  const names = getCalendarNames(query);
   const calendarType = summarizeAnniversaryTypes(query, true);
   let title = calendarType;
   if (names.length > 0) {
     title += ': ' + names.join(', ');
   }
-  if (title.length > 64) {
-    title = title.substring(0, 61) + '...';
+  if (title.length > maxlen) {
+    title = title.substring(0, maxlen - 3) + '...';
   }
   return title;
+}
+
+/**
+ * @param {any} query
+ * @return {string[]}
+ */
+function getCalendarNames(query) {
+  return Object.entries(query)
+      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
+      .map((x) => x[1])
+      .filter((str) => str.length > 0);
 }
 
 /**
