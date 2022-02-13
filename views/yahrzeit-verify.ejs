@@ -8,6 +8,12 @@
 <svg class="icon m-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> Your annual email reminders are now active.
 </div><!-- .alert -->
+<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
+  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+  View calendar</a>
+  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>#form">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  Edit calendar</a></p>
 <% } else { %>
 <p>To activate your <%= anniversaryType %> reminders, please confirm your email
 and complete your registration via the button below.</p>

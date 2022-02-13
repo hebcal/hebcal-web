@@ -6,7 +6,7 @@ import {ulid} from 'ulid';
 import {basename} from 'path';
 
 export async function yahrzeitEmailVerify(ctx) {
-  ctx.set('Cache-Control', 'private');
+  ctx.set('Cache-Control', 'private, max-age=0');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
   const subscriptionId = basename(ctx.request.path);
   if (subscriptionId.length !== 26) {
@@ -42,6 +42,7 @@ export async function yahrzeitEmailVerify(ctx) {
     confirmed,
     subscriptionId,
     emailAddress,
+    calendarId,
   });
 }
 
@@ -61,17 +62,16 @@ async function lookupSubscription(ctx, subscriptionId) {
 
 async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
   const db = ctx.mysql;
-  const sql = `SELECT id FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
+  const sql = `SELECT id, sub_status FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
   const results = await db.query(sql, [emailAddress, calendarId]);
   if (!results || !results[0]) {
-    return false;
+    return {id: false, status: null};
   }
-  return results[0].id;
+  return {id: results[0].id, status: results[0].sub_status};
 }
 
-
 export async function yahrzeitEmailSub(ctx) {
-  ctx.set('Cache-Control', 'private');
+  ctx.set('Cache-Control', 'private, max-age=0');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
   if (q.cfg !== 'html') {
     ctx.response.type = ctx.request.header['accept'] = 'application/json';
@@ -86,35 +86,7 @@ export async function yahrzeitEmailSub(ctx) {
         q,
       });
     }
-    const db = ctx.mysql;
-    if (q.num === 'all') {
-      const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'unsub', ip_addr = ? WHERE id = ?`;
-      const ip = getIpAddress(ctx);
-      await db.query(sqlUpdate, [ip, q.id]);
-    }
-    const sql = 'INSERT INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
-    const num = q.num === 'all' ? 0 : parseInt(q.num, 10);
-    const nameHash = num == 0 ? null : (q.hash || null);
-    await db.query(sql, [q.id, nameHash, num]);
-    if (q.cfg === 'json') {
-      ctx.body = {ok: true};
-      return;
-    } else {
-      if (q.num === 'all') {
-        const {emailAddress} = await lookupSubscription(ctx, q.id);
-        return ctx.render('yahrzeit-optout', {
-          title: `Anniversary Email Unsubscribe | Hebcal Jewish Calendar`,
-          emailAddress,
-        });
-      } else {
-        const {info, emailAddress} = await lookupSubNum(ctx, q);
-        return ctx.render('yahrzeit-optout', {
-          title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
-          emailAddress,
-          info,
-        });
-      }
-    }
+    return unsub(ctx, q);
   }
   ['em', 'ulid', 'type'].forEach((key) => {
     if (empty(q[key])) {
@@ -124,17 +96,25 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
-  let id = await existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
+  const db = ctx.mysql;
+  const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
+  await db.query(sqlUpdate, q.ulid);
+  let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
   const ip = getIpAddress(ctx);
   if (id === false) {
     id = ulid().toLowerCase();
-    const db = ctx.mysql;
     const sql = `INSERT INTO yahrzeit_email
     (id, email_addr, calendar_id, sub_status, created, ip_addr)
     VALUES (?, ?, ?, 'pending', NOW(), ?)`;
     await db.query(sql, [id, q.em, q.ulid, ip]);
-    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-    await db.query(sqlUpdate, q.ulid);
+  } else if (status === 'active') {
+    const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
+    await db.query(sqlUpdate, [id]);
+    ctx.body = {ok: true, alreadySubscribed: true};
+    return;
+  } else {
+    const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
+    await db.query(sqlUpdate, [ip, id]);
   }
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
@@ -187,4 +167,37 @@ AND e.calendar_id = y.id`;
   info.maxId = getMaxYahrzeitId(row.contents);
   info.anniversaryType = summarizeAnniversaryTypes(row.contents, false);
   return {info, emailAddress: row.email_addr};
+}
+
+async function unsub(ctx, q) {
+  const db = ctx.mysql;
+  if (q.num === 'all') {
+    const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'unsub', ip_addr = ? WHERE id = ?`;
+    const ip = getIpAddress(ctx);
+    await db.query(sqlUpdate, [ip, q.id]);
+  } else {
+    const sql = 'INSERT INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
+    const num = q.num === 'all' ? 0 : parseInt(q.num, 10);
+    const nameHash = num == 0 ? null : (q.hash || null);
+    await db.query(sql, [q.id, nameHash, num]);
+  }
+  if (q.cfg === 'json') {
+    ctx.body = {ok: true};
+    return;
+  } else {
+    if (q.num === 'all') {
+      const {emailAddress} = await lookupSubscription(ctx, q.id);
+      return ctx.render('yahrzeit-optout', {
+        title: `Anniversary Email Unsubscribe | Hebcal Jewish Calendar`,
+        emailAddress,
+      });
+    } else {
+      const {info, emailAddress} = await lookupSubNum(ctx, q);
+      return ctx.render('yahrzeit-optout', {
+        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+        emailAddress,
+        info,
+      });
+    }
+  }
 }
