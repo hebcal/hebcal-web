@@ -1,15 +1,16 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-function show(el) { el.style.display = 'block' }
-function hide(el) { el.style.display = 'none' }
-var resource = '<%=resource%>';
-var emailModalSuccess = document.getElementById('email-modal-success');
-var emailModalFailure = document.getElementById('email-modal-failure');
-var emailModalEntry = document.getElementById('email-modal-entry');
-var emailModal = document.getElementById('email-modal');
-var emailSubscribeBtn = document.getElementById('email-subscribe');
-var emailForm = document.getElementById('f2');
-var emailInput = document.getElementById('em');
+function show(el) { if (el) { el.style.display = 'block' } }
+function hide(el) { if (el) { el.style.display = 'none' } }
+const resource = '<%=resource%>';
+const emailModalSuccess = document.getElementById('email-modal-success');
+const emailModalFailure = document.getElementById('email-modal-failure');
+const emailModalAlready = document.getElementById('email-modal-already');
+const emailModalEntry = document.getElementById('email-modal-entry');
+const emailModal = document.getElementById('email-modal');
+const emailSubscribeBtn = document.getElementById('email-subscribe');
+const emailForm = document.getElementById('f2');
+const emailInput = document.getElementById('em');
 emailModal.addEventListener('show.bs.modal', function () {
   hide(emailModalSuccess);
   hide(emailModalFailure);
@@ -30,6 +31,7 @@ function doSubscribe(event) {
   event.stopPropagation();
   hide(emailModalSuccess);
   hide(emailModalFailure);
+  hide(emailModalAlready);
   emailForm.classList.remove('was-validated');
   if (!emailForm.checkValidity()) {
     emailForm.classList.add('was-validated');
@@ -45,9 +47,9 @@ function doSubscribe(event) {
 
   emailSubscribeBtn.textContent = 'Subscribing...';
   emailSubscribeBtn.disabled = true;
-  var params = new URLSearchParams();
-  var formData = new FormData(emailForm);
-  for (var pair of formData) {
+  const params = new URLSearchParams();
+  const formData = new FormData(emailForm);
+  for (const pair of formData) {
     params.append(pair[0], pair[1]);
   }
   fetch(resource, {
@@ -59,11 +61,22 @@ function doSubscribe(event) {
     },
   }).then(function(response) {
     if (response.ok) {
-      response.blob().then(function(data) {
-        show(emailModalSuccess);
-        hide(emailModalFailure);
-        hide(emailModalEntry);
-        hide(emailSubscribeBtn);
+      response.json().then(function(data) {
+        if (data.alreadySubscribed) {
+          show(emailModalAlready);
+          hide(emailModalFailure);
+          hide(emailModalEntry);
+          hide(emailSubscribeBtn);
+        } else if (data.ok) {
+          show(emailModalSuccess);
+          hide(emailModalFailure);
+          hide(emailModalEntry);
+          hide(emailSubscribeBtn);
+        } else {
+          show(emailModalFailure);
+          emailSubscribeBtn.textContent = 'Subscribe';
+          emailSubscribeBtn.disabled = false;
+        }
       });
     } else {
       show(emailModalFailure);

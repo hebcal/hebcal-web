@@ -120,6 +120,9 @@ export async function emailForm(ctx) {
     q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
   }
   const isJSON = q.cfg === 'json';
+  if (isJSON) {
+    ctx.response.type = ctx.request.header['accept'] = 'application/json';
+  }
   let location;
   try {
     location = getLocationFromQuery(ctx.db, q);
@@ -150,7 +153,7 @@ export async function emailForm(ctx) {
       const ok = await unsubscribe(ctx, q.em);
       if (ok) {
         if (isJSON) {
-          ctx.body = {unsubscribe: true, emailAddress: ctx.state.emailAddress};
+          ctx.body = {ok: true, unsubscribe: true, emailAddress: ctx.state.emailAddress};
           return;
         }
         return ctx.render('email-unsubscribe');
@@ -186,11 +189,19 @@ export async function emailForm(ctx) {
       }
       if (subInfo && subInfo.status === 'active') {
         await updateActiveSub(ctx, db, q);
+        if (isJSON) {
+          ctx.body = {ok: true};
+          return;
+        }
         return ctx.render('email-success', {
           updated: true,
         });
       }
       await writeStagingInfo(ctx, db, q);
+      if (isJSON) {
+        ctx.body = {ok: true};
+        return;
+      }
       return ctx.render('email-success', {
         updated: false,
       });

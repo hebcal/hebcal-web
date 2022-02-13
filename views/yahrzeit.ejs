@@ -136,6 +136,7 @@ instructions</a>.</p>
 <div class="modal-content">
 <form id="f2" class="needs-validation" novalidate>
 <input type="hidden" name="v" value="1">
+<input type="hidden" name="cfg" value="json">
 <input type="hidden" name="type" value="<%=anniversaryType%>">
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <div class="modal-header">
@@ -151,8 +152,8 @@ instructions</a>.</p>
   Click the link within that message to confirm your subscription.
 </div><!-- .alert -->
 <div id="email-modal-already" class="alert alert-warning" role="alert" style="display: none">
-  <strong>Subscribed.</strong> Your email address is already subscribed to annual reminders
-  for this personal calendar. No further action is required.
+  <strong>Already subscribed.</strong> Annual reminder emails
+  for this personal calendar are already active. No further action is required.
 </div><!-- .alert -->
 <div id="email-modal-entry">
   <p>Receive a reminder email 7 days before each anniversary.</p>
