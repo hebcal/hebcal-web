@@ -3,6 +3,7 @@ import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail} from './common';
 import {mySendMail} from './common2';
+import dayjs from 'dayjs';
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
@@ -340,9 +341,16 @@ async function writeStagingInfo(ctx, db, q) {
   ]);
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
+  const msgid = `${subscriptionId}.${Date.now()}`;
+  const today = dayjs();
+  const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=verify-' +
+    today.format('YYYY-MM-DD');
+  // eslint-disable-next-line max-len
+  const imgOpen = `<img src="https://www.hebcal.com/email/open?msgid=${msgid}&amp;loc=${encodeURIComponent(locationName)}&amp;${UTM_PARAM}" alt="" width="1" height="1" border="0" style="height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important">`;
   const message = {
     to: q.em,
     subject: 'Please confirm your request to subscribe to hebcal',
+    messageId: `<${msgid}@hebcal.com>`,
     html: `<div dir="ltr">
 <div>Hello,</div>
 <div><br></div>
@@ -363,7 +371,7 @@ apologies and ignore this message.</div>
 <div><br></div>
 <div>[${ip}]</div>
 </div>
-`,
+${imgOpen}`,
   };
   await mySendMail(ctx, message);
 }
