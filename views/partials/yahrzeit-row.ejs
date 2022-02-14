@@ -35,5 +35,11 @@
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' %> value="on">
  <label class="form-check-label" for="s<%=num%>-1">After sunset</label>
 </div>
+<div class="col-auto ms-2">
+<button type="button" class="btn btn-sm btn-outline-danger del" id="del-<%=num%>">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-trash"></use></svg>
+Delete
+</button>
+</div>
 </div>
 </div>
