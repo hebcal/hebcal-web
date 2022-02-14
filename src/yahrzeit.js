@@ -7,6 +7,10 @@ import {empty, getIpAddress, eTagFromOptions} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
+import util from 'util';
+import mmh3 from 'murmurhash3';
+
+const murmur32Hex = util.promisify(mmh3.murmur32Hex);
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
@@ -63,7 +67,7 @@ export async function yahrzeitApp(ctx) {
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (maxId > 0 && q.cfg === 'json') {
-    ctx.body = renderJson(maxId, q);
+    ctx.body = await renderJson(maxId, q);
     return;
   }
   const count = Math.max(+q.count || 1, maxId);
@@ -72,7 +76,7 @@ export async function yahrzeitApp(ctx) {
   if (maxId > 0) {
     const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
     q.ulid = ctx.state.ulid = id;
-    const tables = ctx.state.tables = makeFormResults(ctx);
+    const tables = ctx.state.tables = await makeFormResults(ctx);
     if (tables !== null) {
       setYahrzeitCookie(ctx);
       await makeDownloadProps(ctx);
@@ -126,9 +130,9 @@ function setYahrzeitCookie(ctx) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function renderJson(maxId, q) {
+async function renderJson(maxId, q) {
   delete q.ulid;
-  const events = makeYahrzeitEvents(maxId, q);
+  const events = await makeYahrzeitEvents(maxId, q);
   const results = eventsToClassicApi(events, {}, false);
   for (const item of results.items) {
     delete item.hebrew;
@@ -143,9 +147,9 @@ function renderJson(maxId, q) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function makeFormResults(ctx) {
+async function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events0 = makeYahrzeitEvents(ctx.state.maxId, q);
+  const events0 = await makeYahrzeitEvents(ctx.state.maxId, q);
   const events = filterRecentEvents(events0, 90);
   if (events.length === 0) {
     return null;
@@ -287,7 +291,7 @@ export async function yahrzeitDownload(ctx) {
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
-  const events = makeYahrzeitEvents(maxId, query);
+  const events = await makeYahrzeitEvents(maxId, query);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
@@ -358,17 +362,23 @@ function getCalendarNames(query) {
  * @param {any} query
  * @return {Event[]}
  */
-export function makeYahrzeitEvents(maxId, query) {
+async function makeYahrzeitEvents(maxId, query) {
   const years = parseInt(query.years, 10) || 20;
   const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
-    events = events.concat(getEventsForId(query, id, startYear, endYear));
+    const events0 = await getEventsForId(query, id, startYear, endYear);
+    events = events.concat(events0);
   }
   const yizkor = query.yizkor;
   if (yizkor === 'on' || yizkor === '1') {
     const holidays = makeYizkorEvents(startYear, endYear, query.i === 'on');
+    for (const ev of holidays) {
+      const d = dayjs(ev.getDate().greg());
+      const hash = await murmur32Hex(ev.getDesc());
+      ev.uid = 'yizkor-' + d.format('YYYYMMDD') + '-' + hash;
+    }
     events = events.concat(holidays);
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
@@ -395,7 +405,7 @@ function calculateAnniversaryNth(origDt, hyear) {
  * @param {number} endYear
  * @return {Event[]}
  */
-function getEventsForId(query, id, startYear, endYear) {
+async function getEventsForId(query, id, startYear, endYear) {
   const events = [];
   const info = getYahrzeitDetailForId(query, id);
   if (info === null) {
@@ -445,9 +455,8 @@ function getEventsForId(query, id, startYear, endYear) {
         memo += `\\n\\n${urlPrefix}#row${id}`;
       }
       ev.memo = memo;
-      if (query.ulid) {
-        ev.uid = `hebcal-${hyear}-${query.ulid}-${id}`;
-      }
+      const hash = query.ulid || await murmur32Hex(name);
+      ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
       events.push(ev);
     }
   }
