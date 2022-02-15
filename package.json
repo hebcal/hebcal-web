@@ -35,8 +35,8 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.2",
+    "@babel/cli": "^7.17.3",
+    "@babel/core": "^7.17.3",
     "@babel/preset-env": "^7.16.11",
     "@babel/register": "^7.17.0",
     "babel-plugin-transform-modules-iife": "^1.0.0",
@@ -46,7 +46,7 @@
   "dependencies": {
     "@hebcal/core": "^3.33.2",
     "@hebcal/geo-sqlite": "^3.8.0",
-    "@hebcal/icalendar": "^4.15.0",
+    "@hebcal/icalendar": "^4.15.2",
     "@hebcal/leyning": "^4.12.1",
     "@hebcal/locales": "^3.3.2",
     "@hebcal/rest-api": "^3.12.0",
@@ -76,7 +76,7 @@
     "mysql2": "^2.3.3",
     "nodemailer": "^6.7.2",
     "pdfkit": "^0.13.0",
-    "pino": "^7.6.5",
+    "pino": "^7.8.0",
     "random-bigint": "0.0.1",
     "ulid": "^2.3.0",
     "universal-analytics": "^0.5.3",
