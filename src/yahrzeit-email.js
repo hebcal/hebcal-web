@@ -1,10 +1,12 @@
 /* eslint-disable require-jsdoc */
 import {getIpAddress, validateEmail, empty} from './common';
 import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetailsFromDb,
-  summarizeAnniversaryTypes} from './common2';
+  summarizeAnniversaryTypes, getImgOpenHtml} from './common2';
 import {ulid} from 'ulid';
 import {basename} from 'path';
-import dayjs from 'dayjs';
+
+const BLANK = '<div>&nbsp;</div>';
+const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
 export async function yahrzeitEmailVerify(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
@@ -120,35 +122,36 @@ export async function yahrzeitEmailSub(ctx) {
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${q.ulid}.${id}.${Date.now()}`;
-  const today = dayjs();
-  const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=verify-' +
-    today.format('YYYY-MM-DD');
-  // eslint-disable-next-line max-len
-  const imgOpen = `<img src="https://www.hebcal.com/email/open?msgid=${msgid}&amp;loc=${anniversaryType}&amp;${UTM_PARAM}" alt="" width="1" height="1" border="0" style="height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important">`;
+  const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'verify-yahrzeit');
   const message = {
     to: q.em,
     subject: `Activate your ${anniversaryType} reminders`,
     messageId: `<${msgid}@hebcal.com>`,
-    html: `<div dir="ltr">
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
 <div>Hello,</div>
-<div><br></div>
+${BLANK}
 <div>We have received your request to receive ${anniversaryType} reminders
-from hebcal.com.</div>
-<div><br></div>
+from Hebcal.com.</div>
+${BLANK}
 <div>Please confirm your request and activate your subscription
 by clicking on this link:</div>
-<div><br></div>
+${BLANK}
 <div><a href="${url}">${url}</a></div>
-<div><br></div>
+${BLANK}
 <div>If you did not request (or do not want) ${anniversaryType} reminders,
 please accept our apologies and ignore this message.</div>
-<div><br></div>
-<div>Regards,
-<br>hebcal.com</div>
-<div><br></div>
+${BLANK}
+<div>Kol Tuv,
+<br>Hebcal.com</div>
+${BLANK}
+<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
 <div>[${ip}]</div>
 </div>
-${imgOpen}`,
+${imgOpen}</div>
+`,
   };
   await mySendMail(ctx, message);
   ctx.body = {ok: true};

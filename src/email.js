@@ -2,8 +2,10 @@
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail} from './common';
-import {mySendMail} from './common2';
-import dayjs from 'dayjs';
+import {mySendMail, getImgOpenHtml} from './common2';
+
+const BLANK = '<div>&nbsp;</div>';
+const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email';
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
@@ -24,15 +26,15 @@ WHERE email_id = ?`;
   const row = results[0];
   ctx.state.emailAddress = row.email_address;
   const location = getLocationFromQuery(ctx.db, getGeoFromRow(row));
+  ctx.state.locationName = location.getName();
   const confirmed = (query.commit === '1');
   if (confirmed) {
     await updateDbAndEmail(ctx, db);
   }
-  const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
+  const title = confirmed ? 'Shabbat Email Subscription Confirmed' : 'Confirm Shabbat Email Subscription';
   await ctx.render('verify', {
-    title: `${title} | Hebcal Jewish Calendar`,
+    title: `${title} | Hebcal`,
     confirmed,
-    locationName: location ? location.getName() : 'unknown',
   });
 }
 
@@ -47,6 +49,22 @@ function getGeoFromRow(row) {
   return {};
 }
 
+/**
+ * @param {string} emailAddress
+ * @return {string}
+ */
+function makeFooter(emailAddress) {
+  const unsubUrl = getUnsubUrl(emailAddress);
+  return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
+<div><a href="${unsubUrl}&amp;unsubscribe=1&amp;cfg=html&amp;${UTM_PARAM}">Unsubscribe</a> |
+<a href="${unsubUrl}&amp;modify=1&amp;cfg=html&amp;${UTM_PARAM}">Update Settings</a> |
+<a href="https://www.hebcal.com/home/about/privacy-policy?${UTM_PARAM}">Privacy Policy</a></div>
+</div>`;
+}
+
 async function updateDbAndEmail(ctx, db) {
   const sql = `UPDATE hebcal_shabbat_email
     SET email_status = 'active', email_ip = ?
@@ -57,24 +75,28 @@ async function updateDbAndEmail(ctx, db) {
 
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const emailAddress = ctx.state.emailAddress;
-  const unsubUrl = getUnsubUrl(emailAddress);
+  const locationName = ctx.state.locationName;
+  const msgid = `${subscriptionId}.${Date.now()}`;
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'complete-shabbat');
+  const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
-    subject: 'Your subscription to hebcal is complete',
+    subject: 'Your subscription to Hebcal is complete',
     headers: {
       'List-Unsubscribe': `<mailto:${unsubAddr}>`,
     },
-    text: `Hello,
-
-Your subscription request for hebcal is complete.
-
-You'll receive a maximum of one message per week, typically on Thursday morning.
-
-Regards,
-hebcal.com
-
-To modify your subscription or to unsubscribe completely, visit:
-${unsubUrl}
+    messageId: `<${msgid}@hebcal.com>`,
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Hello,</div>
+${BLANK}
+<div>Your subscription request for Shabbat candle lighting times from Hebcal is complete.</div>
+${BLANK}
+<div>You'll receive a maximum of one message per week, typically on Thursday morning.</div>
+${BLANK}
+<div>Kol Tuv,
+<br>Hebcal.com</div>
+${footerHtml}
+${imgOpen}</div>
 `,
   };
   await mySendMail(ctx, message);
@@ -134,7 +156,7 @@ export async function emailForm(ctx) {
     ctx.status = err.status;
   }
   q['city-typeahead'] = location ? location.getName() : '';
-  ctx.state.title = 'Shabbat Candle Lighting Times by Email | Hebcal Jewish Calendar';
+  ctx.state.title = 'Shabbat Candle Lighting Times by Email | Hebcal';
   if (q.v === '1') {
     if (!q.em) {
       ctx.state.message = 'Please enter your email address.';
@@ -219,24 +241,29 @@ export async function emailForm(ctx) {
 async function updateActiveSub(ctx, db, q) {
   await writeSubInfo(ctx, db, q);
   const emailAddress = ctx.state.emailAddress;
-  const unsubUrl = getUnsubUrl(emailAddress);
   const subscriptionId = ctx.state.subscriptionId;
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
+  const msgid = `${subscriptionId}.${Date.now()}`;
+  const locationName = ctx.state.locationName;
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'update-shabbat');
+  const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
-    subject: 'Your subscription to hebcal is updated',
+    subject: 'Your subscription to Hebcal is updated',
+    messageId: `<${msgid}@hebcal.com>`,
     headers: {
       'List-Unsubscribe': `<mailto:${unsubAddr}>`,
     },
-    text: `Hello,
-
-We have updated your weekly Shabbat candle lighting time subscription for ${ctx.state.locationName}.
-
-Regards,
-hebcal.com
-
-To modify your subscription or to unsubscribe completely, visit:
-${unsubUrl}
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Hello,</div>
+${BLANK}
+<div>This message confirms that your weekly Shabbat candle lighting times
+for <strong>${locationName}</strong> have been updated.</div>
+${BLANK}
+<div>Kol Tuv,
+<br>Hebcal.com</div>
+${footerHtml}
+${imgOpen}</div>
 `,
   };
   await mySendMail(ctx, message);
@@ -353,36 +380,33 @@ async function writeStagingInfo(ctx, db, q) {
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;
-  const today = dayjs();
-  const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=verify-' +
-    today.format('YYYY-MM-DD');
-  // eslint-disable-next-line max-len
-  const imgOpen = `<img src="https://www.hebcal.com/email/open?msgid=${msgid}&amp;loc=${encodeURIComponent(locationName)}&amp;${UTM_PARAM}" alt="" width="1" height="1" border="0" style="height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important">`;
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'verify-shabbat');
   const message = {
     to: q.em,
-    subject: 'Please confirm your request to subscribe to hebcal',
+    subject: 'Please confirm your request to subscribe to Hebcal',
     messageId: `<${msgid}@hebcal.com>`,
-    html: `<div dir="ltr">
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
 <div>Hello,</div>
-<div><br></div>
+${BLANK}
 <div>We have received your request to receive weekly Shabbat
-candle lighting time information from hebcal.com for
+candle lighting times from Hebcal.com for
 ${locationName}.</div>
-<div><br></div>
+${BLANK}
 <div>Please confirm your request by clicking on this link:</div>
-<div><br></div>
+${BLANK}
 <div><a href="${url}">${url}</a></div>
-<div><br></div>
+${BLANK}
 <div>If you did not request (or do not want) weekly Shabbat
-candle lighting time information, please accept our
-apologies and ignore this message.</div>
-<div><br></div>
-<div>Regards,
-<br>hebcal.com</div>
-<div><br></div>
+candle lighting times, please accept our apologies and ignore this message.</div>
+${BLANK}
+<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
 <div>[${ip}]</div>
 </div>
-${imgOpen}`,
+${imgOpen}</div>
+`,
   };
   await mySendMail(ctx, message);
 }
