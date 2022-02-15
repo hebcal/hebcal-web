@@ -60,9 +60,10 @@ function clickToDelete(el) {
   var num = el.id.substring(4);
   el.addEventListener('click', function() {
     var node = document.getElementById('row' + num);
-    if (node && node.parentNode) {
-      node.parentNode.removeChild(node);
-    }
+    node.innerHTML = '<div class="row mb-3 align-items-center mt-1"><div class="col-auto">'+num+'.</div>'+
+      '<div class="col-auto"><span class="text-danger lead">Deleted.</span></div>'+
+      '<div class="col-auto"><span class="text-danger">Click "Update Calendar" to save changes.</span></div>'+
+      '</div>';
   });
 }
 var delBtns = [].slice.call(document.querySelectorAll('button.del'));
