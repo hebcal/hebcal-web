@@ -194,16 +194,19 @@ function filterRecentEvents(events, daysAgo) {
   return events.filter((ev) => ev.getDate().abs() >= startAbs);
 }
 
+const MIN_YEARS = 2;
+const MAX_YEARS = 50;
+
 /**
  * @param {string|number} str
  * @return {number}
  */
 function getNumYears(str) {
   const y = parseInt(str, 10);
-  if (isNaN(y) || y < 2) {
-    return 2;
-  } else if (y > 50) {
-    return 50;
+  if (isNaN(y) || y < MIN_YEARS) {
+    return MIN_YEARS;
+  } else if (y > MAX_YEARS) {
+    return MAX_YEARS;
   } else {
     return y;
   }
@@ -296,7 +299,7 @@ export async function yahrzeitDownload(ctx) {
   if (query.v !== 'yahrzeit') {
     return;
   }
-  const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
+  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   ctx.response.etag = eTagFromOptions(query, {startYear});
   ctx.status = 200;
   if (ctx.fresh) {
@@ -374,17 +377,28 @@ function getCalendarNames(query) {
 }
 
 /**
+ * @return {number}
+ */
+function getDefaultStartYear() {
+  const today = new HDate();
+  const hmonth = today.getMonth();
+  const hyear = today.getFullYear();
+  const isFirst3months = hmonth >= months.TISHREI && hmonth <= months.KISLEV;
+  return isFirst3months ? hyear - 1 : hyear;
+}
+
+/**
  * @param {number} maxId
  * @param {any} query
  * @return {Event[]}
  */
 async function makeYahrzeitEvents(maxId, query) {
   const years = getNumYears(query.years);
-  const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
+  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
-    const events0 = await getEventsForId(query, id, startYear, endYear);
+    const events0 = await getEventsForId(query, id, startYear, years);
     events = events.concat(events0);
   }
   const yizkor = query.yizkor;
@@ -418,65 +432,82 @@ function calculateAnniversaryNth(origDt, hyear) {
  * @param {any} query
  * @param {number} id
  * @param {number} startYear
- * @param {number} endYear
+ * @param {number} numYears
  * @return {Event[]}
  */
-async function getEventsForId(query, id, startYear, endYear) {
+async function getEventsForId(query, id, startYear, numYears) {
   const events = [];
   const info = getYahrzeitDetailForId(query, id);
   if (info === null) {
     return events;
   }
-  const type = info.type;
-  const name = info.name;
-  const day = info.day;
-  const urlPrefix = query.ulid && query.dl !== '1' ? `https://www.hebcal.com/yahrzeit/edit/${query.ulid}` : null;
+  const calendarId = query.ulid;
+  const includeUrl = Boolean(calendarId && query.dl !== '1');
   const appendHebDate = (query.hebdate === 'on' || query.hebdate === '1');
-  for (let hyear = startYear; hyear <= endYear; hyear++) {
-    const origDt = day.toDate();
-    const isYahrzeit = (type === 'Yahrzeit');
-    const hd = isYahrzeit ?
-      HebrewCalendar.getYahrzeit(hyear, origDt) :
-      HebrewCalendar.getBirthdayOrAnniversary(hyear, origDt);
-    if (hd) {
-      const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-      const hebdate = hd.render('en');
-      const nth = calculateAnniversaryNth(origDt, hyear);
-      let subj = `${name}'s ${nth} ${typeStr}`;
-      if (appendHebDate) {
-        const comma = hebdate.indexOf(',');
-        subj += ' (' + hebdate.substring(0, comma) + ')';
-      }
-      const ev = new Event(hd, subj, flags.USER_EVENT);
-      if (isYahrzeit) {
-        ev.emoji = '🕯️';
-      } else if (type === 'Birthday') {
-        ev.emoji = '🎂✡️';
-      }
-      const observed = dayjs(hd.greg());
-      const erev = observed.subtract(1, 'day');
-      const verb = isYahrzeit ? 'remembering' : 'honoring';
-      let memo = `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr} occurs on ` +
-      `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.\\n\\n` +
-      `${name}'s ${typeStr} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
-      `sundown on the day of observance.`;
-      if (isYahrzeit) {
-        const dow = erev.day();
-        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'after nightfall' : 'at sundown';
-        memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
-        'May your loved one\'s soul be bound up in the bond of eternal life and may their memory ' +
-        'serve as a continued source of inspiration and comfort to you.';
-      }
-      if (urlPrefix) {
-        memo += `\\n\\n${urlPrefix}#row${id}`;
-      }
-      ev.memo = memo;
-      const hash = query.ulid || await murmur32Hex(name);
-      ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
+  for (let hyear = startYear; events.length < numYears; hyear++) {
+    const ev = await makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl);
+    if (ev) {
       events.push(ev);
     }
   }
   return events;
+}
+
+/**
+ * @param {number} id
+ * @param {any} info
+ * @param {number} hyear
+ * @param {boolean} appendHebDate
+ * @param {string} calendarId
+ * @param {boolean} includeUrl
+ * @return {Event}
+ */
+async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl) {
+  const type = info.type;
+  const isYahrzeit = (type === 'Yahrzeit');
+  const origDt = info.day.toDate();
+  const hd = isYahrzeit ?
+    HebrewCalendar.getYahrzeit(hyear, origDt) :
+    HebrewCalendar.getBirthdayOrAnniversary(hyear, origDt);
+  if (!hd) {
+    return null;
+  }
+  const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
+  const hebdate = hd.render('en');
+  const nth = calculateAnniversaryNth(origDt, hyear);
+  const name = info.name;
+  let subj = `${name}'s ${nth} ${typeStr}`;
+  if (appendHebDate) {
+    const comma = hebdate.indexOf(',');
+    subj += ' (' + hebdate.substring(0, comma) + ')';
+  }
+  const ev = new Event(hd, subj, flags.USER_EVENT);
+  if (isYahrzeit) {
+    ev.emoji = '🕯️';
+  } else if (type === 'Birthday') {
+    ev.emoji = '🎂✡️';
+  }
+  const observed = dayjs(hd.greg());
+  const erev = observed.subtract(1, 'day');
+  const verb = isYahrzeit ? 'remembering' : 'honoring';
+  let memo = `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr} occurs on ` +
+    `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.\\n\\n` +
+    `${name}'s ${typeStr} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
+    `sundown on the day of observance.`;
+  if (isYahrzeit) {
+    const dow = erev.day();
+    const when = dow === 5 ? 'before sundown' : dow === 6 ? 'after nightfall' : 'at sundown';
+    memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
+      'May your loved one\'s soul be bound up in the bond of eternal life and may their memory ' +
+      'serve as a continued source of inspiration and comfort to you.';
+  }
+  if (includeUrl) {
+    memo += `\\n\\nhttps://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
+  }
+  ev.memo = memo;
+  const hash = calendarId || await murmur32Hex(name);
+  ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
+  return ev;
 }
 
 /**
