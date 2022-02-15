@@ -5,7 +5,7 @@ import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
 import {mySendMail, getImgOpenHtml} from './common2';
 
 const BLANK = '<div>&nbsp;</div>';
-const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email';
+const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
