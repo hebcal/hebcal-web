@@ -84,6 +84,7 @@ export async function yahrzeitApp(ctx) {
   } else {
     ctx.state.tables = null;
   }
+  q.years = getNumYears(q.years);
   await ctx.render('yahrzeit', {
     title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
     count,
@@ -193,6 +194,21 @@ function filterRecentEvents(events, daysAgo) {
   return events.filter((ev) => ev.getDate().abs() >= startAbs);
 }
 
+/**
+ * @param {string|number} str
+ * @return {number}
+ */
+function getNumYears(str) {
+  const y = parseInt(str, 10);
+  if (isNaN(y) || y < 2) {
+    return 2;
+  } else if (y > 50) {
+    return 50;
+  } else {
+    return y;
+  }
+}
+
 // eslint-disable-next-line require-jsdoc
 async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
@@ -200,7 +216,7 @@ async function makeDownloadProps(ctx) {
   const type = summarizeAnniversaryTypes(q);
   ctx.state.anniversaryType = type;
   ctx.state.downloadAltTitle = `${type}.ics`;
-  ctx.state.numYears = parseInt(q.years, 10) || 20;
+  ctx.state.numYears = getNumYears(q.years);
   ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = type.toLowerCase();
   const db = ctx.mysql;
@@ -363,7 +379,7 @@ function getCalendarNames(query) {
  * @return {Event[]}
  */
 async function makeYahrzeitEvents(maxId, query) {
-  const years = parseInt(query.years, 10) || 20;
+  const years = getNumYears(query.years);
   const startYear = parseInt(query.start, 10) || new HDate().getFullYear() - 1;
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
   let events = [];
