@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, Event, flags, months, Locale, greg} from '@hebcal/core';
+import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -13,6 +13,9 @@ import mmh3 from 'murmurhash3';
 const murmur32Hex = util.promisify(mmh3.murmur32Hex);
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
+const MIN_YEARS = 2;
+const MAX_YEARS = 50;
+const DEFAULT_YEARS = 20;
 
 /**
  * @param {*} ctx
@@ -22,7 +25,7 @@ async function makeQuery(ctx) {
   ctx.state.ulid = '';
   ctx.state.isEditPage = false;
   const isPost = ctx.request.body && ctx.request.body.v === 'yahrzeit';
-  const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: 20};
+  const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
   const query = Object.assign(defaults, ctx.request.body, ctx.request.query);
   if (isPost) {
     return query;
@@ -180,16 +183,15 @@ async function makeFormResults(ctx) {
   }, new Map());
 }
 
-const MIN_YEARS = 2;
-const MAX_YEARS = 50;
-
 /**
  * @param {string|number} str
  * @return {number}
  */
 function getNumYears(str) {
   const y = parseInt(str, 10);
-  if (isNaN(y) || y < MIN_YEARS) {
+  if (isNaN(y)) {
+    return DEFAULT_YEARS;
+  } else if (y < MIN_YEARS) {
     return MIN_YEARS;
   } else if (y > MAX_YEARS) {
     return MAX_YEARS;
