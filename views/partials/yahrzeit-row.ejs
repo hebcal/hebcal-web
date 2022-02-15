@@ -1,5 +1,6 @@
 <div class="yahrzeit-row" id="row<%=num%>">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
+<div class="col-auto"><%=num%>.</div>
 <div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)">
 <label class="form-label" for="n<%=num%>">Name (optional)</label></div>
 <div class="col-auto form-floating"><select name="t<%=num%>" id="t<%=num%>" class="form-select">
@@ -29,11 +30,11 @@
 <label class="form-label" for="y<%=num%>">Year</label></div>
 <div class="col-auto form-check m-2">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' %> value="off">
- <label class="form-check-label" for="s<%=num%>-0">Before sunset</label>
+ <label class="form-check-label small" for="s<%=num%>-0">Before sunset</label>
 </div>
 <div class="col-auto form-check">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' %> value="on">
- <label class="form-check-label" for="s<%=num%>-1">After sunset</label>
+ <label class="form-check-label small" for="s<%=num%>-1">After sunset</label>
 </div>
 <div class="col-auto ms-2">
 <button type="button" class="btn btn-sm btn-outline-danger del" id="del-<%=num%>">

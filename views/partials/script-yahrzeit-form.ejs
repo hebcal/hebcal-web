@@ -2,7 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
 var count=<%=count%>;
 function yahrzeitRow(n) {
-  return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1"><div class="col-auto form-floating">'+
+  return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">'+
+  '<div class="col-auto">'+n+'.</div>' +
+  '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name (optional)">'+
   '<label class="form-label" for="n'+n+'">Name (optional)</label></div>'+
   '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
@@ -23,10 +25,10 @@ function yahrzeitRow(n) {
   '<label class="form-label" for="y'+n+'">Year</label></div>'+
   '<div class="col-auto form-check m-2">'+
   '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off">'+
-  '<label class="form-check-label" for="s'+n+'-0">Before sunset</label></div>'+
+  '<label class="form-check-label small" for="s'+n+'-0">Before sunset</label></div>'+
   '<div class="col-auto form-check">'+
   '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-1" value="on">'+
-  '<label class="form-check-label" for="s'+n+'-1">After sunset</label></div>'+
+  '<label class="form-check-label small" for="s'+n+'-1">After sunset</label></div>'+
   '<div class="col-auto ms-2">' +
   '<button type="button" class="btn btn-sm btn-outline-danger del" id="del-'+n+'">'+
   '<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-trash"></use></svg>'+
