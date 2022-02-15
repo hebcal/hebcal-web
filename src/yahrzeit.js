@@ -150,8 +150,7 @@ async function renderJson(maxId, q) {
 // eslint-disable-next-line require-jsdoc
 async function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events0 = await makeYahrzeitEvents(ctx.state.maxId, q);
-  const events = filterRecentEvents(events0, 90);
+  const events = await makeYahrzeitEvents(ctx.state.maxId, q);
   if (events.length === 0) {
     return null;
   }
@@ -164,7 +163,7 @@ async function makeFormResults(ctx) {
     return {
       date: dayjs(dt).format('ddd, D MMM YYYY'),
       desc: ev.render(),
-      year: dt.getFullYear(),
+      year: hd.getFullYear(),
     };
   });
   if (q.yizkor !== 'on' && q.yizkor !== '1') {
@@ -179,19 +178,6 @@ async function makeFormResults(ctx) {
     }
     return m;
   }, new Map());
-}
-
-/**
- * @param {Event[]} events
- * @param {number} daysAgo
- * @return {Event[]}
- */
-function filterRecentEvents(events, daysAgo) {
-  const now = new Date();
-  const nowAbs = greg.greg2abs(now);
-  const janOne = greg.greg2abs(new Date(now.getFullYear(), 0, 1));
-  const startAbs = Math.min(janOne, nowAbs - daysAgo);
-  return events.filter((ev) => ev.getDate().abs() >= startAbs);
 }
 
 const MIN_YEARS = 2;
