@@ -77,7 +77,7 @@ async function updateDbAndEmail(ctx, db) {
   const emailAddress = ctx.state.emailAddress;
   const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'complete-shabbat');
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-complete');
   const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
@@ -245,7 +245,7 @@ async function updateActiveSub(ctx, db, q) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const locationName = ctx.state.locationName;
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'update-shabbat');
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-update');
   const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
@@ -380,7 +380,7 @@ async function writeStagingInfo(ctx, db, q) {
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'verify-shabbat');
+  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-verify');
   const message = {
     to: q.em,
     subject: 'Please confirm your request to subscribe to Hebcal',

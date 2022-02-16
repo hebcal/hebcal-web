@@ -122,7 +122,7 @@ export async function yahrzeitEmailSub(ctx) {
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${q.ulid}.${id}.${Date.now()}`;
-  const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'verify-yahrzeit');
+  const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-verify');
   const message = {
     to: q.em,
     subject: `Activate your ${anniversaryType} reminders`,
