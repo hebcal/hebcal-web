@@ -12,29 +12,42 @@ export async function parshaIndex(ctx) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
   const il = q.i === 'on';
-  const sedra = HebrewCalendar.getSedra(hyear, il);
-  const parsha0 = sedra.lookup(hd);
-  let parsha = null;
-  let parshaHref = null;
-  if (parsha0.chag) {
-    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-    if (events.length > 0) {
-      parsha = events[0].basename();
-      parshaHref = events[0].url();
-    }
-  } else {
-    parsha = parsha0.parsha.join('-');
-    const pe = new ParshaEvent(hd, parsha0.parsha, il);
-    parshaHref = pe.url();
-  }
+  const [parshaDia, parshaDiaHref] = getParsha(hd, false);
+  const [parshaIsrael, parshaIsraelHref] = getParsha(hd, true);
+  const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
   await ctx.render('parsha-index', {
     il,
     saturday,
     hyear,
     triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
-    parsha,
-    parshaHref,
+    parsha: il ? parshaIsrael : parshaDia,
+    parshaHref: il ? parshaIsraelHref : parshaDiaHref,
     parshaByBook,
     torahBookNames,
+    parshaDia,
+    parshaDiaHref,
+    parshaIsrael,
+    parshaIsraelHref,
+    israelDiasporaDiffer,
   });
+}
+
+function getParsha(hd, il) {
+  const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+  const parsha0 = sedra.lookup(hd);
+  const parsha = parsha0.parsha.join('-');
+  if (parsha0.chag) {
+    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    if (events.length > 0) {
+      const ev = events[0];
+      return [ev.basename(), ev.url()];
+    } else {
+      // is this possible?
+      return [parsha, null];
+    }
+  } else {
+    const pe = new ParshaEvent(hd, parsha0.parsha, il);
+    const parshaHref = pe.url();
+    return ['Parashat ' + parsha, parshaHref];
+  }
 }
