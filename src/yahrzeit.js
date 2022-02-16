@@ -59,6 +59,7 @@ async function lookupFromDb(ctx, id) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function yahrzeitApp(ctx) {
+  ctx.set('Cache-Control', 'private');
   const rpath = ctx.request.path;
   const yahrzeitCookie = ctx.cookies.get('Y');
   if (ctx.method === 'GET' && !ctx.request.querystring &&
@@ -89,7 +90,7 @@ export async function yahrzeitApp(ctx) {
   }
   q.years = getNumYears(q.years);
   await ctx.render('yahrzeit', {
-    title: 'Yahrzeit + Anniversary Calendar | Hebcal Jewish Calendar',
+    title: 'Yahrzeit + Anniversary Calendar | Hebcal',
     count,
   });
 }
@@ -104,7 +105,6 @@ async function renderCalPicker(ctx, ids) {
     const title = makeCalendarTitle(row.contents, 100);
     return {id: row.id, title, names};
   });
-  ctx.set('Cache-Control', 'private');
   return ctx.render('yahrzeit-calpicker', {
     calendars,
   });
@@ -122,7 +122,6 @@ function setYahrzeitCookie(ctx) {
   const ids = new Set(prevIds);
   ids.add(ctx.state.ulid);
   const newCookie = Array.from(ids).join('|');
-  ctx.set('Cache-Control', 'private');
   ctx.cookies.set('Y', newCookie, {
     path: '/yahrzeit',
     expires: dayjs().add(1, 'year').toDate(),
