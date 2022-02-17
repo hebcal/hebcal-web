@@ -9,6 +9,7 @@ import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
 import util from 'util';
 import mmh3 from 'murmurhash3';
+import uuid from 'uuid-random';
 
 const murmur32Hex = util.promisify(mmh3.murmur32Hex);
 
@@ -112,9 +113,10 @@ async function renderCalPicker(ctx, ids) {
 
 // eslint-disable-next-line require-jsdoc
 function setYahrzeitCookie(ctx) {
+  const cCookie = ctx.cookies.get('C');
   if (ctx.state.yahrzeitCookieSet) {
     return false;
-  } else if (ctx.cookies.get('C') === 'opt_out') {
+  } else if (cCookie === 'opt_out') {
     return false;
   }
   const yahrzeitCookie = ctx.cookies.get('Y');
@@ -122,12 +124,22 @@ function setYahrzeitCookie(ctx) {
   const ids = new Set(prevIds);
   ids.add(ctx.state.ulid);
   const newCookie = Array.from(ids).join('|');
+  const expires = dayjs().add(1, 'year').toDate();
   ctx.cookies.set('Y', newCookie, {
     path: '/yahrzeit',
-    expires: dayjs().add(1, 'year').toDate(),
+    expires: expires,
     overwrite: true,
     httpOnly: false,
   });
+  if (!cCookie) {
+    const userId = uuid();
+    ctx.cookies.set('C', 'uid=' + userId, {
+      expires: expires,
+      path: '/',
+      overwrite: true,
+      httpOnly: false,
+    });
+  }
   ctx.state.yahrzeitCookieSet = true;
   return true;
 }
