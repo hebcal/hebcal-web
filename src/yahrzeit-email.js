@@ -141,7 +141,7 @@ ${BLANK}
 <div>If you did not request (or do not want) ${anniversaryType} reminders,
 please accept our apologies and ignore this message.</div>
 ${BLANK}
-<div>Kol Tuv,
+<div style="font-size:16px">Kol Tuv,
 <br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">

@@ -93,8 +93,9 @@ ${BLANK}
 ${BLANK}
 <div>You'll receive a maximum of one message per week, typically on Thursday morning.</div>
 ${BLANK}
-<div>Kol Tuv,
+<div style="font-size:16px">Kol Tuv,
 <br>Hebcal.com</div>
+${BLANK}
 ${footerHtml}
 ${imgOpen}</div>
 `,
@@ -260,8 +261,9 @@ ${BLANK}
 <div>This message confirms that your weekly Shabbat candle lighting times
 for <strong>${locationName}</strong> have been updated.</div>
 ${BLANK}
-<div>Kol Tuv,
+<div style="font-size:16px">Kol Tuv,
 <br>Hebcal.com</div>
+${BLANK}
 ${footerHtml}
 ${imgOpen}</div>
 `,
@@ -398,6 +400,9 @@ ${BLANK}
 ${BLANK}
 <div>If you did not request (or do not want) weekly Shabbat
 candle lighting times, please accept our apologies and ignore this message.</div>
+${BLANK}
+<div style="font-size:16px">Kol Tuv,
+<br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
 <div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
