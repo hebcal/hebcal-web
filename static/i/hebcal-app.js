@@ -284,7 +284,7 @@ export const hebcalClient = {
       const val0 = $('#city-typeahead').typeahead('val');
 
       const val = (typeof val0 === 'string') ? val0.trim() : '';
-      const firstCharCode = k.charCodeAt(0);
+      const firstCharCode = val.charCodeAt(0);
       const numericRe = /^\d\d\d\d\d/;
       if (firstCharCode >= 48 && firstCharCode <= 57 && numericRe.test(val)) {
         const zip5 = val.substring(0, 5);
