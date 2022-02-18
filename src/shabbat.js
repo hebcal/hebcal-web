@@ -156,7 +156,7 @@ function compactLocationName(location) {
   }
   const city = location.getShortName();
   const country = countryNames[cc];
-  return Location.geonameCityDescr(city, location.admin1, country);
+  return Location.geonameCityDescr(city, null, country);
 }
 
 function makeItems(ctx, options, q) {
