@@ -25,8 +25,8 @@ ul.hebcal-results li {
 <div id="content">
 <div class="row mt-3">
 <div class="col-md-8">
-<h2 dir="<%- locale === 'he' ? 'rtl' : 'ltr'%>"><%= Shabbat %> <span class="d-none d-sm-inline">Times</span>
-  <span class="h4 small text-muted"><%= locationName %></span></h2>
+<h2><%= Shabbat %> Times for <%= location.getShortName() %></h2>
+<h5 class="text-muted"><%= location.getName() %></h5>
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

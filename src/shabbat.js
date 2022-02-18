@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale, Zmanim} from '@hebcal/core';
+import {HebrewCalendar, Locale, Zmanim, Location} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getDefaultHebrewYear,
   httpRedirect,
@@ -143,22 +143,39 @@ function getStartAndEnd(now, tzid) {
   return [midnight, endOfWeek];
 }
 
+const includeAdmin1 = {US: 1, CA: 1, UK: 1};
+
+/**
+ * @param {Location} location
+ * @return {string}
+ */
+function compactLocationName(location) {
+  const cc = location.getCountryCode();
+  if (includeAdmin1[cc]) {
+    return location.getName();
+  }
+  const city = location.getShortName();
+  const country = countryNames[cc];
+  return Location.geonameCityDescr(city, location.admin1, country);
+}
+
 function makeItems(ctx, options, q) {
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     ctx.throw(400, 'Bad request: no events');
   }
+  /** @type {Location} */
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const items = events.map((ev) => eventToItem(ev, options, locale));
   const parashaItem = items.find((i) => i.cat === 'parashat');
-  const titlePrefix = location.getName() + ' ' + Locale.gettext('Shabbat') + ' Times';
+  const titlePrefix = Locale.gettext('Shabbat') + ' Times for ' + compactLocationName(location);
   let title = titlePrefix;
   if (parashaItem) {
     const parsha = parashaItem.desc;
-    title += ' | ' + parsha.substring(parsha.indexOf(' ') + 1);
+    title += ' - ' + parsha.substring(parsha.indexOf(' ') + 1);
   }
-  title += ' | Hebcal';
+  title += ' - Hebcal';
   Object.assign(ctx.state, {
     events,
     options,
