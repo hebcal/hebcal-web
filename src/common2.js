@@ -1,6 +1,7 @@
 import {empty, getIpAddress, makeGregDate} from './common';
 import dayjs from 'dayjs';
 import nodemailer from 'nodemailer';
+import {htmlToText} from 'nodemailer-html-to-text';
 
 /**
  * @param {Object<string,any>} iniConfig
@@ -32,6 +33,17 @@ export async function mySendMail(ctx, message) {
   message.headers['X-Originating-IP'] = `[${ip}]`;
   // console.log(message);
   const transporter = makeEmailTransport(ctx.iniConfig);
+  if (message.html && !message.text) {
+    transporter.use('compile', htmlToText({
+      wordwrap: 74,
+      ignoreImage: true,
+      ignoreHref: true,
+      selectors: [
+        {selector: 'img', format: 'skip'},
+        {selector: 'a', options: {ignoreHref: true}},
+      ],
+    }));
+  }
   await transporter.sendMail(message);
   // return Promise.resolve({response: '250 OK', messageId: 'foo'});
 }
