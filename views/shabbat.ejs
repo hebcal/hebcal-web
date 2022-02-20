@@ -39,7 +39,7 @@ ul.hebcal-results li {
 </div>
 <%- await include('partials/shabbat-items.ejs') -%>
 <div class="mt-4">
-<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= hyear %>" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>">
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= hyear %>" rel="nofollow" href="/shabbat/fridge.cgi?<%= geoUrlArgs %>&amp;year=<%= hyear %>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>
     Print <%= hyear %></a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" href="#email-modal" data-bs-toggle="modal" data-bs-target="#email-modal">
