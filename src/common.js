@@ -291,6 +291,9 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   if (is5DigitZip(cityTypeahead)) {
     query.zip = cityTypeahead.trim();
   }
+  if (!empty(query.m)) {
+    delete ck.M;
+  }
   for (const geoKey of primaryGeoKeys) {
     if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
       for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
