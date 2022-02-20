@@ -45,7 +45,7 @@ export function wwwRouter() {
     if (rpath === '/robots.txt') {
       ctx.state.trackPageview = false;
       ctx.lastModified = ctx.launchDate;
-      ctx.body = 'User-agent: *\nAllow: /\n';
+      ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\n';
       return;
     } else if (rpath === '/ping' || rpath === '/ads.txt') {
       ctx.type = 'text/plain';
