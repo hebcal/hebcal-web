@@ -537,11 +537,6 @@ export function getLocationFromQuery(db, query) {
     if (empty(query.tzid)) {
       throw createError(400, 'Timezone required');
     }
-    try {
-      new Intl.DateTimeFormat('en-US', {timeZone: query.tzid});
-    } catch (err) {
-      throw createError(400, err, {expose: true});
-    }
     let il = query.i === 'on';
     if (query.tzid === 'Asia/Jerusalem') {
       il = true;
@@ -554,6 +549,11 @@ export function getLocationFromQuery(db, query) {
       }
     }
     query.tzid = tzidMap[query.tzid] || query.tzid;
+    try {
+      new Intl.DateTimeFormat('en-US', {timeZone: query.tzid});
+    } catch (err) {
+      throw createError(400, err, {expose: true});
+    }
     const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
     return new Location(latitude, longitude, il, query.tzid, cityName);
