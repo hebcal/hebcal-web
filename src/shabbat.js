@@ -37,11 +37,11 @@ export async function shabbatApp(ctx) {
   if (isRedir) {
     return;
   }
+  ctx.status = 200;
   const {q, options} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
-  if (ctx.status != 400 && ctx.request.querystring.length > 0) {
+  if (ctx.status < 400 && ctx.request.querystring.length > 0) {
     ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
-    ctx.status = 200;
     if (ctx.fresh) {
       ctx.status = 304;
       return;
@@ -217,10 +217,11 @@ function makeOptions(ctx) {
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
+    const status = err.status || 400;
     if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
-      ctx.throw(400, err);
+      ctx.throw(status, err);
     } else {
-      ctx.status = 400;
+      ctx.status = status;
     }
     ctx.state.message = err.message;
   }

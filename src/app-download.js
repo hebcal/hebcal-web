@@ -161,7 +161,8 @@ app.use(async function fixup1(ctx, next) {
       ctx.request.query = Object.assign(q, ctx.request.query);
       ctx.request.path = '/export/' + filename;
     } catch (err) {
-      ctx.throw(400, `Invalid download URL: ${data}`);
+      const status = err.status || 400;
+      ctx.throw(status, `Invalid download URL: ${data}`);
     }
   } else if (path.startsWith('/v2')) {
     const slash = path.indexOf('/', 6);

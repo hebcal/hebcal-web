@@ -211,7 +211,7 @@ function makeCookie(query, uid) {
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
-  if (ctx.status === 400 || ctx.request.querystring.length === 0) {
+  if (ctx.status >= 400 || ctx.request.querystring.length === 0) {
     return false;
   }
   const prevCookie = ctx.cookies.get('C');
@@ -702,7 +702,8 @@ export function makeHebrewCalendar(ctx, options) {
   try {
     events = HebrewCalendar.calendar(options);
   } catch (err) {
-    ctx.throw(400, err);
+    const status = err.status || 400;
+    ctx.throw(status, err);
   }
   if (options.noMinorHolidays) {
     events = events.filter((ev) => {
@@ -841,7 +842,7 @@ export function setDefautLangTz(ctx) {
  * @return {any}
  */
 function getLocationFromQueryOrGeoIp(ctx, q) {
-  let location = getLocationFromQuery(ctx.db, q);
+  const location = getLocationFromQuery(ctx.db, q);
   if (location !== null) {
     return location;
   }
@@ -855,8 +856,8 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
       }
     }
     try {
-      location = getLocationFromQuery(ctx.db, geoip);
-      return location;
+      const location2 = getLocationFromQuery(ctx.db, geoip);
+      return location2;
     } catch (err) {
       // ignore
     }

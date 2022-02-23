@@ -46,11 +46,13 @@ export async function hebcalApp(ctx) {
     Object.assign({}, hebcalFormDefaults) :
     ctx.request.query.v === '1' ? Object.assign({}, ctx.request.query) :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
+  ctx.status = 200;
   let error;
   let options = {};
   try {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
+    const status = err.status || 400;
     switch (q.cfg) {
       case 'json':
       case 'fc':
@@ -59,11 +61,11 @@ export async function hebcalApp(ctx) {
       case 'csv':
       case 'rss':
       case 'ics':
-        ctx.throw(400, err);
+        ctx.throw(status, err);
         break;
       default:
         if (q.v === '1') {
-          ctx.status = 400;
+          ctx.status = status;
           q.v = '0';
           error = err;
         }
@@ -82,9 +84,8 @@ export async function hebcalApp(ctx) {
       getDefaultHebrewYear(new HDate(dt)) :
       dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
   }
-  if (ctx.status != 400 && q.v === '1') {
+  if (ctx.status < 400 && q.v === '1') {
     ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
-    ctx.status = 200;
     if (ctx.fresh) {
       ctx.status = 304;
       return;
@@ -171,9 +172,6 @@ async function renderForm(ctx, error) {
     // private cache only if we're tailoring results by cookie
     ctx.set('Cache-Control', 'private');
   }
-  if (error) {
-    ctx.status = 400;
-  }
   const today = dayjs();
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
@@ -220,6 +218,7 @@ function renderHtml(ctx) {
   shortTitle += titleYear;
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
+    ctx.status = 400;
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const locale = localeMap[options.locale] || 'en';
