@@ -67,7 +67,12 @@ export async function yahrzeitApp(ctx) {
     yahrzeitCookie && yahrzeitCookie.length &&
     !rpath.startsWith('/yahrzeit/edit/') && !rpath.startsWith('/yahrzeit/new')) {
     const ids = yahrzeitCookie.split('|');
-    return renderCalPicker(ctx, ids);
+    const calendars = await getCalPickerIds(ctx, ids);
+    if (calendars.length) {
+      return ctx.render('yahrzeit-calpicker', {
+        calendars,
+      });
+    }
   }
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
@@ -97,7 +102,7 @@ export async function yahrzeitApp(ctx) {
 }
 
 // eslint-disable-next-line require-jsdoc
-async function renderCalPicker(ctx, ids) {
+async function getCalPickerIds(ctx, ids) {
   const db = ctx.mysql;
   const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
   const results = await db.query({sql, values: ids, timeout: 5000});
@@ -106,9 +111,7 @@ async function renderCalPicker(ctx, ids) {
     const title = makeCalendarTitle(row.contents, 100);
     return {id: row.id, title, names};
   });
-  return ctx.render('yahrzeit-calpicker', {
-    calendars,
-  });
+  return calendars;
 }
 
 // eslint-disable-next-line require-jsdoc
