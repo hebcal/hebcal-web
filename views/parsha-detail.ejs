@@ -47,13 +47,13 @@ href="https://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=par
 <% if (reading.fullkriyah) { %>
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
-<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<% if (reading.reason && reading.reason[num]) { %> <span class="text-success">☞&nbsp;<small><%= reading.reason[num] %></small>&nbsp;☜</span><% } %>
+<% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
 <%    } // ... for %>
 </ol>
 <% } // reading.fullkriyah %>
@@ -81,10 +81,10 @@ href="<%-aliyah.tikkun%>">
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
 <% if (triReading.reason && triReading.reason.haftara) { -%>
-<p class="haftara">Haftarah:
+<p class="haftara">Haftarah<span class="text-success">*</span>:
 <a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
-<span class="text-success">☞&nbsp;<small><%= triReading.reason.haftara %></small>&nbsp;☜</span>
+<br><span class="text-success ps-1 small">*<%= triReading.reason.haftara %></span>
 </p>
 <% } -%>
 <% } // ... else triReadings %>
@@ -101,10 +101,10 @@ href="<%-aliyah.tikkun%>">
 <div class="row">
 <div class="col">
 <% if (reading.haftara) { %>
-<p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%>:
+<p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><span class="text-success">*</span>:
 <a class="outbound" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading.reason && reading.reason.haftara) { %> <span class="text-success">☞&nbsp;<small><%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></small>&nbsp;☜</span> <% } %>
+<% if (reading.reason && reading.reason.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span> <% } %>
 </p>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>

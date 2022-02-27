@@ -36,6 +36,6 @@ export function shortUrlRedir(ctx) {
   const base = path.basename(rpath);
   const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
   const destUrl = `https://www.hebcal.com/${dest}/${base}?` + new URLSearchParams(qs).toString();
-  ctx.set('Cache-Control', 'private, max-age=0');
+  ctx.set('Cache-Control', 'private');
   ctx.redirect(destUrl);
 }
