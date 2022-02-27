@@ -12,6 +12,13 @@ export function shortUrlRedir(ctx) {
       if (!qs.um && !qs.utm_medium) {
         qs.utm_medium = 'document';
       }
+    } else if (qs.uc.startsWith('ical-')) {
+      if (!qs.us && !qs.utm_source) {
+        qs.utm_source = 'js';
+      }
+      if (!qs.um && !qs.utm_medium) {
+        qs.utm_medium = 'icalendar';
+      }
     }
     delete qs.uc;
   }
