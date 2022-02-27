@@ -27,10 +27,12 @@ body { background-color: #eee;}
 <input type="hidden" name="commit" value="1">
 <input type="hidden" name="cfg" value="html">
 <div class="mt-4">
+<% if (q.num !== 'all') { %>
 <button type="submit" class="btn btn-primary mb-2 me-2" name="num" value="<%=q.num%>">
   Unsubscribe
   <% if (info.maxId > 1) { %> only <%= info.name %>'s <%= info.typeStr %> Reminders<% } %>
 </button>
+<% } %>
 <% if (info.maxId > 1) { %>
 <div><button type="submit" class="btn btn-primary mb-2 me-2" name="num" value="all">Unsubscribe all (<%=info.maxId%>) <%=info.anniversaryType%> Reminders</button></div>
 <% } %>

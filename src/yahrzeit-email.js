@@ -15,13 +15,16 @@ export async function yahrzeitEmailVerify(ctx) {
   if (subscriptionId.length !== 26) {
     ctx.throw(400, `Invalid anniversary subscription key '${subscriptionId}'`);
   }
-  const {emailAddress, calendarId} = await lookupSubscription(ctx, subscriptionId);
+  const contents = await lookupSubContents(ctx, subscriptionId);
+  const emailAddress = contents.emailAddress;
+  const calendarId = contents.calendarId;
   const confirmed = (q.commit === '1');
   if (confirmed) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
     const db = ctx.mysql;
     await db.query(sqlUpdate, [ip, subscriptionId]);
+    await sendConfirmEmail(ctx, contents, subscriptionId);
   } else {
     const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, calendarId);
     ctx.state.anniversaryType = summarizeAnniversaryTypes(obj, true);
@@ -157,27 +160,43 @@ ${imgOpen}</div>
   ctx.body = {ok: true};
 }
 
-async function lookupSubNum(ctx, q) {
+async function lookupSubContents(ctx, id) {
   const db = ctx.mysql;
-  const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents
+  const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents, y.updated, y.downloaded
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
-  const results = await db.query(sql2, [q.id]);
+  const results = await db.query(sql2, [id]);
   if (!results || !results[0]) {
-    ctx.throw(404, `Subscription key '${q.id}' not found`);
+    ctx.throw(404, `Subscription key '${id}' not found`);
   }
   const row = results[0];
-  const info = getYahrzeitDetailForId(row.contents, q.num);
+  const contents = row.contents;
+  contents.emailAddress = row.email_addr;
+  contents.calendarId = row.calendar_id;
+  contents.maxId = getMaxYahrzeitId(contents);
+  const type = contents.type = contents.anniversaryType = summarizeAnniversaryTypes(contents, false);
+  contents.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+  contents.lastModified = row.updated;
+  contents.downloaded = row.downloaded;
+  return contents;
+}
+
+async function lookupSubNum(ctx, q) {
+  const contents = await lookupSubContents(ctx, q.id);
+  if (q.num === 'all') {
+    return {info: contents, emailAddress: contents.emailAddress};
+  }
+  const info = getYahrzeitDetailForId(contents, q.num);
   if (info === null) {
     ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
   }
   const type = info.type;
   info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
-  info.calendarId = row.calendar_id;
-  info.maxId = getMaxYahrzeitId(row.contents);
-  info.anniversaryType = summarizeAnniversaryTypes(row.contents, false);
-  return {info, emailAddress: row.email_addr};
+  info.calendarId = contents.calendarId;
+  info.maxId = contents.maxId;
+  info.anniversaryType = contents.anniversaryType;
+  return {info, emailAddress: contents.emailAddress};
 }
 
 async function unsub(ctx, q) {
@@ -211,4 +230,57 @@ async function unsub(ctx, q) {
       });
     }
   }
+}
+
+function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
+  editUrl = editUrl.replace(/&/g, '&amp;');
+  unsubUrl = unsubUrl.replace(/&/g, '&amp;');
+  return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
+<div><a href="${editUrl}">Edit ${typeStr}</a> |
+<a href="${unsubUrl}&amp;cfg=html&amp;${UTM_PARAM}">Unsubscribe</a> |
+<a href="https://www.hebcal.com/home/about/privacy-policy?${UTM_PARAM}">Privacy Policy</a></div>
+</div>`;
+}
+
+async function sendConfirmEmail(ctx, contents, subscriptionId) {
+  const anniversaryType = contents.anniversaryType;
+  const calendarId = contents.calendarId;
+  const msgid = `${calendarId}.${subscriptionId}.${Date.now()}`;
+  const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-complete');
+  const urlBase = 'https://www.hebcal.com/yahrzeit';
+  const editUrl = `${urlBase}/edit/${calendarId}`;
+  const unsubUrl = `${urlBase}/email?id=${subscriptionId}&num=all&unsubscribe=1`;
+  const emailAddress = contents.emailAddress;
+  const footerHtml = makeFooter(emailAddress, anniversaryType, `${editUrl}?${UTM_PARAM}#form`, unsubUrl);
+  const message = {
+    to: emailAddress,
+    subject: `Your ${anniversaryType} reminders are now active`,
+    headers: {
+      'List-ID': `<${subscriptionId}.list-id.hebcal.com>`,
+      'List-Unsubscribe': `<${unsubUrl}&commit=1&cfg=json>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
+    messageId: `<${msgid}@hebcal.com>`,
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Hello,</div>
+${BLANK}
+<div>Your subscription request for ${anniversaryType} annual reminders from Hebcal.com is complete.
+Reminders are sent 7 days before each anniversary.</div>
+${BLANK}
+<div>Please save this message. If you'd like to edit your personal calendar
+or add additional names, you may visit the following URL at any time:</div>
+${BLANK}
+<div><a href="${editUrl}">${editUrl}</a></div>
+${BLANK}
+<div style="font-size:16px">Kol Tuv,
+<br>Hebcal.com</div>
+${BLANK}
+${footerHtml}
+${imgOpen}</div>
+`,
+  };
+  await mySendMail(ctx, message);
 }
