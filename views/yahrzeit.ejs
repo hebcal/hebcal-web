@@ -45,6 +45,15 @@ Hebrew month of <strong>Adar</strong>.
 how Hebcal calculates Hebrew anniversaries occurring in Adar</a>.
 </div><!-- .alert -->
 <% } %>
+<% if (futureDate) { -%>
+<div class="alert alert-warning alert-dismissible" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Warning!</strong>
+The date entered for <strong><%=futureDate.name%></strong> is
+<time><%=futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
+<br>Please double-check the date to ensure you have entered it correctly.
+</div><!-- .alert -->
+<% } -%>
 <% tables.forEach((items, heading) => { -%>
 <% if (heading) { %><h4><%= heading %></h4><% } %>
 <table class="table table-condensed table-striped">

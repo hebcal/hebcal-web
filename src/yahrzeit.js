@@ -82,12 +82,20 @@ export async function yahrzeitApp(ctx) {
   }
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
+  ctx.state.futureDate = false;
   ctx.state.url = {};
   if (maxId > 0) {
     const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
     q.ulid = ctx.state.ulid = id;
     const tables = ctx.state.tables = await makeFormResults(ctx);
     if (tables !== null) {
+      const today = dayjs();
+      for (let num = 1; num <= maxId; num++) {
+        const info = getYahrzeitDetailForId(q, num);
+        if (info.day.isAfter(today)) {
+          ctx.state.futureDate = info;
+        }
+      }
       setYahrzeitCookie(ctx);
       await makeDownloadProps(ctx);
     }
