@@ -52,7 +52,7 @@
     "@hebcal/rest-api": "^3.12.0",
     "better-sqlite3": "^7.5.0",
     "csv-parse": "^5.0.4",
-    "dayjs": "^1.10.7",
+    "dayjs": "^1.10.8",
     "ejs": "^3.1.6",
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.12",
