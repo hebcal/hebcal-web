@@ -25,9 +25,10 @@ const DEFAULT_YEARS = 20;
 async function makeQuery(ctx) {
   ctx.state.ulid = '';
   ctx.state.isEditPage = false;
-  const isPost = ctx.request.body && ctx.request.body.v === 'yahrzeit';
+  const reqBody = ctx.request.body;
+  const isPost = ctx.method === 'POST' && reqBody && reqBody.v === 'yahrzeit';
   const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
-  const query = Object.assign(defaults, ctx.request.body, ctx.request.query);
+  const query = Object.assign(defaults, reqBody, ctx.request.query);
   if (isPost) {
     return query;
   }
@@ -45,12 +46,17 @@ async function makeQuery(ctx) {
 // eslint-disable-next-line require-jsdoc
 async function lookupFromDb(ctx, id) {
   const db = ctx.mysql;
-  const sql = 'SELECT contents FROM yahrzeit WHERE id = ?';
+  const sql = 'SELECT contents, downloaded FROM yahrzeit WHERE id = ?';
   const results = await db.query({sql, values: [id], timeout: 5000});
   if (results && results[0]) {
     ctx.state.ulid = id;
     ctx.state.isEditPage = true;
-    return results[0].contents;
+    const row = results[0];
+    if (!row.downloaded) {
+      const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
+      await db.query({sql: sqlUpdate, values: [id], timeout: 5000});
+    }
+    return row.contents;
   } else {
     ctx.throw(404, `Not found: ${id}`);
   }
@@ -83,6 +89,7 @@ export async function yahrzeitApp(ctx) {
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   ctx.state.futureDate = false;
+  ctx.state.distantPastDate = false;
   ctx.state.url = {};
   if (maxId > 0) {
     const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
@@ -94,6 +101,8 @@ export async function yahrzeitApp(ctx) {
         const info = getYahrzeitDetailForId(q, num);
         if (info.day.isAfter(today)) {
           ctx.state.futureDate = info;
+        } else if ((today.year() - info.day.year()) > 150) {
+          ctx.state.distantPastDate = info;
         }
       }
       setYahrzeitCookie(ctx);

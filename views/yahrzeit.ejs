@@ -50,8 +50,18 @@ how Hebcal calculates Hebrew anniversaries occurring in Adar</a>.
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 The date entered for <strong><%=futureDate.name%></strong> is
-<time><%=futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
+<time datetime="<%=futureDate.day.format('YYYY-MM-DD')%>"><%=futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
 <br>Please double-check the date to ensure you have entered it correctly.
+</div><!-- .alert -->
+<% } -%>
+<% if (distantPastDate) { -%>
+<div class="alert alert-warning alert-dismissible" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Warning!</strong>
+The date entered for <strong><%=distantPastDate.name%></strong> is
+<time datetime="<%=distantPastDate.day.format('YYYY-MM-DD')%>"><%=distantPastDate.day.format('ddd, D MMM YYYY')%></time>, which is in the distant past.
+<br>Please double-check the date to ensure you have entered it correctly.
+<br>Be sure to use 4-digit years (e.g. 2015 instead of 15).
 </div><!-- .alert -->
 <% } -%>
 <% tables.forEach((items, heading) => { -%>
