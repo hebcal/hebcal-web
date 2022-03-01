@@ -33,32 +33,15 @@ async function makeQuery(ctx) {
     return query;
   }
   const rpath = ctx.request.path;
-  if (rpath.startsWith('/yahrzeit/edit/')) {
-    const id = basename(rpath);
-    return lookupFromDb(ctx, id);
-  } else if (typeof query.id === 'string' && query.id.length === 26) {
-    return lookupFromDb(ctx, query.id);
-  } else {
-    return query;
-  }
-}
-
-// eslint-disable-next-line require-jsdoc
-async function lookupFromDb(ctx, id) {
-  const db = ctx.mysql;
-  const sql = 'SELECT contents, downloaded FROM yahrzeit WHERE id = ?';
-  const results = await db.query({sql, values: [id], timeout: 5000});
-  if (results && results[0]) {
+  const qid = query.id;
+  if (rpath.startsWith('/yahrzeit/edit/') || (typeof qid === 'string' && qid.length === 26)) {
+    const id = qid || basename(rpath);
+    const contents = await getYahrzeitDetailsFromDb(ctx, id);
     ctx.state.ulid = id;
     ctx.state.isEditPage = true;
-    const row = results[0];
-    if (!row.downloaded) {
-      const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-      await db.query({sql: sqlUpdate, values: [id], timeout: 5000});
-    }
-    return row.contents;
+    return contents;
   } else {
-    ctx.throw(404, `Not found: ${id}`);
+    return query;
   }
 }
 
@@ -99,6 +82,9 @@ export async function yahrzeitApp(ctx) {
       const today = dayjs();
       for (let num = 1; num <= maxId; num++) {
         const info = getYahrzeitDetailForId(q, num);
+        if (!info) {
+          continue;
+        }
         if (info.day.isAfter(today)) {
           ctx.state.futureDate = info;
         } else if ((today.year() - info.day.year()) > 150) {
