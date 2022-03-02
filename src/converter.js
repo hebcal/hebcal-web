@@ -225,7 +225,7 @@ function makeDiasporaIsraelItems(ctx, hdate) {
 }
 
 /** @private */
-class PesudoParshaEvent extends Event {
+class PseudoParshaEvent extends Event {
   /**
    * @param {Event} ev
    */
@@ -268,7 +268,7 @@ function getEvents(hdate, il) {
     } else if (saturday.abs() != hdate.abs()) {
       const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
       for (const ev of satHolidays) {
-        const pe = new PesudoParshaEvent(ev);
+        const pe = new PseudoParshaEvent(ev);
         events = events.concat(pe);
       }
     }
