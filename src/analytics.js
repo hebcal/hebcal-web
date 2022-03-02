@@ -42,20 +42,16 @@ export function googleAnalytics(tid) {
       visitorId = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
     }
     ctx.state.visitorId = visitorId;
-    const options = {enableBatching: true};
+    const options = {tid: ctx.state.trackingId || tid, cid: visitorId, enableBatching: true};
     if (cookie.has('uid')) {
       options.uid = cookie.get('uid');
     }
-    tid = ctx.state.trackingId || tid;
-    const visitor = ctx.state.visitor = ua(tid, visitorId, options);
+    const visitor = ctx.state.visitor = ua(options);
     visitor.set('ua', userAgent);
     visitor.set('dr', ctx.get('referrer'));
     visitor.set('uip', ipAddress);
-    if (cookie.has('uid')) {
-      visitor.set('uid', cookie.get('uid'));
-    }
     await next();
-    let trackPageview = ctx.state.trackPageview && ctx.status === 200;
+    let trackPageview = Boolean(ctx.state.trackPageview && ctx.status === 200);
     if (trackPageview && knownRobots[userAgent]) {
       trackPageview = false;
     }
