@@ -155,7 +155,7 @@ href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHr
 <% } // meta.reading %>
 <h3 id="ref">References</h3>
 <dl>
-<dt><em><a class="amzn" id="strassfeld-2"
+<dt><em><a class="amzn" id="strassfeld-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em> <small class="text-muted">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
@@ -163,7 +163,7 @@ Jewish Holidays: A Guide &amp; Commentary</a></em> <small class="text-muted">(pa
 <dt><em><a class="outbound"
 href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dd>Sefaria.org
-<dt><em><a class="amzn" id="jps-tanakh-1"
+<dt><em><a class="amzn" id="jps-tanakh-1" rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em> <small class="text-muted">(paid link)</small>
@@ -182,11 +182,11 @@ The Holy Scriptures</a></em> <small class="text-muted">(paid link)</small>
 <% meta.books.forEach((book) => { %>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
-<a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
+<a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
 class="img-fluid card-img-top" alt="<%=book.text%>" width="104" height="160" style="border:none"
 src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 <div class="card-body">
-<p class="card-text small"><a class="amzn" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
+<p class="card-text small"><a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
 <% if (book.author) { %><br>by <%=book.author%><% } %></p>
 </div><!-- .card-body -->
 </div><!-- .card -->
