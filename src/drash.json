@@ -1,5 +1,6 @@
 {
 "Bereshit":{
+ "rabbisacks.org":"bereishit",
  "ajr.edu":{"target":"bereshit"},
  "jtsa.edu":"bereishit",
  "torah.org":{"target":"bereishis"},
@@ -12,6 +13,7 @@
  "uscj.org":{"target":"Bereshit"}
 },
 "Noach":{
+ "rabbisacks.org":"noach",
  "ajr.edu":{"target":"noah"},
  "jtsa.edu":"noah",
  "torah.org":{"target":"noach"},
@@ -24,6 +26,7 @@
  "uscj.org":{"target":"Noah"}
 },
 "Lech-Lecha":{
+ "rabbisacks.org":"lech-lecha",
  "ajr.edu":{"target":"lekh-lekha"},
  "jtsa.edu":"lekh-lekha",
  "torah.org":{"target":"lech-lecha"},
@@ -36,6 +39,7 @@
  "uscj.org":{"target":"LekhLekha"}
 },
 "Vayera":{
+ "rabbisacks.org":"vayera",
  "ajr.edu":{"target":"vayera"},
  "jtsa.edu":"vayera",
  "torah.org":{"target":"vayera"},
@@ -48,6 +52,7 @@
  "uscj.org":{"target":"Vayera"}
 },
 "Chayei Sara":{
+ "rabbisacks.org":"chayei-sarah",
  "ajr.edu":{"target":"hayei-sarah"},
  "jtsa.edu":"hayyei-sarah",
  "torah.org":{"target":"chayei-sarah"},
@@ -60,6 +65,7 @@
  "uscj.org":{"target":"HayeSarah"}
 },
 "Toldot":{
+ "rabbisacks.org":"toldot",
  "ajr.edu":{"target":"toldot"},
  "jtsa.edu":"toledot",
  "torah.org":{"target":"toldos"},
@@ -72,6 +78,7 @@
  "uscj.org":{"target":"Toldot"}
 },
 "Vayetzei":{
+ "rabbisacks.org":"vayetse",
  "ajr.edu":{"target":"vayetzei"},
  "jtsa.edu":"vayetzei",
  "torah.org":{"target":"vayeitzei"},
@@ -84,6 +91,7 @@
  "uscj.org":{"target":"Vayetze"}
 },
 "Vayishlach":{
+ "rabbisacks.org":"vayishlach",
  "ajr.edu":{"target":"vayishlah"},
  "jtsa.edu":"vayishlah",
  "torah.org":{"target":"vayishlach"},
@@ -96,6 +104,7 @@
  "uscj.org":{"target":"Vayishlah"}
 },
 "Vayeshev":{
+ "rabbisacks.org":"vayeshev",
  "ajr.edu":{"target":"vayeshev"},
  "jtsa.edu":"vayeshev",
  "torah.org":{"target":"vayeishev"},
@@ -108,6 +117,7 @@
  "uscj.org":{"target":"Vayeshev"}
 },
 "Miketz":{
+ "rabbisacks.org":"mikketz",
  "ajr.edu":{"target":"miketz"},
  "jtsa.edu":"miketz",
  "torah.org":{"target":"miketz"},
@@ -120,6 +130,7 @@
  "uscj.org":{"target":"Miketz"}
 },
 "Vayigash":{
+ "rabbisacks.org":"vayigash",
  "ajr.edu":{"target":"vayigash"},
  "jtsa.edu":"vayiggash",
  "torah.org":{"target":"vayigash"},
@@ -132,6 +143,7 @@
  "uscj.org":{"target":"Vayigash"}
 },
 "Vayechi":{
+ "rabbisacks.org":"vayechi",
  "ajr.edu":{"target":"vayhi"},
  "jtsa.edu":"vayehi",
  "torah.org":{"target":"vayechi"},
@@ -144,6 +156,7 @@
  "uscj.org":{"target":"Vayehi"}
 },
 "Shemot":{
+ "rabbisacks.org":"shemot",
  "ajr.edu":{"target":"shemot"},
  "jtsa.edu":"shemot",
  "torah.org":{"target":"shemos"},
@@ -156,6 +169,7 @@
  "uscj.org":{"target":"Shemot"}
 },
 "Vaera":{
+ "rabbisacks.org":"vaera",
  "ajr.edu":{"target":"vaera"},
  "jtsa.edu":"vaera",
  "torah.org":{"target":"vaera"},
@@ -168,6 +182,7 @@
  "uscj.org":{"target":"Vaera"}
 },
 "Bo":{
+ "rabbisacks.org":"bo",
  "ajr.edu":{"target":"bo"},
  "jtsa.edu":"bo",
  "torah.org":{"target":"bo"},
@@ -180,6 +195,7 @@
  "uscj.org":{"target":"Bo"}
 },
 "Beshalach":{
+ "rabbisacks.org":"beshallach",
  "ajr.edu":{"target":"beshalah"},
  "jtsa.edu":"beshallah",
  "torah.org":{"target":"beshalach"},
@@ -192,6 +208,7 @@
  "uscj.org":{"target":"Beshalah"}
 },
 "Yitro":{
+ "rabbisacks.org":"yitro",
  "ajr.edu":{"target":"yitro"},
  "jtsa.edu":"yitro",
  "torah.org":{"target":"yisro"},
@@ -204,6 +221,7 @@
  "uscj.org":{"target":"Yitro"}
 },
 "Mishpatim":{
+ "rabbisacks.org":"mishpatim",
  "ajr.edu":{"target":"mishpatim"},
  "jtsa.edu":"mishpatim",
  "torah.org":{"target":"mishpatim"},
@@ -216,6 +234,7 @@
  "uscj.org":{"target":"Mishpatim"}
 },
 "Terumah":{
+ "rabbisacks.org":"terumah",
  "ajr.edu":{"target":"terumah"},
  "jtsa.edu":"terumah",
  "torah.org":{"target":"terumah"},
@@ -228,6 +247,7 @@
  "uscj.org":{"target":"Terumah"}
 },
 "Tetzaveh":{
+ "rabbisacks.org":"tetzaveh",
  "ajr.edu":{"target":"tetzaveh"},
  "jtsa.edu":"tetzavveh",
  "torah.org":{"target":"tetzaveh"},
@@ -240,6 +260,7 @@
  "uscj.org":{"target":"Tetzavah"}
 },
 "Ki Tisa":{
+ "rabbisacks.org":"ki-tissa",
  "ajr.edu":{"target":"ki-tissa"},
  "jtsa.edu":"ki-tissa",
  "torah.org":{"target":"ki-sisa"},
@@ -252,6 +273,7 @@
  "uscj.org":{"target":"KiTissa"}
 },
 "Vayakhel":{
+ "rabbisacks.org":"vayakhel",
  "ajr.edu":{"target":"vayakhel"},
  "jtsa.edu":"vayak-hel",
  "torah.org":{"target":"vayakhel"},
@@ -264,6 +286,7 @@
  "uscj.org":{"target":"Vayakhel"}
 },
 "Pekudei":{
+ "rabbisacks.org":"pekudei",
  "ajr.edu":{"target":"pekudei"},
  "jtsa.edu":"pekudei",
  "torah.org":{"target":"pekudei"},
@@ -276,6 +299,7 @@
  "uscj.org":{"target":"Pekudei"}
 },
 "Vayikra":{
+ "rabbisacks.org":"vayikra",
  "ajr.edu":{"target":"vayikra"},
  "jtsa.edu":"vayikra",
  "torah.org":{"target":"vayikra"},
@@ -288,6 +312,7 @@
  "uscj.org":{"target":"Vayikra"}
 },
 "Tzav":{
+ "rabbisacks.org":"tzav",
  "ajr.edu":{"target":"tzav"},
  "jtsa.edu":"tzav",
  "torah.org":{"target":"tzav"},
@@ -300,6 +325,7 @@
  "uscj.org":{"target":"Tzav"}
 },
 "Shmini":{
+ "rabbisacks.org":"shemini",
  "ajr.edu":{"target":"shemini"},
  "jtsa.edu":"shemini",
  "torah.org":{"target":"shemini"},
@@ -312,6 +338,7 @@
  "uscj.org":{"target":"Shemini"}
 },
 "Tazria":{
+ "rabbisacks.org":"tazria",
  "ajr.edu":{"target":"tazria"},
  "jtsa.edu":"tazria",
  "torah.org":{"target":"tazria"},
@@ -324,6 +351,7 @@
  "uscj.org":{"target":"Tazria"}
 },
 "Metzora":{
+ "rabbisacks.org":"metzora",
  "jtsa.edu":"metzora",
  "torah.org":{"target":"metzorah"},
  "ou.org":{"target":"Metzorah","cid":"1400"},
@@ -335,6 +363,7 @@
  "uscj.org":{"target":"Metzora"}
 },
 "Achrei Mot":{
+ "rabbisacks.org":"acharei-mot",
  "ajr.edu":{"target":"aharei-mot"},
  "jtsa.edu":"aharei-mot",
  "torah.org":{"target":"acharei-mos"},
@@ -347,6 +376,7 @@
  "uscj.org":{"target":"AhareiMot"}
 },
 "Kedoshim":{
+ "rabbisacks.org":"kedoshim",
  "ajr.edu":{"target":"kedoshim"},
  "jtsa.edu":"kedoshim",
  "torah.org":{"target":"kedoshim"},
@@ -359,6 +389,7 @@
  "uscj.org":{"target":"Kedoshim"}
 },
 "Emor":{
+ "rabbisacks.org":"emor",
  "ajr.edu":{"target":"emor"},
  "jtsa.edu":"emor",
  "torah.org":{"target":"emor"},
@@ -371,6 +402,7 @@
  "uscj.org":{"target":"Emor"}
 },
 "Behar":{
+ "rabbisacks.org":"behar",
  "ajr.edu":{"target":"behar"},
  "jtsa.edu":"behar",
  "torah.org":{"target":"behar"},
@@ -383,6 +415,7 @@
  "uscj.org":{"target":"Behar"}
 },
 "Bechukotai":{
+ "rabbisacks.org":"bechukotai",
  "ajr.edu":{"target":"behukotai"},
  "jtsa.edu":"behukkotai",
  "torah.org":{"target":"bechukosai"},
@@ -395,6 +428,7 @@
  "uscj.org":{"target":"Behukotai"}
 },
 "Bamidbar":{
+ "rabbisacks.org":"bamidbar",
  "ajr.edu":{"target":"bemidbar"},
  "jtsa.edu":"bemidbar",
  "torah.org":{"target":"bamidbar"},
@@ -407,6 +441,7 @@
  "uscj.org":{"target":"Bamidbar"}
 },
 "Nasso":{
+ "rabbisacks.org":"naso",
  "ajr.edu":{"target":"naso"},
  "jtsa.edu":"naso",
  "torah.org":{"target":"naso"},
@@ -419,6 +454,7 @@
  "uscj.org":{"target":"Naso"}
 },
 "Beha'alotcha":{
+ "rabbisacks.org":"behaalotcha",
  "jtsa.edu":"behaalotekha",
  "torah.org":{"target":"behaaloscha"},
  "ou.org":{"target":"Beha'alotecha","cid":"1409"},
@@ -430,6 +466,7 @@
  "uscj.org":{"target":"Behaalotekha"}
 },
 "Sh'lach":{
+ "rabbisacks.org":"shelach-lecha",
  "jtsa.edu":"shelah-lekha",
  "torah.org":{"target":"shlach"},
  "ou.org":{"target":"Shelach","cid":"1410"},
@@ -441,6 +478,7 @@
  "uscj.org":{"target":"ShelachLekha"}
 },
 "Korach":{
+ "rabbisacks.org":"korach",
  "ajr.edu":{"target":"korah"},
  "jtsa.edu":"korah",
  "torah.org":{"target":"korach"},
@@ -453,6 +491,7 @@
  "uscj.org":{"target":"Korach"}
 },
 "Chukat":{
+ "rabbisacks.org":"chukat",
  "ajr.edu":{"target":"hukkat"},
  "jtsa.edu":"hukkat",
  "torah.org":{"target":"chukas"},
@@ -465,6 +504,7 @@
  "uscj.org":{"target":"Hukkat"}
 },
 "Balak":{
+ "rabbisacks.org":"balak",
  "ajr.edu":{"target":"balak"},
  "jtsa.edu":"balak",
  "torah.org":{"target":"balak"},
@@ -477,6 +517,7 @@
  "uscj.org":{"target":"Balak"}
 },
 "Pinchas":{
+ "rabbisacks.org":"pinchas",
  "ajr.edu":{"target":"pinhas"},
  "jtsa.edu":"pinehas",
  "torah.org":{"target":"pinchas"},
@@ -489,6 +530,7 @@
  "uscj.org":{"target":"Pinhas"}
 },
 "Matot":{
+ "rabbisacks.org":"matot",
  "ajr.edu":{"target":"mattot"},
  "jtsa.edu":"mattot",
  "torah.org":{"target":"matos"},
@@ -501,6 +543,7 @@
  "uscj.org":{"target":"Mattot"}
 },
 "Masei":{
+ "rabbisacks.org":"masei",
  "ajr.edu":{"target":"massei"},
  "jtsa.edu":"masei",
  "torah.org":{"target":"masei"},
@@ -513,6 +556,7 @@
  "uscj.org":{"target":"Massey"}
 },
 "Devarim":{
+ "rabbisacks.org":"devarim",
  "ajr.edu":{"target":"dvarim"},
  "jtsa.edu":"devarim",
  "torah.org":{"target":"devarim"},
@@ -525,6 +569,7 @@
  "uscj.org":{"target":"Devarim"}
 },
 "Vaetchanan":{
+ "rabbisacks.org":"vaetchanan",
  "jtsa.edu":"vaet-hannan",
  "torah.org":{"target":"vaeschanan"},
  "ou.org":{"target":"Va'etchanan","cid":"1419"},
@@ -536,6 +581,7 @@
  "uscj.org":{"target":"Vaethanan"}
 },
 "Eikev":{
+ "rabbisacks.org":"eikev",
  "jtsa.edu":"eikev",
  "torah.org":{"target":"eikev"},
  "ou.org":{"target":"Eikev","cid":"1420"},
@@ -547,6 +593,7 @@
  "uscj.org":{"target":"Ekev"}
 },
 "Re'eh":{
+ "rabbisacks.org":"reeh",
  "ajr.edu":{"target":"reeh"},
  "jtsa.edu":"reeh",
  "torah.org":{"target":"reeh"},
@@ -559,6 +606,7 @@
  "uscj.org":{"target":"Reeh"}
 },
 "Shoftim":{
+ "rabbisacks.org":"shoftim",
  "jtsa.edu":"shofetim",
  "torah.org":{"target":"shoftim"},
  "ou.org":{"target":"Shoftim","cid":"1422"},
@@ -570,6 +618,7 @@
  "uscj.org":{"target":"Shoftim"}
 },
 "Ki Teitzei":{
+ "rabbisacks.org":"ki-teitse",
  "jtsa.edu":"ki-tetzei",
  "torah.org":{"target":"ki-seitzei"},
  "ou.org":{"target":"Ki Teitzei","cid":"1423"},
@@ -581,6 +630,7 @@
  "uscj.org":{"target":"KiTetze"}
 },
 "Ki Tavo":{
+ "rabbisacks.org":"ki-tavo",
  "jtsa.edu":"ki-tavo",
  "torah.org":{"target":"ki-savo"},
  "ou.org":{"target":"Ki Tavo","cid":"1424"},
@@ -592,6 +642,7 @@
  "uscj.org":{"target":"KiTavo"}
 },
 "Nitzavim":{
+ "rabbisacks.org":"nitzavim",
  "jtsa.edu":"nitzavim",
  "torah.org":{"target":"netzavim"},
  "ou.org":{"target":"Nitzavim","cid":"1425"},
@@ -603,6 +654,7 @@
  "uscj.org":{"target":"Nitzavim"}
 },
 "Vayeilech":{
+ "rabbisacks.org":"vayelech",
  "jtsa.edu":"vayeilekh",
  "torah.org":{"target":"vayeilech"},
  "ou.org":{"target":"Vayeilech","cid":"1426"},
@@ -614,6 +666,7 @@
  "uscj.org":{"target":"Vayelekh"}
 },
 "Ha'Azinu":{
+ "rabbisacks.org":"haazinu",
  "jtsa.edu":"haazinu",
  "torah.org":{"target":"haazinu"},
  "ou.org":{"target":"Ha'azinu","cid":"1427"},
@@ -625,6 +678,7 @@
  "uscj.org":{"target":"Haazinu"}
 },
 "Vezot Haberakhah":{
+ "rabbisacks.org":"vezot-habracha",
  "jtsa.edu":"vezot-haberakhah",
  "torah.org":{"target":"vzos-habracha"},
  "ou.org":{"target":"V'zot Habracha","cid":"1428"},

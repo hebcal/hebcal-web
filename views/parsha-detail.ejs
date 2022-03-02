@@ -147,6 +147,9 @@ href="<%-aliyah.tikkun%>">
 <% if (typeof commentary['chabad.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
 <% } %>
+<% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { %>
+<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
+<% } %>
 <% if (typeof commentary['reformjudaism.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
