@@ -39,7 +39,7 @@ export function shortUrlRedir(ctx) {
   }
   qs.utm_source = qs.utm_source || 'redir';
   qs.utm_medium = qs.utm_medium || 'redir';
-  qs.r = Date.now().toString(36);
+  qs._r = Date.now().toString(36);
   const rpath = ctx.request.path;
   const base = path.basename(rpath);
   const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
