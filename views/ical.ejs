@@ -32,9 +32,11 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <div class="col">
 <div class="accordion" id="ical-accordion">
 <%- await include('partials/ical-accordion-item.ejs', {
+  titleName: 'Jewish Holidays (only major holidays)',
   name: 'Jewish Holidays', id: 'jewish-holidays-v2',
   emoji: '✡️',
-  summary: `<p>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah.</p>
+  summary: `<p>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah.
+<br>Does NOT include minor &amp; modern holidays, fast days or Rosh Chodesh.</p>
 <p>Diaspora schedule (for Jews living anywhere outside of modern Israel)</p>`,
   feedLength: '~40',
   years: 10,
@@ -42,6 +44,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   moreInfo: `<p>Without emoji:</p>` + await include('partials/ical-toolbar.ejs', {name: 'Jewish Holidays', basename: 'jewish-holidays'}),
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  titleName: 'Jewish Holidays (all holidays)',
   name: 'Jewish Holidays (all)', id: 'jewish-holidays-all-v2',
   emoji: '✡️ 🌒 🌳 🎭️ 🔥',
   summary: `<p>Major, minor, modern Israeli holidays, fast days and more.
@@ -49,10 +52,18 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <ul>
 <li>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah</li>
 <li>Rosh Chodesh</li>
-<li>Minor holidays like Purim, Tu BiShvat, Lag BaOmer</li>
-<li>Fasts days</li>
-<li>Modern Israeli holidays</li>
-<li>Special Shabbatot</li>
+<li>Minor holidays
+<span title="Tu BiShvat, Purim Katan, Shushan Purim, Pesach Sheni, Lag BaOmer, Tu B'Av, &amp; Leil Selichot" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-1"><use xlink:href="${spriteHref}#bi-info-circle-fill"></use></svg></span>
+</li>
+<li>Fast days
+<span title="Ta'anit Esther, Tzom Gedaliah, Tzom Tammuz, Asara B'Tevet, &amp; Ta'anit Bechorot" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-1"><use xlink:href="${spriteHref}#bi-info-circle-fill"></use></svg></span>
+</li>
+<li>Modern Israeli holidays
+<span title="Yom HaShoah, Yom HaZikaron, Yom HaAtzma'ut, Yom Yerushalayim, Sigd, &amp; Yom HaAliyah" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-1"><use xlink:href="${spriteHref}#bi-info-circle-fill"></use></svg></span>
+</li>
+<li>Special Shabbatot
+<span title="Shabbat Shuva, Shirah, Shekalim, Zachor, Parah, HaChodesh, HaGadol, Chazon, &amp; Nachamu" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-1"><use xlink:href="${spriteHref}#bi-info-circle-fill"></use></svg></span>
+</li>
 </ul>`,
   feedLength: '~95',
   years: 8,
@@ -64,7 +75,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   emoji: '🌐',
   summary: `<p>Create a custom calendar with event titles in different languages, candle lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
 <ul>` + Object.entries(langNames).map(([langName, desc]) => {
-  return `<li><a title="${desc[1]||desc[0]}" href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a></li>`;
+  return `<li><a href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a> <span class="text-muted">- ${desc[1]||desc[0]}</span></li>`;
 }).join('\n') + `</ul>`,
   noToolbar: true,
 }) -%>
@@ -150,4 +161,4 @@ When Rosh Chodesh occurs on Shabbat or Sunday, Yom Kippur Katan is observed on t
 
 </div><!-- #content -->
 
-<%- await include('partials/footer.ejs', {footerScripts: {clipboard: true}}) _%>
+<%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, clipboard: true}}) _%>

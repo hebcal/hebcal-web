@@ -1,7 +1,7 @@
 <div class="accordion-item">
 <h2 class="accordion-header" id="heading-<%=id%>">
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#body-<%=id%>" aria-expanded="false" aria-controls="body-<%=id%>">
-<% if (typeof he === 'boolean' && he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=name%></span><% } else { %><%=name%><% } %>
+<% if (typeof he === 'boolean' && he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=name%></span><% } else { %><%=typeof titleName === 'string' ? titleName : name%><% } %>
 <% if (typeof emoji === 'string') { %>&nbsp; <span class="text-nowrap"><%=emoji%></span><% } %>
 </button>
 </h2>
