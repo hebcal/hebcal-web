@@ -315,11 +315,12 @@ function makeBreadCrumbLD(location, geoUrlArgs) {
   }];
   let position = 3;
   if (location.admin1) {
+    const suffix = location.stateName || location.admin1;
     elems.push({
       '@type': 'ListItem',
       'position': position++,
       'name': location.admin1,
-      'item': countryUrl + '-' + makeAnchor(location.admin1),
+      'item': countryUrl + '-' + makeAnchor(suffix),
     });
   }
   elems.push({
