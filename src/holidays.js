@@ -35,12 +35,8 @@ export async function holidayYearIndex(ctx) {
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
-  const events2 = HebrewCalendar.calendar({
-    year: calendarYear,
-    isHebrewYear,
-    il,
-    addHebrewDatesForEvents: true,
-  });
+  const fcOptions = Object.assign({addHebrewDatesForEvents: true}, options);
+  const events2 = HebrewCalendar.calendar(fcOptions);
   const fcEvents = events2.map((ev) => eventToFullCalendar(ev, null, il));
   const hebcalPrefix = 'https://www.hebcal.com/';
   for (const fce of fcEvents) {
@@ -75,6 +71,7 @@ export async function holidayYearIndex(ctx) {
     DoWtiny,
     q,
     fcEvents,
+    options,
   });
 }
 

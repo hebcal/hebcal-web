@@ -2,6 +2,7 @@
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
+window['hebcal'].options=<%- JSON.stringify(options) %>;
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,29 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
   var lastYear = parseInt(lastEvDate.substring(0, 4), 10);
   var lastMonth = parseInt(lastEvDate.substring(5, 7), 10);
   var firstOfNextMonth = new Date(lastYear, lastMonth, 1);
-  var calendar = window['hebcalFullCalendar'] = new FullCalendar.Calendar(calendarEl, {
+  var opts = {
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'title',
       right: 'prev,next',
     },
     events: events,
-    initialDate: events[0].start,
     validRange: {
         start: events[0].start.substring(0, 7) + '-01',
         end: firstOfNextMonth,
     },
-/*
-    eventDidMount: function(info) {
-      if (info.event.extendedProps.description) {
-        tippy(info.el, {
-          content: info.event.extendedProps.description.replace(/\n/g, '<br>'),
-          allowHTML: true,
-        });
-      }
-    },
-*/
-  });
+  };
+  var hopts = window['hebcal'].options;
+  if (hopts.isHebrewYear || hopts.year != new Date().getFullYear()) {
+    opts.initialDate = events[0].start;
+  }
+  var calendar = window['hebcalFullCalendar'] = new FullCalendar.Calendar(calendarEl, opts);
   var listViewEl = document.getElementById('list-view');
   var toggleMonth = document.getElementById('toggle-month');
   toggleMonth.onchange = function() {
