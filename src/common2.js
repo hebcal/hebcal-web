@@ -144,7 +144,8 @@ export function getYahrzeitDetailForId(query, id) {
   }
   const type = query[`t${id}`] || 'Yahrzeit';
   const sunset = query[`s${id}`];
-  const name = query[`n${id}`] ? query[`n${id}`].trim() : `Person${id}`;
+  const name0 = query[`n${id}`] && query[`n${id}`].trim();
+  const name = name0 || `Person${id}`;
   let day = dayjs(makeGregDate(yy, mm, dd));
   if (sunset === 'on') {
     day = day.add(1, 'day');

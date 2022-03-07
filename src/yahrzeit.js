@@ -265,6 +265,11 @@ function removeEmptyArgs(q) {
       for (const prefix of keyPrefixes) {
         delete q[prefix + i];
       }
+    } else {
+      // valid date; trim whitespace from names
+      const nameKey = 'n' + i;
+      const name = q[nameKey] || '';
+      q[nameKey] = name.trim();
     }
   }
   // remove anything larger than maxId
