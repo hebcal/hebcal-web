@@ -189,16 +189,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     const utmSource = options.utmSource || 'pdf';
     const utmMedium = options.utmMedium || 'document';
     const utmCampaign = options.utmCampaign || 'pdf-' + evt.getDate().getFullYear();
-    let link = appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);
-    if (link.startsWith('https://www.hebcal.com/')) {
-      link = link.replace('https://www.hebcal.com/holidays/', 'https://hebcal.com/h/');
-      link = link.replace('https://www.hebcal.com/sedrot/', 'https://hebcal.com/s/');
-      link = link.replace('utm_source=', 'us=');
-      link = link.replace('utm_medium=', 'um=');
-      link = link.replace('utm_campaign=', 'uc=');
-      link = link.replace('?us=pdf&um=document&uc=pdf-', '?uc=pdf-');
-    }
-    textOptions.link = link;
+    textOptions.link = appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);
   }
   doc.text(subj, x, rtl ? y + 0.65 : y, textOptions);
   if (options.appendHebrewToSubject) {

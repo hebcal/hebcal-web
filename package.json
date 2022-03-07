@@ -46,10 +46,10 @@
   "dependencies": {
     "@hebcal/core": "^3.33.3",
     "@hebcal/geo-sqlite": "^4.2.0",
-    "@hebcal/icalendar": "^4.15.3",
+    "@hebcal/icalendar": "^4.15.4",
     "@hebcal/leyning": "^4.12.1",
     "@hebcal/locales": "^3.3.2",
-    "@hebcal/rest-api": "^3.12.0",
+    "@hebcal/rest-api": "^3.13.0",
     "better-sqlite3": "^7.5.0",
     "csv-parse": "^5.0.4",
     "dayjs": "^1.10.8",
