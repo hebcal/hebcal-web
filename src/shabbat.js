@@ -50,6 +50,11 @@ export async function shabbatApp(ctx) {
     expires(ctx, options.location.getTzid());
   }
   makeItems(ctx, options, q);
+  const location = options.location;
+  const campaign = makeAnchor(location.getShortName());
+  const selfUrl = `${BASE_URL}?${ctx.state.geoUrlArgs}`;
+  ctx.state.poweredByUrl = appendIsraelAndTracking(selfUrl,
+      options.il, 'shabbat1c', 'js-' + q.cfg, 's1c-' + campaign);
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe');
   } else if (q.cfg === 'j') {
@@ -61,7 +66,6 @@ export async function shabbatApp(ctx) {
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.type = 'application/rss+xml; charset=utf-8';
-    const selfUrl = `${BASE_URL}?${ctx.state.geoUrlArgs}`;
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
@@ -396,7 +400,9 @@ function eventToItem(ev, options, locale, cfg) {
   const url = ev.url();
   if (url) {
     if (cfg === 'i' || cfg === 'j') {
-      obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg);
+      const location = options.location;
+      const campaign = makeAnchor(location.getShortName());
+      obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg, 's1c-' + campaign);
     } else {
       let u = url;
       if (options.il && url.indexOf('?') === -1) {
