@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Zmanim, Location} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
+  empty,
   getDefaultHebrewYear,
   httpRedirect,
   getLocationFromGeoIp,
@@ -10,7 +11,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
-  eventsToRss, eventsToClassicApi} from '@hebcal/rest-api';
+  eventsToRss, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import './dayjs-locales';
@@ -167,7 +168,7 @@ function makeItems(ctx, options, q) {
   /** @type {Location} */
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
-  const items = events.map((ev) => eventToItem(ev, options, locale));
+  const items = events.map((ev) => eventToItem(ev, options, locale, q.cfg));
   const parashaItem = items.find((i) => i.cat === 'parashat');
   const titlePrefix = Locale.gettext('Shabbat') + ' Times for ' + compactLocationName(location);
   let title = titlePrefix;
@@ -365,9 +366,10 @@ function makeJsonLDevent(item, location, subj, url) {
  * @param {Event} ev
  * @param {HebrewCalendar.Options} options
  * @param {string} locale
+ * @param {string} cfg
  * @return {Object}
  */
-function eventToItem(ev, options, locale) {
+function eventToItem(ev, options, locale, cfg) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
@@ -393,9 +395,17 @@ function eventToItem(ev, options, locale) {
   }
   const url = ev.url();
   if (url) {
-    obj.url = url;
-    if (options.il && url.indexOf('?') === -1) {
-      obj.url += '?i=on';
+    if (cfg === 'i' || cfg === 'j') {
+      obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg);
+    } else {
+      let u = url;
+      if (options.il && url.indexOf('?') === -1) {
+        u += '?i=on';
+      }
+      if (empty(cfg) && u.startsWith('https://www.hebcal.com/')) {
+        u = u.substring(22);
+      }
+      obj.url = u;
     }
   }
   return obj;
