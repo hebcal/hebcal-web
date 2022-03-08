@@ -61,7 +61,7 @@ const isPast = hy < todayHebYear;
 <label class="form-check-label" for="nikud-checkbox">Show Hebrew <i>nekudot</i></label>
 </div>
 </div><!-- .d-flex -->
-<div id="converter-form" class="d-print-none mt-3">
+<div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
@@ -98,7 +98,7 @@ const isPast = hy < todayHebYear;
 </div><!-- .form-check -->
 </div><!-- .col -->
 <% if (il) {%><input type="hidden" name="i" value="on"><%}%>
-<div class="col-auto mb-2">
+<div class="col-auto mb-3">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
   Convert to Hebrew
@@ -108,7 +108,7 @@ const isPast = hy < todayHebYear;
 </div><!-- .col-md -->
 
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3" method="get" autocomplete="off" action="/converter">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
 <h5>Convert from Hebrew to Gregorian</h5>
 <%- await include('partials/hebdate-picker.ejs', {
   hd: hd,
@@ -118,7 +118,7 @@ const isPast = hy < todayHebYear;
   suffix: '',
 }) -%>
 <% if (il) {%><input type="hidden" name="i" value="on"><%}%>
-<div class="col mb-2">
+<div class="col mb-3">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
   <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
   Convert to Gregorian
@@ -130,7 +130,7 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-form -->
 
 <div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mb-1">Advertisement</h6>
+<h6 class="text-muted mt-2 mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
@@ -146,13 +146,13 @@ data-ad-slot="5342180883"></ins>
 </script>
 </div><!-- .d-print-none -->
 
-<div class="row d-print-none mt-4">
+<div class="row d-print-none mt-5">
 <div class="col">
 <p>Hebrew dates are written right-to-left with the day of the month, followed by the
 month name, then the Hebrew year. <a
 href="/home/1824/numerical-values-of-hebrew-letters">Numerical values</a> are
 represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
-<h5>Yahrzeit + Anniversary Calendar</h5>
+<h5 class="mt-3">Yahrzeit + Anniversary Calendar</h5>
 <p>Calculate anniversaries on the Hebrew calendar. Print, subscribe to annual email
 reminders, and download a multi-year calendar feed to Apple, Google, Outlook, and
 more.</p>
