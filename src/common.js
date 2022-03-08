@@ -1,5 +1,4 @@
 import {HDate, Location, months, HebrewCalendar, greg, Zmanim} from '@hebcal/core';
-import querystring from 'querystring';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
@@ -157,7 +156,7 @@ export function urlArgsObj(query, override={}) {
  */
 export function urlArgs(query, override={}) {
   const q = urlArgsObj(query, override);
-  return querystring.stringify(q);
+  return new URLSearchParams(q).toString();
 }
 
 /**
@@ -202,7 +201,7 @@ function makeCookie(query, uid) {
     return false;
   }
   uid = uid || uuid();
-  return 'uid=' + uid + '&' + querystring.stringify(ck);
+  return 'uid=' + uid + '&' + new URLSearchParams(ck).toString();
 }
 
 /**
@@ -283,7 +282,11 @@ function is5DigitZip(str) {
  */
 export function processCookieAndQuery(cookieString, defaults, query0) {
   const query = Object.assign({}, query0);
-  const ck = querystring.parse(cookieString || '');
+  const ck0 = new URLSearchParams(cookieString || '');
+  const ck = {};
+  for (const [key, value] of ck0.entries()) {
+    ck[key] = value;
+  }
   delete ck.t;
   delete ck.uid;
   let found = false;
