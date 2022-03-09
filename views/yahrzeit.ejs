@@ -76,6 +76,20 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 </table>
 <% }); -%>
 <% } %>
+<% if (tables !== null) { %>
+<div class="btn-toolbar d-print-none mt-3 mb-4">
+<div class="me-2 mb-2">
+<a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+  Email reminders</a>
+</div>
+<div class="me-2 mb-2">
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  Download</a>
+</div>
+</div><!-- .btn-toolbar -->
+<% } %>
 <div class="d-print-none">
 <p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 and Hebrew Anniversaries.</p>
