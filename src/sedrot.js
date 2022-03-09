@@ -194,13 +194,15 @@ export async function parshaDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat('Parashat ' + parsha.name);
   const translations = Array.from(new Set(translations0)).sort();
+  const iSuffix = il ? '?i=on' : '';
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
     parshaAnchor,
+    parshaDateAnchor: getParshaDateAnchor(parshaEv) + iSuffix,
     reading,
     il,
-    iSuffix: il ? '?i=on' : '',
+    iSuffix,
     d: dayjs(hd.greg()),
     hd,
     date,
