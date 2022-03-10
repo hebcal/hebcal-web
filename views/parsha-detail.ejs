@@ -3,8 +3,8 @@
 <%- await include('partials/parsha-breadcrumb-structured.ejs') -%>
 <meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <meta name="keywords" content="<%=translations.join(',')%>">
-<% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev%>"><%}%>
-<% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next%>"><%}%>
+<% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev.anchor%>"><%}%>
+<% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next.anchor%>"><%}%>
 <style>
 ol.list-unstyled li {margin-bottom: 0.33em}
 </style>
@@ -206,6 +206,15 @@ Complete Triennial System for Reading the Torah</a></em>
 <dd>Sefaria, Inc.
 <% } %>
 </dl>
+
+<div class="d-flex gx-2 mt-2 justify-content-between">
+<% if (parsha.prev) { %><div>
+<a class="btn btn-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>" class="text-nowrap"><%=parsha.prev.d.format('D MMMM')%></time> · <% } %><span class="text-nowrap"><%=parsha.prev.name%></span></a>
+</div><% } %>
+<% if (parsha.next) { %><div>
+<a class="btn btn-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><span class="text-nowrap"><%=parsha.next.name%></span><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>" class="text-nowrap"><%=parsha.next.d.format('D MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+</div><% } %>
+</div>
 
 </div><!-- .col -->
 </div><!-- .row -->
