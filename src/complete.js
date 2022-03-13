@@ -14,8 +14,14 @@ export async function geoAutoComplete(ctx) {
     ctx.body = NOTFOUND;
     return;
   }
-  const items = ctx.db.autoComplete(qraw, false);
+  const latlong = (q.g === 'on' || q.g == '1');
+  const items = ctx.db.autoComplete(qraw, latlong);
   if (items.length) {
+    if (!latlong) {
+      for (const item of items) {
+        delete item.population;
+      }
+    }
     ctx.body = items;
   } else {
     ctx.status = 404;
