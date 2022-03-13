@@ -192,6 +192,9 @@ export const hebcalClient = {
     const hebcalCities = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
+      identify: function(obj) {
+        return obj.id;
+      },
       remote: {
         url: '/complete.php?q=%QUERY',
         wildcard: '%QUERY',

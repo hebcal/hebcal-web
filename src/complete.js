@@ -14,7 +14,7 @@ export async function geoAutoComplete(ctx) {
     ctx.body = NOTFOUND;
     return;
   }
-  const items = ctx.db.autoComplete(qraw);
+  const items = ctx.db.autoComplete(qraw, false);
   if (items.length) {
     ctx.body = items;
   } else {

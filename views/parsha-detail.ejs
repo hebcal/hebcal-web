@@ -209,10 +209,10 @@ Complete Triennial System for Reading the Torah</a></em>
 
 <div class="d-flex gx-2 mt-2 justify-content-between">
 <% if (parsha.prev) { %><div>
-<a class="btn btn-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>" class="text-nowrap"><%=parsha.prev.d.format('D MMMM')%></time> · <% } %><span class="text-nowrap"><%=parsha.prev.name%></span></a>
+<a class="btn btn-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name%></a>
 </div><% } %>
 <% if (parsha.next) { %><div>
-<a class="btn btn-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><span class="text-nowrap"><%=parsha.next.name%></span><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>" class="text-nowrap"><%=parsha.next.d.format('D MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 
