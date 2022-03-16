@@ -37,7 +37,7 @@
 <% } -%>
 <div id="converter-results" class="mt-4">
 <ul class="list-unstyled">
-<li class="big-list"<% if (locale == 'he') { %> lang="he" dir="rtl"<% } -%>><span class="text-nowrap"><%- first.replace(/ \(after sunset\)/, '</span> <span class="smaller text-nowrap">(after sunset)') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
+<li class="big-list"<% if (locale == 'he') { %> lang="he" dir="rtl"<% } -%>><span class="text-nowrap"><%- first.replace(/ after sunset/, '</span> <span class="smaller text-nowrap">after sunset') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
 <li id="jumbo-hebdate" dir="rtl" lang="he" class="hebrew big-list jumbo"><%= hebrew %></li>
 <%- await include('partials/converter-inner.ejs', {
   items: dateItems.both, location: false}) -%>

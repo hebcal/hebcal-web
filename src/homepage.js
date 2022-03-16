@@ -80,7 +80,7 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   const items = ctx.state.items;
   const d = dayjs(dt).locale(ctx.state.locale);
   const isoDt = d.format('YYYY-MM-DD');
-  const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' (after sunset)' : '');
+  const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' after sunset' : '');
   items.push(`<time datetime="${isoDt}">${fmtDt}</time>`);
   items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(ctx.state.lg));
 }
