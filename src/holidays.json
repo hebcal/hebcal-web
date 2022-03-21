@@ -159,19 +159,7 @@
    "Pesach VII (on Shabbat)",
    "Pesach VIII",
    "Pesach VIII (on Shabbat)"
-  ],
-  "links": {
-   "torah": {
-    "Pesach I": "https://www.jtsa.edu/pesah-day-1",
-    "Pesach I (on Shabbat)": "https://www.jtsa.edu/pesah-day-1",
-    "Pesach II": "https://www.jtsa.edu/pesah-day-2",
-    "Pesach Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-pesah",
-    "Pesach VII": "https://www.jtsa.edu/pesah-day-7",
-    "Pesach VII (on Shabbat)": "https://www.jtsa.edu/pesah-day-7",
-    "Pesach VIII": "https://www.jtsa.edu/pesah-day-8",
-    "Pesach VIII (on Shabbat)": "https://www.jtsa.edu/pesah-day-8"
-   }
-  }
+  ]
  },
  "Pesach Sheni": {
   "about": {
@@ -347,14 +335,7 @@
    "Rosh Hashana I",
    "Rosh Hashana I (on Shabbat)",
    "Rosh Hashana II"
-  ],
-  "links": {
-   "torah": {
-    "Rosh Hashana I": "https://www.jtsa.edu/rosh-hashanah-day-1-torah",
-    "Rosh Hashana I (on Shabbat)": "https://www.jtsa.edu/rosh-hashanah-day-1-torah",
-    "Rosh Hashana II": "https://www.jtsa.edu/rosh-hashanah-day-2-torah"
-   }
-  }
+  ]
  },
  "Rosh Hashana LaBehemot": {
   "about": {
@@ -434,8 +415,7 @@
  },
  "Shabbat Rosh Chodesh": {
   "about": {
-   "href": "https://www.chabad.org/parshah/article_cdo/aid/3572702/jewish/Shabbat-Rosh-Chodesh-Haftarah-in-a-Nutshell.htm",
-   "torah": "https://www.jtsa.edu/shabbat-rosh-hodesh-maftir"
+   "href": "https://www.chabad.org/parshah/article_cdo/aid/3572702/jewish/Shabbat-Rosh-Chodesh-Haftarah-in-a-Nutshell.htm"
   },
   "category": "shabbat"
  },
@@ -519,20 +499,11 @@
    "Shavuot I",
    "Shavuot II",
    "Shavuot II (on Shabbat)"
-  ],
-  "links": {
-    "torah": {
-      "Shavuot": "https://www.jtsa.edu/shavuot-day-1",
-      "Shavuot I": "https://www.jtsa.edu/shavuot-day-1",
-      "Shavuot II": "https://www.jtsa.edu/shavuot-day-2",
-      "Shavuot II (on Shabbat)": "https://www.jtsa.edu/shavuot-day-2"
-    }
-  }
+  ]
  },
  "Shmini Atzeret": {
   "about": {
-   "href": "https://jewfaq.org/holiday6.htm",
-   "torah": "https://www.jtsa.edu/shemini-atzeret"
+   "href": "https://jewfaq.org/holiday6.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Shemini_Atzeret",
@@ -565,8 +536,7 @@
  },
  "Simchat Torah": {
   "about": {
-   "href": "https://jewfaq.org/holiday6.htm",
-   "torah": "https://www.jtsa.edu/simhat-torah"
+   "href": "https://jewfaq.org/holiday6.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Simchat_Torah",
@@ -612,15 +582,7 @@
    "Sukkot Chol ha-Moed Day 4",
    "Sukkot Shabbat Chol ha-Moed",
    "Sukkot Final Day (Hoshana Raba)"
-  ],
-  "links": {
-   "torah": {
-    "Sukkot I": "https://www.jtsa.edu/sukkot-day-1-2",
-    "Sukkot I (on Shabbat)": "https://www.jtsa.edu/sukkot-day-1-2",
-    "Sukkot II": "https://www.jtsa.edu/sukkot-day-1-2",
-    "Sukkot Shabbat Chol ha-Moed": "https://www.jtsa.edu/shabbat-hol-hamoed-sukkot"
-   }
-  }
+  ]
  },
  "Ta'anit Bechorot": {
   "about": {
@@ -801,8 +763,7 @@
  },
  "Yom Kippur": {
   "about": {
-   "href": "https://jewfaq.org/holiday4.htm",
-   "torah": "https://www.jtsa.edu/yom-kippur"
+   "href": "https://jewfaq.org/holiday4.htm"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_Kippur",
