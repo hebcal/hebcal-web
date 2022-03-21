@@ -301,7 +301,6 @@ function makeSummaryHtml(parsha) {
 }
 
 function makeTriennial(date, parshaEv, hyear, parshaName) {
-  const triennial = {};
   if (date) {
     const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
     if (parshaName === VEZOT_HABERAKHAH) {
@@ -309,45 +308,52 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
         delete reading.aliyot[i].reason;
       }
     }
-    triennial.reading = reading.aliyot;
-    triennial.yearNum = reading.yearNum + 1;
+    const triennial = {
+      reading: reading.aliyot,
+      yearNum: reading.yearNum + 1,
+    };
     addLinksToLeyning(triennial.reading, false);
     for (const aliyah of Object.values(triennial.reading)) {
       aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
     }
-  } else {
-    const startYear = leyning.Triennial.getCycleStartYear(hyear);
-    const tri = leyning.getTriennial(startYear);
-    triennial.readings = Array(3);
-    for (let yr = 0; yr < 3; yr++) {
-      const triReading = triennial.readings[yr] = tri.getReading(parshaName, yr);
-      if (triReading.readSeparately) {
-        triReading.hyear = startYear + yr;
-        triReading.p1d = dayjs(triReading.date1.greg());
-        triReading.p2d = dayjs(triReading.date2.greg());
-      } else {
-        if (triReading.readTogether) {
-          triReading.hyear = startYear + yr;
-          triReading.d = dayjs(triReading.date.greg());
-          triReading.anchor = makeAnchor(triReading.readTogether);
-        } else {
-          const ev = new ParshaEvent(triReading.date, [parshaName], false);
-          const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
-          addLinksToLeyning(triReading2.aliyot, false);
-          for (const aliyah of Object.values(triReading2.aliyot)) {
-            aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
-            if (parshaName === VEZOT_HABERAKHAH) {
-              delete aliyah.reason;
-            }
-          }
-          triReading2.d = dayjs(triReading.date.greg());
-          addSpecialHaftarahToTriennial(ev, triReading2);
-          triennial.readings[yr] = triReading2;
-        }
-      }
-    }
+    return triennial;
+  }
+  const triennial = {};
+  const startYear = leyning.Triennial.getCycleStartYear(hyear);
+  const tri = leyning.getTriennial(startYear);
+  triennial.readings = Array(3);
+  for (let yr = 0; yr < 3; yr++) {
+    const reading = makeTriReading(tri, yr, parshaName);
+    reading.hyear = startYear + yr;
+    triennial.readings[yr] = reading;
   }
   return triennial;
+}
+
+function makeTriReading(tri, yr, parshaName) {
+  const triReading = tri.getReading(parshaName, yr);
+  if (triReading.readSeparately) {
+    triReading.p1d = dayjs(triReading.date1.greg());
+    triReading.p2d = dayjs(triReading.date2.greg());
+    return triReading;
+  } else if (triReading.readTogether) {
+    triReading.d = dayjs(triReading.date.greg());
+    triReading.anchor = makeAnchor(triReading.readTogether);
+    return triReading;
+  }
+  const hd = triReading.date;
+  const ev = new ParshaEvent(hd, [parshaName], false);
+  const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
+  addLinksToLeyning(triReading2.aliyot, false);
+  for (const aliyah of Object.values(triReading2.aliyot)) {
+    aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
+    if (parshaName === VEZOT_HABERAKHAH) {
+      delete aliyah.reason;
+    }
+  }
+  triReading2.d = dayjs(hd.greg());
+  addSpecialHaftarahToTriennial(ev, triReading2);
+  return triReading2;
 }
 
 function addSpecialHaftarahToTriennial(ev, triReading2) {
