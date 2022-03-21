@@ -199,7 +199,7 @@ export async function parshaDetail(ctx) {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
     parsha,
     parshaAnchor,
-    parshaDateAnchor: getParshaDateAnchor(parshaEv) + iSuffix,
+    parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor + iSuffix,
     reading,
     il,
     iSuffix,
@@ -253,7 +253,7 @@ function findParshaDate(events, name, il) {
 /**
  * @private
  * @param {Event} ev
- * @return {string}
+ * @return {Object}
  */
 function getParshaDateAnchor(ev) {
   const d = dayjs(ev.getDate().greg());
