@@ -11,6 +11,8 @@ import dayjs from 'dayjs';
 import drash from './drash.json';
 import {distance, closest} from 'fastest-levenshtein';
 
+const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
+
 const options15yr = {
   year: new Date().getFullYear() - 2,
   numYears: 17,
@@ -161,6 +163,12 @@ export async function parshaDetail(ctx) {
   const reading = date ?
     leyning.getLeyningForParshaHaShavua(parshaEv, il) :
     leyning.getLeyningForParsha(parshaName);
+  if (date && parshaName === VEZOT_HABERAKHAH) {
+    for (let i = 1; i <= 6; i++) {
+      delete reading.reason[i];
+    }
+    delete reading.reason.haftara;
+  }
   addLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHref = sefariaAliyahHref(reading.haft, false);
   if (reading.sephardic) {
@@ -296,6 +304,11 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
   const triennial = {};
   if (date) {
     const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
+    if (parshaName === VEZOT_HABERAKHAH) {
+      for (let i = 1; i <= 6; i++) {
+        delete reading.aliyot[i].reason;
+      }
+    }
     triennial.reading = reading.aliyot;
     triennial.yearNum = reading.yearNum + 1;
     addLinksToLeyning(triennial.reading, false);
@@ -323,7 +336,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
           addLinksToLeyning(triReading2.aliyot, false);
           for (const aliyah of Object.values(triReading2.aliyot)) {
             aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
-            if (parshaName === 'Vezot Haberakhah') {
+            if (parshaName === VEZOT_HABERAKHAH) {
               delete aliyah.reason;
             }
           }
@@ -339,7 +352,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
 
 function addSpecialHaftarahToTriennial(ev, triReading2) {
   const parshaName = ev.parsha[0];
-  if (parshaName === 'Vezot Haberakhah') {
+  if (parshaName === VEZOT_HABERAKHAH) {
     return;
   }
   const fk = leyning.getLeyningForParshaHaShavua(ev, false);
@@ -365,7 +378,7 @@ function makeYearEvents(il, date, parshaName) {
     il: il,
   };
   const dt = date ? parse8digitDateStr(date) : new Date();
-  if (date && parshaName === 'Vezot Haberakhah') {
+  if (date && parshaName === VEZOT_HABERAKHAH) {
     const hd = new HDate(dt);
     options.year = hd.getFullYear();
     options.isHebrewYear = true;
@@ -396,7 +409,7 @@ function getParshaEvent(il, date, parshaName) {
 }
 
 function findParshaEvent(events, parshaName, il) {
-  if (parshaName === 'Vezot Haberakhah') {
+  if (parshaName === VEZOT_HABERAKHAH) {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
     const mday = il ? 22 : 23;
