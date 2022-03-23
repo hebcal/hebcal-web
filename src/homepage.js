@@ -204,8 +204,9 @@ function getMastheadGreeting(hd, il, tzid) {
   if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
     const strtime = erevShavuot.format(FORMAT_DOW_MONTH_DAY);
+    const suffix = il ? '?i=on' : '';
     return ['🌸 ⛰️&nbsp; Chag Shavuot Sameach! &nbsp;⛰️ 🌸',
-      `<br><a href="/holidays/shavuot-${gy}">Shavuot</a>
+      `<br><a href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if ((mm == months.TISHREI && dd >= 16 && dd <= 21) ||
       (mm == months.NISAN && dd >= 16 && dd <= 21)) {
@@ -235,7 +236,8 @@ function getMastheadGreeting(hd, il, tzid) {
     const when = (dd === 14) ? 'tonight at sundown' :
       ` at sundown on <span class="text-nowrap">${strtime}</span>`;
     const blurb = '🌿 🍋&nbsp; Chag Sukkot Sameach &middot; <span lang="he" dir="rtl">חג סוכות שמח</span> &nbsp;🍋 🌿';
-    const longText = `<br><a href="/holidays/sukkot-${gy}">Sukkot</a>
+    const suffix = il ? '?i=on' : '';
+    const longText = `<br><a href="/holidays/sukkot-${gy}${suffix}">Sukkot</a>
  begins ${when}`;
     return [blurb, longText];
   }
@@ -313,8 +315,9 @@ function getMastheadGreeting(hd, il, tzid) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
     const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
+    const suffix = il ? '?i=on' : '';
     return ['Chag Kasher v\'Sameach!', `We wish you a happy
- <a href="/holidays/pesach-${gy}">Passover</a>. Pesach
+ <a href="/holidays/pesach-${gy}${suffix}">Passover</a>. Pesach
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
 
