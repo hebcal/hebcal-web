@@ -37,7 +37,14 @@ export async function holidayYearIndex(ctx) {
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const fcOptions = Object.assign({addHebrewDatesForEvents: true}, options);
   const events2 = HebrewCalendar.calendar(fcOptions);
-  const fcEvents = events2.map((ev) => eventToFullCalendar(ev, null, il));
+  const fcEvents = events2.map((ev) => {
+    const fc = eventToFullCalendar(ev, null, il);
+    const emoji = ev.getEmoji();
+    if (emoji) {
+      fc.title += ' ' + emoji;
+    }
+    return fc;
+  });
   const hebcalPrefix = 'https://www.hebcal.com/';
   for (const fce of fcEvents) {
     delete fce.description; // not showing tooltips just yet
