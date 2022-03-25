@@ -150,6 +150,7 @@ nightfall on the second date specified.</p>
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%>",
 "startDate":"<%=item.d.format('YYYY-MM-DD')%>","endDate":"<%=item.endD.format('YYYY-MM-DD')%>",
 "url":"<%=item.event.url()%>",
+"eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
 "location":{"@type": "VirtualLocation",
 "url":"<%=item.event.url()%>"}}</script>
 </td>
