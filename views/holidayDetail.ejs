@@ -3,7 +3,7 @@
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
-<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
+<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today)) { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
 <style>
 .past {color: rgba(0, 0, 0, 0.5) !important;}
 .current {background-color: #ffc;}

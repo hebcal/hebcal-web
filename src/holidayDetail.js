@@ -101,6 +101,7 @@ export async function holidayDetail(ctx) {
   const titleYear = year ? ' ' + year : '';
   const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
   const now = new Date();
+  const today = dayjs(now);
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
   const upcomingHebrewYear = next.hd.getFullYear();
   const translations0 = Object.keys(langNames)
@@ -108,6 +109,7 @@ export async function holidayDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
+  const jsonLD = noindex ? null : JSON.stringify(getJsonLD(next, descrMedium));
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -126,7 +128,8 @@ export async function holidayDetail(ctx) {
     occursOn,
     meta,
     noindex,
-    jsonLD: noindex ? '{}' : JSON.stringify(getJsonLD(next, descrMedium)),
+    today,
+    jsonLD,
     il,
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
     translations,

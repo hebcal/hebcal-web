@@ -146,6 +146,7 @@ nightfall on the second date specified.</p>
 <% for (const item of items[catId]) { %>
 <tbody>
 <tr><td><a class="lead" href="<%=item.id%>-<%=item.name === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=iSuffix%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
+<% if (!item.d.isBefore(today)) { -%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%>",
 "startDate":"<%=item.d.format('YYYY-MM-DD')%>","endDate":"<%=item.endD.format('YYYY-MM-DD')%>",
@@ -153,6 +154,7 @@ nightfall on the second date specified.</p>
 "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
 "location":{"@type": "VirtualLocation",
 "url":"<%=item.event.url()%>"}}</script>
+<% } -%>
 </td>
 <td><%-item.dates%><br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small></td>
 </tr>
