@@ -955,6 +955,20 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
 }
 
 /**
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @return {any}
+ */
+export function getSunsetAwareDate(q, location) {
+  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
+  const dt = getTodayDate(q);
+  if (isToday && location != null) {
+    return getBeforeAfterSunsetForLocation(dt, location);
+  }
+  return {dt: dt, afterSunset: false, gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
+}
+
+/**
  * @private
  * @param {Object.<string,string>} options
  * @param {Object.<string,string>} attrs

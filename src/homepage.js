@@ -3,7 +3,7 @@ import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
-  getBeforeAfterSunsetForLocation, getTodayDate} from './common';
+  getSunsetAwareDate, getTodayDate} from './common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -39,7 +39,7 @@ export async function homepage(ctx) {
   const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   ctx.state.lang = 'en';
-  const {gy, gd, gm, dt, afterSunset} = getDate(ctx, q);
+  const {gy, gd, gm, dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
   ctx.state.gy = gy;
   const hdate = new HDate(dt);
   const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
@@ -53,7 +53,7 @@ export async function homepage(ctx) {
   mastheadDates(ctx, dt, afterSunset, hd);
   const il = ctx.state.il;
   mastheadHolidays(ctx, hd, il);
-  mastheadParsha(ctx, dt, il);
+  mastheadParsha(ctx, hd, il);
   mastheadOmer(ctx, hd);
   mastheadDafYomi(ctx, hd);
   const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.timezone);
@@ -66,16 +66,6 @@ export async function homepage(ctx) {
   return ctx.render('homepage');
 }
 
-function getDate(ctx, q) {
-  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
-  const dt = getTodayDate(q);
-  const location = ctx.state.location;
-  if (isToday && location !== null) {
-    return getBeforeAfterSunsetForLocation(dt, location);
-  }
-  return {dt: dt, afterSunset: false, gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
-}
-
 function mastheadDates(ctx, dt, afterSunset, hd) {
   const items = ctx.state.items;
   const d = dayjs(dt).locale(ctx.state.locale);
@@ -85,13 +75,12 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(ctx.state.lg));
 }
 
-function mastheadParsha(ctx, dt, il) {
+function mastheadParsha(ctx, hd, il) {
   const items = ctx.state.items;
-  const saturday = dayjs(dt).day(6);
-  const hd = new HDate(saturday.toDate());
-  const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
-  if (sedra.isParsha(hd)) {
-    const pe = new ParshaEvent(hd, sedra.get(hd), il);
+  const saturday = hd.onOrAfter(6);
+  const sedra = HebrewCalendar.getSedra(saturday.getFullYear(), il);
+  if (sedra.isParsha(saturday)) {
+    const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
     const url = pe.url();
     items.push(`<a href="${url}">${pe.render(ctx.state.lg)}</a>`);
   }

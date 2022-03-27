@@ -1,23 +1,24 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
-import {getTodayDate} from './common';
+import {setDefautLangTz, getSunsetAwareDate} from './common';
 import {parshaByBook, torahBookNames} from './parshaCommon';
 import dayjs from 'dayjs';
 
 export async function parshaIndex(ctx) {
-  const q = ctx.request.query;
-  const dt = getTodayDate(q);
-  const saturday = dayjs(dt).day(6);
-  const hd = new HDate(saturday.toDate());
-  const hyear = hd.getFullYear();
+  const q = setDefautLangTz(ctx);
+  const {dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
+  const hd0 = new HDate(dt);
+  const hd = afterSunset ? hd0.next() : hd0;
+  const saturday = hd.onOrAfter(6);
+  const hyear = saturday.getFullYear();
   const il = q.i === 'on';
-  const [parshaDia, parshaDiaHref] = getParsha(hd, false);
-  const [parshaIsrael, parshaIsraelHref] = getParsha(hd, true);
+  const [parshaDia, parshaDiaHref] = getParsha(saturday, false);
+  const [parshaIsrael, parshaIsraelHref] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
   await ctx.render('parsha-index', {
     il,
-    saturday,
+    saturday: dayjs(saturday.greg()),
     hyear,
     triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
     parsha: il ? parshaIsrael : parshaDia,
