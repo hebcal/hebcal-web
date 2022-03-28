@@ -239,7 +239,7 @@ function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
 <div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
-<div><a href="${editUrl}">Edit ${typeStr}</a> |
+<div><a href="${editUrl}">Edit ${typeStr} Calendar</a> |
 <a href="${unsubUrl}&amp;cfg=html&amp;${UTM_PARAM}">Unsubscribe</a> |
 <a href="https://www.hebcal.com/home/about/privacy-policy?${UTM_PARAM}">Privacy Policy</a></div>
 </div>`;
