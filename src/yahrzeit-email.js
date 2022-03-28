@@ -233,7 +233,6 @@ async function unsub(ctx, q) {
 }
 
 function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
-  editUrl = editUrl.replace(/&/g, '&amp;');
   unsubUrl = unsubUrl.replace(/&/g, '&amp;');
   return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
 <div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
