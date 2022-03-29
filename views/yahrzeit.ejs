@@ -105,7 +105,9 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form class="d-print-none" method="post" action="/yahrzeit">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
+<% if (num === 1 || typeof q['t'+num] === 'string') { -%>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
+<% } -%>
 <% } %>
 </div><!-- #rows -->
 <div class="clearfix">
