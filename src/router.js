@@ -35,7 +35,20 @@ const needsTrailingSlash = {
   '/sedrot': true,
 };
 
-const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
+const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000';
+
+// favicon-like files in the directory root that should be cached for 365 days
+const rootDirStatic = new Set(`ads.txt
+favicon.ico
+android-chrome-192x192.png
+android-chrome-512x512.png
+apple-touch-icon.png
+browserconfig.xml
+favicon-16x16.png
+favicon-32x32.png
+mstile-150x150.png
+safari-pinned-tab.svg
+site.webmanifest`.split('\n').map((s) => '/' + s));
 
 // eslint-disable-next-line require-jsdoc
 export function wwwRouter() {
@@ -47,7 +60,7 @@ export function wwwRouter() {
       ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\n';
       return;
-    } else if (rpath === '/ping' || rpath === '/ads.txt') {
+    } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
       ctx.state.trackPageview = false;
       // let serve() handle this file
@@ -71,10 +84,10 @@ export function wwwRouter() {
     } else if (needsTrailingSlash[rpath]) {
       httpRedirect(ctx, `${rpath}/`, 301);
       return;
-    } else if (rpath === '/favicon.ico' || rpath.startsWith('/i/') || rpath === '/apple-touch-icon.png') {
+    } else if (rootDirStatic.has(rpath) || rpath.startsWith('/i/')) {
       ctx.state.trackPageview = false;
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
-    // let serve() handle this file
+      // let serve() handle this file
     } else if (rpath.startsWith('/complete')) {
       ctx.state.trackPageview = false;
       return geoAutoComplete(ctx);
