@@ -22,6 +22,7 @@ export async function geoAutoComplete(ctx) {
         delete item.population;
       }
     }
+    ctx.set('Cache-Control', 'public, max-age=86400, s-maxage=86400');
     ctx.body = items;
   } else {
     ctx.status = 404;
