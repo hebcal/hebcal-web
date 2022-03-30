@@ -43,6 +43,7 @@ export async function holidayYearIndex(ctx) {
     if (emoji) {
       fc.title += ' ' + emoji;
     }
+    fc.url = ev.url();
     return fc;
   });
   const hebcalPrefix = 'https://www.hebcal.com/';
