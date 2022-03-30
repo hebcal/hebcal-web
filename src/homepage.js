@@ -304,8 +304,9 @@ function getMastheadGreeting(hd, il, tzid) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
     const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
+    const blurb = '🫓 🍷&nbsp; Chag Kasher v\'Sameach &middot; <span lang="he" dir="rtl">חג כשר ושמח</span> &nbsp;🍷 🫓';
     const suffix = il ? '?i=on' : '';
-    return ['Chag Kasher v\'Sameach!', `We wish you a happy
+    return [blurb, `<br>We wish you a happy
  <a href="/holidays/pesach-${gy}${suffix}">Passover</a>. Pesach
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
