@@ -151,7 +151,11 @@ function setDefaultYear(ctx, dt, hdate) {
   });
 }
 
-const FORMAT_DOW_MONTH_DAY = 'ddd, D MMMM YYYY';
+function myDateFormat(d) {
+  const strtime = d.format('dddd, MMMM D');
+  const isodate = d.format('YYYY-MM-DD');
+  return `<time datetime="${isodate}" class="text-nowrap">${strtime}</time>`;
+}
 
 const chagSameach = {
   'Chanukah': true,
@@ -184,19 +188,20 @@ function getMastheadGreeting(hd, il, tzid) {
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
-    const strtime = dayjs(fastDay.getDate().greg()).format(FORMAT_DOW_MONTH_DAY);
+    const d = dayjs(fastDay.getDate().greg());
+    const htmlDate = myDateFormat(d);
     return ['Tzom Kal!',
       `We wish you an easy fast.<br><a href="${fastDay.url()}">${fastDay.render()}</a>
- occurs on <span class="text-nowrap">${strtime}</span>`];
+ occurs on ${htmlDate}`];
   }
 
   if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
-    const strtime = erevShavuot.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevShavuot);
     const suffix = il ? '?i=on' : '';
     return ['🌸 ⛰️&nbsp; Chag Shavuot Sameach! &middot; <span lang="he" dir="rtl">חג שבועות שמח</span> &nbsp;⛰️ 🌸',
       `<br><a href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   } else if ((mm == months.TISHREI && dd >= 16 && dd <= 21) ||
       (mm == months.NISAN && dd >= 16 && dd <= 21)) {
     const holiday = mm == months.TISHREI ? 'Sukkot' : 'Pesach';
@@ -213,17 +218,17 @@ function getMastheadGreeting(hd, il, tzid) {
     let longText = '<br>We wish you a good inscription in the Book of Life';
     if (dd < 10) {
       const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
-      const strtime = erevYK.format(FORMAT_DOW_MONTH_DAY);
+      const htmlDate = myDateFormat(erevYK);
       longText += `.\n<br><a href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
- begins at sundown on <span class="text-nowrap">${strtime}</span>`;
+ begins at sundown on ${htmlDate}`;
     }
     return ['✡️&nbsp; G\'mar Chatima Tova &middot; <span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span> &nbsp;✡️',
       longText];
   } else if (mm == months.TISHREI && dd >= 11 && dd <= 14) {
     const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg());
-    const strtime = erevSukkot.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevSukkot);
     const when = (dd === 14) ? 'tonight at sundown' :
-      ` at sundown on <span class="text-nowrap">${strtime}</span>`;
+      ` at sundown on ${htmlDate}`;
     const blurb = '🌿 🍋&nbsp; Chag Sukkot Sameach &middot; <span lang="he" dir="rtl">חג סוכות שמח</span> &nbsp;🍋 🌿';
     const suffix = il ? '?i=on' : '';
     const longText = `<br><a href="/holidays/sukkot-${gy}${suffix}">Sukkot</a>
@@ -256,60 +261,60 @@ function getMastheadGreeting(hd, il, tzid) {
     // for the entire month of Elul
     const nextYear = yy + 1;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
-    const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevRH);
     return ['🍏 🍯&nbsp; Shana Tova! &middot; <span lang="he" dir="rtl">שנה טובה</span> &nbsp;🍯 🍏',
       `<br>We wish you a happy and healthy New Year.
  <a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear}
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   } else if (mm == months.KISLEV && dd < 24) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg());
     const dow = erevChanukah.day();
-    const strtime = erevChanukah.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevChanukah);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
     return ['🕎&nbsp; Happy Chanukah! &middot; <span lang="he" dir="rtl">חנוכה שמח</span> &nbsp;🕎',
       `<br>Light the first <a href="/holidays/chanukah-${gy}">Chanukah candle</a>
- ${when} on <span class="text-nowrap">${strtime}</span>`];
+ ${when} on ${htmlDate}`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
     const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg());
-    const strtime = erevLagBaOmer.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevLagBaOmer);
     return ['🔥&nbsp; <span lang="he" dir="rtl">ל״ג בעומר שמח</span> &nbsp;🔥',
       `<br><a href="/holidays/lag-baomer-${gy}">Lag BaOmer</a>
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   } else if (mm === months.AV && dd >= 23) {
     // for the last week of Av
     const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg());
-    const strtime = erevRHLaBehemot.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevRHLaBehemot);
     return ['🐑 🐓&nbsp; <span lang="he" dir="rtl">ראש השנה לבהמות שמח</span> &nbsp;🐓 🐑',
       `<br><a href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a> (New Year for Tithing Animals)
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   } else if (mm === months.SHVAT && dd >= 2 && dd <= 13) {
     // first 2 weeks of Shvat
     const erevTuBiShvat = dayjs(new HDate(14, months.SHVAT, yy).greg());
-    const strtime = erevTuBiShvat.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevTuBiShvat);
     return ['🌳 🌱&nbsp; <span lang="he" dir="rtl">ט״ו בשבט שמח</span> &nbsp;🌱 🌳',
       `<br><a href="/holidays/tu-bishvat-${gy}">Tu BiShvat</a> (New Year for Trees)
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   }
 
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
   if (mm == purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
-    const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
+    const htmlDate = myDateFormat(erevPurim);
     return ['🎭️ 📜&nbsp; Chag Purim Sameach! &middot; <span lang="he" dir="rtl">חג פורים שמח</span> &nbsp;📜 🎭️',
       `<br><a href="/holidays/purim-${gy}">Purim</a>
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
-    const strtime = erevPesach.format(FORMAT_DOW_MONTH_DAY);
-    const blurb = '🫓 🍷&nbsp; Chag Kasher v\'Sameach &middot; <span lang="he" dir="rtl">חג כשר ושמח</span> &nbsp;🍷 🫓';
+    const htmlDate = myDateFormat(erevPesach);
+    const blurb = '🫓 🍷&nbsp; <span lang="he" dir="rtl">חג כשר ושמח</span> &nbsp;🍷 🫓';
     const suffix = il ? '?i=on' : '';
-    return [blurb, `<br>We wish you a happy
+    return [blurb, `<br>Chag Kasher v\'Sameach! We wish you a happy
  <a href="/holidays/pesach-${gy}${suffix}">Passover</a>. Pesach
- begins at sundown on <span class="text-nowrap">${strtime}</span>`];
+ begins at sundown on ${htmlDate}`];
   }
 
   return [null, null];
