@@ -345,7 +345,7 @@ function getHolidayGreeting(ev, il, today, tzid) {
   const longText = today ?
     `<br>We wish you a happy <a href="${url}">${title}</a>` :
     `<br><a href="${url}">${title}</a> begins tonight at sundown`;
-  return [`${emoji}&nbsp; Chag Sameach! &nbsp;${emoji}`, longText];
+  return [`${emoji}&nbsp; Chag Sameach! &middot; <span lang="he" dir="rtl">חג שמח</span> &nbsp;${emoji}`, longText];
 }
 
 const roshChodeshBlurb = '🗓️ 🌒&nbsp; Chodesh Tov &middot; <span lang="he" dir="rtl">חודש טוב</span> &nbsp;🌒 🗓️';
