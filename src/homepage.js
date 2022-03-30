@@ -312,7 +312,7 @@ function getMastheadGreeting(hd, il, tzid) {
     const htmlDate = myDateFormat(erevPesach);
     const blurb = '🫓 🍷&nbsp; <span lang="he" dir="rtl">חג כשר ושמח</span> &nbsp;🍷 🫓';
     const suffix = il ? '?i=on' : '';
-    return [blurb, `<br>Chag Kasher v\'Sameach! We wish you a happy
+    return [blurb, `<br><strong>Chag Kasher v\'Sameach!</strong> We wish you a happy
  <a href="/holidays/pesach-${gy}${suffix}">Passover</a>. Pesach
  begins at sundown on ${htmlDate}`];
   }
