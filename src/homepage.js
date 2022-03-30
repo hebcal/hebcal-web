@@ -194,7 +194,7 @@ function getMastheadGreeting(hd, il, tzid) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
     const strtime = erevShavuot.format(FORMAT_DOW_MONTH_DAY);
     const suffix = il ? '?i=on' : '';
-    return ['🌸 ⛰️&nbsp; Chag Shavuot Sameach! &nbsp;⛰️ 🌸',
+    return ['🌸 ⛰️&nbsp; Chag Shavuot Sameach! &middot; <span lang="he" dir="rtl">חג שבועות שמח</span> &nbsp;⛰️ 🌸',
       `<br><a href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if ((mm == months.TISHREI && dd >= 16 && dd <= 21) ||
@@ -257,8 +257,9 @@ function getMastheadGreeting(hd, il, tzid) {
     const nextYear = yy + 1;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
     const strtime = erevRH.format(FORMAT_DOW_MONTH_DAY);
-    return ['🍏 🍯&nbsp; Shana Tova! &nbsp;🍯 🍏', `We wish you a happy and healthy New Year.
- <br><a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear}
+    return ['🍏 🍯&nbsp; Shana Tova! &middot; <span lang="he" dir="rtl">שנה טובה</span> &nbsp;🍯 🍏',
+      `<br>We wish you a happy and healthy New Year.
+ <a href="/holidays/rosh-hashana-${gy}">Rosh Hashana</a> ${nextYear}
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   } else if (mm == months.KISLEV && dd < 24) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
@@ -296,8 +297,8 @@ function getMastheadGreeting(hd, il, tzid) {
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const strtime = erevPurim.format(FORMAT_DOW_MONTH_DAY);
-    return ['🎭️ 📜&nbsp; Chag Purim Sameach! &nbsp;📜 🎭️',
-      `<a href="/holidays/purim-${gy}">Purim</a>
+    return ['🎭️ 📜&nbsp; Chag Purim Sameach! &middot; <span lang="he" dir="rtl">חג פורים שמח</span> &nbsp;📜 🎭️',
+      `<br><a href="/holidays/purim-${gy}">Purim</a>
  begins at sundown on <span class="text-nowrap">${strtime}</span>`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
