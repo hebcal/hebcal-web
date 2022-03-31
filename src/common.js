@@ -960,12 +960,13 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
  * @return {any}
  */
 export function getSunsetAwareDate(q, location) {
-  const isToday = Boolean(empty(q.gy) || empty(q.gm) || empty(q.gd));
   const dt = getTodayDate(q);
-  if (isToday && location != null) {
+  const dateOverride = !empty(q.dt) || (!empty(q.gy) && !empty(q.gm) && !empty(q.gd));
+  if (!dateOverride && location != null) {
     return getBeforeAfterSunsetForLocation(dt, location);
   }
-  return {dt: dt, afterSunset: false, gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
+  return {dt: dt, afterSunset: false, dateOverride: dateOverride,
+    gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
 }
 
 /**

@@ -1,9 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
-import {empty, getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
+import {getDefaultHebrewYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
-  getSunsetAwareDate, getTodayDate} from './common';
+  getSunsetAwareDate} from './common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -39,7 +39,7 @@ export async function homepage(ctx) {
   const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   ctx.state.lang = 'en';
-  const {gy, gd, gm, dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
+  const {gy, gd, gm, dt, afterSunset, dateOverride} = getSunsetAwareDate(q, ctx.state.location);
   ctx.state.gy = gy;
   const hdate = new HDate(dt);
   const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
@@ -56,7 +56,7 @@ export async function homepage(ctx) {
   mastheadParsha(ctx, hd, il);
   mastheadOmer(ctx, hd);
   mastheadDafYomi(ctx, hd);
-  const [blub, longText] = getMastheadGreeting(hd, il, ctx.state.timezone);
+  const [blub, longText] = getMastheadGreeting(hd, il, dateOverride, ctx.state.timezone);
   if (blub) {
     ctx.state.holidayBlurb = blub;
     ctx.state.holidayLongText = longText;
@@ -175,7 +175,7 @@ const chagSameach = {
   'Simchat Torah': true,
 };
 
-function getMastheadGreeting(hd, il, tzid) {
+function getMastheadGreeting(hd, il, dateOverride, tzid) {
   const mm = hd.getMonth();
   const dd = hd.getDate();
   const yy = hd.getFullYear();
@@ -199,8 +199,8 @@ function getMastheadGreeting(hd, il, tzid) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
     const htmlDate = myDateFormat(erevShavuot);
     const suffix = il ? '?i=on' : '';
-    return ['🌸 ⛰️&nbsp; Chag Shavuot Sameach! &middot; <span lang="he" dir="rtl">חג שבועות שמח</span> &nbsp;⛰️ 🌸',
-      `<br><a href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
+    return ['🌸 ⛰️&nbsp; <span lang="he" dir="rtl">חג שבועות שמח</span> &nbsp;⛰️ 🌸',
+      `<br><strong>Chag Shavuot Sameach!</strong> <a href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
  begins at sundown on ${htmlDate}`];
   } else if ((mm == months.TISHREI && dd >= 16 && dd <= 21) ||
       (mm == months.NISAN && dd >= 16 && dd <= 21)) {
@@ -238,7 +238,7 @@ function getMastheadGreeting(hd, il, tzid) {
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
   if (chagToday) {
-    return getHolidayGreeting(chagToday, il, true, tzid);
+    return getHolidayGreeting(chagToday, il, true, tzid, dateOverride);
   }
 
   const tomorrow = HebrewCalendar.getHolidaysOnDate(hd.next(), il) || [];
@@ -302,8 +302,8 @@ function getMastheadGreeting(hd, il, tzid) {
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
     const htmlDate = myDateFormat(erevPurim);
-    return ['🎭️ 📜&nbsp; Chag Purim Sameach! &middot; <span lang="he" dir="rtl">חג פורים שמח</span> &nbsp;📜 🎭️',
-      `<br><a href="/holidays/purim-${gy}">Purim</a>
+    return ['🎭️ 📜&nbsp; <span lang="he" dir="rtl">חג פורים שמח</span> &nbsp;📜 🎭️',
+      `<br><strong>Chag Purim Sameach!</strong> <a href="/holidays/purim-${gy}">Purim</a>
  begins at sundown on ${htmlDate}`];
   }
   if ((mm == purimMonth && dd >= 17) || (mm == months.NISAN && dd <= 14)) {
@@ -326,12 +326,13 @@ function getMastheadGreeting(hd, il, tzid) {
  * @param {boolean} il
  * @param {boolean} today
  * @param {string} tzid
+ * @param {boolean} dateOverride
  * @return {any}
  */
-function getHolidayGreeting(ev, il, today, tzid) {
+function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
   const url = ev.url();
   const mask = ev.getFlags();
-  if (today && (mask & flags.CHANUKAH_CANDLES)) {
+  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES)) {
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
