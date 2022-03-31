@@ -125,9 +125,8 @@ render(app, {
 
 app.use(async function fixup1(ctx, next) {
   // force error middleware to use proper json response type
-  const accept = ctx.get('accept');
   const cfg = ctx.request.query.cfg;
-  if ((cfg === 'json' || cfg === 'fc') && (!accept || accept === '*' || accept === '*/*')) {
+  if (cfg === 'json' || cfg === 'fc') {
     ctx.request.header['accept'] = 'application/json';
   }
   await next();
