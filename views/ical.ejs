@@ -94,7 +94,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   name: 'פרשת השבוע - ישראל', id: 'torah-readings-israel-he',
   he: true,
   emoji: '🕍',
-  summary: `Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl" class="big">בראשית, נח, לך־לך</span>.</p>
+  summary: `Parashat ha-Shavua - Weekly Torah Portion such as <span lang="he" dir="rtl">בראשית, נח, לך־לך</span>.</p>
 <p>Israel schedule 🇮🇱</p>`,
   feedLength: '~50',
   years: 5,
@@ -108,14 +108,14 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew)', id: 'hdate-he-v2',
-  summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טבת</span>) every day of the week.</p>
-<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap big">א׳ כסלו תשפ״ב</span>)</p>`,
+  summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap">י״ח טבת</span>) every day of the week.</p>
+<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap">א׳ כסלו תשפ״ב</span>)</p>`,
   feedLength: 365,
   years: 2,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew with nikud)', id: 'hdate-he',
-  summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap big">י״ח טֵבֵת</span>) every day of the week</p>`,
+  summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap">י״ח טֵבֵת</span>) every day of the week</p>`,
   feedLength: 365,
   years: 2,
 }) -%>
@@ -143,7 +143,7 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yom Kippur Katan', id: 'yom-kippur-katan',
-  summary: `<p><span lang="he" dir="rtl" class="big">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.</p>
+  summary: `<p><span lang="he" dir="rtl">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh.</p>
 <p class="small">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),
 Tishrei (Yom Kippur has just passed), Kislev (due to Chanukah) or Nisan (fasting not permitted during Nisan).
 When Rosh Chodesh occurs on Shabbat or Sunday, Yom Kippur Katan is observed on the preceding Thursday.
