@@ -365,6 +365,7 @@ function getRoshChodeshGreeting(hd, ev) {
     return [roshChodeshBlurb,
       `<br>We wish you a good new month of <a href="${url}">${monthName}</a>`];
   }
+  const htmlDate = myDateFormat(d.subtract(1, 'day'));
   return [roshChodeshBlurb,
-    `<br><a href="${url}">Rosh Chodesh ${monthName}</a> begins at sundown`];
+    `<br><a href="${url}">Rosh Chodesh ${monthName}</a> begins at sundown on ${htmlDate}`];
 }
