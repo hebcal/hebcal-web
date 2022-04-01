@@ -12,30 +12,19 @@ import './dayjs-locales';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const hebcalFormDefaultsDiaspora = {
-  maj: 'on',
-  min: 'on',
-  nx: 'on',
-  mf: 'off',
-  ss: 'off',
-  mod: 'off',
-  i: 'off',
-};
-
-const hebcalFormDefaultsIL = {
-  maj: 'on',
-  min: 'on',
-  nx: 'on',
-  mf: 'on',
-  ss: 'on',
-  mod: 'on',
-  i: 'on',
-};
-
 export async function homepage(ctx) {
   const q0 = setDefautLangTz(ctx);
   const cookie = ctx.cookies.get('C');
-  const defaults = q0.i === 'on' ? hebcalFormDefaultsIL : hebcalFormDefaultsDiaspora;
+  const il = ctx.state.il;
+  const defaults = {
+    maj: 'on',
+    min: 'on',
+    nx: 'on',
+    mf: 'on',
+    ss: 'on',
+    mod: 'on',
+    i: il ? 'on' : 'off',
+  };
   const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   ctx.state.lang = 'en';
@@ -51,7 +40,6 @@ export async function homepage(ctx) {
   setDefaultYear(ctx, dt, hd);
   ctx.state.items = [];
   mastheadDates(ctx, dt, afterSunset, hd);
-  const il = ctx.state.il;
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
   mastheadOmer(ctx, hd);
