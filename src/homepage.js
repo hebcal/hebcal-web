@@ -312,8 +312,8 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
     const htmlDate = myDateFormat(erevPesach);
     const blurb = '🫓 🍷&nbsp; <span lang="he" dir="rtl">חג כשר ושמח</span> &nbsp;🍷 🫓';
     const suffix = il ? '?i=on' : '';
-    return [blurb, `<br><strong>Chag Kasher v\'Sameach!</strong> We wish you a happy
- <a href="/holidays/pesach-${gy}${suffix}">Passover</a>. Pesach
+    return [blurb, `<br><strong>Chag Kasher v\'Sameach!</strong>
+ <a href="/holidays/pesach-${gy}${suffix}">Passover</a>
  begins at sundown on ${htmlDate}`];
   }
 
