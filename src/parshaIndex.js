@@ -16,6 +16,7 @@ export async function parshaIndex(ctx) {
   const [parshaDia, parshaDiaHref] = getParsha(saturday, false);
   const [parshaIsrael, parshaIsraelHref] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
+  ctx.state.lang = 'en';
   await ctx.render('parsha-index', {
     il,
     saturday: dayjs(saturday.greg()),
