@@ -98,7 +98,7 @@ href="<%-aliyah.tikkun%>">
 <% } else if (il && !israelDiasporaDiffer) { %>
 <div class="col-sm-6">
 <h5>Triennial</h5>
-<p><small>See <a href="<%=parsha.anchor%>-<%=d.format('YYYYMMDD')%>">Diaspora reading</a></small></p>
+<p class="small">See <a href="<%=parsha.anchor%><%= date ? '-' + d.format('YYYYMMDD') : '' %>">Diaspora reading</a></p>
 </div>
 <% } // !il %>
 </div><!-- .row -->
