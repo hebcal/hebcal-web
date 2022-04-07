@@ -103,8 +103,10 @@ export function summarizeAnniversaryTypes(query, long=false) {
     types.length === 1 ? types[0] : 'Anniversary';
   if (long) {
     switch (anniversaryType) {
-      case 'Anniversary': return 'Hebrew Anniversaries';
-      case 'Birthday': return 'Hebrew Birthdays';
+      case 'Anniversary':
+        return types.length === 1 ? 'Hebrew Anniversary' : 'Hebrew Anniversaries';
+      case 'Birthday':
+        return types.length === 1 ? 'Hebrew Birthday' : 'Hebrew Birthdays';
       default: break;
     }
   }
