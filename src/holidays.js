@@ -41,7 +41,7 @@ export async function holidayYearIndex(ctx) {
     const fc = eventToFullCalendar(ev, null, il);
     const emoji = ev.getEmoji();
     if (emoji) {
-      fc.title += ' ' + emoji;
+      fc.title += '\u00a0' + emoji;
     }
     fc.url = ev.url();
     return fc;

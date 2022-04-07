@@ -1,5 +1,4 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@5.10.2/main.global.min.js"></script>
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
@@ -16,11 +15,11 @@ document.addEventListener('DOMContentLoaded', function() {
   var lastMonth = parseInt(lastEvDate.substring(5, 7), 10);
   var firstOfNextMonth = new Date(lastYear, lastMonth, 1);
   var opts = {
-    themeSystem: 'bootstrap5',
     initialView: 'dayGridMonth',
     headerToolbar: {
-      left: 'title',
-      right: 'prev next',
+      left: 'prev next',
+      center: 'title',
+      right: '',
     },
     events: events,
     validRange: {
