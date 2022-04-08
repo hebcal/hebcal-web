@@ -95,20 +95,10 @@ export async function parshaRss(ctx) {
   const dt = new Date();
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(dt);
-  const hy = hd.getFullYear();
   const utcString = dt.toUTCString();
   const hebrew = rpath === '/sedrot/israel-he.xml';
   const il = rpath.startsWith('/sedrot/israel');
-  const sedra = HebrewCalendar.getSedra(hy, il);
-  const isParsha = sedra.isParsha(hd);
-  let ev;
-  if (isParsha) {
-    ev = new ParshaEvent(hd, sedra.get(hd), il);
-  } else {
-    const events = HebrewCalendar.getHolidaysOnDate(saturday.toDate(), il) || [];
-    ev = events[0];
-  }
-
+  const ev = getSaturdayEvent(hd.onOrAfter(6), il);
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
   const lang = hebrew ? 'he' : 'en';
   const props = {
@@ -129,6 +119,12 @@ export async function parshaRss(ctx) {
   expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('parsha-rss', props);
+}
+
+function getSaturdayEvent(hd, il) {
+  const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+  const parsha = sedra.lookup(hd);
+  return parsha.chag ? HebrewCalendar.getHolidaysOnDate(hd, il)[0] : new ParshaEvent(hd, parsha.parsha, il);
 }
 
 function createMemo(ev, il) {
