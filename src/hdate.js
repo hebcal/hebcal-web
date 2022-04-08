@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HDate, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
-import {pad2, getHolidayDescription, makeTorahMemoText} from '@hebcal/rest-api';
-import {CACHE_CONTROL_7DAYS} from './common';
+import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
+import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import fs from 'fs/promises';
@@ -92,7 +92,7 @@ export async function hdateXml(ctx) {
 
 export async function parshaRss(ctx) {
   const rpath = ctx.request.path;
-  const dt = new Date();
+  const dt = getTodayDate(ctx.request.query);
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(dt);
   const utcString = dt.toUTCString();
@@ -109,7 +109,7 @@ export async function parshaRss(ctx) {
     pubDate: utcString,
     parsha: ev.render(lang),
     memo: createMemo(ev, il),
-    link: ev.url() + '?utm_medium=rss&utm_source=rss-parasha',
+    link: appendIsraelAndTracking(ev.url(), il, 'sedrot-' + (il ? 'israel' : 'diaspora'), 'rss'),
     dt: '' + dt.getFullYear() + pad2(dt.getMonth() + 1) + pad2(dt.getDate()),
     year: dt.getFullYear(),
     saturdayDate: saturday.locale(lang).format('D MMMM YYYY'),
