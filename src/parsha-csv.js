@@ -44,33 +44,73 @@ function sendCsv(ctx, filename, hyear, il, callback) {
  */
 function writeWeekdayCsv(stream, hyear, il) {
   stream.write('"Date","Parashah","Weekday Aliyah","Reading","Verses"\r\n');
-  const sedra = HebrewCalendar.getSedra(hyear, il);
   const startDate = new HDate(1, months.TISHREI, hyear);
   const startAbs = startDate.abs();
   const endAbs = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
   for (let abs = startAbs; abs <= endAbs; abs++) {
     const hd = new HDate(abs);
-    // skip if it's not a Monday or Thursday, or if it's a holiday that has Torah reading
-    if (!isWeekdayReading(hd, il)) {
-      continue;
-    }
-    const saturday = hd.onOrAfter(6);
-    const parsha = sedra.lookup(saturday);
-    if (parsha.chag) {
-      // pick next saturday?
-    } else {
-      const reading = leyning.getLeyningForParsha(parsha.parsha);
-      const parshaName = parsha.parsha.join('-');
-      const date = fmtDate(hd.greg());
-      if (reading.weekday) {
-        writeCsvLines(stream, date, parshaName, reading.weekday);
-      } else {
-        throw createError(500, `No weekday for ${parshaName} on ${date}`);
-      }
-    }
+    writeWeekdayCsvInner(stream, hd, il);
   }
 }
 
+/**
+ * @private
+ * @param {WriteStream} stream
+ * @param {HDate} hd
+ * @param {boolean} il
+ * @return {boolean}
+ */
+function writeWeekdayCsvInner(stream, hd, il) {
+  // skip if it's not a Monday or Thursday, or if it's a holiday that has Torah reading
+  if (!isWeekdayReading(hd, il)) {
+    return false;
+  }
+  const hyear = hd.getFullYear();
+  const sedra = HebrewCalendar.getSedra(hyear, il);
+  const saturday = hd.onOrAfter(6);
+  const parsha = sedra.lookup(saturday);
+  if (!parsha.chag) {
+    writeWeekdayCsvLines(stream, parsha.parsha, hd);
+    return true;
+  }
+  // So it's a Monday or Thursday but Saturday is Chag.
+  // Search for next regular parsha, which could even spill into next year
+  const endOfYear = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
+  const endAbs = endOfYear + 30;
+  for (let sat2 = saturday.abs() + 7; sat2 <= endAbs; sat2 += 7) {
+    const sedra2 = sat2 > endOfYear ? HebrewCalendar.getSedra(hyear + 1, il) : sedra;
+    const parsha2 = sedra2.lookup(sat2);
+    if (!parsha2.chag) {
+      writeWeekdayCsvLines(stream, parsha2.parsha, hd);
+      return true;
+    }
+  }
+  throw createError(500, `Can't find weekday for ${hd.toString()}`);
+}
+
+/**
+ * @private
+ * @param {WriteStream} stream
+ * @param {string[]} parsha
+ * @param {HDate} hd
+ */
+function writeWeekdayCsvLines(stream, parsha, hd) {
+  const reading = leyning.getLeyningForParsha(parsha);
+  const parshaName = parsha.join('-');
+  const date = fmtDate(hd.greg());
+  if (reading.weekday) {
+    writeCsvLines(stream, date, parshaName, reading.weekday);
+  } else {
+    throw createError(500, `No weekday for ${parshaName} on ${date}`);
+  }
+}
+
+/**
+ * @private
+ * @param {HDate} hd
+ * @param {boolean} il
+ * @return {boolean}
+ */
 function isWeekdayReading(hd, il) {
   const dow = hd.getDay();
   if (dow !== 1 && dow !== 4) {
