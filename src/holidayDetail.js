@@ -158,10 +158,9 @@ function makeNextObserved(item, year, il) {
   const where = (item.basename === 'Shavuot' || item.basename === 'Pesach') ?
     (il ? ' in 🇮🇱' : ' in the Diaspora') : '';
   const nextObserved = `${verb}${where}${beginsWhen} on ${dateStrShort}`;
-  const iso = item.d.format('YYYY-MM-DD');
   const dateStrLong = item.d.format('dddd, D MMMM YYYY');
   // eslint-disable-next-line max-len
-  const nextObservedHtml = `${verb}${where}${beginsWhen} on <strong class="text-burgundy"><time datetime="${iso}">${dateStrLong}</time></strong>`;
+  const nextObservedHtml = `${verb}${where}${beginsWhen} on <strong class="text-burgundy"><time datetime="${item.startIsoDate}">${dateStrLong}</time></strong>`;
   if (!item.duration) {
     return [nextObserved, nextObservedHtml];
   }
@@ -170,9 +169,8 @@ function makeNextObserved(item, year, il) {
   const endVerb = isPast2 ? 'ended' : 'ends';
   const endWhen = isPast2 ? '' : ' at nightfall';
   const endObservedPrefix = ` and ${endVerb}${endWhen} on `;
-  const endIso = end.format('YYYY-MM-DD');
   const endObserved = endObservedPrefix + end.format('D-MMM-YYYY');
-  const endObservedHtml = endObservedPrefix + `<strong class="text-burgundy"><time datetime="${endIso}">` +
+  const endObservedHtml = endObservedPrefix + `<strong class="text-burgundy"><time datetime="${item.endIsoDate}">` +
     end.format('dddd, D MMMM YYYY') + '</time></strong>';
   return [nextObserved + endObserved, nextObservedHtml + endObservedHtml];
 }
@@ -181,9 +179,9 @@ function getJsonLD(item, description) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Event',
-    'name': item.basename + ' ' + item.d.format('YYYY'),
-    'startDate': item.d.format('YYYY-MM-DD'),
-    'endDate': item.endD.format('YYYY-MM-DD'),
+    'name': item.basename + ' ' + item.d.year(),
+    'startDate': item.startIsoDate,
+    'endDate': item.endIsoDate,
     'description': description,
     'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
     'location': {

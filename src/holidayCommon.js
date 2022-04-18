@@ -124,17 +124,24 @@ export function eventToHolidayItem(ev, il) {
   const endD = d.add(duration, 'd');
   const emoji = Boolean(mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) ? '' :
     holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
+  const anchor = makeAnchor(holiday);
+  const anchorDate = holiday === 'Asara B\'Tevet' ? d.format('YYYYMMDD') : d.year();
+  const iSuffix = il ? '?i=on' : '';
+  const href = anchor + '-' + anchorDate + iSuffix;
   const item = {
     name: holiday,
     mask,
-    id: makeAnchor(holiday),
+    id: anchor,
+    href,
     hd,
     beginsWhen,
     d,
+    startIsoDate: d.format('YYYY-MM-DD'),
     startDowHtml: wrapDisplaySpans('md', d.format('ddd'), d.format('dddd')),
     startMonDayHtml: wrapDisplaySpans('md', d.format('MMM D'), d.format('MMMM D')),
     duration,
     endD,
+    endIsoDate: endD.format('YYYY-MM-DD'),
     endDowHtml: wrapDisplaySpans('lg', endD.format('ddd'), endD.format('dddd')),
     endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
     hdRange: hebrewDateRange(hd, duration, true),

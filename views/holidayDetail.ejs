@@ -47,7 +47,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <tbody>
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
 <tr class="<%=item.ppf%>">
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.format('YYYY') %><% } %></time></td>
+<td><time datetime="<%=item.startIsoDate%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
 <%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
 <%   } else { %>
@@ -101,11 +101,11 @@ data-ad-slot="5342180883"></ins>
 <tbody>
 <% occursOn.forEach((item) => { %>
 <tr class="<%=item.ppf%>">
-<td><a href="<%=item.id%>-<%=holiday === 'Asara B\'Tevet' ? item.d.format('YYYYMMDD') : item.d.format('YYYY')%><%=il?'?i=on':''%>"><%=holiday%> <%=item.d.format('YYYY')%><% if (holiday === 'Asara B\'Tevet') {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+<td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (holiday === 'Asara B\'Tevet') {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
-<td><time datetime="<%=item.endD.format('YYYY-MM-DD')%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
+<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
 <td class="small"><%=item.hdRange%></td>
 </tr>
 <% }); %>

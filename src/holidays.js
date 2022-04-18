@@ -35,8 +35,35 @@ export async function holidayYearIndex(ctx) {
   const items = makeItems(events, il, isHebrewYear);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
+  const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
+  const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
+  const fcEvents = greg1 <= 1752 ? [] : makeFullCalendarEvents(options);
+  await ctx.render('holiday-year-index', {
+    today: dayjs(),
+    year: year.padStart(4, '0'),
+    greg1,
+    greg2,
+    prev: isHebrewYear ? `${greg1 - 1}-${greg1}` : yearNum - 1,
+    next: isHebrewYear ? `${greg2}-${greg2 + 1}` : yearNum + 1,
+    isHebrewYear,
+    calendarYear,
+    categories,
+    items,
+    RH: dayjs(roshHashana.getDate().greg()),
+    il,
+    locationName: il ? 'Israel' : 'the Diaspora',
+    iSuffix: il ? '?i=on' : '',
+    DoWtiny,
+    q,
+    fcEvents,
+    options,
+  });
+}
+
+function makeFullCalendarEvents(options) {
   const fcOptions = Object.assign({addHebrewDatesForEvents: true}, options);
   const events2 = HebrewCalendar.calendar(fcOptions);
+  const il = options.il;
   const fcEvents = events2.map((ev) => {
     const fc = eventToFullCalendar(ev, null, il);
     const emoji = ev.getEmoji();
@@ -59,28 +86,7 @@ export async function holidayYearIndex(ctx) {
       }
     }
   }
-  const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
-  const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
-  await ctx.render('holiday-year-index', {
-    today: dayjs(),
-    year,
-    greg1,
-    greg2,
-    prev: isHebrewYear ? `${greg1 - 1}-${greg1}` : yearNum - 1,
-    next: isHebrewYear ? `${greg2}-${greg2 + 1}` : yearNum + 1,
-    isHebrewYear,
-    calendarYear,
-    categories,
-    items,
-    RH: dayjs(roshHashana.getDate().greg()),
-    il,
-    locationName: il ? 'Israel' : 'the Diaspora',
-    iSuffix: il ? '?i=on' : '',
-    DoWtiny,
-    q,
-    fcEvents,
-    options,
-  });
+  return fcEvents;
 }
 
 function makeQueryAndDownloadProps(ctx, options) {
