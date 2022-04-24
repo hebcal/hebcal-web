@@ -10,6 +10,7 @@ import xResponseTime from 'koa-better-response-time';
 import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
+import os from 'os';
 import zlib from 'zlib';
 import {makeLogger, errorLogger, accessLogger} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
@@ -79,6 +80,7 @@ app.use(async function fixup0(ctx, next) {
   ctx.state.spriteHref = '/i/' + pkg.config.sprite;
   ctx.state.cspriteHref = '/i/' + pkg.config.csprite;
   ctx.state.clientAppHref = '/i/' + pkg.config.clientapp;
+  ctx.state.hostname = os.hostname(); // used by some ejs templates
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
