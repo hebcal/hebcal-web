@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs', {
-  title: `${ev.render()} - ${d.format('D MMMM YYYY')} | Hebcal`,
+  title: `${ev.render('en')} - ${d.format('D MMMM YYYY')} | Hebcal`,
 }) -%>
 <% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
@@ -34,13 +34,13 @@
 <ul class="list-unstyled">
 <li class="fs-2"><time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('dddd, D MMMM YYYY') %></time></li>
 <li class="fs-2"><%= hd.toString() %></li>
-<li class="fs-1 text-burgundy"><%= ev.render() %></li>
+<li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
 <li class="fs-4"><%= ev.getTodayIs() %></li>
 <li dir="rtl" lang="he" class="jumbo"><%= sefHebrew %></li>
 <li class="fs-4"><em><%= sefTranslit %></em></li>
 <li class="fs-3"><%= sefEnglish %></li>
 <% for (const ev of holidays) { %>
-<li class="fs-4 mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render() %><% if (ev.url()) { %></a><% } %></li>
+<li class="fs-4 mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render('en') %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
 </ul>
 </div><!-- #today -->
