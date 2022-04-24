@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {flags, greg, HDate, HebrewCalendar, Locale, months, HolidayEvent} from '@hebcal/core';
+import {flags, greg, HDate, HebrewCalendar, Locale, months, Event} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {addLinksToLeyning} from './parshaCommon';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
@@ -8,11 +8,9 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
-  wrapDisplaySpans} from './holidayCommon';
+  wrapDisplaySpans, OMER_TITLE} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
-
-const OMER_TITLE = 'Days of the Omer';
 
 const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 
@@ -81,6 +79,11 @@ export async function holidayDetail(ctx) {
     })) : events11yearsBegin;
   const category = categories[meta.category] || {};
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
+  if (holiday === OMER_TITLE) {
+    for (const item of occursOn) {
+      item.href = '/omer/' + item.hd.getFullYear();
+    }
+  }
   const next = dateSuffix && dateSuffix.length === 8 ?
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :
@@ -196,7 +199,7 @@ function makeOmerEvents(year) {
   const hy = year ? year + 3757 : new HDate().getFullYear() - 1;
   for (let i = 0; i < 11; i++) {
     const hd = new HDate(16, months.NISAN, hy + i);
-    events.push(new HolidayEvent(hd, OMER_TITLE, flags.OMER_COUNT));
+    events.push(new Event(hd, OMER_TITLE, flags.OMER_COUNT, {emoji: '㊾'}));
   }
   return events;
 }

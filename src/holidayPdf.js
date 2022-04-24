@@ -3,7 +3,9 @@ import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf';
-import {lgToLocale, localeMap, eTagFromOptions} from './common';
+import {lgToLocale, localeMap, eTagFromOptions, cacheControl} from './common';
+
+const CACHE_CONTROL_60DAYS = cacheControl(60);
 
 /**
  * @param {any} ctx
@@ -31,7 +33,7 @@ export async function holidayPdf(ctx) {
     locale,
     il: ctx.state.il,
   };
-  ctx.set('Cache-Control', 'public, max-age=5184000');
+  ctx.set('Cache-Control', CACHE_CONTROL_60DAYS);
   ctx.response.type = 'application/pdf';
   ctx.response.etag = eTagFromOptions(options, {outputType: '.pdf'});
   ctx.status = 200;

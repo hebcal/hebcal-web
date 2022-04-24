@@ -2,14 +2,14 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent} fr
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
-  CACHE_CONTROL_7DAYS,
+  CACHE_CONTROL_7DAYS, cacheControl,
 } from './common';
 import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
 import './dayjs-locales';
 import {gematriyaDate} from './gematriyaDate';
 
-const CACHE_CONTROL_ONE_YEAR = 'public, max-age=31536000, s-maxage=31536000';
+const CACHE_CONTROL_ONE_YEAR = cacheControl(365);
 /**
  * @param {string} val
  * @return {boolean}
@@ -277,6 +277,21 @@ function getEvents(hdate, il) {
   return events;
 }
 
+/** @private */
+class OmerUrlEvent extends OmerEvent {
+  /**
+   * @param {HDate} date
+   * @param {number} omerDay
+   */
+  constructor(date, omerDay) {
+    super(date, omerDay);
+  }
+  /** @return {string} */
+  url() {
+    return `https://www.hebcal.com/omer/${this.getDate().getFullYear()}/${this.omer}`;
+  }
+}
+
 /**
  * @private
  * @param {HDate} hdate
@@ -287,7 +302,7 @@ function makeOmer(hdate) {
   const abs = hdate.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    return [new OmerEvent(hdate, omer)];
+    return [new OmerUrlEvent(hdate, omer)];
   }
   return [];
 }

@@ -106,3 +106,8 @@ dist
 # other
 *.ini
 *.sqlite3
+
+.DS_Store
+static/i/*.br
+static/i/*.gz
+static/i/*.min.js

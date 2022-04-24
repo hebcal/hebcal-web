@@ -63,6 +63,7 @@ ul.hebcal-results li {
 <input type="hidden" name="city" value="<%= q.city %>" id="city">
 <input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
 <%- await include('partials/city-and-havdalah.ejs') -%>
+<input type="hidden" name="lg" value="<%= q.lg || 's' %>">
   <button type="submit" class="btn btn-primary">
     <svg class="icon mb-1"><use xlink:href="<%=spriteHref%>#gi-candle"></use></svg>
     Get Shabbat Times</button>

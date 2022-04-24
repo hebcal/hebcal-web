@@ -35,6 +35,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css">
 <%- await include('partials/style-fullcalendar.ejs') -%>
 <style>
+table.tbody-striped > thead > * > * {
+  border-bottom: 2px solid currentColor;
+}
 .tbody-striped > tbody {
   border-bottom-color: #dee2e6;
   border-bottom-width: 1px;

@@ -4,6 +4,7 @@ import {
   getLocationFromQuery,
   httpRedirect,
   langNames,
+  CACHE_CONTROL_IMMUTABLE,
 } from './common';
 import {geoAutoComplete} from './complete';
 import {hebrewDateConverter} from './converter';
@@ -27,6 +28,7 @@ import {yahrzeitApp} from './yahrzeit';
 import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 import {getZmanim} from './zmanim';
 import {hebrewDateCalc} from './calc';
+import {omerApp} from './omerApp';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -34,8 +36,6 @@ const needsTrailingSlash = {
   '/ical': true,
   '/sedrot': true,
 };
-
-const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000';
 
 // favicon-like files in the directory root that should be cached for 365 days
 const rootDirStatic = new Set(`ads.txt
@@ -170,6 +170,8 @@ export function wwwRouter() {
       }
     } else if (rpath.startsWith('/calc')) {
       return hebrewDateCalc(ctx);
+    } else if (rpath.startsWith('/omer')) {
+      return omerApp(rpath, ctx);
     }
     await next();
   };

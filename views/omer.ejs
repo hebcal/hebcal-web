@@ -1,0 +1,57 @@
+<%- await include('partials/header.ejs', {
+  title: `${ev.render()} - ${d.format('D MMMM YYYY')} | Hebcal`,
+}) -%>
+<style>
+#today {text-align: center}
+.jumbo {font-size: 48px}
+</style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Omer <%=hyear%>",
+  "item": "https://www.hebcal.com/omer/<%=hyear%>"
+ },{
+  "@type": "ListItem",
+  "position": 2,
+  "name": "Day <%=omerDay%>",
+  "item": "https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>"
+ }]
+}
+</script>
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col">
+<div id="today" class="mt-3">
+<ul class="list-unstyled">
+<li class="fs-2"><time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('dddd, D MMMM YYYY') %></time></li>
+<li class="fs-2"><%= hd.toString() %></li>
+<li class="fs-1 text-burgundy"><%= ev.render() %></li>
+<li class="fs-4"><%= ev.getTodayIs() %></li>
+<li dir="rtl" lang="he" class="jumbo"><%= sefHebrew %></li>
+<li class="fs-4"><em><%= sefTranslit %></em></li>
+<li class="fs-3"><%= sefEnglish %></li>
+<% for (const ev of holidays) { %>
+<li class="fs-4 mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render() %><% if (ev.url()) { %></a><% } %></li>
+<% } %>
+</ul>
+</div><!-- #today -->
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
+<% if (omerDay > 1) { %><div>
+<a rel="prev" class="btn btn-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%-d.subtract(1, 'd').format('D[&nbsp;]MMMM')%></time> · <%=prevNth%> day</a>
+</div><% } %>
+<% if (omerDay < 49) { %><div>
+<a rel="next" class="btn btn-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%> day · <time datetime="<%=d.add(1, 'd').format('YYYY-MM-DD')%>"><%-d.add(1, 'd').format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a>
+</div><% } %>
+</div>
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') _%>

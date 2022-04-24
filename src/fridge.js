@@ -1,14 +1,16 @@
 import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
-import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
+
+const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 // eslint-disable-next-line require-jsdoc
 export async function fridgeShabbat(ctx) {
   const p = makeProperties(ctx);
   ctx.lastModified = ctx.launchDate;
   if (!empty(ctx.request.query.year)) {
-    ctx.set('Cache-Control', 'public, max-age=2592000, s-maxage=2592000');
+    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   }
   return ctx.render('fridge', p);
 }

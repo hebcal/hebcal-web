@@ -1,0 +1,46 @@
+<%- await include('partials/header.ejs', {
+  title: `Counting of Omer ${hyear} | Hebcal`,
+}) -%>
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div id="content">
+<div class="row mt-3">
+<div class="col">
+<h2>Counting of the Omer <%=hyear%> (<%= hyear - 3760 %>)</h2>
+<div class="table-responsive mt-3">
+<table class="table table-striped">
+<colgroup>
+  <col><col><col>
+</colgroup>
+<thead>
+<tr>
+  <th>Day</th>
+  <th>Date</th>
+  <th>Sefira</th>
+</tr>
+</thead>
+<tbody>
+<% for (let i = 1; i <= 49; i++) { const o = items[i]; %>
+<tr class="align-middle">
+  <td><a class="fs-3" href="/omer/<%=hyear%>/<%=o.omerDay%>"><%=o.omerDay%></a></td>
+  <td><time datetime="<%=o.d.format('YYYY-MM-DD')%>"><%-o.d.format('ddd, D[&nbsp;]MMMM')%></time> / <%=o.hd.getDate()%>&nbsp;<%=o.hd.getMonthName()%></td>
+  <td><span dir="rtl" lang="he"><%=o.he%></span><br><%=o.sefira%></td>
+</tr>
+<% } %>
+</tbody>
+</table>
+</div>
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
+<% if (hyear > 3761) { %><div>
+<a rel="prev" class="btn btn-secondary me-2" href="/omer/<%=hyear-1%>"><span aria-hidden="true">←&nbsp;</span><%=hyear-1%></a>
+</div><% } %>
+<% if (hyear < 9999) { %><div>
+<a rel="next" class="btn btn-secondary ms-2" href="/omer/<%=hyear+1%>"><%=hyear+1%><span aria-hidden="true">&nbsp;→</span></a>
+</div><% } %>
+</div>
+</div><!-- #content -->
+<%- await include('partials/footer.ejs') _%>

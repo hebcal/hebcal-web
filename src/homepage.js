@@ -91,11 +91,15 @@ function mastheadHolidays(ctx, hd, il) {
 
 function mastheadOmer(ctx, hd) {
   const items = ctx.state.items;
-  const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
+  const hyear = hd.getFullYear();
+  const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
   const abs = hd.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    items.push(new OmerEvent(hd, omer).render(ctx.state.lg));
+    const ev = new OmerEvent(hd, omer);
+    const url = `/omer/${hyear}/${omer}`;
+    const desc = ev.render(ctx.state.lg);
+    items.push(`<a href="${url}">${desc}</a>`);
   }
 }
 

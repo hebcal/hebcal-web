@@ -11,7 +11,7 @@ import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger} from './logger';
-import {httpRedirect, stopIfTimedOut} from './common';
+import {httpRedirect, stopIfTimedOut, CACHE_CONTROL_IMMUTABLE} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
 import {googleAnalytics} from './analytics';
@@ -86,8 +86,6 @@ app.use(compress({
 app.use(stopIfTimedOut());
 
 const DOCUMENT_ROOT = '/var/www/html';
-
-const CACHE_CONTROL_IMMUTABLE = 'public, max-age=31536000, s-maxage=31536000, immutable';
 
 // Send static files before regular request dispatch
 app.use(async function sendStatic(ctx, next) {

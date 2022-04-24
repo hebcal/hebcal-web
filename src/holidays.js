@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {flags, HDate, HebrewCalendar} from '@hebcal/core';
+import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
 import {getEventCategories, getHolidayDescription, eventToFullCalendar} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -7,7 +7,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {getDefaultHebrewYear, getNumYears} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
-import {categories, getFirstOcccurences, eventToHolidayItem} from './holidayCommon';
+import {categories, getFirstOcccurences, eventToHolidayItem, OMER_TITLE} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
 
@@ -121,6 +121,16 @@ function makeItems(events, il, showYear) {
     item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
   }
+  // insert Days of the Omer
+  const hyear = events[0].getDate().getFullYear();
+  const omerEv = new Event(new HDate(16, months.NISAN, hyear),
+      OMER_TITLE, flags.OMER_COUNT, {emoji: '㊾'});
+  const omer = eventToHolidayItem(omerEv, il);
+  omer.href = `/omer/${hyear}`;
+  omer.dates = tableCellObserved(omer, il, showYear);
+  omer.descrShort = getHolidayDescription(omerEv, true);
+  const minorHolidayIdx = items['minor'].findIndex((item) => item.name === 'Pesach Sheni');
+  items['minor'].splice(minorHolidayIdx, 0, omer);
   return items;
 }
 
