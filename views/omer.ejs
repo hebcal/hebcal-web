@@ -1,9 +1,10 @@
 <%- await include('partials/header.ejs', {
   title: `${ev.render()} - ${d.format('D MMMM YYYY')} | Hebcal`,
 }) -%>
+<% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
 #today {text-align: center}
-.jumbo {font-size: 48px}
+.jumbo {font-size: calc(1.4rem + 2.0vw) !important}
 </style>
 <script type="application/ld+json">
 {
@@ -47,10 +48,10 @@
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <% if (omerDay > 1) { %><div>
-<a rel="prev" class="btn btn-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%-d.subtract(1, 'd').format('D[&nbsp;]MMMM')%></time> · <%=prevNth%> day</a>
+<a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%-d.subtract(1, 'd').format('D[&nbsp;]MMMM')%></time> · <%=prevNth%>&nbsp;day</a>
 </div><% } %>
 <% if (omerDay < 49) { %><div>
-<a rel="next" class="btn btn-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%> day · <time datetime="<%=d.add(1, 'd').format('YYYY-MM-DD')%>"><%-d.add(1, 'd').format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a>
+<a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day · <time datetime="<%=d.add(1, 'd').format('YYYY-MM-DD')%>"><%-d.add(1, 'd').format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 </div><!-- #content -->
