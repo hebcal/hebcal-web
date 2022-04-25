@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs', {
-  title: `Counting of Omer ${hyear} | Hebcal`,
+  title: `Counting of the Omer ${hyear} | Hebcal`,
 }) -%>
 </head>
 <body>
@@ -9,6 +9,14 @@
 <div class="row mt-3">
 <div class="col">
 <h2>Counting of the Omer <%= hyear - 3760 %> / <span class="text-nowrap" dir="rtl" lang="he">סְפִירַת הָעוֹמֶר <%= hyear %></span></h2>
+<p>Counting of the Omer (or Sefirat Ha’omer, Hebrew: <span lang="he" dir="rtl">ספירת העומר</span>) is a verbal counting of each of
+  the forty-nine days between the Jewish holidays of Passover and Shavuot.</p>
+<p>We begin counting on the evening of the 2nd night of Pesach:
+  <time class="text-burgundy text-nowrap" datetime="<%=items[1].d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=items[1].d.subtract(1, 'd').format('dddd, D MMMM YYYY')%></time>,
+  corresponding to the <span class="text-nowrap"><%=items[1].hd.render('en')%></span>.
+  The counting concludes on Erev Shavuot:
+  <time class="text-burgundy text-nowrap" datetime="<%=items[49].d.format('YYYY-MM-DD')%>"><%=items[49].d.format('dddd, D MMMM YYYY')%></time>,
+  corresponding to the <span class="text-nowrap"><%=items[49].hd.render('en')%></span>.</p>
 <div class="table-responsive mt-3">
 <table class="table table-striped">
 <colgroup>
@@ -24,14 +32,22 @@
 <tbody>
 <% for (let i = 1; i <= 49; i++) { const o = items[i]; %>
 <tr class="align-middle">
-  <td><a class="fs-3" href="/omer/<%=hyear%>/<%=o.omerDay%>"><%=o.omerDay%></a></td>
-  <td><time datetime="<%=o.d.format('YYYY-MM-DD')%>"><%-o.d.format('ddd, D[&nbsp;]MMMM')%></time> / <%=o.hd.getDate()%>&nbsp;<%=o.hd.getMonthName()%></td>
-  <td><span dir="rtl" lang="he"><%=o.he%></span><br><%=o.sefira%></td>
+ <td class="text-end"><a class="fs-4" href="/omer/<%=hyear%>/<%=o.omerDay%>"><%=o.omerDay%></a></td>
+ <td><%=o.hd.getDate()%>&nbsp;<%=o.hd.getMonthName()%> ·
+  <span class="text-nowrap"><%=o.d.subtract(1, 'd').format('ddd')%> night,
+   <time datetime="<%=o.d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=o.d.subtract(1, 'd').format('D MMMM')%></time>
+  </span></td>
+ <td><span dir="rtl" lang="he"><%=o.he%></span><br><%=o.sefira%></td>
 </tr>
 <% } %>
 </tbody>
 </table>
 </div>
+<p class="d-print-none"><em>Read more about the Counting of the Omer from <a class="outbound"
+  title="More about Counting of the Omer from Judaism 101"
+  href="https://www.jewfaq.org/holidayb.htm">Judaism 101&nbsp;&rarr;</a> or <a class="outbound"
+  title="More about Counting of the Omer from Wikipedia"
+  href="https://en.wikipedia.org/wiki/Counting_of_the_Omer">Wikipedia&nbsp;&rarr;</a></em></p>
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">

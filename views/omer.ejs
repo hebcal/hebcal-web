@@ -32,7 +32,7 @@
 <div class="col">
 <div id="today" class="mt-3">
 <ul class="list-unstyled">
-<li class="fs-2"><time datetime="<%= d.format('YYYY-MM-DD') %>"><%= d.format('dddd, D MMMM YYYY') %></time></li>
+<li class="fs-2"><time datetime="<%= d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
 <li class="fs-2"><%= hd.toString() %></li>
 <li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
 <li class="fs-4"><%= ev.getTodayIs() %></li>
@@ -47,12 +47,16 @@
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (omerDay > 1) { %><div>
-<a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%-d.subtract(1, 'd').format('D[&nbsp;]MMMM')%></time> · <%=prevNth%>&nbsp;day</a>
-</div><% } %>
-<% if (omerDay < 49) { %><div>
-<a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day · <time datetime="<%=d.add(1, 'd').format('YYYY-MM-DD')%>"><%-d.add(1, 'd').format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a>
-</div><% } %>
+<% if (omerDay === 1) { -%>
+<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear-1%>/49"><span aria-hidden="true">←&nbsp;</span>49th&nbsp;day</a></div>
+<% } else { -%>
+<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=prevNth%>&nbsp;day</a></div>
+<% } -%>
+<% if (omerDay === 49) { -%>
+<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear+1%>/1">1st&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
+<% } else { -%>
+<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
+<% } -%>
 </div>
 </div><!-- #content -->
 <%- await include('partials/footer.ejs') _%>
