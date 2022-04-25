@@ -2,8 +2,9 @@
   title: `Torah Readings ${hyear} | Hebcal Jewish Calendar`,
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%=hyear%>?i=<%=il?'on':'off'%>">
-<% if (hyear >= 5500) { %><link rel="prev" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><%}%>
-<% if (hyear <= 6100) { %><link rel="next" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%}%>
+<% if (hyear <= 5513 || hyear > todayHebYear + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (hyear >= 5513) { %><link rel="prev" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><%}%>
+<% if (hyear < todayHebYear + 100) { %><link rel="next" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%}%>
 <style>
 .text-big {font-size: larger}
 </style>
@@ -24,7 +25,9 @@
 </nav>
 </div><!-- .d-none d-sm-block -->
 </div><!-- .d-print-none -->
-
+<% if (hyear <= 5513) { -%>
+<%- await include('partials/warning-1752.ejs') -%>
+<% } -%>
 <h2>Torah Readings <%=hyear%> <span class="h4 small text-muted"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
 <div class="btn-toolbar d-print-none mb-2">
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="<%-dlhref%>" download="<%=dlfilename%>">
