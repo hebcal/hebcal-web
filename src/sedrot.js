@@ -204,7 +204,7 @@ export async function parshaDetail(ctx) {
   const translations = Array.from(new Set(translations0)).sort();
   const iSuffix = il ? '?i=on' : '';
   await ctx.render('parsha-detail', {
-    title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} | Hebcal Jewish Calendar`,
+    title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} - Hebcal`,
     parsha,
     parshaAnchor,
     parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor + iSuffix,

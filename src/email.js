@@ -33,7 +33,7 @@ WHERE email_id = ?`;
   }
   const title = confirmed ? 'Shabbat Email Subscription Confirmed' : 'Confirm Shabbat Email Subscription';
   await ctx.render('verify', {
-    title: `${title} | Hebcal`,
+    title: `${title} - Hebcal`,
     confirmed,
   });
 }
@@ -157,7 +157,7 @@ export async function emailForm(ctx) {
     ctx.status = err.status || 400;
   }
   q['city-typeahead'] = location ? location.getName() : '';
-  ctx.state.title = 'Shabbat Candle Lighting Times by Email | Hebcal';
+  ctx.state.title = 'Shabbat Candle Lighting Times by Email - Hebcal';
   if (q.v === '1') {
     if (!q.em) {
       ctx.state.message = 'Please enter your email address.';

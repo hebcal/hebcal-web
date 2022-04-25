@@ -102,7 +102,7 @@ export async function holidayDetail(ctx) {
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
-  const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} | Hebcal Jewish Calendar`;
+  const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} - Hebcal`;
   const now = new Date();
   const today = dayjs(now);
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));

@@ -44,7 +44,7 @@ export async function yahrzeitEmailVerify(ctx) {
   }
   const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
   await ctx.render('yahrzeit-verify', {
-    title: `${title} | Hebcal Jewish Calendar`,
+    title: `${title} - Hebcal`,
     confirmed,
     subscriptionId,
     emailAddress,
@@ -86,7 +86,7 @@ export async function yahrzeitEmailSub(ctx) {
     if (q.commit !== '1') {
       const {info, emailAddress} = await lookupSubNum(ctx, q);
       return ctx.render('yahrzeit-pre-unsub', {
-        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+        title: `${info.typeStr} Email Unsubscribe - Hebcal`,
         emailAddress,
         info,
         q,
@@ -218,13 +218,13 @@ async function unsub(ctx, q) {
     if (q.num === 'all') {
       const {emailAddress} = await lookupSubscription(ctx, q.id);
       return ctx.render('yahrzeit-optout', {
-        title: `Anniversary Email Unsubscribe | Hebcal Jewish Calendar`,
+        title: `Anniversary Email Unsubscribe - Hebcal`,
         emailAddress,
       });
     } else {
       const {info, emailAddress} = await lookupSubNum(ctx, q);
       return ctx.render('yahrzeit-optout', {
-        title: `${info.typeStr} Email Unsubscribe | Hebcal Jewish Calendar`,
+        title: `${info.typeStr} Email Unsubscribe - Hebcal`,
         emailAddress,
         info,
       });

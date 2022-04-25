@@ -129,7 +129,7 @@ export async function shabbatBrowse(ctx) {
     ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', 'max-age=2592000');
     return ctx.render('shabbat-browse', {
-      title: 'Shabbat candle-lighting times for world cities | Hebcal Jewish Calendar',
+      title: 'Shabbat candle-lighting times for world cities - Hebcal',
       continents: Object.values(continents),
     });
   }
@@ -157,7 +157,7 @@ export async function shabbatBrowse(ctx) {
     const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
     const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
     return render(ctx, 'shabbat-browse-country-small', {
-      title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      title: `${countryName} Shabbat Times - Hebcal`,
       countryName,
       results,
       friday,
@@ -190,7 +190,7 @@ async function countryPage(ctx, countryCode) {
     ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', 'max-age=2592000');
     return render(ctx, 'shabbat-browse-admin1', {
-      title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
       countryName,
       admin1: listItems,
@@ -202,7 +202,7 @@ async function countryPage(ctx, countryCode) {
 
   if (results.length < 30 || admin1.size === 1 || (results.length / admin1.size) < 1.25) {
     return render(ctx, 'shabbat-browse-country-small', {
-      title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
       countryName,
       results,
@@ -213,7 +213,7 @@ async function countryPage(ctx, countryCode) {
   } else {
     const listItems = makeAdmin1(admin1);
     return render(ctx, 'shabbat-browse-country', {
-      title: `${countryName} Shabbat Times | Hebcal Jewish Calendar`,
+      title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
       countryName,
       results,

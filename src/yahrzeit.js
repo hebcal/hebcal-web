@@ -99,7 +99,7 @@ export async function yahrzeitApp(ctx) {
   }
   q.years = getNumYears(q.years);
   await ctx.render('yahrzeit', {
-    title: 'Yahrzeit + Anniversary Calendar | Hebcal',
+    title: 'Yahrzeit + Anniversary Calendar - Hebcal',
     count,
   });
 }

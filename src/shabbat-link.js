@@ -19,7 +19,7 @@ export async function shabbatJsLink(ctx) {
   await ctx.render('link', {
     q, geoUrlArgs, geoUrlArgsDbl,
     locationName: location.getName(),
-    title: 'Add weekly Shabbat candle-lighting times to your synagogue website | Hebcal Jewish Calendar',
+    title: 'Add weekly Shabbat candle-lighting times to your synagogue website - Hebcal',
     langNames,
   });
 }

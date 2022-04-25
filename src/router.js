@@ -143,7 +143,7 @@ export function wwwRouter() {
       return shabbatJsLink(ctx);
     } else if (rpath === '/ical/') {
       return ctx.render('ical', {
-        title: 'Jewish Holiday downloads for desktop, mobile and web calendars | Hebcal Jewish Calendar',
+        title: 'Jewish Holiday downloads for desktop, mobile and web calendars - Hebcal',
         langNames,
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {

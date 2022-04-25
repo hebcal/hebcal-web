@@ -1,7 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: isHebrewYear ?
-    `Jewish Holidays ${calendarYear} (${calendarYear-3761}-${calendarYear-3760}) for ${locationName} | Hebcal` :
-    `Jewish Holidays ${year} for ${locationName} | Hebcal`,
+    `Jewish Holidays ${calendarYear} (${calendarYear-3761}-${calendarYear-3760}) for ${locationName} - Hebcal` :
+    `Jewish Holidays ${year} for ${locationName} - Hebcal`,
 }) -%>
 <% if (isHebrewYear) { %>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>">
