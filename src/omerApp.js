@@ -4,9 +4,26 @@ import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
 
 const CACHE_CONTROL_30DAYS = cacheControl(30);
+const CACHE_CONTROL_1_YEAR = cacheControl(365);
 
 // eslint-disable-next-line require-jsdoc
 export function omerApp(rpath, ctx) {
+  if (rpath === '/omer/sitemap.txt') {
+    const prefix = 'https://www.hebcal.com/omer';
+    let body = '';
+    const hyear = new HDate().getFullYear();
+    for (let year = hyear - 1; year < hyear + 4; year++) {
+      body += `${prefix}/${year}\n`;
+      for (let day = 1; day <=49; day++) {
+        body += `${prefix}/${year}/${day}\n`;
+      }
+    }
+    ctx.lastModified = ctx.launchDate;
+    ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
+    ctx.type = 'text/plain';
+    ctx.body = body;
+    return;
+  }
   const yearStr = basename(dirname(rpath));
   if (yearStr === '') {
     return redirCurrentYear(ctx);
