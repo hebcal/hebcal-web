@@ -44,9 +44,9 @@
     "eslint-config-google": "^0.14.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.35.0",
+    "@hebcal/core": "^3.36.0",
     "@hebcal/geo-sqlite": "^4.3.0",
-    "@hebcal/icalendar": "^4.16.0",
+    "@hebcal/icalendar": "^4.17.1",
     "@hebcal/leyning": "^4.13.2",
     "@hebcal/locales": "^3.3.2",
     "@hebcal/rest-api": "^3.13.0",
