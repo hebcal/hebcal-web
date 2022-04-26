@@ -1,4 +1,8 @@
-import path from 'path';
+const shortToLong = {
+  h: 'holidays',
+  s: 'sedrot',
+  o: 'omer',
+};
 
 // eslint-disable-next-line require-jsdoc
 export function shortUrlRedir(ctx) {
@@ -31,8 +35,12 @@ export function shortUrlRedir(ctx) {
   qs.delete('us');
   qs.delete('um');
   const rpath = ctx.request.path;
-  const base = path.basename(rpath);
-  const dest = rpath.startsWith('/h/') ? 'holidays' : 'sedrot';
+  const base = rpath.substring(3);
+  const shortStr = rpath[1];
+  const dest = shortToLong[shortStr];
+  if (!dest) {
+    ctx.throw(500, `Unknown short URL '${shortStr}'`);
+  }
   if (dest === 'sedrot') {
     qs.set('_r', Date.now().toString(36));
   }

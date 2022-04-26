@@ -131,7 +131,7 @@ export function wwwRouter() {
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {
       return holidaysApp(ctx);
-    } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/')) {
+    } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
     } else if (rpath === '/email/verify.php') {
       return emailVerify(ctx);
