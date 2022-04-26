@@ -78,7 +78,7 @@
     "nodemailer": "^6.7.3",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
-    "pino": "^7.10.0",
+    "pino": "^7.11.0",
     "random-bigint": "0.0.1",
     "ulid": "^2.3.0",
     "universal-analytics": "^0.5.3",

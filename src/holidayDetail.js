@@ -179,6 +179,10 @@ function makeNextObserved(item, year, il) {
 }
 
 function getJsonLD(item, description) {
+  const url = item.event.url();
+  if (!url) {
+    return {};
+  }
   return {
     '@context': 'https://schema.org',
     '@type': 'Event',
@@ -189,7 +193,7 @@ function getJsonLD(item, description) {
     'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
     'location': {
       '@type': 'VirtualLocation',
-      'url': item.event.url(),
+      'url': url,
     },
   };
 }

@@ -152,7 +152,7 @@ nightfall on the second date specified.</p>
 <% for (const item of items[catId]) { %>
 <tbody>
 <tr><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
-<% if (!item.d.isBefore(today)) { -%>
+<% if (!item.d.isBefore(today) && item.event.url()) { -%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%> <%=item.d.year()%>",
 "startDate":"<%=item.startIsoDate%>","endDate":"<%=item.endIsoDate%>",
