@@ -97,7 +97,7 @@ function mastheadOmer(ctx, hd) {
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
     const ev = new OmerEvent(hd, omer);
-    const url = `/omer/${hyear}/${omer}`;
+    const url = ev.url();
     const desc = ev.render(ctx.state.lg);
     items.push(`<a href="${url}">${desc}</a>`);
   }

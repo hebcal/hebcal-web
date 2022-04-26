@@ -277,21 +277,6 @@ function getEvents(hdate, il) {
   return events;
 }
 
-/** @private */
-class OmerUrlEvent extends OmerEvent {
-  /**
-   * @param {HDate} date
-   * @param {number} omerDay
-   */
-  constructor(date, omerDay) {
-    super(date, omerDay);
-  }
-  /** @return {string} */
-  url() {
-    return `https://www.hebcal.com/omer/${this.getDate().getFullYear()}/${this.omer}`;
-  }
-}
-
 /**
  * @private
  * @param {HDate} hdate
@@ -302,7 +287,7 @@ function makeOmer(hdate) {
   const abs = hdate.abs();
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
-    return [new OmerUrlEvent(hdate, omer)];
+    return [new OmerEvent(hdate, omer)];
   }
   return [];
 }
