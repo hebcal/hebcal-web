@@ -180,6 +180,10 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
     return [TZOM_KAL, `<a href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
  begins tonight at sundown. We wish you an easy fast`];
   }
+  if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
+    return ['✡️ We remember ✡️',
+      `Today is <a href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>`];
+  }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
     const d = dayjs(fastDay.getDate().greg());
