@@ -182,7 +182,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   }
   if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
     return ['✡️ We remember ✡️',
-      `Today is <a href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>, Holocaust and Heroism Remembrance Day.`];
+      `Today is <a href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>, Holocaust and Heroism Remembrance Day`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
