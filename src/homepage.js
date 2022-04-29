@@ -120,6 +120,7 @@ function setDefaultYear(ctx, dt, hdate) {
   const gregYr1 = hy - 3761;
   const gregYr2 = gregYr1 + 1;
   let gregRange;
+  let gregRangeShort;
   let yearArgs;
   const gy0 = dt.getFullYear();
   const gm = dt.getMonth() + 1;
@@ -127,16 +128,20 @@ function setDefaultYear(ctx, dt, hdate) {
   if (hdate.getMonth() === months.TISHREI) {
     yearArgs = `&yt=H&year=${hy}`;
     gregRange = gregYr1 + '-' + gregYr2;
+    gregRangeShort = gregYr1 + '-' + (gregYr2 % 100);
   } else if (gm < 8 || (gm <= 9 && today <= av15) || gm === 12 && dt.getDate() >= 10) {
     yearArgs = `&yt=G&year=${gy}`;
     gregRange = gy;
+    gregRangeShort = gy;
   } else {
     yearArgs = `&yt=H&year=${hy}`;
     gregRange = gregYr1 + '-' + gregYr2;
+    gregRangeShort = gregYr1 + '-' + (gregYr2 % 100);
   }
   Object.assign(ctx.state, {
     hy,
     gregRange,
+    gregRangeShort,
     yearArgs,
     gregYr1,
     gregYr2,
