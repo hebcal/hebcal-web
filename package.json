@@ -46,7 +46,7 @@
   "dependencies": {
     "@hebcal/core": "^3.36.2",
     "@hebcal/geo-sqlite": "^4.3.0",
-    "@hebcal/icalendar": "^4.17.2",
+    "@hebcal/icalendar": "^4.17.3",
     "@hebcal/leyning": "^4.13.3",
     "@hebcal/locales": "^3.3.2",
     "@hebcal/rest-api": "^3.13.2",
@@ -75,7 +75,7 @@
     "maxmind": "^4.3.6",
     "murmurhash3": "^0.5.0",
     "mysql2": "^2.3.3",
-    "nodemailer": "^6.7.3",
+    "nodemailer": "^6.7.4",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
     "pino": "^7.11.0",
