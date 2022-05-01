@@ -151,7 +151,7 @@ nightfall on the second date specified.</p>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
 <tbody>
-<tr><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<%=item.emoji%>
+<tr><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
 <% if (!item.d.isBefore(today) && item.event.url()) { -%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%> <%=item.d.year()%>",
