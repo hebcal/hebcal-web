@@ -187,6 +187,14 @@ const ZMAN_NAMES = {
     'Latest Shacharit (Gra)',
     'Sunrise plus 4.5 halachic hours, according to the Gra',
   ],
+  sofZmanShmaMGA: [
+    'Latest Shema (MGA)',
+    'Sunrise plus 3 halachic hours, according to Magen Avraham',
+  ],
+  sofZmanTfillaMGA: [
+    'Latest Shacharit (MGA)',
+    'Sunrise plus 4.5 halachic hours, according to Magen Avraham',
+  ],
   chatzot: [
     'Midday - Chatzot',
     'Sunrise plus 6 halachic hours',
@@ -250,7 +258,8 @@ export async function zmanimIcalendar(ctx) {
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
       const hd = new HDate(new Date(isoDate));
-      const desc = ZMAN_NAMES[zman];
+      const desc0 = ZMAN_NAMES[zman];
+      const desc = Array.isArray(desc0) && desc0.length === 2 ? desc0 : [zman, ''];
       const ev = new TimedEvent(hd, desc[0], 0, dt, location);
       ev.category = zman;
       ev.memo = desc[1];
