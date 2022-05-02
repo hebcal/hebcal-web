@@ -8,6 +8,8 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
 import {makeDownloadProps} from './makeDownloadProps';
 import {HebrewCalendar, greg, flags, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar, pad2,
+  eventToClassicApiObject,
+  locationToPlainObj,
   shouldRenderBrief,
   getCalendarTitle,
   eventsToCsv,
@@ -226,11 +228,17 @@ function renderHtml(ctx) {
   if (months.length > 14) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
   }
-  const result = eventsToClassicApi(events, options, false);
+  const items = events.map((ev) => {
+    const item = eventToClassicApiObject(ev, options, false);
+    if (item.link) {
+      item.link = ev.url();
+    }
+    delete item.memo;
+    return item;
+  });
   // Reduce size of HTML
   const hebcalPrefix = 'https://www.hebcal.com/';
-  result.items.forEach((i) => {
-    delete i.memo;
+  items.forEach((i) => {
     if (typeof i.link === 'string' && i.link.startsWith(hebcalPrefix)) {
       i.link = i.link.substring(hebcalPrefix.length - 1);
       const utm = i.link.indexOf('utm_source=');
@@ -277,9 +285,10 @@ function renderHtml(ctx) {
     ctx.state.hebrewYear = options.year;
     ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
   }
+  const cconfig = locationToPlainObj(ctx.state.location);
   return ctx.render('hebcal-results', {
-    items: result.items,
-    cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, result.location)),
+    items: items,
+    cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
     today,
     dates: months,
     gy,
