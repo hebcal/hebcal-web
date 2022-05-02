@@ -1,4 +1,4 @@
-import {Zmanim, TimedEvent, HDate} from '@hebcal/core';
+import {Zmanim, TimedEvent, HDate, flags} from '@hebcal/core';
 import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
@@ -260,7 +260,7 @@ export async function zmanimIcalendar(ctx) {
       const hd = new HDate(new Date(isoDate));
       const desc0 = ZMAN_NAMES[zman];
       const desc = Array.isArray(desc0) && desc0.length === 2 ? desc0 : [zman, ''];
-      const ev = new TimedEvent(hd, desc[0], 0, dt, location);
+      const ev = new TimedEvent(hd, desc[0], flags.USER_EVENT, dt, location);
       ev.category = zman;
       ev.memo = desc[1];
       events.push(ev);
