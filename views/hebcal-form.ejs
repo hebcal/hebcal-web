@@ -86,11 +86,17 @@
 <fieldset>
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<% for (const langName of ['s', 'a', 'he-x-NoNikud', 'h']) {
+  const desc = langNames[langName]; -%>
 <option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
 <% } -%>
 <option <%- (q.lg === 'sh') ? 'selected' : '' -%> value="sh">Sephardic translit. + Hebrew</option>
-<option <%- (q.lg === 'ah') ? 'selected' : '' -%> value="ah">Ashkenazis translit. + Hebrew</option>
+<option <%- (q.lg === 'ah') ? 'selected' : '' -%> value="ah">Ashkenazi translit. + Hebrew</option>
+<option disabled>----------------</option>
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<% if (['s', 'a', 'he-x-NoNikud', 'h'].indexOf(langName) !== -1) { continue; } -%>
+<option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% } -%>
 </select>
 <label for="lg">Event titles</label>
 </div>

@@ -12,13 +12,15 @@ export const langNames = {
   'a': ['Ashkenazis transliterations', null],
   'he-x-NoNikud': ['עברית', 'Hebrew'],
   'h': ['עִברִית', 'Hebrew with nikud'],
-  'es': ['español', 'Spanish'],
+  'fi': ['Suomalainen', 'Finnish'],
   'fr': ['français', 'French'],
   'de': ['Deutsch', 'German'],
-  'ru': ['ру́сский язы́к', 'Russian'],
-  'pl': ['język polski', 'Polish'],
-  'fi': ['Suomalainen', 'Finnish'],
   'hu': ['Magyar nyelv', 'Hungarian'],
+  'pl': ['język polski', 'Polish'],
+  'ro': ['Română', 'Romanian'],
+  'ashkenazi_romanian': ['Română (Ashkenazi)', 'Romanian (Ashkenazi translit)'],
+  'ru': ['ру́сский язы́к', 'Russian'],
+  'es': ['español', 'Spanish'],
 };
 
 export const langTzDefaults = {
@@ -40,7 +42,7 @@ export const langTzDefaults = {
   NL: ['s', 'Europe/Amsterdam'],
   NZ: ['s', 'Pacific/Auckland'],
   PL: ['pl', 'Europe/Warsaw'],
-  RO: ['s', 'Europe/Bucharest'],
+  RO: ['ro', 'Europe/Bucharest'],
   RU: ['ru', 'Europe/Moscow'],
   US: ['s', 'America/New_York'],
   ZA: ['s', 'Africa/Johannesburg'],
@@ -663,6 +665,8 @@ export const localeMap = {
   'h': 'he',
   'pl': 'pl',
   'ru': 'ru',
+  'ro': 'ro',
+  'ashkenazi_romanian': 'ro',
 };
 
 /**
