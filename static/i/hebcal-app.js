@@ -255,25 +255,15 @@ export const hebcalClient = {
       }
     }).bind('typeahead:select', function(ev, suggestion, name) {
       if (typeof suggestion.geo === 'string' && suggestion.geo == 'zip') {
+        clearGeo();
         $('#geo').val('zip');
         $('#zip').val(suggestion.id);
-        if (autoSubmit) {
-          $('#geonameid').remove();
-        } else {
-          $('#c').val('on');
-          $('#geonameid').val('');
-          $('#city').val('');
-        }
+        $('#c').val('on');
       } else {
+        clearGeo();
         $('#geo').val('geoname');
         $('#geonameid').val(suggestion.id);
-        if (autoSubmit) {
-          $('#zip').remove();
-        } else {
-          $('#c').val('on');
-          $('#zip').val('');
-          $('#city').val('');
-        }
+        $('#c').val('on');
       }
       if (autoSubmit) {
         $('#shabbat-form').submit();
@@ -293,13 +283,9 @@ export const hebcalClient = {
         const zip5 = val.substring(0, 5);
         $('#geo').val('zip');
         $('#zip').val(zip5);
-        if (autoSubmit) {
-          $('#geonameid').remove();
-        } else {
-          $('#c').val('on');
-          $('#geonameid').val('');
-          $('#city').val('');
-        }
+        $('#c').val('on');
+        $('#geonameid').val('');
+        $('#city').val('');
       }
       const code = e.keyCode || e.which;
       if (code == 13) {
