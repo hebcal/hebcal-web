@@ -18,7 +18,7 @@ export const langNames = {
   'hu': ['Magyar nyelv', 'Hungarian'],
   'pl': ['język polski', 'Polish'],
   'ro': ['Română', 'Romanian'],
-  'ashkenazi_romanian': ['Română (Ashkenazi)', 'Romanian (Ashkenazic translit)'],
+  'ashkenazi_romanian': ['Română (Ashk.)', 'Romanian (Ashk.)'],
   'ru': ['ру́сский язы́к', 'Russian'],
   'es': ['español', 'Spanish'],
 };

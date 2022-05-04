@@ -99,6 +99,18 @@ app.use(async function fixup0(ctx, next) {
     ctx.state.trackingId = 'UA-967247-6';
     ctx.state.trackPageview = true;
   }
+  // Collapse duplicate identical key/values in querystring
+  const query = Object.assign({}, ctx.request.query);
+  let needsRewrite = false;
+  for (const [key, value] of Object.entries(query)) {
+    if (Array.isArray(value) && value.length >= 2 && value[0] === value[1]) {
+      query[key] = value[0];
+      needsRewrite = true;
+    }
+  }
+  if (needsRewrite) {
+    ctx.request.query = query;
+  }
   await next();
 });
 
