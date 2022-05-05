@@ -42,7 +42,12 @@ export function googleAnalytics(tid) {
       visitorId = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
     }
     ctx.state.visitorId = visitorId;
-    const options = {tid: ctx.state.trackingId || tid, cid: visitorId, enableBatching: true};
+    const options = {
+      tid: ctx.state.trackingId || tid,
+      cid: visitorId,
+      enableBatching: true,
+      http: true,
+    };
     if (cookie.has('uid')) {
       options.uid = cookie.get('uid');
     }
