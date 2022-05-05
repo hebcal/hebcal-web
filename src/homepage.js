@@ -172,7 +172,7 @@ const chagSameach = {
   'Simchat Torah': true,
 };
 
-const TZOM_KAL = '✡️&nbsp;Tzom Kal! · <span lang="he" dir="rtl">צום קל</span>&nbsp;✡️';
+const TZOM_KAL = '✡️&nbsp;Tzom Kal!&nbsp;&nbsp;<span lang="he" dir="rtl">צום קל</span>&nbsp;✡️';
 
 function getMastheadGreeting(hd, il, dateOverride, tzid) {
   const mm = hd.getMonth();
@@ -188,6 +188,10 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
     return ['✡️ We remember ✡️',
       `Today is <a href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>, Holocaust and Heroism Remembrance Day`];
+  }
+  if (holidays.find((ev) => ev.getDesc() === 'Yom HaZikaron')) {
+    return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
+      `Today is <a href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>, Israeli Memorial Day`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay) {
@@ -359,11 +363,11 @@ function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
   const longText = today ?
     `We wish you a happy <a href="${url}">${title}</a>` :
     `<a href="${url}">${title}</a> begins tonight at sundown`;
-  const blurb = `${emoji}&nbsp;Chag Sameach! · <span lang="he" dir="rtl">חג שמח</span>&nbsp;${emoji}`;
+  const blurb = `${emoji}&nbsp;Chag Sameach!&nbsp;&nbsp;<span lang="he" dir="rtl">חג שמח</span>&nbsp;${emoji}`;
   return [`${blurb}`, longText];
 }
 
-const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov! · <span lang="he" dir="rtl">חודש טוב</span>&nbsp;🌒';
+const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir="rtl">חודש טוב</span>&nbsp;🌒';
 
 function getRoshChodeshGreeting(hd, ev) {
   const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
