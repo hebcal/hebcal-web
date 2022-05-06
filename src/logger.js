@@ -1,4 +1,9 @@
 import pino from 'pino';
+import mmh3 from 'murmurhash3';
+import util from 'util';
+
+// return array that have 4 elements of 32bit integer
+const murmur128 = util.promisify(mmh3.murmur128);
 
 /**
  * @private
@@ -108,6 +113,7 @@ function makeLogInfo(ctx) {
 export function accessLogger(logger) {
   return async function accessLog(ctx, next) {
     ctx.state.startTime = Date.now();
+    ctx.state.visitorId = await getVisitorId(ctx);
     await next();
     logger.info(makeLogInfo(ctx));
   };
@@ -144,4 +150,55 @@ export function errorLogger(logger) {
       }
     }
   };
+}
+
+/**
+ * @private
+ * @param {any} ctx
+ * @return {string}
+ */
+async function getVisitorId(ctx) {
+  const str = ctx.cookies.get('C');
+  if (str) {
+    const cookie = new URLSearchParams(str);
+    if (cookie.has('uid')) {
+      const uid = cookie.get('uid');
+      ctx.state.userId = uid;
+      return uid;
+    }
+  }
+  const userAgent = ctx.get('user-agent');
+  const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
+  const vid = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
+  return vid;
+}
+
+/**
+ * @private
+ * @param {string} ipAddress
+ * @param {string} userAgent
+ * @param {string} acceptLanguage
+ * @return {string}
+ */
+async function makeUuid(ipAddress, userAgent, acceptLanguage) {
+  const raw = await murmur128(ipAddress + userAgent + acceptLanguage);
+  const buf32 = new Uint32Array(raw);
+  const bytes = new Uint8Array(buf32.buffer);
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  let digest = '';
+  for (let i = 0; i < 16; i++) {
+    digest += bytes[i].toString(16).padStart(2, '0');
+    switch (i) {
+      case 3:
+      case 5:
+      case 7:
+      case 9:
+        digest += '-';
+        break;
+      default:
+        break;
+    }
+  }
+  return digest;
 }
