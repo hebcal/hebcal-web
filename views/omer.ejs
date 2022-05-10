@@ -38,7 +38,8 @@
 <li class="fs-2"><time datetime="<%= d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
 <li class="fs-2"><%= hd.toString() %></li>
 <li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
-<li class="fs-4"><%= ev.getTodayIs() %></li>
+<li class="fs-2 lh-sm pt-1 pb-2" dir="rtl" lang="he"><%= ev.getTodayIs('he') %></li>
+<li class="fs-4 lh-sm"><%= ev.getTodayIs('en') %></li>
 <li dir="rtl" lang="he" class="jumbo"><%= sefHebrew %></li>
 <li class="fs-4"><em><%= sefTranslit %></em></li>
 <li class="fs-3"><%= sefEnglish %></li>

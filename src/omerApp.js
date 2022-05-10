@@ -39,8 +39,7 @@ export function omerApp(rpath, ctx) {
       const hd = new HDate(abs);
       const d = dayjs(hd.greg());
       const ev = new OmerEvent(hd, omerDay);
-      const lines = ev.memo.split('\n');
-      items[omerDay] = {omerDay, ev, hd, d, sefira: lines[0], he: lines[1]};
+      items[omerDay] = {omerDay, ev, hd, d, sefira: ev.sefira('en'), he: ev.sefira('he')};
     }
     ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
@@ -61,7 +60,6 @@ export function omerApp(rpath, ctx) {
   const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
   const hd = new HDate(beginOmer + omerDay - 1);
   const ev = new OmerEvent(hd, omerDay);
-  const lines = ev.memo.split('\n');
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, false) || [];
   const prev = omerDay === 1 ? 49 : omerDay - 1;
   const next = omerDay === 49 ? 1 : omerDay + 1;
@@ -77,9 +75,9 @@ export function omerApp(rpath, ctx) {
     prevNth: Locale.ordinal(prev, 'en'),
     next,
     nextNth: Locale.ordinal(next, 'en'),
-    sefEnglish: lines[0],
-    sefHebrew: lines[1],
-    sefTranslit: lines[2],
+    sefEnglish: ev.sefira('en'),
+    sefHebrew: ev.sefira('he'),
+    sefTranslit: ev.sefira('translit'),
     holidays,
   });
 }
