@@ -496,6 +496,7 @@ function renderLegacyJavascript(ctx) {
   options.numYears = 2;
   const events = makeHebrewCalendar(ctx, options);
   ctx.type = 'text/javascript';
+  const isoDate = new Date().toISOString();
   if (ctx.state.q.cfg === 'e') {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());
@@ -504,22 +505,23 @@ function renderLegacyJavascript(ctx) {
       const url = ev.url() || '';
       return `DefineEvent(${fmtDt},"${desc}","${url}","",0,0);`;
     });
-    return strs.join('\n');
+    return `/*! ${isoDate} */\n` + strs.join('\n');
   } else {
     const strs = events.map((ev) => {
       const d = dayjs(ev.getDate().greg());
       const url = ev.url();
-      const obj = {d: d.format('YYYYMMDD'), s: ev.render(options.locale)};
+      const obj = {d: Number(d.format('YYYYMMDD')), s: ev.render(options.locale)};
       if (url) {
-        obj.u = url;
+        obj.u = url.startsWith('https://www.hebcal.com/') ? url.substring(22) : url;
       }
       return JSON.stringify(obj);
     });
-    return 'if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}\nHEBCAL.eraw=[\n' +
-      strs.join(',') + `];
-HEBCAL.jec2events=HEBCAL.eraw.map(function(e){
-var f={eventDate:e.d,eventDescription:e.s};
-if(e.u){f.eventLink=e.u}
+    return `/*! ${isoDate} */\n` +
+      'if(typeof HEBCAL=="undefined"||!HEBCAL){var HEBCAL={};}\nHEBCAL.eraw2=[\n' +
+      strs.join(',\n') + `];
+HEBCAL.jec2events=HEBCAL.eraw2.map(function(e){
+var f={eventDate:''+e.d,eventDescription:e.s};
+if(e.u){f.eventLink=e.u[0]=="/"?"https://www.hebcal.com"+e.u:e.u}
 return f;
 });
 `;
