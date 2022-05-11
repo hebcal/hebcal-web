@@ -29,6 +29,7 @@ import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
 import {getZmanim} from './zmanim';
 import {hebrewDateCalc} from './calc';
 import {omerApp} from './omerApp';
+import {sitemapZips} from './sitemapZips';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -172,6 +173,8 @@ export function wwwRouter() {
       return hebrewDateCalc(ctx);
     } else if (rpath.startsWith('/omer')) {
       return omerApp(rpath, ctx);
+    } else if (rpath === '/sitemap_zips.txt') {
+      return sitemapZips(ctx);
     }
     await next();
   };
