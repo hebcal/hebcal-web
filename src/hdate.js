@@ -105,7 +105,7 @@ export async function hdateXml(ctx) {
 
 export async function parshaRss(ctx) {
   const rpath = ctx.request.path;
-  const dt = getTodayDate(ctx.request.query);
+  const {dt} = getTodayDate(ctx.request.query);
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(dt);
   const utcString = dt.toUTCString();

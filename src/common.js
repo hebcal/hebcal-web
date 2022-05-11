@@ -344,19 +344,19 @@ export function isoDateStringToDate(str) {
 /**
  * Returns the date in the query string or today
  * @param {Object.<string,string>} query
- * @return {Date}
+ * @return {Object}
  */
 export function getTodayDate(query) {
   if (!empty(query.dt)) {
     try {
       const dt = isoDateStringToDate(query.dt);
-      return dt;
+      return {dt, now: false};
     } catch (err) {
-      return new Date();
+      return {dt: new Date(), now: true};
     }
   }
   const isToday = Boolean(empty(query.gy) || empty(query.gm) || empty(query.gd));
-  return isToday ? new Date() : makeGregDate(query.gy, query.gm, query.gd);
+  return isToday ? {dt: new Date(), now: true} : {dt: makeGregDate(query.gy, query.gm, query.gd), now: false};
 }
 
 /**
@@ -973,12 +973,11 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
  * @return {any}
  */
 export function getSunsetAwareDate(q, location) {
-  const dt = getTodayDate(q);
-  const dateOverride = !empty(q.dt) || (!empty(q.gy) && !empty(q.gm) && !empty(q.gd));
-  if (!dateOverride && location != null) {
+  const {dt, now} = getTodayDate(q);
+  if (now && location != null) {
     return getBeforeAfterSunsetForLocation(dt, location);
   }
-  return {dt: dt, afterSunset: false, dateOverride: dateOverride,
+  return {dt: dt, afterSunset: false, dateOverride: !now,
     gy: dt.getFullYear(), gd: dt.getDate(), gm: dt.getMonth() + 1};
 }
 

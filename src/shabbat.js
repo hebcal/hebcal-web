@@ -39,7 +39,7 @@ export async function shabbatApp(ctx) {
     return;
   }
   ctx.status = 200;
-  const {q, options} = makeOptions(ctx);
+  const {q, options, dateOverride, midnight, endOfWeek} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status < 400 && ctx.request.querystring.length > 0) {
     ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
@@ -47,7 +47,6 @@ export async function shabbatApp(ctx) {
       ctx.status = 304;
       return;
     }
-    const dateOverride = !empty(q.dt) || (!empty(q.gy) && !empty(q.gm) && !empty(q.gd));
     if (dateOverride) {
       ctx.lastModified = new Date();
     } else {
@@ -80,6 +79,10 @@ export async function shabbatApp(ctx) {
         delete item.leyning;
       }
     }
+    obj.range = {
+      start: midnight.format('YYYY-MM-DD'),
+      end: endOfWeek.format('YYYY-MM-DD'),
+    };
     const cb = q.callback;
     if (typeof cb === 'string' && cb.length) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
@@ -135,15 +138,16 @@ function redir(ctx, dest) {
 
 /**
  * Gets start and end days for filtering relevant hebcal events
- * @param {Date} now
+ * @param {Date} dt
+ * @param {boolean} now
  * @param {string} tzid
  * @return {dayjs.Dayjs[]}
  */
-function getStartAndEnd(now, tzid) {
-  const d = dayjs.tz(now, tzid);
-  const dt = new Date(d.year(), d.month(), d.date());
-  let midnight = dayjs(dt);
-  const dow = midnight.day();
+function getStartAndEnd(dt, now, tzid) {
+  const input = now ? dt : dayjs(dt).format('YYYY-MM-DD 12:00');
+  const d = dayjs.tz(input, tzid);
+  let midnight = d;
+  const dow = d.day();
   // back up to Friday if today is Saturday (include last night's candle-lighting times)
   if (dow == 6) {
     midnight = midnight.subtract(1, 'day');
@@ -246,17 +250,17 @@ function makeOptions(ctx) {
     q.geonameid = location.getGeoId();
     q.geo = 'geoname';
   }
-  const dt = getTodayDate(q);
+  const {dt, now} = getTodayDate(q);
   let startAndEnd;
   try {
-    startAndEnd = getStartAndEnd(dt, location.getTzid());
+    startAndEnd = getStartAndEnd(dt, now, location.getTzid());
   } catch (err) {
     ctx.throw(400, err); // RangeError: Invalid time zone specified
   }
   const [midnight, endOfWeek] = startAndEnd;
   options.start = new Date(midnight.year(), midnight.month(), midnight.date());
   options.end = new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date());
-  return {q, options};
+  return {q, options, dateOverride: !now, midnight, endOfWeek};
 }
 
 function makePropsForFullHtml(ctx) {
