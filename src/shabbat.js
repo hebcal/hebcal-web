@@ -47,7 +47,12 @@ export async function shabbatApp(ctx) {
       ctx.status = 304;
       return;
     }
-    expires(ctx, options.location.getTzid());
+    const dateOverride = !empty(q.dt) || (!empty(q.gy) && !empty(q.gm) && !empty(q.gd));
+    if (dateOverride) {
+      ctx.lastModified = new Date();
+    } else {
+      expires(ctx, options.location.getTzid());
+    }
   }
   makeItems(ctx, options, q);
   const location = options.location;
@@ -135,8 +140,9 @@ function redir(ctx, dest) {
  * @return {dayjs.Dayjs[]}
  */
 function getStartAndEnd(now, tzid) {
-  const now0 = dayjs.tz(now, tzid);
-  let midnight = now0.hour(0).minute(0).second(0).millisecond(0);
+  const d = dayjs.tz(now, tzid);
+  const dt = new Date(d.year(), d.month(), d.date());
+  let midnight = dayjs(dt);
   const dow = midnight.day();
   // back up to Friday if today is Saturday (include last night's candle-lighting times)
   if (dow == 6) {
@@ -211,11 +217,12 @@ function makeItems(ctx, options, q) {
 }
 
 function makeOptions(ctx) {
-  const q0 = Object.assign({}, ctx.request.query);
+  const q0 = Object.assign({tgt: '_top'}, ctx.request.query);
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q0[k] = 'on';
   }
-  const q = processCookieAndQuery(ctx.cookies.get('C'), {tgt: '_top'}, q0);
+  const isApi = (q0.cfg === 'json' || q0.cfg === 'i' || q0.cfg === 'r' || q0.cfg === 'j');
+  const q = isApi ? q0 : processCookieAndQuery(ctx.cookies.get('C'), {}, q0);
   delete q.d;
   delete q.D;
   let options = {};
@@ -223,7 +230,7 @@ function makeOptions(ctx) {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
     const status = err.status || 400;
-    if (q.cfg === 'json' || q.cfg === 'r' || q.cfg === 'j') {
+    if (isApi) {
       ctx.throw(status, err);
     } else {
       ctx.status = status;
