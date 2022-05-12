@@ -466,6 +466,15 @@ function renderFullCalendar(ctx) {
   ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
 }
 
+/**
+ * @private
+ * @param {Event} ev
+ * @return {string}
+ */
+function eventIsoDate(ev) {
+  return dayjs(ev.getDate().greg()).format('YYYY-MM-DD');
+}
+
 function renderJson(ctx) {
   if (isFresh(ctx)) {
     return;
@@ -473,7 +482,12 @@ function renderJson(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
   const q = ctx.state.q;
-  let obj = eventsToClassicApi(events, options, q.leyning !== 'off');
+  const leyningOff = (q.leyning === 'off' || q.leyning === '0');
+  let obj = eventsToClassicApi(events, options, !leyningOff);
+  obj.range = {
+    start: eventIsoDate(events[0]),
+    end: eventIsoDate(events[events.length - 1]),
+  };
   const cb = q.callback;
   if (typeof cb === 'string' && cb.length) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';

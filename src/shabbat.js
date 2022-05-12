@@ -73,12 +73,8 @@ export async function shabbatApp(ctx) {
     ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
         selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
   } else if (q.cfg === 'json') {
-    let obj = eventsToClassicApi(ctx.state.events, ctx.state.options);
-    if (q.leyning === 'off') {
-      for (const item of obj.items) {
-        delete item.leyning;
-      }
-    }
+    const leyningOff = (q.leyning === 'off' || q.leyning === '0');
+    let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
     obj.range = {
       start: midnight.format('YYYY-MM-DD'),
       end: endOfWeek.format('YYYY-MM-DD'),
