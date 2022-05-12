@@ -146,16 +146,12 @@ function redir(ctx, dest) {
 function getStartAndEnd(dt, now, tzid) {
   const input = now ? dt : dayjs(dt).format('YYYY-MM-DD 12:00');
   const d = dayjs.tz(input, tzid);
-  let midnight = d;
-  const dow = d.day();
   // back up to Friday if today is Saturday (include last night's candle-lighting times)
-  if (dow == 6) {
-    midnight = midnight.subtract(1, 'day');
-  }
-  const saturday = midnight.add(6 - dow, 'day');
-  const fiveDaysAhead = midnight.add(5, 'day');
+  const start = (d.day() === 6) ? d.subtract(1, 'day') : d;
+  const saturday = start.add(6 - start.day(), 'day');
+  const fiveDaysAhead = start.add(5, 'day');
   const endOfWeek = fiveDaysAhead.isAfter(saturday) ? fiveDaysAhead : saturday;
-  return [midnight, endOfWeek];
+  return [start, endOfWeek];
 }
 
 const includeAdmin1 = {US: 1, CA: 1, UK: 1};
