@@ -75,10 +75,6 @@ export async function shabbatApp(ctx) {
   } else if (q.cfg === 'json') {
     const leyningOff = (q.leyning === 'off' || q.leyning === '0');
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    obj.range = {
-      start: midnight.format('YYYY-MM-DD'),
-      end: endOfWeek.format('YYYY-MM-DD'),
-    };
     const cb = q.callback;
     if (typeof cb === 'string' && cb.length) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
