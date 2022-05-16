@@ -95,10 +95,21 @@ small:lang(he) {
 src="/a/js/script.outbound-links.js"></script>
 <script>
   var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
   _paq.push(['disableCookies']);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
+  /* Hebcal anonymous userid */
+  var d0=document, c0=d0.cookie;
+  if(c0&&c0.length&&typeof URLSearchParams=='function'){
+    var cks=c0.split(';').map(function(s0){var s=s0.trim(),eq=s.indexOf('=');
+     return[s.substring(0, eq),s.substring(eq+1)]}).reduce(function(m,v){
+      m[v[0]]=v[1];return m},{});
+    if(cks['C']){
+     var ck=new URLSearchParams(cks['C']);
+     var uid=ck.get('uid');
+     if(uid){_paq.push(['setUserId', uid])}
+    }
+  }
   (function() {
     var u="/matomo/";
     _paq.push(['setTrackerUrl', u+'matomo.php']);
