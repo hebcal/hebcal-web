@@ -76,5 +76,6 @@ CREATE TABLE email_open (
   msgid varchar(80) NOT NULL,
   ip_addr varchar(16) NOT NULL,
   loc varchar(80) DEFAULT NULL,
+  delta int DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
