@@ -15,7 +15,7 @@ import zlib from 'zlib';
 import {makeLogger, errorLogger, accessLogger} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router';
-import {googleAnalytics} from './analytics';
+// import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
 import {stopIfTimedOut} from './common';
 import pkg from '../package.json';
@@ -114,7 +114,7 @@ app.use(async function fixup0(ctx, next) {
   await next();
 });
 
-app.use(googleAnalytics('UA-967247-1'));
+// app.use(googleAnalytics('UA-967247-1'));
 
 app.use(compress({
   gzip: true,
