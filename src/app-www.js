@@ -93,11 +93,6 @@ app.use(async function fixup0(ctx, next) {
       ctx.request.querystring = qs.replace(/;/g, '&');
     }
   }
-  const cfg = ctx.request.query.cfg;
-  if (typeof cfg === 'string' && cfg !== 'html') {
-    ctx.state.trackingId = 'UA-967247-6';
-    ctx.state.trackPageview = true;
-  }
   // Collapse duplicate identical key/values in querystring
   const query = Object.assign({}, ctx.request.query);
   let needsRewrite = false;
