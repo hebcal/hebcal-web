@@ -50,7 +50,7 @@
     "@hebcal/leyning": "^4.13.3",
     "@hebcal/locales": "^3.4.1",
     "@hebcal/rest-api": "^3.17.0",
-    "better-sqlite3": "^7.5.2",
+    "better-sqlite3": "^7.5.3",
     "csv-parse": "^5.0.4",
     "dayjs": "^1.11.2",
     "ejs": "^3.1.8",
