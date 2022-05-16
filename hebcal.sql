@@ -69,3 +69,12 @@ CREATE TABLE yahrzeit_optout (
   updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
+CREATE TABLE email_open (
+  id int NOT NULL AUTO_INCREMENT,
+  ts timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  msgid varchar(80) NOT NULL,
+  ip_addr varchar(16) NOT NULL,
+  loc varchar(80) DEFAULT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
