@@ -16,7 +16,6 @@ export function matomoTrack(ctx, params) {
   if (ref && ref.length) {
     args.set('urlref', ref);
   }
-  args.set('action_name', action);
   if (ctx.state.userId) {
     args.set('uid', ctx.state.userId);
   }
