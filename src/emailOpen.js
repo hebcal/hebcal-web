@@ -13,7 +13,6 @@ export async function emailOpen(ctx) {
   const sql = 'INSERT INTO email_open (msgid, ip_addr, loc, delta) VALUES (?, ?, ?, ?)';
   const ipAddress = getIpAddress(ctx);
   await db.query(sql, [msgid, ipAddress, q.loc, delta]);
-  ctx.state.trackPageview = false;
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
   ctx.type = 'image/gif';
   matomoTrack(ctx, {

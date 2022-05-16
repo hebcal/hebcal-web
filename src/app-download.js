@@ -102,7 +102,6 @@ app.use(async function sendStatic(ctx, next) {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/ical')) {
-    ctx.state.trackPageview = true;
     ctx.set('Cache-Control', 'max-age=5184000');
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath === '/ping') {
@@ -117,7 +116,6 @@ app.use(async function sendStatic(ctx, next) {
     httpRedirect(ctx, `/ical/${path}`, 302);
     return;
   } else {
-    ctx.state.trackPageview = true;
     return next();
   }
 });

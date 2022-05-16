@@ -54,16 +54,13 @@ site.webmanifest`.split('\n').map((s) => '/' + s));
 // eslint-disable-next-line require-jsdoc
 export function wwwRouter() {
   return async function router(ctx, next) {
-    ctx.state.trackPageview = true;
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
-      ctx.state.trackPageview = false;
       ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\n';
       return;
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
-      ctx.state.trackPageview = false;
       // let serve() handle this file
     } else if (rpath === '/') {
       return homepage(ctx);
@@ -86,11 +83,9 @@ export function wwwRouter() {
       httpRedirect(ctx, `${rpath}/`, 301);
       return;
     } else if (rootDirStatic.has(rpath) || rpath.startsWith('/i/')) {
-      ctx.state.trackPageview = false;
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       // let serve() handle this file
     } else if (rpath.startsWith('/complete')) {
-      ctx.state.trackPageview = false;
       return geoAutoComplete(ctx);
     } else if (rpath.startsWith('/zmanim')) {
       return getZmanim(ctx);
@@ -148,13 +143,10 @@ export function wwwRouter() {
         langNames,
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
-      ctx.state.trackPageview = false;
       return hdateJavascript(ctx);
     } else if (rpath === '/etc/hdate-he.xml' || rpath === '/etc/hdate-en.xml') {
-      ctx.state.trackPageview = false;
       return hdateXml(ctx);
     } else if (rpath === '/sedrot/index.xml' || rpath === '/sedrot/israel.xml' || rpath === '/sedrot/israel-he.xml') {
-      ctx.state.trackPageview = false;
       return parshaRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
       if (rpath === '/sedrot/') {

@@ -127,26 +127,11 @@ export function accessLogger(logger) {
 export function errorLogger(logger) {
   return function errorLog(err, ctx) {
     if (ctx && ctx.status != 404 && ctx.status != 200) {
-      const visitor = ctx.state.visitor;
       const obj = Object.assign(err, makeLogInfo(ctx));
-      const message = err.message || err.msg;
-      const params = {
-        ec: ctx.status < 500 ? 'warning' : 'error',
-        ea: `http${ctx.status}`,
-        ev: ctx.status,
-        el: message,
-        p: ctx.request.path,
-      };
       if (ctx.status < 500) {
         logger.warn(obj);
-        if (visitor) {
-          visitor.event(params).send();
-        }
       } else {
         logger.error(obj);
-        if (visitor) {
-          visitor.event(params).exception(message).send();
-        }
       }
     }
   };
