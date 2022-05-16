@@ -14,7 +14,6 @@ import {makeLogger, errorLogger, accessLogger} from './logger';
 import {httpRedirect, stopIfTimedOut, CACHE_CONTROL_IMMUTABLE} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
-import {googleAnalytics} from './analytics';
 import {MysqlDb} from './db';
 import {zmanimIcalendar} from './zmanim';
 import {deserializeDownload} from './deserializeDownload';
@@ -50,7 +49,6 @@ app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 app.use(stopIfTimedOut());
 
 app.use(xResponseTime());
-app.use(googleAnalytics('UA-967247-5'));
 
 app.use(async function fixup0(ctx, next) {
   if (ctx.method !== 'GET' && ctx.method !== 'HEAD') {
