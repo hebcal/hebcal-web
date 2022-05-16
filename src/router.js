@@ -167,6 +167,11 @@ export function wwwRouter() {
       return omerApp(rpath, ctx);
     } else if (rpath === '/sitemap_zips.txt') {
       return sitemapZips(ctx);
+    } else if (rpath === '/matomo/matomo.js' ||
+               (rpath.startsWith('/a/js/') && rpath.endsWith('.js'))) {
+      ctx.type = 'application/javascript';
+      ctx.body = '/* Nothing to see here */\n';
+      return;
     }
     await next();
   };
