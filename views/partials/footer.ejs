@@ -26,6 +26,14 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <%   if (footerScripts.typeahead) { -%><%- await include('script-typeahead.ejs') -%><% } -%>
 <% } -%>
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
+<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
+<script>
+(function(){
+var canonicalMeta=document.querySelector('link[rel="canonical"]');
+var url=canonicalMeta?canonicalMeta.href:window.location.href;
+plausible('pageview',{u: url});
+})();
+</script>
 </body>
 </html>
 <!-- <%= hostname %> <%= new Date().toISOString() %> -->
