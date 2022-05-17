@@ -249,7 +249,7 @@ async function updateActiveSub(ctx, db, q) {
   const locationName = ctx.state.locationName;
   plausibleTrack(ctx, 'Signup', {
     type: 'candles',
-    update: true,
+    verified: true,
     email: emailAddress,
     loc: locationName,
   });
@@ -392,6 +392,7 @@ async function writeStagingInfo(ctx, db, q) {
   ]);
   plausibleTrack(ctx, 'Signup', {
     type: 'candles',
+    verified: false,
     email: q.em,
     loc: ctx.state.locationName,
   });
