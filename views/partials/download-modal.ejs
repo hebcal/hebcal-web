@@ -26,7 +26,14 @@
 <div>
 <div class="mb-3">
 <div>
-  <a class="btn btn-secondary download mb-2" id="dl-ios-sub" data-hebcal-attr="href" data-hebcal-src="webcal" rel="nofollow" href="<%= url.webcal %>">
+  <a class="btn btn-secondary download mb-2" id="dl-ios-sub"
+  data-hebcal-attr="href" data-hebcal-src="webcal"
+<% if (typeof yahrzeit === 'boolean' && yahrzeit === true) { -%>
+  data-analytics='"YahrzeitCalSub",{"props":{"type":"ios"}}'
+<% } else { -%>
+  data-analytics='"HolidayCalSub",{"props":{"type":"ios"}}'
+<% } -%>
+  rel="nofollow" href="<%= url.webcal %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
   Subscribe on iPhone, iPad &amp; macOS</a>
 </div>
@@ -59,7 +66,14 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 <div>
 <div class="mb-3">
 <div>
-  <a class="btn btn-secondary download mb-2" id="dl-ol-ics" data-hebcal-attr="href" data-hebcal-src="webcal" title="<%= filename.ics %>" rel="nofollow" href="<%= url.webcal %>">
+  <a class="btn btn-secondary download mb-2" id="dl-ol-ics"
+  data-hebcal-attr="href" data-hebcal-src="webcal"
+<% if (typeof yahrzeit === 'boolean' && yahrzeit === true) { -%>
+  data-analytics='"YahrzeitCalSub",{"props":{"type":"ol"}}'
+<% } else { -%>
+  data-analytics='"HolidayCalSub",{"props":{"type":"ol"}}'
+<% } -%>
+  title="<%= filename.ics %>" rel="nofollow" href="<%= url.webcal %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook 365 Calendar Subscription</a>
 </div>
@@ -88,6 +102,11 @@ href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Outlook 36
   <a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
 title="Add <%= filename.ics %> to Google Calendar"
 data-hebcal-attr="href" data-hebcal-src="gcal"
+<% if (typeof yahrzeit === 'boolean' && yahrzeit === true) { -%>
+data-analytics='"YahrzeitCalSub",{"props":{"type":"gcal"}}'
+<% } else { -%>
+data-analytics='"HolidayCalSub",{"props":{"type":"gcal"}}'
+<% } -%>
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
   Add to Google Calendar</a>
@@ -142,6 +161,11 @@ Copy
   <a class="btn btn-secondary download mb-2" id="dl-olcom" rel="nofollow"
 title="Add <%= filename.ics %> to Outlook.com"
 data-hebcal-attr="href" data-hebcal-src="olcom"
+<% if (typeof yahrzeit === 'boolean' && yahrzeit === true) { -%>
+data-analytics='"YahrzeitCalSub",{"props":{"type":"olcom"}}'
+<% } else { -%>
+data-analytics='"HolidayCalSub",{"props":{"type":"olcom"}}'
+<% } -%>
 href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(url.gcal) %>&amp;name=<%=encodeURIComponent(url.title)%>&amp;mkt=en-001">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Add to Outlook.com</a>

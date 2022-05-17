@@ -20,7 +20,8 @@ and complete your registration via the button below.</p>
 <p>Email: <strong><%= emailAddress %></strong></p>
 <form method="post" action="<%= rpath %>">
 <input type="hidden" name="commit" value="1">
-<button type="submit" class="btn btn-primary mb-2">
+<button type="submit" class="btn btn-primary mb-2"
+data-analytics='"EmailSub",{"props":{"type":"yahrzeit"}}'>
   <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
   Confirm
 </button>

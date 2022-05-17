@@ -165,7 +165,7 @@ instructions</a>.</p>
 </div><!-- .row -->
 </div><!-- #content -->
 <% if (tables !== null) { -%>
-<%- await include('partials/download-modal.ejs') -%>
+<%- await include('partials/download-modal.ejs', {yahrtzeit: true}) -%>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
