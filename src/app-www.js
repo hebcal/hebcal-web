@@ -145,7 +145,11 @@ app.use(error({
 
 app.use(stopIfTimedOut());
 
-app.use(bodyParser());
+app.use(bodyParser({
+  extendTypes: {
+    json: ['text/plain'], // will parse text/plain type body as a JSON string
+  },
+}));
 
 app.use(stopIfTimedOut());
 

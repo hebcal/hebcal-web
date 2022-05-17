@@ -28,11 +28,14 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
 <script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
 <script>
-(function(){
 var canonicalMeta=document.querySelector('link[rel="canonical"]');
 var url=canonicalMeta?canonicalMeta.href:window.location.href;
-plausible('pageview',{u: url});
-})();
+/* redact identifier from URL */
+var u = new URL(url);
+if (u.pathname.substring(0, 15) == '/yahrzeit/edit/') {
+  u.pathname = '/yahrzeit/edit/_ID_';
+}
+plausible('pageview',{u: u.href});
 </script>
 </body>
 </html>

@@ -36,8 +36,8 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.17.10",
-    "@babel/preset-env": "^7.17.10",
+    "@babel/core": "^7.17.12",
+    "@babel/preset-env": "^7.17.12",
     "@babel/register": "^7.17.7",
     "babel-plugin-transform-modules-iife": "^1.0.0",
     "eslint": "^8.15.0",

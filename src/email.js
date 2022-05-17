@@ -3,6 +3,7 @@ import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail} from './common';
 import {mySendMail, getImgOpenHtml} from './common2';
+import {plausibleTrack} from './plausibleTrack';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
@@ -246,6 +247,12 @@ async function updateActiveSub(ctx, db, q) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const locationName = ctx.state.locationName;
+  plausibleTrack(ctx, 'Signup', {
+    type: 'candles',
+    update: true,
+    email: emailAddress,
+    loc: locationName,
+  });
   const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-update');
   const footerHtml = makeFooter(emailAddress);
   const message = {
@@ -290,6 +297,10 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = true;
     success = true;
   }
+  plausibleTrack(ctx, 'Unsubscribe', {
+    type: 'candles',
+    email: emailAddress,
+  });
   return success;
 }
 
@@ -379,6 +390,11 @@ async function writeStagingInfo(ctx, db, q) {
     locationValue,
     ip,
   ]);
+  plausibleTrack(ctx, 'Signup', {
+    type: 'candles',
+    email: q.em,
+    loc: ctx.state.locationName,
+  });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;

@@ -172,6 +172,11 @@ export function wwwRouter() {
       ctx.type = 'application/javascript';
       ctx.body = '/* Nothing to see here */\n';
       return;
+    } else if (rpath === '/a/api/event') {
+      ctx.status = 202;
+      ctx.type = 'text/plain';
+      ctx.body = 'bogus';
+      return;
     }
     await next();
   };

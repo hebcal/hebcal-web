@@ -29,7 +29,6 @@ body { background-color: #eee;}
 <div class="mt-4">
 <% if (q.num !== 'all') { %>
 <button type="submit" class="btn btn-primary mb-2 me-2"
-data-analytics='"EmailUnsub",{"props":{"type":"yahrzeit","num":<%=q.num%>}}'
 name="num" value="<%=q.num%>">
   Unsubscribe
   <% if (info.maxId > 1) { %> only <%= info.name %>'s <%= info.typeStr %> Reminders<% } %>
@@ -37,7 +36,6 @@ name="num" value="<%=q.num%>">
 <% } %>
 <% if (info.maxId > 1) { %>
 <div><button type="submit" class="btn btn-primary mb-2 me-2"
-data-analytics='"EmailUnsub",{"props":{"type":"yahrzeit","num":"all"}}'
 name="num" value="all">Unsubscribe all (<%=info.maxId%>) <%=info.anniversaryType%> Reminders</button></div>
 <% } %>
 <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">Edit Calendar</a>
