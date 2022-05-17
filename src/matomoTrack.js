@@ -11,7 +11,10 @@ export function matomoTrack(ctx, params) {
     args.set(p, '1');
   }
   args.set('ua', ctx.get('user-agent'));
-  args.set('lang', ctx.get('accept-language'));
+  const lang = ctx.get('accept-language');
+  if (lang && lang.length) {
+    args.set('lang', lang);
+  }
   const ref = ctx.get('referer');
   if (ref && ref.length) {
     args.set('urlref', ref);
@@ -33,6 +36,7 @@ export function matomoTrack(ctx, params) {
       'Content-Length': Buffer.byteLength(postData),
     },
   };
+  ctx.logger.info(`matomo: ${postData}`);
   const req = http.request(options);
   req.on('error', (err) => {
     ctx.logger.error(err);
@@ -48,8 +52,8 @@ export function matomoTrack(ctx, params) {
  */
 export function plausibleTrack(ctx, params) {
   const body = {
-    domain: 'hebcal.com',
-    name: 'event',
+    domain: 'www.hebcal.com',
+    name: 'Event',
     url: makeUrl(ctx),
     props: params,
   };
@@ -74,6 +78,7 @@ export function plausibleTrack(ctx, params) {
       'Content-Length': Buffer.byteLength(postData),
     },
   };
+  ctx.logger.info({options, body}, 'plausible /api/event');
   const req = http.request(options);
   req.on('error', (err) => {
     ctx.logger.error(err);
