@@ -4,7 +4,6 @@ import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetails
   summarizeAnniversaryTypes, getImgOpenHtml} from './common2';
 import {ulid} from 'ulid';
 import {basename} from 'path';
-import {plausibleTrack} from './plausibleTrack';
 import {matomoTrack} from './matomoTrack';
 
 const BLANK = '<div>&nbsp;</div>';
@@ -27,13 +26,6 @@ export async function yahrzeitEmailVerify(ctx) {
     const db = ctx.mysql;
     await db.query(sqlUpdate, [ip, subscriptionId]);
     matomoTrack(ctx, 'Signup', contents.type, null, {
-      email: emailAddress,
-      verified: true,
-      calendarId: calendarId,
-      subscriptionId: subscriptionId,
-    });
-    plausibleTrack(ctx, 'Signup', {
-      type: contents.type,
       email: emailAddress,
       verified: true,
       calendarId: calendarId,
@@ -144,12 +136,6 @@ export async function yahrzeitEmailSub(ctx) {
     verified: alreadySubscribed,
     calendarId: q.ulid,
   });
-  plausibleTrack(ctx, 'Signup', {
-    type: q.type,
-    email: q.em,
-    verified: alreadySubscribed,
-    calendarId: q.ulid,
-  });
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${q.ulid}.${id}.${Date.now()}`;
@@ -240,11 +226,6 @@ async function unsub(ctx, q) {
     await db.query(sql, [q.id, nameHash, num]);
   }
   matomoTrack(ctx, 'Unsubscribe', 'yahrzeit', null, {
-    num: q.num,
-    subscriptionId: q.id,
-  });
-  plausibleTrack(ctx, 'Unsubscribe', {
-    type: 'yahrzeit',
     num: q.num,
     subscriptionId: q.id,
   });

@@ -3,7 +3,6 @@ import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail} from './common';
 import {mySendMail, getImgOpenHtml} from './common2';
-import {plausibleTrack} from './plausibleTrack';
 import {matomoTrack} from './matomoTrack';
 
 const BLANK = '<div>&nbsp;</div>';
@@ -252,12 +251,6 @@ async function updateActiveSub(ctx, db, q) {
     verified: true,
     email: emailAddress,
   });
-  plausibleTrack(ctx, 'Signup', {
-    type: 'candles',
-    verified: true,
-    email: emailAddress,
-    loc: locationName,
-  });
   const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-update');
   const footerHtml = makeFooter(emailAddress);
   const message = {
@@ -303,10 +296,6 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     success = true;
   }
   matomoTrack(ctx, 'Unsubscribe', 'candles', null, {
-    email: emailAddress,
-  });
-  plausibleTrack(ctx, 'Unsubscribe', {
-    type: 'candles',
     email: emailAddress,
   });
   return success;
@@ -402,12 +391,6 @@ async function writeStagingInfo(ctx, db, q) {
   matomoTrack(ctx, 'Signup', 'candles', locationName, {
     verified: false,
     email: q.em,
-  });
-  plausibleTrack(ctx, 'Signup', {
-    type: 'candles',
-    verified: false,
-    email: q.em,
-    loc: locationName,
   });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const msgid = `${subscriptionId}.${Date.now()}`;

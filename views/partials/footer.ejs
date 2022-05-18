@@ -26,17 +26,6 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <%   if (footerScripts.typeahead) { -%><%- await include('script-typeahead.ejs') -%><% } -%>
 <% } -%>
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
-<script>window.plausible=window.plausible||function(){(window.plausible.q=window.plausible.q||[]).push(arguments)}</script>
-<script>
-var canonicalMeta=document.querySelector('link[rel="canonical"]');
-var urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
-/* redact identifier from URL */
-var url = new URL(urlHref);
-if (url.pathname.substring(0, 15) == '/yahrzeit/edit/') {
-  url.pathname = '/yahrzeit/edit/_ID_';
-}
-plausible('pageview',{u: url.href});
-</script>
 <script>
 var _paq = window._paq = window._paq || [];
 var canonicalMeta=document.querySelector('link[rel="canonical"]');

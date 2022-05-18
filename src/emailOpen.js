@@ -1,6 +1,5 @@
 import send from 'koa-send';
 import {matomoTrack} from './matomoTrack';
-import {plausibleTrack} from './plausibleTrack';
 import {getIpAddress} from './common';
 
 const DOCUMENT_ROOT = '/var/www/html';
@@ -17,10 +16,6 @@ export async function emailOpen(ctx) {
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
   ctx.type = 'image/gif';
   matomoTrack(ctx, 'email-open', q['utm_campaign'], q.loc);
-  plausibleTrack(ctx, 'Email Open', {
-    type: q['utm_campaign'],
-    loc: q['loc'],
-  });
   return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
 }
 
