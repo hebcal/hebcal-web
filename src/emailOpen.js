@@ -1,6 +1,7 @@
 import send from 'koa-send';
 import {matomoTrack} from './matomoTrack';
 import {getIpAddress} from './common';
+import {transliterate} from 'transliteration';
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -10,12 +11,13 @@ export async function emailOpen(ctx) {
   const msgid = q.msgid;
   const delta = computeDelta(msgid);
   const db = ctx.mysql;
+  const loc = transliterate(q.loc);
   const sql = 'INSERT INTO email_open (msgid, ip_addr, loc, delta) VALUES (?, ?, ?, ?)';
   const ipAddress = getIpAddress(ctx);
-  await db.query(sql, [msgid, ipAddress, q.loc, delta]);
+  await db.query(sql, [msgid, ipAddress, loc, delta]);
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
   ctx.type = 'image/gif';
-  matomoTrack(ctx, 'email-open', q['utm_campaign'], q.loc);
+  matomoTrack(ctx, 'email-open', q['utm_campaign'], loc);
   return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
 }
 
