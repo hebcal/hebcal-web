@@ -6,7 +6,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames, off} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans, OMER_TITLE} from './holidayCommon';
 import holidayMeta from './holidays.json';
@@ -69,6 +69,13 @@ export async function holidayDetail(ctx) {
       httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
       return;
     }
+  }
+  if (doIsraelRedir(ctx, holiday)) {
+    // It's Shalosh regalim and the URL doesn't have i=on/off
+    ctx.set('Cache-Control', 'private, max-age=0');
+    const rpath = ctx.request.path;
+    httpRedirect(ctx, `${rpath}?i=on`, 302);
+    return;
   }
   const meta = getHolidayMeta(holiday);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
@@ -138,6 +145,20 @@ export async function holidayDetail(ctx) {
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
   });
+}
+
+const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
+
+function doIsraelRedir(ctx, holiday) {
+  if (!empty(ctx.request.query.i) || !shaloshRegalim[holiday]) {
+    return false;
+  }
+  const cookieStr = ctx.cookies.get('C');
+  if (!cookieStr) {
+    return false;
+  }
+  const ck = new URLSearchParams(cookieStr);
+  return !off(ck.get('i'));
 }
 
 function appendPeriod(str) {
