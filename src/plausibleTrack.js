@@ -8,17 +8,17 @@ import {getIpAddress} from './common';
  */
 export function plausibleTrack(ctx, name, props) {
   const body = {
-    domain: 'hebcal.com',
-    name: name,
-    url: makeUrl(ctx),
-    props: props,
+    d: 'hebcal.com',
+    n: name,
+    u: makeUrl(ctx),
+    p: props,
   };
   const ref = ctx.get('referer');
   if (ref && ref.length) {
-    body.referrer = ref;
+    body.r = ref;
   }
   if (ctx.state.userId) {
-    body.props.uid = ctx.state.userId;
+    body.p.uid = ctx.state.userId;
   }
   const postData = JSON.stringify(body);
   const ip = getIpAddress(ctx);
@@ -34,7 +34,7 @@ export function plausibleTrack(ctx, name, props) {
       'Content-Length': Buffer.byteLength(postData),
     },
   };
-  ctx.logger.info({options, body}, 'plausible /api/event');
+  ctx.logger.info({options, body}, 'plausible/api/event');
   const req = http.request(options);
   req.on('error', (err) => {
     ctx.logger.error(err);

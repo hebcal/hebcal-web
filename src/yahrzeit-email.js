@@ -5,6 +5,7 @@ import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetails
 import {ulid} from 'ulid';
 import {basename} from 'path';
 import {plausibleTrack} from './plausibleTrack';
+import {matomoTrack} from './matomoTrack';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
@@ -25,6 +26,12 @@ export async function yahrzeitEmailVerify(ctx) {
     const ip = getIpAddress(ctx);
     const db = ctx.mysql;
     await db.query(sqlUpdate, [ip, subscriptionId]);
+    matomoTrack(ctx, 'Signup', contents.type, null, {
+      email: emailAddress,
+      verified: true,
+      calendarId: calendarId,
+      subscriptionId: subscriptionId,
+    });
     plausibleTrack(ctx, 'Signup', {
       type: contents.type,
       email: emailAddress,
@@ -132,6 +139,11 @@ export async function yahrzeitEmailSub(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
     await db.query(sqlUpdate, [ip, id]);
   }
+  matomoTrack(ctx, 'Signup', q.type, null, {
+    email: q.em,
+    verified: alreadySubscribed,
+    calendarId: q.ulid,
+  });
   plausibleTrack(ctx, 'Signup', {
     type: q.type,
     email: q.em,
@@ -227,6 +239,10 @@ async function unsub(ctx, q) {
     const nameHash = num == 0 ? null : (q.hash || null);
     await db.query(sql, [q.id, nameHash, num]);
   }
+  matomoTrack(ctx, 'Unsubscribe', 'yahrzeit', null, {
+    num: q.num,
+    subscriptionId: q.id,
+  });
   plausibleTrack(ctx, 'Unsubscribe', {
     type: 'yahrzeit',
     num: q.num,

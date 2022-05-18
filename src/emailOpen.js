@@ -16,15 +16,10 @@ export async function emailOpen(ctx) {
   await db.query(sql, [msgid, ipAddress, q.loc, delta]);
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
   ctx.type = 'image/gif';
-  matomoTrack(ctx, {
-    action_name: 'Email Open',
-    e_c: 'email-open',
-    e_a: ctx.request.query['utm_campaign'],
-    e_n: ctx.request.query['loc'],
-  });
+  matomoTrack(ctx, 'email-open', q['utm_campaign'], q.loc);
   plausibleTrack(ctx, 'Email Open', {
-    type: ctx.request.query['utm_campaign'],
-    loc: ctx.request.query['loc'],
+    type: q['utm_campaign'],
+    loc: q['loc'],
   });
   return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
 }

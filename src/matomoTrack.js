@@ -2,13 +2,21 @@ import http from 'node:http';
 import {getIpAddress} from './common';
 
 /**
- * @param {any} ctx
- * @param {any} params
+ * @param {*} ctx
+ * @param {string} category
+ * @param {string} action
+ * @param {string} [name]
+ * @param {*} [params={}]
  */
-export function matomoTrack(ctx, params) {
+export function matomoTrack(ctx, category, action, name=null, params={}) {
   const args = new URLSearchParams(params);
   for (const p of ['idsite', 'rec', 'apiv']) {
     args.set(p, '1');
+  }
+  args.set('e_c', category);
+  args.set('e_a', action);
+  if (name) {
+    args.set('e_n', name);
   }
   args.set('ua', ctx.get('user-agent'));
   const lang = ctx.get('accept-language');
@@ -27,9 +35,10 @@ export function matomoTrack(ctx, params) {
   const options = {
     hostname: 'www-internal.hebcal.com',
     port: 8080,
-    path: '/matomo/matomo.php',
+    path: '/ma/ma.php',
     method: 'POST',
     headers: {
+      'Host': 'www.hebcal.com',
       'X-Forwarded-For': ip,
       'X-Forwarded-Proto': 'https',
       'Content-Type': 'application/x-www-form-urlencoded',

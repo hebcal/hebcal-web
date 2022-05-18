@@ -4,6 +4,7 @@ import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail} from './common';
 import {mySendMail, getImgOpenHtml} from './common2';
 import {plausibleTrack} from './plausibleTrack';
+import {matomoTrack} from './matomoTrack';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
@@ -247,6 +248,10 @@ async function updateActiveSub(ctx, db, q) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const locationName = ctx.state.locationName;
+  matomoTrack(ctx, 'Signup', 'candles', locationName, {
+    verified: true,
+    email: emailAddress,
+  });
   plausibleTrack(ctx, 'Signup', {
     type: 'candles',
     verified: true,
@@ -297,6 +302,9 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = true;
     success = true;
   }
+  matomoTrack(ctx, 'Unsubscribe', 'candles', null, {
+    email: emailAddress,
+  });
   plausibleTrack(ctx, 'Unsubscribe', {
     type: 'candles',
     email: emailAddress,
@@ -390,14 +398,18 @@ async function writeStagingInfo(ctx, db, q) {
     locationValue,
     ip,
   ]);
+  const locationName = ctx.state.locationName;
+  matomoTrack(ctx, 'Signup', 'candles', locationName, {
+    verified: false,
+    email: q.em,
+  });
   plausibleTrack(ctx, 'Signup', {
     type: 'candles',
     verified: false,
     email: q.em,
-    loc: ctx.state.locationName,
+    loc: locationName,
   });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
-  const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-verify');
   const message = {

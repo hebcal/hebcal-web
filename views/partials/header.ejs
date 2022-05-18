@@ -94,28 +94,3 @@ small:lang(he) {
 <script defer
 data-domain="hebcal.com" data-api="/a/api/event" file-types="pdf,ics,csv"
 src="/js/plausible-hebcal.js"></script>
-<script>
-  var _paq = window._paq = window._paq || [];
-  _paq.push(['disableCookies']);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  /* Hebcal anonymous userid */
-  var d0=document, c0=d0.cookie;
-  if(c0&&c0.length&&typeof URLSearchParams=='function'){
-    var cks=c0.split(';').map(function(s0){var s=s0.trim(),eq=s.indexOf('=');
-     return[s.substring(0, eq),s.substring(eq+1)]}).reduce(function(m,v){
-      m[v[0]]=v[1];return m},{});
-    if(cks['C']){
-     var ck=new URLSearchParams(cks['C']);
-     var uid=ck.get('uid');
-     if(uid){_paq.push(['setUserId', uid])}
-    }
-  }
-  (function() {
-    var u="/matomo/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>

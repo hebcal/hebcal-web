@@ -168,6 +168,7 @@ export function wwwRouter() {
     } else if (rpath === '/sitemap_zips.txt') {
       return sitemapZips(ctx);
     } else if (rpath === '/matomo/matomo.js' ||
+               rpath === '/ma/ma.js' ||
                (rpath.startsWith('/a/js/') && rpath.endsWith('.js'))) {
       ctx.type = 'application/javascript';
       ctx.body = '/* Nothing to see here */\n';
