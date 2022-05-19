@@ -41,9 +41,6 @@ export function shortUrlRedir(ctx) {
   if (!dest) {
     ctx.throw(500, `Unknown short URL '${shortStr}'`);
   }
-  if (dest === 'sedrot') {
-    qs.set('_r', Date.now().toString(36));
-  }
   const destUrl = `https://www.hebcal.com/${dest}/${base}?` + qs.toString();
   ctx.set('Cache-Control', 'private');
   ctx.redirect(destUrl);
