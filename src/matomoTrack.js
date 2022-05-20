@@ -45,7 +45,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
       'Content-Length': Buffer.byteLength(postData),
     },
   };
-  ctx.logger.info(`matomo: ${postData}`);
+  // ctx.logger.info(`matomo: ${postData}`);
   const req = http.request(options);
   req.on('error', (err) => {
     ctx.logger.error(err);

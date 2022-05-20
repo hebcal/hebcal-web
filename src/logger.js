@@ -1,6 +1,7 @@
 import pino from 'pino';
 import mmh3 from 'murmurhash3';
 import util from 'util';
+import {matomoTrack} from './matomoTrack';
 
 // return array that have 4 elements of 32bit integer
 const murmur128 = util.promisify(mmh3.murmur128);
@@ -64,6 +65,9 @@ function makeLogInfo(ctx) {
     ua: ctx.get('user-agent'),
     vid: ctx.state.visitorId,
   };
+  if (typeof info.length !== 'number') {
+    delete info.length;
+  }
   const ref = ctx.get('referer');
   if (!empty(ref)) info.ref = ref;
   const cookie = ctx.get('cookie');
@@ -133,6 +137,10 @@ export function errorLogger(logger) {
       } else {
         logger.error(obj);
       }
+    }
+    if (ctx && ctx.status) {
+      const logInfo = makeLogInfo(ctx);
+      matomoTrack(ctx, 'Error', ctx.status, null, logInfo);
     }
   };
 }
