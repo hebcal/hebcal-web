@@ -247,7 +247,7 @@ async function updateActiveSub(ctx, db, q) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const locationName = ctx.state.locationName;
-  matomoTrack(ctx, 'Signup', 'candles', locationName, {
+  matomoTrack(ctx, 'Signup', 'shabbat-weekly', locationName, {
     verified: true,
     email: emailAddress,
   });
@@ -295,9 +295,7 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = true;
     success = true;
   }
-  matomoTrack(ctx, 'Unsubscribe', 'candles', null, {
-    email: emailAddress,
-  });
+  matomoTrack(ctx, 'Unsubscribe', 'shabbat-weekly', emailAddress);
   return success;
 }
 
@@ -388,7 +386,7 @@ async function writeStagingInfo(ctx, db, q) {
     ip,
   ]);
   const locationName = ctx.state.locationName;
-  matomoTrack(ctx, 'Signup', 'candles', locationName, {
+  matomoTrack(ctx, 'Signup', 'shabbat-weekly', locationName, {
     verified: false,
     email: q.em,
   });

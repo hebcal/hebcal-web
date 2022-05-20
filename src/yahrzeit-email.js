@@ -25,7 +25,7 @@ export async function yahrzeitEmailVerify(ctx) {
     const ip = getIpAddress(ctx);
     const db = ctx.mysql;
     await db.query(sqlUpdate, [ip, subscriptionId]);
-    matomoTrack(ctx, 'Signup', contents.type, null, {
+    matomoTrack(ctx, 'Signup', 'yahrzeit-reminder', contents.type, {
       email: emailAddress,
       verified: true,
       calendarId: calendarId,
@@ -131,7 +131,7 @@ export async function yahrzeitEmailSub(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
     await db.query(sqlUpdate, [ip, id]);
   }
-  matomoTrack(ctx, 'Signup', q.type, null, {
+  matomoTrack(ctx, 'Signup', 'yahrzeit-reminder', q.type, {
     email: q.em,
     verified: alreadySubscribed,
     calendarId: q.ulid,
@@ -225,7 +225,7 @@ async function unsub(ctx, q) {
     const nameHash = num == 0 ? null : (q.hash || null);
     await db.query(sql, [q.id, nameHash, num]);
   }
-  matomoTrack(ctx, 'Unsubscribe', 'yahrzeit', null, {
+  matomoTrack(ctx, 'Unsubscribe', 'yahrzeit-reminder', null, {
     num: q.num,
     subscriptionId: q.id,
   });
