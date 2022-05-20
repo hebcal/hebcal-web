@@ -138,7 +138,7 @@ export function errorLogger(logger) {
         logger.error(obj);
       }
     }
-    if (ctx && ctx.status) {
+    if (ctx && ctx.status && ctx.status != 200) {
       matomoTrack(ctx, 'Error', ctx.status, ctx.request.path);
     }
   };
