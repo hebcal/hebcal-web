@@ -139,8 +139,7 @@ export function errorLogger(logger) {
       }
     }
     if (ctx && ctx.status) {
-      const logInfo = makeLogInfo(ctx);
-      matomoTrack(ctx, 'Error', ctx.status, null, logInfo);
+      matomoTrack(ctx, 'Error', ctx.status, null);
     }
   };
 }

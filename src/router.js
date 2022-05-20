@@ -36,6 +36,7 @@ const needsTrailingSlash = {
   '/holidays': true,
   '/ical': true,
   '/sedrot': true,
+  '/ma': true,
 };
 
 // favicon-like files in the directory root that should be cached for 365 days
