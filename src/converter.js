@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
   CACHE_CONTROL_7DAYS, cacheControl,
+  isoDateStringToDate,
 } from './common';
 import createError from 'http-errors';
 import {pad4} from '@hebcal/rest-api';
@@ -141,6 +142,10 @@ function makeProperties(ctx) {
   try {
     props = parseConverterQuery(ctx);
   } catch (err) {
+    if (query.strict === '1') {
+      const status = err.status || 400;
+      ctx.throw(status, err);
+    }
     props = Object.assign(g2h(new Date(), false, true), {message: err.message});
   }
   if (typeof props.hdates === 'object') {
@@ -293,6 +298,15 @@ function makeOmer(hdate) {
 }
 
 /**
+ * @param {string} str
+ * @return {boolean}
+ */
+function isNumber(str) {
+  const charCode = str.charCodeAt(0);
+  return charCode >= 48 && charCode <= 57;
+}
+
+/**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
@@ -332,29 +346,57 @@ function parseConverterQuery(ctx) {
       return g2h(startD.toDate(), false, false);
     }
   }
-  if (isset(query.h2g) && isset(query.hy) && isset(query.hm) && isset(query.hd)) {
+  if (isset(query.h2g)) {
+    for (const param of ['hy', 'hm', 'hd']) {
+      if (empty(query[param])) {
+        if (query.strict === '1') {
+          throw createError(400, `h2g=1 requires parameter '${param}'`);
+        } else {
+          return g2h(new Date(), false, true);
+        }
+      }
+    }
     const hdate = makeHebDate(query.hy, query.hm, query.hd);
     const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
-  } else {
-    const gs = query.gs === 'on' || query.gs === '1';
-    if (typeof query.date === 'string' && query.date.length === 10) {
-      return g2h(new Date(query.date), gs, false);
-    } else if (isset(query.gy) && isset(query.gm) && isset(query.gd)) {
-      if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
-        return g2h(new Date(), gs, true);
+  }
+  if (isset(query.g2h) && query.strict === '1') {
+    if (isset(query.date)) {
+      isoDateStringToDate(query.date); // throws if invalid
+    } else if (isset(query.t)) {
+      if (!isNumber(query.t)) {
+        throw createError(400, `invalid argument t: ${query.t}`);
       }
-      const dt = makeGregDate(query.gy, query.gm, query.gd);
-      return g2h(dt, gs, false);
     } else {
-      const dt = (!empty(query.t) && query.t.charCodeAt(0) >= 48 && query.t.charCodeAt(0) <= 57) ?
-        new Date(parseInt(query.t, 10) * 1000) : new Date();
-      return g2h(dt, gs, true);
+      for (const param of ['gy', 'gm', 'gd']) {
+        if (empty(query[param])) {
+          throw createError(400, `Missing parameter '${param}'`);
+        }
+      }
     }
+  }
+  const gs = query.gs === 'on' || query.gs === '1';
+  if (!empty(query.date)) {
+    const dt = isoDateStringToDate(query.date);
+    return g2h(dt, gs, false);
+  } else if (!empty(query.t) && isNumber(query.t)) {
+    const dt = new Date(parseInt(query.t, 10) * 1000);
+    return g2h(dt, false, false);
+  } else if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
+    return g2h(new Date(), gs, true);
+  } else {
+    const dt = makeGregDate(query.gy, query.gm, query.gd);
+    return g2h(dt, gs, false);
   }
 }
 
-// eslint-disable-next-line require-jsdoc
+/**
+ * @private
+ * @param {Date} dt
+ * @param {boolean} gs
+ * @param {boolean} noCache
+ * @return {any}
+ */
 function g2h(dt, gs, noCache) {
   let hdate = new HDate(dt);
   if (gs) {
