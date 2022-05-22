@@ -298,15 +298,6 @@ function makeOmer(hdate) {
 }
 
 /**
- * @param {string} str
- * @return {boolean}
- */
-function isNumber(str) {
-  const charCode = str.charCodeAt(0);
-  return charCode >= 48 && charCode <= 57;
-}
-
-/**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
@@ -363,10 +354,6 @@ function parseConverterQuery(ctx) {
   if (isset(query.g2h) && query.strict === '1') {
     if (isset(query.date)) {
       isoDateStringToDate(query.date); // throws if invalid
-    } else if (isset(query.t)) {
-      if (!isNumber(query.t)) {
-        throw createError(400, `invalid argument t: ${query.t}`);
-      }
     } else {
       for (const param of ['gy', 'gm', 'gd']) {
         if (empty(query[param])) {
@@ -379,9 +366,6 @@ function parseConverterQuery(ctx) {
   if (!empty(query.date)) {
     const dt = isoDateStringToDate(query.date);
     return g2h(dt, gs, false);
-  } else if (!empty(query.t) && isNumber(query.t)) {
-    const dt = new Date(parseInt(query.t, 10) * 1000);
-    return g2h(dt, false, false);
   } else if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
     return g2h(new Date(), gs, true);
   } else {
