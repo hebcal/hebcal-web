@@ -1,10 +1,29 @@
+/* eslint-disable no-var, one-var, keyword-spacing, comma-spacing, brace-style, space-before-blocks */
 var _paq = window._paq = window._paq || [];
 var canonicalMeta=document.querySelector('link[rel="canonical"]');
 var urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
 /* redact identifier from URL */
 var url = new URL(urlHref);
-if (url.pathname.substring(0, 15) == '/yahrzeit/edit/') {
-  url.pathname = '/yahrzeit/edit/_ID_';
+var sp = url.searchParams;
+var pn = url.pathname;
+if (pn.substring(0, 15) == '/yahrzeit/edit/') {
+  url.pathname='/yahrzeit/edit/_ID_';
+  url.search='';
+} else if ((pn=='/yahrzeit'||pn=='/yahrzeit/')&&typeof sp.get('t1')=='string') {
+  url.pathname='/yahrzeit';
+  url.search='';
+} else if (pn=='/converter') {
+  if (sp.get('h2g')=='1') {
+    url.pathname='/converter/'+sp.get('hy')+'/'+sp.get('hm')+'/'+sp.get('hd');
+  } else {
+    url.pathname='/converter/'+sp.get('gy')+'/'+sp.get('gm')+'/'+sp.get('gd');
+  }
+  url.search='';
+} else if (pn=='/hebcal') {
+  url.pathname=sp.get('v')=='0'?'/hebcal/form':'/hebcal/'+sp.get('year');
+  url.search='';
+} else if (pn=='/shabbat/fridge.cgi'||pn=='/shabbat') {
+  url.search='';
 }
 _paq.push(['setCustomUrl', url.href]);
 _paq.push(['disableCookies']);
@@ -23,9 +42,9 @@ if(c0&&c0.length&&typeof URLSearchParams=='function'){
   }
 }
 (function() {
-var u="/ma/";
-_paq.push(['setTrackerUrl', u+'ma.php']);
-_paq.push(['setSiteId', '1']);
-var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-g.async=true; g.src=u+'ma.js'; s.parentNode.insertBefore(g,s);
+  var u='/ma/';
+  _paq.push(['setTrackerUrl', u+'ma.php']);
+  _paq.push(['setSiteId', '1']);
+  var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+  g.async=true; g.src=u+'ma.js'; s.parentNode.insertBefore(g,s);
 })();
