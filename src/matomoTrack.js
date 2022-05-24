@@ -13,6 +13,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   for (const p of ['idsite', 'rec', 'apiv']) {
     args.set(p, '1');
   }
+  args.set('send_image', '0'); // prefer HTTP 204 instead of a GIF image
   args.set('e_c', category);
   args.set('e_a', action);
   if (name) {
