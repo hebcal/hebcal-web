@@ -20,7 +20,8 @@ if (pn.substring(0, 15) == '/yahrzeit/edit/') {
   }
   url.search='';
 } else if (pn=='/hebcal') {
-  url.pathname=sp.get('v')=='0'?'/hebcal/form':'/hebcal/'+sp.get('year');
+  var yr=sp.get('year');
+  url.pathname=sp.get('v')=='1'&&yr?'/hebcal/'+yr:'/hebcal';
   url.search='';
 } else if (pn=='/shabbat/fridge.cgi'||pn=='/shabbat') {
   url.search='';
