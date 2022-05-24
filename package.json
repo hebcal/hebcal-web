@@ -40,6 +40,7 @@
     "@babel/preset-env": "^7.18.0",
     "@babel/register": "^7.17.7",
     "babel-plugin-transform-modules-iife": "^1.0.0",
+    "csv-parse": "^5.1.0",
     "eslint": "^8.16.0",
     "eslint-config-google": "^0.14.0"
   },
@@ -51,7 +52,6 @@
     "@hebcal/locales": "^3.4.1",
     "@hebcal/rest-api": "^3.17.0",
     "better-sqlite3": "^7.5.3",
-    "csv-parse": "^5.1.0",
     "dayjs": "^1.11.2",
     "ejs": "^3.1.8",
     "etag": "^1.8.1",
