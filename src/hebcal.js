@@ -455,6 +455,9 @@ function renderFullCalendar(ctx) {
   const options = ctx.state.options;
   for (const param of ['start', 'end']) {
     if (typeof options[param] === 'undefined') {
+      if (Array.isArray(ctx.state.q[param])) {
+        ctx.throw(400, `Invalid duplicate parameter '${param}'`);
+      }
       ctx.throw(400, `Please specify required parameter '${param}'`);
     }
   }

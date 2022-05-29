@@ -324,7 +324,7 @@ const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
  */
 export function isoDateStringToDate(str) {
   if (!reIsoDate.test(str)) {
-    throw createError(400, `Date must match format YYYY-MM-DD: ${str}`);
+    throw createError(400, `Date does not match format YYYY-MM-DD: ${str}`);
   }
   const yy = parseInt(str, 10);
   const mm = parseInt(str.substring(5, 7), 10);
