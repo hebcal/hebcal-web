@@ -14,6 +14,8 @@ if (pn.substring(0, 15)=='/yahrzeit/edit/') {
 } else if ((pn=='/yahrzeit'||pn=='/yahrzeit/')&&typeof sp.get('t1')=='string') {
   url.pathname='/yahrzeit';
   url.search='';
+} else if (pn=='/email') {
+  sp.delete('e');
 } else if (pn=='/email/verify.php') {
   url.search='';
 } else if (pn=='/converter') {
