@@ -58,10 +58,13 @@ export async function shabbatApp(ctx) {
   const location = options.location;
   const campaign = makeAnchor(location.getShortName());
   const selfUrl = `${BASE_URL}?${ctx.state.geoUrlArgs}`;
+  ctx.state.q = q;
   ctx.state.poweredByUrl = appendIsraelAndTracking(selfUrl,
       options.il, 'shabbat1c', 'js-' + q.cfg, 's1c-' + campaign);
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe');
+  } else if (q.cfg === 'i2') {
+    return ctx.render('shabbat-js');
   } else if (q.cfg === 'j') {
     const html = await ctx.render('shabbat-js', {writeResp: false});
     ctx.set('Access-Control-Allow-Origin', '*');
@@ -214,7 +217,8 @@ function makeOptions(ctx) {
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q0[k] = 'on';
   }
-  const isApi = (q0.cfg === 'json' || q0.cfg === 'i' || q0.cfg === 'r' || q0.cfg === 'j');
+  const cfg = q0.cfg;
+  const isApi = (cfg === 'json' || cfg === 'i' || cfg === 'r' || cfg === 'j' || cfg === 'i2');
   const q = isApi ? q0 : processCookieAndQuery(ctx.cookies.get('C'), {}, q0);
   delete q.d;
   delete q.D;
@@ -402,7 +406,7 @@ function eventToItem(ev, options, locale, cfg) {
   }
   const url = ev.url();
   if (url) {
-    if (cfg === 'i' || cfg === 'j') {
+    if (cfg === 'i' || cfg === 'j' || cfg === 'i2') {
       const location = options.location;
       const campaign = makeAnchor(location.getShortName());
       obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg, 's1c-' + campaign);

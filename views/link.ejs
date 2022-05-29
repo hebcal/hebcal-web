@@ -26,16 +26,24 @@ Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 (<a href="#change">change city</a>).</p>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML:</p>
-<pre><code class="html">&lt;script type=&quot;text/javascript&quot; charset=&quot;utf-8&quot;
-src=&quot;https://www.hebcal.com/shabbat?cfg=j&amp;amp;<%= geoUrlArgsDbl %>&amp;amp;tgt=_top&quot;&gt;
-&lt;/script&gt;</code></pre>
+<pre><code class="html">&lt;div id="hebcal-shabbat"&gt;&lt;/div&gt;
+&lt;script defer&gt;
+fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top')
+  .then(response =&gt; response.text())
+  .then(data =&gt; document.getElementById('hebcal-shabbat').innerHTML = data);
+&lt;/script&gt;
+</code></pre>
 
 <p>The result will look like this (<a href="#fonts">customize fonts</a>):</p>
 
 <div class="box">
-<script type="text/javascript" charset="utf-8"
-src="https://www.hebcal.com/shabbat?cfg=j&amp;<%= geoUrlArgs %>&amp;tgt=_top">
-</script></div><!-- .box -->
+<div id="hebcal-shabbat"></div>
+<script defer>
+fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>')
+  .then(response => response.text())
+  .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
+</script>
+</div><!-- .box -->
 
 <div id="change-city">
 <h3 id="change">Change City</h3>
@@ -65,7 +73,26 @@ src="https://www.hebcal.com/shabbat?cfg=j&amp;<%= geoUrlArgs %>&amp;tgt=_top">
 <code>&lt;head&gt; ... &lt;/head&gt;</code> section at the top of your web
 page:</p>
 
-<script src="https://gist.github.com/mjradwin/fc4f38384a6335ab9963.js"></script>
+<pre><code class="html">&lt;style type="text/css"&gt;
+.hebcal-container {
+ font-family: "Gill Sans MT","Gill Sans",GillSans,Arial,Helvetica,sans-serif;
+ font-size: small;
+}
+.hebcal-container h3 {
+ font-family: Georgia,Palatino,"Times New Roman",Times,serif;
+}
+ul.hebcal-results { list-style-type:none }
+ul.hebcal-results li {
+  margin-bottom: 11px;
+  font-size: 21px;
+  font-weight: 200;
+  line-height: normal;
+}
+.hebcal-results .candles { color: red; font-size: large }
+.hebcal-results .havdalah { color: green }
+.hebcal-results .parashat { color: black; background: #ff9 }
+.hebcal-results .holiday { display: none }
+&lt;/style&gt;</code></pre>
 
 <p>Those fonts and colors are just an example.  <a
 href="https://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
@@ -73,8 +100,12 @@ very powerful and flexible.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
 </div><!-- #content -->
-<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
-<script type="text/javascript">
-hljs.initHighlightingOnLoad();
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.0/build/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('pre code').forEach(function(el) {
+    hljs.highlightElement(el);
+  });
+});
 </script>
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, typeahead: true}}) -%>
