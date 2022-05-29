@@ -6,11 +6,15 @@ var urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
 var url = new URL(urlHref);
 var sp = url.searchParams;
 var pn = url.pathname;
-if (pn.substring(0, 15) == '/yahrzeit/edit/') {
+if (pn.substring(0, 15)=='/yahrzeit/edit/') {
   url.pathname='/yahrzeit/edit/_ID_';
   url.search='';
+} else if (pn.substring(0, 17)=='/yahrzeit/verify/') {
+  url.pathname='/yahrzeit/verify/_ID_';
 } else if ((pn=='/yahrzeit'||pn=='/yahrzeit/')&&typeof sp.get('t1')=='string') {
   url.pathname='/yahrzeit';
+  url.search='';
+} else if (pn=='/email/verify.php') {
   url.search='';
 } else if (pn=='/converter') {
   if (sp.get('h2g')=='1') {
