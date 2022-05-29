@@ -1,4 +1,4 @@
-import {HebrewCalendar, Locale, HDate, flags, months} from '@hebcal/core';
+import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -29,12 +29,10 @@ function makeProperties(ctx) {
   if (!location) {
     ctx.throw(400, 'Location required: geonameid, zip, city');
   }
-  const hyear = parseInt(query.year, 10) || new HDate().getFullYear();
-  if (hyear < 3761) {
-    ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
-  }
-  options.start = new HDate(1, months.TISHREI, hyear).abs() - 1;
-  options.end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
+  const startEnd = getStartAndEnd(query);
+  options.start = startEnd[0];
+  options.end = startEnd[1];
+  const hyear = startEnd[2];
   const events = makeHebrewCalendar(ctx, options).filter((ev) => {
     return !ev.getDesc().startsWith('Chanukah');
   });
@@ -61,6 +59,29 @@ function makeProperties(ctx) {
     candleLightingStr: Locale.gettext('Candle lighting'),
     q: query,
   };
+}
+
+/**
+ * @param {any} query
+ * @return {number[]}
+ */
+function getStartAndEnd(query) {
+  if (query.yt === 'G') {
+    const year = parseInt(query.year, 10) || new Date().getFullYear();
+    if (year < 1752) {
+      ctx.throw(400, 'Gregorian year must be 1752 or later');
+    }
+    const start = greg.greg2abs(new Date(year, 0, 1));
+    const end = greg.greg2abs(new Date(year, 11, 31));
+    return [start, end];
+  }
+  const hyear = parseInt(query.year, 10) || new HDate().getFullYear();
+  if (hyear < 3761) {
+    ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
+  }
+  const start = new HDate(1, months.TISHREI, hyear).abs() - 1;
+  const end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
+  return [start, end, hyear];
 }
 
 /**
@@ -91,11 +112,18 @@ function makeContents(events, options) {
       date: d,
       time: HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options),
     };
-    if (i == events.length - 1) {
-      item.reason = Locale.gettext('Rosh Hashana');
-      item.yomtov = true;
-      objs.push(item);
-      return objs;
+    if (i === events.length - 1) {
+      if (hd.getMonth() === months.ELUL) {
+        item.reason = Locale.gettext('Rosh Hashana');
+        item.yomtov = true;
+        objs.push(item);
+      } else {
+        const parsha = ev.memo;
+        const space = parsha.indexOf(' ');
+        item.reason = parsha.substring(space + 1);
+        objs.push(item);
+      }
+      continue;
     }
     if (d.day() == 5) {
       const parshaEv = events.slice(i + 1).find((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA);

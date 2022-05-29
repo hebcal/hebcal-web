@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="<%=lang%>" dir="<%=htmlDir%>"><head>
 <meta charset="UTF-8">
-<title><%= location.getName() %> - <%= hyear %> Shabbat Times | Hebcal</title>
+<title><%= location.getName() %> - <%= hyear||gregYear1 %> Shabbat Times | Hebcal</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
@@ -45,6 +45,7 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
 .yomtov { font-weight:<%= lang === 'he' ? 700 : 600 %>}
 .narrow { font-family: 'Open Sans Condensed', sans-serif }
 .havdalah {display:none}
+.nowrap {white-space: nowrap !important;}
 @media print{
  a[href]:after{content:""}
  .nav {display:none}
@@ -55,7 +56,10 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
 <div class="container">
 <h3 class="text-center"><%= candleLightingStr %> - <%= location.getShortName() %>
 <br>
-<span lang="en" dir="ltr">Hebrew Year <%= hyear %> (<%= gregYear1 %> - <%= gregYear2 %>)</span>
+<span lang="en" dir="ltr">
+<% if (hyear) { %>Hebrew Year <%= hyear %> (<%= gregYear1 %> - <%= gregYear2 %>)
+<% } else { %><%= gregYear1 %> (<%= gregYear1 + 3760 %> - <%= gregYear1 + 3761 %>)<% } -%>
+</span>
 </h3>
 <p class="text-center" style="margin:0 0 4px">www.hebcal.com</p>
 <table style="width:524px" id="fridge-table">
@@ -76,9 +80,18 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
   <input type="checkbox" style="width:1.25rem; height:1.25rem; vertical-align: middle" id="toggle-havdalah">
   <label for="toggle-havdalah" style="vertical-align: middle">Show Havdalah times</label>
 </form>
-<p lang="en" dir="ltr"><a class="nav" title="Previous" rel="nofollow"
-href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr;&nbsp;<%= hyear - 1 %></a>&nbsp;&nbsp;&nbsp;Candle-lighting times are <%= q.b || 18 %> minutes before sunset.&nbsp;&nbsp;&nbsp;<a class="nav" title="Next"
-href="<%- url %>&amp;year=<%= hyear + 1 %>" rel="nofollow"><%= hyear + 1 %>&nbsp;&rarr;</a></p>
+<p lang="en" dir="ltr"><a class="nav nowrap" title="Previous" rel="nofollow"
+<% if (hyear) { %> href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr; <%= hyear - 1 %></a>
+<% } else { %> href="<%- url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a>
+<% } -%>
+&nbsp;&nbsp;&nbsp;
+Candle-lighting times are <%= q.b || 18 %> minutes before sunset
+&nbsp;&nbsp;&nbsp;
+<a class="nav nowrap" title="Next" rel="nofollow"
+<% if (hyear) { %> href="<%- url %>&amp;year=<%= hyear + 1 %>"><%= hyear + 1 %> &rarr;</a>
+<% } else { %> href="<%- url %>&amp;year=<%= gregYear1 + 1 %>&amp;yt=G"><%= gregYear1 + 1 %> &rarr;</a>
+<% } -%>
+</p>
 </div>
 </div><!-- .container -->
 <script>

@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale, Zmanim, Location} from '@hebcal/core';
+import {HebrewCalendar, Locale, Zmanim, Location, HDate} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty,
   getDefaultHebrewYear,
+  getDefaultYear,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
@@ -39,7 +40,7 @@ export async function shabbatApp(ctx) {
     return;
   }
   ctx.status = 200;
-  const {q, options, dateOverride, midnight, endOfWeek} = makeOptions(ctx);
+  const {q, options, dateOverride, dt} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status < 400 && ctx.request.querystring.length > 0) {
     ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
@@ -82,7 +83,7 @@ export async function shabbatApp(ctx) {
     ctx.body = obj;
   } else {
     const cookie = ctx.cookies.get('C');
-    const p = makePropsForFullHtml(ctx);
+    const p = makePropsForFullHtml(ctx, dt);
     if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
       // private cache only if we're tailoring results by cookie
       ctx.set('Cache-Control', 'private');
@@ -248,10 +249,10 @@ function makeOptions(ctx) {
   const [midnight, endOfWeek] = startAndEnd;
   options.start = new Date(midnight.year(), midnight.month(), midnight.date());
   options.end = new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date());
-  return {q, options, dateOverride: !now, midnight, endOfWeek};
+  return {q, options, dateOverride: !now, midnight, endOfWeek, dt};
 }
 
-function makePropsForFullHtml(ctx) {
+function makePropsForFullHtml(ctx, dt) {
   const items = ctx.state.items;
   const location = ctx.state.location;
   const briefText = items.map((i) => {
@@ -274,12 +275,15 @@ function makePropsForFullHtml(ctx) {
         havdalah,
         parashaItem && parashaItem.desc,
     );
-
-  return {
+  const geoUrlArgs = ctx.state.geoUrlArgs;
+  const yearInfo = getDefaultYear(dt, new HDate(dt));
+  const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
+  return Object.assign({
     summary: briefText.join('. '),
     jsonLD: jsonLD ? JSON.stringify(jsonLD) : '',
     locationName: location.getName(),
-  };
+    fridgeURL,
+  }, yearInfo);
 }
 
 function getJsonLD(ctx, candles, havdalah, torahPortion) {
