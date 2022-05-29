@@ -64,14 +64,13 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 
+app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
 
 app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
 
 app.use(stopIfTimedOut());
-
-app.use(xResponseTime());
 
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
