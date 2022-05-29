@@ -41,6 +41,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     headers: {
       'Host': 'www.hebcal.com',
       'X-Forwarded-For': ip,
+      'X-Client-IP': ip,
       'X-Forwarded-Proto': 'https',
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': Buffer.byteLength(postData),
