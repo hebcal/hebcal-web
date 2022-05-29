@@ -122,6 +122,8 @@ app.use(async function sendStatic(ctx, next) {
 
 app.use(stopIfTimedOut());
 
+const bingUA = 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
+
 // Fix up querystring so we can later use ctx.request.query
 app.use(async function fixup1(ctx, next) {
   const path = ctx.request.path;
@@ -155,7 +157,8 @@ app.use(async function fixup1(ctx, next) {
       ctx.request.query = Object.assign(q, ctx.request.query);
       ctx.request.path = '/export/' + filename;
     } catch (err) {
-      const status = err.status || 400;
+      const userAgent = ctx.get('user-agent');
+      const status = userAgent === bingUA ? 404 : err.status || 400;
       ctx.throw(status, `Invalid download URL: ${data}`);
     }
   } else if (path.startsWith('/v2')) {
