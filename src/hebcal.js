@@ -391,12 +391,12 @@ function renderEventHtml(ev, options, locale) {
     const suffix = options.il && url.indexOf('?') === -1 ? '?i=on' : '';
     url = url.substring(22) + suffix;
   }
-  const ahref = url ? `<a href="${url}">` : '';
+  const ahref = url ? `<a href="${url}"${memo}>` : '';
   const aclose = url ? '</a>' : '';
   const hebrew = options.appendHebrewToSubject ?
     '<br>' + subjectSpan(null, 'he', ev.renderBrief('he-x-NoNikud')) : '';
   // eslint-disable-next-line max-len
-  return `<div class="fc-event ${classes}">${ahref}<span class="fc-title"${memo}>${title}${hebrew}</span>${aclose}</div>\n`;
+  return `<div class="fc-event ${classes}">${ahref}${title}${hebrew}${aclose}</div>\n`;
 }
 
 /**
