@@ -154,13 +154,22 @@ function setYahrzeitCookie(ctx) {
 async function renderJson(maxId, q) {
   delete q.ulid;
   const events = await makeYahrzeitEvents(maxId, q);
-  const results = eventsToClassicApi(events, {}, false);
+  const results = eventsToClassicApi(events, {includeEvent: true}, false);
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;
     if (typeof item.memo === 'string') {
       item.memo = item.memo.replace(/\\n/g, '\n');
     }
+    const ev = item.ev;
+    delete item.ev;
+    if (ev.name) item.name = ev.name;
+    if (ev.type) {
+      item.category = ev.type.toLowerCase();
+    } else if (item.title.startsWith('Yizkor (')) {
+      item.category = 'yizkor';
+    }
+    if (ev.anniversary) item.anniversary = ev.anniversary;
   }
   results.title = makeCalendarTitle(q, 255);
   delete results.location;
@@ -428,14 +437,12 @@ async function makeYahrzeitEvents(maxId, query) {
 /**
  * @param {Date} origDt
  * @param {number} hyear
- * @return {string}
+ * @return {number}
  */
 function calculateAnniversaryNth(origDt, hyear) {
   const origHd = new HDate(origDt);
   const origHyear = origHd.getFullYear();
-  const numYears = hyear - origHyear;
-  const nth = Locale.ordinal(numYears, 'en');
-  return nth;
+  return hyear - origHyear;
 }
 
 /**
@@ -484,7 +491,10 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   }
   const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
   const hebdate = hd.render('en');
-  const nth = calculateAnniversaryNth(origDt, hyear);
+  const origHd = new HDate(origDt);
+  const origHyear = origHd.getFullYear();
+  const yearNumber = hyear - origHyear;
+  const nth = Locale.ordinal(yearNumber, 'en');
   const name = info.name;
   let subj = `${name}'s ${nth} ${typeStr}`;
   if (appendHebDate) {
@@ -517,6 +527,9 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   ev.memo = memo;
   const hash = calendarId || await murmur32Hex(name);
   ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
+  ev.name = name;
+  ev.type = type;
+  ev.anniversary = yearNumber;
   return ev;
 }
 
