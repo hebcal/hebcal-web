@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/styles/default.min.css">
 <link rel="stylesheet" type="text/css" href="/i/typeahead1.css">
+<link rel="canonical" href="https://www.hebcal.com/link?<%=geoUrlArgs%>">
 <meta name="robots" content="noindex, nofollow">
 <style type="text/css">
 ul.hebcal-results { list-style-type: none }
@@ -22,10 +23,10 @@ times and Torah portion directly on your synagogue's website.</p>
 <p>Browse the <a href="/home/developer-apis">Hebcal web developer
 APIs</a> to display other information on your site (e.g. today's
 Hebrew date, a full Jewish Calendar, RSS feeds).</p>
-<p>The following tags are for <b><%= locationName %></b>
-(<a href="#change">change city</a>).</p>
+<h3><%= locationName %></h3>
+<a href="#change">Change city</a>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
-the appropriate place in your HTML:</p>
+the appropriate place in your HTML.</p>
 <pre><code class="html">&lt;div id="hebcal-shabbat"&gt;&lt;/div&gt;
 &lt;script defer&gt;
 fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top')
@@ -36,32 +37,36 @@ fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top'
 
 <p>The result will look like this (<a href="#fonts">customize fonts</a>):</p>
 
-<div class="box">
+<div class="card">
+<div class="card-body">
 <div id="hebcal-shabbat"></div>
 <script defer>
 fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>')
   .then(response => response.text())
-  .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
+  .then(data => document.getElementById('hebcal-shabbat').innerHTML = data.replace(/h3>/g, 'h4>'));
 </script>
-</div><!-- .box -->
+</div><!-- .card-body -->
+</div><!-- .card -->
 
 <div id="change-city">
-<h3 id="change">Change City</h3>
-<p>Enter a new city to get revised HTML tags for your synagogue's web page.</p>
-
-<form action="<%= rpath %>" autocomplete="off" method="get">
-<div class="form-floating">
+<h3 id="change">City and settings</h3>
+<p>Enter a new city or select different candle-lighting, Havdalah
+  or language options to get revised HTML tags.</p>
+<form action="/link" autocomplete="off" method="get">
+<div class="row">
+<div class="col-sm-6">
+<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
+<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
+<%- await include('partials/city-and-havdalah.ejs') -%>
+<label class="form-label" for="lg">Event titles</label>
 <select name="lg" class="form-select mb-2" id="lg">
 <% for (const [langName, desc] of Object.entries(langNames)) { -%>
 <option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
 <% } -%>
 </select>
-<label for="lg">Event titles</label>
 </div>
-<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
-<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
-<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
-<%- await include('partials/city-and-havdalah.ejs') -%>
+</div>
 <button type="submit" class="btn btn-primary">Get new HTML tags</button>
 </form>
 </div><!-- #change-city -->
