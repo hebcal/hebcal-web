@@ -8,6 +8,7 @@ import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {langTzDefaults, CACHE_CONTROL_7DAYS} from './common';
+import flag from 'emoji-flag';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -164,6 +165,7 @@ export async function shabbatBrowse(ctx) {
       parsha,
       admin1: {size: 0},
       countryA1,
+      flag: flag(countryCode),
     });
   }
   throw createError(404, `Browse page not found: ${base}`);
@@ -192,6 +194,7 @@ async function countryPage(ctx, countryCode) {
     return render(ctx, 'shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
+      flag: flag(countryCode),
       countryName,
       admin1: listItems,
       results,
@@ -204,6 +207,7 @@ async function countryPage(ctx, countryCode) {
     return render(ctx, 'shabbat-browse-country-small', {
       title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
+      flag: flag(countryCode),
       countryName,
       results,
       admin1,
@@ -215,6 +219,7 @@ async function countryPage(ctx, countryCode) {
     return render(ctx, 'shabbat-browse-country', {
       title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
+      flag: flag(countryCode),
       countryName,
       results,
       admin1: listItems,

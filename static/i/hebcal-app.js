@@ -225,7 +225,8 @@ export const hebcalClient = {
         },
         suggestion: function(ctx) {
           if (typeof ctx.geo === 'string' && ctx.geo == 'zip') {
-            return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - United States</p>`;
+            const flag = ctx.flag ? ' ' + ctx.flag : '';
+            return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - United States${flag}</p>`;
           } else {
             const ctry = ctx.country && ctx.country == 'United Kingdom' ? 'UK' : ctx.country;
             let ctryStr = ctry || '';
@@ -237,7 +238,8 @@ export const hebcalClient = {
             if (ctryStr) {
               ctryStr = ` - <small>${ctryStr}</small>`;
             }
-            return `${s + ctryStr}</p>`;
+            const flag = ctx.flag ? ' ' + ctx.flag : '';
+            return `${s}${ctryStr}${flag}</p>`;
           }
         },
       },

@@ -12,7 +12,7 @@ ul.list-unstyled li {margin-bottom: 0.5em}
 <div id="content">
 <div class="row mt-3">
 <div class="col">
-<h2><%=countryName%><br><span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
+<h2><%=countryName%> <%=flag%><br><span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
 <p class="lead"><time datetime="<%= friday.format('YYYY-MM-DD') %>"><%= friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= parsha %></a></p>
 <ul class="list-unstyled">
 <% for (const r of results) { -%>

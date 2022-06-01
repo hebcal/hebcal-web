@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite9.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-3.7.min.js",
+    "clientapp": "hebcal-app-3.8.min.js",
     "typeaheadcss": "typeahead1.css"
   },
   "scripts": {
@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^3.38.0",
-    "@hebcal/geo-sqlite": "^4.5.1",
+    "@hebcal/geo-sqlite": "^4.5.2",
     "@hebcal/icalendar": "^4.18.0",
     "@hebcal/leyning": "^4.13.3",
     "@hebcal/locales": "^3.4.1",
@@ -54,6 +54,7 @@
     "better-sqlite3": "^7.5.3",
     "dayjs": "^1.11.2",
     "ejs": "^3.1.8",
+    "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.12",
     "geo-tz": "^7.0.2",

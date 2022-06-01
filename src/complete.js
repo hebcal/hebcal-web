@@ -1,4 +1,6 @@
 import {cacheControl} from './common';
+import flag from 'emoji-flag';
+
 const NOTFOUND = {error: 'Not Found'};
 
 // eslint-disable-next-line require-jsdoc
@@ -21,6 +23,12 @@ export async function geoAutoComplete(ctx) {
     if (!latlong) {
       for (const item of items) {
         delete item.population;
+      }
+    }
+    for (const item of items) {
+      const cc = item.cc;
+      if (cc && cc.length === 2) {
+        item.flag = flag(cc.toUpperCase());
       }
     }
     ctx.set('Cache-Control', cacheControl(1));
