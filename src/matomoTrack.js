@@ -58,15 +58,13 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   const options = {
     hostname: 'www-internal.hebcal.com',
     port: 8080,
-    path: '/ma/ma.php',
-    method: 'POST',
+    path: '/ma/ma.php?' + postData,
+    method: 'GET',
     headers: {
       'Host': 'www.hebcal.com',
       'X-Forwarded-For': xfwd,
       'X-Client-IP': ipAddress,
       'X-Forwarded-Proto': 'https',
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': Buffer.byteLength(postData),
     },
   };
   if (!isProduction) {

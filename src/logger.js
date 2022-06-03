@@ -139,7 +139,9 @@ export function errorLogger(logger) {
       }
     }
     if (ctx && ctx.status && ctx.status != 200) {
-      matomoTrack(ctx, 'Error', ctx.status, ctx.request.path);
+      matomoTrack(ctx, 'Error', ctx.status, ctx.request.path, {
+        url: ctx.request.href,
+      });
     }
   };
 }
