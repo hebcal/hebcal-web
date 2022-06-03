@@ -1,37 +1,39 @@
-/* eslint-disable no-var, one-var, keyword-spacing, comma-spacing, brace-style, space-before-blocks */
+/* eslint-disable no-var, one-var, keyword-spacing, comma-spacing, brace-style, space-before-blocks, require-jsdoc */
 var _paq = window._paq = window._paq || [];
 var canonicalMeta=document.querySelector('link[rel="canonical"]');
 var urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
+/* save utm */
+var utm_ = {};
+new URL(window.location.href).searchParams.forEach(function(value, key) {
+  if (key[0] === 'u' && key[1] === 't' && key[2] === 'm' && key[3] === '_') {
+    utm_[key] = value;
+  }
+});
 /* redact identifier from URL */
 var url = new URL(urlHref);
 var sp = url.searchParams;
 var pn = url.pathname;
 if (pn.substring(0, 15)=='/yahrzeit/edit/') {
   url.pathname='/yahrzeit/edit/_ID_';
-  url.search='';
 } else if (pn.substring(0, 17)=='/yahrzeit/verify/') {
   url.pathname='/yahrzeit/verify/_ID_';
-} else if ((pn=='/yahrzeit'||pn=='/yahrzeit/')&&typeof sp.get('t1')=='string') {
+} else if (pn=='/yahrzeit/') {
   url.pathname='/yahrzeit';
-  url.search='';
-} else if (pn=='/email') {
-  sp.delete('e');
-} else if (pn=='/email/verify.php') {
-  url.search='';
 } else if (pn=='/converter') {
   if (sp.get('h2g')=='1') {
     url.pathname='/converter/'+sp.get('hy')+'/'+sp.get('hm')+'/'+sp.get('hd');
   } else {
     url.pathname='/converter/'+sp.get('gy')+'/'+sp.get('gm')+'/'+sp.get('gd');
   }
-  url.search='';
 } else if (pn=='/hebcal') {
   var yr=sp.get('year');
   url.pathname=sp.get('v')=='1'&&yr?'/hebcal/'+yr:'/hebcal';
-  url.search='';
-} else if (pn=='/shabbat/fridge.cgi'||pn=='/shabbat') {
-  url.search='';
 }
+/* always remove search params */
+url.search='';
+Object.entries(utm_).forEach(function(arr) {
+  url.searchParams.set(arr[0], arr[1]);
+});
 _paq.push(['setCustomUrl', url.href]);
 _paq.push(['disableCookies']);
 _paq.push(['trackPageView']);
