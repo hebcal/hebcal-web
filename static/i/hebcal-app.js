@@ -213,9 +213,21 @@ export const hebcalClient = {
 
     $('#city-typeahead').typeahead({autoselect: true}, {
       name: 'hebcal-city',
-      displayKey: 'value',
+      display: function(ctx) {
+        const country = ctx.country;
+        const ctry = country == 'United Kingdom' ? 'UK' : country == 'United States' ? 'USA' : country;
+        let ctryStr = ctry || '';
+        const cc = ctx.cc;
+        const admin1 = cc === 'IL' ? '' : ctx.admin1 || '';
+        if (admin1.length > 0 && admin1.indexOf(ctx.asciiname) != 0) {
+          ctryStr = admin1 + ', ' + ctryStr;
+        }
+        const name = ctx.name || ctx.asciiname;
+        const s = name + ', ' + ctryStr;
+        return s;
+      },
       source: hebcalCities.ttAdapter(),
-      limit: 8,
+      limit: 10,
       templates: {
         empty: function({query}) {
           const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
@@ -228,12 +240,15 @@ export const hebcalClient = {
             const flag = ctx.flag ? ' ' + ctx.flag : '';
             return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - United States${flag}</p>`;
           } else {
-            const ctry = ctx.country && ctx.country == 'United Kingdom' ? 'UK' : ctx.country;
+            const country = ctx.country;
+            const ctry = country == 'United Kingdom' ? 'UK' : country == 'United States' ? 'USA' : country;
             let ctryStr = ctry || '';
-            const s = `<p><strong>${ctx.asciiname}</strong>`;
-            if (ctry && typeof ctx.admin1 === 'string' && ctx.admin1.length > 0 &&
-                ctx.admin1.indexOf(ctx.asciiname) != 0) {
-              ctryStr = `${ctx.admin1}, ${ctryStr}`;
+            const name = ctx.name || ctx.asciiname;
+            const s = `<p><strong>${name}</strong>`;
+            const admin1 = ctx.cc === 'IL' ? '' : ctx.admin1 || '';
+            if (ctry && typeof admin1 === 'string' && admin1.length > 0 &&
+                admin1.indexOf(ctx.asciiname) != 0) {
+              ctryStr = `${admin1}, ${ctryStr}`;
             }
             if (ctryStr) {
               ctryStr = ` - <small>${ctryStr}</small>`;
