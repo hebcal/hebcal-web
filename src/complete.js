@@ -5,7 +5,9 @@ const NOTFOUND = {error: 'Not Found'};
 
 // eslint-disable-next-line require-jsdoc
 export async function geoAutoComplete(ctx) {
-  if (ctx.get('if-modified-since')) {
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
     ctx.status = 304;
     ctx.body = {status: 'Not Modified'};
     return;
