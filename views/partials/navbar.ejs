@@ -16,7 +16,7 @@ function menuItem(path, title, tooltip, selected) {
 
 // eslint-disable-next-line require-jsdoc
 function htmlMenu(selected) {
-  let str = '<ul class="navbar-nav me-auto mb-2 mb-lg-0">';
+  let str = '<ul class="navbar-nav me-auto mb-2 mb-lg-0 d-print-none">';
   for (const item of MENU_ITEMS) {
     str += menuItem(item[0], item[1], item[2], selected);
     str += '</li>';
@@ -39,7 +39,7 @@ if (rpath === '/') {
   </button>
   <div class="collapse navbar-collapse d-print-none" id="navbarSupportedContent">
     <%- htmlMenu(rpath) %>
-    <form class="d-flex" role="search" method="get" id="searchform" action="/home/">
+    <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search">
     </form>
   </div>
