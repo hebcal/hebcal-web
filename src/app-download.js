@@ -17,6 +17,7 @@ import {yahrzeitDownload} from './yahrzeit';
 import {MysqlDb} from './db';
 import {zmanimIcalendar} from './zmanim';
 import {deserializeDownload} from './deserializeDownload';
+import redirectMap from './redirectDownload.json';
 
 const app = new Koa();
 
@@ -100,6 +101,10 @@ app.use(async function sendStatic(ctx, next) {
   } else if (rpath === '/favicon.ico') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
+    const path = rpath.substring(0, rpath.length - 1);
+    httpRedirect(ctx, path, 301);
+    return;
   } else if (rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', 'max-age=5184000');
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
@@ -172,6 +177,20 @@ app.use(async function fixup1(ctx, next) {
 });
 
 app.use(stopIfTimedOut());
+
+app.use(async function redirLegacy(ctx, next) {
+  if (ctx.request.querystring.length === 0) {
+    const rpath = ctx.request.path;
+    const rpath0 = rpath.substring(0, rpath.length - 1);
+    if (typeof redirectMap[rpath] !== 'undefined' || typeof redirectMap[rpath0] !== 'undefined') {
+      const destination = redirectMap[rpath] || redirectMap[rpath0];
+      ctx.status = 301;
+      ctx.redirect(destination);
+      return;
+    }
+  }
+  await next();
+});
 
 // request dispatcher
 app.use(async function router(ctx, next) {
