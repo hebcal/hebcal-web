@@ -50,12 +50,6 @@ function myPrint() {
   }
   // For now, only do magic print stuff on Chrome, Edge 20+ and Firefox
   if (!!window.chrome || !!window.StyleMedia || typeof InstallTrigger !== 'undefined') {
-    var printEl = document.getElementById('print-pdf');
-    printEl.onclick = function(e) {
-      myPrint();
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    };
     document.addEventListener('keydown', function(e) {
       if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
         myPrint();
