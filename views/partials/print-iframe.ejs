@@ -1,0 +1,68 @@
+<div class="modal fade" id="printModal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <p class="fs-4">Generating preview</p>
+        <p>This may take a few moments...</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+function myPrint() {
+  var modal = document.getElementById('printModal');
+  var myModal = new bootstrap.Modal(modal, {backdrop: 'static', keyboard: false});
+  myModal.show();
+  var printEl = document.getElementById('print-pdf');
+  var pdfUrl = printEl.getAttribute('href');
+  fetch(pdfUrl, {mode: 'cors', credentials: 'omit'})
+    .then(function(response) { return response.arrayBuffer(); })
+    .then(function(pdf) {
+      var pdfBlob = new Blob([new Uint8Array(pdf, 0)], {type:'application/pdf'});
+      var iframe = document.createElement('iframe');
+      // iframe.style.display = 'none';
+      iframe.setAttribute('id', 'ipdf');
+      iframe.setAttribute('name', 'ipdf');
+      iframe.src = URL.createObjectURL(pdfBlob);
+      var focusHandler = function() {
+        window.removeEventListener('focus', focusHandler);
+        var el = document.getElementById('ipdf');
+        if (el) {
+          el.remove();
+        }
+      };
+      iframe.onload = function() {
+        URL.revokeObjectURL(iframe.src);
+        window.addEventListener('focus', focusHandler);
+      };
+      document.body.style.overflow = 'hidden';
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+      document.body.appendChild(iframe);
+      setTimeout(function() {
+        myModal.hide();
+        var cw = iframe.contentWindow;
+        cw.focus();
+        cw.print();
+      }, 1200);
+    });
+  }
+  // For now, only do magic print stuff on Chrome, Edge 20+ and Firefox
+  if (!!window.chrome || !!window.StyleMedia || typeof InstallTrigger !== 'undefined') {
+    var printEl = document.getElementById('print-pdf');
+    printEl.onclick = function(e) {
+      myPrint();
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
+        myPrint();
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    });
+  }
+});
+</script>

@@ -173,11 +173,12 @@ export async function emailForm(ctx) {
         ctx.throw(ctx.status, ctx.state.message);
       }
     } else if (q.unsubscribe === '1') {
-      ctx.state.emailAddress = q.em;
+      const emailAddress = ctx.state.emailAddress = q.em;
       const ok = await unsubscribe(ctx, q.em);
+      matomoTrack(ctx, 'Unsubscribe', 'shabbat-weekly', emailAddress);
       if (ok) {
         if (isJSON) {
-          ctx.body = {ok: true, unsubscribe: true, emailAddress: ctx.state.emailAddress};
+          ctx.body = {ok: true, unsubscribe: true, emailAddress};
           return;
         }
         return ctx.render('email-unsubscribe');
@@ -295,7 +296,6 @@ async function unsubscribe(ctx, emailAddress, subInfo) {
     ctx.state.success = true;
     success = true;
   }
-  matomoTrack(ctx, 'Unsubscribe', 'shabbat-weekly', emailAddress);
   return success;
 }
 

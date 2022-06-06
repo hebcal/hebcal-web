@@ -52,7 +52,10 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     args.set('urlref', ref);
   }
   if (ctx.state.userId) {
-    args.set('uid', ctx.state.userId);
+    const uid = ctx.state.userId;
+    const vid = uid.substring(0, 4) + uid.substring(24);
+    args.set('uid', uid);
+    args.set('_id', vid);
   }
   const postData = args.toString();
   const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;

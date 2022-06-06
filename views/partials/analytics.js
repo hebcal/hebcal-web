@@ -47,7 +47,11 @@ if(c0&&c0.length&&typeof URLSearchParams=='function'){
   if(cks['C']){
     var ck=new URLSearchParams(cks['C']);
     var uid=ck.get('uid');
-    if(uid){_paq.push(['setUserId', uid])}
+    if(uid){
+      var vid = uid.substring(0, 4) + uid.substring(24);
+      _paq.push(['setVisitorId', vid]);
+      _paq.push(['setUserId', uid]);
+    }
   }
 }
 (function() {

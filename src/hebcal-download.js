@@ -58,6 +58,7 @@ export async function hebcalDownload(ctx) {
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = csv;
   } else if (extension == '.pdf') {
+    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
     const doc = ctx.body = createPdfDoc(title, options);

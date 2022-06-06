@@ -154,34 +154,40 @@ function eventColor(evt) {
  */
 function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const color = eventColor(evt);
-  doc.fillColor(color).fontSize(8);
+  doc.fillColor(color);
+  let timedWidth = 0;
   const timed = Boolean(evt.eventTime);
   if (timed) {
     const str = HebrewCalendar.reformatTimeStr(evt.eventTimeStr, 'p', options) + ' ';
-    doc.font('bold');
-    const width = doc.widthOfString(str);
-    doc.text(str, x, y);
-    x += width;
+    doc.font('bold').fontSize(8.5);
+    timedWidth = doc.widthOfString(str);
+    doc.text(str, x, y + 1);
+    x += timedWidth;
   }
   const locale = options && options.locale;
   const mask = evt.getFlags();
   let subj = shouldRenderBrief(evt) ? evt.renderBrief(locale) : evt.render(locale);
   const isChag = Boolean(mask & flags.CHAG) && !timed;
-  let fontStyle = isChag ? 'bold' : 'plain';
+  let fontSize = rtl ? 12 : 10;
+  const heFontName = isChag ? 'hebrew-bold' : 'hebrew';
+  const fontStyle = rtl ? heFontName : isChag ? 'bold' : 'plain';
   if (mask & flags.SHABBAT_MEVARCHIM) {
     const space = subj.indexOf(' ');
     subj = subj.substring(space + 1);
   }
   if (rtl) {
-    fontStyle = isChag ? 'hebrew-bold' : 'hebrew';
-    doc.fontSize(10);
     subj = reverseHebrewWords(subj);
   }
-  doc.font(fontStyle);
+  doc.font(fontStyle).fontSize(fontSize);
   let width = doc.widthOfString(subj);
-  if (width > (PDF_COLWIDTH - 20)) {
-    doc.fontSize(rtl ? 8 : 7);
-    width = doc.widthOfString(subj);
+  for (let i = 0; i < 6; i++) {
+    if (timedWidth + width > (PDF_COLWIDTH - 8)) {
+      fontSize = fontSize - 0.5;
+      doc.fontSize(fontSize);
+      width = doc.widthOfString(subj);
+    } else {
+      break;
+    }
   }
   const textOptions = {};
   const url = evt.url();
@@ -197,22 +203,21 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     doc.font(fontStyle);
     const widthSlash = doc.widthOfString(slash);
     const hebrew = evt.renderBrief('he');
-    const heFontName = isChag ? 'hebrew-bold' : 'hebrew';
-    doc.font(heFontName).fontSize(9);
+    doc.font(heFontName).fontSize(11);
     const hebrewWidth = doc.widthOfString(hebrew);
-    if ((width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 23)) {
-      y += 12;
+    if ((timedWidth + width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 8)) {
+      y += (fontSize * 1.35);
     } else {
       x += width;
-      doc.font(fontStyle).fontSize(8);
+      doc.font(fontStyle).fontSize(fontSize);
       doc.text(slash, x, y);
       x += widthSlash;
       y += 1.35;
     }
-    doc.font(heFontName).fontSize(9);
+    doc.font(heFontName).fontSize(11);
     doc.text(reverseHebrewWords(hebrew), x, y);
   }
-  return y + 12; // newline within cell
+  return y + (fontSize * 1.4); // newline within cell
 }
 
 /**

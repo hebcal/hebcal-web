@@ -214,6 +214,9 @@ export const hebcalClient = {
     $('#city-typeahead').typeahead({autoselect: true}, {
       name: 'hebcal-city',
       display: function(ctx) {
+        if (ctx.geo === 'zip') {
+          return `${ctx.asciiname}, ${ctx.admin1} ${ctx.id}`;
+        }
         const country = ctx.country;
         const ctry = country == 'United Kingdom' ? 'UK' : country == 'United States' ? 'USA' : country;
         let ctryStr = ctry || '';
@@ -236,9 +239,9 @@ export const hebcalClient = {
           return `<div class="tt-suggestion">Sorry, no city names match <b>${encodedStr}</b>.</div>`;
         },
         suggestion: function(ctx) {
-          if (typeof ctx.geo === 'string' && ctx.geo == 'zip') {
+          if (ctx.geo === 'zip') {
             const flag = ctx.flag ? ' ' + ctx.flag : '';
-            return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - United States${flag}</p>`;
+            return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - USA${flag}</p>`;
           } else {
             const country = ctx.country;
             const ctry = country == 'United Kingdom' ? 'UK' : country == 'United States' ? 'USA' : country;

@@ -183,6 +183,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <% if (item.desc !== parsha.name) { %> &middot; <small><%=item.desc%></small><% } %>
 <% }); %>
 </ul>
+<div class="d-print-none">
 <form method="GET" action="/sedrot/<%=parsha.anchor%>">
 <label for="gy">Look up the date of Parashat <%=parsha.name%> in a past or future year</label>
 <div class="row gx-2 mb-3">
@@ -194,7 +195,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div>
 </form>
-
+</div><!-- .d-print-none -->
 <h4 id="ref">References</h4>
 <dl>
 <dt><em><a class="amzn" id="chumash-2" rel="sponsored"
@@ -213,12 +214,12 @@ Complete Triennial System for Reading the Torah</a></em>
 <% } %>
 </dl>
 
-<div class="d-flex gx-2 mt-2 justify-content-between">
+<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <% if (parsha.prev) { %><div>
-<a class="btn btn-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name%></a>
+<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name%></a>
 </div><% } %>
 <% if (parsha.next) { %><div>
-<a class="btn btn-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 
