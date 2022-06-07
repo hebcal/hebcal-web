@@ -12,6 +12,7 @@ import {eventsToClassicApi, eventToFullCalendar, pad2,
   locationToPlainObj,
   shouldRenderBrief,
   getCalendarTitle,
+  getDownloadFilename,
   eventsToCsv,
   eventsToRss2,
   getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
@@ -108,12 +109,14 @@ export async function hebcalApp(ctx) {
       ctx.body = renderLegacyJavascript(ctx);
       break;
     case 'csv':
+      ctx.response.attachment(getDownloadFilename(options) + '.csv');
       ctx.body = renderCsv(ctx);
       break;
     case 'rss':
       ctx.body = renderRss(ctx);
       break;
     case 'ics':
+      ctx.response.attachment(getDownloadFilename(options) + '.ics');
       return renderIcal(ctx);
     default:
       if (q.v === '1') {
