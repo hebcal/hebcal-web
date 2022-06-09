@@ -4,10 +4,8 @@ var canonicalMeta=document.querySelector('link[rel="canonical"]');
 var urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
 /* save utm */
 var utm_ = {};
-new URL(window.location.href).searchParams.forEach(function(value, key) {
-  if (key[0] === 'u' && key[1] === 't' && key[2] === 'm' && key[3] === '_') {
-    utm_[key] = value;
-  }
+new URL(window.location.href).searchParams.forEach(function(v, k) {
+  if (k[0]=='u'&&k[1]=='t'&&k[2]=='m'&&k[3]=='_') {utm_[k] = v;}
 });
 /* redact identifier from URL */
 var url = new URL(urlHref);

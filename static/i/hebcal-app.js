@@ -189,6 +189,7 @@ export const hebcalClient = {
   },
 
   createCityTypeahead: function(autoSubmit) {
+    const doFlags = navigator.userAgent.indexOf('Win') === -1;
     const hebcalCities = new Bloodhound({
       datumTokenizer: Bloodhound.tokenizers.obj.whitespace('value'),
       queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -240,7 +241,7 @@ export const hebcalClient = {
         },
         suggestion: function(ctx) {
           if (ctx.geo === 'zip') {
-            const flag = ctx.flag ? ' ' + ctx.flag : '';
+            const flag = doFlags && ctx.flag ? ' ' + ctx.flag : '';
             return `<p>${ctx.asciiname}, ${ctx.admin1} <strong>${ctx.id}</strong> - USA${flag}</p>`;
           } else {
             const country = ctx.country;
@@ -256,7 +257,7 @@ export const hebcalClient = {
             if (ctryStr) {
               ctryStr = ` - <small>${ctryStr}</small>`;
             }
-            const flag = ctx.flag ? ' ' + ctx.flag : '';
+            const flag = doFlags && ctx.flag ? ' ' + ctx.flag : '';
             return `${s}${ctryStr}${flag}</p>`;
           }
         },
