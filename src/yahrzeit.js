@@ -315,7 +315,8 @@ export async function yahrzeitDownload(ctx) {
       query[key] = value[1];
     }
   }
-  if (query.v !== 'yahrzeit') {
+  const vv = query.v;
+  if (!vv || vv[0] !== 'y') {
     return;
   }
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();

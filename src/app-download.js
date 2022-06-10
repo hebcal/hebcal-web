@@ -218,7 +218,7 @@ app.use(async function router(ctx, next) {
     ctx.set('Cache-Control', 'max-age=2592000');
     ctx.state.logQuery = true;
     const vv = ctx.request.query.v;
-    if (vv == 'yahrzeit') {
+    if (typeof vv === 'string' && vv[0] === 'y') {
       return yahrzeitDownload(ctx);
     } else if (vv == '1') {
       return hebcalDownload(ctx);
