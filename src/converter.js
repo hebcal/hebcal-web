@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
@@ -72,6 +72,11 @@ export async function hebrewDateConverter(ctx) {
         hm: p.hmStr,
         hd: p.hd,
         hebrew: p.hebrew,
+        heDateParts: {
+          y: gematriya(p.hy),
+          m: Locale.gettext(p.hmStr, 'he-x-NoNikud'),
+          d: gematriya(p.hd),
+        },
       };
       if (p.events.length) {
         result.events = p.events.map(renameChanukah(p.locale));
@@ -312,11 +317,17 @@ function parseConverterQuery(ctx) {
       for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
         const isoDate = d.format('YYYY-MM-DD');
         const hdate = new HDate(d.toDate());
+        const hy = hdate.getFullYear();
+        const hm = hdate.getMonthName();
+        const hd = hdate.getDate();
         const result = {
-          hy: hdate.getFullYear(),
-          hm: hdate.getMonthName(),
-          hd: hdate.getDate(),
+          hy, hm, hd,
           hebrew: gematriyaDate(hdate),
+          heDateParts: {
+            y: gematriya(hy),
+            m: Locale.gettext(hm, 'he-x-NoNikud'),
+            d: gematriya(hd),
+          },
         };
         const events = getEvents(hdate, il);
         if (events.length) {
