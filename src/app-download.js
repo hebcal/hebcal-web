@@ -169,6 +169,15 @@ app.use(async function fixup2(ctx, next) {
 
 app.use(stopIfTimedOut());
 
+app.use(async function fixup3(ctx, next) {
+  const rpath = ctx.request.path;
+  const q = ctx.request.query;
+  if (rpath.startsWith('/export/') && (typeof q.v === 'undefined' || !q.v.length) && q.y1 && q.m1 && q.d1) {
+    ctx.request.query.v = 'yahrzeit';
+  }
+  return next();
+});
+
 app.use(async function redirLegacy(ctx, next) {
   if (ctx.request.querystring.length === 0) {
     const rpath = ctx.request.path;
