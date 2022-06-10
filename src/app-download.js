@@ -223,7 +223,8 @@ app.use(async function router(ctx, next) {
     } else if (vv == '1') {
       return hebcalDownload(ctx);
     } else {
-      ctx.throw(400, `Invalid download URL: v=${vv}`);
+      const status = typeof vv === 'undefined' ? 404 : 400;
+      ctx.throw(status, `Invalid download URL: v=${vv}`);
     }
   } else if (rpath.startsWith('/zmanim')) {
     return zmanimIcalendar(ctx);
