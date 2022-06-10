@@ -86,7 +86,7 @@ app.use(stopIfTimedOut());
 const DOCUMENT_ROOT = '/var/www/html';
 
 // Send static files before regular request dispatch
-app.use(async function sendStatic(ctx, next) {
+app.use(async function fixup1(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
@@ -98,19 +98,10 @@ app.use(async function sendStatic(ctx, next) {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     ctx.redirect('https://www.hebcal.com/ical/', 301);
     return;
-  } else if (rpath === '/favicon.ico') {
-    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
-    return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
     const path = rpath.substring(0, rpath.length - 1);
     httpRedirect(ctx, path, 301);
     return;
-  } else if (rpath.startsWith('/ical')) {
-    ctx.set('Cache-Control', 'max-age=5184000');
-    return send(ctx, rpath, {root: DOCUMENT_ROOT});
-  } else if (rpath === '/ping') {
-    ctx.type = 'text/plain';
-    return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath.startsWith('/cal/')) {
     const path = rpath.substring(5);
     httpRedirect(ctx, `/ical/${path}`, 302);
@@ -129,7 +120,7 @@ app.use(stopIfTimedOut());
 const bingUA = 'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
 
 // Fix up querystring so we can later use ctx.request.query
-app.use(async function fixup1(ctx, next) {
+app.use(async function fixup2(ctx, next) {
   const path = ctx.request.path;
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
@@ -189,7 +180,22 @@ app.use(async function redirLegacy(ctx, next) {
       return;
     }
   }
-  await next();
+  return next();
+});
+
+app.use(async function sendStatic(ctx, next) {
+  const rpath = ctx.request.path;
+  if (rpath.startsWith('/ical')) {
+    ctx.set('Cache-Control', 'max-age=5184000');
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath === '/favicon.ico') {
+    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
+  } else if (rpath === '/ping') {
+    ctx.type = 'text/plain';
+    return send(ctx, rpath, {root: DOCUMENT_ROOT});
+  }
+  return next();
 });
 
 // request dispatcher
@@ -202,10 +208,13 @@ app.use(async function router(ctx, next) {
              rpath.startsWith('/hebcal/index.cgi/')) {
     ctx.set('Cache-Control', 'max-age=2592000');
     ctx.state.logQuery = true;
-    if (ctx.request.query.v == 'yahrzeit') {
+    const vv = ctx.request.query.v;
+    if (vv == 'yahrzeit') {
       return yahrzeitDownload(ctx);
-    } else if (ctx.request.query.v == '1') {
+    } else if (vv == '1') {
       return hebcalDownload(ctx);
+    } else {
+      ctx.throw(400, `Invalid download URL: v=${vv}`);
     }
   } else if (rpath.startsWith('/zmanim')) {
     return zmanimIcalendar(ctx);

@@ -1,4 +1,8 @@
 {
+ "/ical/jewish-holidaysall.ics": "http://download.hebcal.com/ical/jewish-holidays-all.ics",
+ "/ical/jewis-holidays.ics": "http://download.hebcal.com/ical/jewish-holidays.ics",
+ "/ical/jewish-holidays": "http://download.hebcal.com/ical/jewish-holidays.ics",
+ "/ical/jewish-holidays.icsub": "http://download.hebcal.com/ical/jewish-holidays.ics",
  "/export/07/af3b83c82f242b3b71849bbb031fe5.ics": "http://download.hebcal.com/export/07/af3b83c82f242b3b71849bbb031fe5.ics?subscribe=1&year=2014&month=x&yt=G&v=1&i=off&maj=on&lg=s&vis=on&c=off&geo=geoname&geonameid=&city-typeahead=&b=18",
  "/export/0c/7865c0e3b51e437cf74e22af9dccd6.ics": "http://download.hebcal.com/export/0c/7865c0e3b51e437cf74e22af9dccd6.ics?subscribe=1&v=1&maj=on&min=on&i=off&lg=s&c=off&set=off&yt=H&year=now&month=x",
  "/export/34/956a6f117cfa4a71a65633c65b3acf.ics": "http://download.hebcal.com/export/34/956a6f117cfa4a71a65633c65b3acf.ics?subscribe=1&v=1&year=2007&month=x&nh=on&tag=fp.ql&c=off",
@@ -9,5 +13,9 @@
  "/export/95/471125c2f9979977063b5890c8ff99.ics": "http://download.hebcal.com/export/95/471125c2f9979977063b5890c8ff99.ics?subscribe=1&year=2007&v=1&month=x&yt=G&nh=on&nx=on&i=off&vis=on&c=off&geo=zip",
  "/export/aa/6b3289ae4c4892d9fce1c5f5": "http://download.hebcal.com/export/aa/6b3289ae4c4892d9fce1c5f59a7505.ics?subscribe=1&year=2012&month=x&yt=G&v=1&nh=on&i=off&lg=sh&vis=on&c=off&geo=zip",
  "/export/aa/6b3289ae4c4892d9fce1c5f59a7505.ics": "http://download.hebcal.com/export/aa/6b3289ae4c4892d9fce1c5f59a7505.ics?subscribe=1&year=2012&month=x&yt=G&v=1&nh=on&i=off&lg=sh&vis=on&c=off&geo=zip",
+ "/export/a6/c0991c4857cf63f7d714c744b80e1b.ics": "http://download.hebcal.com/export/a6/c0991c4857cf63f7d714c744b80e1b.ics?subscribe=1&year=2011&month=x&yt=G&v=1&nh=on&i=off&lg=s&vis=on&c=off&geo=zip",
+ "/export/bb/fd8c6af2b7b799c73393590b93a28d.ics": "http://download.hebcal.com/export/bb/fd8c6af2b7b799c73393590b93a28d.ics?subscribe=1&year=2012&month=x&yt=G&v=1&nh=on&nx=on&mf=on&ss=on&i=off&lg=s&vis=on&c=off&geo=zip",
+ "/export/a9/9d99c2567b52d891702cb52d3ca662.ics": "http://download.hebcal.com/export/a9/9d99c2567b52d891702cb52d3ca662.ics?subscribe=1&year=2007&v=1&month=x&yt=G&nh=on&i=off&vis=on&c=off&geo=zip",
+ "/export/36/c814c58a122e546d4adb3846828de3.ics": "http://download.hebcal.com/export/36/c814c58a122e546d4adb3846828de3.ics?subscribe=1&year=2012&month=x&yt=G&v=1&nh=on&nx=on&mf=on&ss=on&o=on&s=on&i=off&lg=a&vis=on&D=on&d=on&c=on&geo=zip&zip=11552&m=48&tz=-5&dst=usa",
  "/export/ba/e8e6457ecd5bbdd3375d331e237273.ics": "http://download.hebcal.com/export/ba/e8e6457ecd5bbdd3375d331e237273.ics?subscribe=1&v=1&maj=on&min=on&mf=on&mod=on&i=off&year=now&month=x&yt=G&lg=s&c=off&geo=geoname"
 }
