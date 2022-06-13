@@ -9,6 +9,9 @@ ul.hebcal-results { list-style-type: none }
   margin-top: 30px;
   margin-bottom: 80px;
 }
+div.hebcal-container div h3 {
+  font-size: calc(1.275rem + 0.3vw);
+}
 </style>
 </head>
 <body>
@@ -41,9 +44,9 @@ fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top'
 <div class="card-body">
 <div id="hebcal-shabbat"></div>
 <script defer>
-fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>')
+fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>&tgt=_top')
   .then(response => response.text())
-  .then(data => document.getElementById('hebcal-shabbat').innerHTML = data.replace(/h3>/g, 'h4>'));
+  .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
 </script>
 </div><!-- .card-body -->
 </div><!-- .card -->
