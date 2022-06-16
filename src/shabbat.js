@@ -16,7 +16,6 @@ import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import './dayjs-locales';
-import worldCities from './worldCities.json';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -284,7 +283,6 @@ function makePropsForFullHtml(ctx, dt) {
   const yearInfo = getDefaultYear(dt, new HDate(dt));
   const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
   return Object.assign({
-    worldCities,
     summary: briefText.join('. '),
     jsonLD: jsonLD ? JSON.stringify(jsonLD) : '',
     locationName: location.getName(),
