@@ -1,0 +1,29 @@
+<%- await include('partials/header.ejs', {
+  title: 'Free custom Jewish Holiday Calendar - Hebcal',
+}) -%>
+<link rel="canonical" href="https://www.hebcal.com/hebcal">
+<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,Torah,parsha">
+<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
+<link rel="stylesheet" type="text/css" href="/i/typeahead1.css">
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div id="content">
+<div class="row">
+<div class="col-sm-12">
+<p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
+<% if (typeof message !== 'undefined') { -%>
+<div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <%= message %>
+</div><!-- .alert -->
+<% } -%>
+<%- await include('partials/hebcal-form.ejs') -%>
+</div><!-- .col-sm-12 -->
+</div><!-- .row -->
+</div><!-- #content -->
+<%- await include('partials/footer.ejs', {
+  footerScripts: {tooltip: true, typeahead: true},
+  xtra_html: await include('partials/script-hebcal-form.ejs'),
+}) _%>

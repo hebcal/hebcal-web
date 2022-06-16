@@ -1,28 +1,7 @@
-<%- await include('partials/header.ejs', {
-  title: 'Free custom Jewish Holiday Calendar - Hebcal',
-}) -%>
-<link rel="canonical" href="https://www.hebcal.com/hebcal">
-<meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle lighting,Shabbat,Havdalah,Torah,parsha">
-<meta name="description" content="Personalized Jewish calendar for any year 0001-9999 includes Jewish holidays, candle lighting times, Torah readings. Export to Outlook, Apple iCal, Google, Palm, etc.">
-<link rel="stylesheet" type="text/css" href="/i/typeahead1.css">
-</head>
-<body>
-<%- await include('partials/navbar.ejs') -%>
-<div class="container">
-<div id="content">
-<div class="row">
-<div class="col-sm-12">
-<p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
-<% if (typeof message !== 'undefined') { -%>
-<div class="alert alert-danger alert-dismissible" role="alert">
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  <%= message %>
-</div><!-- .alert -->
-<% } -%>
 <form id="f1" name="f1" autocomplete="off" action="/hebcal">
 <input type="hidden" name="v" value="1">
 <div class="row">
-<div class="col-sm-6">
+<div class="col-sm-auto mb-3">
 <fieldset>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="maj" value="on" <%= q.maj === 'on' ? 'checked' : '' -%> id="maj">
@@ -55,7 +34,7 @@
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' -%> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
-<div class="mt-3">
+<fieldset class="mt-3">
   <div class="form-check mb-1">
     <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' -%> value="off">
     <label class="form-check-label" for="i0">Diaspora holiday schedule</label>
@@ -64,12 +43,12 @@
     <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' -%> value="on">
     <label class="form-check-label" for="i1">Israel holiday schedule</label>
   </div>
-</div>
+</fieldset>
 <div class="row align-items-center gx-3 mt-3">
 <div class="form-floating col-auto mb-1">
 <input type="text" inputmode="numeric" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
 <label for="year">Year</label>
-</div><!-- .col-sm-4 -->
+</div><!-- .form-floating -->
 <div class="col-auto">
 <div class="form-check mb-1">
   <input class="form-check-input" type="radio" name="yt" value="G" id="ytG" <%- q.yt !== 'H' ? 'checked' : '' %>>
@@ -79,10 +58,10 @@
   <input class="form-check-input" type="radio" name="yt" value="H" id="ytH" <%- q.yt === 'H' ? 'checked' : '' %>>
   <label class="form-check-label" for="ytH">Hebrew year</label>
 </div>
-</div><!-- .col-sm -->
+</div><!-- .col-auto -->
 </div><!-- .row -->
 </div><!-- .col-sm-6 -->
-<div class="col-sm-6">
+<div class="col-sm-auto mb-3">
 <fieldset>
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
@@ -148,12 +127,5 @@
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-<button type="submit" class="btn btn-primary mt-3">Create Calendar</button>
+<button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
-</div><!-- .col-sm-12 -->
-</div><!-- .row -->
-</div><!-- #content -->
-<%- await include('partials/footer.ejs', {
-  footerScripts: {tooltip: true, typeahead: true},
-  xtra_html: await include('partials/script-hebcal-form.ejs'),
-}) _%>

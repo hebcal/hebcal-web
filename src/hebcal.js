@@ -181,7 +181,7 @@ async function renderForm(ctx, error) {
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
-  return ctx.render('hebcal-form', {
+  return ctx.render('hebcal-form-page', {
     message,
     tzids,
     langNames,
@@ -289,6 +289,8 @@ function renderHtml(ctx) {
     ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
   }
   const cconfig = locationToPlainObj(ctx.state.location);
+  const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
+  const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   return ctx.render('hebcal-results', {
     items: items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
@@ -306,6 +308,9 @@ function renderHtml(ctx) {
     currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
     downloadAltTitle: `${options.year} only`,
     numYears: getNumYears(options),
+    langNames,
+    defaultYear,
+    defaultYearHeb,
   });
 }
 

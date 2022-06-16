@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: shortTitle + ' ' + locationName + ' - Hebcal',
 }) -%>
+<link rel="stylesheet" type="text/css" href="/i/typeahead1.css">
 <link rel="dns-prefetch" href="https://download.hebcal.com/">
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <link rel="canonical" href="<%= url.canonical %>">
@@ -101,7 +102,9 @@ accurate.
 <% } else { %>
 <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
 <% } %>
-<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" title="Change calendar options"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-gear-fill"></use></svg> Settings</a>
+<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-settings" aria-controls="offcanvas-settings" title="Change calendar options">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-gear-fill"></use></svg>
+  Settings</a>
 </div><!-- .btn-toolbar -->
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
@@ -153,12 +156,19 @@ window['hebcal'].events=<%- JSON.stringify(items) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
 </div><!-- #content -->
+<div class="offcanvas offcanvas-start" style="width:auto" tabindex="-1" id="offcanvas-settings" aria-labelledby="settings-label">
+<div class="offcanvas-header">
+<h5 class="offcanvas-title" id="settings-label">Calendar Settings</h5>
+<button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+</div>
+<div class="offcanvas-body">
+<%- await include('partials/hebcal-form.ejs') -%>
+</div>
+</div>
 <% if (gy >= 1900) { -%>
 <%- await include('partials/download-modal.ejs') -%>
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
-<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.2/dayjs.min.js"></script>
-<script src="<%=clientAppHref%>"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var d = document;
@@ -186,4 +196,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <%- await include('partials/print-iframe.ejs') -%>
-<%- await include('partials/footer.ejs', {footerScripts: {clipboard: true}}) _%>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.2/dayjs.min.js"></script>
+<%- await include('partials/footer.ejs', {
+  footerScripts: {clipboard: true, tooltip: true, typeahead: true},
+  xtra_html: await include('partials/script-hebcal-form.ejs'),
+}) _%>
