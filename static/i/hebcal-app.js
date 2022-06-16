@@ -16,7 +16,12 @@
  *    disclaimer in the documentation and/or other materials
  *    provided with the distribution.
  */
-export const hebcalClient = {
+import dayjs from 'dayjs';
+import $ from 'jquery';
+import Bloodhound from 'corejs-typeahead/dist/bloodhound';
+import 'corejs-typeahead/dist/typeahead.jquery';
+
+const hebcalClient = {
   hour12cc: {
     US: 1, CA: 1, BR: 1, AU: 1, NZ: 1, DO: 1, PR: 1, GR: 1, IN: 1, KR: 1, NP: 1, ZA: 1,
   },
@@ -322,3 +327,5 @@ export const hebcalClient = {
     });
   },
 };
+
+export default hebcalClient;

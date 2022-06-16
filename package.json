@@ -13,14 +13,14 @@
   "config": {
     "sprite": "sprite9.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-3.11.min.js",
+    "clientapp": "hebcal-app-4.0.1.min.js",
     "typeaheadcss": "typeahead1.css"
   },
   "scripts": {
     "build": "npm run build:cp-json && npm run build:babel",
     "build:babel": "babel src --out-dir dist",
     "build:cp-json": "mkdir -p ./dist && cp ./src/*.json ./dist",
-    "build-static": "babel --no-babelrc --minified --presets '@babel/preset-env' --plugins babel-plugin-transform-modules-iife static/i/hebcal-app.js > static/i/$npm_package_config_clientapp",
+    "build-static": "rollup -c",
     "download-geolite": "if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then node -e \"import('geolite2-redist').then(geolite => geolite.downloadDbs())\"; fi",
     "compress-static": "brotli -f --keep --best ./static/i/$npm_package_config_sprite && gzip -f --keep --best ./static/i/$npm_package_config_sprite && brotli -f --keep --best ./static/i/$npm_package_config_clientapp && gzip -f --keep --best ./static/i/$npm_package_config_clientapp && brotli -f --keep --best ./static/i/$npm_package_config_typeaheadcss && gzip -f --keep --best ./static/i/$npm_package_config_typeaheadcss && brotli -f --keep --best ./static/i/$npm_package_config_csprite && gzip -f --keep --best ./static/i/$npm_package_config_csprite",
     "deploy-rsync": "rsync -av ./fonts/ /var/www/fonts/ && rsync -av ./static/ /var/www/html/ && rsync -av ./package.json /var/www/ && rsync -av ./dist/ /var/www/dist/ && rsync -av ./views/ /var/www/dist/views/ && rsync -av ./node_modules/ /var/www/node_modules/ && rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/",
@@ -39,10 +39,16 @@
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
     "@babel/register": "^7.17.7",
-    "babel-plugin-transform-modules-iife": "^1.0.0",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "corejs-typeahead": "^1.3.1",
     "csv-parse": "^5.2.0",
     "eslint": "^8.17.0",
-    "eslint-config-google": "^0.14.0"
+    "eslint-config-google": "^0.14.0",
+    "jquery": "^3.6.0",
+    "rollup": "^2.75.6",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "@hebcal/core": "^3.38.2",
