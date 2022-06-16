@@ -22,7 +22,6 @@ ul.hebcal-results li {
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row mt-3">
 <div class="col-md-8">
 <h2><%= Shabbat %> Times for <%= location.getShortName() %></h2>
@@ -125,8 +124,6 @@ for (const [geonameid, city] of worldCities) { -%>
 </script>
 </div><!-- .col-md-4 -->
 </div><!-- .row -->
-
-</div><!-- #content -->
 <%- await include('partials/email-candles-modal.ejs') _%>
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, typeahead: true}}) _%>
 <% if (typeof geoip === 'object') { -%>

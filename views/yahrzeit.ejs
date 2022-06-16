@@ -13,7 +13,6 @@ div.yahrzeit-row {
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row">
 <div class="col">
 <% if (typeof q.ref_url === 'string') { -%>
@@ -163,7 +162,7 @@ and then come back to this page.</p>
 <a href="/home/43/customizing-yahrzeit-birthday-and-anniversary-calendar-for-your-website">developer
 instructions</a>.</p>
 </div><!-- .row -->
-</div><!-- #content -->
+
 <% if (tables !== null) { -%>
 <%- await include('partials/download-modal.ejs', {yahrtzeit: true}) -%>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">

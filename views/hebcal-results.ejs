@@ -40,7 +40,6 @@ div.pbba { page-break-before: always }
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container-fluid">
-<div id="content">
 <div class="row">
 <div class="col-sm-8">
 <% if (gy < 0 && q.yt === 'H') { -%>
@@ -155,7 +154,6 @@ window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
 window['hebcal'].events=<%- JSON.stringify(items) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
-</div><!-- #content -->
 <div class="offcanvas offcanvas-start" style="width:auto" tabindex="-1" id="offcanvas-settings" aria-labelledby="settings-label">
 <div class="offcanvas-header">
 <h5 class="offcanvas-title" id="settings-label">Calendar Settings</h5>

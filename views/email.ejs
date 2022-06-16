@@ -4,7 +4,6 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row">
 <div class="col">
 <p class="lead"><%= defaultUnsubscribe ? 'Unsubscribe from' : 'Subscribe to' %> weekly Shabbat candle lighting times and Torah portion by email.</p>
@@ -52,5 +51,4 @@ class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubs
 <% } %>
 </div><!-- .col -->
 </div><!-- .row -->
-</div><!-- #content -->
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, typeahead: true}}) -%>

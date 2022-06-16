@@ -24,7 +24,6 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row">
 <div class="col">
 <% if (typeof message !== 'undefined') { -%>
@@ -161,8 +160,6 @@ more.</p>
   Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
-
-</div><!-- #content -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var switchEl = document.querySelector("#nikud-checkbox");

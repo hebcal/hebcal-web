@@ -27,7 +27,6 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row">
 <div class="col">
 <% if (d.year() <= 1752) { -%>
@@ -62,5 +61,4 @@
 <div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
-</div><!-- #content -->
 <%- await include('partials/footer.ejs') _%>

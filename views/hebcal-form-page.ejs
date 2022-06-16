@@ -9,7 +9,6 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div id="content">
 <div class="row">
 <div class="col-sm-12">
 <p class="lead">Customize, print &amp; download your calendar of Jewish holidays.</p>
@@ -22,7 +21,6 @@
 <%- await include('partials/hebcal-form.ejs') -%>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
-</div><!-- #content -->
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, typeahead: true},
   xtra_html: await include('partials/script-hebcal-form.ejs'),
