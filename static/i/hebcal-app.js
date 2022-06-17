@@ -41,7 +41,7 @@ const hebcalClient = {
 
   transformHebcalEvents: function(events, lang) {
     const self = this;
-    let evts = events.map((src) => {
+    let evts = events.map(function(src) {
       const allDay = !src.date.includes('T');
       const title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':'));
 
@@ -69,12 +69,12 @@ const hebcalClient = {
     });
     if (lang === 'ah' || lang === 'sh') {
       const dest = [];
-      evts.forEach((evt) => {
+      evts.forEach(function(evt) {
         dest.push(evt);
         if (evt.hebrew) {
           const tmp = $.extend({}, evt, {
             title: evt.hebrew,
-            className: `${evt.className} hebrew`,
+            className: evt.className + ' hebrew',
           });
           dest.push(tmp);
         }
@@ -88,7 +88,7 @@ const hebcalClient = {
     const out = [];
     let prevMonth = '';
     let monthEvents;
-    events.forEach((evt) => {
+    events.forEach(function(evt) {
       const idxT = evt.date.indexOf('T');
       const isoDate = idxT == -1 ? evt.date : evt.date.substring(0, idxT);
       const month = isoDate.substring(0, isoDate.length - 3);
@@ -136,7 +136,7 @@ const hebcalClient = {
           hour = hour - 12;
         }
         const min = dt.substring(14, 16);
-        timeStr = `${String(hour)}:${String(min)}${suffix}`;
+        timeStr = '' + hour + ':' + min + suffix;
       }
     }
     const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
@@ -167,7 +167,7 @@ const hebcalClient = {
     const divBegin = `<div class="month-table" dir="${dir}">`;
     const divEnd = '</div><!-- .month-table -->';
     const localeData = window['hebcal'].localeConfig;
-    const titleText = `${localeData.months[mm - 1]} ${yearStr}`;
+    const titleText = localeData.months[mm - 1] + ' ' + yearStr;
     const titleSpan = isHebrew ? `<span lang="he" dir="rtl">${titleText}</span>` : titleText;
     const heading = `<h3>${titleSpan}</h3>`;
     const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
@@ -182,10 +182,10 @@ const hebcalClient = {
     const self = this;
     if (typeof window['hebcal'].monthTablesRendered === 'undefined') {
       const months = self.splitByMonth(window['hebcal'].events);
-      months.forEach((month) => {
+      months.forEach(function(month) {
         const html = self.monthHtml(month);
         const selector = `#cal-${month.month} .agenda`;
-        document.querySelectorAll(selector).forEach((el) => {
+        document.querySelectorAll(selector).forEach(function(el) {
           el.innerHTML = html;
         });
       });
@@ -209,13 +209,30 @@ const hebcalClient = {
 
     hebcalCities.initialize();
 
-    const clearGeo = () => {
+    let readyToSubmit = false;
+    // eslint-disable-next-line require-jsdoc
+    function clearGeo() {
+      readyToSubmit = false;
       $('#geo').val('none');
       $('#c').val('off');
       $('#geonameid').val('');
       $('#zip').val('');
-      $('#city').val('');
-    };
+    }
+    // eslint-disable-next-line require-jsdoc
+    function selectSuggestion(suggestion) {
+      const geo = suggestion.geo;
+      const id = suggestion.id;
+      if (geo === 'zip') {
+        $('#zip').val(id);
+        $('#geonameid').val('');
+      } else {
+        $('#geonameid').val(id);
+        $('#zip').val('');
+      }
+      $('#geo').val(geo);
+      $('#c').val('on');
+      readyToSubmit = true;
+    }
 
     $('#city-typeahead').typeahead({autoselect: true}, {
       name: 'hebcal-city',
@@ -239,7 +256,7 @@ const hebcalClient = {
       limit: 10,
       templates: {
         empty: function({query}) {
-          const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/gim, (i) => {
+          const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
             return `&#${i.charCodeAt(0)};`;
           });
           return `<div class="tt-suggestion">Sorry, no city names match <b>${encodedStr}</b>.</div>`;
@@ -269,28 +286,10 @@ const hebcalClient = {
       },
     }).bind('typeahead:render', function(ev, suggestions, isAsync, name) {
       if (suggestions.length == 1) {
-        const suggestion = suggestions[0];
-        if (typeof suggestion.geo == 'string' && suggestion.geo == 'zip') {
-          $('#geo').val('zip');
-          $('#zip').val(suggestion.id);
-        } else {
-          $('#geo').val('geoname');
-          $('#geonameid').val(suggestion.id);
-        }
-        $('#c').val('on');
+        selectSuggestion(suggestions[0]);
       }
     }).bind('typeahead:select', function(ev, suggestion, name) {
-      if (typeof suggestion.geo === 'string' && suggestion.geo == 'zip') {
-        clearGeo();
-        $('#geo').val('zip');
-        $('#zip').val(suggestion.id);
-        $('#c').val('on');
-      } else {
-        clearGeo();
-        $('#geo').val('geoname');
-        $('#geonameid').val(suggestion.id);
-        $('#c').val('on');
-      }
+      selectSuggestion(suggestion);
       if (autoSubmit) {
         $('#shabbat-form').submit();
       }
@@ -307,15 +306,11 @@ const hebcalClient = {
       const numericRe = /^\d\d\d\d\d/;
       if (firstCharCode >= 48 && firstCharCode <= 57 && numericRe.test(val)) {
         const zip5 = val.substring(0, 5);
-        $('#geo').val('zip');
-        $('#zip').val(zip5);
-        $('#c').val('on');
-        $('#geonameid').val('');
-        $('#city').val('');
+        selectSuggestion({geo: 'zip', id: zip5});
       }
       const code = e.keyCode || e.which;
       if (code == 13) {
-        if (val.length == 5 && numericRe.test(val)) {
+        if (readyToSubmit) {
           return true; // allow form to submit
         }
         e.preventDefault();

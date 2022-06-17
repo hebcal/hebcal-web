@@ -34,10 +34,10 @@ export default [
               'es.symbol.description',
             ],
             targets: {
-              edge: '17',
+              edge: '16',
               firefox: '60',
-              chrome: '67',
-              safari: '11.1',
+              chrome: '58',
+              safari: '10',
             },
             useBuiltIns: 'usage',
             corejs: 3,

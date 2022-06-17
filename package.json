@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite9.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-4.0.1.min.js",
+    "clientapp": "hebcal-app-4.0.2.min.js",
     "typeaheadcss": "typeahead1.css"
   },
   "scripts": {

@@ -59,7 +59,6 @@ ul.hebcal-results li {
 <form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
-<input type="hidden" name="city" value="<%= q.city %>" id="city">
 <input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
 <%- await include('partials/city-and-havdalah.ejs') -%>
 <input type="hidden" name="lg" value="<%= q.lg || 's' %>">
