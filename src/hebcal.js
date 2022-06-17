@@ -20,8 +20,6 @@ import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import './dayjs-locales';
-import fs from 'fs';
-import readline from 'readline';
 
 dayjs.extend(localeData);
 
@@ -180,35 +178,11 @@ async function renderForm(ctx, error) {
   const today = dayjs();
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
-  const tzids = ctx.state.q.geo === 'pos' ? await getTzids() : [];
   return ctx.render('hebcal-form-page', {
     message,
-    tzids,
     langNames,
     defaultYear,
     defaultYearHeb,
-  });
-}
-
-async function getTzids() {
-  return new Promise((resolve, reject) => {
-    const infile = '/usr/share/zoneinfo/zone.tab';
-    const result = [];
-    try {
-      const rl = readline.createInterface({
-        input: fs.createReadStream(infile),
-        crlfDelay: Infinity,
-      });
-      rl.on('line', (line) => {
-        if (line[0] !== '#') {
-          result.push(line.split('\t')[2]);
-        }
-      });
-      rl.on('close', () => resolve(result.sort()));
-      rl.on('error', (err) => reject(err));
-    } catch (err) {
-      return reject(err);
-    }
   });
 }
 
