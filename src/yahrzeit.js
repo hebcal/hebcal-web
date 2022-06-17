@@ -483,6 +483,7 @@ async function getEventsForId(query, id, startYear, numYears) {
 async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl) {
   const type = info.type;
   const isYahrzeit = (type === 'Yahrzeit');
+  const isBirthday = (type === 'Birthday');
   const origDt = info.day.toDate();
   const hd = isYahrzeit ?
     HebrewCalendar.getYahrzeit(hyear, origDt) :
@@ -505,7 +506,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const ev = new Event(hd, subj, flags.USER_EVENT);
   if (isYahrzeit) {
     ev.emoji = '🕯️';
-  } else if (type === 'Birthday') {
+  } else if (isBirthday) {
     ev.emoji = '🎂✡️';
   }
   const observed = dayjs(hd.greg());
@@ -521,6 +522,8 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
     memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
       'May your loved one\'s soul be bound up in the bond of eternal life and may their memory ' +
       'serve as a continued source of inspiration and comfort to you.';
+  } else if (isBirthday) {
+    memo += '\\n\\nMazel Tov!';
   }
   if (includeUrl) {
     memo += `\\n\\nhttps://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
