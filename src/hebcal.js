@@ -236,7 +236,12 @@ function renderHtml(ctx) {
     if (item.link) {
       item.link = ev.url();
     }
-    delete item.memo;
+    for (const p of ['memo', 'hdate', 'subcat', 'title_orig']) {
+      delete item[p];
+    }
+    if (locale !== 'he' && !options.appendHebrewToSubject) {
+      delete item.hebrew;
+    }
     return item;
   });
   // Reduce size of HTML
