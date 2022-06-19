@@ -21,6 +21,12 @@ import $ from 'jquery';
 import Bloodhound from 'corejs-typeahead/dist/bloodhound';
 import 'corejs-typeahead/dist/typeahead.jquery';
 
+// eslint-disable-next-line require-jsdoc
+function dateOnly(s) {
+  const idxT = s.indexOf('T');
+  return idxT === -1 ? s : s.substring(0, idxT);
+}
+
 const hebcalClient = {
   hour12cc: {
     US: 1, CA: 1, BR: 1, AU: 1, NZ: 1, DO: 1, PR: 1, GR: 1, IN: 1, KR: 1, NP: 1, ZA: 1,
@@ -48,8 +54,7 @@ const hebcalClient = {
     let prevMonth = '';
     let monthEvents;
     events.forEach(function(evt) {
-      const idxT = evt.date.indexOf('T');
-      const isoDate = idxT == -1 ? evt.date : evt.date.substring(0, idxT);
+      const isoDate = dateOnly(evt.date);
       const month = isoDate.substring(0, isoDate.length - 3);
       if (month !== prevMonth) {
         prevMonth = month;
@@ -91,7 +96,8 @@ const hebcalClient = {
 
   tableRow: function(evt) {
     const self = this;
-    const m = dayjs(evt.date);
+    const isoDate = dateOnly(evt.date);
+    const m = dayjs(isoDate);
     const cat = evt.category;
     const localeData = window['hebcal'].localeConfig;
     const lang = window['hebcal'].lang || 's';
@@ -236,13 +242,15 @@ const hebcalClient = {
     const self = this;
     const dayMap = [];
     events.forEach(function(evt) {
-      const d = dayjs(evt.date);
+      const isoDate = dateOnly(evt.date);
+      const d = dayjs(isoDate);
       const date = d.date();
       dayMap[date] = dayMap[date] || [];
       dayMap[date].push(evt);
     });
     let html = '<tr>';
-    const day1 = dayjs(events[0].date).date(1);
+    const isoDate = dateOnly(events[0].date);
+    const day1 = dayjs(isoDate).date(1);
     const dow = day1.day();
     for (let i = 0; i < dow; i++) {
       html += '<td>&nbsp;</td>';
