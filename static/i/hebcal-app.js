@@ -114,7 +114,8 @@ const hebcalClient = {
       subj += ` / <span lang="he" dir="rtl">${evt.hebrew}</span>`;
     }
     if (evt.link) {
-      const atitle = evt.memo ? ` title="${evt.memo}"` : '';
+      const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
+      const atitle = memo0 ? ` title="${memo0}"` : '';
       subj = `<a${atitle} href="${evt.link}">${subj}</a>`;
     }
     return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}">${subj}</span></td></tr>`;
@@ -136,7 +137,7 @@ const hebcalClient = {
   },
 
   renderMonthTables: function() {
-    if (window['hebcal'].monthTablesRendered ) {
+    if (window['hebcal'].monthTablesRendered) {
       return;
     }
     const self = this;
@@ -185,7 +186,7 @@ const hebcalClient = {
     if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
       subj += `<br><span lang="he" dir="rtl">${evt.hebrew}</span>`;
     }
-    const memo0 = evt.memo;
+    const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
     const memo = memo0 ? ` title="${memo0}"` : '';
     const url = evt.link;
     const ahref = url ? `<a href="${url}"${memo}>` : '';

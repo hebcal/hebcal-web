@@ -201,13 +201,15 @@ function renderHtml(ctx) {
   }
   const locale = localeMap[options.locale] || 'en';
   const hebcalPrefix = 'https://www.hebcal.com/';
+  const memos = {};
   const items = events.map((ev) => {
     const item0 = eventToClassicApiObject(ev, options, false);
+    const bn = ev.basename();
     const item = {
       title: item0.title,
       date: item0.date,
       category: item0.category,
-      bn: ev.basename(),
+      bn,
     };
     if (locale === 'he' || options.appendHebrewToSubject) {
       item.hebrew = item0.hebrew;
@@ -225,6 +227,10 @@ function renderHtml(ctx) {
     }
     if (item0.yomtov) {
       item.yomtov = true;
+    }
+    if (item0.memo && typeof memos[bn] === 'undefined' && item0.date.indexOf('T') === -1) {
+      const fullStop = item0.memo.indexOf('.');
+      memos[bn] = fullStop === -1 ? item0.memo : item0.memo.substring(0, fullStop);
     }
     return item;
   });
@@ -270,7 +276,8 @@ function renderHtml(ctx) {
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   return ctx.render('hebcal-results', {
-    items: items,
+    items,
+    memos,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
     today,
     gy,

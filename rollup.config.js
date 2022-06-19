@@ -18,7 +18,7 @@ export default [
       },
     ],
     plugins: [
-      //  terser(),
+      terser(),
       babel({
         babelHelpers: 'bundled',
         presets: [

@@ -1,0 +1,108 @@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var d = document;
+  var show = function (el) { el.style.display = 'block' };
+  var hide = function (el) { el.style.display = 'none' };
+  var months = hebcalClient.splitByMonth(window['hebcal'].events);
+  function renderResults() {
+    if (window['hebcal'].resultsRendered) {
+      return;
+    }
+    var parentDiv = document.getElementById("hebcal-results");
+    hide(parentDiv);
+    var first = true;
+    var currentMonth = new Date().toISOString().substring(0, 7);
+    months.forEach(function(month) {
+      var wrapperEl = d.createElement("div");
+      wrapperEl.id = "cal-" + month.month;
+      if (currentMonth === month.month) {
+        var el = d.createElement("div");
+        el.id = "cal-current";
+        wrapperEl.appendChild(el);
+      }
+      var calEl = d.createElement("div");
+      calEl.className = first ? "cal" : "cal pbba";
+      if (!first) {
+        calEl.style.pageBreakBefore = 'always';
+      }
+      var html = hebcalClient.makeMonthHtml(month);
+      calEl.innerHTML = html;
+      wrapperEl.appendChild(calEl);
+      var agendaEl = d.createElement("div");
+      agendaEl.className = "agenda";
+      wrapperEl.appendChild(agendaEl);
+      parentDiv.appendChild(wrapperEl);
+      first = false;
+    });
+    show(parentDiv);
+    window['hebcal'].resultsRendered = true;
+  }
+  function paginationListItem(props) {
+    var listEl = d.createElement("li");
+    listEl.className = "page-item";
+    var anchor = d.createElement("a");
+    anchor.className = "page-link";
+    anchor.href = props.href;
+    if (props.title) anchor.title = props.title;
+    if (props.rel) anchor.rel = props.rel;
+    anchor.innerHTML = props.innerHTML;
+    listEl.appendChild(anchor);
+    return listEl;
+  }
+  function renderPagination() {
+    if (window['hebcal'].paginationRendered) {
+      return;
+    }
+    var localeData = window['hebcal'].localeConfig;
+    d.querySelectorAll('ul.month-nav').forEach(function(parentEl) {
+      var prevEl = paginationListItem({
+        rel: "prev nofollow",
+        href: "<%- url.prev %>",
+        innerHTML: '&laquo;&nbsp;<%= prevTitle %>',
+      });
+      parentEl.appendChild(prevEl);
+      months.forEach(function(month) {
+        var yearMonth = month.month;
+        var yearStr = yearMonth.substring(0, yearMonth.length - 3);
+        var monthStr = yearMonth.substring(yearMonth.length - 2);
+        var mm = parseInt(monthStr, 10);
+        var listEl = paginationListItem({
+          href: '#cal-' + yearMonth,
+          title: localeData.months[mm - 1] + ' ' + yearStr,
+          innerHTML: localeData.monthsShort[mm - 1],
+        });
+        listEl.className = "page-item d-none d-sm-inline";
+        parentEl.appendChild(listEl);
+      });
+      var nextEl = paginationListItem({
+        className: "page-link",
+        rel: "next nofollow",
+        href: "<%- url.next %>",
+        innerHTML: '<%= nextTitle %>&nbsp;&raquo;',
+      });
+      parentEl.appendChild(nextEl);
+    });
+    window['hebcal'].paginationRendered = true;
+  }
+  var toggleList = document.getElementById('toggle-list');
+  document.getElementById('toggle-month').onchange = function() {
+    d.querySelectorAll('div.agenda').forEach(hide);
+    d.querySelectorAll('div.cal').forEach(show);
+  };
+  toggleList.onchange = function() {
+    d.querySelectorAll('div.cal').forEach(hide);
+    hebcalClient.renderMonthTables();
+    d.querySelectorAll('div.agenda').forEach(show);
+  };
+  renderResults();
+  renderPagination();
+  if (window.outerWidth < 768) {
+    var event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true
+    });
+    toggleList.dispatchEvent(event);
+  }
+});
+</script>
