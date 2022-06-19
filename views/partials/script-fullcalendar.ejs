@@ -1,4 +1,4 @@
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (hopts.isHebrewYear || hopts.year != new Date().getFullYear()) {
     opts.initialDate = events[0].start;
   }
-  var calendar = window['hebcalFullCalendar'] = new FullCalendar.Calendar(calendarEl, opts);
+  var calendar = window['hebcal'].fullCalendar = new FullCalendar.Calendar(calendarEl, opts);
   var listViewEl = document.getElementById('list-view');
   var toggleMonth = document.getElementById('toggle-month');
   toggleMonth.onchange = function() {
@@ -41,10 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleMonth.blur();
   };
   document.addEventListener('keydown', function(e) {
-    if (e.keyCode == 37) {
-        window['hebcalFullCalendar'].prev();
-    } else if (e.keyCode == 39) {
-        window['hebcalFullCalendar'].next();
+    if (e.key === 'ArrowLeft') {
+      calendar.prev();
+    } else if (e.key === 'ArrowRight') {
+      calendar.next();
     }
   });
 });

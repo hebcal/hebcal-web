@@ -41,7 +41,7 @@ div.pbba { page-break-before: always }
 <%- await include('partials/navbar.ejs') -%>
 <div class="container-fluid">
 <div class="row">
-<div class="col-sm-8">
+<div class="col-sm-8 mb-2">
 <% if (gy < 0 && q.yt === 'H') { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -108,7 +108,7 @@ accurate.
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mb-1">Advertisement</h6>
+<h6 class="text-muted mb-2">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-flex justify-content-center d-print-none mb-2">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
@@ -124,29 +124,14 @@ data-ad-slot="1867606375"></ins>
 </div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
+<nav class="d-print-none">
+<ul class="pagination pagination-sm month-nav"></ul>
+</nav>
 <div id="hebcal-results">
-<%- await include('partials/pagination.ejs') -%>
-<% let first = true; %>
-<% for (const [yearMonth, tableBody] of Object.entries(tableBodies)) { %>
-<% if (today.isSame(tableBody.d, 'year') && today.isSame(tableBody.d, 'month')) { %><div id="cal-current"></div><% } -%>
-<div id="cal-<%= yearMonth %>">
-<div class="cal<%if(first){%>"<%}else{%> pbba" style="page-break-before:always"<%}%>>
-<h3 class="text-center"><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } _%>
-<%if(!first){%><a class="d-print-none text-muted" href="#cal-<%= tableBody.prevMonth %>">«</a> <% } %><%= tableBody.d.locale(locale).format('MMMM') + ' ' + tableBody.year %> <a class="d-print-none text-muted" href="#cal-<%= tableBody.nextMonth %>">»</a>
-<% if (locale === 'he') { %></span><% } _%>
-</h3>
-<table <%- locale === 'he' ? 'dir="rtl"' : '' -%> class="table table-bordered fc-emulated-table">
-<tbody><tr><% localeConfig.weekdaysShort.forEach((s) => { -%><th><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= s %><% if (locale === 'he') { %></span><% } %></th><% }); -%></tr>
-<%- tableBody.html _%>
-</tbody></table>
-</div><!-- .cal -->
-<div class="agenda">
-</div><!-- .agenda -->
-</div><!-- #cal-<%= yearMonth %> -->
-<%   first = false; -%>
-<% } %>
-<%- await include('partials/pagination.ejs') -%>
 </div><!-- #hebcal-results -->
+<nav class="d-print-none">
+<ul class="pagination pagination-sm month-nav"></ul>
+</nav>
 <script>
 window['hebcal']=window['hebcal']||{};
 window['hebcal'].lang='<%= q.lg || 's' %>';
@@ -170,6 +155,73 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var d = document;
+  var months = hebcalClient.splitByMonth(window['hebcal'].events);
+  var parentDiv = document.getElementById("hebcal-results");
+  var first = true;
+  var currentMonth = new Date().toISOString().substring(0, 7);
+  months.forEach(function(month) {
+    var wrapperEl = d.createElement("div");
+    wrapperEl.id = "cal-" + month.month;
+    if (currentMonth === month.month) {
+      var el = d.createElement("div");
+      el.id = "cal-current";
+      wrapperEl.appendChild(el);
+    }
+    var calEl = d.createElement("div");
+    calEl.className = first ? "cal" : "cal pbba";
+    if (!first) {
+      calEl.style.pageBreakBefore = 'always';
+    }
+    var html = hebcalClient.makeMonthHtml(month);
+    calEl.innerHTML = html;
+    wrapperEl.appendChild(calEl);
+    var agendaEl = d.createElement("div");
+    agendaEl.className = "agenda";
+    wrapperEl.appendChild(agendaEl);
+    parentDiv.appendChild(wrapperEl);
+    first = false;
+  });
+  var localeData = window['hebcal'].localeConfig;
+  function paginationListItem(props) {
+    var listEl = d.createElement("li");
+    listEl.className = "page-item";
+    var anchor = d.createElement("a");
+    anchor.className = "page-link";
+    anchor.href = props.href;
+    if (props.title) anchor.title = props.title;
+    if (props.rel) anchor.rel = props.rel;
+    anchor.innerHTML = props.innerHTML;
+    listEl.appendChild(anchor);
+    return listEl;
+  }
+  d.querySelectorAll('ul.month-nav').forEach(function(parentEl) {
+    var prevEl = paginationListItem({
+      rel: "prev nofollow",
+      href: "<%- url.prev %>",
+      innerHTML: '&laquo;&nbsp;<%= prevTitle %>',
+    });
+    parentEl.appendChild(prevEl);
+    months.forEach(function(month) {
+      var yearMonth = month.month;
+      var yearStr = yearMonth.substring(0, yearMonth.length - 3);
+      var monthStr = yearMonth.substring(yearMonth.length - 2);
+      var mm = parseInt(monthStr, 10);
+      var listEl = paginationListItem({
+        href: '#cal-' + yearMonth,
+        title: localeData.months[mm - 1] + ' ' + yearStr,
+        innerHTML: localeData.monthsShort[mm - 1],
+      });
+      listEl.className = "page-item d-none d-sm-inline";
+      parentEl.appendChild(listEl);
+    });
+    var nextEl = paginationListItem({
+      className: "page-link",
+      rel: "next nofollow",
+      href: "<%- url.next %>",
+      innerHTML: '<%= nextTitle %>&nbsp;&raquo;',
+    });
+    parentEl.appendChild(nextEl);
+  });
   var toggleList = document.getElementById('toggle-list');
   var show = function (el) { el.style.display = 'block' };
   var hide = function (el) { el.style.display = 'none' };

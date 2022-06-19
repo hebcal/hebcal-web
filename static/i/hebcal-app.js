@@ -26,62 +26,21 @@ const hebcalClient = {
     US: 1, CA: 1, BR: 1, AU: 1, NZ: 1, DO: 1, PR: 1, GR: 1, IN: 1, KR: 1, NP: 1, ZA: 1,
   },
 
-  getEventClassName: function({category, yomtov, link}) {
-    let className = category;
-    if (yomtov) {
+  getEventClassName: function(evt) {
+    let className = evt.category;
+    if (evt.yomtov) {
       className += ' yomtov';
     }
+    if (evt.date.indexOf('T') !== -1) {
+      className += ' timed';
+    }
+    const link = evt.link;
     if (typeof link === 'string' &&
       link.substring(0, 4) === 'http' &&
       link.substring(0, 22) !== 'https://www.hebcal.com') {
       className += ' outbound';
     }
     return className;
-  },
-
-  transformHebcalEvents: function(events, lang) {
-    const self = this;
-    let evts = events.map(function(src) {
-      const allDay = !src.date.includes('T');
-      const title = allDay ? src.title : src.title.substring(0, src.title.indexOf(':'));
-
-      const dest = {
-        title,
-        start: dayjs(src.date),
-        className: self.getEventClassName(src),
-        allDay,
-      };
-
-      if (src.memo) {
-        dest.description = src.memo;
-      }
-      if (src.link) {
-        dest.url = src.link;
-      }
-      if (src.hebrew) {
-        dest.hebrew = src.hebrew;
-        if (lang === 'h') {
-          dest.title = src.hebrew;
-          dest.className += ' hebrew';
-        }
-      }
-      return dest;
-    });
-    if (lang === 'ah' || lang === 'sh') {
-      const dest = [];
-      evts.forEach(function(evt) {
-        dest.push(evt);
-        if (evt.hebrew) {
-          const tmp = $.extend({}, evt, {
-            title: evt.hebrew,
-            className: evt.className + ' hebrew',
-          });
-          dest.push(tmp);
-        }
-      });
-      evts = dest;
-    }
-    return evts;
   },
 
   splitByMonth: function(events) {
@@ -102,42 +61,51 @@ const hebcalClient = {
       }
       monthEvents.push(evt);
     });
+    for (let i = 1; i < out.length; i++) {
+      out[i].prev = out[i - 1].month;
+    }
+    for (let i = 0; i < out.length - 1; i++) {
+      out[i].next = out[i + 1].month;
+    }
     return out;
+  },
+
+  getTimeStr: function(dt) {
+    const allDay = dt.length === 10;
+    if (allDay) {
+      return '';
+    }
+    const cc = window['hebcal'].cconfig.cc;
+    if (typeof this.hour12cc[cc] === 'undefined') {
+      return dt.substring(11, 16);
+    } else {
+      let hour = +dt.substring(11, 13);
+      const suffix = hour >= 12 ? 'pm' : 'am';
+      if (hour > 12) {
+        hour = hour - 12;
+      }
+      const min = dt.substring(14, 16);
+      return '' + hour + ':' + min + suffix;
+    }
   },
 
   tableRow: function(evt) {
     const self = this;
     const m = dayjs(evt.date);
-    const dt = evt.date;
     const cat = evt.category;
     const localeData = window['hebcal'].localeConfig;
     const lang = window['hebcal'].lang || 's';
     const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
     const dateStr0 = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
     const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr0}</span>` : dateStr0;
-    const allDay = !dt.includes('T');
     let subj = evt.title;
-    let timeStr = '';
+    const timeStr = this.getTimeStr(evt.date);
     const className = self.getEventClassName(evt);
     if (cat === 'dafyomi') {
       subj = subj.substring(subj.indexOf(':') + 1);
     } else if (cat === 'candles' || cat === 'havdalah') {
       // "Candle lighting: foo" or "Havdalah (42 min): foo"
       subj = subj.substring(0, subj.indexOf(':'));
-    }
-    if (!allDay) {
-      const cc = window['hebcal'].cconfig.cc;
-      if (typeof self.hour12cc[cc] === 'undefined') {
-        timeStr = dt.substring(11, 16);
-      } else {
-        let hour = +dt.substring(11, 13);
-        const suffix = hour >= 12 ? 'pm' : 'am';
-        if (hour > 12) {
-          hour = hour - 12;
-        }
-        const min = dt.substring(14, 16);
-        timeStr = '' + hour + ':' + min + suffix;
-      }
     }
     const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
     if (isHebrew) {
@@ -153,23 +121,12 @@ const hebcalClient = {
   },
 
   monthHtml: function(month) {
-    const yearStr = month.month.substring(0, month.month.length - 3);
-    const monthStr = month.month.substring(month.month.length - 2);
-    const yy = parseInt(yearStr, 10);
-    const mm = parseInt(monthStr, 10);
-    const dt = new Date(yy, mm - 1, 1);
-    if (yy < 100) {
-      dt.setFullYear(yy);
-    }
     const lang = window['hebcal'].lang || 's';
     const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
     const dir = isHebrew ? 'rtl' : 'ltr';
     const divBegin = `<div class="month-table" dir="${dir}">`;
     const divEnd = '</div><!-- .month-table -->';
-    const localeData = window['hebcal'].localeConfig;
-    const titleText = localeData.months[mm - 1] + ' ' + yearStr;
-    const titleSpan = isHebrew ? `<span lang="he" dir="rtl">${titleText}</span>` : titleText;
-    const heading = `<h3>${titleSpan}</h3>`;
+    const heading = this.getMonthTitle(month, false, false);
     const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
     // eslint-disable-next-line max-len
     const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:116px">${timeColumn}<col><tbody>`;
@@ -179,18 +136,139 @@ const hebcalClient = {
   },
 
   renderMonthTables: function() {
-    const self = this;
-    if (typeof window['hebcal'].monthTablesRendered === 'undefined') {
-      const months = self.splitByMonth(window['hebcal'].events);
-      months.forEach(function(month) {
-        const html = self.monthHtml(month);
-        const selector = `#cal-${month.month} .agenda`;
-        document.querySelectorAll(selector).forEach(function(el) {
-          el.innerHTML = html;
-        });
-      });
-      window['hebcal'].monthTablesRendered = true;
+    if (window['hebcal'].monthTablesRendered ) {
+      return;
     }
+    const self = this;
+    const months = self.splitByMonth(window['hebcal'].events);
+    months.forEach(function(month) {
+      const html = self.monthHtml(month);
+      const selector = `div#cal-${month.month} div.agenda`;
+      const el = document.querySelector(selector);
+      if (el) {
+        el.innerHTML = html;
+      }
+    });
+    window['hebcal'].monthTablesRendered = true;
+  },
+
+  subjectSpan: function(str) {
+    const lang = window['hebcal'].lang || 's';
+    const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+    str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
+    if (isHebrew) {
+      return '<span lang="he" dir="rtl">' + str + '</span>';
+    }
+    return str;
+  },
+
+  renderEventHtml: function(evt) {
+    let subj = evt.title;
+    const cat = evt.category;
+    if (cat === 'dafyomi') {
+      subj = subj.substring(subj.indexOf(':') + 1);
+    } else if (cat === 'candles' || cat === 'havdalah') {
+      // "Candle lighting: foo" or "Havdalah (42 min): foo"
+      subj = subj.substring(0, subj.indexOf(':'));
+    }
+    const time = this.getTimeStr(evt.date);
+    if (time) {
+      const timeHtml = evt.bn === 'Chanukah' ?
+        '<small>' + time + '</small>' :
+        '<small class="text-muted">' + time + '</small>';
+      subj = timeHtml + ' ' + this.subjectSpan(subj);
+    } else {
+      subj = this.subjectSpan(subj);
+    }
+    const className = this.getEventClassName(evt);
+    const lang = window['hebcal'].lang || 's';
+    if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
+      subj += `<br><span lang="he" dir="rtl">${evt.hebrew}</span>`;
+    }
+    const memo0 = evt.memo;
+    const memo = memo0 ? ` title="${memo0}"` : '';
+    const url = evt.link;
+    const ahref = url ? `<a href="${url}"${memo}>` : '';
+    const aclose = url ? '</a>' : '';
+    return `<div class="fc-event ${className}">${ahref}${subj}${aclose}</div>\n`;
+  },
+
+  getMonthTitle: function(month, center, prevNext) {
+    const lang = window['hebcal'].lang || 's';
+    const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+    const span0 = isHebrew ? '<span lang="he" dir="rtl">' : '';
+    const span1 = isHebrew ? '</span>' : '';
+    const localeData = window['hebcal'].localeConfig;
+    const yearMonth = month.month;
+    const yearStr = yearMonth.substring(0, yearMonth.length - 3);
+    const monthStr = yearMonth.substring(yearMonth.length - 2);
+    const mm = parseInt(monthStr, 10);
+    const titleText = localeData.months[mm - 1] + ' ' + yearStr;
+    const prev = prevNext && month.prev ? `<a class="d-print-none text-muted" href="#cal-${month.prev}">«</a> ` : '';
+    const next = prevNext && month.next ? ` <a class="d-print-none text-muted" href="#cal-${month.next}">»</a>` : '';
+    const h3 = center ? '<h3 class="text-center">' : '<h3>';
+    return h3 + prev + span0 + titleText + span1 + next + '</h3>';
+  },
+
+  makeMonthHtml: function(month) {
+    const lang = window['hebcal'].lang || 's';
+    const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+    const span0 = isHebrew ? '<span lang="he" dir="rtl">' : '';
+    const span1 = isHebrew ? '</span>' : '';
+    const localeData = window['hebcal'].localeConfig;
+    let html = this.getMonthTitle(month, true, true);
+    const dir = isHebrew ? ' dir="rtl" ' : ' ';
+    html += '<table' + dir + 'class="table table-bordered fc-emulated-table">\n';
+    html += '<tbody>\n';
+    html += '<tr>';
+    localeData.weekdaysShort.forEach(function(s) {
+      html += '<th>' + span0 + s + span1 + '</th>';
+    });
+    html += '</tr>\n';
+    const tbody = this.makeMonthTableBody(month.events);
+    html += tbody;
+    html += '</tbody></table>\n';
+    return html;
+  },
+
+  makeMonthTableBody: function(events) {
+    const self = this;
+    const dayMap = [];
+    events.forEach(function(evt) {
+      const d = dayjs(evt.date);
+      const date = d.date();
+      dayMap[date] = dayMap[date] || [];
+      dayMap[date].push(evt);
+    });
+    let html = '<tr>';
+    const day1 = dayjs(events[0].date).date(1);
+    const dow = day1.day();
+    for (let i = 0; i < dow; i++) {
+      html += '<td>&nbsp;</td>';
+    }
+    let n = dow;
+    const days = day1.daysInMonth();
+    for (let i = 1; i <= days; i++) {
+      html += `<td><p><b>${i}</b></p>`;
+      const evts = dayMap[i] || [];
+      evts.forEach(function(evt) {
+        html += self.renderEventHtml(evt);
+      });
+      html += '</td>\n';
+      n++;
+      if (n % 7 === 0) {
+        html += '</tr>\n<tr>';
+      }
+    }
+    while (n % 7 !== 0) {
+      html += '<td>&nbsp;</td>';
+      n++;
+    }
+    html += '</tr>\n';
+    if (html.substring(html.length - 10) === '<tr></tr>\n') {
+      return html.substring(0, html.length - 10);
+    }
+    return html;
   },
 
   createCityTypeahead: function(autoSubmit) {

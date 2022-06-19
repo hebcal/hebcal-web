@@ -205,29 +205,33 @@ function renderHtml(ctx) {
   if (months.length > 14) {
     throw new Error(`Something is wrong; months.length=${months.length}`);
   }
+  const hebcalPrefix = 'https://www.hebcal.com/';
   const items = events.map((ev) => {
-    const item = eventToClassicApiObject(ev, options, false);
-    if (item.link) {
-      item.link = ev.url();
+    const item0 = eventToClassicApiObject(ev, options, false);
+    const item = {
+      title: item0.title,
+      date: item0.date,
+      category: item0.category,
+      bn: ev.basename(),
+    };
+    if (locale === 'he' || options.appendHebrewToSubject) {
+      item.hebrew = item0.hebrew;
     }
-    for (const p of ['memo', 'hdate', 'subcat', 'title_orig']) {
-      delete item[p];
+    if (item0.link) {
+      let link = ev.url();
+      if (link.startsWith(hebcalPrefix)) {
+        link = link.substring(hebcalPrefix.length - 1);
+        const utm = link.indexOf('utm_source=');
+        if (utm !== -1) {
+          link = link.substring(0, utm - 1);
+        }
+      }
+      item.link = link;
     }
-    if (locale !== 'he' && !options.appendHebrewToSubject) {
-      delete item.hebrew;
+    if (item0.yomtov) {
+      item.yomtov = true;
     }
     return item;
-  });
-  // Reduce size of HTML
-  const hebcalPrefix = 'https://www.hebcal.com/';
-  items.forEach((i) => {
-    if (typeof i.link === 'string' && i.link.startsWith(hebcalPrefix)) {
-      i.link = i.link.substring(hebcalPrefix.length - 1);
-      const utm = i.link.indexOf('utm_source=');
-      if (utm !== -1) {
-        i.link = i.link.substring(0, utm - 1);
-      }
-    }
   });
   const q = ctx.state.q;
   if (q.set !== 'off') {
@@ -293,47 +297,39 @@ function renderHtml(ctx) {
   });
 }
 
-function makeTableBodies(events, months, options, locale) {
-  const eventMap = new Map();
+/**
+ * @private
+ * @param {Event[]} events
+ * @return {any[]}
+ */
+function splitByMonth(events) {
+  const monthMap = {};
+  let prevMonth = '';
+  let monthEvents;
   for (const ev of events) {
-    const key = toISOString(ev.date.greg());
-    if (eventMap.has(key)) {
-      eventMap.get(key).push(ev);
-    } else {
-      eventMap.set(key, [ev]);
+    const d = dayjs(ev.getDate().greg());
+    const month = d.format('YYYY-MM');
+    if (month !== prevMonth) {
+      prevMonth = month;
+      monthEvents = [];
+      monthMap[month] = {
+        month,
+        events: monthEvents,
+      };
     }
+    monthEvents.push(ev);
   }
+  return monthMap;
+}
+
+function makeTableBodies(events, months, options, locale) {
+  const monthMap = splitByMonth(events);
   const tableBodies = {};
   for (const d of months) {
-    let html = '<tr>';
-    const dow = d.day();
-    for (let i = 0; i < dow; i++) {
-      html += '<td>&nbsp;</td>';
-    }
-    let n = dow;
-    const daysInMonth = greg.daysInMonth(d.month() + 1, d.year());
     const yearStr = pad4(d.year());
     const yearMonth = yearStr + '-' + pad2(d.month() + 1);
-    for (let i = 1; i <= daysInMonth; i++) {
-      html += `<td><p><b>${i}</b></p>`;
-      const evs = eventMap.get(yearMonth + '-' + pad2(i)) || [];
-      for (const ev of evs) {
-        html += renderEventHtml(ev, options, locale);
-      }
-      html += '</td>\n';
-      n++;
-      if (n % 7 === 0) {
-        html += '</tr>\n<tr>';
-      }
-    }
-    while (n % 7 !== 0) {
-      html += '<td>&nbsp;</td>';
-      n++;
-    }
-    html += '</tr>\n';
-    if (html.endsWith('<tr></tr>\n')) {
-      html = html.substring(0, html.length - 10);
-    }
+    const evts = monthMap[yearMonth].events;
+    const html = makeMonthHtml(evts, d, options, locale);
     const prev = d.subtract(1, 'month');
     const next = d.add(1, 'month');
     tableBodies[yearMonth] = {
@@ -345,6 +341,44 @@ function makeTableBodies(events, months, options, locale) {
     };
   }
   return tableBodies;
+}
+
+function makeMonthHtml(events, d, options, locale) {
+  const dayMap = [];
+  for (const ev of events) {
+    const d = dayjs(ev.getDate().greg());
+    const date = d.date();
+    dayMap[date] = dayMap[date] || [];
+    dayMap[date].push(ev);
+  }
+  let html = '<tr>';
+  const dow = d.day();
+  for (let i = 0; i < dow; i++) {
+    html += '<td>&nbsp;</td>';
+  }
+  let n = dow;
+  const daysInMonth = greg.daysInMonth(d.month() + 1, d.year());
+  for (let i = 1; i <= daysInMonth; i++) {
+    html += `<td><p><b>${i}</b></p>`;
+    const evs = dayMap[i] || [];
+    for (const ev of evs) {
+      html += renderEventHtml(ev, options, locale);
+    }
+    html += '</td>\n';
+    n++;
+    if (n % 7 === 0) {
+      html += '</tr>\n<tr>';
+    }
+  }
+  while (n % 7 !== 0) {
+    html += '<td>&nbsp;</td>';
+    n++;
+  }
+  html += '</tr>\n';
+  if (html.endsWith('<tr></tr>\n')) {
+    html = html.substring(0, html.length - 10);
+  }
+  return html;
 }
 
 /**

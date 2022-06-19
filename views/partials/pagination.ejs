@@ -1,9 +1,0 @@
-<nav class="d-print-none">
-<ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%= url.prev %>" rel="prev nofollow">&laquo;&nbsp;<%= prevTitle %></a></li>
-<% for (const [yearMonth, tableBody] of Object.entries(tableBodies)) { -%>
-<li class="page-item d-none d-sm-inline"><a class="page-link" title="<%= tableBody.d.format('MMMM') %> <%= tableBody.year %>" href="#cal-<%= yearMonth %>"><%= tableBody.d.format('MMM') %></a></li>
-<% } -%>
-<li class="page-item"><a class="page-link" href="<%= url.next %>" rel="next nofollow"><%= nextTitle %>&nbsp;&raquo;</a></li>
-</ul>
-</nav>
