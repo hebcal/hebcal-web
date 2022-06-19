@@ -6,16 +6,15 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getDefaultHebrewYear, makeHebrewCalendar,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
-import {HebrewCalendar, greg, flags, HDate} from '@hebcal/core';
-import {eventsToClassicApi, eventToFullCalendar, pad2,
+import {greg, HDate} from '@hebcal/core';
+import {eventsToClassicApi, eventToFullCalendar,
   eventToClassicApiObject,
   locationToPlainObj,
-  shouldRenderBrief,
   getCalendarTitle,
   getDownloadFilename,
   eventsToCsv,
   eventsToRss2,
-  getEventCategories, getHolidayDescription, pad4, toISOString} from '@hebcal/rest-api';
+} from '@hebcal/rest-api';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
@@ -201,10 +200,6 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const locale = localeMap[options.locale] || 'en';
-  const months = makeMonthlyDates(events, locale);
-  if (months.length > 14) {
-    throw new Error(`Something is wrong; months.length=${months.length}`);
-  }
   const hebcalPrefix = 'https://www.hebcal.com/';
   const items = events.map((ev) => {
     const item0 = eventToClassicApiObject(ev, options, false);
@@ -263,7 +258,7 @@ function renderHtml(ctx) {
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
   };
-  const gy = months[0].year();
+  const gy = events[0].getDate().greg().getFullYear();
   if (gy >= 3762 && q.yt === 'G') {
     ctx.state.futureYears = gy - today.year();
     ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
@@ -278,9 +273,7 @@ function renderHtml(ctx) {
     items: items,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
     today,
-    dates: months,
     gy,
-    tableBodies: makeTableBodies(events, months, options, locale),
     lang: locale === 'he' ? 'en' : locale, // twbs5 doesn't handle <html lang="he"> well enough yet
     locale,
     localeConfig,
@@ -295,168 +288,6 @@ function renderHtml(ctx) {
     defaultYear,
     defaultYearHeb,
   });
-}
-
-/**
- * @private
- * @param {Event[]} events
- * @return {any[]}
- */
-function splitByMonth(events) {
-  const monthMap = {};
-  let prevMonth = '';
-  let monthEvents;
-  for (const ev of events) {
-    const d = dayjs(ev.getDate().greg());
-    const month = d.format('YYYY-MM');
-    if (month !== prevMonth) {
-      prevMonth = month;
-      monthEvents = [];
-      monthMap[month] = {
-        month,
-        events: monthEvents,
-      };
-    }
-    monthEvents.push(ev);
-  }
-  return monthMap;
-}
-
-function makeTableBodies(events, months, options, locale) {
-  const monthMap = splitByMonth(events);
-  const tableBodies = {};
-  for (const d of months) {
-    const yearStr = pad4(d.year());
-    const yearMonth = yearStr + '-' + pad2(d.month() + 1);
-    const evts = monthMap[yearMonth].events;
-    const html = makeMonthHtml(evts, d, options, locale);
-    const prev = d.subtract(1, 'month');
-    const next = d.add(1, 'month');
-    tableBodies[yearMonth] = {
-      year: yearStr,
-      d,
-      html,
-      prevMonth: pad4(prev.year()) + '-' + pad2(prev.month() + 1),
-      nextMonth: pad4(next.year()) + '-' + pad2(next.month() + 1),
-    };
-  }
-  return tableBodies;
-}
-
-function makeMonthHtml(events, d, options, locale) {
-  const dayMap = [];
-  for (const ev of events) {
-    const d = dayjs(ev.getDate().greg());
-    const date = d.date();
-    dayMap[date] = dayMap[date] || [];
-    dayMap[date].push(ev);
-  }
-  let html = '<tr>';
-  const dow = d.day();
-  for (let i = 0; i < dow; i++) {
-    html += '<td>&nbsp;</td>';
-  }
-  let n = dow;
-  const daysInMonth = greg.daysInMonth(d.month() + 1, d.year());
-  for (let i = 1; i <= daysInMonth; i++) {
-    html += `<td><p><b>${i}</b></p>`;
-    const evs = dayMap[i] || [];
-    for (const ev of evs) {
-      html += renderEventHtml(ev, options, locale);
-    }
-    html += '</td>\n';
-    n++;
-    if (n % 7 === 0) {
-      html += '</tr>\n<tr>';
-    }
-  }
-  while (n % 7 !== 0) {
-    html += '<td>&nbsp;</td>';
-    n++;
-  }
-  html += '</tr>\n';
-  if (html.endsWith('<tr></tr>\n')) {
-    html = html.substring(0, html.length - 10);
-  }
-  return html;
-}
-
-/**
- * @param {Event} ev
- * @param {HebrewCalendar.Options} options
- * @param {string} locale
- * @return {string}
- */
-function renderEventHtml(ev, options, locale) {
-  const categories = getEventCategories(ev);
-  const mask = ev.getFlags();
-  if (categories[0] == 'holiday' && mask & flags.CHAG) {
-    categories.push('yomtov');
-  }
-  const time = ev.eventTimeStr && HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
-  let title = shouldRenderBrief(ev) ? ev.renderBrief(options.locale) : ev.render(options.locale);
-  if (time) {
-    categories.push('timed');
-    const timeHtml = mask & flags.CHANUKAH_CANDLES ?
-     '<small>' + time + '</small>' :
-     '<small class="text-muted">' + time + '</small>';
-    title = timeHtml + ' ' + subjectSpan(ev, locale, title);
-  } else {
-    title = subjectSpan(ev, locale, title);
-  }
-  const classes = categories.join(' ');
-  const memo0 = getHolidayDescription(ev, true);
-  const memo = memo0 ? ` title="${memo0}"` : '';
-  let url = ev.url();
-  if (typeof url === 'string' && url.startsWith('https://www.hebcal.com/')) {
-    const suffix = options.il && url.indexOf('?') === -1 ? '?i=on' : '';
-    url = url.substring(22) + suffix;
-  }
-  const ahref = url ? `<a href="${url}"${memo}>` : '';
-  const aclose = url ? '</a>' : '';
-  const hebrew = options.appendHebrewToSubject ?
-    '<br>' + subjectSpan(null, 'he', ev.renderBrief('he-x-NoNikud')) : '';
-  // eslint-disable-next-line max-len
-  return `<div class="fc-event ${classes}">${ahref}${title}${hebrew}${aclose}</div>\n`;
-}
-
-/**
- * @param {Event} ev
- * @param {string} locale
- * @param {string} str
- * @return {string}
- */
-function subjectSpan(ev, locale, str) {
-  str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
-  if (locale === 'he') {
-    return '<span lang="he" dir="rtl">' + str + '</span>';
-  }
-  /*
-  const emoji0 = ev && ev.getEmoji();
-  const emoji = emoji0 ? ' ' + emoji0 : '';
-  return str + emoji;
-  */
-  return str;
-}
-
-/**
- * Returns an array of dayjs objects for every month (including blanks) in the range
- * @param {Event[]} events
- * @param {string} locale
- * @return {dayjs.Dayjs[]}
- */
-function makeMonthlyDates(events, locale) {
-  const startDate = dayjs(events[0].getDate().greg());
-  const endDate = dayjs(events[events.length - 1].getDate().greg());
-  const start = startDate.date(1);
-  if (events.length === 1) {
-    return [start];
-  }
-  const result = [];
-  for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
-    result.push(d.locale(locale));
-  }
-  return result;
 }
 
 function isFresh(ctx) {
