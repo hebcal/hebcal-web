@@ -71,7 +71,7 @@ const hebcalClient = {
   },
 
   getTimeStr: function(dt) {
-    const allDay = dt.length === 10;
+    const allDay = dt.indexOf('T') === -1;
     if (allDay) {
       return '';
     }
