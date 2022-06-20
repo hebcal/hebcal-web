@@ -119,11 +119,10 @@ function monthHtml(month) {
   return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
 }
 
-function renderMonthTables() {
+function renderMonthTables(months) {
   if (window['hebcal'].monthTablesRendered) {
     return;
   }
-  const months = splitByMonth(window['hebcal'].events);
   months.forEach(function(month) {
     const html = monthHtml(month);
     const selector = `div#cal-${month.month} div.agenda`;
@@ -255,15 +254,13 @@ function makeMonthTableBody(events) {
   return html;
 }
 
-function renderResults() {
-  if (window['hebcal'].resultsRendered) {
+function makeMonthDivs(months) {
+  if (window['hebcal'].monthDivsCreated) {
     return;
   }
   const parentDiv = document.getElementById('hebcal-results');
-  // parentDiv.style.display = 'none';
   let first = true;
   const currentMonth = new Date().toISOString().substring(0, 7);
-  const months = splitByMonth(window['hebcal'].events);
   months.forEach((month) => {
     const wrapperEl = document.createElement('div');
     wrapperEl.id = `cal-${month.month}`;
@@ -277,8 +274,6 @@ function renderResults() {
     if (!first) {
       calEl.style.pageBreakBefore = 'always';
     }
-    const html = makeMonthHtml(month);
-    calEl.innerHTML = html;
     wrapperEl.appendChild(calEl);
     const agendaEl = document.createElement('div');
     agendaEl.className = 'agenda';
@@ -287,6 +282,21 @@ function renderResults() {
     first = false;
   });
   // parentDiv.style.display = 'block';
+  window['hebcal'].monthDivsCreated = true;
+}
+
+function renderCalendarGrids(months) {
+  if (window['hebcal'].resultsRendered) {
+    return;
+  }
+  months.forEach((month) => {
+    const html = makeMonthHtml(month);
+    const selector = `div#cal-${month.month} div.cal`;
+    const el = document.querySelector(selector);
+    if (el) {
+      el.innerHTML = html;
+    }
+  });
   window['hebcal'].resultsRendered = true;
 }
 
@@ -304,9 +314,10 @@ function paginationListItem({href, title, rel, innerHTML}) {
 }
 
 const hebcalResults = {
+  makeMonthDivs,
   renderMonthTables,
   makeMonthHtml,
-  renderResults,
+  renderCalendarGrids,
   paginationListItem,
   splitByMonth,
 };

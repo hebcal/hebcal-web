@@ -158,12 +158,11 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var d = document;
-  function renderPagination() {
+  function renderPagination(months) {
     if (window['hebcal'].paginationRendered) {
       return;
     }
     var localeData = window['hebcal'].localeConfig;
-    var months = hebcalResults.splitByMonth(window['hebcal'].events);
     document.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
       var finalChildNode = parentEl.children[parentEl.children.length - 1];
       months.forEach(function(month) {
@@ -184,28 +183,34 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   var show = function (el) { el.style.display = 'block' };
   var hide = function (el) { el.style.display = 'none' };
-  var toggleList = d.getElementById('toggle-list');
-  d.getElementById('toggle-month').onchange = function() {
+
+  var months = hebcalResults.splitByMonth(window['hebcal'].events);
+  renderPagination(months);
+  hebcalResults.makeMonthDivs(months);
+
+  var toggleMonth = d.getElementById('toggle-month');
+  toggleMonth.onchange = function() {
     d.querySelectorAll('div.agenda').forEach(hide);
+    hebcalResults.renderCalendarGrids(months);
     d.querySelectorAll('div.cal').forEach(show);
   };
+  var toggleList = d.getElementById('toggle-list');
   toggleList.onchange = function() {
     d.querySelectorAll('div.cal').forEach(hide);
-    hebcalResults.renderMonthTables();
+    hebcalResults.renderMonthTables(months);
     d.querySelectorAll('div.agenda').forEach(show);
   };
-  renderPagination();
-  hebcalResults.renderResults();
+  if (window.innerWidth >= 768) {
+    hebcalResults.renderCalendarGrids(months);
+    toggleMonth.checked = true;
+    toggleList.checked = false;
+  } else {
+    hebcalResults.renderMonthTables(months);
+    toggleList.checked = true;
+    toggleMonth.checked = false;
+  }
   var loadingEl = d.getElementById('hebcal-loading');
   loadingEl.style.display = 'none';
-  if (window.outerWidth < 768) {
-    var event = new MouseEvent('click', {
-      view: window,
-      bubbles: true,
-      cancelable: true
-    });
-    toggleList.dispatchEvent(event);
-  }
 });
 </script>
 <%- await include('partials/footer.ejs', {
