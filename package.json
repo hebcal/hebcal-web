@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite9.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-4.1.1.min.js",
+    "clientapp": "hebcal-app-5.0.1.min.js",
     "typeaheadcss": "typeahead1.css"
   },
   "scripts": {
@@ -47,7 +47,7 @@
     "eslint": "^8.18.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.6.0",
-    "rollup": "^2.75.6",
+    "rollup": "^2.75.7",
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {

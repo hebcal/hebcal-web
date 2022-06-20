@@ -133,6 +133,9 @@ window['hebcal'].memos=<%- JSON.stringify(memos) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
 <nav class="d-print-none"><ul class="pagination pagination-sm month-nav"></ul></nav>
+<div id="hebcal-loading" style="width:100%;height:600px">
+  <p class="lead">Loading...</p>
+</div><!-- #hebcal-loading -->
 <div id="hebcal-results">
 </div><!-- #hebcal-results -->
 <nav class="d-print-none"><ul class="pagination pagination-sm month-nav"></ul></nav>
@@ -151,8 +154,73 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <%- await include('partials/print-iframe.ejs') -%>
+<script><%- await include('partials/hebcalResults.min.js') %></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var d = document;
+  function renderPagination() {
+    if (window['hebcal'].paginationRendered) {
+      return;
+    }
+    const localeData = window['hebcal'].localeConfig;
+    const months = hebcalResults.splitByMonth(window['hebcal'].events);
+    document.querySelectorAll('ul.month-nav').forEach((parentEl) => {
+      const prevEl = hebcalResults.paginationListItem({
+        rel: 'prev nofollow',
+        href: '<%- url.prev %>',
+        innerHTML: '&laquo;&nbsp;<%= prevTitle %>',
+      });
+      parentEl.appendChild(prevEl);
+      months.forEach((month) => {
+        const yearMonth = month.month;
+        const yearStr = yearMonth.substring(0, yearMonth.length - 3);
+        const monthStr = yearMonth.substring(yearMonth.length - 2);
+        const mm = parseInt(monthStr, 10);
+        const listEl = hebcalResults.paginationListItem({
+          href: `#cal-${yearMonth}`,
+          title: `${localeData.months[mm - 1]} ${yearStr}`,
+          innerHTML: localeData.monthsShort[mm - 1],
+        });
+        listEl.className = 'page-item d-none d-sm-inline';
+        parentEl.appendChild(listEl);
+      });
+      const nextEl = hebcalResults.paginationListItem({
+        className: 'page-link',
+        rel: 'next nofollow',
+        href: '<%- url.next %>',
+        innerHTML: '<%= nextTitle %>&nbsp;&raquo;',
+      });
+      parentEl.appendChild(nextEl);
+    });
+    window['hebcal'].paginationRendered = true;
+  }
+  var show = function (el) { el.style.display = 'block' };
+  var hide = function (el) { el.style.display = 'none' };
+  var toggleList = d.getElementById('toggle-list');
+  d.getElementById('toggle-month').onchange = function() {
+    d.querySelectorAll('div.agenda').forEach(hide);
+    d.querySelectorAll('div.cal').forEach(show);
+  };
+  toggleList.onchange = function() {
+    d.querySelectorAll('div.cal').forEach(hide);
+    hebcalResults.renderMonthTables();
+    d.querySelectorAll('div.agenda').forEach(show);
+  };
+  renderPagination();
+  hebcalResults.renderResults();
+  var loadingEl = d.getElementById('hebcal-loading');
+  loadingEl.style.display = 'none';
+  if (window.outerWidth < 768) {
+    var event = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true
+    });
+    toggleList.dispatchEvent(event);
+  }
+});
+</script>
 <%- await include('partials/footer.ejs', {
   footerScripts: {clipboard: true, tooltip: true, typeahead: true},
-  xtra_html: await include('partials/script-hebcal-results.ejs') +
-    await include('partials/script-hebcal-form.ejs'),
+  xtra_html: await include('partials/script-hebcal-form.ejs'),
 }) _%>
