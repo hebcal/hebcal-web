@@ -132,13 +132,13 @@ window['hebcal'].events=<%- JSON.stringify(items) %>;
 window['hebcal'].memos=<%- JSON.stringify(memos) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
-<nav class="d-print-none"><ul class="pagination pagination-sm month-nav"></ul></nav>
+<%- await include('partials/pagination.ejs') -%>
 <div id="hebcal-loading" style="width:100%;height:600px">
   <p class="lead">Loading...</p>
 </div><!-- #hebcal-loading -->
 <div id="hebcal-results">
 </div><!-- #hebcal-results -->
-<nav class="d-print-none"><ul class="pagination pagination-sm month-nav"></ul></nav>
+<%- await include('partials/pagination.ejs') -%>
 <div class="offcanvas offcanvas-start" style="width:auto" tabindex="-1" id="offcanvas-settings" aria-labelledby="settings-label">
 <div class="offcanvas-header">
 <h5 class="offcanvas-title" id="settings-label">Calendar Settings</h5>
@@ -162,35 +162,23 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window['hebcal'].paginationRendered) {
       return;
     }
-    const localeData = window['hebcal'].localeConfig;
-    const months = hebcalResults.splitByMonth(window['hebcal'].events);
-    document.querySelectorAll('ul.month-nav').forEach((parentEl) => {
-      const prevEl = hebcalResults.paginationListItem({
-        rel: 'prev nofollow',
-        href: '<%- url.prev %>',
-        innerHTML: '&laquo;&nbsp;<%= prevTitle %>',
-      });
-      parentEl.appendChild(prevEl);
-      months.forEach((month) => {
-        const yearMonth = month.month;
-        const yearStr = yearMonth.substring(0, yearMonth.length - 3);
-        const monthStr = yearMonth.substring(yearMonth.length - 2);
-        const mm = parseInt(monthStr, 10);
-        const listEl = hebcalResults.paginationListItem({
-          href: `#cal-${yearMonth}`,
-          title: `${localeData.months[mm - 1]} ${yearStr}`,
+    var localeData = window['hebcal'].localeConfig;
+    var months = hebcalResults.splitByMonth(window['hebcal'].events);
+    document.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
+      var finalChildNode = parentEl.children[parentEl.children.length - 1];
+      months.forEach(function(month) {
+        var yearMonth = month.month;
+        var yearStr = yearMonth.substring(0, yearMonth.length - 3);
+        var monthStr = yearMonth.substring(yearMonth.length - 2);
+        var mm = parseInt(monthStr, 10);
+        var newNode = hebcalResults.paginationListItem({
+          href: '#cal-' + yearMonth,
+          title: localeData.months[mm - 1] + ' ' + yearStr,
           innerHTML: localeData.monthsShort[mm - 1],
         });
-        listEl.className = 'page-item d-none d-sm-inline';
-        parentEl.appendChild(listEl);
+        newNode.className = 'page-item d-none d-sm-inline';
+        parentEl.insertBefore(newNode, finalChildNode);
       });
-      const nextEl = hebcalResults.paginationListItem({
-        className: 'page-link',
-        rel: 'next nofollow',
-        href: '<%- url.next %>',
-        innerHTML: '<%= nextTitle %>&nbsp;&raquo;',
-      });
-      parentEl.appendChild(nextEl);
     });
     window['hebcal'].paginationRendered = true;
   }
