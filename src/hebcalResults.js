@@ -97,11 +97,11 @@ function tableRow(evt) {
     subj += ` / <span lang="he" dir="rtl">${evt.hebrew}</span>`;
   }
   if (evt.link) {
-    const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
-    const atitle = memo0 ? ` title="${memo0}"` : '';
-    subj = `<a${atitle} href="${evt.link}">${subj}</a>`;
+    subj = `<a href="${evt.link}">${subj}</a>`;
   }
-  return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}">${subj}</span></td></tr>`;
+  const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
+  const memo = memo0 ? ` title="${memo0}"` : '';
+  return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}"${memo}>${subj}</span></td></tr>`;
 }
 
 function monthHtml(month) {
@@ -171,9 +171,9 @@ function renderEventHtml(evt) {
   const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
   const memo = memo0 ? ` title="${memo0}"` : '';
   const url = evt.link;
-  const ahref = url ? `<a href="${url}"${memo}>` : '';
+  const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
-  return `<div class="fc-event ${className}">${ahref}${subj}${aclose}</div>\n`;
+  return `<div class="fc-event ${className}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
 function getMonthTitle(month, center, prevNext) {
