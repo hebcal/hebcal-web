@@ -130,7 +130,7 @@ export async function parshaRss(ctx) {
   const hebrew = lang === 'he';
   const props = {
     writeResp: false,
-    title: hebrew ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
+    title: hebrew && il ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
     description: 'Torah reading of the week from Hebcal.com' + suffix,
     lang,
     pubDate: utcString,

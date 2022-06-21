@@ -81,8 +81,17 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm mb-2" href="index.xml">
-<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed</a>
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div>
 </div>
 </div><!-- .row -->
 
@@ -93,10 +102,17 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<a class="btn btn-outline-primary btn-sm mb-2" href="israel-he.xml">
-<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed (Hebrew)</a>
-<a class="btn btn-outline-primary btn-sm mb-2" href="israel.xml">
-<svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg> RSS feed (Translit.)</a>
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div>
 </div>
 </div><!-- .row -->
 

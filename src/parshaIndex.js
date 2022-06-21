@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
-import {setDefautLangTz, getSunsetAwareDate} from './common';
+import {setDefautLangTz, getSunsetAwareDate, langNames} from './common';
 import {parshaByBook, torahBookNames} from './parshaCommon';
 import dayjs from 'dayjs';
 
@@ -17,6 +17,15 @@ export async function parshaIndex(ctx) {
   const [parshaIsrael, parshaIsraelHref] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
   ctx.state.lang = 'en';
+  const myLangNames = Object.assign({
+    en: langNames.s,
+    ashkenazi: langNames.a,
+    he: ['עברית', 'Hebrew'],
+  }, langNames);
+  delete myLangNames.s;
+  delete myLangNames.h;
+  delete myLangNames.a;
+  delete myLangNames['he-x-NoNikud'];
   await ctx.render('parsha-index', {
     il,
     saturday: dayjs(saturday.greg()),
@@ -31,6 +40,7 @@ export async function parshaIndex(ctx) {
     parshaIsrael,
     parshaIsraelHref,
     israelDiasporaDiffer,
+    langNames: myLangNames,
   });
 }
 
