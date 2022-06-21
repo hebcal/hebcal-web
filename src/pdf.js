@@ -149,7 +149,7 @@ function eventColor(evt) {
  * @param {number} x
  * @param {number} y
  * @param {boolean} rtl
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {number}
  */
 function renderPdfEvent(doc, evt, x, y, rtl, options) {
@@ -328,10 +328,11 @@ export function renderPdf(doc, events, options) {
 
     doc.fillColor('#000000');
     doc.font('plain').fontSize(8);
-    if (options.location && options.location.name) {
-      doc.text(`Candle lighting times for ${options.location.name}`,
-          PDF_LMARGIN, PDF_HEIGHT - 28);
-    }
+    const leftText = (options.location && options.location.name) ?
+      options.location.name + ' · ' +
+      `Candle-lighting times ${options.candleLightingMins||18} min before sunset` :
+      options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
+    doc.text(leftText, PDF_LMARGIN, PDF_HEIGHT - 28);
 
     const str = 'Provided by Hebcal.com with a Creative Commons Attribution 4.0 International License';
     const width = doc.widthOfString(str);
