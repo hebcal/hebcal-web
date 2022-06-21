@@ -1,8 +1,10 @@
 /* eslint-disable require-jsdoc */
-import {HDate, ParshaEvent, HebrewCalendar, flags} from '@hebcal/core';
+import {HDate, ParshaEvent, HebrewCalendar, flags, Locale} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
+import {basename} from 'path';
+import createError from 'http-errors';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import fs from 'fs/promises';
@@ -79,14 +81,25 @@ const hmToArg = {
 
 const RSS_CONTENT_TYPE = 'application/rss+xml; charset=utf-8';
 
+function getLang(rpath) {
+  const bn = basename(rpath);
+  const dash = bn.indexOf('-');
+  const lang = dash === -1 ? 'en' : bn.substring(dash + 1, bn.indexOf('.'));
+  const locales = Locale.getLocaleNames();
+  if (locales.indexOf(lang) === -1) {
+    throw createError(404, `Unknown locale: ${lang}`);
+  }
+  return lang;
+}
+
 export async function hdateXml(ctx) {
   const rpath = ctx.request.path;
   const dt = new Date();
   const hd = new HDate(dt);
   const utcString = dt.toUTCString();
-  const hebrew = rpath === '/etc/hdate-he.xml';
   const hm = hd.getMonthName();
-  const lang = hebrew ? 'he' : 'en';
+  const lang = getLang(rpath);
+  const hebrew = lang === 'he';
   const props = {
     writeResp: false,
     title: hebrew ? gematriyaDate(hd) : hd.render(lang),
@@ -109,11 +122,12 @@ export async function parshaRss(ctx) {
   const saturday = dayjs(dt).day(6);
   const hd = new HDate(dt);
   const utcString = dt.toUTCString();
-  const hebrew = rpath === '/sedrot/israel-he.xml';
-  const il = rpath.startsWith('/sedrot/israel');
+  const bn = basename(rpath);
+  const il = bn.startsWith('israel');
   const ev = getSaturdayEvent(hd.onOrAfter(6), il);
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
-  const lang = hebrew ? 'he' : 'en';
+  const lang = getLang(rpath);
+  const hebrew = lang === 'he';
   const props = {
     writeResp: false,
     title: hebrew ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,

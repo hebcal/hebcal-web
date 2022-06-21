@@ -145,13 +145,13 @@ export function wwwRouter() {
       });
     } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
       return hdateJavascript(ctx);
-    } else if (rpath === '/etc/hdate-he.xml' || rpath === '/etc/hdate-en.xml') {
+    } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.xml')) {
       return hdateXml(ctx);
-    } else if (rpath === '/sedrot/index.xml' || rpath === '/sedrot/israel.xml' || rpath === '/sedrot/israel-he.xml') {
-      return parshaRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
       if (rpath === '/sedrot/') {
         return parshaIndex(ctx);
+      } else if (rpath.endsWith('.xml')) {
+        return parshaRss(ctx);
       } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
         ctx.set('Cache-Control', 'max-age=5184000');
         return parshaCsv(ctx);
