@@ -24,15 +24,44 @@ div.pbba { page-break-before: always }
 .fc-emulated-table tr td {
   height: 90px;
 }
-.label-lightgrey {
-  background-color: #e7e7e7;
-  background-image: -webkit-linear-gradient(#fefefe, #e7e7e7);
-  background-image: linear-gradient(#fefefe, #e7e7e7);
-  border: 1px solid #cfcfcf;
-  border-radius: 2px;
-}
 .table-event.yomtov {
   background:#ff9;
+}
+div#hebcal-loading {
+  width:100%;
+  height:320px;
+}
+div#hebcal-loading h3 {
+  text-align: left;
+}
+@media (min-width: 768px) {
+  div#hebcal-loading h3 {
+    text-align: center;
+  }
+}
+:root {
+  --loading-grey: #ededed;
+}
+.loading {
+  background-color: var(--loading-grey);
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, .5) 50%,
+    rgba(255, 255, 255, 0) 60%
+  ) var(--loading-grey);
+  background-size: 200% 100%;
+  background-position-x: 180%;
+  animation: 1s loading ease-in-out infinite;
+}
+@keyframes loading {
+  to {
+    background-position-x: -20%;
+  }
+}
+.loading.bar {
+  min-height: 1.6rem;
+  border-radius: 4px;
 }
 </style>
 <%- await include('partials/style-fullcalendar.ejs') -%>
@@ -133,8 +162,9 @@ window['hebcal'].memos=<%- JSON.stringify(memos) %>;
 window['hebcal'].cconfig=<%- cconfig %>;
 </script>
 <%- await include('partials/pagination.ejs') -%>
-<div id="hebcal-loading" style="width:100%;height:600px">
-  <p class="lead">Loading...</p>
+<div id="hebcal-loading">
+  <h3>Loading...</h3>
+  <div class="loading bar"></div>
 </div><!-- #hebcal-loading -->
 <div id="hebcal-results">
 </div><!-- #hebcal-results -->
