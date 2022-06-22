@@ -153,14 +153,6 @@ data-ad-slot="1867606375"></ins>
 </div><!-- .d-flex -->
 </div><!-- .col-sm-4 -->
 </div><!-- .row -->
-<script>
-window['hebcal']=window['hebcal']||{};
-window['hebcal'].lang='<%= q.lg || 's' %>';
-window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
-window['hebcal'].events=<%- JSON.stringify(items) %>;
-window['hebcal'].memos=<%- JSON.stringify(memos) %>;
-window['hebcal'].cconfig=<%- cconfig %>;
-</script>
 <%- await include('partials/pagination.ejs') -%>
 <div id="hebcal-loading">
   <h3>Loading...</h3>
@@ -187,13 +179,19 @@ window['hebcal'].cconfig=<%- cconfig %>;
 <script><%- await include('partials/hebcalResults.min.js') %></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  window['hebcal']=window['hebcal']||{};
+  window['hebcal'].lang='<%= q.lg || "s" %>';
+  window['hebcal'].cconfig=<%- cconfig %>;
+  window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
+  window['hebcal'].events=<%- JSON.stringify(items) %>;
+  window['hebcal'].memos=<%- JSON.stringify(memos) %>;
   var d = document;
   function renderPagination(months) {
     if (window['hebcal'].paginationRendered) {
       return;
     }
     var localeData = window['hebcal'].localeConfig;
-    document.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
+    d.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
       var finalChildNode = parentEl.children[parentEl.children.length - 1];
       months.forEach(function(month) {
         var yearMonth = month.month;
@@ -211,8 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     window['hebcal'].paginationRendered = true;
   }
-  var show = function (el) { el.style.display = 'block' };
-  var hide = function (el) { el.style.display = 'none' };
+  function show(el) { if (el) { el.style.display = 'block' } }
+  function hide(el) { if (el) { el.style.display = 'none' } }
 
   var months = hebcalResults.splitByMonth(window['hebcal'].events);
   renderPagination(months);
