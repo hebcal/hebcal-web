@@ -259,9 +259,9 @@ function makeMonthDivs(months) {
     return;
   }
   const parentDiv = document.getElementById('hebcal-results');
-  let first = true;
   const currentMonth = new Date().toISOString().substring(0, 7);
-  months.forEach((month) => {
+  for (let i = 0; i < months.length; i++) {
+    const month = months[i];
     const wrapperEl = document.createElement('div');
     wrapperEl.id = `cal-${month.month}`;
     if (currentMonth === month.month) {
@@ -270,6 +270,7 @@ function makeMonthDivs(months) {
       wrapperEl.appendChild(el);
     }
     const calEl = document.createElement('div');
+    const first = !i;
     calEl.className = first ? 'cal' : 'cal pbba';
     if (!first) {
       calEl.style.pageBreakBefore = 'always';
@@ -279,8 +280,7 @@ function makeMonthDivs(months) {
     agendaEl.className = 'agenda';
     wrapperEl.appendChild(agendaEl);
     parentDiv.appendChild(wrapperEl);
-    first = false;
-  });
+  }
   // parentDiv.style.display = 'block';
   window['hebcal'].monthDivsCreated = true;
 }

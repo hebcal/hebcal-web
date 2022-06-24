@@ -1,6 +1,4 @@
-<% if (q.v !== 'yahrzeit') { -%>
 <div class="form-check emoji-checkbox mb-2">
   <input class="form-check-input" type="checkbox" id="e-<%=id%>" checked>
-  <label class="form-check-label" for="e-<%=id%>">Show images in event names ✡️ 🌒</label>
+  <label class="form-check-label" for="e-<%=id%>">Show images in event names <%= q.v === 'yahrzeit' ? '🕯️ ✡️' : '✡️ 🌒'%></label>
 </div>
-<% } -%>
