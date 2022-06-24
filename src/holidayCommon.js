@@ -12,6 +12,7 @@ const events11years = HebrewCalendar.calendar({
   year: new HDate().getFullYear() - 1,
   isHebrewYear: true,
   numYears: 8,
+  yomKippurKatan: true,
 });
 export const events11yearsBegin = getFirstOcccurences(events11years);
 
@@ -125,7 +126,7 @@ export function eventToHolidayItem(ev, il) {
   const emoji = Boolean(mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) ? '' :
     holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
   const anchor = makeAnchor(holiday);
-  const anchorDate = holiday === 'Asara B\'Tevet' ? d.format('YYYYMMDD') : d.year();
+  const anchorDate = (typeof ev.urlDateSuffix === 'function') ? ev.urlDateSuffix() : d.year();
   const iSuffix = il ? '?i=on' : '';
   const href = anchor + '-' + anchorDate + iSuffix;
   const item = {
@@ -151,6 +152,7 @@ export function eventToHolidayItem(ev, il) {
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
     event: ev,
     emoji,
+    anchorDate,
   };
   if (mask & flags.SPECIAL_SHABBAT) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);

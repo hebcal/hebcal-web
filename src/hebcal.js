@@ -275,10 +275,13 @@ function renderHtml(ctx) {
   const cconfig = locationToPlainObj(ctx.state.location);
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
+  const opts = Object.assign({}, options);
+  delete opts.location;
   return ctx.render('hebcal-results', {
     items,
     memos,
     cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
+    opts,
     today,
     gy,
     lang: locale === 'he' ? 'en' : locale, // twbs5 doesn't handle <html lang="he"> well enough yet

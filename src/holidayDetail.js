@@ -83,6 +83,7 @@ export async function holidayDetail(ctx) {
       year: year - 3,
       isHebrewYear: false,
       numYears: 8,
+      yomKippurKatan: true,
     })) : events11yearsBegin;
   const category = categories[meta.category] || {};
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
@@ -285,6 +286,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       year: next.event.getDate().getFullYear(),
       isHebrewYear: true,
       il,
+      yomKippurKatan: true,
     }).filter((ev) => holiday === ev.basename());
     meta.items = [];
     for (const ev of events) {

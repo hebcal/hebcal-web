@@ -52,6 +52,7 @@ export function downloadHref2(query, filename, override={}) {
   if (b !== null) msg.setCandlelightingmins(b);
   if (q.emoji) msg.setEmoji(true);
   if (q.euro) msg.setEuro(true);
+  if (q.hour12) msg.setHour12(true);
   if (q.subscribe) msg.setSubscribe(true);
   const ny = getInt(q.ny);
   if (ny !== null) msg.setNumyears(ny);
@@ -61,6 +62,7 @@ export function downloadHref2(query, filename, override={}) {
   if (q.o === 'on') msg.setOmer(true);
   if (q.F === 'on') msg.setDafyomi(true);
   if (q.myomi === 'on') msg.setMishnayomi(true);
+  if (q.ykk === 'on') msg.setYomkippurkatan(true);
 
   if (q.d === 'on') msg.setAddhebrewdates(true);
   if (q.D === 'on') msg.setAddhebrewdatesforevents(true);

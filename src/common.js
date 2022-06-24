@@ -93,6 +93,8 @@ const booleanOpts = {
   myomi: 'mishnaYomi',
   euro: 'euro',
   M: 'havdalahTzeit',
+  ykk: 'yomKippurKatan',
+  hour12: 'hour12',
 };
 
 const numberOpts = {
@@ -377,6 +379,9 @@ export function makeHebcalOptions(db, query) {
       (query[key] === 'on' || query[key] === '1')) {
       options[val] = true;
     }
+  }
+  if (!empty(query.hour12)) {
+    options.hour12 = !off(query.hour12);
   }
   for (const [key, val] of Object.entries(negativeOpts)) {
     if (off(query[key])) {

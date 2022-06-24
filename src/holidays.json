@@ -800,6 +800,17 @@
    "Yom Kippur (Mincha, Alternate)"
   ]
  },
+ "Yom Kippur Katan": {
+  "about": {
+    "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan"
+   },
+   "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan",
+    "text": "Yom Kippur Katan (Hebrew: יוֹם כִּפּוּר קָטָן) is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh"
+   },
+   "category": "fast",
+   "yomtov": false
+ },
  "Yom Yerushalayim": {
   "about": {
    "href": "https://en.wikipedia.org/wiki/Jerusalem_Day"

@@ -39,4 +39,6 @@ message Download {
   string tzid = 34;
   string start = 35;
   string end = 36;
+  bool yomKippurKatan = 37;
+  bool hour12 = 38;
 }

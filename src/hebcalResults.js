@@ -58,8 +58,12 @@ function getTimeStr(dt) {
   if (allDay) {
     return '';
   }
+  const opts = window['hebcal'].opts;
+  if (typeof opts.hour12 !== 'undefined' && !opts.hour12) {
+    return dt.substring(11, 16);
+  }
   const cc = window['hebcal'].cconfig.cc;
-  if (typeof hour12cc[cc] === 'undefined') {
+  if (!opts.hour12 && typeof hour12cc[cc] === 'undefined') {
     return dt.substring(11, 16);
   } else {
     let hour = +dt.substring(11, 13);

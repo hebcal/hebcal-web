@@ -108,7 +108,9 @@ proto.Download.toObject = function(includeInstance, msg) {
     longitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 33, 0.0),
     tzid: jspb.Message.getFieldWithDefault(msg, 34, ""),
     start: jspb.Message.getFieldWithDefault(msg, 35, ""),
-    end: jspb.Message.getFieldWithDefault(msg, 36, "")
+    end: jspb.Message.getFieldWithDefault(msg, 36, ""),
+    yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
+    hour12: jspb.Message.getBooleanFieldWithDefault(msg, 38, false)
   };
 
   if (includeInstance) {
@@ -280,6 +282,14 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 36:
       var value = /** @type {string} */ (reader.readString());
       msg.setEnd(value);
+      break;
+    case 37:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setYomkippurkatan(value);
+      break;
+    case 38:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setHour12(value);
       break;
     default:
       reader.skipField();
@@ -545,6 +555,20 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       36,
+      f
+    );
+  }
+  f = message.getYomkippurkatan();
+  if (f) {
+    writer.writeBool(
+      37,
+      f
+    );
+  }
+  f = message.getHour12();
+  if (f) {
+    writer.writeBool(
+      38,
       f
     );
   }
@@ -1160,6 +1184,42 @@ proto.Download.prototype.getEnd = function() {
  */
 proto.Download.prototype.setEnd = function(value) {
   return jspb.Message.setProto3StringField(this, 36, value);
+};
+
+
+/**
+ * optional bool yomKippurKatan = 37;
+ * @return {boolean}
+ */
+proto.Download.prototype.getYomkippurkatan = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 37, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setYomkippurkatan = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 37, value);
+};
+
+
+/**
+ * optional bool hour12 = 38;
+ * @return {boolean}
+ */
+proto.Download.prototype.getHour12 = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 38, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setHour12 = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 38, value);
 };
 
 

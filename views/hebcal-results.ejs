@@ -185,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
   window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
   window['hebcal'].events=<%- JSON.stringify(items) %>;
   window['hebcal'].memos=<%- JSON.stringify(memos) %>;
+  window['hebcal'].opts=<%- JSON.stringify(opts) %>;
   var d = document;
   function renderPagination(months) {
     if (window['hebcal'].paginationRendered) {

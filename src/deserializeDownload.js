@@ -32,6 +32,7 @@ export function deserializeDownload(data) {
   q.b = msg.getCandlelightingmins() || undefined;
   q.emoji = msg.getEmoji() ? '1' : '0';
   q.euro = msg.getEuro() ? '1' : '0';
+  q.hour12 = msg.getHour12() ? '1' : '0';
   q.subscribe = msg.getSubscribe() ? '1' : '0';
   q.ny = msg.getNumyears() || undefined;
   q.zip = msg.getZip() || undefined;
@@ -41,6 +42,7 @@ export function deserializeDownload(data) {
   if (msg.getMishnayomi()) q.myomi = 'on';
   if (msg.getAddhebrewdates()) q.d = 'on';
   if (msg.getAddhebrewdatesforevents()) q.D = 'on';
+  if (msg.getYomkippurkatan()) q.ykk = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.getLatitude();

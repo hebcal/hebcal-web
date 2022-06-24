@@ -100,7 +100,7 @@ data-ad-slot="5342180883"></ins>
 <tbody>
 <% occursOn.forEach((item) => { %>
 <tr class="<%=item.ppf%>">
-<td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (holiday === 'Asara B\'Tevet') {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+<td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
 <td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
