@@ -81,14 +81,14 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
-<a href="/holidays/<%= gregRange %>">
+<a href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">
   <svg width="68" height="68" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#magen-david"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-dark" href="/holidays/<%= gregRange %>">Holidays</a></h3>
+<h3 class="text-center"><a class="text-dark" href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
-<br><a href="/holidays/<%=hy-3761%>-<%=hy-3760%>"><%=hy%></a> &middot;
-<a href="/holidays/<%=gy%>"><%=gy%></a> &middot;
-<a class="text-nowrap" href="/holidays/">6-year summary</a> &middot;
+<br><a href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>"><%=hy%></a> &middot;
+<a href="/holidays/<%=gy%><%=il?'?i=on':''%>"><%=gy%></a> &middot;
+<a class="text-nowrap" href="/holidays/<%=il?'?i=on':''%>">6-year summary</a> &middot;
 <a class="text-nowrap" href="/hebcal">Custom calendar &raquo;</a>
 </p>
 </div><!-- .col-sm-4 -->
@@ -108,14 +108,14 @@ href="https://www.hebcal.com/home/shabbat/fridge">Year at-a-glance &raquo;</a></
 
 <div class="row">
 <div class="col-sm-4 mb-3">
-<a href="/sedrot/">
+<a href="/sedrot/<%=il?'?i=on':''%>">
   <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#torah-235339"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-dark" href="/sedrot/">Torah Readings</a></h3>
+<h3 class="text-center"><a class="text-dark" href="/sedrot/<%=il?'?i=on':''%>">Torah Readings</a></h3>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
 Full kriyah, triennial cycle, weekday readings.
 Spreadsheets for <em>leyning</em> coordinators.
-<br><a href="/sedrot/">See more &raquo;</a></p>
+<br><a href="/sedrot/<%=il?'?i=on':''%>">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
