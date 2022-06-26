@@ -2,7 +2,7 @@
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {setDefautLangTz, getSunsetAwareDate, langNames} from './common';
-import {parshaByBook, torahBookNames} from './parshaCommon';
+import {parshaByBook, torahBookNames, lookupParsha} from './parshaCommon';
 import dayjs from 'dayjs';
 
 export async function parshaIndex(ctx) {
@@ -13,8 +13,8 @@ export async function parshaIndex(ctx) {
   const saturday = hd.onOrAfter(6);
   const hyear = saturday.getFullYear();
   const il = q.i === 'on';
-  const [parshaDia, parshaDiaHref] = getParsha(saturday, false);
-  const [parshaIsrael, parshaIsraelHref] = getParsha(saturday, true);
+  const [parshaDia, parshaDiaHref, metaDia] = getParsha(saturday, false);
+  const [parshaIsrael, parshaIsraelHref, metaIL] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
   ctx.state.lang = 'en';
   const myLangNames = Object.assign({
@@ -26,12 +26,15 @@ export async function parshaIndex(ctx) {
   delete myLangNames.h;
   delete myLangNames.a;
   delete myLangNames['he-x-NoNikud'];
+  const parsha = il ? parshaIsrael : parshaDia;
+  const meta = il ? metaIL : metaDia;
   await ctx.render('parsha-index', {
+    title: `${parsha} - Weekly Torah Portion - Hebcal`,
     il,
     saturday: dayjs(saturday.greg()),
     hyear,
     triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
-    parsha: il ? parshaIsrael : parshaDia,
+    parsha,
     parshaHref: il ? parshaIsraelHref : parshaDiaHref,
     parshaByBook,
     torahBookNames,
@@ -41,6 +44,7 @@ export async function parshaIndex(ctx) {
     parshaIsraelHref,
     israelDiasporaDiffer,
     langNames: myLangNames,
+    meta,
   });
 }
 
@@ -52,14 +56,15 @@ function getParsha(hd, il) {
     const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
     if (events.length > 0) {
       const ev = events[0];
-      return [ev.basename(), ev.url()];
+      return [ev.basename(), ev.url(), undefined];
     } else {
       // is this possible?
-      return [parsha, null];
+      return [parsha, null, undefined];
     }
   } else {
     const pe = new ParshaEvent(hd, parsha0.parsha, il);
     const parshaHref = pe.url();
-    return ['Parashat ' + parsha, parshaHref];
+    const meta = lookupParsha(parsha);
+    return [parsha, parshaHref, meta];
   }
 }

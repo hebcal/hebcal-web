@@ -6,7 +6,7 @@ import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
-import {torahBookNames, sedrot, doubled, addLinksToLeyning} from './parshaCommon';
+import {sedrot, doubled, addLinksToLeyning, lookupParsha} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 import {distance, closest} from 'fastest-levenshtein';
@@ -132,31 +132,7 @@ export async function parshaDetail(ctx) {
     return;
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
-  const parsha0 = leyning.parshiyot[parshaName];
-  const parsha = Object.assign({
-    name: parshaName,
-    bookName: torahBookNames[parsha0.book - 1],
-    anchor: makeAnchor(parshaName),
-  }, parsha0);
-  if (parsha.combined) {
-    const [p1, p2] = parshaName.split('-');
-    parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
-    const n1 = leyning.parshiyot[p1].num;
-    parsha.ordinal = Locale.ordinal(n1, 'en') + ' and ' + Locale.ordinal(n1 + 1, 'en');
-    parsha.p1 = p1;
-    parsha.p2 = p2;
-    parsha.p1anchor = makeAnchor(p1);
-    parsha.p2anchor = makeAnchor(p2);
-    const haftKey = p1 === 'Nitzavim' ? p1 : p2;
-    parsha.haft = leyning.parshiyot[haftKey].haft;
-  } else {
-    parsha.ordinal = Locale.ordinal(parsha.num, 'en');
-  }
-  const chapVerse = parsha.fullkriyah['1'].b;
-  const [chapter, verse] = chapVerse.split(':');
-  const book = parsha.book;
-  const portion = parsha.combined ? parsha.num1 : parsha.num;
-  parsha.ids = {portion, book, chapter, verse};
+  const parsha = lookupParsha(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items0 = items15map.get(parshaName);
   const items = items0.items;
@@ -221,7 +197,7 @@ export async function parshaDetail(ctx) {
     items,
     sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
-    summary: makeSummaryHtml(parsha),
+    summary: parsha.summaryHtml,
     translations,
   });
 }
@@ -269,35 +245,6 @@ function getParshaDateAnchor(ev) {
   const name = ev.getDesc().substring(9);
   const desc = makeAnchor(name);
   return {anchor: desc + '-' + dateStr, d, ev, name};
-}
-
-function makeSummaryHtml(parsha) {
-  let summary;
-  let target;
-  if (parsha.combined) {
-    const [p1, p2] = parsha.name.split('-');
-    const s1 = drash[p1].sefaria && drash[p1].sefaria.summary;
-    const s2 = drash[p2].sefaria && drash[p2].sefaria.summary;
-    if (s1 && s2) {
-      summary = s1 + '\n ' + s2;
-      target = drash[p1].sefaria.target;
-    } else {
-      return null;
-    }
-  } else {
-    const sefaria = drash[parsha.name].sefaria;
-    if (sefaria && sefaria.summary) {
-      summary = sefaria.summary;
-      target = sefaria.target;
-    } else {
-      return null;
-    }
-  }
-  return {
-    link: `https://www.sefaria.org/topics/parashat-${target}?tab=sources`,
-    title: 'Parashat ' + parsha.name + ' from Sefaria',
-    html: summary,
-  };
 }
 
 function makeTriennial(date, parshaEv, hyear, parshaName) {

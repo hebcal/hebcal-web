@@ -1,6 +1,8 @@
+import {Locale} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {bookId, sefariaAliyahHref} from './common';
+import drash from './drash.json';
 
 export const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
 export const parshaByBook = new Map();
@@ -44,4 +46,71 @@ export function addLinksToLeyning(aliyot, showBook) {
     const bid = bookId[aliyah.k];
     aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
   });
+}
+
+/**
+ * @param {string} parshaName
+ * @return {any}
+ */
+export function lookupParsha(parshaName) {
+  const parsha0 = leyning.parshiyot[parshaName];
+  const parsha = Object.assign({
+    name: parshaName,
+    bookName: torahBookNames[parsha0.book - 1],
+    anchor: makeAnchor(parshaName),
+  }, parsha0);
+  if (parsha.combined) {
+    const [p1, p2] = parshaName.split('-');
+    parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
+    const n1 = leyning.parshiyot[p1].num;
+    parsha.ordinal = Locale.ordinal(n1, 'en') + ' and ' + Locale.ordinal(n1 + 1, 'en');
+    parsha.p1 = p1;
+    parsha.p2 = p2;
+    parsha.p1anchor = makeAnchor(p1);
+    parsha.p2anchor = makeAnchor(p2);
+    const haftKey = p1 === 'Nitzavim' ? p1 : p2;
+    parsha.haft = leyning.parshiyot[haftKey].haft;
+  } else {
+    parsha.ordinal = Locale.ordinal(parsha.num, 'en');
+  }
+  const chapVerse = parsha.fullkriyah['1'].b;
+  const [chapter, verse] = chapVerse.split(':');
+  const book = parsha.book;
+  const portion = parsha.combined ? parsha.num1 : parsha.num;
+  parsha.ids = {portion, book, chapter, verse};
+  parsha.summaryHtml = makeSummaryHtml(parsha);
+  return parsha;
+}
+
+/**
+ * @param {any} parsha
+ * @return {any}
+ */
+function makeSummaryHtml(parsha) {
+  let summary;
+  let target;
+  if (parsha.combined) {
+    const [p1, p2] = parsha.name.split('-');
+    const s1 = drash[p1].sefaria && drash[p1].sefaria.summary;
+    const s2 = drash[p2].sefaria && drash[p2].sefaria.summary;
+    if (s1 && s2) {
+      summary = s1 + '\n ' + s2;
+      target = drash[p1].sefaria.target;
+    } else {
+      return null;
+    }
+  } else {
+    const sefaria = drash[parsha.name].sefaria;
+    if (sefaria && sefaria.summary) {
+      summary = sefaria.summary;
+      target = sefaria.target;
+    } else {
+      return null;
+    }
+  }
+  return {
+    link: `https://www.sefaria.org/topics/parashat-${target}?tab=sources`,
+    title: 'Parashat ' + parsha.name + ' from Sefaria',
+    html: summary,
+  };
 }

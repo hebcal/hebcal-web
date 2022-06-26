@@ -1,6 +1,4 @@
-<%- await include('partials/header.ejs', {
-  title: 'Torah Readings - Hebcal',
-}) -%>
+<%- await include('partials/header.ejs') -%>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
 </head>
 <body>
@@ -11,11 +9,9 @@
 <div class="float-start">
   <svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#torah-235339"></use></svg>
 </div>
-<h2>Torah Readings</h2>
-<p>Weekly Torah readings (Parashat ha-Shavua) including
-verses for each aliyah and accompanying Haftarah. Includes
-traditional (full <em>kriyah</em>), <a
-href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and weekday readings.</p>
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replace(/'/g, '’')%>
+<% if (israelDiasporaDiffer) { %><small class="text-muted">&middot; <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
+</h2>
 <% if (israelDiasporaDiffer) { %>
 <p class="lead">
  This week's Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
@@ -23,11 +19,23 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
  &middot; <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael%></a> in Israel 🇮🇱</span>
 </p>
 <% } else { %>
-<p class="lead">This week's Torah portion is <a class="text-nowrap" href="<%=parshaHref%>"><%=parsha%></a>
+<p class="lead">This week's Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha%></a>
  (read on <time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>).</p>
 <% } %>
+<% if (typeof meta === 'object') { %>
+<p><%- meta.summaryHtml.html %> <sup><a class="outbound" title="<%= meta.summaryHtml.title %>" href="<%- meta.summaryHtml.link %>">[1]</a></sup></p>
+<ul class="bullet-list-inline">
+  <li>Torah reading: <a href="<%=parshaHref%>#torah"><%=meta.bookName%> <%=meta.verses%></a></li>
+  <li><a href="<%=parshaHref%>#drash">Commentary and Divrei Torah</a></li>
+</ul>
+<% } %>
+<h2 id="all">Torah Readings</h2>
+<p>Weekly Torah readings (Parashat ha-Shavua) including
+verses for each aliyah and accompanying Haftarah. Includes
+traditional (full <em>kriyah</em>), <a
+href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and weekday readings.</p>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Event","name":"<%=parsha%>",
+{"@context":"https://schema.org","@type":"Event","name":"Parashat <%=parsha%>",
 "startDate":"<%=saturday.format('YYYY-MM-DD')%>","endDate":"<%=saturday.format('YYYY-MM-DD')%>",
 "url":"<%=parshaHref%>",
 "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
