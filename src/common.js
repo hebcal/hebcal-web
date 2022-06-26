@@ -1,11 +1,16 @@
 import {HDate, Location, months, HebrewCalendar, greg, Zmanim} from '@hebcal/core';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 import {find as geoTzFind} from 'geo-tz';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const langNames = {
   's': ['Sephardic transliterations', null],
@@ -1196,4 +1201,17 @@ export function makeIcalOpts(options, query) {
     }
   }
   return icalOpts;
+}
+
+/**
+ * @param {any} ctx
+ * @param {Date} now
+ * @param {string} tzid
+ */
+export function expiresSaturdayNight(ctx, now, tzid) {
+  ctx.lastModified = now;
+  const today = dayjs.tz(now, tzid);
+  const sunday = today.day(7);
+  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
+  ctx.set('Expires', exp.toUTCString());
 }

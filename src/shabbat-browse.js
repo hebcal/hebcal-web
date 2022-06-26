@@ -7,7 +7,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import {langTzDefaults, CACHE_CONTROL_7DAYS} from './common';
+import {langTzDefaults, CACHE_CONTROL_7DAYS, expiresSaturdayNight} from './common';
 import flag from 'emoji-flag';
 
 dayjs.extend(utc);
@@ -93,14 +93,6 @@ function init() {
   didInit = true;
 }
 
-function expires(ctx, today, tzid) {
-  const dt = today.toDate();
-  ctx.lastModified = dt;
-  const sunday = today.day(7);
-  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
-  ctx.set('Expires', exp.toUTCString());
-}
-
 async function render(ctx, view, options) {
   const cc = options.countryCode || 'US';
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
@@ -109,12 +101,12 @@ async function render(ctx, view, options) {
   if (basename(ctx.request.path).endsWith('.xml')) {
     const results = options.results;
     const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
-    const today = dayjs.tz(new Date(), tzid);
     ctx.response.remove('Cache-Control');
-    expires(ctx, today, tzid);
+    const now = new Date();
+    expiresSaturdayNight(ctx, now, tzid);
     ctx.type = 'text/xml';
     options.writeResp = false;
-    options.lastmod = today.toDate().toISOString();
+    options.lastmod = now.toISOString();
     ctx.body = await ctx.render('shabbat-browse-country-xml', options);
     return;
   }
@@ -231,8 +223,9 @@ async function countryPage(ctx, countryCode) {
 
 function makeCandleLighting(ctx, results, countryCode) {
   const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
-  const today = dayjs.tz(new Date(), tzid);
-  expires(ctx, today, tzid);
+  const now = new Date();
+  expiresSaturdayNight(ctx, now, tzid);
+  const today = dayjs.tz(now, tzid);
   const friday = today.day(5);
   const parsha = getParsha(today.day(6), countryCode === 'IL');
   results.forEach((city) => city.countryCode = countryCode);

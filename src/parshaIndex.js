@@ -1,13 +1,14 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
-import {setDefautLangTz, getSunsetAwareDate, langNames} from './common';
+import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common';
 import {parshaByBook, torahBookNames, lookupParsha} from './parshaCommon';
 import dayjs from 'dayjs';
 
 export async function parshaIndex(ctx) {
   const q = setDefautLangTz(ctx);
   const {dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
+  expiresSaturdayNight(ctx, new Date(), ctx.state.timezone);
   const hd0 = new HDate(dt);
   const hd = afterSunset ? hd0.next() : hd0;
   const saturday = hd.onOrAfter(6);

@@ -8,6 +8,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getLocationFromGeoIp,
   eTagFromOptions,
   getTodayDate,
+  expiresSaturdayNight,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -21,14 +22,6 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const BASE_URL = 'https://www.hebcal.com/shabbat';
-
-function expires(ctx, tzid) {
-  const today = dayjs.tz(new Date(), tzid);
-  ctx.lastModified = today.toDate();
-  const sunday = today.day(7);
-  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
-  ctx.set('Expires', exp.toUTCString());
-}
 
 export async function shabbatApp(ctx) {
   if (ctx.method === 'POST') {
@@ -51,7 +44,7 @@ export async function shabbatApp(ctx) {
     if (dateOverride) {
       ctx.lastModified = new Date();
     } else {
-      expires(ctx, options.location.getTzid());
+      expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
     }
   }
   makeItems(ctx, options, q);
