@@ -1209,7 +1209,7 @@ export function makeIcalOpts(options, query) {
   if (query.emoji === '1' || query.emoji === 'on') {
     icalOpts.emoji = true;
   }
-  for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe']) {
+  for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe', 'relcalid']) {
     if (!empty(query[key])) {
       icalOpts[key] = query[key];
     }
