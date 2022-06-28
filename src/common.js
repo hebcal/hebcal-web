@@ -819,22 +819,28 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
   if (!geoip) {
     return {geo: 'none'};
   }
-  const gloc = {details: geoip};
-  if (typeof geoip.location === 'object' &&
-        typeof geoip.location.time_zone === 'string' &&
-        typeof geoip.location.latitude === 'number' &&
-        typeof geoip.location.longitude === 'number') {
-    gloc.latitude = geoip.location.latitude;
-    gloc.longitude = geoip.location.longitude;
-    gloc.tzid = geoip.location.time_zone;
-    gloc.cc = geoip.country && geoip.country.iso_code;
-    gloc.accuracy_radius = geoip.location.accuracy_radius;
+  const gloc = {details: geoip, cc: geoip.country && geoip.country.iso_code};
+  if (typeof geoip.location === 'object') {
+    const gloc0 = geoip.location;
+    const tzid = gloc0.time_zone;
+    if (typeof tzid === 'string') {
+      gloc.tzid = tzid;
+    }
+    const latitude = gloc0.latitude;
+    const longitude = gloc0.longitude;
+    if (typeof latitude === 'number' && typeof longitude === 'number') {
+      gloc.latitude = latitude;
+      gloc.longitude = longitude;
+    }
+    const radius = gloc0.accuracy_radius;
+    if (typeof radius === 'number') {
+      gloc.accuracy_radius = radius;
+    }
   }
   if (typeof geoip.postal === 'object' &&
         typeof geoip.postal.code === 'string' &&
         geoip.postal.code.length === 5 &&
-        typeof geoip.country === 'object' &&
-        geoip.country.iso_code === 'US') {
+        gloc.cc === 'US') {
     gloc.geo = 'zip';
     gloc.zip = geoip.postal.code;
     return gloc;
@@ -852,18 +858,17 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
       return gloc;
     }
   }
-  if (typeof geoip.location === 'object' &&
-        typeof geoip.location.time_zone === 'string' &&
-        typeof geoip.location.latitude === 'number' &&
-        typeof geoip.location.longitude === 'number') {
+  if (typeof gloc.tzid === 'string' &&
+        typeof gloc.latitude === 'number' &&
+        typeof gloc.longitude === 'number') {
     gloc.geo = 'pos';
-    if (geoip.location.accuracy_radius > maxAccuracyRadius) {
+    if (gloc.accuracy_radius > maxAccuracyRadius) {
       return gloc;
     }
     const city = nearestCity(ctx.db.geonamesDb,
-        geoip.location.latitude,
-        geoip.location.longitude,
-        geoip.location.time_zone);
+        gloc.latitude,
+        gloc.longitude,
+        gloc.tzid);
     if (city !== null) {
       gloc.geo = 'geoname';
       gloc.geonameid = city.geonameid;
@@ -885,17 +890,18 @@ export function setDefautLangTz(ctx) {
   const prevCookie = ctx.cookies.get('C');
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   const location = getLocationFromQueryOrGeoIp(ctx, q);
-  let cc = 'US';
-  let tzid = null;
+  const geoip = ctx.state.geoip;
+  let cc = geoip && geoip.cc || 'US';
+  let tzid = geoip && geoip.tzid || null;
   if (location !== null) {
     tzid = location.getTzid();
     cc = location.getCountryCode();
     if (location.getIsrael()) {
       q.i = 'on';
     }
-  } else {
+  } else if (ctx.geoipCountry) {
     const ip = getIpAddress(ctx);
-    cc = ctx.geoipCountry ? ctx.geoipCountry.get(ip) || 'US' : 'US';
+    cc = ctx.geoipCountry.get(ip) || 'US';
   }
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
   const lg = ctx.state.lg = q.lg = q.lg || ccDefaults[0];
