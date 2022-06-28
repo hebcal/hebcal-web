@@ -156,7 +156,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
       `Today is <a href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>, Israeli Memorial Day`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
-  if (fastDay) {
+  if (fastDay && fastDay.url()) {
     const d = dayjs(fastDay.getDate().greg());
     const htmlDate = myDateFormat(d);
     return [TZOM_KAL, `<a href="${fastDay.url()}">${fastDay.render()}</a>
