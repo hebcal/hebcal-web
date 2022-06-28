@@ -1,6 +1,6 @@
 import Database from 'better-sqlite3';
 import {makeAnchor} from '@hebcal/rest-api';
-import {Location} from '@hebcal/core';
+import {GeoDb} from '@hebcal/geo-sqlite';
 
 const geonamesFilename = 'geonames.sqlite3';
 
@@ -80,7 +80,7 @@ for (const [iso, num] of Object.entries(COUNTRIES)) {
   const stmt = geonamesDb.prepare(sql);
   const results = stmt.all(iso);
   for (const r of results) {
-    const descr = Location.geonameCityDescr(r.name, r.admin1, country[iso]);
+    const descr = GeoDb.geonameCityDescr(r.name, r.admin1, country[iso]);
     const link = `/shabbat?geonameid=${r.geonameid}`;
     const parent = 113;
     const slug = makeAnchor(r.asciiname);

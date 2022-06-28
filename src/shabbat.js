@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, Locale, Zmanim, Location, HDate} from '@hebcal/core';
+import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty,
   getDefaultHebrewYear,
@@ -17,6 +17,7 @@ import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import './dayjs-locales';
+import {GeoDb} from '@hebcal/geo-sqlite';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -156,7 +157,7 @@ function compactLocationName(location) {
   }
   const city = location.getShortName();
   const country = countryNames[cc];
-  return Location.geonameCityDescr(city, null, country);
+  return GeoDb.geonameCityDescr(city, null, country);
 }
 
 function makeItems(ctx, options, q) {
