@@ -4,6 +4,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeIcalOpts,
   CACHE_CONTROL_7DAYS,
   getDefaultHebrewYear, makeHebrewCalendar,
+  makeGeoUrlArgs,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {greg, HDate} from '@hebcal/core';
@@ -251,11 +252,7 @@ function renderHtml(ctx) {
   url.title = getCalendarTitle(events, optsTmp);
   if (options.candlelighting) {
     const location = ctx.state.location;
-    let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
-    if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
-      geoUrlArgs += '&m=' + options.havdalahMins;
-    }
-    geoUrlArgs += `&M=${q.M}&lg=` + (q.lg || 's');
+    const geoUrlArgs = makeGeoUrlArgs(q, location, options);
     const hyear = options.isHebrewYear ? options.year : events[0].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }

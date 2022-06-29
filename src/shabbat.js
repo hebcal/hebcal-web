@@ -9,6 +9,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   eTagFromOptions,
   getTodayDate,
   expiresSaturdayNight,
+  makeGeoUrlArgs,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -190,16 +191,7 @@ function makeItems(ctx, options, q) {
     Shabbat: Locale.gettext('Shabbat'),
   });
 
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
-  if (typeof options.candleLightingMins !== 'undefined') {
-    geoUrlArgs += '&b=' + options.candleLightingMins;
-  }
-  if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
-    geoUrlArgs += '&M=off&m=' + options.havdalahMins;
-  } else {
-    geoUrlArgs += '&M=on';
-  }
-  geoUrlArgs += `&lg=` + (q.lg || 's');
+  const geoUrlArgs = makeGeoUrlArgs(q, location, options);
   Object.assign(ctx.state, {
     geoUrlArgs,
     rssUrl: `${BASE_URL}?cfg=r&${geoUrlArgs}&pubDate=0`,

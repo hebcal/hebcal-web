@@ -373,7 +373,7 @@ export function getTodayDate(query) {
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {Object.<string,string>} query
- * @return {HebrewCalendar.Options}
+ * @return {CalOptions}
  */
 export function makeHebcalOptions(db, query) {
   const options = {};
@@ -766,7 +766,7 @@ export function httpRedirect(ctx, rpath, status=302) {
 
 /**
  * @param {any} ctx
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {Event[]}
  */
 export function makeHebrewCalendar(ctx, options) {
@@ -1170,7 +1170,7 @@ const maxNumYear = {
 
 /**
  * Parse HebcalOptions to determine ideal numYears
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {number}
  */
 export function getNumYears(options) {
@@ -1200,7 +1200,7 @@ export function getNumYears(options) {
 
 /**
  * @private
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @param {Object.<string,string>} query
  * @return {Object.<string,string>}
  */
@@ -1228,4 +1228,24 @@ export function expiresSaturdayNight(ctx, now, tzid) {
   const sunday = today.day(7);
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
+}
+
+/**
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @param {CalOptions} options
+ * @return {string}
+ */
+export function makeGeoUrlArgs(q, location, options) {
+  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  if (typeof options.candleLightingMins !== 'undefined') {
+    geoUrlArgs += '&b=' + options.candleLightingMins;
+  }
+  if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
+    geoUrlArgs += '&M=off&m=' + options.havdalahMins;
+  } else {
+    geoUrlArgs += '&M=on';
+  }
+  geoUrlArgs += `&lg=` + (q.lg || 's');
+  return geoUrlArgs;
 }
