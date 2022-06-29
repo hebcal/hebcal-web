@@ -1,6 +1,6 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'path';
-import {urlArgsObj, empty} from './common';
+import {urlArgsObj, empty, off} from './common';
 import DownloadProtoBuf from './download_pb';
 
 const dlPrefix = process.env.NODE_ENV == 'production' ?
@@ -52,7 +52,9 @@ export function downloadHref2(query, filename, override={}) {
   if (b !== null) msg.setCandlelightingmins(b);
   if (q.emoji) msg.setEmoji(true);
   if (q.euro) msg.setEuro(true);
-  if (q.hour12) msg.setHour12(true);
+  if (!empty(q.hour12)) {
+    msg.setHour12(off(query.hour12) ? 2 : 1);
+  }
   if (q.subscribe) msg.setSubscribe(true);
   const ny = getInt(q.ny);
   if (ny !== null) msg.setNumyears(ny);

@@ -110,7 +110,7 @@ proto.Download.toObject = function(includeInstance, msg) {
     start: jspb.Message.getFieldWithDefault(msg, 35, ""),
     end: jspb.Message.getFieldWithDefault(msg, 36, ""),
     yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
-    hour12: jspb.Message.getBooleanFieldWithDefault(msg, 38, false)
+    hour12: jspb.Message.getFieldWithDefault(msg, 39, 0)
   };
 
   if (includeInstance) {
@@ -287,8 +287,8 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setYomkippurkatan(value);
       break;
-    case 38:
-      var value = /** @type {boolean} */ (reader.readBool());
+    case 39:
+      var value = /** @type {number} */ (reader.readUint32());
       msg.setHour12(value);
       break;
     default:
@@ -566,9 +566,9 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getHour12();
-  if (f) {
-    writer.writeBool(
-      38,
+  if (f !== 0) {
+    writer.writeUint32(
+      39,
       f
     );
   }
@@ -1206,20 +1206,20 @@ proto.Download.prototype.setYomkippurkatan = function(value) {
 
 
 /**
- * optional bool hour12 = 38;
- * @return {boolean}
+ * optional uint32 hour12 = 39;
+ * @return {number}
  */
 proto.Download.prototype.getHour12 = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 38, false));
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 39, 0));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {number} value
  * @return {!proto.Download} returns this
  */
 proto.Download.prototype.setHour12 = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 38, value);
+  return jspb.Message.setProto3IntField(this, 39, value);
 };
 
 

@@ -32,7 +32,17 @@ export function deserializeDownload(data) {
   q.b = msg.getCandlelightingmins() || undefined;
   q.emoji = msg.getEmoji() ? '1' : '0';
   q.euro = msg.getEuro() ? '1' : '0';
-  q.hour12 = msg.getHour12() ? '1' : '0';
+  switch (msg.getHour12()) {
+    case 1:
+      q.hour12 = '1';
+      break;
+    case 2:
+      q.hour12 = '0';
+      break;
+    default:
+      // don't set q.hour12
+      break;
+  }
   q.subscribe = msg.getSubscribe() ? '1' : '0';
   q.ny = msg.getNumyears() || undefined;
   q.zip = msg.getZip() || undefined;
