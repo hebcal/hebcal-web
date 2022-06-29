@@ -2,6 +2,7 @@ import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
+import createError from 'http-errors';
 
 const CACHE_CONTROL_3DAYS = cacheControl(3);
 
@@ -27,7 +28,7 @@ function makeProperties(ctx) {
   const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
   if (!location) {
-    ctx.throw(400, 'Location required: geonameid, zip, city');
+    throw createError(400, 'Location required: geonameid, zip, city');
   }
   const startEnd = getStartAndEnd(query);
   options.start = startEnd[0];
@@ -69,7 +70,7 @@ function getStartAndEnd(query) {
   if (query.yt === 'G') {
     const year = parseInt(query.year, 10) || new Date().getFullYear();
     if (year < 1752) {
-      ctx.throw(400, 'Gregorian year must be 1752 or later');
+      throw createError(400, 'Gregorian year must be 1752 or later');
     }
     const start = greg.greg2abs(new Date(year, 0, 1));
     const end = greg.greg2abs(new Date(year, 11, 31));
@@ -77,7 +78,7 @@ function getStartAndEnd(query) {
   }
   const hyear = parseInt(query.year, 10) || new HDate().getFullYear();
   if (hyear < 3761) {
-    ctx.throw(400, 'Hebrew year must be in the common era (3761 and above)');
+    throw createError(400, 'Hebrew year must be in the common era (3761 and above)');
   }
   const start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   const end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
