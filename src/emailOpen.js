@@ -8,17 +8,23 @@ const DOCUMENT_ROOT = '/var/www/html';
 // eslint-disable-next-line require-jsdoc
 export async function emailOpen(ctx) {
   const q = ctx.request.query;
+  const loc = transliterate(q.loc);
+  matomoTrack(ctx, 'email-open', q['utm_campaign'], loc);
+  await saveEmailOpenToDb(ctx, loc);
+  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+  ctx.type = 'image/gif';
+  return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
+}
+
+// eslint-disable-next-line require-jsdoc
+async function saveEmailOpenToDb(ctx, loc) {
+  const q = ctx.request.query;
   const msgid = q.msgid;
   const delta = computeDelta(msgid);
   const db = ctx.mysql;
-  const loc = transliterate(q.loc);
   const sql = 'INSERT INTO email_open (msgid, ip_addr, loc, delta) VALUES (?, ?, ?, ?)';
   const ipAddress = getIpAddress(ctx);
   await db.query(sql, [msgid, ipAddress, loc, delta]);
-  ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-  ctx.type = 'image/gif';
-  matomoTrack(ctx, 'email-open', q['utm_campaign'], loc);
-  return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
 }
 
 /**
