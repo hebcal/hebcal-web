@@ -29,7 +29,10 @@ function computeDelta(msgid) {
   const parts = msgid.split('.');
   const sentTime = parseInt(parts[parts.length - 1], 10);
   if (sentTime) {
-    return Math.trunc((Date.now() - sentTime) / 1000);
+    const delta = Math.trunc((Date.now() - sentTime) / 1000);
+    if (delta < 0 || delta > 2147483647) {
+      return null;
+    }
   }
   return null;
 }
