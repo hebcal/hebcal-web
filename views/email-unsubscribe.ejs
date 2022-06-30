@@ -7,6 +7,14 @@
 <style>
 body { background-color: #eee;}
 .container { max-width: 600px; margin-top: 50px;}
+.icon-lg {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
 </style>
 </head>
 <body>
@@ -15,7 +23,9 @@ body { background-color: #eee;}
 <div class="col-sm">
 <div class="card">
 <div class="card-body">
-  <h3 class="card-title">Unsubscribed</h3>
+  <h3 class="card-title">
+    <svg class="icon-lg m-2 text-success"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+    Unsubscribed</h3>
   <p class="card-text">
     <strong><%= emailAddress %></strong>
     <% if (success) { %> has been <% } else { %> was previously <% } %>
