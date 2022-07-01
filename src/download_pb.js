@@ -110,6 +110,7 @@ proto.Download.toObject = function(includeInstance, msg) {
     start: jspb.Message.getFieldWithDefault(msg, 35, ""),
     end: jspb.Message.getFieldWithDefault(msg, 36, ""),
     yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
+    ignored1: jspb.Message.getBooleanFieldWithDefault(msg, 38, false),
     hour12: jspb.Message.getFieldWithDefault(msg, 39, 0)
   };
 
@@ -286,6 +287,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 37:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setYomkippurkatan(value);
+      break;
+    case 38:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setIgnored1(value);
       break;
     case 39:
       var value = /** @type {number} */ (reader.readUint32());
@@ -562,6 +567,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       37,
+      f
+    );
+  }
+  f = message.getIgnored1();
+  if (f) {
+    writer.writeBool(
+      38,
       f
     );
   }
@@ -1202,6 +1214,24 @@ proto.Download.prototype.getYomkippurkatan = function() {
  */
 proto.Download.prototype.setYomkippurkatan = function(value) {
   return jspb.Message.setProto3BooleanField(this, 37, value);
+};
+
+
+/**
+ * optional bool ignored1 = 38;
+ * @return {boolean}
+ */
+proto.Download.prototype.getIgnored1 = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 38, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setIgnored1 = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 38, value);
 };
 
 

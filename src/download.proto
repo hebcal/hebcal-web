@@ -40,6 +40,6 @@ message Download {
   string start = 35;
   string end = 36;
   bool yomKippurKatan = 37;
-  // bool hour12 = 38;
+  bool ignored1 = 38;
   uint32 hour12 = 39;
 }
