@@ -28,13 +28,15 @@
 <label class="form-label" for="m<%=num%>">Month</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
 <label class="form-label" for="y<%=num%>">Year</label></div>
-<div class="col-auto form-check m-2">
+<div class="col-auto m-2">
+ <div class="form-check">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' %> value="off">
  <label class="form-check-label small" for="s<%=num%>-0">Before sunset</label>
-</div>
-<div class="col-auto form-check">
+ </div>
+ <div class="form-check">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' %> value="on">
  <label class="form-check-label small" for="s<%=num%>-1">After sunset</label>
+ </div>
 </div>
 <div class="col-auto ms-2">
 <button type="button" class="btn btn-sm btn-outline-danger del" id="del-<%=num%>">
