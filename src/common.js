@@ -107,7 +107,6 @@ const booleanOpts = {
   euro: 'euro',
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',
-  hour12: 'hour12',
 };
 
 const numberOpts = {
@@ -207,6 +206,9 @@ function makeCookie(query, uid) {
       continue;
     }
     ck[key] = (query[key] === 'on' || query[key] == '1') ? 'on' : 'off';
+  }
+  if (!empty(query.h12)) {
+    ck.h12 = off(query.h12) ? '0' : '1';
   }
   for (const key of cookieOpts) {
     if (typeof query[key] === 'number' ||
@@ -393,8 +395,8 @@ export function makeHebcalOptions(db, query) {
       options[val] = true;
     }
   }
-  if (!empty(query.hour12)) {
-    options.hour12 = !off(query.hour12);
+  if (!empty(query.h12)) {
+    options.hour12 = !off(query.h12);
   }
   for (const [key, val] of Object.entries(negativeOpts)) {
     if (off(query[key])) {

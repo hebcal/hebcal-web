@@ -34,13 +34,13 @@ export function deserializeDownload(data) {
   q.euro = msg.getEuro() ? '1' : '0';
   switch (msg.getHour12()) {
     case 1:
-      q.hour12 = '1';
+      q.h12 = '1';
       break;
     case 2:
-      q.hour12 = '0';
+      q.h12 = '0';
       break;
     default:
-      // don't set q.hour12
+      // don't set q.h12
       break;
   }
   q.subscribe = msg.getSubscribe() ? '1' : '0';
