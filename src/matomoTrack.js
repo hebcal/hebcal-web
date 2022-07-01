@@ -28,7 +28,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  */
 export function matomoTrack(ctx, category, action, name=null, params={}) {
   const userAgent = ctx.get('user-agent');
-  if (knownRobots[userAgent]) {
+  if (userAgent && knownRobots[userAgent]) {
     return;
   }
   const args = new URLSearchParams(params);
@@ -82,6 +82,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   req.on('error', (err) => {
     ctx.logger.error(err);
   });
+  req.setTimeout(1000);
   req.write(postData);
   req.end();
 }

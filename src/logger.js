@@ -6,6 +6,12 @@ import {matomoTrack} from './matomoTrack';
 // return array that have 4 elements of 32bit integer
 const murmur128 = util.promisify(mmh3.murmur128);
 
+const ignore404 = new Set([
+  '/apple-touch-icon-precomposed.png',
+  '/apple-touch-icon-120x120-precomposed.png',
+  '/apple-touch-icon-152x152-precomposed.png',
+]);
+
 /**
  * @private
  * @param {string} logDir
@@ -138,7 +144,8 @@ export function errorLogger(logger) {
         logger.error(obj);
       }
     }
-    if (ctx && ctx.status && ctx.status != 200) {
+    if (ctx && ctx.status && ctx.status != 200 &&
+        (ctx.status !== 404 || !ignore404.has(ctx.request.path))) {
       matomoTrack(ctx, 'Error', ctx.status, null, {
         url: ctx.request.href,
       });
