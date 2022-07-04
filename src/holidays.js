@@ -123,15 +123,20 @@ function makeItems(events, il, showYear) {
   }
   // insert Days of the Omer
   const hyear = events[0].getDate().getFullYear();
+  const omer = makeOmerItem(hyear, il, showYear);
+  const minorHolidayIdx = items['minor'].findIndex((item) => item.name === 'Pesach Sheni');
+  items['minor'].splice(minorHolidayIdx, 0, omer);
+  return items;
+}
+
+function makeOmerItem(hyear, il, showYear) {
   const omerEv = new Event(new HDate(16, months.NISAN, hyear),
       OMER_TITLE, flags.OMER_COUNT, {emoji: '㊾'});
   const omer = eventToHolidayItem(omerEv, il);
   omer.href = `/omer/${hyear}`;
   omer.dates = tableCellObserved(omer, il, showYear);
   omer.descrShort = getHolidayDescription(omerEv, true);
-  const minorHolidayIdx = items['minor'].findIndex((item) => item.name === 'Pesach Sheni');
-  items['minor'].splice(minorHolidayIdx, 0, omer);
-  return items;
+  return omer;
 }
 
 /**
