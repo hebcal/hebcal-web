@@ -181,7 +181,7 @@ function makeNextObserved(item, year, il) {
   const dateStrShort = item.d.format('D-MMM-YYYY');
   const beginsWhen = isPast ? '' : ` ${item.beginsWhen}`;
   const where = (item.basename === 'Shavuot' || item.basename === 'Pesach') ?
-    (il ? ' in 🇮🇱' : ' in the Diaspora') : '';
+    (il ? ' in Israel 🇮🇱' : ' in the Diaspora') : '';
   const nextObserved = `${verb}${where}${beginsWhen} on ${dateStrShort}`;
   const dateStrLong = item.d.format('dddd, D MMMM YYYY');
   // eslint-disable-next-line max-len
