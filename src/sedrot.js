@@ -259,6 +259,11 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
       reading: reading.aliyot,
       yearNum: reading.yearNum + 1,
     };
+    if (reading.haft) {
+      triennial.haftara = reading.haftara;
+      triennial.haftaraHref = sefariaAliyahHref(reading.haft);
+      triennial.haftaraNumV = reading.haftaraNumV;
+    }
     addLinksToLeyning(triennial.reading, false);
     for (const aliyah of Object.values(triennial.reading)) {
       aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
@@ -315,6 +320,8 @@ function addSpecialHaftarahToTriennial(ev, triReading2) {
     triReading2.haftaraNumV = fk.haftaraNumV;
     triReading2.reason = triReading2.reason || {};
     triReading2.reason.haftara = fk.reason.haftara;
+  } else if (triReading2.haft) {
+    triReading2.haftaraHref = sefariaAliyahHref(triReading2.haft);
   }
 }
 
