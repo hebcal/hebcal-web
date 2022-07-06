@@ -49,9 +49,9 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 <div class="row">
 <div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-lg-3'%>">
 <h5>Full Kriyah</h5>
-<% if (reading.fullkriyah) { %>
+<% if (reading.fullkriyah) { -%>
 <ol class="list-unstyled">
-<%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) {  %>
+<%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
@@ -63,7 +63,8 @@ href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
 </span>
 <% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
-<%    } // ... for %>
+</li>
+<%    } // ... for -%>
 </ol>
 <% } // reading.fullkriyah %>
 </div><!-- fk -->
@@ -131,9 +132,7 @@ href="<%-aliyah.tikkun%>">
 <h5 id="weekday">Weekday
 <small class="text-muted">for Shabbat afternoon, Monday &amp; Thursday</small>
 </h5>
-<ol class="list-unstyled">
-<% for (const aliyah of Object.values(reading.weekday)) { %><%- await include('partials/aliyah-listitem.ejs', {aliyah: aliyah}) %><% } -%>
-</ol>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.weekday}) -%>
 <% } // reading.weekday %>
 
 <div class="d-print-none">
