@@ -893,7 +893,7 @@ export function setDefautLangTz(ctx) {
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   const location = getLocationFromQueryOrGeoIp(ctx, q);
   const geoip = ctx.state.geoip;
-  let cc = geoip && geoip.cc || 'US';
+  let cc = geoip && geoip.cc;
   let tzid = geoip && geoip.tzid || null;
   if (location !== null) {
     tzid = location.getTzid();
@@ -903,17 +903,43 @@ export function setDefautLangTz(ctx) {
     }
   } else if (ctx.geoipCountry) {
     const ip = getIpAddress(ctx);
-    cc = ctx.geoipCountry.get(ip) || 'US';
+    cc = ctx.geoipCountry.get(ip);
   }
-  const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  const lg = ctx.state.lg = q.lg = q.lg || ccDefaults[0];
+  const lg = ctx.state.lg = q.lg = pickLanguage(ctx, q.lg, cc);
   ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
+  cc = cc || 'US';
   ctx.state.countryCode = cc;
+  const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
   ctx.state.timezone = tzid || ccDefaults[1];
   ctx.state.location = location;
   ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
   return q;
+}
+
+const langISOs = ['en', 'he'].concat(Object.keys(langNames).filter((x) => x.length === 2));
+
+/**
+ * @param {*} ctx
+ * @param {string} lg
+ * @param {string} cc
+ * @return {string}
+ */
+function pickLanguage(ctx, lg, cc) {
+  if (lg) {
+    return lg;
+  }
+  const ccDefaults = langTzDefaults[cc];
+  if (ccDefaults) {
+    return ccDefaults[0];
+  }
+  const acceptsLangs = ctx.acceptsLanguages(langISOs);
+  if (Array.isArray(acceptsLangs)) {
+    return acceptsLangs[0] === 'en' ? 's' : acceptsLangs[0];
+  } else if (typeof acceptsLangs === 'string') {
+    return acceptsLangs === 'en' ? 's' : acceptsLangs;
+  }
+  return 's';
 }
 
 /**
