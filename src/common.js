@@ -1184,7 +1184,7 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
   const endStr = beginStr === end ? '' : cv1[0] === cv2[0] ? '-' + cv2[1] : '-' + end;
   const book = aliyah.k;
   const suffix = bookId[book] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
-  return `https://www.sefaria.org/${aliyah.k}.${beginStr}${endStr}?lang=bi${suffix}`;
+  return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
 }
 
 const maxNumYear = {

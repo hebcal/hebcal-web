@@ -55,9 +55,13 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">&middot;</span>
+<span class="text-nowrap">
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
+<a class="ms-1 outbound d-print-none" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
+<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
+</span>
 <% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
 <%    } // ... for %>
 </ol>
@@ -128,14 +132,7 @@ href="<%-aliyah.tikkun%>">
 <small class="text-muted">for Shabbat afternoon, Monday &amp; Thursday</small>
 </h5>
 <ol class="list-unstyled">
-<%    for (const [num, aliyah] of Object.entries(reading.weekday)) {  %>
-<li><%=aliyah.num%>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-muted d-print-none">&middot;</span>
-<a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> weekday aliyah <%=aliyah.num%>"
-href="<%-aliyah.tikkun%>">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<%    } // ... for %>
+<% for (const aliyah of Object.values(reading.weekday)) { %><%- await include('partials/aliyah-listitem.ejs', {aliyah: aliyah}) %><% } -%>
 </ol>
 <% } // reading.weekday %>
 

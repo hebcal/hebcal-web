@@ -1,13 +1,7 @@
 <% if (aliyot) { %>
 <ol class="list-unstyled">
 <% for (const aliyah of Object.values(aliyot)) {  %>
-<li><%=aliyah.num%><% if (aliyah.reason) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-muted d-print-none">&middot;</span>
-<a class="outbound d-print-none" title="Tikkun.io - <%=aliyah.verses%>"
-href="<%-aliyah.tikkun%>">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<% if (aliyah.reason) { %><br><span class="text-success ps-1 small">*<%= aliyah.reason %></span><% } %>
+<%- await include('aliyah-listitem.ejs', {aliyah: aliyah}) -%>
 <% } %>
 </ol>
 <% } %>

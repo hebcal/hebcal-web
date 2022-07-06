@@ -45,6 +45,8 @@ export function addLinksToLeyning(aliyot, showBook) {
     aliyah.href = sefariaAliyahHref(aliyah, !showBook);
     const bid = bookId[aliyah.k];
     aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
+    const startCV = `${aliyah.k}.${begin[0]}.${begin[1]}`;
+    aliyah.pocketTorahAudio = `https://www.sefaria.org/${startCV}?lang=bi&with=Torah%20Readings&lang2=en`;
   });
 }
 
