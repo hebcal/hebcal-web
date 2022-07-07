@@ -3,6 +3,7 @@ import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
+  shortenUrl,
   getSunsetAwareDate} from './common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -69,7 +70,7 @@ function mastheadParsha(ctx, hd, il) {
   const sedra = HebrewCalendar.getSedra(saturday.getFullYear(), il);
   if (sedra.isParsha(saturday)) {
     const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
-    const url = pe.url();
+    const url = shortenUrl(pe.url());
     items.push(`<a href="${url}">${pe.render(ctx.state.lg)}</a>`);
   }
 }
@@ -79,7 +80,7 @@ function mastheadHolidays(ctx, hd, il) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   holidays
       .map((ev) => {
-        const url = ev.url();
+        const url = shortenUrl(ev.url());
         const desc = ev.chanukahDay ?
           Locale.gettext('Chanukah', ctx.state.lg) + ' ' +
           Locale.gettext('day', ctx.state.lg) + ' ' + ev.chanukahDay :
@@ -97,7 +98,7 @@ function mastheadOmer(ctx, hd) {
   if (abs >= beginOmer && abs < (beginOmer + 49)) {
     const omer = abs - beginOmer + 1;
     const ev = new OmerEvent(hd, omer);
-    const url = ev.url();
+    const url = shortenUrl(ev.url());
     const desc = ev.render(ctx.state.lg);
     items.push(`<a href="${url}">${desc}</a>`);
   }
@@ -159,7 +160,8 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   if (fastDay && fastDay.url()) {
     const d = dayjs(fastDay.getDate().greg());
     const htmlDate = myDateFormat(d);
-    return [TZOM_KAL, `<a href="${fastDay.url()}">${fastDay.render()}</a>
+    const url = shortenUrl(fastDay.url());
+    return [TZOM_KAL, `<a href="${url}">${fastDay.render()}</a>
  occurs on ${htmlDate}. We wish you an easy fast`];
   }
 
@@ -302,7 +304,7 @@ ${when} on ${htmlDate}`];
  * @return {any}
  */
 function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
-  const url = ev.url();
+  const url = shortenUrl(ev.url());
   const mask = ev.getFlags();
   if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES)) {
     const d = dayjs.tz(new Date(), tzid);
@@ -333,7 +335,7 @@ const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir=
 
 function getRoshChodeshGreeting(hd, ev) {
   const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
-  const url = ev.url();
+  const url = shortenUrl(ev.url());
   const d = dayjs(ev.getDate().greg());
   const today = dayjs(hd.greg()).isSame(d, 'day');
   if (today) {

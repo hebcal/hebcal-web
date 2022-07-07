@@ -10,6 +10,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getTodayDate,
   expiresSaturdayNight,
   makeGeoUrlArgs,
+  shortenUrl,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -401,8 +402,8 @@ function eventToItem(ev, options, locale, cfg) {
       if (options.il && url.indexOf('?') === -1) {
         u += '?i=on';
       }
-      if (empty(cfg) && u.startsWith('https://www.hebcal.com/')) {
-        u = u.substring(22);
+      if (empty(cfg)) {
+        u = shortenUrl(u);
       }
       obj.url = u;
     }

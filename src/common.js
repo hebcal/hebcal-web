@@ -1277,3 +1277,20 @@ export function makeGeoUrlArgs(q, location, options) {
   geoUrlArgs += `&lg=` + (q.lg || 's');
   return geoUrlArgs;
 }
+
+const hebcalPrefix = 'https://www.hebcal.com/';
+
+/**
+ * @param {string} url
+ * @return {string}
+ */
+export function shortenUrl(url) {
+  if (typeof url === 'string' && url.startsWith(hebcalPrefix)) {
+    url = url.substring(hebcalPrefix.length - 1);
+    const utm = url.indexOf('utm_source=');
+    if (utm !== -1) {
+      url = url.substring(0, utm - 1);
+    }
+  }
+  return url;
+}

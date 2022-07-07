@@ -5,6 +5,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   CACHE_CONTROL_7DAYS,
   getDefaultHebrewYear, makeHebrewCalendar,
   makeGeoUrlArgs,
+  shortenUrl,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {greg, HDate} from '@hebcal/core';
@@ -201,7 +202,6 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const locale = localeMap[options.locale] || 'en';
-  const hebcalPrefix = 'https://www.hebcal.com/';
   const memos = {};
   const items = events.map((ev) => {
     const item0 = eventToClassicApiObject(ev, options, false);
@@ -216,15 +216,7 @@ function renderHtml(ctx) {
       item.hebrew = item0.hebrew;
     }
     if (item0.link) {
-      let link = ev.url();
-      if (link.startsWith(hebcalPrefix)) {
-        link = link.substring(hebcalPrefix.length - 1);
-        const utm = link.indexOf('utm_source=');
-        if (utm !== -1) {
-          link = link.substring(0, utm - 1);
-        }
-      }
-      item.link = link;
+      item.link = shortenUrl(ev.url());
     }
     if (item0.yomtov) {
       item.yomtov = true;
@@ -375,7 +367,7 @@ function renderLegacyJavascript(ctx) {
       const url = ev.url();
       const obj = {d: Number(d.format('YYYYMMDD')), s: ev.render(options.locale)};
       if (url) {
-        obj.u = url.startsWith('https://www.hebcal.com/') ? url.substring(22) : url;
+        obj.u = shortenUrl(url);
       }
       return JSON.stringify(obj);
     });

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear, getNumYears} from './common';
+import {getDefaultHebrewYear, getNumYears, shortenUrl} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {categories, getFirstOcccurences, eventToHolidayItem, OMER_TITLE} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
@@ -70,22 +70,15 @@ function makeFullCalendarEvents(options) {
     if (emoji) {
       fc.title += '\u00a0' + emoji;
     }
-    fc.url = ev.url();
+    const url = shortenUrl(ev.url());
+    if (url) {
+      fc.url = url;
+    }
+    delete fc.description; // not showing tooltips just yet
+    delete fc.hebrew; // not showing tooltips just yet
+    delete fc.allDay; // not needed
     return fc;
   });
-  const hebcalPrefix = 'https://www.hebcal.com/';
-  for (const fce of fcEvents) {
-    delete fce.description; // not showing tooltips just yet
-    delete fce.hebrew; // not showing tooltips just yet
-    delete fce.allDay; // not needed
-    if (typeof fce.url === 'string' && fce.url.startsWith(hebcalPrefix)) {
-      fce.url = fce.url.substring(hebcalPrefix.length - 1);
-      const utm = fce.url.indexOf('utm_source=');
-      if (utm !== -1) {
-        fce.url = fce.url.substring(0, utm - 1);
-      }
-    }
-  }
   return fcEvents;
 }
 
