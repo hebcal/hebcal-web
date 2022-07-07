@@ -74,7 +74,7 @@ href="<%-aliyah.tikkun%>">
 <h5>Triennial <small class="text-muted">year <%=triennial.yearNum%></small></h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 <% if (triennial.haftara) { -%>
-<p class="haftara">Triennial Haftarah:
+<p class="haftara">Triennial alternate Haftarah:
 <a class="outbound" href="<%=triennial.haftaraHref%>"><%=triennial.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
 </p>
@@ -103,7 +103,7 @@ href="<%-aliyah.tikkun%>">
 <br><span class="text-success ps-1 small">*<%= triReading.reason.haftara %></span>
 </p>
 <% } else if (triReading.haftara) { -%>
-<p class="haftara">Triennial Haftarah:
+<p class="haftara">Triennial alternate Haftarah:
 <a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
 </p>
