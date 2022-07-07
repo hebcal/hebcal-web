@@ -48,8 +48,8 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 
 <div class="row">
 <div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-lg-3'%>">
-<h5>Full Kriyah</h5>
 <% if (reading.fullkriyah) { -%>
+<h5>Full Kriyah</h5>
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
@@ -67,6 +67,19 @@ href="<%-aliyah.tikkun%>">
 <%    } // ... for -%>
 </ol>
 <% } // reading.fullkriyah %>
+<% if (reading.haftara) { %>
+<p class="haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
+<a class="outbound text-nowrap" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
+<%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
+<% if (reading.reason && reading.reason.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
+</p>
+<% } // reading.haftara %>
+<% if (reading.sephardic) { %>
+<p class="haftara">Haftarah for Sephardim:
+<a class="outbound text-nowrap" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
+<%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
+</p>
+<% } // reading.sephardic %>
 </div><!-- fk -->
 <% if (hasTriennial) { %>
 <% if (date) { %>
@@ -126,19 +139,6 @@ href="<%-aliyah.tikkun%>">
 </div><!-- .row -->
 <div class="row">
 <div class="col">
-<% if (reading.haftara) { %>
-<p class="lead haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
-<a class="outbound text-nowrap" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
-<%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading.reason && reading.reason.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
-</p>
-<% } // reading.haftara %>
-<% if (reading.sephardic) { %>
-<p class="lead haftara">Haftarah for Sephardim:
-<a class="outbound text-nowrap" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
-<%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
-</p>
-<% } // reading.sephardic %>
 <% if (reading.weekday) { %>
 <h5 id="weekday">Weekday
 <small class="text-muted">for Shabbat afternoon, Monday &amp; Thursday</small>
