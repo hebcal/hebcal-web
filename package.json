@@ -47,14 +47,14 @@
     "eslint": "^8.19.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.6.0",
-    "rollup": "^2.75.7",
+    "rollup": "^2.76.0",
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
     "@hebcal/core": "^3.42.0",
     "@hebcal/geo-sqlite": "^4.8.0",
     "@hebcal/icalendar": "^4.18.0",
-    "@hebcal/leyning": "^4.14.5",
+    "@hebcal/leyning": "^4.15.0",
     "@hebcal/locales": "^3.4.1",
     "@hebcal/rest-api": "^3.19.1",
     "better-sqlite3": "^7.5.3",

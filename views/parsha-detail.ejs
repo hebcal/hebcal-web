@@ -59,7 +59,7 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<a class="ms-1 outbound d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
+<a class="ms-2 outbound d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
 </span>
 <% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
@@ -87,7 +87,7 @@ href="<%-aliyah.tikkun%>">
 <h5>Triennial <small class="text-muted">year <%=triennial.yearNum%></small></h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 <% if (triennial.haftara) { -%>
-<p class="haftara">Triennial alternate Haftarah:
+<p class="haftara">Alternate Haftarah:
 <a class="outbound" href="<%=triennial.haftaraHref%>"><%=triennial.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
 </p>
@@ -116,7 +116,7 @@ href="<%-aliyah.tikkun%>">
 <br><span class="text-success ps-1 small">*<%= triReading.reason.haftara %></span>
 </p>
 <% } else if (triReading.haftara) { -%>
-<p class="haftara">Triennial alternate Haftarah:
+<p class="haftara">Alternate Haftarah:
 <a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
 </p>
