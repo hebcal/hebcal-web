@@ -145,6 +145,7 @@ export async function holidayDetail(ctx) {
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
+    amp: (q.amp === '1') ? true : undefined,
   });
 }
 

@@ -57,6 +57,7 @@ export async function holidayYearIndex(ctx) {
     q,
     fcEvents,
     options,
+    amp: (q.amp === '1') ? true : undefined,
   });
 }
 
@@ -294,6 +295,7 @@ export async function holidayMainIndex(ctx) {
     items,
     il,
     q,
+    amp: (q.amp === '1') ? true : undefined,
   });
 }
 

@@ -1,6 +1,7 @@
 <%- await include('partials/header2.ejs', {
   title: `Hebrew Date Converter - ${gdateStr} / ${hdateStr}`,
   ampAds: true,
+  ampForm: true,
 }) -%>
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
@@ -57,7 +58,7 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
-<% if (typeof amp === 'undefined' || !amp) { -%>
+<% if (true) { // if (typeof amp === 'undefined' || !amp) { -%>
 <div class="d-flex justify-content-center d-print-none">
 <div class="form-check form-switch mb-2">
 <input class="form-check-input" type="checkbox" role="switch" id="nikud-checkbox" checked>
@@ -67,7 +68,7 @@ const isPast = hy < todayHebYear;
 <div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top">
 <h5>Convert from Gregorian to Hebrew</h5>
 <div class="form-floating col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" id="gd" pattern="\d*">
@@ -111,7 +112,7 @@ const isPast = hy < todayHebYear;
 </div><!-- .col-md -->
 
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top">
 <h5>Convert from Hebrew to Gregorian</h5>
 <%- await include('partials/hebdate-picker.ejs', {
   hd: hd,
