@@ -19,7 +19,22 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 </div><!-- .row -->
 </footer>
 </div><!-- .container -->
-<% if (typeof amp === 'undefined' || (typeof amp === 'boolean' && !amp)) { -%>
+<% if (typeof amp === 'boolean' && amp) { -%>
+<amp-analytics><script type="application/json">
+{
+  "triggers": {
+    "trackPageview": {
+      "on": "visible",
+      "request": "pageview"
+    }
+  },
+  "requests": {
+    "base": "https://www.hebcal.com/ma/ma.php?idsite=1&rec=1&action_name=${title}&url=${sourceUrl}&rand=${random}&apiv=1&urlref=${documentReferrer}&res=${screenWidth}x${screenHeight}&lang=${browserLanguage}&gt_ms=${serverResponseTime}&cs=${documentCharset}",
+    "pageview": "${base}"
+  }
+}
+</script></amp-analytics>
+<% } else { -%>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <% if (typeof footerScripts === 'object') { -%>
 <%   if (footerScripts.tooltip) { -%><%- await include('script-tooltip.ejs') -%><% } -%>
