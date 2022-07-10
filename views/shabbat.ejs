@@ -1,4 +1,4 @@
-<%- await include('partials/header2.ejs') -%>
+<%- await include('partials/header2.ejs', {ampAds: true}) -%>
 <meta name="description" content="<%= summary %>">
 <% if (jsonLD) { -%>
 <script type="application/ld+json"><%- jsonLD %></script>
@@ -68,7 +68,7 @@ ul.hebcal-results li {
 </form>
 <% } -%>
 <hr>
-<p><%= Shabbat %> times for world cities</p>
+<p class="mt-2"><%= Shabbat %> times for world cities</p>
 <ul class="bullet-list-inline">
 <% const worldCities = [
 [295629, "Ashdod"],
@@ -115,11 +115,18 @@ for (const [geonameid, city] of worldCities) { -%>
 </ul>
 </div><!-- .d-print-none -->
 </div><!-- .col-md-8 -->
-<% if (typeof amp === 'boolean' && amp) { -%>
-<!-- amp: no ad -->
-<% } else { -%>
 <div class="col-md-4 d-print-none" role="complementary">
 <h6 class="text-muted mb-1">Advertisement</h6>
+<% if (typeof amp === 'boolean' && amp) { -%>
+<amp-ad width="100vw" height="320"
+  type="adsense"
+  data-ad-client="ca-pub-7687563417622459"
+  data-ad-slot="5981467974"
+  data-auto-format="rspv"
+  data-full-width="">
+<div overflow=""></div>
+</amp-ad>
+<% } else { -%>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
      crossorigin="anonymous"></script>
 <!-- responsive textonly -->
