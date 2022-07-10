@@ -1,9 +1,7 @@
-<%- await include('partials/header.ejs') -%>
+<%- await include('partials/header2.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<link rel="amphtml" href="https://www.hebcal.com<%=rpath%>?amp=1">
 <%- await include('partials/shabbat-browse-structured.ejs') -%>
-<style>
-ul.list-unstyled li {margin-bottom: 0.5em}
-</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -20,7 +18,7 @@ ul.list-unstyled li {margin-bottom: 0.5em}
 <% for (const a1 of admin1) { -%>
 <div id="<%=a1.id%>" class="col-md-4">
 <h3><%=a1.name%></h3>
-<ul class="list-unstyled">
+<ul class="list-unstyled lh-lg">
 <% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
 <li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=s"><%= r.name %></a> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>

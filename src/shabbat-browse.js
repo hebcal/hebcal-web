@@ -99,18 +99,24 @@ async function render(ctx, view, options) {
   options.lg = ccDefaults[0];
   options.cc = cc;
   if (basename(ctx.request.path).endsWith('.xml')) {
-    const results = options.results;
-    const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
-    ctx.response.remove('Cache-Control');
-    const now = new Date();
-    expiresSaturdayNight(ctx, now, tzid);
-    ctx.type = 'text/xml';
-    options.writeResp = false;
-    options.lastmod = now.toISOString();
-    ctx.body = await ctx.render('shabbat-browse-country-xml', options);
-    return;
+    return renderBrowseCountryXml(options, ctx);
+  }
+  if (ctx.request.query.amp === '1') {
+    options.amp = true;
   }
   return ctx.render(view, options);
+}
+
+async function renderBrowseCountryXml(options, ctx) {
+  const results = options.results;
+  const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
+  ctx.response.remove('Cache-Control');
+  const now = new Date();
+  expiresSaturdayNight(ctx, now, tzid);
+  ctx.type = 'text/xml';
+  options.writeResp = false;
+  options.lastmod = now.toISOString();
+  ctx.body = await ctx.render('shabbat-browse-country-xml', options);
 }
 
 export async function shabbatBrowse(ctx) {

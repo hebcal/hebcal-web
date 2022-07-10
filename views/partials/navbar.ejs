@@ -35,14 +35,18 @@ if (rpath === '/') {
 %><nav class="navbar navbar-expand-lg navbar-light bg-light">
 <div class="container-fluid">
   <%- logoHtml %>
+<% if (typeof amp === 'undefined' || (typeof amp === 'boolean' && !amp)) { -%>
   <button class="navbar-toggler d-print-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+<% } -%>
   <div class="collapse navbar-collapse d-print-none" id="navbarSupportedContent">
     <%- htmlMenu(rpath) %>
+<% if (typeof amp === 'undefined' || (typeof amp === 'boolean' && !amp)) { -%>
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search">
     </form>
+<% } -%>
   </div>
 </div>
 </nav>

@@ -1,5 +1,10 @@
-<%- await include('partials/header-and-navbar.ejs') -%>
+<%- await include('partials/header2.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<link rel="amphtml" href="https://www.hebcal.com<%=rpath%>?amp=1">
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
 <%- await include('partials/shabbat-browse-structured.ejs') -%>
 <div class="row"><div class="col"><%- await include('partials/shabbat-browse-breadcrumb.ejs') -%></div></div>
 <div class="row mt-3">
@@ -7,7 +12,7 @@
 <h2><%=countryName%> <%=flag%><br><span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
 <ul class="list-unstyled lh-lg">
 <% for (const a1 of admin1) { -%>
-<li><a href="<%= a1.href %>"><%= a1.name %></a></li>
+<li><a href="<%=a1.href%><%=typeof amp==='boolean'&&amp?'?amp=1':''%>"><%=a1.name%></a></li>
 <% } -%>
 </ul>
 </div><!-- .col -->

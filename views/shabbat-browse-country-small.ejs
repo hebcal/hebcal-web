@@ -1,9 +1,7 @@
-<%- await include('partials/header.ejs') -%>
+<%- await include('partials/header2.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<link rel="amphtml" href="https://www.hebcal.com<%=rpath%>?amp=1">
 <%- await include('partials/shabbat-browse-structured.ejs') -%>
-<style>
-ul.list-unstyled li {margin-bottom: 0.5em}
-</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -14,7 +12,7 @@ ul.list-unstyled li {margin-bottom: 0.5em}
 <div class="col">
 <h2><%=countryName%> <%=flag%><br><span class="h3 small text-muted">Shabbat Candle Lighting Times</span></h2>
 <p class="lead"><time datetime="<%= friday.format('YYYY-MM-DD') %>"><%= friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= parsha %></a></p>
-<ul class="list-unstyled">
+<ul class="list-unstyled lh-lg">
 <% for (const r of results) { -%>
 <li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=s"><%= r.name %></a><% if (admin1.size > 1 && r.name != r.admin1) { %>, <small><%=r.admin1%></small><% } %> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>
