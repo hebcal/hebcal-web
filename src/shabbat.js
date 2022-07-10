@@ -89,6 +89,9 @@ export async function shabbatApp(ctx) {
     } else {
       possiblySetCookie(ctx, q);
     }
+    if (q.amp === '1') {
+      p.amp = true;
+    }
     return ctx.render('shabbat', p);
   }
 }

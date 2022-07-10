@@ -1,5 +1,5 @@
 <% if (locale === 'he') { %><div lang="he" dir="rtl"><% } %>
-<ul class="hebcal-results">
+<ul class="hebcal-results list-unstyled">
 <% items.forEach((i) => { -%>
 <% if (i.isoDateTime) { -%>
 <li class="<%= i.cat %>" id="<%= i.id %>"><% if (i.url) { %><a target="<%= q.tgt %>" href="<%= i.url %>"><% } %><%= i.desc %><% if (i.url) { %></a><% } %>: <time datetime="<%= i.isoDateTime %>"><strong><%= i.fmtTime %></strong> on <span class="text-nowrap"><%= i.fmtDate %></span></time></li>
