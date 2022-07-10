@@ -110,6 +110,9 @@ export async function hebrewDateConverter(ctx) {
       ctx.lastModified = ctx.launchDate;
       ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     }
+    if (q.amp === '1') {
+      p.amp = true;
+    }
     return ctx.render('converter', p);
   }
 }
@@ -184,6 +187,7 @@ function makeProperties(ctx) {
     events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
     dateItems: makeDiasporaIsraelItems(ctx, hdate),
     hdateStr,
+    gdateStr: d.format('MMMM D, ') + gyStr,
     canonical,
     first: greg2heb ? dateStr + afterSunset : hdateStr,
     second: greg2heb ? hdateStr : dateStr,

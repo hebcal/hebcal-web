@@ -1,10 +1,12 @@
-<%- await include('partials/header.ejs', {
-  title: `Hebrew Date Converter - ${hdateStr} - Hebcal`,
+<%- await include('partials/header2.ejs', {
+  title: `Hebrew Date Converter - ${gdateStr} / ${hdateStr}`,
+  ampAds: true,
 }) -%>
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
+<% if (typeof amp === 'undefined' || !amp) { -%>
 <style>
 #converter-results {
  text-align: center;
@@ -20,6 +22,7 @@
 }
 .smaller {font-size: 0.75em}
 </style>
+<% } -%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -54,6 +57,7 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
+<% if (typeof amp === 'undefined' || !amp) { -%>
 <div class="d-flex justify-content-center d-print-none">
 <div class="form-check form-switch mb-2">
 <input class="form-check-input" type="checkbox" role="switch" id="nikud-checkbox" checked>
@@ -127,11 +131,22 @@ const isPast = hy < todayHebYear;
 </div><!-- .col-md -->
 </div><!-- .row -->
 </div><!-- #converter-form -->
+<% } -%>
 
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-muted mt-2 mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
+<% if (typeof amp === 'boolean' && amp) { -%>
+<amp-ad width="100vw" height="320"
+  type="adsense"
+  data-ad-client="ca-pub-7687563417622459"
+  data-ad-slot="8149436309"
+  data-auto-format="rspv"
+  data-full-width="">
+<div overflow=""></div>
+</amp-ad>
+<% } else { -%>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
@@ -143,6 +158,7 @@ data-ad-slot="5342180883"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+<% } -%>
 </div><!-- .d-print-none -->
 
 <div class="row d-print-none mt-5">
@@ -160,6 +176,7 @@ more.</p>
   Yahrzeit + Anniversary Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
+<% if (typeof amp === 'undefined' || !amp) { -%>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var switchEl = document.querySelector("#nikud-checkbox");
@@ -169,4 +186,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<% } -%>
 <%- await include('partials/footer.ejs') _%>
