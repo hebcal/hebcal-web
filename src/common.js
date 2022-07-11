@@ -1278,6 +1278,25 @@ export function makeGeoUrlArgs(q, location, options) {
   return geoUrlArgs;
 }
 
+/**
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @return {string}
+ */
+export function makeGeoUrlArgs2(q, location) {
+  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  if (q.M === 'on') {
+    delete q.m;
+  }
+  q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
+  for (const key of ['b', 'M', 'm', 'lg']) {
+    if (!empty(q[key])) {
+      geoUrlArgs += `&${key}=${q[key]}`;
+    }
+  }
+  return geoUrlArgs;
+}
+
 const hebcalPrefix = 'https://www.hebcal.com/';
 
 /**

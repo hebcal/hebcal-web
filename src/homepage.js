@@ -4,6 +4,7 @@ import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   shortenUrl,
+  makeGeoUrlArgs2,
   getSunsetAwareDate} from './common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -28,6 +29,9 @@ export async function homepage(ctx) {
   };
   const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
+  const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
+  const geoUrlArgs = makeGeoUrlArgs2(q, location);
+  ctx.state.shabbatUrl = '/shabbat?' + geoUrlArgs;
   ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset, dateOverride} = getSunsetAwareDate(q, ctx.state.location);
   ctx.state.gy = gy;
