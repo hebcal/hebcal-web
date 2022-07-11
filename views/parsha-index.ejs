@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%=il?'?i=on':''%>">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
+<meta name="description" content="Weekly Torah reading for <%=saturday.format('MMMM D')%>: <%= israelDiasporaDiffer ? `${parshaDia} in the Diaspora, ${parshaIsrael} in Israel` : parsha %>. Full kriyah, triennial cycle, weekday readings. Calendar, spreadsheets, feeds and downloads">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
