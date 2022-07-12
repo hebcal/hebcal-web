@@ -1,13 +1,19 @@
-<%- await include('partials/header2.ejs') -%>
+<%- await include('partials/header2.ejs', {
+  ampAds: true,
+  ampForm: true,
+}) -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>">
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today)) { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
+<% if (typeof amp === 'undefined' || !amp) { -%>
+<link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>
 .past {color: rgba(0, 0, 0, 0.5) !important;}
 .current {background-color: #ffc;}
 </style>
+<% } -%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -63,6 +69,16 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <h6 class="text-muted mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
+<% if (typeof amp === 'boolean' && amp) { -%>
+<amp-ad width="100vw" height="320"
+ type="adsense"
+ data-ad-client="ca-pub-7687563417622459"
+ data-ad-slot="3531211046"
+ data-auto-format="rspv"
+ data-full-width="">
+<div overflow=""></div>
+</amp-ad>
+<% } else { -%>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
@@ -74,6 +90,7 @@ data-ad-slot="5342180883"></ins>
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+<% } -%>
 </div><!-- .d-print-none -->
 
 <% if (typeof meta.reading !== 'undefined' && Array.isArray(meta.items)) { %>
@@ -112,7 +129,7 @@ data-ad-slot="5342180883"></ins>
 </table>
 </div>
 <% if (holiday !== 'Asara B\'Tevet') { %>
-<form method="GET" action="/holidays/<%=holidayAnchor%>">
+<form method="GET" action="/holidays/<%=holidayAnchor%>" target="_top">
 <label for="gy">Look up the date of <%=holiday%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
