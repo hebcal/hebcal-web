@@ -80,18 +80,23 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
   <input type="checkbox" style="width:1.25rem; height:1.25rem; vertical-align: middle" id="toggle-havdalah">
   <label for="toggle-havdalah" style="vertical-align: middle">Show Havdalah times</label>
 </form>
-<p lang="en" dir="ltr"><a class="nav nowrap" title="Previous" rel="nofollow"
-<% if (hyear) { %> href="<%- url %>&amp;year=<%= hyear - 1 %>">&larr; <%= hyear - 1 %></a>
-<% } else { %> href="<%- url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a>
-<% } -%>
-&nbsp;&nbsp;&nbsp;
-Candle-lighting times are <%= q.b || 18 %> minutes before sunset
-&nbsp;&nbsp;&nbsp;
-<a class="nav nowrap" title="Next" rel="nofollow"
-<% if (hyear) { %> href="<%- url %>&amp;year=<%= hyear + 1 %>"><%= hyear + 1 %> &rarr;</a>
-<% } else { %> href="<%- url %>&amp;year=<%= gregYear1 + 1 %>&amp;yt=G"><%= gregYear1 + 1 %> &rarr;</a>
-<% } -%>
-</p>
+<table style="width:524px">
+<tbody>
+<tr>
+<td><p><a class="nav nowrap" title="Previous" rel="nofollow"
+  href="<%- url %>&amp;year=<%= hyear ? hyear - 1 : gregYear1 + 3759 %>">&larr; <%= hyear ? hyear - 1 : gregYear1 + 3759 %></a></p>
+  <a class="nav nowrap" title="Previous" rel="nofollow"
+  href="<%- url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a>
+</td>
+<td class="text-center">Candle-lighting times are <%= q.b || 18 %> minutes before sunset</td>
+<td><p><a class="nav nowrap" title="Next" rel="nofollow"
+  href="<%- url %>&amp;year=<%= hyear ? hyear + 1 : gregYear1 + 3761 %>"><%= hyear ? hyear + 1 : gregYear1 + 3761 %> &rarr;</a></p>
+  <p><a class="nav nowrap" title="Next" rel="nofollow"
+  href="<%- url %>&amp;year=<%= gregYear1 + 1 %>&amp;yt=G"><%= gregYear1 + 1 %> &rarr;</a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div><!-- .container -->
 <script>
