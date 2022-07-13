@@ -93,7 +93,7 @@ function makeParshaJsonLD(hd, parsha, parshaHref, meta) {
       'url': parshaHref,
     },
   };
-  const desc = meta && meta.summaryHtml && meta.summaryHtml.html;
+  const desc = meta?.summaryHtml?.html;
   if (desc) {
     jsonLD.description = desc;
   }

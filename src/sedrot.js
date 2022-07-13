@@ -82,7 +82,7 @@ export async function parshaDetail(ctx) {
   const base0 = basename(rpath);
   const base = base0.toLowerCase();
   const matches = base.match(parshaDateRe);
-  const date = matches && matches[2];
+  const date = matches?.[2];
   const parshaAnchor = matches === null ? base : matches[1];
   const parshaName0 = sedrot.get(parshaAnchor);
   if (typeof parshaName0 !== 'string') {

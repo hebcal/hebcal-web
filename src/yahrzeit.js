@@ -26,7 +26,7 @@ async function makeQuery(ctx) {
   ctx.state.ulid = '';
   ctx.state.isEditPage = false;
   const reqBody = ctx.request.body;
-  const isPost = ctx.method === 'POST' && reqBody && reqBody.v === 'yahrzeit';
+  const isPost = ctx.method === 'POST' && reqBody?.v === 'yahrzeit';
   const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
   const query = Object.assign(defaults, reqBody, ctx.request.query);
   if (isPost) {

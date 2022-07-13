@@ -38,7 +38,7 @@ export async function holidayDetail(ctx) {
   const base0 = basename(rpath);
   const base = base0.toLowerCase();
   const matches = base.match(holidayYearRe);
-  const dateSuffix = matches && matches[2];
+  const dateSuffix = matches?.[2];
   const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
   const base1 = matches === null ? base : matches[1];
   const holiday = holidays.get(base1);
@@ -92,7 +92,7 @@ export async function holidayDetail(ctx) {
       item.href = '/omer/' + item.hd.getFullYear();
     }
   }
-  const next = dateSuffix && dateSuffix.length === 8 ?
+  const next = dateSuffix?.length === 8 ?
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :
       occursOn.find((item) => item.ppf === 'future');

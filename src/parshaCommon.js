@@ -33,7 +33,7 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
  * @param {boolean} showBook display the book name in the `verses` field (e.g. for special Maftir)
  */
 export function addLinksToLeyning(aliyot, showBook) {
-  const book1 = aliyot['1'] && aliyot['1'].k;
+  const book1 = aliyot['1']?.k;
   Object.keys(aliyot).forEach((num) => {
     const aliyah = aliyot[num];
     aliyah.num = num == 'M' ? 'maf' : num;
@@ -93,8 +93,8 @@ function makeSummaryHtml(parsha) {
   let target;
   if (parsha.combined) {
     const [p1, p2] = parsha.name.split('-');
-    const s1 = drash[p1].sefaria && drash[p1].sefaria.summary;
-    const s2 = drash[p2].sefaria && drash[p2].sefaria.summary;
+    const s1 = drash[p1]?.sefaria?.summary;
+    const s2 = drash[p2]?.sefaria?.summary;
     if (s1 && s2) {
       summary = s1 + '\n ' + s2;
       target = drash[p1].sefaria.target;
@@ -103,7 +103,7 @@ function makeSummaryHtml(parsha) {
     }
   } else {
     const sefaria = drash[parsha.name].sefaria;
-    if (sefaria && sefaria.summary) {
+    if (sefaria?.summary) {
       summary = sefaria.summary;
       target = sefaria.target;
     } else {

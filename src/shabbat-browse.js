@@ -108,8 +108,7 @@ async function render(ctx, view, options) {
 }
 
 async function renderBrowseCountryXml(options, ctx) {
-  const results = options.results;
-  const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
+  const tzid = options?.results?.[0]?.timezone || 'America/New_York';
   ctx.response.remove('Cache-Control');
   const now = new Date();
   expiresSaturdayNight(ctx, now, tzid);
@@ -228,7 +227,7 @@ async function countryPage(ctx, countryCode) {
 }
 
 function makeCandleLighting(ctx, results, countryCode) {
-  const tzid = (results && results[0] && results[0].timezone) || 'America/New_York';
+  const tzid = results?.[0]?.timezone || 'America/New_York';
   const now = new Date();
   expiresSaturdayNight(ctx, now, tzid);
   const today = dayjs.tz(now, tzid);

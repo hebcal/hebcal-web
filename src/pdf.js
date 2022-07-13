@@ -164,7 +164,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     doc.text(str, x, y + 1);
     x += timedWidth;
   }
-  const locale = options && options.locale;
+  const locale = options?.locale;
   const mask = evt.getFlags();
   let subj = shouldRenderBrief(evt) ? evt.renderBrief(locale) : evt.render(locale);
   const isChag = Boolean(mask & flags.CHAG) && !timed;
@@ -271,7 +271,7 @@ export function createPdfDoc(title, options) {
  */
 export function renderPdf(doc, events, options) {
   const cells = eventsToCells(events);
-  const locale0 = options && options.locale;
+  const locale0 = options?.locale;
   const locale = localeMap[locale0] || 'en';
   const rtl = Boolean(locale === 'he');
   const xposNewRow = rtl ? (PDF_WIDTH - PDF_RMARGIN - 4) : (PDF_LMARGIN + PDF_COLWIDTH - 4);
@@ -328,7 +328,7 @@ export function renderPdf(doc, events, options) {
 
     doc.fillColor('#000000');
     doc.font('plain').fontSize(8);
-    const leftText = (options.location && options.location.name) ?
+    const leftText = options?.location?.name ?
       options.location.name + ' · ' +
       `Candle-lighting times ${options.candleLightingMins||18} min before sunset` :
       options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';

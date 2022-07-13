@@ -821,7 +821,7 @@ export function getLocationFromGeoIp(ctx, maxAccuracyRadius=500) {
   if (!geoip) {
     return {geo: 'none'};
   }
-  const gloc = {details: geoip, cc: geoip.country && geoip.country.iso_code};
+  const gloc = {details: geoip, cc: geoip.country?.iso_code};
   if (typeof geoip.location === 'object') {
     const gloc0 = geoip.location;
     const tzid = gloc0.time_zone;
