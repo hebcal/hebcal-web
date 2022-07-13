@@ -1265,7 +1265,8 @@ export function expiresSaturdayNight(ctx, now, tzid) {
  * @return {string}
  */
 export function makeGeoUrlArgs(q, location, options) {
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  const geonameid = location && location.getGeoId();
+  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${geonameid}`;
   if (typeof options.candleLightingMins !== 'undefined') {
     geoUrlArgs += '&b=' + options.candleLightingMins;
   }
@@ -1284,7 +1285,8 @@ export function makeGeoUrlArgs(q, location, options) {
  * @return {string}
  */
 export function makeGeoUrlArgs2(q, location) {
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${location.getGeoId()}`;
+  const geonameid = location && location.getGeoId();
+  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${geonameid}`;
   if (q.M === 'on') {
     delete q.m;
   }

@@ -8,7 +8,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames, off} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
-  wrapDisplaySpans, OMER_TITLE} from './holidayCommon';
+  wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
 
@@ -120,7 +120,7 @@ export async function holidayDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
-  const jsonLD = noindex ? null : JSON.stringify(getJsonLD(next, descrMedium));
+  const jsonLD = noindex ? null : JSON.stringify(makeEventJsonLD(next.event, il));
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -163,12 +163,6 @@ function doIsraelRedir(ctx, holiday) {
   return !off(ck.get('i'));
 }
 
-function appendPeriod(str) {
-  if (!str) return str;
-  if (str.charAt(str.length - 1) !== '.') return str + '.';
-  return str;
-}
-
 /**
  * @param {any} item
  * @param {number} year
@@ -199,26 +193,6 @@ function makeNextObserved(item, year, il) {
   const endObservedHtml = endObservedPrefix + `<strong class="text-burgundy"><time datetime="${item.endIsoDate}">` +
     end.format('dddd, D MMMM YYYY') + '</time></strong>';
   return [nextObserved + endObserved, nextObservedHtml + endObservedHtml];
-}
-
-function getJsonLD(item, description) {
-  const url = item.event.url();
-  if (!url) {
-    return {};
-  }
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'Event',
-    'name': item.basename + ' ' + item.d.year(),
-    'startDate': item.startIsoDate,
-    'endDate': item.endIsoDate,
-    'description': description,
-    'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
-    'location': {
-      '@type': 'VirtualLocation',
-      'url': url,
-    },
-  };
 }
 
 function makeOmerEvents(year) {

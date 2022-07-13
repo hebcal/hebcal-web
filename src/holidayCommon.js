@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
 import holidayMeta from './holidays.json';
-import {makeAnchor} from '@hebcal/rest-api';
+import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
 
 export const holidays = new Map();
 for (const key of Object.keys(holidayMeta)) {
@@ -113,16 +113,9 @@ function hebrewDateRange(hd, duration, showYear=true) {
  * @return {any}
  */
 export function eventToHolidayItem(ev, il) {
+  const {hd, d, duration, endD, beginsWhen} = holidayStartAndEnd(ev, il);
   const holiday = ev.basename();
   const mask = ev.getFlags();
-  const duration0 = getHolidayDuration(il, mask, holiday);
-  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-    duration0 === 0 ? 'at dawn' : 'at sundown';
-  const hd = ev.getDate();
-  const d0 = dayjs(hd.greg());
-  const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
-  const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
-  const endD = d.add(duration, 'd');
   const emoji = Boolean(mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) ? '' :
     holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
   const anchor = makeAnchor(holiday);
@@ -165,6 +158,25 @@ export function eventToHolidayItem(ev, il) {
 }
 
 /**
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {any}
+ */
+function holidayStartAndEnd(ev, il) {
+  const holiday = ev.basename();
+  const mask = ev.getFlags();
+  const duration0 = getHolidayDuration(il, mask, holiday);
+  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+    duration0 === 0 ? 'at dawn' : 'at sundown';
+  const hd = ev.getDate();
+  const d0 = dayjs(hd.greg());
+  const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
+  const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
+  const endD = d.add(duration, 'd');
+  return {mask, holiday, d, hd, beginsWhen, duration, endD};
+}
+
+/**
  *
  * @param {string} breakpoint
  * @param {string} short
@@ -174,4 +186,47 @@ export function eventToHolidayItem(ev, il) {
 export function wrapDisplaySpans(breakpoint, short, long) {
   return `<span class="d-none d-${breakpoint}-inline text-nowrap">${long}</span>` +
     `<span class="d-inline d-${breakpoint}-none text-nowrap">${short}</span>`;
+}
+
+/**
+ * @param {string} str
+ * @return {string}
+ */
+export function appendPeriod(str) {
+  if (!str) {
+    return str;
+  }
+  if (str.charAt(str.length - 1) !== '.') {
+    return str + '.';
+  }
+  return str;
+}
+
+/**
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {any}
+ */
+export function makeEventJsonLD(ev, il) {
+  const url = ev.url();
+  if (!url) {
+    return {};
+  }
+  const {d, endD} = holidayStartAndEnd(ev, il);
+  const description = appendPeriod(getHolidayDescription(ev, false));
+  const startIsoDate = d.format('YYYY-MM-DD');
+  const endIsoDate = endD.format('YYYY-MM-DD');
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': ev.basename() + ' ' + d.year(),
+    'startDate': startIsoDate,
+    'endDate': endIsoDate,
+    'description': description,
+    'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
+    'location': {
+      '@type': 'VirtualLocation',
+      'url': url,
+    },
+  };
 }
