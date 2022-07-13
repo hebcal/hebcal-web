@@ -28,7 +28,14 @@ export async function parshaIndex(ctx) {
   delete myLangNames.a;
   delete myLangNames['he-x-NoNikud'];
   const parsha = il ? parshaIsrael : parshaDia;
+  const parshaHref = il ? parshaIsraelHref : parshaDiaHref;
   const meta = il ? metaIL : metaDia;
+  const nextSaturday = new HDate(saturday.abs() + 7);
+  const [parshaNext, parshaNextHref, metaNext] = getParsha(nextSaturday, il);
+  const jsonLD = [
+    makeParshaJsonLD(saturday, parsha, parshaHref, meta),
+    makeParshaJsonLD(nextSaturday, parshaNext, parshaNextHref, metaNext),
+  ];
   await ctx.render('parsha-index', {
     title: `${parsha} - Weekly Torah Portion - Hebcal`,
     il,
@@ -36,7 +43,7 @@ export async function parshaIndex(ctx) {
     hyear,
     triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
     parsha,
-    parshaHref: il ? parshaIsraelHref : parshaDiaHref,
+    parshaHref,
     parshaByBook,
     torahBookNames,
     parshaDia,
@@ -46,6 +53,7 @@ export async function parshaIndex(ctx) {
     israelDiasporaDiffer,
     langNames: myLangNames,
     meta,
+    jsonLD,
   });
 }
 
@@ -68,4 +76,26 @@ function getParsha(hd, il) {
     const meta = lookupParsha(parsha);
     return [parsha, parshaHref, meta];
   }
+}
+
+function makeParshaJsonLD(hd, parsha, parshaHref, meta) {
+  const d = dayjs(hd.greg());
+  const isoDate = d.format('YYYY-MM-DD');
+  const jsonLD = {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': `Parashat ${parsha}`,
+    'startDate': isoDate,
+    'endDate': isoDate,
+    'eventAttendanceMode': 'https://schema.org/OnlineEventAttendanceMode',
+    'location': {
+      '@type': 'VirtualLocation',
+      'url': parshaHref,
+    },
+  };
+  const desc = meta && meta.summaryHtml && meta.summaryHtml.html;
+  if (desc) {
+    jsonLD.description = desc;
+  }
+  return jsonLD;
 }

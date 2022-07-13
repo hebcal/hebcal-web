@@ -36,13 +36,7 @@
 verses for each aliyah and accompanying Haftarah. Includes
 traditional (full <em>kriyah</em>), <a
 href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and weekday readings.</p>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Event","name":"Parashat <%=parsha%>",
-"startDate":"<%=saturday.format('YYYY-MM-DD')%>","endDate":"<%=saturday.format('YYYY-MM-DD')%>",
-"url":"<%=parshaHref%>",
-"eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-"location":{"@type": "VirtualLocation",
-"url":"<%=parshaHref%>"}}</script>
+<script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
 
 </div><!-- .col -->
 </div><!-- .row -->
