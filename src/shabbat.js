@@ -174,14 +174,8 @@ function makeItems(ctx, options, q) {
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const items = events.map((ev) => eventToItem(ev, options, locale, q.cfg));
-  const parashaItem = items.find((i) => i.cat === 'parashat');
   const titlePrefix = Locale.gettext('Shabbat') + ' Times for ' + compactLocationName(location);
-  let title = titlePrefix;
-  if (parashaItem) {
-    const parsha = parashaItem.desc;
-    title += ' - ' + parsha.substring(parsha.indexOf(' ') + 1);
-  }
-  title += ' - Hebcal';
+  const title = titlePrefix + ' - Hebcal';
   Object.assign(ctx.state, {
     events,
     options,
