@@ -31,7 +31,7 @@ export async function hebrewDateConverter(ctx) {
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
-    ctx.set('Cache-Control', 'private, max-age=0');
+    ctx.set('Cache-Control', 'private, max-age=3600');
     const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1`;
     httpRedirect(ctx, url, 302);
     return;
