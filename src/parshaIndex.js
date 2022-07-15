@@ -37,7 +37,7 @@ export async function parshaIndex(ctx) {
     makeParshaJsonLD(nextSaturday, parshaNext, parshaNextHref, metaNext),
   ];
   await ctx.render('parsha-index', {
-    title: `${parsha} - Weekly Torah Portion - Hebcal`,
+    title: `Weekly Torah Portion - Parashat haShavua - Hebcal`,
     il,
     saturday: dayjs(saturday.greg()),
     hyear,

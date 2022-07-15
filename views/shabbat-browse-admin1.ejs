@@ -1,6 +1,8 @@
 <%- await include('partials/header2.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com<%=rpath%>?amp=1">
+<% } -%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
