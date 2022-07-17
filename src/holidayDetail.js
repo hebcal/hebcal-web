@@ -79,7 +79,7 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, `${rpath}?i=on`, 302);
     return;
   }
-  const meta = getHolidayMeta(holiday);
+  const meta = await getHolidayMeta(holiday);
   const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
     year ? getFirstOcccurences(HebrewCalendar.calendar({
       year: year - 3,
@@ -416,7 +416,7 @@ function sourceName(href) {
   return primarySource[domain] || domain;
 }
 
-function getHolidayMeta(holiday) {
+async function getHolidayMeta(holiday) {
   const meta0 = holidayMeta[holiday];
   if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
@@ -430,14 +430,13 @@ function getHolidayMeta(holiday) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
-      const path = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ.jpg';
-      const rs = fs.createReadStream(path);
-      rs.on('error', function(err) {
+      try {
+        const path = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ.jpg';
+        const rs = fs.createReadStream(path);
+        book.dimensions = await probe(rs);
+      } catch (err) {
         // ignore file not found
-      });
-      rs.on('open', function() {
-        probe(rs).then((dim) => book.dimensions = dim);
-      });
+      }
     }
   }
   return meta;
