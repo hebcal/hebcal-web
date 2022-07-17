@@ -576,7 +576,9 @@ export function getLocationFromQuery(db, query) {
     }
     const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
-    return new Location(latitude, longitude, il, query.tzid, cityName);
+    const loc = new Location(latitude, longitude, il, query.tzid, cityName);
+    loc.geo = 'pos';
+    return loc;
   } else if (hasLatLongLegacy(query)) {
     for (const [key, max] of Object.entries(geoposLegacy)) {
       if (empty(query[key]) || parseInt(query[key], 10) > max) {
@@ -625,7 +627,9 @@ export function getLocationFromQuery(db, query) {
     query.tzid = tzid;
     const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, tzid);
     query.geo = 'pos';
-    return new Location(latitude, longitude, il, tzid, cityName);
+    const loc = new Location(latitude, longitude, il, tzid, cityName);
+    loc.geo = 'pos';
+    return loc;
   } else if (query.geo === 'pos') {
     if (empty(query.latitude) && empty(query.longitude)) {
       query.geo = 'none';
@@ -969,7 +973,9 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
     }
   }
   if (typeof gloc.latitude === 'number') {
-    return new Location(gloc.latitude, gloc.longitude, gloc.cc === 'IL', gloc.tzid, null, gloc.cc);
+    const loc = new Location(gloc.latitude, gloc.longitude, gloc.cc === 'IL', gloc.tzid, null, gloc.cc);
+    loc.geo = 'pos';
+    return loc;
   }
   return null;
 }
@@ -1259,24 +1265,54 @@ export function expiresSaturdayNight(ctx, now, tzid) {
 }
 
 /**
+ * @private
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @return {URLSearchParams}
+ */
+function makeGeoUrlArgs0(q, location) {
+  if (!location) {
+    throw createError(500, 'Internal error: Location required!');
+  }
+  const args = new URLSearchParams();
+  if (location.geo === 'pos') {
+    args.set('geo', 'pos');
+    args.set('latitude', location.getLatitude());
+    args.set('longitude', location.getLongitude());
+    args.set('tzid', location.getTzid());
+    const cityName = q['city-typeahead'];
+    if (!empty(cityName)) {
+      args.set('city-typeahead', cityName);
+    }
+  } else if (q.zip) {
+    args.set('zip', q.zip);
+  } else {
+    args.set('geonameid', location.getGeoId());
+  }
+  return args;
+}
+
+/**
  * @param {Object.<string,string>} q
  * @param {Location} location
  * @param {CalOptions} options
  * @return {string}
  */
 export function makeGeoUrlArgs(q, location, options) {
-  const geonameid = location && location.getGeoId();
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${geonameid}`;
-  if (typeof options.candleLightingMins !== 'undefined') {
-    geoUrlArgs += '&b=' + options.candleLightingMins;
+  const args = makeGeoUrlArgs0(q, location);
+  const candleLightingMins = options.candleLightingMins;
+  if (typeof candleLightingMins !== 'undefined') {
+    args.set('b', candleLightingMins);
   }
-  if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) {
-    geoUrlArgs += '&M=off&m=' + options.havdalahMins;
+  const havdalahMins = options.havdalahMins;
+  if (typeof havdalahMins === 'number' && !isNaN(havdalahMins)) {
+    args.set('M', 'off');
+    args.set('m', havdalahMins);
   } else {
-    geoUrlArgs += '&M=on';
+    args.set('M', 'on');
   }
-  geoUrlArgs += `&lg=` + (q.lg || 's');
-  return geoUrlArgs;
+  args.set('lg', q.lg || 's');
+  return args.toString();
 }
 
 /**
@@ -1285,18 +1321,17 @@ export function makeGeoUrlArgs(q, location, options) {
  * @return {string}
  */
 export function makeGeoUrlArgs2(q, location) {
-  const geonameid = location && location.getGeoId();
-  let geoUrlArgs = q.zip ? `zip=${q.zip}` : `geonameid=${geonameid}`;
+  const args = makeGeoUrlArgs0(q, location);
   if (q.M === 'on') {
     delete q.m;
   }
   q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
   for (const key of ['b', 'M', 'm', 'lg']) {
     if (!empty(q[key])) {
-      geoUrlArgs += `&${key}=${q[key]}`;
+      args.set(key, q[key]);
     }
   }
-  return geoUrlArgs;
+  return args.toString();
 }
 
 const hebcalPrefix = 'https://www.hebcal.com/';
