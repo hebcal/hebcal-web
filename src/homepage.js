@@ -141,6 +141,14 @@ const chagSameach = {
 
 const TZOM_KAL = '✡️&nbsp;Tzom Kal!&nbsp;&nbsp;<span lang="he" dir="rtl">צום קל</span>&nbsp;✡️';
 
+/**
+ * @private
+ * @param {HDate} hd
+ * @param {boolean} il
+ * @param {boolean} dateOverride
+ * @param {string} tzid
+ * @return {string[]}
+ */
 function getMastheadGreeting(hd, il, dateOverride, tzid) {
   const mm = hd.getMonth();
   const dd = hd.getDate();
@@ -162,11 +170,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay && fastDay.url()) {
-    const d = dayjs(fastDay.getDate().greg());
-    const htmlDate = myDateFormat(d);
-    const url = shortenUrl(fastDay.url());
-    return [TZOM_KAL, `<a href="${url}">${fastDay.render()}</a>
- occurs on ${htmlDate}. We wish you an easy fast`];
+    return fastDayGreeting(fastDay);
   }
 
   const chmStart = il ? 16 : 17;
@@ -295,7 +299,25 @@ ${when} on ${htmlDate}`];
  begins at sundown on ${htmlDate}`];
   }
 
+  const fastTomorrow = tomorrow.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
+  if (fastTomorrow && fastTomorrow.url()) {
+    return fastDayGreeting(fastTomorrow);
+  }
+
   return [null, null];
+}
+
+/**
+ * @private
+ * @param {Event} ev
+ * @return {string[]}
+ */
+function fastDayGreeting(ev) {
+  const d = dayjs(ev.getDate().greg());
+  const htmlDate = myDateFormat(d);
+  const url = shortenUrl(ev.url());
+  return [TZOM_KAL,
+    `<a href="${url}">${ev.render()}</a> occurs on ${htmlDate}. We wish you an easy fast`];
 }
 
 /**
@@ -305,7 +327,7 @@ ${when} on ${htmlDate}`];
  * @param {boolean} today
  * @param {string} tzid
  * @param {boolean} dateOverride
- * @return {any}
+ * @return {string[]}
  */
 function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
   const url = shortenUrl(ev.url());
