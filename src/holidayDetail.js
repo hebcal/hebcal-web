@@ -11,6 +11,8 @@ import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHo
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
+import probe from 'probe-image-size';
+import fs from 'fs';
 
 const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 
@@ -428,6 +430,14 @@ function getHolidayMeta(holiday) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
+      const path = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ.jpg';
+      const rs = fs.createReadStream(path);
+      rs.on('error', function(err) {
+        // ignore file not found
+      });
+      rs.on('open', function() {
+        probe(rs).then((dim) => book.dimensions = dim);
+      });
     }
   }
   return meta;

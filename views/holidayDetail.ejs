@@ -198,9 +198,22 @@ The Holy Scriptures</a></em> <small class="text-muted">(paid link)</small>
 <% meta.books.forEach((book) => { %>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
-<a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><img
-class="img-fluid card-img-top" alt="<%=book.text%>" width="104" height="160" style="border:none"
-src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
+<a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
+<% if (typeof amp === 'boolean' && amp) { -%>
+<amp-img alt="<%=book.text%>"
+src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
+width="<%=book.dimensions?.width||104%>"
+height="<%=book.dimensions?.height||160%>"
+layout="responsive"></amp-img>
+<% } else { -%>
+<img alt="<%=book.text%>"
+src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
+class="img-fluid card-img-top"
+width="<%=book.dimensions?.width||104%>"
+height="<%=book.dimensions?.height||160%>"
+style="border:none">
+<% } -%>
+</a>
 <div class="card-body">
 <p class="card-text small"><a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
 <% if (book.author) { %><br>by <%=book.author%><% } %></p>
@@ -208,6 +221,8 @@ src="https://www.hebcal.com/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"></a>
 </div><!-- .card -->
 </div><!-- .col -->
 <% }); %>
+<p class="text-muted small">When you buy a book using a link on this page, we receive a commission.
+Thank you for supporting Hebcal.</p>
 </div><!-- .row -->
 </div><!-- .col-md-2 -->
 <% } // books %>

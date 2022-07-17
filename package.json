@@ -86,6 +86,7 @@
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
     "pino": "^8.1.0",
+    "probe-image-size": "^7.2.3",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",
     "ulid": "^2.3.0",
