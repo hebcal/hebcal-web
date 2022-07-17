@@ -239,7 +239,7 @@ function makeChanukahItems(hyear) {
           candles,
           when,
           ppf,
-          desc: ev.render(),
+          desc: ev.render('en'),
           event: ev,
           digit: KEYCAP_DIGITS[candles],
           monthDayHtml: wrapDisplaySpans('sm', d.format('MMM D'), d.format('MMMM D')),

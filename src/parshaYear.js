@@ -45,7 +45,7 @@ export async function parshaYear(ctx) {
     }
     const key = leyning.getLeyningKeyForEvent(ev, il);
     const desc = ev.basename();
-    const title0 = ev.render();
+    const title0 = ev.render('en');
     const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : Locale.gettext(key, lang);
     const hebrew0 = Locale.lookupTranslation(key, 'he') || ev.render('he');
     const hebrew = isParsha ? hebrew0.substring(hebrew0.indexOf(' ') + 1) : hebrew0;

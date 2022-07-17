@@ -317,7 +317,7 @@ function fastDayGreeting(ev) {
   const htmlDate = myDateFormat(d);
   const url = shortenUrl(ev.url());
   return [TZOM_KAL,
-    `<a href="${url}">${ev.render()}</a> occurs on ${htmlDate}. We wish you an easy fast`];
+    `<a href="${url}">${ev.getDesc()}</a> occurs on ${htmlDate}. We wish you an easy fast`];
 }
 
 /**

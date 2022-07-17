@@ -140,7 +140,7 @@ export function eventToHolidayItem(ev, il) {
     endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
     hdRange: hebrewDateRange(hd, duration, true),
     hdRangeNoYear: hebrewDateRange(hd, duration, false),
-    desc: ev.render(),
+    desc: ev.render('en'),
     basename: ev.basename(),
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
     event: ev,

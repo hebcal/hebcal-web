@@ -129,7 +129,7 @@ function makeContents(events, options) {
     if (d.day() == 5) {
       const parshaEv = events.slice(i + 1).find((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA);
       if (parshaEv && parshaEv.getDate().isSameDate(hd.next())) {
-        const parsha = parshaEv.render();
+        const parsha = parshaEv.render(locale0);
         const space = parsha.indexOf(' ');
         item.reason = parsha.substring(space + 1);
         objs.push(item);

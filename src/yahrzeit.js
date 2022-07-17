@@ -190,7 +190,7 @@ async function makeFormResults(ctx) {
     const dt = hd.greg();
     return {
       date: dayjs(dt).format('ddd, D MMM YYYY'),
-      desc: ev.render(),
+      desc: ev.render('en'),
       year: hd.getFullYear(),
     };
   });
