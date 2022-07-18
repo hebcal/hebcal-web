@@ -1,9 +1,24 @@
 /* eslint-disable require-jsdoc */
 import dayjs from 'dayjs';
 
+/**
+ * @private
+ * @param {string} s
+ * @return {string}
+ */
 function dateOnly(s) {
   const idxT = s.indexOf('T');
   return idxT === -1 ? s : s.substring(0, idxT);
+}
+
+/**
+ * @private
+ * @param {string} isoDate
+ * @return {string}
+ */
+function yearMonthOnly(isoDate) {
+  const arr = isoDate.split('-');
+  return arr.slice(0, arr.length - 1).join('-');
 }
 
 const hour12cc = {
@@ -28,20 +43,23 @@ function getEventClassName(evt) {
 }
 
 function splitByMonth(events) {
+  const startDate = dayjs(dateOnly(events[0].date));
+  const endDate = dayjs(dateOnly(events[events.length - 1].date));
+  const start = startDate.set('date', 1);
+  const months = {};
   const out = [];
-  let prevMonth = '';
-  let monthEvents;
+  let i = 0;
+  for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
+    const yearMonth = d.format('YYYY-MM');
+    if (!months[yearMonth]) {
+      out[i++] = months[yearMonth] = {month: yearMonth, events: []};
+    }
+  }
   events.forEach(function(evt) {
     const isoDate = dateOnly(evt.date);
-    const month = isoDate.substring(0, isoDate.length - 3);
-    if (month !== prevMonth) {
-      prevMonth = month;
-      monthEvents = [];
-      out.push({
-        month,
-        events: monthEvents,
-      });
-    }
+    const d = dayjs(isoDate);
+    const yearMonth = d.format('YYYY-MM');
+    const monthEvents = months[yearMonth].events;
     monthEvents.push(evt);
   });
   for (let i = 1; i < out.length; i++) {
@@ -211,14 +229,15 @@ function makeMonthHtml(month) {
     html += '<th>' + span0 + s + span1 + '</th>';
   });
   html += '</tr>\n';
-  const tbody = makeMonthTableBody(month.events);
+  const tbody = makeMonthTableBody(month);
   html += tbody;
   html += '</tbody></table>\n';
   return html;
 }
 
-function makeMonthTableBody(events) {
+function makeMonthTableBody(month) {
   const dayMap = [];
+  const events = month.events;
   events.forEach(function(evt) {
     const isoDate = dateOnly(evt.date);
     const d = dayjs(isoDate);
@@ -227,8 +246,8 @@ function makeMonthTableBody(events) {
     dayMap[date].push(evt);
   });
   let html = '<tr>';
-  const isoDate = dateOnly(events[0].date);
-  const day1 = dayjs(isoDate).date(1);
+  const isoDate = month.month + '-01';
+  const day1 = dayjs(isoDate);
   const dow = day1.day();
   for (let i = 0; i < dow; i++) {
     html += '<td>&nbsp;</td>';
