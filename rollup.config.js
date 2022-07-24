@@ -71,6 +71,7 @@ export default [
               'es.regexp.exec',
               'es.string.includes',
               'es.string.replace',
+              'es.string.split',
               'es.string.trim',
               'es.symbol.description',
             ],

@@ -46,10 +46,11 @@ function splitByMonth(events) {
   const startDate = dayjs(dateOnly(events[0].date));
   const endDate = dayjs(dateOnly(events[events.length - 1].date));
   const start = startDate.set('date', 1);
+  const end = endDate.add(1, 'day');
   const months = {};
   const out = [];
   let i = 0;
-  for (let d = start; d.isBefore(endDate); d = d.add(1, 'month')) {
+  for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
     const yearMonth = d.format('YYYY-MM');
     if (!months[yearMonth]) {
       out[i++] = months[yearMonth] = {month: yearMonth, events: []};
