@@ -15,13 +15,14 @@ export async function parshaYear(ctx) {
   const q = ctx.request.query;
   const il = q.i === 'on';
   const lang = q.lg || 's';
-  const events = HebrewCalendar.calendar({
+  const events0 = HebrewCalendar.calendar({
     sedrot: true,
     year: hyear,
     isHebrewYear: true,
     il,
     locale: lang,
   });
+  const events = events0.filter((ev) => ev.getDesc() !== 'Rosh Chodesh Tevet');
   const parshaEvents = events.filter((ev) => ev.getFlags() === flags.PARSHA_HASHAVUA);
   const parshaDates = parshaEvents.reduce((set, ev) => {
     set.add(ev.getDate().toString());
