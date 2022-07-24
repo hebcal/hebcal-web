@@ -218,9 +218,10 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <div class="col-md">
 <ul class="list-unstyled">
 <% for (let j = 0; j < 5; j++) { -%>
-<% const item = items[(i * 5) + j]; -%>
+<% const item = items[(i * 5) + j]; if (item) { -%>
 <li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-muted">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
 <% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
+<% } -%>
 <% } %>
 </ul>
 </div><!-- .col -->
