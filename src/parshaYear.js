@@ -6,12 +6,16 @@ import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
 import {localeMap} from './common';
 import {downloadHref2} from './makeDownloadProps';
+import createError from 'http-errors';
 
 export async function parshaYear(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   const todayHebYear = new HDate().getFullYear();
   const hyear = parseInt(base, 10) || todayHebYear;
+  if (hyear < 2 || hyear > 32000) {
+    throw createError(400, 'Hebrew year must be in range 2-32000');
+  }
   const q = ctx.request.query;
   const il = q.i === 'on';
   const lang = q.lg || 's';
