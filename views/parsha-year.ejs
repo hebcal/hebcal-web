@@ -65,7 +65,7 @@ Download Calendar .ics</a>
 href="<%=item.event.url()%>"><%=item.title%> /
 <span lang="he" dir="rtl" class="text-nowrap"><%=item.hebrew%></span></a>
 <li><time class="text-nowrap" datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('dddd, MMMM D, YYYY')%></time>
-&middot;
+·
 <span class="text-nowrap"><%=item.hd.getDate()%> <%=item.hd.getMonthName()%></span>
 <% if (item.reading.reason) { %><li class="text-success"><%=item.reading.reason.M ||item.reading.reason.haftara%><% } %>
 <li><%=item.reading.summary%>

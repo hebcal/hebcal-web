@@ -149,7 +149,7 @@ nightfall on the second date specified.</p>
 </colgroup>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
-<tbody>
+<tbody class="table-group-divider">
 <tr><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
 <% if (!item.d.isBefore(today) && item.event.url()) { -%>
 <script type="application/ld+json">

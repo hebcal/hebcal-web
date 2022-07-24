@@ -49,7 +49,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;&rarr;</a>
 <thead>
 <tr><th>Date</th><th>🕎 <span class="d-none d-sm-inline">Chanukah</span> Candles</th></tr>
 </thead>
-<tbody>
+<tbody class="table-group-divider">
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
 <tr class="<%=item.ppf%>">
 <td><time datetime="<%=item.startIsoDate%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
@@ -114,7 +114,7 @@ data-ad-slot="5342180883"></ins>
 <thead>
 <tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in Israel&nbsp;🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
 </thead>
-<tbody>
+<tbody class="table-group-divider">
 <% occursOn.forEach((item) => { %>
 <tr class="<%=item.ppf%>">
 <td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
@@ -151,7 +151,7 @@ data-ad-slot="5342180883"></ins>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
-<% if (reading.parsha) { %>Parashat <%= reading.parsha.join('-') %> &middot; <% } %>
+<% if (reading.parsha) { %>Parashat <%= reading.parsha.join('-') %> · <% } %>
 <% if (reading.torahHtml) { %><%- reading.torahHtml %><% } else { -%>
 <% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
 href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ? '</a>' : '' %>

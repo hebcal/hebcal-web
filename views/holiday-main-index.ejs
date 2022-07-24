@@ -65,11 +65,11 @@ is forbidden.</p>
 nightfall on the second date specified.</p>
 <% } // major-holidays %>
 <div class="table-responsive">
-<table class="table table-sm table-striped">
+<table class="table table-sm table-striped-columns">
 <colgroup>
 <col style="width:200px"><col><col style="background-color:#FFFFCC"><col><col><col><col>
 </colgroup>
-<thead>
+<thead class="table-group-divider">
 <tr><th>Holiday</th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
 <th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%>"><%=yr%></a>
@@ -77,7 +77,7 @@ nightfall on the second date specified.</p>
 <% } %>
 </tr>
 </thead>
-<tbody>
+<tbody class="table-group-divider">
 <% for (const [holiday,arr] of Object.entries(items[catId])) { %>
 <% let first = arr.find((item) => typeof item !== 'undefined'); %>
 <tr><td><a href="<%=first.id%><%=il?'?i=on':''%>" title="<%=first.descrShort%>"><%=holiday%></a></td>

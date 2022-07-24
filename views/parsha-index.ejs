@@ -13,13 +13,13 @@
   <svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#torah-235339"></use></svg>
 </div>
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replace(/'/g, '’')%>
-<% if (israelDiasporaDiffer) { %><small class="text-muted">&middot; <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
+<% if (israelDiasporaDiffer) { %><small class="text-muted">· <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
 </h2>
 <% if (israelDiasporaDiffer) { %>
 <p class="lead">
  This week's Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
  <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia%></a> in the Diaspora</span>
- &middot; <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael%></a> in Israel 🇮🇱</span>
+ · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael%></a> in Israel 🇮🇱</span>
 </p>
 <% } else { %>
 <p class="lead">This week's Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha%></a>
