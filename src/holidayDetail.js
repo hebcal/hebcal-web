@@ -269,7 +269,9 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
     for (const ev of events) {
       const reading = getReadingForHoliday(ev, il);
       if (typeof reading !== 'undefined') {
-        const key = leyning.getLeyningKeyForEvent(ev, il) || ev.getDesc();
+        const desc = ev.getDesc();
+        const key0 = leyning.getLeyningKeyForEvent(ev, il) || desc;
+        const key = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
         meta.items.push(key);
         makeHolidayReading(holiday, key, meta, reading, ev, il);
         const hd = reading.hd = ev.getDate();
@@ -391,7 +393,8 @@ function getReadingForHoliday(ev, il) {
   if (desc === 'Chanukah: 1 Candle') {
     return undefined;
   }
-  if (dow === 6) {
+  const reading = leyning.getLeyningForHoliday(ev, il);
+  if (reading && dow === 6) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
@@ -399,7 +402,7 @@ function getReadingForHoliday(ev, il) {
       return leyning.getLeyningForParshaHaShavua(pe, il);
     }
   }
-  return leyning.getLeyningForHoliday(ev, il);
+  return reading;
 }
 
 const primarySource = {
