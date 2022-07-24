@@ -72,7 +72,7 @@ nightfall on the second date specified.</p>
 <thead class="table-group-divider">
 <tr><th>Holiday</th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
-<th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%>#<%=category.id%>"><%=yr%></a>
+<th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
 <br><small class="text-muted"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
 <% } %>
 </tr>
