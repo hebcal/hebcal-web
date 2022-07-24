@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {flags, greg, HDate, HebrewCalendar, Locale, months, Event} from '@hebcal/core';
+import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {addLinksToLeyning} from './parshaCommon';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
@@ -369,8 +369,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else {
     itemReading.shortName = item;
   }
-  if (ev && ev.getDate().getDay() === 6 &&
-      (holiday === 'Chanukah' || ev.getFlags() & flags.SPECIAL_SHABBAT)) {
+  if (ev && ev.getDate().getDay() === 6) {
     const hd = ev.getDate();
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
@@ -392,11 +391,12 @@ function getReadingForHoliday(ev, il) {
   if (desc === 'Chanukah: 1 Candle') {
     return undefined;
   }
-  if (desc.startsWith('Shabbat ') || (desc.startsWith('Chanukah') && dow === 6)) {
-    const parshaEv = HebrewCalendar.calendar({start: hd, end: hd,
-      il, noHolidays: true, sedrot: true});
-    if (parshaEv.length > 0) {
-      return leyning.getLeyningForParshaHaShavua(parshaEv[0], il);
+  if (dow === 6) {
+    const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+    const parsha = sedra.lookup(hd);
+    if (!parsha.chag) {
+      const pe = new ParshaEvent(hd, parsha.parsha, il);
+      return leyning.getLeyningForParshaHaShavua(pe, il);
     }
   }
   return leyning.getLeyningForHoliday(ev, il);
