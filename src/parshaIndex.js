@@ -5,6 +5,16 @@ import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} fr
 import {parshaByBook, torahBookNames, lookupParsha} from './parshaCommon';
 import dayjs from 'dayjs';
 
+const myLangNames = Object.assign({
+  en: langNames.s,
+  ashkenazi: langNames.a,
+  he: ['עברית', 'Hebrew'],
+}, langNames);
+delete myLangNames.s;
+delete myLangNames.h;
+delete myLangNames.a;
+delete myLangNames['he-x-NoNikud'];
+
 export async function parshaIndex(ctx) {
   const q = setDefautLangTz(ctx);
   const {dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
@@ -18,15 +28,6 @@ export async function parshaIndex(ctx) {
   const [parshaIsrael, parshaIsraelHref, metaIL] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
   ctx.state.lang = 'en';
-  const myLangNames = Object.assign({
-    en: langNames.s,
-    ashkenazi: langNames.a,
-    he: ['עברית', 'Hebrew'],
-  }, langNames);
-  delete myLangNames.s;
-  delete myLangNames.h;
-  delete myLangNames.a;
-  delete myLangNames['he-x-NoNikud'];
   const parsha = il ? parshaIsrael : parshaDia;
   const parshaHref = il ? parshaIsraelHref : parshaDiaHref;
   const meta = il ? metaIL : metaDia;
