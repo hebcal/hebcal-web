@@ -133,7 +133,7 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 <% for (const [catId, category] of Object.entries(categories)) { %>
 <div class="row mt-3" id="<%=category.id%>">
 <div class="col">
-<h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
+<h3><%=category.name%> <span class="small text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
 obligations and restrictions to Shabbat in the sense that normal "work"
