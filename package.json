@@ -54,7 +54,7 @@
     "@hebcal/core": "^3.42.0",
     "@hebcal/geo-sqlite": "^4.8.0",
     "@hebcal/icalendar": "^4.18.0",
-    "@hebcal/leyning": "^4.15.0",
+    "@hebcal/leyning": "^4.15.1",
     "@hebcal/locales": "^3.4.1",
     "@hebcal/rest-api": "^3.19.2",
     "better-sqlite3": "^7.6.2",
