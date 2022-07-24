@@ -28,22 +28,11 @@ for (const parshaName of Object.keys(leyning.parshiyot)) {
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
 
-function eventToItem(ev) {
-  const desc = ev.getDesc().substring(9);
-  return {
-    event: ev,
-    desc: desc,
-    anchor: makeAnchor(desc),
-    d: dayjs(ev.getDate().greg()),
-    hyear: ev.getDate().getFullYear(),
-  };
-}
-
 /**
  * Returns Parsha events during 15 year period that match this parshaName
  * @param {string} parshaName
  * @param {boolean} il
- * @return {any}
+ * @return {any[]}
  */
 function get15yrEvents(parshaName, il) {
   const allEvents = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
@@ -54,8 +43,25 @@ function get15yrEvents(parshaName, il) {
     descs.push(prefix + pair);
   }
   const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
-  const items = events.map(eventToItem);
-  return {items};
+  return events.map(function(ev) {
+    const desc = ev.getDesc().substring(9);
+    const item = {
+      event: ev,
+      desc: desc,
+      anchor: makeAnchor(desc),
+      d: dayjs(ev.getDate().greg()),
+      hyear: ev.getDate().getFullYear(),
+    };
+    const fk = leyning.getLeyningForParshaHaShavua(ev, il);
+    if (fk.reason && fk.reason.haftara) {
+      item.haftara = fk.haftara;
+      item.haftaraReason = fk.reason.haftara;
+    }
+    if (fk.reason && fk.reason.M) {
+      item.maftir = fk.fullkriyah.M;
+    }
+    return item;
+  });
 }
 
 const parshaDateRe = /^([a-z-]+)-(\d{8})$/;
@@ -134,8 +140,7 @@ export async function parshaDetail(ctx) {
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha = lookupParsha(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
-  const items0 = items15map.get(parshaName);
-  const items = items0.items;
+  const items = items15map.get(parshaName);
   const reading = date ?
     leyning.getLeyningForParshaHaShavua(parshaEv, il) :
     leyning.getLeyningForParsha(parshaName);
@@ -195,7 +200,6 @@ export async function parshaDetail(ctx) {
     israelDiasporaDiffer,
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
-    sometimesDoubled: parsha.combined || doubled.has(parshaName),
     commentary: drash[parsha.name],
     summary: parsha.summaryHtml,
     translations,

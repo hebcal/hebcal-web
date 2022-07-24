@@ -33,6 +33,7 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.bookName%> <%=parsha.verses%></a>
+<!--
 <span class="d-print-none">
 <a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" title="Tikkun.io - <%=parsha.name%>"
 href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=parsha.ids.chapter%>-<%=parsha.ids.verse%>">
@@ -41,6 +42,7 @@ href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=parsha.ids.chapter%>-<%=pars
 href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=parsha.ids.book%>&amp;chapter=<%=parsha.ids.chapter%>&amp;verse=<%=parsha.ids.verse%>&amp;portion=<%=parsha.ids.portion%>">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
 </span>
+-->
 </h4>
 <% if (typeof summary === 'object') { %><p><%- summary.html %> <sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
@@ -54,7 +56,7 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-muted d-print-none">&middot;</span>
+<span class="text-muted d-print-none">·</span>
 <span class="text-nowrap">
 <a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
@@ -67,6 +69,16 @@ href="<%-aliyah.tikkun%>">
 <%    } // ... for -%>
 </ol>
 <% } // reading.fullkriyah %>
+<%
+const spMaftirItems = items.filter((item) => typeof item.maftir === 'object');
+if (!date && spMaftirItems.length !== 0) { -%>
+<p class="small text-muted">Years with special maftir:
+<% for (let i = 0; i < spMaftirItems.length; i++) {
+  const item = spMaftirItems[i]; -%>
+<a class="text-success" title="<%=item.maftir.reason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spMaftirItems.length - 1 ? ', ' : ''%>
+<% } -%>
+</p>
+<% } -%>
 <% if (reading.haftara) { %>
 <p class="haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
 <a class="outbound text-nowrap" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
@@ -80,6 +92,16 @@ href="<%-aliyah.tikkun%>">
 <%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
 </p>
 <% } // reading.sephardic %>
+<%
+const spHaftItems = items.filter((item) => typeof item.haftara === 'string');
+if (!date && spHaftItems.length !== 0) { -%>
+<p class="small text-muted">Years with special Haftarah:
+<% for (let i = 0; i < spHaftItems.length; i++) {
+  const item = spHaftItems[i]; -%>
+<a class="text-success" title="<%=item.haftaraReason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spHaftItems.length - 1 ? ', ' : ''%>
+<% } -%>
+</p>
+<% } -%>
 </div><!-- fk -->
 <% if (hasTriennial) { %>
 <% if (date) { %>
@@ -145,8 +167,10 @@ href="<%-aliyah.tikkun%>">
 </h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.weekday}) -%>
 <% } // reading.weekday %>
-
-<div class="d-print-none">
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row d-print-none">
+<div class="col">
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
 <% if (typeof commentary['sefaria'] === 'object') { %>
@@ -180,17 +204,30 @@ href="<%-aliyah.tikkun%>">
 <li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
 <% } %>
 </ul>
+</div><!-- .col -->
 </div><!-- .d-print-none -->
 
+<div class="row">
+<div class="col">
 <h4 id="dates">List of Dates</h4>
 Parashat <%=parsha.name%> is read in <%=locationName%> on:
-<ul class="<%=sometimesDoubled ? 'list-unstyled' : 'bullet-list-inline' %>">
-<% items.forEach((item) => { -%>
-<li><a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
-<% if (item.desc !== parsha.name) { %> &middot; <small><%=item.desc%></small><% } %>
-<% }); %>
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row">
+<% for (let i = 0; i < 3; i++) { -%>
+<div class="col-md">
+<ul class="list-unstyled">
+<% for (let j = 0; j < 5; j++) { -%>
+<% const item = items[(i * 5) + j]; -%>
+<li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-muted">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
+<% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
+<% } %>
 </ul>
-<div class="d-print-none">
+</div><!-- .col -->
+<% } -%>
+</div><!-- .row -->
+<div class="row d-print-none">
+<div class="col">
 <form method="GET" action="/sedrot/<%=parsha.anchor%>">
 <label for="gy">Look up the date of Parashat <%=parsha.name%> in a past or future year</label>
 <div class="row gx-2 mb-3">
@@ -202,7 +239,10 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div>
 </form>
+</div><!-- .col -->
 </div><!-- .d-print-none -->
+<div class="row">
+<div class="col">
 <h4 id="ref">References</h4>
 <dl>
 <% if (typeof summary === 'object') { %>
