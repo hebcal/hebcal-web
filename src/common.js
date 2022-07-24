@@ -1284,8 +1284,8 @@ function makeGeoUrlArgs0(q, location) {
     if (!empty(cityName)) {
       args.set('city-typeahead', cityName);
     }
-  } else if (q.zip) {
-    args.set('zip', q.zip);
+  } else if (location.geo === 'zip' || q.zip) {
+    args.set('zip', location.getGeoId() || q.zip);
   } else {
     args.set('geonameid', location.getGeoId());
   }
