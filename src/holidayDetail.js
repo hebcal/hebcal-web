@@ -266,13 +266,16 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       yomKippurKatan: true,
     }).filter((ev) => holiday === ev.basename());
     meta.items = [];
+    const dupes = new Set(); // for Rosh Chodesh day 2
     for (const ev of events) {
       const reading = getReadingForHoliday(ev, il);
       if (typeof reading !== 'undefined') {
         const desc = ev.getDesc();
         const key0 = leyning.getLeyningKeyForEvent(ev, il) || desc;
-        const key = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
+        const key1 = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
+        const key = dupes.has(key1) ? key1 + ' Day 2' : key1;
         meta.items.push(key);
+        dupes.add(key);
         makeHolidayReading(holiday, key, meta, reading, ev, il);
         const hd = reading.hd = ev.getDate();
         reading.d = dayjs(hd.greg());
