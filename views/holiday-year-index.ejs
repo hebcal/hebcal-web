@@ -129,6 +129,8 @@ end at nightfall on the last date specified.
 <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 </div></div>
 <% for (const [catId, category] of Object.entries(categories)) { %>
 <div class="row mt-3" id="<%=category.id%>">
@@ -136,7 +138,7 @@ and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</
 <h3><%=category.name%> <span class="h4 text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
-obligations and restrictions to Shabbat in the sense that normal "work"
+obligations and restrictions to Shabbat in the sense that normal “work”
 is forbidden.</p>
 <% } else if ('minor-fasts' === category.id) { %>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
@@ -150,7 +152,7 @@ nightfall on the second date specified.</p>
 <thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
 <% for (const item of items[catId]) { %>
 <tbody class="table-group-divider">
-<tr><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
+<tr id="<%=item.id%>"><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
 <% if (!item.d.isBefore(today) && item.event.url()) { -%>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Event","name":"<%=item.name%> <%=item.d.year()%>",
@@ -164,7 +166,12 @@ nightfall on the second date specified.</p>
 </td>
 <td><%-item.dates%><br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small></td>
 </tr>
-<tr><td colspan="2"><em><%=item.descrShort%></em></td></tr>
+<tr><td colspan="2"><em><%=item.descrShort%></em>
+<% if (il && (item.name === 'Pesach' || item.name === 'Sukkot' || item.name === 'Shavuot')) { -%>
+<div class="small text-muted mt-1"><span class="text-success">*</span> These are the dates of observance in <span class="text-success">Israel</span>.
+<br><a href="<%=rpath%>#<%=item.id%>">The Diaspora</a> observes a second festival day.</div>
+<% } -%>
+</td></tr>
 </tbody>
 <% } %>
 </table>

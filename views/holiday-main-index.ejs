@@ -18,6 +18,8 @@ on the last date specified. For example, if the dates for Rosh
 Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none">
@@ -57,7 +59,7 @@ data-ad-slot="1140358973"></ins>
 <h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
 <p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
-obligations and restrictions to Shabbat in the sense that normal "work"
+obligations and restrictions to Shabbat in the sense that normal “work”
 is forbidden.</p>
 <% } else if ('minor-fasts' === category.id) { %>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
