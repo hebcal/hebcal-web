@@ -32,7 +32,7 @@ export async function holidayYearIndex(ctx) {
   };
   const events0 = HebrewCalendar.calendar(options);
   const events = getFirstOcccurences(events0);
-  const items = makeItems(events, il, isHebrewYear);
+  const items = makeItems(events, il, isHebrewYear, true);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
@@ -102,7 +102,7 @@ function makeQueryAndDownloadProps(ctx, options) {
   return q;
 }
 
-function makeItems(events, il, showYear) {
+function makeItems(events, il, showYear, addIsraelAsterisk) {
   const items = {};
   for (const key of Object.keys(categories)) {
     items[key] = [];
@@ -111,7 +111,7 @@ function makeItems(events, il, showYear) {
     const eventCategories = getEventCategories(ev);
     const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
     const item = eventToHolidayItem(ev, il);
-    item.dates = tableCellObserved(item, il, showYear);
+    item.dates = tableCellObserved(item, il, showYear, addIsraelAsterisk);
     item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
   }
@@ -128,7 +128,7 @@ function makeOmerItem(hyear, il, showYear) {
       OMER_TITLE, flags.OMER_COUNT, {emoji: '㊾'});
   const omer = eventToHolidayItem(omerEv, il);
   omer.href = `/omer/${hyear}`;
-  omer.dates = tableCellObserved(omer, il, showYear);
+  omer.dates = tableCellObserved(omer, il, showYear, false);
   omer.descrShort = getHolidayDescription(omerEv, true);
   return omer;
 }
@@ -137,9 +137,10 @@ function makeOmerItem(hyear, il, showYear) {
  * @param {any} item
  * @param {boolean} il
  * @param {boolean} isHebrewYear
+ * @param {boolean} addIsraelAsterisk
  * @return {string}
  */
-function tableCellObserved(item, il, isHebrewYear) {
+function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
   const f = item.name;
   const mask = item.mask;
   const dur = item.duration;
@@ -154,7 +155,7 @@ function tableCellObserved(item, il, isHebrewYear) {
     return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
   } else {
     const yomTovDays = il ? 1 : 2;
-    const asterisk = il ? ' <span class="text-success">*</span>' : '';
+    const asterisk = il && addIsraelAsterisk ? ' <span class="text-success">*</span>' : '';
     switch (f) {
       case 'Rosh Hashana':
       case 'Yom Kippur':
@@ -275,7 +276,7 @@ export async function holidayMainIndex(ctx) {
       il,
     });
     const events = getFirstOcccurences(events0);
-    const items0 = makeItems(events, il, false);
+    const items0 = makeItems(events, il, false, false);
     for (const [catId, items1] of Object.entries(items0)) {
       for (const item of items1) {
         if (!Array.isArray(items[catId][item.name])) {

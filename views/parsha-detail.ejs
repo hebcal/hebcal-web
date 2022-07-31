@@ -72,7 +72,7 @@ href="<%-aliyah.tikkun%>">
 <%
 const spMaftirItems = items.filter((item) => typeof item.maftir === 'object');
 if (!date && spMaftirItems.length !== 0) { -%>
-<p class="small text-muted">Years with special maftir:
+<p class="small text-muted">N.B. special maftir in years
 <% for (let i = 0; i < spMaftirItems.length; i++) {
   const item = spMaftirItems[i]; -%>
 <a class="text-success" title="<%=item.maftir.reason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spMaftirItems.length - 1 ? ', ' : ''%>
@@ -95,7 +95,7 @@ if (!date && spMaftirItems.length !== 0) { -%>
 <%
 const spHaftItems = items.filter((item) => typeof item.haftara === 'string');
 if (!date && spHaftItems.length !== 0) { -%>
-<p class="small text-muted">Years with special Haftarah:
+<p class="small text-muted">N.B. special Haftarah in years
 <% for (let i = 0; i < spHaftItems.length; i++) {
   const item = spHaftItems[i]; -%>
 <a class="text-success" title="<%=item.haftaraReason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spHaftItems.length - 1 ? ', ' : ''%>
