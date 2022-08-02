@@ -1,8 +1,10 @@
 import {Locale} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
-import {bookId, sefariaAliyahHref} from './common';
+import {bookId, sefariaAliyahHref, langNames} from './common';
 import drash from './drash.json';
+import {transliterate} from 'transliteration';
+import {distance, closest} from 'fastest-levenshtein';
 
 export const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
 export const parshaByBook = new Map();
@@ -12,6 +14,8 @@ for (const book of torahBookNames) {
 
 export const sedrot = new Map();
 export const doubled = new Map();
+const parshaAlias = new Map();
+const allLangs = Object.keys(langNames);
 for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
   const anchor = makeAnchor(parshaName);
   sedrot.set(anchor, parshaName);
@@ -23,6 +27,49 @@ for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
   }
   const bookId = reading.combined ? 'DoubledParshiyot' : torahBookNames[reading.book - 1];
   parshaByBook.get(bookId).set(anchor, parshaName);
+  for (const lang of allLangs) {
+    const str = Locale.lookupTranslation(parshaName, lang);
+    if (str) {
+      const str2 = makeAnchor(transliterate(str));
+      parshaAlias.set(str2, anchor);
+    }
+  }
+  for (const obj of Object.values(drash[parshaName])) {
+    if (typeof obj === 'string') {
+      const target = makeAnchor(obj);
+      parshaAlias.set(target, anchor);
+    } else if (typeof obj === 'object' && obj.target) {
+      const target = makeAnchor(obj.target);
+      parshaAlias.set(target, anchor);
+    }
+  }
+}
+
+const allParshaAnchors = Array.from(sedrot.keys());
+// const allAliases = Array.from(parshaAlias.keys());
+
+/**
+ * @param {string} str
+ * @return {string}
+ */
+export function lookupParshaAlias(str) {
+  const str1 = makeAnchor(transliterate(str));
+  const alias1 = parshaAlias.get(str1);
+  if (alias1) {
+    return alias1;
+  }
+  const candidate = closest(str1, allParshaAnchors);
+  const editDist = distance(str1, candidate);
+  if (editDist < 2) {
+    return candidate;
+  }
+  /*
+  const candidate2 = closest(str1, allAliases);
+  const editDist2 = distance(str1, candidate2);
+  if (editDist2 < 2) {
+    return parshaAlias.get(candidate2);
+  }
+  */
 }
 
 /**

@@ -6,10 +6,9 @@ import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
-import {sedrot, doubled, addLinksToLeyning, lookupParsha} from './parshaCommon';
+import {sedrot, doubled, addLinksToLeyning, lookupParsha, lookupParshaAlias} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
-import {distance, closest} from 'fastest-levenshtein';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
@@ -81,20 +80,17 @@ const noTriennial = [
   13298, 13299, 13300,
 ];
 
-const allParshaAnchors = Array.from(sedrot.keys());
-
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = basename(rpath);
-  const base = base0.toLowerCase();
+  const base = decodeURIComponent(base0.toLowerCase());
   const matches = base.match(parshaDateRe);
   const date = matches?.[2];
   const parshaAnchor = matches === null ? base : matches[1];
   const parshaName0 = sedrot.get(parshaAnchor);
   if (typeof parshaName0 !== 'string') {
-    const candidate = closest(parshaAnchor, allParshaAnchors);
-    const editDist = distance(parshaAnchor, candidate);
-    if (editDist < 2) {
+    const candidate = lookupParshaAlias(parshaAnchor);
+    if (candidate) {
       httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);
       return;
     }
