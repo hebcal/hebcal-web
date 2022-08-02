@@ -75,7 +75,7 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 </nav>
 
 <div id="download" class="float-start">
-  <svg width="72" height="60" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#cloud-download"></use></svg>
+  <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
 </div>
 <h3 class="mt-4">Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
 <p>Download or subscribe to Parashat ha-Shavua (weekly Torah Portion) on your device
@@ -126,7 +126,7 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <div class="row">
 <div class="col">
 <div id="download-leyning" class="float-start">
-  <svg width="60" height="60" class="me-3 mb-3 text-burgundy" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  <svg width="60" height="60" class="me-3 mb-2 text-burgundy" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
 </div>
 <h4>Download leyning spreadsheets <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
 <p>Leyning coordinators can download these Comma Separated
@@ -147,28 +147,34 @@ spreadsheet program.</p>
 <h5 id="download-leyning-diaspora">Diaspora spreadsheets</h5>
 <div class="row">
 <div class="col-md">
-<p>Diaspora Full Kriyah</p>
-<ul class="list-unstyled lh-base" role="menu">
+<p>Diaspora Full Kriyah
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
-<li><small><a class="download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" rel="nofollow" download="fullkriyah-<%=yr%>.csv">fullkriyah-<%=yr%>.csv</a></small></li>
+<li><a class="download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" rel="nofollow" download="fullkriyah-<%=yr%>.csv">
+  Full Kriyah <%=yr%></a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
 
 <div class="col-md">
-<p>Diaspora Triennial</p>
-<ul class="list-unstyled lh-base" role="menu">
-<% for (let yr = triCycleStartYear - 3; yr < triCycleStartYear + 12; yr += 3) { %>
-<li><small><a class="download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" rel="nofollow" download="triennial-<%=yr%>-<%=yr+2%>.csv">triennial-<%=yr%>-<%=yr+2%>.csv</a></small></li>
+<p>Diaspora Triennial
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
+<% for (let yr = triCycleStartYear - 3; yr <= triCycleStartYear + 12; yr += 3) { %>
+<li><a class="download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" rel="nofollow" download="triennial-<%=yr%>-<%=yr+2%>.csv">
+  Triennial <%=yr%>-<%=yr+2%></a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
 
 <div class="col-md">
-<p>Diaspora Weekday</p>
-<ul class="list-unstyled lh-base" role="menu">
+<p>Diaspora Weekday
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
-<li><small><a class="download" id="weekday-diaspora-<%=yr%>" href="weekday-diaspora-<%=yr%>.csv" rel="nofollow" download="weekday-diaspora-<%=yr%>.csv">weekday-diaspora-<%=yr%>.csv</a></small></li>
+<li><a class="download" id="weekday-diaspora-<%=yr%>" href="weekday-diaspora-<%=yr%>.csv" rel="nofollow" download="weekday-diaspora-<%=yr%>.csv">
+  Weekday <%=yr%></a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
@@ -177,19 +183,23 @@ spreadsheet program.</p>
 <h5 id="download-leyning-israel">Israel spreadsheets</h5>
 <div class="row">
 <div class="col-md">
-<p>Israel Full Kriyah</p>
-<ul class="list-unstyled lh-base" role="menu">
+<p>Israel Full Kriyah
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 12; yr++) { %>
-<li><small><a class="download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" rel="nofollow" download="fullkriyah-il-<%=yr%>.csv">fullkriyah-il-<%=yr%>.csv</a></small></li>
+<li><a class="download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" rel="nofollow" download="fullkriyah-il-<%=yr%>.csv">
+  Full Kriyah <%=yr%></a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
 
 <div class="col-md">
-<p>Israel Weekday</p>
-<ul class="list-unstyled lh-base" role="menu">
+<p>Israel Weekday
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
 <% for (let yr = hyear - 1; yr <= hyear + 6; yr++) { %>
-<li><small><a class="download" id="weekday-il-<%=yr%>" href="weekday-il-<%=yr%>.csv" rel="nofollow" download="weekday-il-<%=yr%>.csv">weekday-il-<%=yr%>.csv</a></small></li>
+<li><a class="download" id="weekday-il-<%=yr%>" href="weekday-il-<%=yr%>.csv" rel="nofollow" download="weekday-il-<%=yr%>.csv">
+  Weekday <%=yr%></a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
