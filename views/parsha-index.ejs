@@ -32,7 +32,7 @@
   <li><a href="<%=parshaHref%>#drash">Commentary and Divrei Torah</a></li>
 </ul>
 <% } %>
-<h2 id="all">Torah Readings</h2>
+<h2 class="mt-3" id="all">Torah Readings</h2>
 <p>Weekly Torah readings (Parashat ha-Shavua) including
 verses for each aliyah and accompanying Haftarah. Includes
 traditional (full <em>kriyah</em>), <a
@@ -54,9 +54,9 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 <% } %>
 </div><!-- .row -->
 
-<div class="row">
+<div class="row mt-3">
 <div class="col">
-<h3 id="by-year" class="mt-3">Parashat ha-Shavua by Hebrew year</h3>
+<h3 id="by-year">Parashat ha-Shavua by Hebrew year</h3>
 <nav>
 <ul class="pagination pagination-sm">
 <li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
@@ -73,13 +73,19 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 <% } %>
 </ul><!-- .pagination -->
 </nav>
+</div><!-- .col -->
+</div><!-- .row -->
 
+<div class="row mt-4">
+<div class="col">
 <div id="download" class="float-start">
   <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
 </div>
-<h3 class="mt-4">Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
+<h3>Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
 <p>Download or subscribe to Parashat ha-Shavua (weekly Torah Portion) on your device
 or web/desktop application. Subscribers to these feeds receive perpetual updates.</p>
+</div><!-- .col -->
+</div><!-- .row -->
 
 <div class="row mt-2">
 <div class="col-2 col-lg-1"><span class="text-muted">Diaspora</span></div>
@@ -102,7 +108,7 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 </div>
 </div><!-- .row -->
 
-<div class="row mt-2 mb-4">
+<div class="row mt-2">
 <div class="col-2 col-lg-1"><span class="text-muted">Israel</span></div>
 <div class="col-10 col-lg-11">
 <a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
@@ -123,12 +129,14 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 </div>
 </div><!-- .row -->
 
-<div class="row">
+<div class="row mt-4">
 <div class="col">
 <div id="download-leyning" class="float-start">
   <svg width="60" height="60" class="me-3 mb-2 text-burgundy" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
 </div>
-<h4>Download leyning spreadsheets <small class="text-muted">aliyah-by-aliyah breakdown of Torah readings</small></h4>
+<h4>Download leyning spreadsheets</h4>
+<p>The following downloadable files contain the aliyah-by-aliyah
+breakdown of Torah readings for Shabbat, holidays and weekdays.</p>
 <p>Leyning coordinators can download these Comma Separated
 Value (CSV) files and import into Microsoft Excel or some other
 spreadsheet program.</p>
