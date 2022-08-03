@@ -59,14 +59,16 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <div class="d-flex justify-content-center d-print-none">
+<% if (typeof amp === 'boolean' && amp) { -%>
+<div class="small"><a href="/converter">Convert today’s date</a></div>
+<% } else { -%>
 <div class="form-check form-switch mb-2">
 <input class="form-check-input" type="checkbox" role="switch" id="nikud-checkbox" checked>
 <label class="form-check-label" for="nikud-checkbox">Show Hebrew <i>nekudot</i></label>
 </div>
-</div><!-- .d-flex -->
 <% } -%>
+</div><!-- .d-flex -->
 <div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
