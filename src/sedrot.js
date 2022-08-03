@@ -82,8 +82,8 @@ const noTriennial = [
 
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
-  const base0 = basename(rpath);
-  const base = decodeURIComponent(base0.toLowerCase());
+  const base0 = decodeURIComponent(basename(rpath));
+  const base = base0.toLowerCase();
   const matches = base.match(parshaDateRe);
   const date = matches?.[2];
   const parshaAnchor = matches === null ? base : matches[1];
@@ -94,7 +94,7 @@ export async function parshaDetail(ctx) {
       httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);
       return;
     }
-    throw createError(404, `Parsha not found: ${base}`);
+    throw createError(404, `Parsha not found: ${base0}`);
   }
   const q = ctx.request.query;
   const il = q.i === 'on';

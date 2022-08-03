@@ -16,6 +16,21 @@ import fs from 'fs';
 
 const holidayYearRe = /^([a-z-]+)-(\d+)$/;
 
+const holidayAlias = new Map();
+for (const [holiday, meta] of Object.entries(holidayMeta)) {
+  const anchor = makeAnchor(holiday);
+  const href = meta.wikipedia?.href;
+  if (href) {
+    const article0 = decodeURIComponent(basename(href));
+    const hash = article0.indexOf('#');
+    const article = hash === -1 ? article0 : article0.substring(hash + 1);
+    const wname = makeAnchor(article).replace(/_/g, '-');
+    if (wname !== anchor) {
+      holidayAlias.set(wname, anchor);
+    }
+  }
+}
+
 /**
  * @param {Event[]} events
  * @param {string} holiday
@@ -37,7 +52,7 @@ const allHolidays = Array.from(holidays.keys());
 
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
-  const base0 = basename(rpath);
+  const base0 = decodeURIComponent(basename(rpath));
   const base = base0.toLowerCase();
   const matches = base.match(holidayYearRe);
   const dateSuffix = matches?.[2];
@@ -45,13 +60,19 @@ export async function holidayDetail(ctx) {
   const base1 = matches === null ? base : matches[1];
   const holiday = holidays.get(base1);
   if (typeof holiday !== 'string') {
-    const candidate = closest(base1, allHolidays);
-    const editDist = distance(base1, candidate);
-    if (editDist < 2) {
+    const str1 = makeAnchor(base1).replace(/_/g, '-');
+    const alias = holidayAlias.get(str1);
+    if (alias) {
+      httpRedirect(ctx, `/holidays/${alias}?redir=spelling`);
+      return;
+    }
+    const candidate = closest(str1, allHolidays);
+    const editDist = distance(str1, candidate);
+    if (editDist <= 2) {
       httpRedirect(ctx, `/holidays/${candidate}?redir=spelling`);
       return;
     }
-    throw createError(404, `Holiday not found: ${base}`);
+    throw createError(404, `Holiday not found: ${base0}`);
   }
   const holidayAnchor = makeAnchor(holiday);
   if (year && (year < 100 || year > 9999)) {
