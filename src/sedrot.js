@@ -63,7 +63,7 @@ function get15yrEvents(parshaName, il) {
   });
 }
 
-const parshaDateRe = /^([a-z-]+)-(\d{8})$/;
+const parshaDateRe = /^([a-z-]+)-(\d+)$/;
 
 // Can't find pattern SSS for Vayakhel-Pekudei, startYear=5831
 const noTriennial = [
@@ -95,6 +95,10 @@ export async function parshaDetail(ctx) {
       return;
     }
     throw createError(404, `Parsha not found: ${base0}`);
+  }
+  if (date && date.length !== 8) {
+    httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
+    return;
   }
   const q = ctx.request.query;
   const il = q.i === 'on';
