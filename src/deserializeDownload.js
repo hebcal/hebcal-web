@@ -55,8 +55,9 @@ export function deserializeDownload(data) {
   if (msg.getYomkippurkatan()) q.ykk = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
-    q.latitude = msg.getLatitude();
-    q.longitude = msg.getLongitude();
+    q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();
+    q.longitude = msg.hasOldLongitude() ? msg.getOldLongitude() : msg.getLongitude();
+    q['city-typeahead'] = msg.getCityname() || undefined;
     q.geo = 'pos';
   }
   q.tzid = msg.getTzid() || undefined;

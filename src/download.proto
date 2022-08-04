@@ -34,12 +34,24 @@ message Download {
   bool geoPos = 29;
   int32 month = 30;
   int32 numYears = 31;
-  double latitude = 32;
-  double longitude = 33;
+  oneof lat_oneof {
+    double old_latitude = 32;
+    float latitude = 41;
+  }
+  oneof long_oneof {
+    double old_longitude = 33;
+    float longitude = 42;
+  }
   string tzid = 34;
   string start = 35;
   string end = 36;
   bool yomKippurKatan = 37;
-  bool ignored1 = 38;
-  uint32 hour12 = 39;
+  reserved 38;
+  enum Hour12 {
+    UNSET = 0;
+    ON = 1;
+    OFF = 2;
+  }
+  Hour12 hour12 = 39;
+  string cityName = 40;
 }

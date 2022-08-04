@@ -74,14 +74,18 @@ export function downloadHref2(query, filename, override={}) {
     if (month !== null) msg.setMonth(month);
   }
 
-  if (q.geo === 'pos') msg.setGeopos(true);
-  const latitude = parseFloat(q.latitude);
-  if (!isNaN(latitude)) msg.setLatitude(latitude);
-  const longitude = parseFloat(q.longitude);
-  if (!isNaN(longitude)) msg.setLongitude(longitude);
-  if (!empty(q.tzid)) msg.setTzid(q.tzid);
   if (!empty(q.start)) msg.setStart(q.start);
   if (!empty(q.end)) msg.setEnd(q.end);
+
+  if (q.geo === 'pos') {
+    msg.setGeopos(true);
+    const latitude = parseFloat(q.latitude);
+    if (!isNaN(latitude)) msg.setLatitude(latitude);
+    const longitude = parseFloat(q.longitude);
+    if (!isNaN(longitude)) msg.setLongitude(longitude);
+    if (!empty(q.tzid)) msg.setTzid(q.tzid);
+    if (!empty(q['city-typeahead'])) msg.setCityname(q['city-typeahead']);
+  }
 
   const msgBin = msg.serializeBinary();
   const encoded = Buffer.from(msgBin)
