@@ -40,7 +40,7 @@ ul.hebcal-results li {
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= gregRangeShort %>" rel="nofollow" href="<%= fridgeURL %>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>
     Print <%= gregRangeShort %></a>
-<a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/email?<%= geoUrlArgs %>" data-bs-toggle="modal" data-bs-target="#email-modal">
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" rel="nofollow" href="/email?<%= geoUrlArgs %>" data-bs-toggle="modal" data-bs-target="#email-modal">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
   Weekly email</a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %>&amp;year=now&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">
