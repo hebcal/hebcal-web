@@ -31,8 +31,11 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <% } -%>
 </p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
+<% if (reading.torahHtml) { -%><%- reading.torahHtml -%>
+<% } else { -%>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.bookName%> <%=parsha.verses%></a>
+<% } -%>
 <!--
 <span class="d-print-none">
 <a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" title="Tikkun.io - <%=parsha.name%>"

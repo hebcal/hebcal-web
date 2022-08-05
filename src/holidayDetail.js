@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent} from '@hebcal/core';
 import * as leyning from '@hebcal/leyning';
-import {addLinksToLeyning} from './parshaCommon';
+import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -323,24 +323,6 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
   }
 }
 
-function makeHtmlFromParts(parts) {
-  if (!Array.isArray(parts)) {
-    parts = [parts];
-  }
-  let prev = parts[0];
-  let summary = '<a href="' + sefariaAliyahHref(prev, false) + '">' +
-    leyning.formatAliyahShort(prev, true) + '</a>';
-  for (let i = 1; i < parts.length; i++) {
-    const part = parts[i];
-    const showBook = (part.k !== prev.k);
-    const delim = showBook ? '; ' : ', ';
-    summary += delim + '<a class="outbound" href="' + sefariaAliyahHref(part, false) + '">' +
-      leyning.formatAliyahShort(part, showBook) + '</a>';
-    prev = part;
-  }
-  return summary;
-}
-
 /**
  * @param {string} holiday
  * @param {string} item
@@ -366,7 +348,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else if (meta.about.torah) {
     itemReading.torahHref = meta.about.torah;
   } else if (itemReading.summaryParts) {
-    itemReading.torahHtml = makeHtmlFromParts(itemReading.summaryParts);
+    itemReading.torahHtml = makeLeyningHtmlFromParts(itemReading.summaryParts);
   } else if (itemReading.summary) {
     const matches = itemReading.summary.match(/^([^\d]+)(\d.+)$/);
     const book = matches[1].trim();
@@ -378,7 +360,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else if (meta.about.haftara) {
     itemReading.haftaraHref = meta.about.haftara;
   } else if (itemReading.haft) {
-    itemReading.haftaraHtml = makeHtmlFromParts(itemReading.haft);
+    itemReading.haftaraHtml = makeLeyningHtmlFromParts(itemReading.haft);
   } else if (itemReading.haftara) {
     itemReading.haftaraHref = sefariaAliyahHref(itemReading.haft, false);
   }

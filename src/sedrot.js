@@ -6,7 +6,8 @@ import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
-import {sedrot, doubled, addLinksToLeyning, lookupParsha, lookupParshaAlias} from './parshaCommon';
+import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
+  lookupParsha, lookupParshaAlias} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -160,6 +161,9 @@ export async function parshaDetail(ctx) {
     for (const aliyah of Object.values(reading.weekday)) {
       aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
     }
+  }
+  if (reading.summaryParts) {
+    reading.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
   }
   parsha.haftaraHref = sefariaAliyahHref(parsha.haft, false);
   const hd = parshaEv.getDate();

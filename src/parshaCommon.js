@@ -163,3 +163,25 @@ function makeSummaryHtml(parsha) {
     html: summary,
   };
 }
+
+/**
+ * @param {any[]} parts
+ * @return {string}
+ */
+export function makeLeyningHtmlFromParts(parts) {
+  if (!Array.isArray(parts)) {
+    parts = [parts];
+  }
+  let prev = parts[0];
+  let summary = '<a href="' + sefariaAliyahHref(prev, false) + '">' +
+    leyning.formatAliyahShort(prev, true) + '</a>';
+  for (let i = 1; i < parts.length; i++) {
+    const part = parts[i];
+    const showBook = (part.k !== prev.k);
+    const delim = showBook ? '; ' : ', ';
+    summary += delim + '<a class="outbound" href="' + sefariaAliyahHref(part, false) + '">' +
+      leyning.formatAliyahShort(part, showBook) + '</a>';
+    prev = part;
+  }
+  return summary;
+}
