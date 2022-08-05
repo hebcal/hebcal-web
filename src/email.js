@@ -157,7 +157,7 @@ export async function emailForm(ctx) {
     ctx.state.message = err.message;
     ctx.status = err.status || 400;
   }
-  q['city-typeahead'] = location ? location.getName() : '';
+  q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
   ctx.state.title = 'Shabbat Candle Lighting Times by Email - Hebcal';
   if (q.v === '1') {
     if (!q.em) {

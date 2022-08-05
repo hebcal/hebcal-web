@@ -77,7 +77,7 @@ export async function hebcalApp(ctx) {
   if (options.il) {
     q.i = 'on';
   }
-  if (options.location) {
+  if (options.location && options.location.geo !== 'pos') {
     q['city-typeahead'] = options.location.getName();
   }
   if (empty(q.year) && q.cfg !== 'fc') {

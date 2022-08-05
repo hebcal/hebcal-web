@@ -219,7 +219,9 @@ function makeOptions(ctx) {
     ctx.state.message = err.message;
   }
   const location = options.location || ctx.db.lookupLegacyCity('New York');
-  q['city-typeahead'] = location.getName();
+  if (location.geo !== 'pos') {
+    q['city-typeahead'] = location.getName();
+  }
   if (!options.location) {
     options.location = location;
     options.candlelighting = true;
