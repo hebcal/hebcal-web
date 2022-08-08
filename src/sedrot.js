@@ -13,6 +13,9 @@ import drash from './drash.json';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
+// Vaetchanan is always Shabbat Nachamu; no need to display anything special
+const VAETCHANAN = 'Vaetchanan';
+
 const options15yr = {
   year: new Date().getFullYear() - 2,
   numYears: 17,
@@ -53,11 +56,11 @@ function get15yrEvents(parshaName, il) {
       hyear: ev.getDate().getFullYear(),
     };
     const fk = leyning.getLeyningForParshaHaShavua(ev, il);
-    if (fk.reason && fk.reason.haftara) {
+    if (fk.reason?.haftara && parshaName !== VAETCHANAN) {
       item.haftara = fk.haftara;
       item.haftaraReason = fk.reason.haftara;
     }
-    if (fk.reason && fk.reason.M) {
+    if (fk.reason?.M) {
       item.maftir = fk.fullkriyah.M;
     }
     return item;
@@ -149,6 +152,9 @@ export async function parshaDetail(ctx) {
     for (let i = 1; i <= 6; i++) {
       delete reading.reason[i];
     }
+    delete reading.reason.haftara;
+  }
+  if (parshaName === VAETCHANAN && reading.reason?.haftara) {
     delete reading.reason.haftara;
   }
   addLinksToLeyning(reading.fullkriyah, false);
@@ -312,7 +318,9 @@ function makeTriReading(tri, yr, parshaName) {
     }
   }
   triReading2.d = dayjs(hd.greg());
-  addSpecialHaftarahToTriennial(ev, triReading2);
+  if (parshaName !== VAETCHANAN) {
+    addSpecialHaftarahToTriennial(ev, triReading2);
+  }
   return triReading2;
 }
 
@@ -322,7 +330,7 @@ function addSpecialHaftarahToTriennial(ev, triReading2) {
     return;
   }
   const fk = leyning.getLeyningForParshaHaShavua(ev, false);
-  if (fk.reason && fk.reason.haftara) {
+  if (fk.reason?.haftara) {
     triReading2.haftara = fk.haftara;
     triReading2.haftaraHref = sefariaAliyahHref(fk.haft);
     triReading2.haftaraNumV = fk.haftaraNumV;
