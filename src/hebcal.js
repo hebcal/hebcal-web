@@ -189,6 +189,16 @@ async function renderForm(ctx, error) {
 
 function renderHtml(ctx) {
   const options = ctx.state.options;
+  const events = makeHebrewCalendar(ctx, options);
+  if (events.length === 0) {
+    ctx.status = 400;
+    if (options.dafyomi) {
+      return renderForm(ctx, {message: 'Daf Yomi cycle began in 5684 (September 1923)'});
+    } else if (options.mishnaYomi) {
+      return renderForm(ctx, {message: 'Mishna Yomi cycle began in 5707 (May 1947)'});
+    }
+    return renderForm(ctx, {message: 'Please select at least one event option'});
+  }
   const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
   let shortTitle = 'Jewish Calendar ';
   if (options.month) {
@@ -196,11 +206,6 @@ function renderHtml(ctx) {
   }
   const titleYear = options.year >= 0 ? options.year : -options.year + ' B.C.E.';
   shortTitle += titleYear;
-  const events = makeHebrewCalendar(ctx, options);
-  if (events.length === 0) {
-    ctx.status = 400;
-    return renderForm(ctx, {message: 'Please select at least one event option'});
-  }
   const locale = localeMap[options.locale] || 'en';
   const memos = {};
   const items = events.map((ev) => {
