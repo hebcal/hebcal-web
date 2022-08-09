@@ -133,9 +133,12 @@ app.use(async function fixup2(ctx, next) {
     } else {
       const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');
       if (encQuery != -1) {
-        const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
-        const path2 = path.substring(0, encQuery + 4);
-        httpRedirect(ctx, `${path2}?redir=1&${qs}`, 301);
+        redirEncQuery(path, encQuery, ctx);
+        return;
+      }
+      const encQueryDL = path.indexOf('.ics%3Fdl%3D1');
+      if (encQueryDL != -1) {
+        redirEncQuery(path, encQueryDL, ctx);
         return;
       }
     }
@@ -247,3 +250,10 @@ app.listen(port, () => {
   logger.info(msg);
   console.log(msg);
 });
+
+// eslint-disable-next-line require-jsdoc
+function redirEncQuery(path, encQuery, ctx) {
+  const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
+  const path2 = path.substring(0, encQuery + 4);
+  httpRedirect(ctx, `${path2}?redir=1&${qs}`, 301);
+}
