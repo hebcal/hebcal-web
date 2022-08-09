@@ -66,21 +66,6 @@ function get15yrEvents(parshaName, il) {
 
 const parshaDateRe = /^([a-z-]+)-(\d+)$/;
 
-// Can't find pattern SSS for Vayakhel-Pekudei, startYear=5831
-const noTriennial = [
-  5831, 5832, 5833,
-  6572, 6573, 6574,
-  7313, 7314, 7315,
-  7340, 7341, 7342,
-  8081, 8082, 8083,
-  8822, 8823, 8824,
-  9194, 9195, 9196,
-  9935, 9936, 9937,
-  10676, 10677, 10678,
-  11417, 11418, 11419,
-  13298, 13299, 13300,
-];
-
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = decodeURIComponent(basename(rpath));
@@ -169,7 +154,7 @@ export async function parshaDetail(ctx) {
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
-  const hasTriennial = !il && hyear >= 5744 && noTriennial.indexOf(hyear) === -1;
+  const hasTriennial = !il && hyear >= 5744;
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
   const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
