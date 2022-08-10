@@ -29,7 +29,7 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
     }
   },
   "requests": {
-    "base": "https://www.hebcal.com/ma/ma.php?idsite=1&rec=1&action_name=${title}&url=${sourceUrl}&rand=${random}&apiv=1&urlref=${documentReferrer}&res=${screenWidth}x${screenHeight}&lang=${browserLanguage}&gt_ms=${serverResponseTime}&cs=${documentCharset}",
+    "base": "https://www.hebcal.com/ma/ma.php?idsite=1&rec=1&action_name=${title}&url=https%3A%2F%2F${canonicalHostname}${canonicalPath}&uid=${clientId(hebcal)}&rand=${random}&apiv=1&urlref=${documentReferrer}&res=${screenWidth}x${screenHeight}&lang=${browserLanguage}&gt_ms=${serverResponseTime}&cs=${documentCharset}",
     "pageview": "${base}"
   }
 }
