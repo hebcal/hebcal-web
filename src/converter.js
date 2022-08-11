@@ -315,39 +315,7 @@ function parseConverterQuery(ctx) {
   if (!empty(query.start) && !empty(query.end)) {
     const {isRange, startD, endD} = getStartAndEnd(query, 'UTC');
     if (isRange) {
-      const il = Boolean(query.i === 'on');
-      const locale = ctx.state.locale;
-      const hdates = {};
-      for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-        const isoDate = d.format('YYYY-MM-DD');
-        const hdate = new HDate(d.toDate());
-        const hy = hdate.getFullYear();
-        const hm = hdate.getMonthName();
-        const hd = hdate.getDate();
-        const result = {
-          hy, hm, hd,
-          hebrew: gematriyaDate(hdate),
-          heDateParts: {
-            y: gematriya(hy),
-            m: Locale.gettext(hm, 'he-x-NoNikud'),
-            d: gematriya(hd),
-          },
-        };
-        const events = getEvents(hdate, il);
-        if (events.length) {
-          result.events = events.map(renameChanukah(locale));
-          if (typeof query.i !== 'undefined') {
-            result.il = il;
-          }
-        }
-        hdates[isoDate] = result;
-      }
-      return {
-        start: startD.format('YYYY-MM-DD'),
-        end: endD.format('YYYY-MM-DD'),
-        locale,
-        hdates,
-      };
+      return convertDateRange(ctx, startD, endD);
     } else {
       return g2h(startD.toDate(), false, false);
     }
@@ -387,6 +355,49 @@ function parseConverterQuery(ctx) {
     const dt = makeGregDate(query.gy, query.gm, query.gd);
     return g2h(dt, gs, false);
   }
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {dayjs.Dayjs} startD
+ * @param {dayjs.Dayjs} endD
+ * @return {Object}
+ */
+function convertDateRange(ctx, startD, endD) {
+  const query = ctx.request.query;
+  const il = Boolean(query.i === 'on');
+  const locale = ctx.state.locale;
+  const hdates = {};
+  for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
+    const isoDate = d.format('YYYY-MM-DD');
+    const hdate = new HDate(d.toDate());
+    const hy = hdate.getFullYear();
+    const hm = hdate.getMonthName();
+    const hd = hdate.getDate();
+    const result = {
+      hy, hm, hd,
+      hebrew: gematriyaDate(hdate),
+      heDateParts: {
+        y: gematriya(hy),
+        m: Locale.gettext(hm, 'he-x-NoNikud'),
+        d: gematriya(hd),
+      },
+    };
+    const events = getEvents(hdate, il);
+    if (events.length) {
+      result.events = events.map(renameChanukah(locale));
+      if (typeof query.i !== 'undefined') {
+        result.il = il;
+      }
+    }
+    hdates[isoDate] = result;
+  }
+  return {
+    start: startD.format('YYYY-MM-DD'),
+    end: endD.format('YYYY-MM-DD'),
+    locale,
+    hdates,
+  };
 }
 
 /**
