@@ -1,4 +1,5 @@
 import http from 'node:http';
+import pkg from '../package.json';
 
 const knownRobots = {
   'check_http/v2.2 (monitoring-plugins 2.2)': 1,
@@ -71,6 +72,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
       'X-Forwarded-For': xfwd,
       'X-Client-IP': ipAddress,
       'X-Forwarded-Proto': 'https',
+      'User-Agent': pkg.name + '/' + pkg.version,
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': Buffer.byteLength(postData),
     },
