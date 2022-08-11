@@ -338,7 +338,8 @@ function parseConverterQuery(ctx) {
         throw createError(400, `Invalid value for ndays: ${query.ndays}`);
       }
       const startD = dayjs(dt);
-      const endD = startD.add(ndays - 1, 'days');
+      const numDays = Math.min(ndays - 1, 179);
+      const endD = startD.add(numDays, 'days');
       return convertDateRange(ctx, startD, endD);
     }
     return {type: 'h2g', dt, hdate, gs: false};
