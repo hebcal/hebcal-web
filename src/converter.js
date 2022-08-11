@@ -332,6 +332,15 @@ function parseConverterQuery(ctx) {
     }
     const hdate = makeHebDate(query.hy, query.hm, query.hd);
     const dt = hdate.greg();
+    if (!empty(query.ndays)) {
+      const ndays = parseInt(query.ndays, 10);
+      if (isNaN(ndays) || ndays < 1) {
+        throw createError(400, `Invalid value for ndays: ${query.ndays}`);
+      }
+      const startD = dayjs(dt);
+      const endD = startD.add(ndays - 1, 'days');
+      return convertDateRange(ctx, startD, endD);
+    }
     return {type: 'h2g', dt, hdate, gs: false};
   }
   if (isset(query.g2h) && query.strict === '1') {
