@@ -62,20 +62,24 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   const postData = args.toString();
   const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
   const xfwd = ctx.get('x-forwarded-for') || ipAddress;
+  const headers = {
+    'Host': 'www.hebcal.com',
+    'X-Forwarded-For': xfwd,
+    'X-Client-IP': ipAddress,
+    'X-Forwarded-Proto': 'https',
+    'User-Agent': pkg.name + '/' + pkg.version,
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Length': Buffer.byteLength(postData),
+  };
+  if (ref && ref.length) {
+    headers.Referer = ref;
+  }
   const options = {
     hostname: 'www-internal.hebcal.com',
     port: 8080,
     path: '/ma/ma.php',
     method: 'POST',
-    headers: {
-      'Host': 'www.hebcal.com',
-      'X-Forwarded-For': xfwd,
-      'X-Client-IP': ipAddress,
-      'X-Forwarded-Proto': 'https',
-      'User-Agent': pkg.name + '/' + pkg.version,
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': Buffer.byteLength(postData),
-    },
+    headers: headers,
   };
   if (!isProduction) {
     ctx.logger.info(`matomo: ${postData}&clientIp=${ipAddress}`);
