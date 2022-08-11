@@ -8,6 +8,13 @@ const DOCUMENT_ROOT = '/var/www/html';
 // eslint-disable-next-line require-jsdoc
 export async function emailOpen(ctx) {
   const q = ctx.request.query;
+  if (!ctx.state.userId) {
+    const msgid = q.msgid;
+    const dot = msgid.indexOf('.');
+    if (dot !== -1) {
+      ctx.state.userId = msgid.substring(0, dot);
+    }
+  }
   const loc = transliterate(q.loc);
   matomoTrack(ctx, 'email-open', q['utm_campaign'], loc);
   await saveEmailOpenToDb(ctx, loc);
