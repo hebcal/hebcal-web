@@ -69,6 +69,7 @@ const isPast = hy < todayHebYear;
 </div>
 <% } -%>
 </div><!-- .d-flex -->
+<div id="ctoday" class="d-flex justify-content-center d-print-none"></div>
 <div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
@@ -188,6 +189,12 @@ document.addEventListener('DOMContentLoaded', function() {
   switchEl.addEventListener('change', function(event) {
     hebdateEl.innerHTML = event.target.checked ? '<%= hebrew %>' : '<%= hebrewNoNikkud %>';
   });
+  var gy=<%=gy%>, gm=<%=gm%>, gd=<%=gd%>;
+  var dt = new Date();
+  if (dt.getFullYear() != gy || dt.getMonth()+1 != gm || dt.getDate() != gd) {
+    var ctodayEl = document.querySelector("#ctoday");
+    ctodayEl.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
+  }
 });
 </script>
 <% } -%>
