@@ -13,12 +13,61 @@ function dateOnly(s) {
 
 /**
  * @private
- * @param {string} isoDate
+ * @param {string} s
+ * @return {dayjs.Dayjs}
+ */
+function makeDayjs(s) {
+  const isBCE = s[0] === '-';
+  if (isBCE) {
+    s = s.substring(1);
+  }
+  const yearMultiplier = isBCE ? -1 : 1;
+  const ymd = s.split('-');
+  const yy = yearMultiplier * parseInt(ymd[0], 10);
+  const mm = parseInt(ymd[1], 10);
+  const dd = parseInt(ymd[2], 10);
+  const dt = new Date(yy, mm - 1, dd);
+  if (yy < 100) {
+    dt.setFullYear(yy);
+  }
+  return dayjs(dt);
+}
+
+/**
+ * @param {number} number
  * @return {string}
  */
-function yearMonthOnly(isoDate) {
-  const arr = isoDate.split('-');
-  return arr.slice(0, arr.length - 1).join('-');
+function pad4(number) {
+  if (number < 0) {
+    return '-00' + pad4(-number);
+  } else if (number < 10) {
+    return '000' + number;
+  } else if (number < 100) {
+    return '00' + number;
+  } else if (number < 1000) {
+    return '0' + number;
+  }
+  return '' + number;
+}
+
+/**
+ * @param {number} number
+ * @return {string}
+ */
+function pad2(number) {
+  if (number < 10) {
+    return '0' + number;
+  }
+  return '' + number;
+}
+
+/**
+ * @private
+ * @param {dayjs.Dayjs} d
+ * @return {string}
+ */
+function formatYearMonth(d) {
+  return pad4(d.year()) + '-' + pad2(d.month() + 1);
 }
 
 const hour12cc = {
@@ -43,23 +92,23 @@ function getEventClassName(evt) {
 }
 
 function splitByMonth(events) {
-  const startDate = dayjs(dateOnly(events[0].date));
-  const endDate = dayjs(dateOnly(events[events.length - 1].date));
+  const startDate = makeDayjs(dateOnly(events[0].date));
+  const endDate = makeDayjs(dateOnly(events[events.length - 1].date));
   const start = startDate.set('date', 1);
   const end = endDate.add(1, 'day');
   const months = {};
   const out = [];
   let i = 0;
   for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
-    const yearMonth = d.format('YYYY-MM');
+    const yearMonth = formatYearMonth(d);
     if (!months[yearMonth]) {
       out[i++] = months[yearMonth] = {month: yearMonth, events: []};
     }
   }
   events.forEach(function(evt) {
     const isoDate = dateOnly(evt.date);
-    const d = dayjs(isoDate);
-    const yearMonth = d.format('YYYY-MM');
+    const d = makeDayjs(isoDate);
+    const yearMonth = formatYearMonth(d);
     const monthEvents = months[yearMonth].events;
     monthEvents.push(evt);
   });
@@ -97,7 +146,7 @@ function getTimeStr(dt) {
 
 function tableRow(evt) {
   const isoDate = dateOnly(evt.date);
-  const m = dayjs(isoDate);
+  const m = makeDayjs(isoDate);
   const cat = evt.category;
   const localeData = window['hebcal'].localeConfig;
   const lang = window['hebcal'].lang || 's';
@@ -205,7 +254,9 @@ function getMonthTitle(month, center, prevNext) {
   const span1 = isHebrew ? '</span>' : '';
   const localeData = window['hebcal'].localeConfig;
   const yearMonth = month.month;
-  const yearStr = yearMonth.substring(0, yearMonth.length - 3);
+  const yyStr = yearMonth.substring(0, yearMonth.length - 3);
+  const yy = parseInt(yyStr, 10);
+  const yearStr = pad4(yy);
   const monthStr = yearMonth.substring(yearMonth.length - 2);
   const mm = parseInt(monthStr, 10);
   const titleText = localeData.months[mm - 1] + ' ' + yearStr;
@@ -241,14 +292,14 @@ function makeMonthTableBody(month) {
   const events = month.events;
   events.forEach(function(evt) {
     const isoDate = dateOnly(evt.date);
-    const d = dayjs(isoDate);
+    const d = makeDayjs(isoDate);
     const date = d.date();
     dayMap[date] = dayMap[date] || [];
     dayMap[date].push(evt);
   });
   let html = '<tr>';
   const isoDate = month.month + '-01';
-  const day1 = dayjs(isoDate);
+  const day1 = makeDayjs(isoDate);
   const dow = day1.day();
   for (let i = 0; i < dow; i++) {
     html += '<td>&nbsp;</td>';

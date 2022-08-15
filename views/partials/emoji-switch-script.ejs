@@ -23,10 +23,12 @@ document.addEventListener('DOMContentLoaded', function() {
     btn[btn.dataset.hebcalAttr] = href;
   }
   var ccEl = document.getElementById('cal-color');
-  ccEl.addEventListener('change', function(event) {
-    calColor = event.target.value;
-    changeButtonTarget('dl-ios-sub');
-  }, false);
+  if (ccEl) {
+    ccEl.addEventListener('change', function(event) {
+      calColor = event.target.value;
+      changeButtonTarget('dl-ios-sub');
+    }, false);
+  }
   document.querySelectorAll(".emoji-checkbox .form-check-input").forEach(function(el) {
     var inputId = el.id.substring(2);
     el.addEventListener('change', function(event) {
