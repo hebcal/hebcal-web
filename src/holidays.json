@@ -8,7 +8,11 @@
    "text": "Tenth of Tevet (Hebrew: עשרה בטבת, Asarah BeTevet), the tenth day of the Hebrew month of Tevet, is a minor fast day in Judaism. The fast commemorates the siege of Jerusalem by Nebuchadnezzar II of Babylonia. Like other minor fasts, Asara B'Tevet begins at dawn (first light) and ends at nightfall (full dark)."
   },
   "category": "fast",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Asara B'Tevet",
+    "Asara B'Tevet (Mincha)"
+   ]
  },
  "Chanukah": {
   "about": {
@@ -593,7 +597,11 @@
    "text": "Fast of the Firstborn (Hebrew: תענית בכורות, Ta'anit B'khorot or תענית בכורים, Ta'anit B'khorim); is a unique fast day in Judaism which usually falls on the day before Passover. Usually, the fast is broken at a siyum celebration (typically made at the conclusion of the morning services), which, according to prevailing custom, creates an atmosphere of rejoicing that overrides the requirement to continue the fast. Unlike most Jewish fast days, only firstborns are required to fast on the Fast of the Firstborn."
   },
   "category": "fast",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Ta'anit Bechorot",
+    "Ta'anit Bechorot (Mincha)"
+   ]
  },
  "Ta'anit Esther": {
   "about": {
@@ -604,7 +612,11 @@
    "text": "The Fast of Esther (Ta'anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish fast from dawn until dusk on Purim eve, commemorating the three-day fast observed by the Jewish people in the story of Purim. If the date of the Fast of Esther falls on Shabbat (Saturday), the fast is instead observed on the preceding Thursday. Like other minor fasts, Ta'anit Esther begins at dawn (first light) and ends at nightfall (full dark)."
   },
   "category": "fast",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Ta'anit Esther",
+    "Ta'anit Esther (Mincha)"
+   ]
  },
  "Tish'a B'Av": {
   "about": {
@@ -632,7 +644,11 @@
    }
   ],
   "category": "major",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Tish'a B'Av",
+    "Tish'a B'Av (Mincha)"
+   ]
  },
  "Tu B'Av": {
   "about": {
@@ -687,7 +703,11 @@
    "text": "The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a Jewish fast day from dawn until dusk to lament the assassination of the righteous governor of Judah of that name, which ended Jewish rule following the destruction of the First Temple. Like other minor fasts, Tzom Gedaliah begins at dawn (first light) and ends at nightfall (full dark)."
   },
   "category": "fast",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Tzom Gedaliah",
+    "Tzom Gedaliah (Mincha)"
+   ]
  },
  "Tzom Tammuz": {
   "about": {
@@ -698,7 +718,11 @@
    "text": "The Seventeenth of Tammuz (Hebrew: שבעה עשר בתמוז‎, Shiv'ah Asar b'Tammuz) is a Jewish fast day commemorating the breach of the walls of Jerusalem before the destruction of the Second Temple. It falls on the 17th day of the Hebrew month of Tammuz and marks the beginning of the three-week mourning period leading up to Tisha B'Av. Like other minor fasts, Tzom Tammuz begins at dawn (first light) and ends at nightfall (full dark). If the 17th of Tammuz falls on a Shabbat, the fast is instead observed the next day, the 18th of Tammuz (on Sunday)."
   },
   "category": "fast",
-  "yomtov": false
+  "yomtov": false,
+  "items": [
+    "Tzom Tammuz",
+    "Tzom Tammuz (Mincha)"
+   ]
  },
  "Yom HaAliyah": {
   "about": {
