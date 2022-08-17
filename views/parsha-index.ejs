@@ -57,21 +57,17 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 <div class="row mt-3">
 <div class="col">
 <h3 id="by-year">Parashat ha-Shavua by Hebrew year</h3>
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item disabled"><a class="page-link" href="#">Diaspora</a></li>
-<% for (let yr = hyear - 2; yr < hyear + 12; yr++) { %>
-<li class="page-item"><a class="page-link" href="<%=yr%>?i=off"><%=yr%></a></li>
+<h5>Diaspora</h5>
+<nav class="mb-3">
+<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
+<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Diaspora" href="<%=yr%>?i=off"><%=yr%></a></div>
 <% } %>
-</ul><!-- .pagination -->
 </nav>
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item disabled"><a class="page-link" href="#">Israel</a></li>
-<% for (let yr = hyear - 2; yr < hyear + 12; yr++) { %>
-<li class="page-item"><a class="page-link" href="<%=yr%>?i=on"><%=yr%></a></li>
+<h5>Israel 🇮🇱</h5>
+<nav class="mb-3">
+<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
+<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Israel" href="<%=yr%>?i=on"><%=yr%></a></div>
 <% } %>
-</ul><!-- .pagination -->
 </nav>
 </div><!-- .col -->
 </div><!-- .row -->
