@@ -80,7 +80,8 @@ export async function hebcalApp(ctx) {
   if (options.location && options.location.geo !== 'pos') {
     q['city-typeahead'] = options.location.getName();
   }
-  if (empty(q.year) && q.cfg !== 'fc') {
+  const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
+  if (empty(q.year) && !startEnd) {
     const dt = new Date();
     q.year = options.year = options.isHebrewYear ?
       getDefaultHebrewYear(new HDate(dt)) :
@@ -200,12 +201,7 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
-  let shortTitle = 'Jewish Calendar ';
-  if (options.month) {
-    shortTitle += greg.monthNames[options.month] + ' ';
-  }
-  const titleYear = options.year >= 0 ? options.year : -options.year + ' B.C.E.';
-  shortTitle += titleYear;
+  const shortTitle = pageTitle(options, events);
   const locale = localeMap[options.locale] || 'en';
   const memos = {};
   const items = events.map((ev) => {
@@ -242,8 +238,10 @@ function renderHtml(ctx) {
   const url = ctx.state.url;
   url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
   url.settings = '/hebcal?' + urlArgs(q, {v: 0});
-  url.prev ='/hebcal?' + urlArgs(q, {year: options.year - 1});
-  url.next = '/hebcal?' + urlArgs(q, {year: options.year + 1});
+  const prev = makePrevNextUrl(q, options, events, false);
+  const next = makePrevNextUrl(q, options, events, true);
+  url.prev = prev.href;
+  url.next = next.href;
   const optsTmp = Object.assign({}, options);
   optsTmp.subscribe = '1';
   url.title = getCalendarTitle(events, optsTmp);
@@ -281,8 +279,8 @@ function renderHtml(ctx) {
     lang: locale === 'he' ? 'en' : locale, // twbs5 doesn't handle <html lang="he"> well enough yet
     locale,
     localeConfig,
-    prevTitle: options.year - 1,
-    nextTitle: options.year + 1,
+    prevTitle: prev.title,
+    nextTitle: next.title,
     shortTitle,
     locationName,
     currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
@@ -292,6 +290,48 @@ function renderHtml(ctx) {
     defaultYear,
     defaultYearHeb,
   });
+}
+
+/**
+ * @private
+ * @param {CalOptions} options
+ * @param {Event[]} events
+ * @return {string}
+ */
+function pageTitle(options, events) {
+  let shortTitle = 'Jewish Calendar ';
+  if (options.month) {
+    shortTitle += greg.monthNames[options.month] + ' ';
+  }
+  if (typeof options.year === 'number') {
+    const yearStr = options.year >= 0 ? options.year : -options.year + ' B.C.E.';
+    return shortTitle + yearStr;
+  }
+  const gy1 = events[0].getDate().greg().getFullYear();
+  const gy2 = events[events.length - 1].getDate().greg().getFullYear();
+  if (gy1 === gy2) {
+    return shortTitle + gy1;
+  }
+  return shortTitle + gy1 + '-' + gy2;
+}
+
+function makePrevNextUrl(q, options, events, isNext) {
+  const numYears = isNext ? 1 : -1;
+  if (typeof options.year === 'number') {
+    return {
+      title: options.year + numYears,
+      href: '/hebcal?' + urlArgs(q, {year: options.year + numYears}),
+    };
+  }
+  const idx = isNext ? events.length - 1 : 0;
+  const gy = events[idx].getDate().greg().getFullYear();
+  const q2 = Object.assign({}, q);
+  delete q2.start;
+  delete q2.end;
+  return {
+    title: gy + numYears,
+    href: '/hebcal?' + urlArgs(q2, {yt: 'G', year: gy + numYears}),
+  };
 }
 
 function isFresh(ctx) {
