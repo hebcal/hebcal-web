@@ -312,7 +312,7 @@ function pageTitle(options, events) {
   if (gy1 === gy2) {
     return shortTitle + gy1;
   }
-  return shortTitle + gy1 + '-' + gy2;
+  return shortTitle + gy1 + '-' + (gy2 % 100);
 }
 
 function makePrevNextUrl(q, options, events, isNext) {
