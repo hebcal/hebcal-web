@@ -6,6 +6,7 @@ import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   shortenUrl,
   makeGeoUrlArgs2,
   getSunsetAwareDate} from './common';
+import {pad2, pad4} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -42,7 +43,13 @@ export async function homepage(ctx) {
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   ctx.state.locale = localeMap[lg] || 'en';
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
-  Object.assign(ctx.state, getDefaultYear(dt, hd));
+  const yearInfo = getDefaultYear(dt, hd);
+  Object.assign(ctx.state, yearInfo);
+  if (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs) {
+    const start = pad4(gy) + '-' + pad2(gm) + '-01';
+    const end = pad4(gy + 1) + '-12-31';
+    ctx.state.yearArgs = `&start=${start}&end=${end}`;
+  }
   ctx.state.items = [];
   mastheadDates(ctx, dt, afterSunset, hd);
   mastheadHolidays(ctx, hd, il);
