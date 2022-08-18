@@ -59,6 +59,7 @@ function makeProperties(ctx) {
     url,
     candleLightingStr: Locale.gettext('Candle lighting'),
     q: query,
+    options,
   };
 }
 

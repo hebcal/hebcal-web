@@ -88,7 +88,16 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
   <a class="nav nowrap" title="Previous" rel="nofollow"
   href="<%- url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a>
 </td>
-<td class="text-center">Candle-lighting times are <%= q.b || 18 %> minutes before sunset</td>
+<td class="text-center">
+<div><p>Candle-lighting times are <%= q.b || 18 %> minutes before sunset</p></div>
+<div id="havdalah-footer" class="havdalah"><p>Havdalah times are
+<% if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) { -%>
+<%= options.havdalahMins %> minutes after sunset
+<% } else { -%>
+for 3 small stars (sun 8.5° below the horizon)
+<% } -%>
+</p></div>
+</td>
 <td><p><a class="nav nowrap" title="Next" rel="nofollow"
   href="<%- url %>&amp;year=<%= hyear ? hyear + 1 : gregYear1 + 3761 %>"><%= hyear ? hyear + 1 : gregYear1 + 3761 %> &rarr;</a></p>
   <p><a class="nav nowrap" title="Next" rel="nofollow"
@@ -106,15 +115,18 @@ document.addEventListener('DOMContentLoaded', function() {
   var havdalahCol = [].slice.call(document.querySelectorAll('col.havdalah'));
   var checkbox = document.getElementById('toggle-havdalah');
   var fridgeTable = document.getElementById('fridge-table');
+  var havdalahFooter = document.getElementById('havdalah-footer');
   checkbox.addEventListener('change', function() {
     if (this.checked) {
       fridgeTable.style.width = '620px';
       havdalahTd.forEach(function (el) {el.style.display = 'table-cell';});
       havdalahCol.forEach(function (el) {el.style.display = 'table-column';});
+      havdalahFooter.style.display = 'block';
     } else {
       fridgeTable.style.width = '524px';
       havdalahTd.forEach(function (el) {el.style.display = 'none';});
       havdalahCol.forEach(function (el) {el.style.display = 'none';});
+      havdalahFooter.style.display = 'none';
     }
   });
 });
