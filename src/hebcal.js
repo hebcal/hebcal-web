@@ -248,7 +248,8 @@ function renderHtml(ctx) {
   if (options.candlelighting) {
     const location = ctx.state.location;
     const geoUrlArgs = makeGeoUrlArgs(q, location, options);
-    const hyear = options.isHebrewYear ? options.year : events[0].getDate().getFullYear();
+    const idx = Math.floor(events.length / 2);
+    const hyear = options.isHebrewYear ? options.year : events[idx].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
   }
   const localeConfig = {
