@@ -281,10 +281,10 @@ function renderHtml(ctx) {
     localeConfig,
     prevTitle: prev.title,
     nextTitle: next.title,
-    shortTitle,
+    shortTitle: 'Jewish Calendar ' + shortTitle,
     locationName,
     currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
-    downloadAltTitle: `${options.year} only`,
+    downloadAltTitle: shortTitle + ' only',
     numYears: getNumYears(options),
     langNames,
     defaultYear,
@@ -299,7 +299,7 @@ function renderHtml(ctx) {
  * @return {string}
  */
 function pageTitle(options, events) {
-  let shortTitle = 'Jewish Calendar ';
+  let shortTitle = '';
   if (options.month) {
     shortTitle += greg.monthNames[options.month] + ' ';
   }

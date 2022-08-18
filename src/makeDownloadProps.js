@@ -41,8 +41,12 @@ export function downloadHref2(query, filename, override={}) {
   const year = getInt(q.year);
   if (year !== null) {
     msg.setYear(year);
+    delete q.start;
+    delete q.end;
   } else if (q.year === 'now') {
     msg.setYearnow(true);
+    delete q.start;
+    delete q.end;
   }
   if (!empty(q.lg)) msg.setLocale(q.lg);
   const m = getInt(q.m);
