@@ -28,6 +28,7 @@
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-ios-sub"
   data-hebcal-attr="href" data-hebcal-src="webcal"
+  title="Subscribe to <%= url.title %>"
   rel="nofollow" href="<%= url.webcal %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
   Subscribe on iPhone, iPad &amp; macOS</a>
@@ -63,7 +64,8 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-ol-ics"
   data-hebcal-attr="href" data-hebcal-src="webcal"
-  title="<%= filename.ics %>" rel="nofollow" href="<%= url.webcal %>">
+  title="Add <%= url.title %> to Outlook 365"
+  rel="nofollow" href="<%= url.webcal %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook 365 Calendar Subscription</a>
 </div>
@@ -90,7 +92,7 @@ href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Outlook 36
 <div class="mb-3">
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
-title="Add <%= filename.ics %> to Google Calendar"
+title="Add <%= url.title %> to Google Calendar"
 data-hebcal-attr="href" data-hebcal-src="gcal"
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
@@ -144,7 +146,7 @@ Copy
 <div class="mb-3">
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-olcom" rel="nofollow"
-title="Add <%= filename.ics %> to Outlook.com"
+title="Add <%= url.title %> to Outlook.com"
 data-hebcal-attr="href" data-hebcal-src="olcom"
 href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(url.gcal) %>&amp;name=<%=encodeURIComponent(url.title)%>&amp;mkt=en-001">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>

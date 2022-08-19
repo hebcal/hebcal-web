@@ -1,6 +1,7 @@
 {
-    "name": "Hebcal Jewish holiday calendars & Hebrew date converter",
+    "name": "Hebcal Jewish Calendar",
     "short_name": "Hebcal",
+    "description": "Hebcal makes calendars of Jewish holidays. Convert Hebrew and Gregorian dates, get Shabbat candle-lighting times, Torah readings for Diaspora + Israel, Yahrzeit dates and more",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +14,8 @@
             "type": "image/png"
         }
     ],
+    "start_url": "/",
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
-    "display": "standalone"
+    "display": "browser"
 }

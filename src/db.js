@@ -6,7 +6,7 @@ export class MysqlDb {
   /**
    * We let this function throw an error instead of trying to handle ourselves.
    * @param {any} logger
-   * @param {any} iniConfig
+   * @param {Object<string,string>} iniConfig
    */
   constructor(logger, iniConfig) {
     const host = iniConfig['hebcal.mysql.host'];
