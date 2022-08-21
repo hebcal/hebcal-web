@@ -27,13 +27,13 @@
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h4 class="text-muted"><%=descrShort%>&nbsp;<%=emoji%></h4>
-<p class="lead"><%=holiday%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
+<p class="lead mt-3"><%=holiday%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
 <% if (currentItem.parsha) { %>
  This corresponds to Parashat <%= currentItem.parsha.join('-') %>.
 <% } %>
 </p>
-<p><%-descrLong%>
-<br><small class="d-print-none"><em>Read more from <a class="outbound"
+<p class="mt-3"><%-descrLong%></p>
+<p><small class="d-print-none"><em>Read more from <a class="outbound"
 title="More about <%=holiday%> from <%=meta.about.name%>"
 href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;&rarr;</a>
 <% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
