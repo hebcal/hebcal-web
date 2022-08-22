@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {basename} from 'path';
 import {PassThrough} from 'stream';
-import * as leyning from '@hebcal/leyning';
+import {writeFullKriyahCsv, writeTriennialCsv, getLeyningForHoliday,
+  getLeyningForParsha, formatAliyahWithBook} from '@hebcal/leyning';
 import createError from 'http-errors';
 import {HebrewCalendar, HDate, months} from '@hebcal/core';
 
@@ -15,11 +16,11 @@ export async function parshaCsv(ctx) {
   const base = basename(rpath);
   let matches;
   if ((matches = reFullKriyahIL.exec(base)) !== null) {
-    sendCsv(ctx, base, matches[1], true, leyning.writeFullKriyahCsv);
+    sendCsv(ctx, base, matches[1], true, writeFullKriyahCsv);
   } else if ((matches = reFullKriyahDiaspora.exec(base)) !== null) {
-    sendCsv(ctx, base, matches[1], false, leyning.writeFullKriyahCsv);
+    sendCsv(ctx, base, matches[1], false, writeFullKriyahCsv);
   } else if ((matches = reTriennial.exec(base)) !== null) {
-    sendCsv(ctx, base, matches[1], false, leyning.writeTriennialCsv);
+    sendCsv(ctx, base, matches[1], false, writeTriennialCsv);
   } else if ((matches = reWeekday.exec(base)) !== null) {
     const il = base.startsWith('weekday-il-');
     sendCsv(ctx, base, matches[1], il, writeWeekdayCsv);
@@ -95,7 +96,7 @@ function writeWeekdayCsvInner(stream, hd, il) {
  * @param {HDate} hd
  */
 function writeWeekdayCsvLines(stream, parsha, hd) {
-  const reading = leyning.getLeyningForParsha(parsha);
+  const reading = getLeyningForParsha(parsha);
   const parshaName = parsha.join('-');
   const date = fmtDate(hd.greg());
   if (reading.weekday) {
@@ -118,7 +119,7 @@ function isWeekdayReading(hd, il) {
   }
   const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   for (const ev of events) {
-    const reading = leyning.getLeyningForHoliday(ev, il);
+    const reading = getLeyningForHoliday(ev, il);
     if (reading && reading.fullkriyah) {
       return false;
     }
@@ -145,11 +146,11 @@ function fmtDate(dt) {
  * @param {fs.WriteStream} stream
  * @param {string} date
  * @param {string} parshaName
- * @param {leyning.AliyotMap} aliyot
+ * @param {AliyotMap} aliyot
  */
 function writeCsvLines(stream, date, parshaName, aliyot) {
   for (const [num, aliyah] of Object.entries(aliyot)) {
-    const str = leyning.formatAliyahWithBook(aliyah);
+    const str = formatAliyahWithBook(aliyah);
     const numv = aliyah.v || '';
     stream.write(`${date},"${parshaName}",${num},"${str}",${numv}\r\n`);
   }

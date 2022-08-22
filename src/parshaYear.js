@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, flags, Locale} from '@hebcal/core';
-import * as leyning from '@hebcal/leyning';
+import {getLeyningKeyForEvent, getLeyningForHoliday,
+  getLeyningForParshaHaShavua, Triennial} from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
@@ -43,12 +44,12 @@ export async function parshaYear(ctx) {
       continue;
     }
     const reading = isParsha ?
-      leyning.getLeyningForParshaHaShavua(ev, il) :
-      leyning.getLeyningForHoliday(ev, il);
+      getLeyningForParshaHaShavua(ev, il) :
+      getLeyningForHoliday(ev, il);
     if (!reading) {
       continue;
     }
-    const key = leyning.getLeyningKeyForEvent(ev, il);
+    const key = getLeyningKeyForEvent(ev, il);
     const desc = ev.basename();
     const title0 = ev.render('en');
     const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : Locale.gettext(key, lang);
@@ -82,6 +83,6 @@ export async function parshaYear(ctx) {
     todayHebYear,
     dlfilename,
     dlhref,
-    triCycleStartYear: hyear >= 5744 ? leyning.Triennial.getCycleStartYear(hyear) : null,
+    triCycleStartYear: hyear >= 5744 ? Triennial.getCycleStartYear(hyear) : null,
   });
 }

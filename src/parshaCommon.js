@@ -1,5 +1,5 @@
-import {Locale} from '@hebcal/core';
-import * as leyning from '@hebcal/leyning';
+import {Locale, parshiot} from '@hebcal/core';
+import {formatAliyahShort, lookupParsha} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {bookId, sefariaAliyahHref, langNames} from './common';
 import drash from './drash.json';
@@ -14,18 +14,40 @@ for (const book of torahBookNames) {
 
 export const sedrot = new Map();
 export const doubled = new Map();
+export const parshaNum = new Map();
 const parshaAlias = new Map();
 const allLangs = Object.keys(langNames);
-for (const [parshaName, reading] of Object.entries(leyning.parshiyot)) {
+for (let i = 0; i < parshiot.length; i++) {
+  const parshaName = parshiot[i];
+  parshaNum.set(parshaName, i + 1);
+  addParshaToMeta(parshaName);
+}
+export const doubledParshiyot = [
+  'Vayakhel-Pekudei',
+  'Tazria-Metzora',
+  'Achrei Mot-Kedoshim',
+  'Behar-Bechukotai',
+  'Chukat-Balak',
+  'Matot-Masei',
+  'Nitzavim-Vayeilech',
+];
+for (const parshaName of doubledParshiyot) {
+  const [p1, p2] = parshaName.split('-');
+  doubled.set(p1, parshaName);
+  doubled.set(p2, parshaName);
+  addParshaToMeta(parshaName);
+}
+
+/**
+ * @private
+ * @param {string} parshaName
+ */
+function addParshaToMeta(parshaName) {
   const anchor = makeAnchor(parshaName);
   sedrot.set(anchor, parshaName);
   sedrot.set(anchor.replace(/-/g, ''), parshaName);
-  if (reading.combined) {
-    const [p1, p2] = parshaName.split('-');
-    doubled.set(p1, parshaName);
-    doubled.set(p2, parshaName);
-  }
-  const bookId = reading.combined ? 'DoubledParshiyot' : torahBookNames[reading.book - 1];
+  const meta = lookupParsha(parshaName);
+  const bookId = meta.combined ? 'DoubledParshiyot' : torahBookNames[meta.book - 1];
   parshaByBook.get(bookId).set(anchor, parshaName);
   for (const lang of allLangs) {
     const str = Locale.lookupTranslation(parshaName, lang);
@@ -101,28 +123,29 @@ export function addLinksToLeyning(aliyot, showBook) {
  * @param {string} parshaName
  * @return {any}
  */
-export function lookupParsha(parshaName) {
-  const parsha0 = leyning.parshiyot[parshaName];
+export function lookupParshaMeta(parshaName) {
+  const parsha0 = lookupParsha(parshaName);
   const parsha = Object.assign({
     name: parshaName,
     bookName: torahBookNames[parsha0.book - 1],
     anchor: makeAnchor(parshaName),
+    verses: parsha0.fullkriyah['1'][0] + '-' + parsha0.fullkriyah['7'][1],
   }, parsha0);
   if (parsha.combined) {
     const [p1, p2] = parshaName.split('-');
     parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');
-    const n1 = leyning.parshiyot[p1].num;
+    const n1 = parshaNum.get(p1);
     parsha.ordinal = Locale.ordinal(n1, 'en') + ' and ' + Locale.ordinal(n1 + 1, 'en');
     parsha.p1 = p1;
     parsha.p2 = p2;
     parsha.p1anchor = makeAnchor(p1);
     parsha.p2anchor = makeAnchor(p2);
     const haftKey = p1 === 'Nitzavim' ? p1 : p2;
-    parsha.haft = leyning.parshiyot[haftKey].haft;
+    parsha.haft = lookupParsha(haftKey).haft;
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
-  const chapVerse = parsha.fullkriyah['1'].b;
+  const chapVerse = parsha.fullkriyah['1'][0];
   const [chapter, verse] = chapVerse.split(':');
   const book = parsha.book;
   const portion = parsha.combined ? parsha.num1 : parsha.num;
@@ -174,13 +197,13 @@ export function makeLeyningHtmlFromParts(parts) {
   }
   let prev = parts[0];
   let summary = '<a href="' + sefariaAliyahHref(prev, false) + '">' +
-    leyning.formatAliyahShort(prev, true) + '</a>';
+    formatAliyahShort(prev, true) + '</a>';
   for (let i = 1; i < parts.length; i++) {
     const part = parts[i];
     const showBook = (part.k !== prev.k);
     const delim = showBook ? '; ' : ', ';
     summary += delim + '<a class="outbound" href="' + sefariaAliyahHref(part, false) + '">' +
-      leyning.formatAliyahShort(part, showBook) + '</a>';
+      formatAliyahShort(part, showBook) + '</a>';
     prev = part;
   }
   return summary;

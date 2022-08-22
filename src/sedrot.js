@@ -1,13 +1,14 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import * as leyning from '@hebcal/leyning';
+import {getLeyningForParshaHaShavua, getLeyningForParsha,
+  Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/leyning';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
-  lookupParsha, lookupParshaAlias} from './parshaCommon';
+  lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 
@@ -23,7 +24,8 @@ const allEvts15yrIsrael = HebrewCalendar.calendar(Object.assign({il: true}, opti
 const allEvts15yrDiaspora = HebrewCalendar.calendar(Object.assign({il: false}, options15yr));
 const items15yrIsrael = new Map();
 const items15yrDiaspora = new Map();
-for (const parshaName of Object.keys(leyning.parshiyot)) {
+const allParshiot = [].concat(parshiot, doubledParshiyot);
+for (const parshaName of allParshiot) {
   items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
@@ -52,7 +54,7 @@ function get15yrEvents(parshaName, il) {
       d: dayjs(ev.getDate().greg()),
       hyear: ev.getDate().getFullYear(),
     };
-    const fk = leyning.getLeyningForParshaHaShavua(ev, il);
+    const fk = getLeyningForParshaHaShavua(ev, il);
     if (fk.reason?.haftara) {
       item.haftara = fk.haftara;
       item.haftaraReason = fk.reason.haftara;
@@ -124,12 +126,12 @@ export async function parshaDetail(ctx) {
     return;
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
-  const parsha = lookupParsha(parshaName);
+  const parsha = lookupParshaMeta(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items = items15map.get(parshaName);
   const reading = date ?
-    leyning.getLeyningForParshaHaShavua(parshaEv, il) :
-    leyning.getLeyningForParsha(parshaName);
+    getLeyningForParshaHaShavua(parshaEv, il) :
+    getLeyningForParsha(parshaName);
   if (date && parshaName === VEZOT_HABERAKHAH) {
     for (let i = 1; i <= 6; i++) {
       delete reading.reason[i];
@@ -196,8 +198,8 @@ export async function parshaDetail(ctx) {
 }
 
 function makePrevNext(parsha, date, hd, il) {
-  const prevNum = parsha.combined ? leyning.parshiyot[parsha.p1].num - 2 : parsha.num - 2;
-  const nextNum = parsha.combined ? leyning.parshiyot[parsha.p2].num : parsha.num;
+  const prevNum = parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
+  const nextNum = parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
   const prevName = parshiot[prevNum];
   const nextName = parshiot[nextNum];
   if (date) {
@@ -242,7 +244,7 @@ function getParshaDateAnchor(ev) {
 
 function makeTriennial(date, parshaEv, hyear, parshaName) {
   if (date) {
-    const reading = leyning.getTriennialForParshaHaShavua(parshaEv, true);
+    const reading = getTriennialForParshaHaShavua(parshaEv);
     if (parshaName === VEZOT_HABERAKHAH) {
       for (let i = 1; i <= 6; i++) {
         delete reading.aliyot[i].reason;
@@ -264,8 +266,8 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     return triennial;
   }
   const triennial = {};
-  const startYear = leyning.Triennial.getCycleStartYear(hyear);
-  const tri = leyning.getTriennial(startYear);
+  const startYear = Triennial.getCycleStartYear(hyear);
+  const tri = getTriennial(startYear);
   triennial.readings = Array(3);
   for (let yr = 0; yr < 3; yr++) {
     const reading = makeTriReading(tri, yr, parshaName);
@@ -288,7 +290,7 @@ function makeTriReading(tri, yr, parshaName) {
   }
   const hd = triReading.date;
   const ev = new ParshaEvent(hd, [parshaName], false);
-  const triReading2 = leyning.getTriennialForParshaHaShavua(ev, true);
+  const triReading2 = getTriennialForParshaHaShavua(ev);
   addLinksToLeyning(triReading2.aliyot, false);
   for (const aliyah of Object.values(triReading2.aliyot)) {
     aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
@@ -306,7 +308,7 @@ function addSpecialHaftarahToTriennial(ev, triReading2) {
   if (parshaName === VEZOT_HABERAKHAH) {
     return;
   }
-  const fk = leyning.getLeyningForParshaHaShavua(ev, false);
+  const fk = getLeyningForParshaHaShavua(ev, false);
   if (fk.reason?.haftara) {
     triReading2.haftara = fk.haftara;
     triReading2.haftaraHref = sefariaAliyahHref(fk.haft);

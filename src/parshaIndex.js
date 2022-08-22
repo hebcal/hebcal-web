@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
-import * as leyning from '@hebcal/leyning';
+import {Triennial} from '@hebcal/leyning';
 import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common';
-import {parshaByBook, torahBookNames, lookupParsha} from './parshaCommon';
+import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon';
 import dayjs from 'dayjs';
 
 const myLangNames = Object.assign({
@@ -42,7 +42,7 @@ export async function parshaIndex(ctx) {
     il,
     saturday: dayjs(saturday.greg()),
     hyear,
-    triCycleStartYear: leyning.Triennial.getCycleStartYear(hyear),
+    triCycleStartYear: Triennial.getCycleStartYear(hyear),
     parsha,
     parshaHref,
     parshaByBook,
@@ -74,7 +74,7 @@ function getParsha(hd, il) {
   } else {
     const pe = new ParshaEvent(hd, parsha0.parsha, il);
     const parshaHref = pe.url();
-    const meta = lookupParsha(parsha);
+    const meta = lookupParshaMeta(parsha);
     return [parsha, parshaHref, meta];
   }
 }

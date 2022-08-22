@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent} from '@hebcal/core';
-import * as leyning from '@hebcal/leyning';
+import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
+  getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
 import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -292,7 +293,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       const reading = getReadingForHoliday(ev, il);
       if (typeof reading !== 'undefined') {
         const desc = ev.getDesc();
-        const key0 = leyning.getLeyningKeyForEvent(ev, il) || desc;
+        const key0 = getLeyningKeyForEvent(ev, il) || desc;
         const key1 = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
         const key = dupes.has(key1) ? key1 + ' Day 2' : key1;
         meta.items.push(key);
@@ -306,12 +307,12 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       delete meta.items;
     }
   } else {
-    if (typeof meta.items === 'undefined' && leyning.holidayReadings[holiday]) {
+    if (typeof meta.items === 'undefined' && hasFestival(holiday)) {
       meta.items = [holiday];
     }
     if (Array.isArray(meta.items)) {
       for (const item of meta.items) {
-        const reading = leyning.getLeyningForHolidayKey(item);
+        const reading = getLeyningForHolidayKey(item);
         if (typeof reading !== 'undefined') {
           makeHolidayReading(holiday, item, meta, reading);
         }
@@ -327,7 +328,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
  * @param {string} holiday
  * @param {string} item
  * @param {any} meta
- * @param {leyning.Leyning} reading
+ * @param {Leyning} reading
  * @param {Event} ev
  * @param {boolean} il
  */
@@ -390,7 +391,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
 /**
  * @param {Event} ev
  * @param {boolean} il
- * @return {leyning.Leyning}
+ * @return {Leyning}
  */
 function getReadingForHoliday(ev, il) {
   const hd = ev.getDate();
@@ -399,13 +400,13 @@ function getReadingForHoliday(ev, il) {
   if (desc === 'Chanukah: 1 Candle') {
     return undefined;
   }
-  const reading = leyning.getLeyningForHoliday(ev, il);
+  const reading = getLeyningForHoliday(ev, il);
   if (reading && dow === 6) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
       const pe = new ParshaEvent(hd, parsha.parsha, il);
-      return leyning.getLeyningForParshaHaShavua(pe, il);
+      return getLeyningForParshaHaShavua(pe, il);
     }
   }
   return reading;
