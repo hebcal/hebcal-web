@@ -16,7 +16,7 @@ const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
 const options15yr = {
   year: new Date().getFullYear() - 2,
-  numYears: 17,
+  numYears: 18,
   noHolidays: true,
   sedrot: true,
 };

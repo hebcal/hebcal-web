@@ -210,18 +210,18 @@ if (!date && spHaftItems.length !== 0) { -%>
 </div><!-- .col -->
 </div><!-- .d-print-none -->
 
-<div class="row">
+<div class="row mb-2">
 <div class="col">
 <h4 id="dates">List of Dates</h4>
 Parashat <%=parsha.name%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div><!-- .row -->
-<div class="row">
+<div class="row mb-3">
 <% for (let i = 0; i < 3; i++) { -%>
 <div class="col-md">
-<ul class="list-unstyled">
-<% for (let j = 0; j < 5; j++) { -%>
-<% const item = items[(i * 5) + j]; if (item) { -%>
+<ul class="list-unstyled mb-0">
+<% for (let j = 0; j < 6; j++) { -%>
+<% const item = items[(i * 6) + j]; if (item) { -%>
 <li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-muted">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
 <% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
 <% } -%>
