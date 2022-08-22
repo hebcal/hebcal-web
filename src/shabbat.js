@@ -15,7 +15,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
-  eventsToRss, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
+  eventsToRss2, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import './dayjs-locales';
@@ -70,8 +70,10 @@ export async function shabbatApp(ctx) {
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.type = 'application/rss+xml; charset=utf-8';
-    ctx.body = eventsToRss(ctx.state.events, ctx.state.location,
-        selfUrl, ctx.state.rssUrl, ctx.state.locale, q.pubDate != 0);
+    options.mainUrl = selfUrl;
+    options.selfUrl = ctx.state.rssUrl;
+    options.evPubDate = q.pubDate != 0;
+    ctx.body = eventsToRss2(ctx.state.events, options);
   } else if (q.cfg === 'json') {
     const leyningOff = (q.leyning === 'off' || q.leyning === '0');
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
