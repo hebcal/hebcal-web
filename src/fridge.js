@@ -1,5 +1,5 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
-import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl, getDefaultHebrewYear} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -24,6 +24,12 @@ function makeProperties(ctx) {
   const query = Object.assign({}, ctx.request.query);
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     query[k] = 'on';
+  }
+  if (empty(query.year)) {
+    const today = new HDate();
+    const hyear = getDefaultHebrewYear(today);
+    query.year = '' + hyear;
+    delete query.yt;
   }
   const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
