@@ -147,20 +147,16 @@ function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
   const d = item.d;
   const b0 = '<strong>';
   const b1 = '</strong>';
-  if (f === 'Chanukah') {
+  if (f === 'Chanukah' || f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
     return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
+  } else if (f === 'Rosh Hashana' || f === 'Yom Kippur' || f === 'Simchat Torah') {
+    return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur);
   } else if (dur === 0) {
     return formatSingleDay(d, isHebrewYear) + shortDayOfWeek(d, 0);
-  } else if (f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
-    return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
   } else {
     const yomTovDays = il ? 1 : 2;
     const asterisk = il && addIsraelAsterisk ? ' <span class="text-success">*</span>' : '';
     switch (f) {
-      case 'Rosh Hashana':
-      case 'Yom Kippur':
-      case 'Simchat Torah':
-        return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur);
       case 'Shmini Atzeret':
       case 'Shavuot':
         return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur) + asterisk;
@@ -178,6 +174,8 @@ function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
         asterisk +
         '<br>' + formatDatePlusDelta(d3, pesachChmDays, isHebrewYear) + shortDayOfWeek(d3, pesachChmDays) +
         '<br>' + b0 + formatDatePlusDelta(d6, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d6, yomTovDays);
+      default:
+        throw createError(500, `Unknown holiday: ${f}`);
     }
   }
 }
