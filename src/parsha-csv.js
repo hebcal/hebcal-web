@@ -1,8 +1,9 @@
 /* eslint-disable require-jsdoc */
 import {basename} from 'path';
 import {PassThrough} from 'stream';
-import {writeFullKriyahCsv, writeTriennialCsv, getLeyningForHoliday,
+import {writeFullKriyahCsv, getLeyningForHoliday,
   getLeyningForParsha, formatAliyahWithBook} from '@hebcal/leyning';
+import {writeTriennialCsv} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {HebrewCalendar, HDate, months} from '@hebcal/core';
 

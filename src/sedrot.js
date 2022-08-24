@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {getLeyningForParshaHaShavua, getLeyningForParsha,
-  Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/leyning';
+import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning';
+import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,

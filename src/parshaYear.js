@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, flags, Locale} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHoliday,
-  getLeyningForParshaHaShavua, Triennial} from '@hebcal/leyning';
+  getLeyningForParshaHaShavua} from '@hebcal/leyning';
+import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';

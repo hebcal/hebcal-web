@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
-import {Triennial} from '@hebcal/leyning';
+import {Triennial} from '@hebcal/triennial';
 import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common';
 import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon';
 import dayjs from 'dayjs';
