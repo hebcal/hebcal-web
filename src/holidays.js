@@ -149,7 +149,7 @@ function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
   const b1 = '</strong>';
   if (f === 'Chanukah') {
     return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
-  } else if (f === 'Leil Selichot' || mask & flags.MINOR_FAST) {
+  } else if (dur === 0) {
     return formatSingleDay(d, isHebrewYear) + shortDayOfWeek(d, 0);
   } else if (f === 'Purim' || f === 'Tish\'a B\'Av' || !(mask & flags.CHAG)) {
     return formatDatePlusDelta(d, dur, isHebrewYear) + shortDayOfWeek(d, dur);
