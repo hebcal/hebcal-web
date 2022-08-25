@@ -11,7 +11,7 @@ import {hebrewDateConverter} from './converter';
 import {emailForm, emailVerify} from './email';
 import {emailOpen} from './emailOpen';
 import {fridgeShabbat} from './fridge';
-import {hdateJavascript, hdateXml, parshaRss} from './hdate';
+import {hdateJavascript, hdateXml, parshaRss, dafYomiRss} from './hdate';
 import {hebcalApp} from './hebcal';
 import {holidaysApp} from './holidays';
 import {homepage} from './homepage';
@@ -147,6 +147,8 @@ export function wwwRouter() {
       return hdateJavascript(ctx);
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.xml')) {
       return hdateXml(ctx);
+    } else if ((rpath.startsWith('/etc/dafyomi-') || rpath.startsWith('/etc/myomi-')) && rpath.endsWith('.xml')) {
+      return dafYomiRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
       if (rpath === '/sedrot/') {
         return parshaIndex(ctx);

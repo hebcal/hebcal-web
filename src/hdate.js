@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, ParshaEvent, HebrewCalendar, flags, Locale} from '@hebcal/core';
+import {HDate, ParshaEvent, HebrewCalendar, flags, Locale,
+  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
@@ -166,4 +167,31 @@ function createMemo(ev, il) {
     }
     return memo;
   }
+}
+
+const myomiIndex = new MishnaYomiIndex();
+
+export async function dafYomiRss(ctx) {
+  const rpath = ctx.request.path;
+  const {dt} = getTodayDate(ctx.request.query);
+  const hd = new HDate(dt);
+  const today = dayjs(dt);
+  const utcString = dt.toUTCString();
+  const lang = getLang(rpath);
+  const bn = basename(rpath);
+  const isDafYomi = bn.startsWith('dafyomi');
+  const event = isDafYomi ? new DafYomiEvent(hd) : new MishnaYomiEvent(hd, myomiIndex.lookup(hd));
+  ctx.lastModified = utcString;
+  expires(ctx, dt);
+  ctx.type = RSS_CONTENT_TYPE;
+  ctx.body = await ctx.render('dafyomi-rss', {
+    writeResp: false,
+    title: Locale.gettext(isDafYomi ? 'Daf Yomi' : 'Mishna Yomi', lang),
+    homepage: isDafYomi ? 'https://www.sefaria.org/daf-yomi' : 'https://www.sefaria.org/texts/Mishnah',
+    description: 'Daily regimen of learning the ' + (isDafYomi ? 'Talmud' : 'Mishna'),
+    dt,
+    memo: today.locale(lang).format('dddd, D MMMM YYYY'),
+    lang,
+    event,
+  });
 }
