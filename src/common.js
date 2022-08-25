@@ -1197,6 +1197,9 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
   const cv2 = end.split('.');
   const endStr = beginStr === end ? '' : cv1[0] === cv2[0] ? '-' + cv2[1] : '-' + end;
   const book = aliyah.k;
+  if (aliyah.reason) {
+    sefAliyot = false;
+  }
   const suffix = bookId[book] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
   return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
 }
