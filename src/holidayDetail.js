@@ -15,7 +15,7 @@ import {distance, closest} from 'fastest-levenshtein';
 import probe from 'probe-image-size';
 import fs from 'fs';
 
-const holidayYearRe = /^([a-z-]+)-(\d+)$/;
+const holidayYearRe = /^([^\d]+)-(\d+)$/;
 
 const holidayAlias = new Map();
 for (const [holiday, meta] of Object.entries(holidayMeta)) {
@@ -51,6 +51,11 @@ function makeOccursOn(events, holiday, il) {
 
 const allHolidays = Array.from(holidays.keys());
 
+function myRedir(ctx, anchor, year) {
+  const slug = year ? `${anchor}-${year}` : anchor;
+  return httpRedirect(ctx, `/holidays/${slug}?redir=spelling`);
+}
+
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = decodeURIComponent(basename(rpath));
@@ -64,14 +69,12 @@ export async function holidayDetail(ctx) {
     const str1 = makeAnchor(base1).replace(/_/g, '-');
     const alias = holidayAlias.get(str1);
     if (alias) {
-      httpRedirect(ctx, `/holidays/${alias}?redir=spelling`);
-      return;
+      return myRedir(ctx, alias, year);
     }
     const candidate = closest(str1, allHolidays);
     const editDist = distance(str1, candidate);
     if (editDist <= 2) {
-      httpRedirect(ctx, `/holidays/${candidate}?redir=spelling`);
-      return;
+      return myRedir(ctx, candidate, year);
     }
     throw createError(404, `Holiday not found: ${base0}`);
   }

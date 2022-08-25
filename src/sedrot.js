@@ -66,7 +66,7 @@ function get15yrEvents(parshaName, il) {
   });
 }
 
-const parshaDateRe = /^([a-z-]+)-(\d+)$/;
+const parshaDateRe = /^([^\d]+)-(\d+)$/;
 
 export async function parshaDetail(ctx) {
   const rpath = ctx.request.path;
@@ -79,7 +79,11 @@ export async function parshaDetail(ctx) {
   if (typeof parshaName0 !== 'string') {
     const candidate = lookupParshaAlias(parshaAnchor);
     if (candidate) {
-      httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);
+      if (date && date.length === 8) {
+        httpRedirect(ctx, `/sedrot/${candidate}-${date}?redir=spelling`);
+      } else {
+        httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);
+      }
       return;
     }
     throw createError(404, `Parsha not found: ${base0}`);
