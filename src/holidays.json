@@ -49,17 +49,22 @@
   "items": [
    "Chanukah",
    "Chanukah Day 1",
+   "Chanukah Day 1 (on Shabbat)",
    "Chanukah Day 2",
+   "Chanukah Day 2 (on Shabbat)",
    "Chanukah Day 3",
+   "Chanukah Day 3 (on Shabbat)",
    "Chanukah Day 4",
+   "Chanukah Day 4 (on Shabbat)",
    "Chanukah Day 5",
+   "Chanukah Day 5 (on Shabbat)",
    "Chanukah Day 6",
    "Chanukah Day 7",
    "Chanukah Day 7 (on Rosh Chodesh)",
+   "Chanukah Day 7 (on Shabbat)",
    "Chanukah Day 8",
-   "Shabbat Chanukah",
-   "Shabbat Rosh Chodesh Chanukah",
-   "Shabbat Chanukah II"
+   "Chanukah Day 8 (on Shabbat)",
+   "Shabbat Rosh Chodesh Chanukah"
   ]
  },
  "Days of the Omer": {
