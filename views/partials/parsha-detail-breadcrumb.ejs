@@ -5,10 +5,10 @@
   <li class="breadcrumb-item"><a href="/sedrot/<%=iSuffix%>#all">Torah Readings</a></li>
   <li class="breadcrumb-item"><a href="/sedrot/<%=iSuffix%>#<%=parsha.bookName%>"><%=parsha.bookName%></a></li>
 <% if (date) { %>
-  <li class="breadcrumb-item"><a href="<%=parsha.anchor%><%=iSuffix%>"><%=parsha.name%></a></li>
+  <li class="breadcrumb-item"><a href="<%=parsha.anchor%><%=iSuffix%>"><%=parshaName%></a></li>
   <li class="breadcrumb-item active"><%=hd.getFullYear()%></li>
 <% } else { %>
-  <li class="breadcrumb-item active"><%=parsha.name%></li>
+  <li class="breadcrumb-item active"><%=parshaName%></li>
 <% } %>
 </ol>
 </nav>

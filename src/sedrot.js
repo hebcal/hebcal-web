@@ -182,6 +182,7 @@ export async function parshaDetail(ctx) {
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} - Hebcal`,
     parsha,
+    parshaName: parsha.name.replace(/'/g, '’'),
     parshaAnchor,
     parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor + iSuffix,
     reading,

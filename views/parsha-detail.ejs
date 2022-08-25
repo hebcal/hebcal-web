@@ -3,7 +3,7 @@
 <link rel="dns-prefetch" href="https://tikkun.io/">
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%= parsha.anchor %><%= date ? ('-' + date) : '' %><%=iSuffix%>">
 <%- await include('partials/parsha-breadcrumb-structured.ejs') -%>
-<meta name="description" content="Parashat <%=parsha.name%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
+<meta name="description" content="Parashat <%=parshaName%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString() %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev.anchor%>"><%}%>
 <% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next.anchor%>"><%}%>
@@ -17,7 +17,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <div class="row">
 <div class="col">
 <%- await include('partials/parsha-detail-breadcrumb.ejs') -%>
-<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.name.replace(/'/g, '’')%> <%= date ? hd.getFullYear() : '' %> /
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=parshaName%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
 <% if (date) { -%>
 <p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString() %></span><% if (israelDiasporaDiffer) { %> <span class="text-muted">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
@@ -25,7 +25,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <% if (date && d.year() < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<p>Parashat <%=parsha.name%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
+<p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
 <% if (!date) { -%>
 Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a href="<%=parshaDateAnchor%>"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap"><%= hd.toString() %></span></a>.
 <% } -%>
@@ -36,16 +36,6 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="English translation from JPS Tanakh"><%=parsha.bookName%> <%=parsha.verses%></a>
 <% } -%>
-<!--
-<span class="d-print-none">
-<a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" title="Tikkun.io - <%=parsha.name%>"
-href="https://tikkun.io/#/r/<%=parsha.ids.book%>-<%=parsha.ids.chapter%>-<%=parsha.ids.verse%>">
-<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<a class="ms-2 outbound" data-bs-toggle="tooltip" data-bs-animation="false" id="ort-audio" rel="nofollow" title="Tikkun &amp; audio from World ORT"
-href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=parsha.ids.book%>&amp;chapter=<%=parsha.ids.chapter%>&amp;verse=<%=parsha.ids.verse%>&amp;portion=<%=parsha.ids.portion%>">
-<svg class="icon"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
-</span>
--->
 </h4>
 <% if (typeof summary === 'object') { %><p><%- summary.html %> <sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
@@ -61,7 +51,7 @@ href="http://bible.ort.org/books/torahd5.asp?action=displaypage&amp;book=<%=pars
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">·</span>
 <span class="text-nowrap">
-<a class="outbound d-print-none" title="Tikkun.io - <%=parsha.name%> aliyah <%=aliyah.num%>"
+<a class="outbound d-print-none" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <a class="ms-2 outbound d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
@@ -177,34 +167,34 @@ if (!date && spHaftItems.length !== 0) { -%>
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
 <% if (typeof commentary['sefaria'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
 <% } %>
 <% if (typeof commentary['wikipedia'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
 <% } %>
 <% if (typeof commentary['ou.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
 <% } %>
 <% if (typeof commentary['torah.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
 <% } %>
 <% if (typeof commentary['chabad.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
 <% } %>
 <% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
 <% } %>
 <% if (typeof commentary['reformjudaism.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
 <% } %>
 <% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
 <% } %>
 <% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parsha.name%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
 <% } %>
 </ul>
 </div><!-- .col -->
@@ -213,7 +203,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 <div class="row mb-2">
 <div class="col">
 <h4 id="dates">List of Dates</h4>
-Parashat <%=parsha.name%> is read in <%=locationName%> on:
+Parashat <%=parshaName%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row mb-3">
@@ -233,7 +223,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <div class="row d-print-none">
 <div class="col">
 <form method="GET" action="/sedrot/<%=parsha.anchor%>">
-<label for="gy">Look up the date of Parashat <%=parsha.name%> in a past or future year</label>
+<label for="gy">Look up the date of Parashat <%=parshaName%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" required name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d*">
@@ -250,7 +240,7 @@ Parashat <%=parsha.name%> is read in <%=locationName%> on:
 <h4 id="ref">References</h4>
 <dl>
 <% if (typeof summary === 'object') { %>
-<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parsha.name%> from Sefaria.org</a>
+<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
 <dt><em><a class="amzn" id="chumash-2" rel="sponsored"
@@ -277,10 +267,10 @@ Triennial Cycle Readings for Combined Parashot in Certain Years</a></em>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <% if (parsha.prev) { %><div>
-<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name%></a>
+<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name.replace(/'/g, '’')%></a>
 </div><% } %>
 <% if (parsha.next) { %><div>
-<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name.replace(/'/g, '’')%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 
