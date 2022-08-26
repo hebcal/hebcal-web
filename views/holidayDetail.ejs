@@ -158,12 +158,9 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } %></p>
 <% } // reading.summary %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
-<% if (reading.haftara) { %>
+<% if (reading.haftaraHtml) { %>
 <p class="lead haftara">Haftarah:
-<% if (reading.haftaraHtml) { %><%- reading.haftaraHtml %><% } else { -%>
-<% if (reading.haftaraHref) { %><a class="outbound" title="English translation from JPS Tanakh"
-href="<%=reading.haftaraHref%>"><% } %><%=reading.haftara%><%- reading.haftaraHref ? '</a>' : '' %>
-<% } %>
+<%- reading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
 </p>
 <% } // reading.haftara %>

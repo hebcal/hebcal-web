@@ -347,11 +347,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     itemReading.hebrew = ev.render('he');
   }
   itemReading.id = makeAnchor(item);
-  if (meta.links && meta.links.torah && meta.links.torah[item]) {
-    itemReading.torahHref = meta.links.torah[item];
-  } else if (meta.about.torah) {
-    itemReading.torahHref = meta.about.torah;
-  } else if (itemReading.summaryParts) {
+  if (itemReading.summaryParts) {
     itemReading.torahHtml = makeLeyningHtmlFromParts(itemReading.summaryParts);
   } else if (itemReading.summary) {
     const matches = itemReading.summary.match(/^([^\d]+)(\d.+)$/);
@@ -359,14 +355,8 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     const verses = matches[2].replace(/:/g, '.').replace(/\s/g, '');
     itemReading.torahHref = `https://www.sefaria.org/${book}.${verses}?lang=bi`;
   }
-  if (meta.links && meta.links.haftara && meta.links.haftara[item]) {
-    itemReading.haftaraHref = meta.links.haftara[item];
-  } else if (meta.about.haftara) {
-    itemReading.haftaraHref = meta.about.haftara;
-  } else if (itemReading.haft) {
+  if (itemReading.haft) {
     itemReading.haftaraHtml = makeLeyningHtmlFromParts(itemReading.haft);
-  } else if (itemReading.haftara) {
-    itemReading.haftaraHref = sefariaAliyahHref(itemReading.haft, false);
   }
   if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {
