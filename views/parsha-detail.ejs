@@ -74,7 +74,7 @@ if (!date && spMaftirItems.length !== 0) { -%>
 <% } -%>
 <% if (reading.haftara) { %>
 <p class="haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
-<a class="outbound text-nowrap" href="<%=reading.haftaraHref%>"><%=reading.haftara%></a>
+<%- reading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
 <% if (reading.reason && reading.reason.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
 </p>
@@ -103,7 +103,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 <% if (triennial.haftara) { -%>
 <p class="haftara">Alternate Haftarah:
-<a class="outbound" href="<%=triennial.haftaraHref%>"><%=triennial.haftara%></a>
+<%- triennial.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
 </p>
 <% } -%>  
@@ -126,13 +126,13 @@ if (!date && spHaftItems.length !== 0) { -%>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
 <% if (triReading.reason && triReading.reason.haftara) { -%>
 <p class="haftara">Haftarah<span class="text-success">*</span>:
-<a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
+<%- triReading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
 <br><span class="text-success ps-1 small">*<%= triReading.reason.haftara %></span>
 </p>
 <% } else if (triReading.haftara) { -%>
 <p class="haftara">Alternate Haftarah:
-<a class="outbound" href="<%=triReading.haftaraHref%>"><%=triReading.haftara%></a>
+<%- triReading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
 </p>
 <% } -%>

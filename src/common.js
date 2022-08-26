@@ -1196,11 +1196,11 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
   const end = aliyah.e.replace(':', '.');
   const cv2 = end.split('.');
   const endStr = beginStr === end ? '' : cv1[0] === cv2[0] ? '-' + cv2[1] : '-' + end;
-  const book = aliyah.k;
   if (aliyah.reason) {
     sefAliyot = false;
   }
-  const suffix = bookId[book] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
+  const suffix = bookId[aliyah.k] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
+  const book = aliyah.k.replace(/ /g, '_');
   return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
 }
 

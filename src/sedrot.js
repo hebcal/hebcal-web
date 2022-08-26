@@ -143,7 +143,7 @@ export async function parshaDetail(ctx) {
     delete reading.reason.haftara;
   }
   addLinksToLeyning(reading.fullkriyah, false);
-  reading.haftaraHref = sefariaAliyahHref(reading.haft, false);
+  reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
   if (reading.sephardic) {
     reading.sephardicHref = sefariaAliyahHref(reading.seph, false);
   }
@@ -156,7 +156,7 @@ export async function parshaDetail(ctx) {
   if (reading.summaryParts) {
     reading.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
   }
-  parsha.haftaraHref = sefariaAliyahHref(parsha.haft, false);
+  parsha.haftaraHtml = makeLeyningHtmlFromParts(parsha.haft);
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
@@ -261,7 +261,7 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
     };
     if (reading.haft) {
       triennial.haftara = reading.haftara;
-      triennial.haftaraHref = sefariaAliyahHref(reading.haft);
+      triennial.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
       triennial.haftaraNumV = reading.haftaraNumV;
     }
     addLinksToLeyning(triennial.reading, false);
@@ -316,12 +316,12 @@ function addSpecialHaftarahToTriennial(ev, triReading2) {
   const fk = getLeyningForParshaHaShavua(ev, false);
   if (fk.reason?.haftara) {
     triReading2.haftara = fk.haftara;
-    triReading2.haftaraHref = sefariaAliyahHref(fk.haft);
+    triReading2.haftaraHtml = makeLeyningHtmlFromParts(fk.haft);
     triReading2.haftaraNumV = fk.haftaraNumV;
     triReading2.reason = triReading2.reason || {};
     triReading2.reason.haftara = fk.reason.haftara;
   } else if (triReading2.haft) {
-    triReading2.haftaraHref = sefariaAliyahHref(triReading2.haft);
+    triReading2.haftaraHtml = makeLeyningHtmlFromParts(triReading2.haft);
   }
 }
 

@@ -195,14 +195,14 @@ export function makeLeyningHtmlFromParts(parts) {
   if (!Array.isArray(parts)) {
     parts = [parts];
   }
-  let prev = parts[0];
-  let summary = '<a href="' + sefariaAliyahHref(prev, false) + '">' +
-    formatAliyahShort(prev, true) + '</a>';
-  for (let i = 1; i < parts.length; i++) {
+  let prev = {k: 'Bogus'};
+  let summary = '';
+  for (let i = 0; i < parts.length; i++) {
     const part = parts[i];
     const showBook = (part.k !== prev.k);
-    const delim = showBook ? '; ' : ', ';
-    summary += delim + '<a class="outbound" href="' + sefariaAliyahHref(part, false) + '">' +
+    const delim = i === 0 ? '' : showBook ? '; ' : ', ';
+    summary += delim + '<a class="outbound" href="' +
+      sefariaAliyahHref(part, false) + '">' +
       formatAliyahShort(part, showBook) + '</a>';
     prev = part;
   }
