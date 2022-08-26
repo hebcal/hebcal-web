@@ -7,7 +7,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, sefariaAliyahHref, langNames, off} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, langNames, off} from './common';
 import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
