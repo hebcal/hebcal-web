@@ -132,7 +132,7 @@ export async function holidayDetail(ctx) {
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = appendPeriod(getHolidayDescription(next.event, false));
-  const wikipediaText = appendPeriod(meta.wikipedia && meta.wikipedia.text);
+  const wikipediaText = appendPeriod(meta.wikipedia?.text);
   const descrLong = wikipediaText || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
@@ -147,7 +147,9 @@ export async function holidayDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
-  const jsonLD = noindex ? null : JSON.stringify(makeEventJsonLD(next.event, il));
+  // const json = year ? makeEventJsonLD(next.event, il) : makeArticleJsonLD(next.event, meta);
+  const json = year ? makeEventJsonLD(next.event, il) : null;
+  const jsonLD = noindex ? null : JSON.stringify(json);
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -426,7 +428,7 @@ async function getHolidayMeta(holiday) {
   }
   const meta = Object.assign({}, meta0);
   meta.about.name = sourceName(meta.about.href);
-  if (meta.wikipedia && meta.wikipedia.href) {
+  if (meta.wikipedia?.href) {
     meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
   }
   if (Array.isArray(meta.books)) {
@@ -443,4 +445,28 @@ async function getHolidayMeta(holiday) {
     }
   }
   return meta;
+}
+
+/**
+ * @param {Event} ev
+ * @param {any} meta
+ * @return {any}
+ */
+function makeArticleJsonLD(ev, meta) {
+  const descrShort = getHolidayDescription(ev, true);
+  const descrMedium = getHolidayDescription(ev, false);
+  const wikipediaText = appendPeriod(meta.wikipedia?.text);
+  const descrLong = wikipediaText || descrMedium;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    'headline': ev.basename() + ' - ' + descrShort,
+    'description': descrLong,
+    'image': [],
+    'author': [{
+      '@type': 'Organization',
+      'name': 'Hebcal',
+      'url': 'https://www.hebcal.com/',
+    }],
+  };
 }
