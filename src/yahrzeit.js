@@ -435,17 +435,6 @@ async function makeYahrzeitEvents(maxId, query) {
 }
 
 /**
- * @param {Date} origDt
- * @param {number} hyear
- * @return {number}
- */
-function calculateAnniversaryNth(origDt, hyear) {
-  const origHd = new HDate(origDt);
-  const origHyear = origHd.getFullYear();
-  return hyear - origHyear;
-}
-
-/**
  * @param {any} query
  * @param {number} id
  * @param {number} startYear

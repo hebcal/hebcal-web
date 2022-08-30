@@ -28,7 +28,7 @@ export class MysqlDb {
   /** */
   async query(...params) {
     try {
-      const [rows, fields] = await this.pool.query(...params);
+      const [rows] = await this.pool.query(...params);
       return rows;
     } catch (err) {
       throw createError(503, err, {expose: true});
@@ -37,7 +37,7 @@ export class MysqlDb {
   /** */
   async execute(...params) {
     try {
-      const [rows, fields] = await this.pool.execute(...params);
+      const [rows] = await this.pool.execute(...params);
       return rows;
     } catch (err) {
       throw createError(503, err, {expose: true});
