@@ -4,7 +4,7 @@ import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
-  makeIcalOpts, getNumYears} from './common';
+  makeIcalOpts, getNumYears, localeMap} from './common';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -56,7 +56,9 @@ export async function hebcalDownload(ctx) {
     const csv = eventsToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
-    ctx.body = csv;
+    const locale = localeMap[options.locale] || 'en';
+    const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
+    ctx.body = byteOrderMark + csv;
   } else if (extension == '.pdf') {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.response.type = 'application/pdf';

@@ -167,7 +167,9 @@ function renderCsv(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const csv = eventsToCsv(events, options);
   ctx.response.type = 'text/x-csv; charset=utf-8';
-  return csv;
+  const locale = localeMap[options.locale] || 'en';
+  const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
+  return byteOrderMark + csv;
 }
 
 async function renderForm(ctx, error) {
