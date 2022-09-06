@@ -90,7 +90,7 @@ async function updateDbAndEmail(ctx, db) {
     html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
 <div>Hello,</div>
 ${BLANK}
-<div>Your subscription request for Shabbat candle lighting times from Hebcal is complete.</div>
+<div>Your subscription request for Shabbat candle-lighting times from Hebcal is complete.</div>
 ${BLANK}
 <div>You'll receive a maximum of one message per week, typically on Thursday morning.</div>
 ${BLANK}
@@ -158,7 +158,7 @@ export async function emailForm(ctx) {
     ctx.status = err.status || 400;
   }
   q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
-  ctx.state.title = 'Shabbat Candle Lighting Times by Email - Hebcal';
+  ctx.state.title = 'Shabbat Candle-lighting Times by Email - Hebcal';
   if (q.v === '1') {
     if (!q.em) {
       ctx.state.message = 'Please enter your email address.';
@@ -264,7 +264,7 @@ async function updateActiveSub(ctx, db, q) {
     html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
 <div>Hello,</div>
 ${BLANK}
-<div>This message confirms that your weekly Shabbat candle lighting times
+<div>This message confirms that your weekly Shabbat candle-lighting times
 for <strong>${locationName}</strong> have been updated.</div>
 ${BLANK}
 <div style="font-size:16px">Kol Tuv,
@@ -401,7 +401,7 @@ async function writeStagingInfo(ctx, db, q) {
 <div>Hello,</div>
 ${BLANK}
 <div>We have received your request to receive weekly Shabbat
-candle lighting times from Hebcal.com for
+candle-lighting times from Hebcal.com for
 ${locationName}.</div>
 ${BLANK}
 <div>Please confirm your request by clicking on this link:</div>
@@ -409,7 +409,7 @@ ${BLANK}
 <div><a href="${url}">${url}</a></div>
 ${BLANK}
 <div>If you did not request (or do not want) weekly Shabbat
-candle lighting times, please accept our apologies and ignore this message.</div>
+candle-lighting times, please accept our apologies and ignore this message.</div>
 ${BLANK}
 <div style="font-size:16px">Kol Tuv,
 <br>Hebcal.com</div>

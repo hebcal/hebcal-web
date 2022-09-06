@@ -76,7 +76,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Customize event language', id: 'lang',
   emoji: '🌐',
-  summary: `<p>Create a custom calendar with event titles in different languages, candle lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
+  summary: `<p>Create a custom calendar with event titles in different languages, candle-lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
 <ul>` + Object.entries(langNames).map(([langName, desc]) => {
   return `<li><a href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a> <span class="text-muted">- ${desc[1]||desc[0]}</span></li>`;
 }).join('\n') + `</ul>`,
