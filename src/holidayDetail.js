@@ -149,7 +149,7 @@ export async function holidayDetail(ctx) {
   const translations = Array.from(new Set(translations0)).sort();
   // const json = year ? makeEventJsonLD(next.event, il) : makeArticleJsonLD(next.event, meta);
   const json = year ? makeEventJsonLD(next.event, il) : null;
-  const jsonLD = noindex ? null : JSON.stringify(json);
+  const jsonLD = noindex ? null : json;
   await ctx.render('holidayDetail', {
     title,
     year,

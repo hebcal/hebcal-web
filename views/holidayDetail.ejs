@@ -6,7 +6,7 @@
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
-<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today)) { %><script type="application/ld+json"><%- jsonLD %></script><% } %>
+<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>

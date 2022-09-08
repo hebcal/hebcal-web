@@ -1,7 +1,7 @@
 <%- await include('partials/header2.ejs', {ampAds: true}) -%>
 <meta name="description" content="<%= summary %>">
 <% if (jsonLD) { -%>
-<script type="application/ld+json"><%- jsonLD %></script>
+<script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
 <% } -%>
 <link rel="canonical" href="https://www.hebcal.com/shabbat?<%= geoUrlArgs %>">
 <% if (typeof amp === 'undefined' || !amp) { -%>

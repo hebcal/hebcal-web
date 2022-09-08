@@ -272,7 +272,7 @@ function makePropsForFullHtml(ctx, dt) {
   const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
   return Object.assign({
     summary: briefText.join('. '),
-    jsonLD: jsonLD ? JSON.stringify(jsonLD) : '',
+    jsonLD,
     locationName: location.getName(),
     fridgeURL,
   }, yearInfo);

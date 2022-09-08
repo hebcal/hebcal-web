@@ -275,7 +275,7 @@ function renderHtml(ctx) {
   return ctx.render('hebcal-results', {
     items,
     memos,
-    cconfig: JSON.stringify(Object.assign({geo: q.geo || 'none'}, cconfig)),
+    cconfig: Object.assign({geo: q.geo || 'none'}, cconfig),
     opts,
     today,
     gy,
