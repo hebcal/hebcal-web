@@ -63,13 +63,14 @@ export async function getZmanim(ctx) {
   } else {
     expires(ctx);
   }
+  const roundMinute = q.sec === '1' ? false : true;
   if (isRange) {
-    const times = getTimesForRange(startD, endD, loc, true);
+    const times = getTimesForRange(startD, endD, loc, true, roundMinute);
     const start = startD.format('YYYY-MM-DD');
     const end = endD.format('YYYY-MM-DD');
     ctx.body = {date: {start, end}, location: loc, times};
   } else {
-    const times = getTimes(startD, loc, true);
+    const times = getTimes(startD, loc, true, roundMinute);
     const isoDate = startD.format('YYYY-MM-DD');
     ctx.body = {date: isoDate, location: loc, times};
   }
@@ -96,15 +97,16 @@ function myGetStartAndEnd(ctx, q, tzid) {
  * @param {dayjs.Dayjs} endD
  * @param {Location} loc
  * @param {boolean} formatAsString
+ * @param {boolean} roundMinute
  * @return {any}
  */
-function getTimesForRange(startD, endD, loc, formatAsString) {
+function getTimesForRange(startD, endD, loc, formatAsString, roundMinute) {
   const times = {};
   for (const func of Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES))) {
     times[func] = {};
   }
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-    const t = getTimes(d, loc, formatAsString);
+    const t = getTimes(d, loc, formatAsString, roundMinute);
     const isoDate = d.format('YYYY-MM-DD');
     for (const [key, val] of Object.entries(t)) {
       times[key][isoDate] = val;
@@ -118,19 +120,22 @@ function getTimesForRange(startD, endD, loc, formatAsString) {
  * @param {dayjs.Dayjs} d
  * @param {Location} location
  * @param {boolean} formatAsString
+ * @param {boolean} roundMinute
  * @return {Object<string,string>}
  */
-function getTimes(d, location, formatAsString) {
+function getTimes(d, location, formatAsString, roundMinute) {
   const times = {};
   const zman = new Zmanim(d.toDate(), location.getLatitude(), location.getLongitude());
   for (const func of Object.keys(TIMES)) {
     times[func] = zman[func]();
   }
   for (const [name, num] of Object.entries(TZEIT_TIMES)) {
-    times[name] = name.endsWith('deg') ? zman.tzeit(num) : zman.sunsetOffset(num);
+    times[name] = name.endsWith('deg') ? zman.tzeit(num) : zman.sunsetOffset(num, roundMinute);
   }
-  for (const [name, dt] of Object.entries(times)) {
-    times[name] = Zmanim.roundTime(dt);
+  if (roundMinute) {
+    for (const [name, dt] of Object.entries(times)) {
+      times[name] = Zmanim.roundTime(dt);
+    }
   }
   if (formatAsString) {
     const tzid = location.getTzid();
@@ -253,7 +258,7 @@ export async function zmanimIcalendar(ctx) {
   const today = nowInTimezone(location.getTzid());
   const startD = today.subtract(2, 'day');
   const endD = today.add(4, 'day');
-  const times = getTimesForRange(startD, endD, location, false);
+  const times = getTimesForRange(startD, endD, location, false, true);
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
