@@ -4,9 +4,10 @@ import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
   CACHE_CONTROL_7DAYS, cacheControl,
   isoDateStringToDate,
+  getDefaultYear, urlArgs,
 } from './common';
 import createError from 'http-errors';
-import {pad4} from '@hebcal/rest-api';
+import {pad4, pad2} from '@hebcal/rest-api';
 import './dayjs-locales';
 import {gematriyaDate} from './gematriyaDate';
 
@@ -113,7 +114,34 @@ export async function hebrewDateConverter(ctx) {
     if (q.amp === '1') {
       p.amp = true;
     }
+    makeCalendarUrl(p);
     return ctx.render('converter', p);
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+function makeCalendarUrl(p) {
+  const now = new Date();
+  const yearInfo = getDefaultYear(now, new HDate(now));
+  const gy = now.getFullYear();
+  const gm = now.getMonth() + 1;
+  p.yearArgs = yearInfo.yearArgs;
+  p.gregRangeShort = yearInfo.gregRangeShort;
+  p.calendarUrl = '/hebcal?' + urlArgs({
+    v: '1',
+    maj: 'on',
+    min: 'on',
+    nx: 'on',
+    mf: 'on',
+    ss: 'on',
+    mod: 'on',
+    i: p.il ? 'on' : 'off',
+    set: 'off',
+  });
+  if ((gm === 12) || (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs)) {
+    const start = pad4(gy) + '-' + pad2(gm) + '-01';
+    const end = pad4(gy + 1) + '-12-31';
+    p.yearArgs = `&start=${start}&end=${end}`;
   }
 }
 
