@@ -14,6 +14,62 @@
     "Asara B'Tevet (Mincha)"
    ]
  },
+ "Ben-Gurion Day": {
+  "about": {
+    "href": "https://knesset.gov.il/vip/BenGurion/eng/BenGurion_Law_eng.html"
+   },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Ben-Gurion_Day",
+    "text": "Ben-Gurion Day (Hebrew: יום בן־גוריון) is an Israeli national holiday celebrated annually on the sixth of the Hebrew month of Kislev, to commemorate the life and vision of Zionist leader, and Israel's first Prime Minister David Ben-Gurion. If the sixth of Kislev falls on Shabbat eve, or on Shabbat, the memorial day is held on the following Sunday"
+  },
+  "category": "modern",
+  "israelOnly": true,
+  "yomtov": false
+ },
+ "Family Day": {
+  "about": {
+    "href": "https://en.wikipedia.org/wiki/Family_Day#Israel"
+   },
+  "category": "modern",
+  "israelOnly": true,
+  "yomtov": false
+ },
+ "Herzl Day": {
+  "about": {
+    "href": "https://knesset.gov.il/vip/herzl/eng/Herz_Law_eng.html"
+   },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Herzl_Day",
+    "text": "Herzl Day (Hebrew: יום הרצל) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Iyar, to commemorate the life and vision of Zionist leader Theodor Herzl. If the 10th of Iyar falls on Shabbat, Herzl Day is postponed until Sunday"
+  },
+  "category": "modern",
+  "israelOnly": true,
+  "yomtov": false
+ },
+ "Jabotinsky Day": {
+  "about": {
+    "href": "https://knesset.gov.il/vip/jabotinsky/eng/law_eng.html"
+   },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Jabotinsky_Day",
+    "text": "Jabotinsky Day (Hebrew: יום ז'בוטינסקי) is an Israeli national holiday celebrated annually on the twenty ninth of the Hebrew month of Tammuz, to commemorate the life and vision of Zionist leader Ze'ev Jabotinsky. If Tammuz 29 falls on a Sabbath, Jabotinsky Day is held on the following Sunday"
+  },
+  "category": "modern",
+  "israelOnly": true,
+  "yomtov": false
+ },
+ "Yitzhak Rabin Memorial Day": {
+  "about": {
+    "href": "https://en.wikipedia.org/wiki/Rabin_Day"
+   },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Rabin_Day",
+    "text": "Yitzhak Rabin Memorial Day (Hebrew: יום הזיכרון ליצחק רבין) is an Israeli day of remembrance observed annually on the twelfth of the Hebrew month of Cheshvan, to commemorate the life of Zionist leader and Israeli Prime Minister and Defense Minister, Yitzhak Rabin, and his assassination"
+  },
+  "category": "modern",
+  "israelOnly": true,
+  "yomtov": false
+ },
  "Chanukah": {
   "about": {
    "href": "https://www.jewfaq.org/holiday7.htm"
@@ -527,7 +583,7 @@
  },
  "Shushan Purim": {
   "about": {
-   "href": "http://www.askmoses.com/en/article/99,56435/What-is-Shushan-Purim.html"
+   "href": "https://reformjudaism.org/what-shushan-purim"
   },
   "category": "minor",
   "yomtov": false
@@ -731,7 +787,7 @@
  },
  "Yom HaAliyah": {
   "about": {
-   "href": "http://amyisraelfoundation.org/yom-haaliyah/"
+   "href": "https://www.amyisraelfoundation.org/yom-haaliyah"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_HaAliyah",
@@ -742,13 +798,14 @@
  },
  "Yom HaAliyah School Observance": {
   "about": {
-   "href": "http://amyisraelfoundation.org/yom-haaliyah/"
+   "href": "https://www.amyisraelfoundation.org/yom-haaliyah"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_HaAliyah",
    "text": "Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday observed in Israeli schools on the seventh of the Hebrew month of Cheshvan, to commemorate the historic events which happened on the tenth of the Hebrew month of Nisan."
   },
   "category": "modern",
+  "israelOnly": true,
   "yomtov": false
  },
  "Yom HaAtzma'ut": {

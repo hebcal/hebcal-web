@@ -4,17 +4,14 @@ import holidayMeta from './holidays.json';
 import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
 
 export const holidays = new Map();
-for (const key of Object.keys(holidayMeta)) {
-  holidays.set(makeAnchor(key), key);
-}
+export const israelOnly = new Set();
 
-const events11years = HebrewCalendar.calendar({
-  year: new HDate().getFullYear() - 1,
-  isHebrewYear: true,
-  numYears: 8,
-  yomKippurKatan: true,
-});
-export const events11yearsBegin = getFirstOcccurences(events11years);
+for (const [holiday, meta] of Object.entries(holidayMeta)) {
+  holidays.set(makeAnchor(holiday), holiday);
+  if (meta.israelOnly) {
+    israelOnly.add(holiday);
+  }
+}
 
 export const categories = {
   major: {id: 'major-holidays', name: 'Major holidays', emoji: '✡️'},
@@ -120,6 +117,9 @@ export function eventToHolidayItem(ev, il) {
     holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
   const anchor = makeAnchor(holiday);
   const anchorDate = (typeof ev.urlDateSuffix === 'function') ? ev.urlDateSuffix() : d.year();
+  if (!il && israelOnly.has(holiday)) {
+    il = true;
+  }
   const iSuffix = il ? '?i=on' : '';
   const href = anchor + '-' + anchorDate + iSuffix;
   const item = {
@@ -147,6 +147,9 @@ export function eventToHolidayItem(ev, il) {
     emoji,
     anchorDate,
   };
+  if (israelOnly.has(holiday)) {
+    item.ilOnly = true;
+  }
   if (mask & flags.SPECIAL_SHABBAT) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha0 = sedra.lookup(hd);

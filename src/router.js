@@ -13,7 +13,7 @@ import {emailOpen} from './emailOpen';
 import {fridgeShabbat} from './fridge';
 import {hdateJavascript, hdateXml, parshaRss, dafYomiRss} from './hdate';
 import {hebcalApp} from './hebcal';
-import {holidaysApp} from './holidays';
+import {holidaysApp} from './holidayIndex';
 import {homepage} from './homepage';
 import {parshaCsv} from './parsha-csv';
 import redirectMap from './redirect.json';

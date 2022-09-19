@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, httpRedirect, wrapHebrewInSpans, langNames, off} from './common';
-import {categories, holidays, events11yearsBegin, getFirstOcccurences, eventToHolidayItem,
+import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
@@ -31,6 +31,24 @@ for (const [holiday, meta] of Object.entries(holidayMeta)) {
     }
   }
 }
+
+const ev11yDiaspora = HebrewCalendar.calendar({
+  year: new HDate().getFullYear() - 1,
+  isHebrewYear: true,
+  numYears: 8,
+  yomKippurKatan: true,
+  il: false,
+});
+const ev11yIL = HebrewCalendar.calendar({
+  year: new HDate().getFullYear() - 1,
+  isHebrewYear: true,
+  numYears: 8,
+  yomKippurKatan: true,
+  il: true,
+});
+
+const events11yDiaspora = getFirstOcccurences(ev11yDiaspora);
+const events11yIsrael = getFirstOcccurences(ev11yIL);
 
 /**
  * @param {Event[]} events
@@ -105,13 +123,7 @@ export async function holidayDetail(ctx) {
     return;
   }
   const meta = await getHolidayMeta(holiday);
-  const holidayBegin = holiday === OMER_TITLE ? makeOmerEvents(year) :
-    year ? getFirstOcccurences(HebrewCalendar.calendar({
-      year: year - 3,
-      isHebrewYear: false,
-      numYears: 8,
-      yomKippurKatan: true,
-    })) : events11yearsBegin;
+  const holidayBegin = getHolidayBegin(holiday, year, il);
   const category = categories[meta.category] || {};
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
   if (holiday === OMER_TITLE) {
@@ -180,8 +192,28 @@ export async function holidayDetail(ctx) {
 
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
 
+function getHolidayBegin(holiday, year, il) {
+  if (holiday === OMER_TITLE) {
+    return makeOmerEvents(year);
+  }
+  if (year) {
+    return getFirstOcccurences(HebrewCalendar.calendar({
+      year: year - 3,
+      isHebrewYear: false,
+      numYears: 8,
+      yomKippurKatan: true,
+      il,
+    }));
+  }
+  return il ? events11yIsrael : events11yDiaspora;
+}
+
 function doIsraelRedir(ctx, holiday) {
-  if (!empty(ctx.request.query.i) || !shaloshRegalim[holiday]) {
+  const qi = ctx.request.query.i;
+  if (israelOnly.has(holiday) && qi !== 'on') {
+    return true;
+  }
+  if (!empty(qi) || !shaloshRegalim[holiday]) {
     return false;
   }
   const cookieStr = ctx.cookies.get('C');

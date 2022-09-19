@@ -30,7 +30,15 @@ export async function holidayYearIndex(ctx) {
     isHebrewYear,
     il,
   };
-  const events0 = HebrewCalendar.calendar(options);
+  let events0 = HebrewCalendar.calendar(options);
+  if (!il) {
+    const eventsIlModern = HebrewCalendar.calendar({
+      il: true,
+      year: calendarYear,
+      isHebrewYear,
+    }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
+    events0 = eventsIlModern.concat(events0);
+  }
   const events = getFirstOcccurences(events0);
   const items = makeItems(events, il, isHebrewYear, true);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
@@ -268,11 +276,19 @@ export async function holidayMainIndex(ctx) {
   rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = Array(NUM_YEARS));
   const il = ctx.state.il;
   for (let i = 0; i < NUM_YEARS; i++) {
-    const events0 = HebrewCalendar.calendar({
+    let events0 = HebrewCalendar.calendar({
       year: hyear + i - 1,
       isHebrewYear: true,
       il,
     });
+    if (!il) {
+      const eventsIlModern = HebrewCalendar.calendar({
+        il: true,
+        year: hyear + i - 1,
+        isHebrewYear: true,
+      }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
+      events0 = eventsIlModern.concat(events0);
+    }
     const events = getFirstOcccurences(events0);
     const items0 = makeItems(events, il, false, false);
     for (const [catId, items1] of Object.entries(items0)) {
