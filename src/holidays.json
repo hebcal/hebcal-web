@@ -20,7 +20,7 @@
    },
   "wikipedia": {
     "href": "https://en.wikipedia.org/wiki/Ben-Gurion_Day",
-    "text": "Ben-Gurion Day (Hebrew: יום בן־גוריון) is an Israeli national holiday celebrated annually on the sixth of the Hebrew month of Kislev, to commemorate the life and vision of Zionist leader, and Israel's first Prime Minister David Ben-Gurion. If the sixth of Kislev falls on Shabbat eve, or on Shabbat, the memorial day is held on the following Sunday"
+    "text": "Ben-Gurion Day (Hebrew: יום בן־גוריון‎) is an Israeli national holiday celebrated annually on the sixth of the Hebrew month of Kislev, to commemorate the life and vision of Zionist leader, and Israel's first Prime Minister David Ben-Gurion. If the sixth of Kislev falls on Shabbat eve, or on Shabbat, the memorial day is held on the following Sunday"
   },
   "category": "modern",
   "israelOnly": true,
@@ -40,7 +40,7 @@
    },
   "wikipedia": {
     "href": "https://en.wikipedia.org/wiki/Herzl_Day",
-    "text": "Herzl Day (Hebrew: יום הרצל) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Iyar, to commemorate the life and vision of Zionist leader Theodor Herzl. If the 10th of Iyar falls on Shabbat, Herzl Day is postponed until Sunday"
+    "text": "Herzl Day (Hebrew: יום הרצל‎) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Iyar, to commemorate the life and vision of Zionist leader Theodor Herzl. If the 10th of Iyar falls on Shabbat, Herzl Day is postponed until Sunday"
   },
   "category": "modern",
   "israelOnly": true,
@@ -52,7 +52,7 @@
    },
   "wikipedia": {
     "href": "https://en.wikipedia.org/wiki/Jabotinsky_Day",
-    "text": "Jabotinsky Day (Hebrew: יום ז'בוטינסקי) is an Israeli national holiday celebrated annually on the twenty ninth of the Hebrew month of Tammuz, to commemorate the life and vision of Zionist leader Ze'ev Jabotinsky. If Tammuz 29 falls on a Sabbath, Jabotinsky Day is held on the following Sunday"
+    "text": "Jabotinsky Day (Hebrew: יום ז׳בוטינסקי‎) is an Israeli national holiday celebrated annually on the twenty ninth of the Hebrew month of Tammuz, to commemorate the life and vision of Zionist leader Ze'ev Jabotinsky. If Tammuz 29 falls on a Sabbath, Jabotinsky Day is held on the following Sunday"
   },
   "category": "modern",
   "israelOnly": true,
@@ -77,6 +77,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Hanukkah",
    "text": "Hanukkah (Hebrew: חֲנֻכָּה, usually spelled חנוכה pronounced [χanuˈka] in Modern Hebrew, also romanized as Chanukah or Chanuka), also known as the Festival of Lights, is an eight-day Jewish holiday commemorating the rededication of the Holy Temple (the Second Temple) in Jerusalem at the time of the Maccabean Revolt of the 2nd century BCE. Hanukkah is observed for eight nights and days, starting on the 25th day of Kislev according to the Hebrew calendar, which may occur at any time from late November to late December in the Gregorian calendar."
+  },
+  "photo": {
+    "fn": "528498099.jpg",
+    "caption": "Menorah, doughnuts, chocolate coins and wooden dreidels",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 267
+      },
+      "640": {
+       "width": 640,
+       "height": 427
+      },
+      "800": {
+       "width": 800,
+       "height": 533
+      },
+      "1024": {
+       "width": 1024,
+       "height": 683
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
   },
   "books": [
    {
@@ -186,6 +220,40 @@
    "href": "https://en.wikipedia.org/wiki/Passover",
    "text": "Passover (Hebrew: פֶּסַח Pesach) commemorates the story of the Exodus, in which the ancient Israelites were freed from slavery in Egypt. Passover begins on the 15th day of the month of Nisan in the Jewish calendar, which is in spring in the Northern Hemisphere, and is celebrated for seven or eight days. It is one of the most widely observed Jewish holidays."
   },
+  "photo": {
+    "fn": "112151899.jpg",
+    "caption": "Traditional symbols on a seder plate for the Jewish festival of Passover",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 268
+      },
+      "640": {
+       "width": 640,
+       "height": 428
+      },
+      "800": {
+       "width": 800,
+       "height": 536
+      },
+      "1024": {
+       "width": 1024,
+       "height": 685
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
+  },
   "books": [
    {
     "ASIN": "0899061788",
@@ -240,6 +308,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Purim",
    "text": "Purim (Hebrew: פּוּרִים, Pûrîm “lots”, from the word פור pur, also called the Festival of Lots) is a Jewish holiday which commemorates the saving of the Jewish people from Haman in the ancient Persian Empire, a story recorded in the Biblical Book of Esther (Megillat Esther)."
+  },
+  "photo": {
+    "fn": "177122920.jpg",
+    "caption": "Traditional hamantaschen cookies for the Jewish festival of Purim",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 268
+      },
+      "640": {
+       "width": 640,
+       "height": 428
+      },
+      "800": {
+       "width": 800,
+       "height": 536
+      },
+      "1024": {
+       "width": 1024,
+       "height": 685
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
   },
   "books": [
    {
@@ -375,6 +477,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Rosh_Hashanah",
    "text": "Rosh Hashanah (Hebrew: ראש השנה), (literally “head of the year”), is the Jewish New Year. It is the first of the High Holidays or Yamim Noraim (“Days of Awe”), celebrated ten days before Yom Kippur. Rosh Hashanah is observed on the first two days of Tishrei, the seventh month of the Hebrew calendar. It is described in the Torah as יום תרועה (Yom Teruah, a day of sounding [the Shofar])."
+  },
+  "photo": {
+    "fn": "625144562.jpg",
+    "caption": "Honey, apple and pomegranate",
+    "dimensions": {
+      "400": {
+        "width": 400,
+        "height": 267
+       },
+       "640": {
+        "width": 640,
+        "height": 427
+       },
+       "800": {
+        "width": 800,
+        "height": 533
+       },
+       "1024": {
+        "width": 1024,
+        "height": 683
+       },
+       "1x1": {
+        "width": 2160,
+        "height": 2160
+       },
+       "4x3": {
+        "width": 2880,
+        "height": 2160
+       },
+       "16x9": {
+        "width": 3840,
+        "height": 2160
+       }
+    }
   },
   "books": [
    {
@@ -540,6 +676,40 @@
    "href": "https://en.wikipedia.org/wiki/Shavuot",
    "text": "The festival of Shavuot (or Shavuos, in Ashkenazi usage; Shabhuʿoth in Classical and Mizrahi Hebrew Hebrew: שבועות, lit. “Weeks”) is a Jewish holiday that occurs on the sixth day of the Hebrew month of Sivan (late May or early June). Shavuot commemorates the anniversary of the day G-d gave the Torah to the entire Israelite nation assembled at Mount Sinai, although the association between the giving of the Torah (Matan Torah) and Shavuot is not explicit in the Biblical text. The holiday is one of the Shalosh Regalim, the three Biblical pilgrimage festivals. It marks the conclusion of the Counting of the Omer."
   },
+  "photo": {
+    "fn": "1139660958.jpg",
+    "caption": "Milk, bread, fruits and dairy products on wooden table",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 267
+      },
+      "640": {
+       "width": 640,
+       "height": 427
+      },
+      "800": {
+       "width": 800,
+       "height": 533
+      },
+      "1024": {
+       "width": 1024,
+       "height": 683
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+     }
+  },
   "books": [
    {
     "ASIN": "076576041X",
@@ -607,6 +777,40 @@
    "href": "https://en.wikipedia.org/wiki/Simchat_Torah",
    "text": "Simchat Torah or Simḥath Torah (also Simkhes Toreh, Hebrew: שִׂמְחַת תורָה, lit., “Rejoicing with/of the Torah,”) is a celebration marking the conclusion of the annual cycle of public Torah readings, and the beginning of a new cycle. Simchat Torah is a component of the Biblical Jewish holiday of Shemini Atzeret (“Eighth Day of Assembly”), which follows immediately after the festival of Sukkot in the month of Tishrei (mid-September to early October on the Gregorian calendar)."
   },
+  "photo": {
+    "fn": "1303904366.jpg",
+    "caption": "Prayer shawl (tallit) with Torah scroll in a synagogue",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 267
+      },
+      "640": {
+       "width": 640,
+       "height": 427
+      },
+      "800": {
+       "width": 800,
+       "height": 534
+      },
+      "1024": {
+       "width": 1024,
+       "height": 683
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+     }
+  },
   "category": "major",
   "yomtov": true,
   "items": [
@@ -621,6 +825,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Sukkot",
    "text": "Sukkot (Hebrew: סוכות or סֻכּוֹת, sukkōt, or sukkos, Feast of Booths, Feast of Tabernacles) is a Biblical holiday celebrated on the 15th day of the month of Tishrei (late September to late October). It is one of the three biblically mandated festivals Shalosh regalim on which Jews were commanded to make a pilgrimage to the Temple in Jerusalem."
+  },
+  "photo": {
+    "fn": "121697710.jpg",
+    "caption": "Lulav (date palm frond), hadass (myrtle), aravah (willow), and etrog (citron) on a red tablecloth",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 266
+      },
+      "640": {
+       "width": 640,
+       "height": 426
+      },
+      "800": {
+       "width": 800,
+       "height": 532
+      },
+      "1024": {
+       "width": 1024,
+       "height": 681
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
   },
   "books": [
    {
@@ -729,6 +967,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tu_BiShvat",
    "text": "Tu BiShvat or Tu B’Shevat or Tu B’Shvat (Hebrew: ט״ו בשבט‎) is a minor Jewish holiday, occurring on the 15th day of the Hebrew month of Shevat. It is also called “The New Year of the Trees” or (Hebrew: ראש השנה לאילנות, Rosh HaShanah La’Ilanot‎). Tu BiShvat is one of four “New Years” mentioned in the Mishnah."
+  },
+  "photo": {
+    "fn": "1168843512.jpg",
+    "caption": "Tree planting growing on soil in child's hand",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 320
+      },
+      "640": {
+       "width": 640,
+       "height": 512
+      },
+      "800": {
+       "width": 800,
+       "height": 640
+      },
+      "1024": {
+       "width": 1024,
+       "height": 819
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
   },
   "books": [
    {
@@ -854,6 +1126,40 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_Kippur",
    "text": "Yom Kippur (Hebrew: יוֹם כִּפּוּר or יום הכיפורים), Also known as Day of Atonement, is the holiest day of the year for the Jews. Its central themes are atonement and repentance. Jews traditionally observe this holy day with a 25-hour period of fasting and intensive prayer, often spending most of the day in synagogue services. Yom Kippur completes the annual period known in Judaism as the High Holy Days (or sometimes “the Days of Awe”)."
+  },
+  "photo": {
+    "fn": "1061644482.jpg",
+    "caption": "Jewish person in a tallit prayer shawl against dramatic sky",
+    "dimensions": {
+      "400": {
+       "width": 400,
+       "height": 233
+      },
+      "640": {
+       "width": 640,
+       "height": 373
+      },
+      "800": {
+       "width": 800,
+       "height": 466
+      },
+      "1024": {
+       "width": 1024,
+       "height": 597
+      },
+      "1x1": {
+       "width": 2160,
+       "height": 2160
+      },
+      "4x3": {
+       "width": 2880,
+       "height": 2160
+      },
+      "16x9": {
+       "width": 3840,
+       "height": 2160
+      }
+    }
   },
   "books": [
    {

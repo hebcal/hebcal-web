@@ -119,7 +119,8 @@ export async function holidayDetail(ctx) {
     // It's Shalosh regalim and the URL doesn't have i=on/off
     ctx.set('Cache-Control', 'private, max-age=0');
     const rpath = ctx.request.path;
-    httpRedirect(ctx, `${rpath}?i=on`, 302);
+    const suffix = (q.amp === '1') ? '?i=on&amp=1' : '?i=on';
+    httpRedirect(ctx, rpath + suffix, 302);
     return;
   }
   const meta = await getHolidayMeta(holiday);
@@ -159,9 +160,7 @@ export async function holidayDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
-  // const json = year ? makeEventJsonLD(next.event, il) : makeArticleJsonLD(next.event, meta);
-  const json = year ? makeEventJsonLD(next.event, il) : null;
-  const jsonLD = noindex ? null : json;
+  const jsonLD = makeJsonLD(noindex, year, next.event, il, meta);
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -191,6 +190,19 @@ export async function holidayDetail(ctx) {
 }
 
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
+
+function makeJsonLD(noindex, year, ev, il, meta) {
+  if (noindex) {
+    return null;
+  }
+  if (year) {
+    return makeEventJsonLD(ev, il);
+  }
+  if (meta.photo) {
+    return makeArticleJsonLD(ev, meta);
+  }
+  return null;
+}
 
 function getHolidayBegin(holiday, year, il) {
   if (holiday === OMER_TITLE) {
@@ -476,6 +488,24 @@ async function getHolidayMeta(holiday) {
       }
     }
   }
+  /*
+  if (meta.photo) {
+    meta.photo.dimensions = {};
+    const a = {};
+    for (const size of [400, 640, 800, 1024, '1x1', '4x3', '16x9']) {
+      try {
+        const path = '/var/www/html/i/is/' + size + '/' + meta.photo.fn;
+        const rs = fs.createReadStream(path);
+        meta.photo.dimensions[size] = await probe(rs);
+        a[size] = {width: meta.photo.dimensions[size].width, height: meta.photo.dimensions[size].height};
+      } catch (err) {
+      // ignore file not found
+      }
+    }
+    console.log(holiday);
+    console.log(JSON.stringify(a, null, 1));
+  }
+  */
   return meta;
 }
 
@@ -489,12 +519,13 @@ function makeArticleJsonLD(ev, meta) {
   const descrMedium = getHolidayDescription(ev, false);
   const wikipediaText = appendPeriod(meta.wikipedia?.text);
   const descrLong = wikipediaText || descrMedium;
+  const images = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo}`);
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     'headline': ev.basename() + ' - ' + descrShort,
     'description': descrLong,
-    'image': [],
+    'image': images,
     'author': [{
       '@type': 'Organization',
       'name': 'Hebcal',
