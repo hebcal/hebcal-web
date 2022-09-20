@@ -7,9 +7,10 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {getDefaultHebrewYear, getNumYears, shortenUrl} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
-import {categories, getFirstOcccurences, eventToHolidayItem, OMER_TITLE} from './holidayCommon';
+import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
+import holidayMeta from './holidays.json';
 
 dayjs.extend(isSameOrAfter);
 
@@ -115,6 +116,7 @@ function makeItems(events, il, showYear, addIsraelAsterisk) {
   for (const key of Object.keys(categories)) {
     items[key] = [];
   }
+  const today = dayjs();
   for (const ev of events) {
     const eventCategories = getEventCategories(ev);
     const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
@@ -122,6 +124,10 @@ function makeItems(events, il, showYear, addIsraelAsterisk) {
     item.dates = tableCellObserved(item, il, showYear, addIsraelAsterisk);
     item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
+    if (today.isBefore(item.d) && ev.url()) {
+      const meta = holidayMeta[item.name];
+      item.jsonLD = makeEventJsonLD(ev, meta, il);
+    }
   }
   // insert Days of the Omer
   const hyear = events[0].getDate().getFullYear();

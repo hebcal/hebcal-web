@@ -153,15 +153,8 @@ nightfall on the second date specified.</p>
 <% for (const item of items[catId]) { %>
 <tbody class="table-group-divider">
 <tr id="<%=item.id%>"><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
-<% if (!item.d.isBefore(today) && item.event.url()) { -%>
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Event","name":"<%=item.name%> <%=item.d.year()%>",
-"startDate":"<%=item.startIsoDate%>","endDate":"<%=item.endIsoDate%>",
-"description":"<%=item.descrShort%>",
-"url":"<%=item.event.url()%>",
-"eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
-"location":{"@type": "VirtualLocation",
-"url":"<%=item.event.url()%>"}}</script>
+<% if (item.jsonLD) { -%>
+<script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script>
 <% } -%>
 </td>
 <td><%-item.dates%><br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small></td>

@@ -196,7 +196,7 @@ function makeJsonLD(noindex, year, ev, il, meta) {
     return null;
   }
   if (year) {
-    return makeEventJsonLD(ev, il);
+    return makeEventJsonLD(ev, meta, il);
   }
   if (meta.photo) {
     return makeArticleJsonLD(ev, meta);

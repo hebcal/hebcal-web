@@ -207,10 +207,11 @@ export function appendPeriod(str) {
 
 /**
  * @param {Event} ev
+ * @param {any} meta
  * @param {boolean} il
  * @return {any}
  */
-export function makeEventJsonLD(ev, il) {
+export function makeEventJsonLD(ev, meta, il) {
   const url = ev.url();
   if (!url) {
     return {};
@@ -219,7 +220,7 @@ export function makeEventJsonLD(ev, il) {
   const description = appendPeriod(getHolidayDescription(ev, false));
   const startIsoDate = d.format('YYYY-MM-DD');
   const endIsoDate = endD.format('YYYY-MM-DD');
-  return {
+  const jsonLD = {
     '@context': 'https://schema.org',
     '@type': 'Event',
     'name': ev.basename() + ' ' + d.year(),
@@ -232,4 +233,8 @@ export function makeEventJsonLD(ev, il) {
       'url': url,
     },
   };
+  if (meta.photo) {
+    jsonLD.image = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo.fn}`);
+  }
+  return jsonLD;
 }
