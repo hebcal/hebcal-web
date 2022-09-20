@@ -519,7 +519,7 @@ function makeArticleJsonLD(ev, meta) {
   const descrMedium = getHolidayDescription(ev, false);
   const wikipediaText = appendPeriod(meta.wikipedia?.text);
   const descrLong = wikipediaText || descrMedium;
-  const images = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo}`);
+  const images = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo.fn}`);
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
