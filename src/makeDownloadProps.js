@@ -78,8 +78,14 @@ export function downloadHref2(query, filename, override={}) {
     if (month !== null) msg.setMonth(month);
   }
 
-  if (!empty(q.start)) msg.setStart(q.start);
-  if (!empty(q.end)) msg.setEnd(q.end);
+  if (!empty(q.start)) {
+    const secs = Math.trunc(new Date(q.start).getTime() / 1000);
+    msg.setStart(secs);
+  }
+  if (!empty(q.end)) {
+    const secs = Math.trunc(new Date(q.end).getTime() / 1000);
+    msg.setEnd(secs);
+  }
 
   if (q.geo === 'pos') {
     msg.setGeopos(true);

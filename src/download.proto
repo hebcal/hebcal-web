@@ -43,8 +43,14 @@ message Download {
     float longitude = 42;
   }
   string tzid = 34;
-  string start = 35;
-  string end = 36;
+  oneof start_oneof {
+    string start_str = 35;
+    int64 start = 43;
+  }
+  oneof end_oneof {
+    string end_str = 36;
+    int64 end = 44;
+  }
   bool yomKippurKatan = 37;
   reserved 38;
   enum Hour12 {

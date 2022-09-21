@@ -30,8 +30,8 @@ export function deserializeDownload(data) {
   }
   q.lg = msg.getLocale() || 's';
   q.b = msg.getCandlelightingmins() || undefined;
-  q.emoji = msg.getEmoji() ? '1' : '0';
-  q.euro = msg.getEuro() ? '1' : '0';
+  q.emoji = msg.getEmoji() ? '1' : undefined;
+  q.euro = msg.getEuro() ? '1' : undefined;
   switch (msg.getHour12()) {
     case 1:
       q.h12 = '1';
@@ -43,7 +43,7 @@ export function deserializeDownload(data) {
       // don't set q.h12
       break;
   }
-  q.subscribe = msg.getSubscribe() ? '1' : '0';
+  q.subscribe = msg.getSubscribe() ? '1' : undefined;
   q.ny = msg.getNumyears() || undefined;
   q.zip = msg.getZip() || undefined;
   if (msg.getSedrot()) q.s = 'on';
@@ -61,7 +61,21 @@ export function deserializeDownload(data) {
     q.geo = 'pos';
   }
   q.tzid = msg.getTzid() || undefined;
-  q.start = msg.getStart() || undefined;
-  q.end = msg.getEnd() || undefined;
+  if (msg.hasStartStr()) {
+    q.start = msg.getStartStr();
+  } else {
+    const secs = msg.getStart();
+    if (secs !== 0) {
+      q.start = new Date(secs*1000).toISOString().substring(0, 10);
+    }
+  }
+  if (msg.hasEndStr()) {
+    q.end = msg.getEndStr();
+  } else {
+    const secs = msg.getEnd();
+    if (secs !== 0) {
+      q.end = new Date(secs*1000).toISOString().substring(0, 10);
+    }
+  }
   return q;
 }
