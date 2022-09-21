@@ -187,10 +187,12 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } // meta.reading %>
 <h3 id="ref">References</h3>
 <dl>
+<% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
 <dt><em><a class="amzn" id="strassfeld-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em> <small class="text-muted">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
+<% } -%>
 <% if (typeof meta.reading !== 'undefined') { %>
 <dt><em><a class="outbound"
 href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>

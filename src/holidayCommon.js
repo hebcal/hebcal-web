@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
 import holidayMeta from './holidays.json';
-import {makeAnchor, getHolidayDescription} from '@hebcal/rest-api';
+import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
 
 export const holidays = new Map();
 export const israelOnly = new Set();
@@ -146,6 +146,7 @@ export function eventToHolidayItem(ev, il) {
     event: ev,
     emoji,
     anchorDate,
+    categories: getEventCategories(ev),
   };
   if (israelOnly.has(holiday)) {
     item.ilOnly = true;

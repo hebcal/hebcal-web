@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
-import {getEventCategories, getHolidayDescription, eventToFullCalendar} from '@hebcal/rest-api';
+import {getHolidayDescription, eventToFullCalendar} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
@@ -118,9 +118,8 @@ function makeItems(events, il, showYear, addIsraelAsterisk) {
   }
   const today = dayjs();
   for (const ev of events) {
-    const eventCategories = getEventCategories(ev);
-    const category = eventCategories.length === 1 ? eventCategories[0] : eventCategories[1];
     const item = eventToHolidayItem(ev, il);
+    const category = item.categories.length === 1 ? item.categories[0] : item.categories[1];
     item.dates = tableCellObserved(item, il, showYear, addIsraelAsterisk);
     item.descrShort = getHolidayDescription(ev, true);
     items[category].push(item);
