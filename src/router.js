@@ -30,6 +30,7 @@ import {getZmanim} from './zmanim';
 import {hebrewDateCalc} from './calc';
 import {omerApp} from './omerApp';
 import {sitemapZips} from './sitemapZips';
+import {getLeyning} from './leyning';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -90,6 +91,8 @@ export function wwwRouter() {
       return geoAutoComplete(ctx);
     } else if (rpath.startsWith('/zmanim')) {
       return getZmanim(ctx);
+    } else if (rpath.startsWith('/leyning')) {
+      return getLeyning(ctx);
     } else if (rpath.startsWith('/geo')) {
     // it's fine if this throws a Not Found exception
       ctx.response.type = ctx.request.header['accept'] = 'application/json';
