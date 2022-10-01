@@ -145,8 +145,7 @@ export async function holidayDetail(ctx) {
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium = appendPeriod(getHolidayDescription(next.event, false));
-  const wikipediaText = appendPeriod(meta.wikipedia?.text);
-  const descrLong = wikipediaText || descrMedium;
+  const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
   const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
@@ -208,14 +207,22 @@ function getHolidayBegin(holiday, year, il) {
   if (holiday === OMER_TITLE) {
     return makeOmerEvents(year);
   }
+  const isBikatHachama = holiday === 'Birkat Hachamah';
+  const isPurimMeshulash = holiday === 'Purim Meshulash';
+  if ((isBikatHachama || isPurimMeshulash) && !year) {
+    year = new Date().getFullYear();
+  }
   if (year) {
-    return getFirstOcccurences(HebrewCalendar.calendar({
-      year: year - 3,
+    const startYear = isBikatHachama ? year - 60 : isPurimMeshulash ? year - 20 : year - 3;
+    const numYears = isBikatHachama ? 120 : isPurimMeshulash ? 50 : 8;
+    const events = HebrewCalendar.calendar({
+      year: startYear,
       isHebrewYear: false,
-      numYears: 8,
+      numYears,
       yomKippurKatan: true,
       il,
-    }));
+    }).filter((ev) => ev.getDesc() === holiday);
+    return getFirstOcccurences(events);
   }
   return il ? events11yIsrael : events11yDiaspora;
 }
@@ -517,8 +524,7 @@ async function getHolidayMeta(holiday) {
 function makeArticleJsonLD(ev, meta) {
   const descrShort = getHolidayDescription(ev, true);
   const descrMedium = getHolidayDescription(ev, false);
-  const wikipediaText = appendPeriod(meta.wikipedia?.text);
-  const descrLong = wikipediaText || descrMedium;
+  const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
   const images = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo.fn}`);
   return {
     '@context': 'https://schema.org',

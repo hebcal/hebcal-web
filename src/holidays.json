@@ -14,6 +14,35 @@
     "Asara B'Tevet (Mincha)"
    ]
  },
+ "Birkat Hachamah": {
+  "about": {
+   "href": "https://www.jewfaq.org/blessing_the_sun"
+  },
+  "wikipedia": {
+   "href": "https://en.wikipedia.org/wiki/Birkat_Hachama",
+   "text": "Birkat Hachama (Hebrew: ברכת החמה) refers to a rare Jewish blessing that is recited to the Creator, thanking Him for creating the sun. The blessing is recited when the sun completes its cycle every 28 years on a Tuesday at sundown. Jewish tradition says that when the Sun completes this cycle, it has returned to its position when the world was created"
+  },
+  "category": "minor",
+  "yomtov": false
+ },
+ "Shushan Purim Katan": {
+  "about": {
+   "href": "https://outorah.org/p/118571/"
+  },
+  "category": "minor",
+  "yomtov": false
+ },
+ "Purim Meshulash": {
+  "about": {
+   "href": "https://oukosher.org/halacha-yomis/purim-meshulash-is-celebrated-this-year-in-yerushalayim-what-is-purim-meshulash/"
+  },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Purim#Purim_Meshulash",
+    "text": "Purim Meshulash, or the three-fold Purim, is a somewhat rare calendric occurrence that affects how Purim is observed in Jerusalem (and, in theory at least, in other cities that were surrounded by a wall in ancient times). When Shushan Purim (Adar 15) falls on the Sabbath, the holiday is celebrated over a period of three days. The megilla reading and distribution of charity takes place on the Friday (Adar 14), which day is called Purim dePrazos. The Al ha-Nissim prayer is only recited on Sabbath (Adar 15), which is Purim itself. The weekly Torah portion (Tetzaveh or Ki Tissa in regular years, Tzav in leap years) is read as usual, while the Torah portion for Purim is read for maftir, and the haftarah is the same as read the previous Shabbat, Parshat Zachor. On Sunday (Adar 16), called Purim Meshullash, mishloach manot are sent and the festive Purim meal is held"
+  },
+  "category": "minor",
+  "yomtov": false
+ },
  "Ben-Gurion Day": {
   "about": {
     "href": "https://knesset.gov.il/vip/BenGurion/eng/BenGurion_Law_eng.html"

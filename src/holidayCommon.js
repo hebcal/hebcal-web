@@ -74,6 +74,7 @@ const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8,
 export function getHolidayDuration(il, mask, holiday) {
   if (mask & flags.MINOR_FAST ||
       holiday === 'Leil Selichot' ||
+      holiday === 'Birkat Hachamah' ||
       holiday === 'Yom HaAliyah School Observance') {
     return 0;
   }
