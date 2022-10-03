@@ -32,24 +32,6 @@ for (const [holiday, meta] of Object.entries(holidayMeta)) {
   }
 }
 
-const ev11yDiaspora = HebrewCalendar.calendar({
-  year: new HDate().getFullYear() - 1,
-  isHebrewYear: true,
-  numYears: 8,
-  yomKippurKatan: true,
-  il: false,
-});
-const ev11yIL = HebrewCalendar.calendar({
-  year: new HDate().getFullYear() - 1,
-  isHebrewYear: true,
-  numYears: 8,
-  yomKippurKatan: true,
-  il: true,
-});
-
-const events11yDiaspora = getFirstOcccurences(ev11yDiaspora);
-const events11yIsrael = getFirstOcccurences(ev11yIL);
-
 /**
  * @param {Event[]} events
  * @param {string} holiday
@@ -203,28 +185,33 @@ function makeJsonLD(noindex, year, ev, il, meta) {
   return null;
 }
 
+const holidayYearRange = {
+  'Birkat Hachamah': [80, 160],
+  'Purim Meshulash': [20, 40],
+  'Rosh Chodesh Adar': [5, 12],
+  'Rosh Chodesh Adar I': [7, 20],
+  'Rosh Chodesh Adar II': [7, 20],
+  'Purim Katan': [7, 20],
+  'Shushan Purim Katan': [7, 20],
+};
+
 function getHolidayBegin(holiday, year, il) {
   if (holiday === OMER_TITLE) {
     return makeOmerEvents(year);
   }
-  const isBikatHachama = holiday === 'Birkat Hachamah';
-  const isPurimMeshulash = holiday === 'Purim Meshulash';
-  if ((isBikatHachama || isPurimMeshulash) && !year) {
-    year = new Date().getFullYear();
-  }
-  if (year) {
-    const startYear = isBikatHachama ? year - 60 : isPurimMeshulash ? year - 20 : year - 3;
-    const numYears = isBikatHachama ? 120 : isPurimMeshulash ? 50 : 8;
-    const events = HebrewCalendar.calendar({
-      year: startYear,
-      isHebrewYear: false,
-      numYears,
-      yomKippurKatan: true,
-      il,
-    }).filter((ev) => ev.getDesc() === holiday);
-    return getFirstOcccurences(events);
-  }
-  return il ? events11yIsrael : events11yDiaspora;
+  year = year || new Date().getFullYear();
+  const range = holidayYearRange[holiday] || [3, 8];
+  const startYear = year - range[0];
+  const numYears = range[1];
+  const events0 = HebrewCalendar.calendar({
+    year: startYear,
+    isHebrewYear: false,
+    numYears,
+    yomKippurKatan: true,
+    il,
+  });
+  const events = events0.filter((ev) => ev.basename() === holiday);
+  return getFirstOcccurences(events);
 }
 
 function doIsraelRedir(ctx, holiday) {
@@ -481,6 +468,10 @@ async function getHolidayMeta(holiday) {
   meta.about.name = sourceName(meta.about.href);
   if (meta.wikipedia?.href) {
     meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
+    const anchorIdx = meta.wikipedia.title.indexOf('#');
+    if (anchorIdx !== -1) {
+      meta.wikipedia.title = meta.wikipedia.title.substring(anchorIdx + 1);
+    }
   }
   if (Array.isArray(meta.books)) {
     for (const book of meta.books) {

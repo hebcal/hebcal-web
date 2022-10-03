@@ -583,7 +583,7 @@
    "href": "https://www.ou.org/holidays/the-three-weeks/shabbat_chazon/"
   },
   "wikipedia": {
-   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon",
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon_–_of_Vision",
    "text": "Shabbat Chazon (“Sabbath [of] vision” שבת חזון) takes its name from the Haftarah that is read on the Shabbat immediately prior to the mournful fast of Tisha B’Av, from the words of rebuke and doom coming from Isaiah in the Book of Isaiah 1:1-27. It is also referred to as the Black Sabbath due to its status as the saddest Shabbat of the year (as opposed to the White Sabbath, Shabbat Shuvah, immediately precededing Yom Kippur)."
   },
   "category": "shabbat",
@@ -654,7 +654,7 @@
    "href": "https://www.ou.org/holidays/four-shabbatot/shabbat-shekalim/"
   },
   "wikipedia": {
-   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim",
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shekalim_–_of_Shekels",
    "text": "Shabbat Shekalim (“Sabbath [of] shekels” שבת שקלים) read in preparation for Purim, requests each adult male Jew contribute half of a Biblical shekel for the upkeep of the Tent of Meeting. The Torah portion Exodus 30:11-16 is read. This Shabbat takes place on the Shabbat before the 1st of the Hebrew calendar month of Adar, or on the 1st of Adar itself if it falls on Shabbat. In leap years on the Hebrew calendar, when there are two months of Adar, Shabbat Shekalim is on the Shabbat before the 1st of Adar II (or on the 1st of Adar II itself if it is Shabbat)."
   },
   "category": "shabbat",
@@ -669,7 +669,7 @@
     "href": "https://www.ou.org/holidays/shabbat-shirah-sabbath-song/"
   },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shirah",
+    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shirah_–_Song",
     "text": "Shabbat Shirah (“Sabbath [of] song” שבת שירה) is the name given to the Shabbat that includes Parsha Beshalach. The Torah reading of the week contains the Song of the sea (Exodus 15:1–18). This was the song by the Children of Israel after the Passage of the Red Sea."
    },
    "category": "shabbat",
@@ -680,7 +680,7 @@
    "href": "https://www.chabad.org/library/article_cdo/aid/4828/jewish/Shabbat-Shuvah.htm"
   },
   "wikipedia": {
-   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah",
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah_–_Return",
    "text": "Shabbat Shuvah (“Sabbath [of] Return” שבת שובה) refers to the Shabbat that occurs during the Ten Days of Repentance between Rosh Hashanah and Yom Kippur. Only one Shabbat can occur between these dates. This Shabbat is named after the first word of the Haftarah (Hosea 14:2-10) and literally means “Return!” It is perhaps a play on, but not to be confused with, the word Teshuvah (the word for repentance)."
   },
   "category": "shabbat",
@@ -691,7 +691,7 @@
    "href": "https://www.ou.org/holidays/four-shabbatot/parshat-zachor/"
   },
   "wikipedia": {
-   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor",
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Zachor_–_of_Remembrance",
    "text": "Shabbat Zachor (“Sabbath [of] remembrance שבת זכור) is the Shabbat immediately preceding Purim. Deuteronomy 25:17-19, describing the attack by Amalek, is recounted. There is a tradition from the Talmud that Haman, the antagonist of the Purim story, was descended from Amalek. The portion that is read includes a commandment to remember the attack by Amalek, and therefore at this public reading both men and women make a special effort to hear the reading."
   },
   "category": "shabbat",
@@ -783,6 +783,10 @@
  "Shushan Purim": {
   "about": {
    "href": "https://reformjudaism.org/what-shushan-purim"
+  },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Purim#Shushan_Purim",
+    "text": "Shushan Purim falls on Adar 15 and is the day on which Jews in Jerusalem celebrate Purim."
   },
   "category": "minor",
   "yomtov": false
