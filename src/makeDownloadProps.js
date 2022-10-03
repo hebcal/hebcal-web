@@ -1,6 +1,6 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'path';
-import {urlArgsObj, empty, off} from './common';
+import {urlArgsObj, empty, off, isoDateStringToDate} from './common';
 import DownloadProtoBuf from './download_pb';
 
 const dlPrefix = process.env.NODE_ENV == 'production' ?
@@ -79,11 +79,13 @@ export function downloadHref2(query, filename, override={}) {
   }
 
   if (!empty(q.start)) {
-    const secs = Math.trunc(new Date(q.start).getTime() / 1000);
+    const dt = isoDateStringToDate(q.start);
+    const secs = Math.trunc(dt.getTime() / 1000);
     msg.setStart(secs);
   }
   if (!empty(q.end)) {
-    const secs = Math.trunc(new Date(q.end).getTime() / 1000);
+    const dt = isoDateStringToDate(q.end);
+    const secs = Math.trunc(dt.getTime() / 1000);
     msg.setEnd(secs);
   }
 
