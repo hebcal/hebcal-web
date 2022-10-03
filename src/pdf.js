@@ -183,7 +183,8 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   }
   doc.font(fontStyle).fontSize(fontSize);
   let width = doc.widthOfString(subj);
-  for (let i = 0; i < 6; i++) {
+  let numLines = 1;
+  for (let i = 0; i < 4; i++) {
     if (timedWidth + width > (PDF_COLWIDTH - 8)) {
       fontSize = fontSize - 0.5;
       doc.fontSize(fontSize);
@@ -192,6 +193,20 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
       break;
     }
   }
+  // If it's still too wide, break it into two lines
+  if (timedWidth + width > (PDF_COLWIDTH - 8)) {
+    const strs = subj.split(/(\s)/);
+    const idx = Math.ceil(strs.length / 2);
+    if (strs[idx] === ' ') {
+      strs[idx] = '\n  ';
+    } else if (strs[idx + 1] === ' ') {
+      strs[idx+1] = '\n  ';
+    }
+    subj = strs.join('');
+    width = doc.widthOfString(subj);
+    numLines++;
+  }
+
   const textOptions = {};
   const url = evt.url();
   if (url) {
@@ -220,7 +235,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     doc.font(heFontName).fontSize(11);
     doc.text(reverseHebrewWords(hebrew), x, y);
   }
-  return y + (fontSize * 1.4); // newline within cell
+  return y + (numLines * fontSize * 1.4); // newline within cell
 }
 
 /**

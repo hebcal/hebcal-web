@@ -687,6 +687,7 @@ export const localeMap = {
   'ru': 'ru',
   'ro': 'ro',
   'ashkenazi_romanian': 'ro',
+  'uk': 'uk',
 };
 
 /**

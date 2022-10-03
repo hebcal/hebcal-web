@@ -45,12 +45,12 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "@hebcal/core": "^3.45.0",
+    "@hebcal/core": "^3.45.1",
     "@hebcal/geo-sqlite": "^4.8.0",
     "@hebcal/icalendar": "^4.18.2",
     "@hebcal/leyning": "^6.2.1",
     "@hebcal/locales": "^3.5.0",
-    "@hebcal/rest-api": "^4.3.3",
+    "@hebcal/rest-api": "^4.3.4",
     "@hebcal/triennial": "^1.0.4",
     "better-sqlite3": "^7.6.2",
     "dayjs": "^1.11.5",
