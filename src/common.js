@@ -26,6 +26,7 @@ export const langNames = {
   'ashkenazi_romanian': ['Română (Ashk.)', 'Romanian (Ashk.)'],
   'ru': ['ру́сский язы́к', 'Russian'],
   'es': ['español', 'Spanish'],
+  'uk': ['українська', 'Ukrainian'],
 };
 
 export const langTzDefaults = {
