@@ -58,6 +58,7 @@ export const langTzDefaults = {
   RO: ['ro', 'Europe/Bucharest'],
   RU: ['ru', 'Europe/Moscow'],
   US: ['s', 'America/New_York'],
+  UK: ['uk', 'Europe/Kiev'],
   VE: ['es', 'America/Caracas'],
   ZA: ['s', 'Africa/Johannesburg'],
 };
