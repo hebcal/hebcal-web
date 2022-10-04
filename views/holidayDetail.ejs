@@ -178,9 +178,15 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } // reading.summary %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
 <% if (reading.haftaraHtml) { %>
-<p class="lead haftara">Haftarah:
+<p class="lead haftara">Haftarah<%=reading.sephardicHtml ? ' for Ashkenazim' : ''%>:
 <%- reading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
+</p>
+<% } // reading.haftara %>
+<% if (reading.sephardicHtml) { %>
+<p class="lead haftara">Haftarah for Sephardim:
+<%- reading.sephardicHtml %>
+<%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
 </p>
 <% } // reading.haftara %>
 <% } // ... for %>

@@ -80,9 +80,10 @@ if (!date && spMaftirItems.length !== 0) { -%>
 </p>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
-<p class="haftara">Haftarah for Sephardim:
+<p class="haftara">Haftarah for Sephardim<% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
 <a class="outbound text-nowrap" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
 <%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
+<% if (reading.reason && reading.reason.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
 </p>
 <% } // reading.sephardic %>
 <%

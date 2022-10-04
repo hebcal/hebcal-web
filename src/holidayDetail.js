@@ -398,6 +398,9 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   if (itemReading.haft) {
     itemReading.haftaraHtml = makeLeyningHtmlFromParts(itemReading.haft);
   }
+  if (itemReading.seph) {
+    itemReading.sephardicHtml = makeLeyningHtmlFromParts(itemReading.seph);
+  }
   if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {
       itemReading.shortName = 'Tanakh';

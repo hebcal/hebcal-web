@@ -144,7 +144,7 @@ export async function parshaDetail(ctx) {
   }
   addLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
-  if (reading.sephardic) {
+  if (reading.seph) {
     reading.sephardicHref = sefariaAliyahHref(reading.seph, false);
   }
   if (reading.weekday) {
