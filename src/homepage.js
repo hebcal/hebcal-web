@@ -162,50 +162,12 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   const yy = hd.getFullYear();
   const gy = hd.greg().getFullYear();
 
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-  if (holidays.find((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
-    return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
- begins tonight at sundown. We wish you an easy fast`];
-  }
-  if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
-    return ['✡️ We remember ✡️',
-      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>,
- Holocaust and Heroism Remembrance Day`];
-  }
-  if (holidays.find((ev) => ev.getDesc() === 'Yom HaZikaron')) {
-    return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
-      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
- Israeli Memorial Day`];
-  }
-  const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
-  if (fastDay && fastDay.url()) {
-    return fastDayGreeting(fastDay);
-  }
-
-  const chmStart = il ? 16 : 17;
   const isElul = mm === months.ELUL;
   const isTishrei = mm === months.TISHREI;
-  const isNisan = mm === months.NISAN;
-
-  if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
-    const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
-    const htmlDate = myDateFormat(erevShavuot);
-    const suffix = il ? '?i=on' : '';
-    return ['🌸&nbsp;⛰️&nbsp;<span lang="he" dir="rtl">חג שבועות שמח</span>&nbsp;⛰️&nbsp;🌸',
-      `<strong>Chag Shavuot Sameach!</strong>
- <a class="text-green1 text-nowrap" href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
- begins at sundown on ${htmlDate}`];
-  } else if ((isTishrei && dd >= chmStart && dd <= 21) || (isNisan && dd >= chmStart && dd <= 20)) {
-    const holiday = isTishrei ? 'Sukkot' : 'Pesach';
-    const emoji = isTishrei ? '🌿🍋' : '🫓';
-    const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מועדים לשמחה</span>&nbsp;${emoji}`;
-    return [blurb, `<strong>Moadim L\'Simcha!</strong> We wish you a very happy ${holiday}`];
-  } else if ((isElul && dd === 29) || (isTishrei && (dd === 1 || dd === 2))) {
+  if ((isElul && dd === 29) || (isTishrei && (dd === 1 || dd === 2))) {
     const blurb = '🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שנה טובה ומתוקה</span>&nbsp;🍯&nbsp;🍏';
     return [blurb, '<strong>Shana Tova u\'Metukah!</strong> We wish you a happy and healthy New Year'];
-  }
-
-  if (isTishrei && dd >= 3 && dd <= 10) {
+  } else if (isTishrei && dd > 4 && dd <= 10) {
     // between RH & YK
     let longText = '<strong>G\'mar Chatima Tova!</strong> We wish you a good inscription in the Book of Life';
     if (dd < 10) {
@@ -227,6 +189,44 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
  <a class="text-green1 text-nowrap" href="/holidays/sukkot-${gy}${suffix}">Sukkot</a>
  begins ${when}`;
     return [blurb, longText];
+  }
+
+  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  if (holidays.find((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
+    return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
+ begins tonight at sundown. We wish you an easy fast`];
+  }
+  if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
+    return ['✡️ We remember ✡️',
+      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>,
+ Holocaust and Heroism Remembrance Day`];
+  }
+  if (holidays.find((ev) => ev.getDesc() === 'Yom HaZikaron')) {
+    return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
+      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
+ Israeli Memorial Day`];
+  }
+  const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
+  if (fastDay && fastDay.url()) {
+    return fastDayGreeting(fastDay);
+  }
+
+  const chmStart = il ? 16 : 17;
+  const isNisan = mm === months.NISAN;
+
+  if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
+    const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
+    const htmlDate = myDateFormat(erevShavuot);
+    const suffix = il ? '?i=on' : '';
+    return ['🌸&nbsp;⛰️&nbsp;<span lang="he" dir="rtl">חג שבועות שמח</span>&nbsp;⛰️&nbsp;🌸',
+      `<strong>Chag Shavuot Sameach!</strong>
+ <a class="text-green1 text-nowrap" href="/holidays/shavuot-${gy}${suffix}">Shavuot</a>
+ begins at sundown on ${htmlDate}`];
+  } else if ((isTishrei && dd >= chmStart && dd <= 21) || (isNisan && dd >= chmStart && dd <= 20)) {
+    const holiday = isTishrei ? 'Sukkot' : 'Pesach';
+    const emoji = isTishrei ? '🌿🍋' : '🫓';
+    const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מועדים לשמחה</span>&nbsp;${emoji}`;
+    return [blurb, `<strong>Moadim L\'Simcha!</strong> We wish you a very happy ${holiday}`];
   }
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
