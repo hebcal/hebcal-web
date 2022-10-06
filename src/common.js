@@ -8,6 +8,7 @@ import {nearestCity} from './nearestCity';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 import {find as geoTzFind} from 'geo-tz';
+import pkg from '../package.json';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -1095,8 +1096,8 @@ export function getSunsetAwareDate(q, location) {
  * @return {string}
  */
 export function eTagFromOptions(options, attrs) {
-  const etagObj = Object.assign({version: HebrewCalendar.version()},
-      options, attrs);
+  const vers = {core: HebrewCalendar.version(), web: pkg.version};
+  const etagObj = Object.assign(vers, options, attrs);
   return etag(JSON.stringify(etagObj), {weak: true});
 }
 
