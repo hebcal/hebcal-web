@@ -1254,13 +1254,20 @@ export function getNumYears(options) {
  */
 export function makeIcalOpts(options, query) {
   const icalOpts = Object.assign({}, options);
-  if (query.emoji === '1' || query.emoji === 'on') {
+  const emoji = query.emoji;
+  if (emoji === '1' || emoji === 'on') {
     icalOpts.emoji = true;
+  } else if (emoji === '0' || emoji === 'off') {
+    icalOpts.emoji = false;
   }
   for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe', 'relcalid']) {
     if (!empty(query[key])) {
       icalOpts[key] = query[key];
     }
+  }
+  const color = query.color;
+  if (typeof color === 'string' && color.length) {
+    icalOpts.calendarColor = color.toUpperCase();
   }
   return icalOpts;
 }

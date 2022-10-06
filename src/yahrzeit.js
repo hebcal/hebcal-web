@@ -3,7 +3,7 @@ import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {empty, getIpAddress, eTagFromOptions} from './common';
+import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
@@ -348,16 +348,14 @@ export async function yahrzeitDownload(ctx) {
   }
   if (extension == '.ics') {
     ctx.response.type = 'text/calendar; charset=utf-8';
-    const icalOpt = {
+    const opts = {
       yahrzeit: true,
       emoji: true,
       title: makeCalendarTitle(query, 64),
       relcalid: ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null,
       publishedTTL: 'PT1D',
     };
-    if (typeof query.color === 'string' && query.color.length) {
-      icalOpt.calendarColor = query.color.toUpperCase();
-    }
+    const icalOpt = makeIcalOpts(opts, query);
     ctx.body = await eventsToIcalendar(events, icalOpt);
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
