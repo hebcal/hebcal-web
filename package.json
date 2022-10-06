@@ -45,10 +45,10 @@
     "rollup-plugin-terser": "^7.0.2"
   },
   "dependencies": {
-    "@hebcal/core": "^3.45.1",
+    "@hebcal/core": "^3.45.2",
     "@hebcal/geo-sqlite": "^4.8.0",
     "@hebcal/icalendar": "^4.18.2",
-    "@hebcal/leyning": "^6.2.1",
+    "@hebcal/leyning": "^6.2.2",
     "@hebcal/locales": "^3.5.0",
     "@hebcal/rest-api": "^4.3.4",
     "@hebcal/triennial": "^1.0.4",
@@ -74,7 +74,7 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
-    "maxmind": "^4.3.7",
+    "maxmind": "^4.3.8",
     "murmurhash3": "^0.5.0",
     "mysql2": "^2.3.3",
     "nodemailer": "^6.8.0",
