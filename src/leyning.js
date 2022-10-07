@@ -1,5 +1,5 @@
-import {ParshaEvent} from '@hebcal/core';
-import {getLeyningOnDate} from '@hebcal/leyning';
+import {HebrewCalendar, ParshaEvent} from '@hebcal/core';
+import {getLeyningOnDate, getLeyningForHolidayKey, getLeyningKeyForEvent} from '@hebcal/leyning';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {isoDateStringToDate, empty} from './common';
 import createError from 'http-errors';
@@ -47,13 +47,7 @@ export async function getLeyning(ctx) {
     const hd = new HDate(d.toDate());
     const reading = getLeyningOnDate(hd, il);
     if (reading) {
-      const item = {
-        date: d.format('YYYY-MM-DD'),
-        hdate: hd.toString(),
-      };
-      Object.assign(item, reading);
-      delete item.parsha;
-      delete item.haftaraNumV;
+      const item = makeReadingItem(d, hd, reading);
       if (doTriennial && reading.parsha && hd.getDay() === 6) {
         const ev = new ParshaEvent(hd, reading.parsha, il);
         const triReading = getTriennialForParshaHaShavua(ev);
@@ -63,6 +57,13 @@ export async function getLeyning(ctx) {
         item.triHaft = triReading.haft;
       }
       items.push(item);
+      if (typeof reading.parshaNum === 'undefined') {
+        const readingMincha = getMincha(hd, il);
+        if (readingMincha) {
+          const minchaItem = makeReadingItem(d, hd, readingMincha);
+          items.push(minchaItem);
+        }
+      }
     }
   }
 
@@ -76,7 +77,42 @@ export async function getLeyning(ctx) {
     items,
   };
 
-  // ctx.set('Cache-Control', 'max-age=2592000');
+  ctx.set('Cache-Control', 'public, max-age=604800');
   ctx.lastModified = new Date();
   ctx.body = result;
+}
+
+/**
+ * @private
+ * @param {HDate} hd
+ * @param {boolean} il
+ * @return {Leyning}
+ */
+function getMincha(hd, il) {
+  const events = HebrewCalendar.getHolidaysOnDate(hd, il);
+  const ev = events[0];
+  const desc = ev.getDesc();
+  const minchaDesc1 = desc + ' (Mincha)';
+  const readingMincha1 = getLeyningForHolidayKey(minchaDesc1);
+  const readingMincha = readingMincha1 ||
+    getLeyningForHolidayKey(getLeyningKeyForEvent(ev, il) + ' (Mincha)');
+  return readingMincha;
+}
+
+/**
+ * @private
+ * @param {dayjs.Dayjs} d
+ * @param {HDate} hd
+ * @param {Leyning} reading
+ * @return {any}
+ */
+function makeReadingItem(d, hd, reading) {
+  const item = {
+    date: d.format('YYYY-MM-DD'),
+    hdate: hd.toString(),
+  };
+  Object.assign(item, reading);
+  delete item.parsha;
+  delete item.haftaraNumV;
+  return item;
 }
