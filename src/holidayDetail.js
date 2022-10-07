@@ -187,7 +187,7 @@ function makeJsonLD(noindex, year, ev, il, meta) {
 
 const holidayYearRange = {
   'Birkat Hachamah': [80, 160],
-  'Purim Meshulash': [20, 40],
+  'Purim Meshulash': [20, 48],
   'Rosh Chodesh Adar': [5, 12],
   'Rosh Chodesh Adar I': [7, 20],
   'Rosh Chodesh Adar II': [7, 20],
