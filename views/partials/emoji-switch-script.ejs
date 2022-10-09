@@ -6,27 +6,37 @@ document.addEventListener('DOMContentLoaded', function() {
   function changeButtonTarget(id) {
     var btn = document.getElementById(id);
     var srcType = btn.dataset.hebcalSrc;
-    var suffix = emojiChecked ? '' : '?emoji=0';
-    if (calColor && id == 'dl-ios-sub') {
-      var param = 'color=' + encodeURIComponent(calColor);
-      suffix = suffix ? (suffix + '&' + param) : ('?' + param);
+    var baseUrl = srcType == 'olcom' ? 'gcal' : srcType;
+    var url = new URL(dlURLs[baseUrl]);
+    if (!emojiChecked) {
+      url.searchParams.set('emoji', '0');
     }
-    var href = dlURLs[srcType] + suffix;
+    if (calColor && id == 'dl-ios') {
+      url.searchParams.set('color', calColor);
+    }
+    var href = url.href;
     if (srcType == 'gcal') {
       href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
     } else if (srcType == 'olcom') {
-      var httpURL = dlURLs.gcal + suffix;
       href = 'https://outlook.live.com/calendar/addfromweb?url=' +
-        encodeURIComponent(httpURL) + '&name=' + encodeURIComponent(dlURLs.title) +
+        encodeURIComponent(href) + '&name=' + encodeURIComponent(dlURLs.title) +
         '&mkt=en-001';
     }
     btn[btn.dataset.hebcalAttr] = href;
+    var btn2 = document.getElementById(id + '-alt');
+    if (btn2 && typeof btn2.href == 'string') {
+      var url = new URL(dlURLs.ics1year);
+      if (!emojiChecked) {
+        url.searchParams.set('emoji', '0');
+      }
+      btn2.href = url.href;
+    }
   }
   var ccEl = document.getElementById('cal-color');
   if (ccEl) {
     ccEl.addEventListener('change', function(event) {
       calColor = event.target.value;
-      changeButtonTarget('dl-ios-sub');
+      changeButtonTarget('dl-ios');
     }, false);
   }
   document.querySelectorAll(".emoji-checkbox .form-check-input").forEach(function(el) {

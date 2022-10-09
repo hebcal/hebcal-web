@@ -25,20 +25,20 @@
 </h6>
 <div>
 <div class="mb-3">
-<div>
-  <a class="btn btn-secondary download mb-2" id="dl-ios-sub"
-  data-hebcal-attr="href" data-hebcal-src="webcal"
-  title="Subscribe to <%= url.title %>"
-  rel="nofollow" href="<%= url.webcal %>">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
-  Subscribe on iPhone, iPad &amp; macOS</a>
-</div>
-<%- await include('emoji-switch.ejs', {id: 'dl-ios-sub'}) -%>
+<%- await include('emoji-switch.ejs', {id: 'dl-ios'}) -%>
 <div class="row g-2 mb-2">
   <div class="col-auto"><label for="cal-color>">Color</label></div>
   <div class="col-2">
   <input class="form-control" type="color" id="cal-color" value="#800002">
  </div>
+</div>
+<div>
+ <a class="btn btn-secondary download mb-2" id="dl-ios"
+  data-hebcal-attr="href" data-hebcal-src="webcal"
+  title="Subscribe to <%= url.title %>"
+  rel="nofollow" href="<%= url.webcal %>">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
+  Subscribe on iPhone, iPad &amp; macOS</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
 <p class="small">Step-by-step: <a title="iPhone and iPad - import Hebcal Jewish calendar"
@@ -47,7 +47,7 @@ href="/home/77/iphone-ipad-jewish-calendar">iPhone / iPad</a> or
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </div>
 <div>
-  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ical-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
+ <a class="btn btn-secondary btn-sm download mb-2" id="dl-ios-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
   <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
@@ -61,6 +61,7 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </h6>
 <div>
 <div class="mb-3">
+<%- await include('emoji-switch.ejs', {id: 'dl-ol-ics'}) -%>
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-ol-ics"
   data-hebcal-attr="href" data-hebcal-src="webcal"
@@ -69,7 +70,6 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook 365 Calendar Subscription</a>
 </div>
-<%- await include('emoji-switch.ejs', {id: 'dl-ol-ics'}) -%>
 <%- await include('download-modal-numyears.ejs') -%>
 <p class="mb-0 small">Step-by-step: <a
 title="Outlook Internet Calendar Subscription - import Hebcal Jewish calendar to Outlook 365"
@@ -90,15 +90,15 @@ href="/home/8/outlook-internet-calendar-subscription-jewish-calendar">Outlook 36
 </h6>
 <div>
 <div class="mb-3">
+<%- await include('emoji-switch.ejs', {id: 'dl-gcal'}) -%>
 <div>
-  <a class="btn btn-secondary download mb-2" id="dl-gcal-sub" rel="nofollow"
+ <a class="btn btn-secondary download mb-2" id="dl-gcal" rel="nofollow"
 title="Add <%= url.title %> to Google Calendar"
 data-hebcal-attr="href" data-hebcal-src="gcal"
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
   Add to Google Calendar</a>
 </div>
-<%- await include('emoji-switch.ejs', {id: 'dl-gcal-sub'}) -%>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 <div>
@@ -119,7 +119,8 @@ href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal
 <div>
 <p class="small">The iCalendar (.ics) format is used by
   many calendar apps.</p>
-<p>Copy the entire iCalendar URL here:</p>
+<%- await include('emoji-switch.ejs', {id: 'grabLink'}) -%>
+<div class="small mb-1">Copy the entire iCalendar URL:</div>
 <div class="mb-3">
 <div class="input-group input-group-sm mb-2">
 <input type="text" class="form-control" size="60" id="grabLink"
@@ -130,7 +131,6 @@ value="<%= url.subical %>">
 Copy
 </button>
 </div>
-<%- await include('emoji-switch.ejs', {id: 'grabLink'}) -%>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 
@@ -144,6 +144,7 @@ Copy
 <p class="small">Outlook.com calendars are used by Windows 10 &amp; 11, Outlook Mac, and
   Microsoft email accounts such as Hotmail.com, MSN.com and Live.com</p>
 <div class="mb-3">
+<%- await include('emoji-switch.ejs', {id: 'dl-olcom'}) -%>
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-olcom" rel="nofollow"
 title="Add <%= url.title %> to Outlook.com"
@@ -152,7 +153,6 @@ href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(ur
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Add to Outlook.com</a>
 </div>
-<%- await include('emoji-switch.ejs', {id: 'dl-olcom'}) -%>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 </div>

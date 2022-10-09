@@ -7,3 +7,4 @@ import 'dayjs/locale/hu';
 import 'dayjs/locale/pl';
 import 'dayjs/locale/ru';
 import 'dayjs/locale/ro';
+import 'dayjs/locale/uk';
