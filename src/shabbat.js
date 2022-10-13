@@ -76,6 +76,9 @@ export async function shabbatApp(ctx) {
     ctx.body = eventsToRss2(ctx.state.events, options);
   } else if (q.cfg === 'json') {
     const leyningOff = (q.leyning === 'off' || q.leyning === '0');
+    if (q.hdp === '1') {
+      ctx.state.options.heDateParts = true;
+    }
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
     const cb = q.callback;
     if (typeof cb === 'string' && cb.length) {

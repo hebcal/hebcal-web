@@ -153,7 +153,11 @@ function setYahrzeitCookie(ctx) {
 async function renderJson(maxId, q) {
   delete q.ulid;
   const events = await makeYahrzeitEvents(maxId, q);
-  const results = eventsToClassicApi(events, {includeEvent: true}, false);
+  const options = {includeEvent: true};
+  if (q.hdp === '1') {
+    options.heDateParts = true;
+  }
+  const results = eventsToClassicApi(events, options, false);
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;

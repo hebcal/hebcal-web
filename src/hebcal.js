@@ -376,6 +376,9 @@ function renderJson(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const q = ctx.state.q;
   const leyningOff = (q.leyning === 'off' || q.leyning === '0');
+  if (q.hdp === '1') {
+    options.heDateParts = true;
+  }
   let obj = eventsToClassicApi(events, options, !leyningOff);
   const cb = q.callback;
   if (typeof cb === 'string' && cb.length) {
