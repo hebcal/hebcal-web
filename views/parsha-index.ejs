@@ -56,73 +56,52 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 
 <div class="row mt-3">
 <div class="col">
-<h3 id="by-year">Parashat ha-Shavua by Hebrew year</h3>
-<h5>Diaspora</h5>
-<nav class="mb-3">
-<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
-<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Diaspora" href="<%=yr%>?i=off"><%=yr%></a></div>
-<% } %>
-</nav>
-<h5>Israel 🇮🇱</h5>
-<nav class="mb-3">
-<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
-<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Israel" href="<%=yr%>?i=on"><%=yr%></a></div>
-<% } %>
-</nav>
+<div id="download" class="float-start">
+  <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+</div>
+<h3>Downloads</h3>
+<p>We offer two kinds of Torah and Haftarah downloads:</p>
+<ol>
+<li><a href="#download-cal">Calendar feeds</a> for desktop, mobile and web calendars. Microsoft Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar).</li>
+<li><a href="#download-leyning">Leyning spreadsheets</a> for aliyah-by-aliyah breakdown of Torah readings for Shabbat, holidays and weekdays.</li>
+</ol>
 </div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row mt-4">
 <div class="col">
-<div id="download" class="float-start">
-  <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+<div id="download-cal" class="float-start">
+  <svg width="52" height="52" class="me-3 mb-2 text-muted" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
 </div>
-<h3>Downloads <small class="text-muted">for desktop, mobile and web calendars</small></h3>
-<p>Download or subscribe to Parashat ha-Shavua (weekly Torah Portion) on your device
-or web/desktop application. Subscribers to these feeds receive perpetual updates.</p>
+
+<h4>Parsha calendar feeds
+<small class="text-muted">for desktop, mobile and web calendars</small></h4>
+<p>Parashat ha-Shavua (weekly Torah Portion) on Saturdays. ~50 events per year · 5-year perpetual feed</p>
 </div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row mt-2">
-<div class="col-2 col-lg-1"><span class="text-muted">Diaspora</span></div>
-<div class="col-10 col-lg-11">
-<a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
+<div class="col">
+<h5>Parashat ha-Shavua - Diaspora</h5>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<div class="btn-group me-2 mb-2">
-<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-  RSS feeds <span class="caret"></span>
-</button>
-<ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
-<% } -%>
-</ul>
-</div>
-</div>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/torah-readings-diaspora.ics&name=Torah%20Readings%20(Diaspora)&mkt=en-001">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+</div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row mt-2">
-<div class="col-2 col-lg-1"><span class="text-muted">Israel</span></div>
-<div class="col-10 col-lg-11">
-<a class="btn btn-outline-primary btn-sm mb-2" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
+<div class="col">
+<h5><span dir="rtl" lang="he">פרשת השבוע - ישראל</span></h5>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
-<a class="btn btn-outline-primary btn-sm mb-2" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
-<div class="btn-group me-2 mb-2">
-<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-  RSS feeds <span class="caret"></span>
-</button>
-<ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
-<% } -%>
-</ul>
-</div>
-</div>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/torah-readings-israel-he.ics&name=%D7%A4%D7%A8%D7%A9%D7%AA%20%D7%94%D7%A9%D7%91%D7%95%D7%A2%20-%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C&mkt=en-001">
+<svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+</div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row mt-4">
@@ -130,7 +109,7 @@ or web/desktop application. Subscribers to these feeds receive perpetual updates
 <div id="download-leyning" class="float-start">
   <svg width="60" height="60" class="me-3 mb-2 text-burgundy" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
 </div>
-<h4>Download leyning spreadsheets</h4>
+<h4>Leyning spreadsheet downloads</h4>
 <p>The following downloadable files contain the aliyah-by-aliyah
 breakdown of Torah readings for Shabbat, holidays and weekdays.</p>
 <p>Leyning coordinators can download these Comma Separated
@@ -208,4 +187,55 @@ spreadsheet program.</p>
 </ul>
 </div><!-- .col-md -->
 </div><!-- .row -->
+
+<div class="row mt-3">
+<div class="col">
+<div id="rss" class="float-start">
+<svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+</div>
+<h4>RSS feeds</h4>
+<p>Torah reading of the week, a single item per RSS feed, updated on Sunday at midnight Eastern Standard Time.</p>
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  Diaspora RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div><!-- .btn-group -->
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  Israel RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div><!-- .btn-group -->
+</div><!-- .col -->
+</div><!-- .row -->
+
+<div class="row mt-4">
+<div class="col">
+<h3 id="by-year">Parashat ha-Shavua by Hebrew year</h3>
+<h5>Diaspora</h5>
+<nav class="mb-3">
+<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
+<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Diaspora" href="<%=yr%>?i=off"><%=yr%></a></div>
+<% } %>
+</nav>
+<h5>Israel 🇮🇱</h5>
+<nav class="mb-3">
+<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
+<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Israel" href="<%=yr%>?i=on"><%=yr%></a></div>
+<% } %>
+</nav>
+</div><!-- .col -->
+</div><!-- .row -->
+
 <%- await include('partials/footer.ejs') -%>
