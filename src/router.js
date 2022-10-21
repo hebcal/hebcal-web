@@ -158,7 +158,7 @@ export function wwwRouter() {
       } else if (rpath.endsWith('.xml')) {
         return parshaRss(ctx);
       } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
-        ctx.set('Cache-Control', 'max-age=5184000');
+        ctx.set('Cache-Control', 'public, max-age=604800');
         return parshaCsv(ctx);
       } else {
         const charCode = rpath.charCodeAt(8);
