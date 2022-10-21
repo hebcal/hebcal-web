@@ -115,8 +115,31 @@ export async function hebrewDateConverter(ctx) {
       p.amp = true;
     }
     makeCalendarUrl(p);
+    makePrevNext(p);
     return ctx.render('converter', p);
   }
+}
+
+// eslint-disable-next-line require-jsdoc
+function makePrevNext(p) {
+  const gsStr = p.gs ? '&gs=on' : '';
+  const ilStr = p.il ? '&i=on' : '';
+  const prev = p.d.add(-1, 'day');
+  let gd = prev.format('D');
+  let gm = prev.format('M');
+  let gy = prev.format('YYYY');
+  p.prev = {
+    d: prev,
+    url: `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1`,
+  };
+  const next = p.d.add(1, 'day');
+  gd = next.format('D');
+  gm = next.format('M');
+  gy = next.format('YYYY');
+  p.next = {
+    d: next,
+    url: `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1`,
+  };
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -222,6 +245,7 @@ function makeProperties(ctx) {
     hebrew: gematriyaDate(hdate),
     hebrewNoNikkud: Locale.hebrewStripNikkud(hdate.renderGematriya()),
     gs: props.gs,
+    d,
     gy,
     gm,
     gd,

@@ -5,6 +5,8 @@
 }) -%>
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
+<% if (typeof prev === 'object' && prev !== null) { %><link rel="prev" href="<%=prev.url%>"><% } %>
+<% if (typeof next === 'object' && next !== null) { %><link rel="next" href="<%=next.url%>"><% } %>
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com/converter?<%=canonical%>&amp;amp=1">
@@ -166,7 +168,24 @@ data-ad-slot="5342180883"></ins>
 <% } -%>
 </div><!-- .d-print-none -->
 
-<div class="row d-print-none mt-5">
+<div class="d-flex d-print-none justify-content-between mt-3">
+<% if (typeof prev === 'object' && prev !== null) { -%>
+<div class="pe-3">
+  <a class="previous-post btn btn-outline-secondary" href="<%=prev.url%>" title="previous date">
+    <span class="arrow">←</span>&nbsp;<%=prev.d.format('MMMM D')%>
+  </a>
+</div>
+<% } -%>
+<% if (typeof next === 'object' && next !== null) { -%>
+<div class="pb-3">
+  <a class="next-post btn btn-outline-secondary" href="<%=next.url%>" title="next date">
+    <%=next.d.format('MMMM D')%>&nbsp;<span class="arrow">→</span>
+  </a>
+</div>
+<% } -%>
+</div>
+
+<div class="row d-print-none mt-4">
 <div class="col">
 <h5>How to read Hebrew Dates</h5>
 <p>Hebrew dates are written right-to-left with the day of the month, followed by the
@@ -201,6 +220,19 @@ document.addEventListener('DOMContentLoaded', function() {
   if (dt.getFullYear() != gy || dt.getMonth()+1 != gm || dt.getDate() != gd) {
     var ctodayEl = document.querySelector("#ctoday");
     ctodayEl.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
+  }
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowLeft') {
+    var linkEl = document.querySelector('link[rel=prev]');
+    if (linkEl) {
+      document.location.href = linkEl.href;
+    }
+  } else if (e.key === 'ArrowRight') {
+    var linkEl = document.querySelector('link[rel=next]');
+    if (linkEl) {
+      document.location.href = linkEl.href;
+    }
   }
 });
 </script>
