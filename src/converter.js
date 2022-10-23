@@ -120,26 +120,27 @@ export async function hebrewDateConverter(ctx) {
   }
 }
 
+/**
+ * @param {HDate} hdate
+ * @param {boolean} il
+ * @return {any}
+ */
+function h2gURL(hdate, il) {
+  const ilStr = il ? '&i=on' : '';
+  const hy = hdate.getFullYear();
+  const hmonthName = hdate.getMonthName();
+  const hmStr = hmonthArg[hmonthName] || hmonthName;
+  const hd = hdate.getDate();
+  return {
+    title: `${hd} ${hmonthName}`,
+    url: `/converter?hd=${hd}&hm=${hmStr}&hy=${hy}${ilStr}&h2g=1`,
+  };
+}
+
 // eslint-disable-next-line require-jsdoc
 function makePrevNext(p) {
-  const gsStr = p.gs ? '&gs=on' : '';
-  const ilStr = p.il ? '&i=on' : '';
-  const prev = p.d.add(-1, 'day');
-  let gd = prev.format('D');
-  let gm = prev.format('M');
-  let gy = prev.format('YYYY');
-  p.prev = {
-    d: prev,
-    url: `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1`,
-  };
-  const next = p.d.add(1, 'day');
-  gd = next.format('D');
-  gm = next.format('M');
-  gy = next.format('YYYY');
-  p.next = {
-    d: next,
-    url: `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gsStr}${ilStr}&g2h=1`,
-  };
+  p.prev = h2gURL(p.hdate.prev(), p.il);
+  p.next = h2gURL(p.hdate.next(), p.il);
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -249,6 +250,7 @@ function makeProperties(ctx) {
     gy,
     gm,
     gd,
+    hdate,
     hy,
     hm: hdate.getMonth(),
     hmStr: hmonthName,

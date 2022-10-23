@@ -25,6 +25,11 @@
   font-size: 48px;
 }
 .smaller {font-size: 0.75em}
+.btn-xs {
+  padding: 0.125rem 0.25rem;
+  font-size: 0.75rem;
+  border-radius: 0.2rem;
+}
 </style>
 <% } -%>
 </head>
@@ -61,17 +66,31 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
+<% if (typeof amp === 'undefined' || !amp) { -%>
 <div class="d-flex justify-content-center d-print-none">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<div class="small"><a href="/converter">Convert today’s date</a></div>
-<% } else { -%>
 <div class="form-check form-switch mb-2">
 <input class="form-check-input" type="checkbox" role="switch" id="nikud-checkbox" checked>
 <label class="form-check-label" for="nikud-checkbox">Show Hebrew <i>nekudot</i></label>
 </div>
-<% } -%>
 </div><!-- .d-flex -->
-<div id="ctoday" class="d-flex justify-content-center d-print-none"></div>
+<% } -%>
+<div class="overflow-auto">
+<% if (typeof prev === 'object' && prev !== null) { -%>
+<div class="float-start d-print-none me-2">
+<a class="btn btn-xs btn-outline-secondary" href="<%=prev.url%>" title="previous date"><span aria-hidden="true">←</span> <%=prev.title%></a>
+</div>
+<% } -%>
+<% if (typeof next === 'object' && next !== null) { -%>
+<div class="float-end d-print-none ms-2">
+<a class="btn btn-xs btn-outline-secondary" href="<%=next.url%>" title="next date"><%=next.title%> <span aria-hidden="true">→</span></a>
+</div>
+<% } -%>
+<div id="ctoday" class="d-flex justify-content-center d-print-none">
+<% if (typeof amp === 'boolean' && amp) { -%>
+<div class="small"><a href="/converter">Convert today’s date</a></div>
+<% } -%>
+</div>
+</div><!-- .clearfix -->
 <div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
@@ -167,23 +186,6 @@ data-ad-slot="5342180883"></ins>
 </script>
 <% } -%>
 </div><!-- .d-print-none -->
-
-<div class="d-flex d-print-none justify-content-between mt-3">
-<% if (typeof prev === 'object' && prev !== null) { -%>
-<div class="pe-3">
-  <a class="previous-post btn btn-outline-secondary" href="<%=prev.url%>" title="previous date">
-    <span class="arrow">←</span>&nbsp;<%=prev.d.format('MMMM D')%>
-  </a>
-</div>
-<% } -%>
-<% if (typeof next === 'object' && next !== null) { -%>
-<div class="pb-3">
-  <a class="next-post btn btn-outline-secondary" href="<%=next.url%>" title="next date">
-    <%=next.d.format('MMMM D')%>&nbsp;<span class="arrow">→</span>
-  </a>
-</div>
-<% } -%>
-</div>
 
 <div class="row d-print-none mt-4">
 <div class="col">
