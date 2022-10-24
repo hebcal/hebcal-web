@@ -139,7 +139,10 @@ function h2gURL(hdate, il) {
 
 // eslint-disable-next-line require-jsdoc
 function makePrevNext(p) {
-  p.prev = h2gURL(p.hdate.prev(), p.il);
+  const isEpoch = p.hy === 1 && p.hd === 1 && p.hm === months.TISHREI;
+  if (!isEpoch) {
+    p.prev = h2gURL(p.hdate.prev(), p.il);
+  }
   p.next = h2gURL(p.hdate.next(), p.il);
 }
 
