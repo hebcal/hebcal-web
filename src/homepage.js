@@ -56,7 +56,7 @@ export async function homepage(ctx) {
   mastheadParsha(ctx, hd, il);
   mastheadOmer(ctx, hd);
   mastheadDafYomi(ctx, hd);
-  const [blub, longText] = getMastheadGreeting(hd, il, dateOverride, ctx.state.timezone);
+  const [blub, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
   if (blub) {
     ctx.state.holidayBlurb = blub;
     ctx.state.holidayLongText = longText;
@@ -72,7 +72,8 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   const isoDt = d.format('YYYY-MM-DD');
   const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' after sunset' : '');
   items.push(`<time datetime="${isoDt}">${fmtDt}</time>`);
-  items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(ctx.state.lg));
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
+  items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(lg));
 }
 
 function mastheadParsha(ctx, hd, il) {
@@ -82,20 +83,22 @@ function mastheadParsha(ctx, hd, il) {
   if (sedra.isParsha(saturday)) {
     const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
     const url = shortenUrl(pe.url());
-    items.push(`<a href="${url}">${pe.render(ctx.state.lg)}</a>`);
+    const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
+    items.push(`<a href="${url}">${pe.render(lg)}</a>`);
   }
 }
 
 function mastheadHolidays(ctx, hd, il) {
   const items = ctx.state.items;
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   holidays
       .map((ev) => {
         const url = shortenUrl(ev.url());
         const desc = ev.chanukahDay ?
-          Locale.gettext('Chanukah', ctx.state.lg) + ' ' +
-          Locale.gettext('day', ctx.state.lg) + ' ' + ev.chanukahDay :
-          ev.render(ctx.state.lg);
+          Locale.gettext('Chanukah', lg) + ' ' +
+          Locale.gettext('day', lg) + ' ' + ev.chanukahDay :
+          ev.render(lg);
         const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
@@ -110,7 +113,8 @@ function mastheadOmer(ctx, hd) {
     const omer = abs - beginOmer + 1;
     const ev = new OmerEvent(hd, omer);
     const url = shortenUrl(ev.url());
-    const desc = ev.render(ctx.state.lg);
+    const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
+    const desc = ev.render(lg);
     items.push(`<a href="${url}">${desc}</a>`);
   }
 }
@@ -150,17 +154,18 @@ const TZOM_KAL = '✡️&nbsp;Tzom Kal!&nbsp;&nbsp;<span lang="he" dir="rtl">צ�
 
 /**
  * @private
+ * @param {any} ctx
  * @param {HDate} hd
  * @param {boolean} il
  * @param {boolean} dateOverride
- * @param {string} tzid
  * @return {string[]}
  */
-function getMastheadGreeting(hd, il, dateOverride, tzid) {
+function getMastheadGreeting(ctx, hd, il, dateOverride) {
   const mm = hd.getMonth();
   const dd = hd.getDate();
   const yy = hd.getFullYear();
   const gy = hd.greg().getFullYear();
+  const locale = ctx.state.locale;
 
   const isElul = mm === months.ELUL;
   const isTishrei = mm === months.TISHREI;
@@ -171,7 +176,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
     // between RH & YK
     let longText = '<strong>G\'mar Chatima Tova!</strong> We wish you a good inscription in the Book of Life';
     if (dd < 10) {
-      const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg());
+      const erevYK = dayjs(new HDate(9, months.TISHREI, yy).greg()).locale(locale);
       const htmlDate = myDateFormat(erevYK);
       longText += `.\n<br><a class="text-green1 text-nowrap" href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
  begins at sundown on ${htmlDate}`;
@@ -179,7 +184,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
     return ['✡️&nbsp;<span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span>&nbsp;✡️',
       longText];
   } else if (isTishrei && dd >= 11 && dd <= 14) {
-    const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg());
+    const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevSukkot);
     const when = (dd === 14) ? 'tonight at sundown' :
       ` at sundown on ${htmlDate}`;
@@ -208,14 +213,14 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastDay && fastDay.url()) {
-    return fastDayGreeting(fastDay);
+    return fastDayGreeting(ctx, fastDay);
   }
 
   const chmStart = il ? 16 : 17;
   const isNisan = mm === months.NISAN;
 
   if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
-    const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg());
+    const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevShavuot);
     const suffix = il ? '?i=on' : '';
     return ['🌸&nbsp;⛰️&nbsp;<span lang="he" dir="rtl">חג שבועות שמח</span>&nbsp;⛰️&nbsp;🌸',
@@ -231,29 +236,29 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
   if (chagToday) {
-    return getHolidayGreeting(chagToday, il, true, tzid, dateOverride);
+    return getHolidayGreeting(ctx, chagToday, il, true, dateOverride);
   }
 
   const tomorrow = HebrewCalendar.getHolidaysOnDate(hd.next(), il) || [];
   const chagTomorrow = tomorrow.find((ev) => !(ev.getFlags() & flags.EREV) && chagSameach[ev.basename()]);
   if (chagTomorrow) {
-    return getHolidayGreeting(chagTomorrow, il, false);
+    return getHolidayGreeting(ctx, chagTomorrow, il, false);
   }
 
   const roshChodeshToday = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
   if (roshChodeshToday) {
-    return getRoshChodeshGreeting(hd, roshChodeshToday);
+    return getRoshChodeshGreeting(ctx, hd, roshChodeshToday);
   }
 
   const roshChodeshTomorrow = tomorrow.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
   if (roshChodeshTomorrow) {
-    return getRoshChodeshGreeting(hd, roshChodeshTomorrow);
+    return getRoshChodeshGreeting(ctx, hd, roshChodeshTomorrow);
   }
 
   if (isElul) {
     // for the entire month of Elul
     const nextYear = yy + 1;
-    const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg());
+    const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg()).locale(locale);
     const htmlDate = myDateFormat(erevRH);
     return ['🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שנה טובה</span>&nbsp;🍯&nbsp;🍏',
       `<strong>Shana Tova!</strong> We wish you a happy and healthy New Year.
@@ -261,7 +266,7 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
  begins at sundown on ${htmlDate}`];
   } else if (mm == months.KISLEV && dd < 24) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
-    const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg());
+    const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
     const dow = erevChanukah.day();
     const htmlDate = myDateFormat(erevChanukah);
     const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
@@ -270,14 +275,14 @@ function getMastheadGreeting(hd, il, dateOverride, tzid) {
  <a class="text-green1 text-nowrap" href="/holidays/chanukah-${gy}">Chanukah candle</a>
 ${when} on ${htmlDate}`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
-    const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg());
+    const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevLagBaOmer);
     return ['🔥&nbsp;<span lang="he" dir="rtl">ל״ג בעומר שמח</span>&nbsp;🔥',
       `<a class="text-green1 text-nowrap" href="/holidays/lag-baomer-${gy}">Lag BaOmer</a>
  begins at sundown on ${htmlDate}`];
   } else if (mm === months.AV && dd >= 23) {
     // for the last week of Av
-    const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg());
+    const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevRHLaBehemot);
     return ['🐑&nbsp;🐓&nbsp;<span lang="he" dir="rtl">ראש השנה לבהמות שמח</span>&nbsp;🐓&nbsp;🐑',
       `<a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a>
@@ -285,7 +290,7 @@ ${when} on ${htmlDate}`];
  begins at sundown on ${htmlDate}`];
   } else if (mm === months.SHVAT && dd >= 2 && dd <= 13) {
     // first 2 weeks of Shvat
-    const erevTuBiShvat = dayjs(new HDate(14, months.SHVAT, yy).greg());
+    const erevTuBiShvat = dayjs(new HDate(14, months.SHVAT, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevTuBiShvat);
     return ['🌳&nbsp;🌱&nbsp;<span lang="he" dir="rtl">ט״ו בשבט שמח</span>&nbsp;🌱&nbsp;🌳',
       `<a class="text-green1 text-nowrap" href="/holidays/tu-bishvat-${gy}">Tu BiShvat</a> (New Year for Trees)
@@ -295,7 +300,7 @@ ${when} on ${htmlDate}`];
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
   if (mm == purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
-    const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg());
+    const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevPurim);
     return ['🎭️&nbsp;📜&nbsp;<span lang="he" dir="rtl">חג פורים שמח</span>&nbsp;📜&nbsp;🎭️',
       `<strong>Chag Purim Sameach!</strong> <a class="text-green1 text-nowrap" href="/holidays/purim-${gy}">Purim</a>
@@ -303,7 +308,7 @@ ${when} on ${htmlDate}`];
   }
   if ((mm == purimMonth && dd >= 17) || (isNisan && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
-    const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg());
+    const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevPesach);
     const blurb = '🫓&nbsp;🍷&nbsp;<span lang="he" dir="rtl">חג כשר ושמח</span>&nbsp;🍷&nbsp;🫓';
     const suffix = il ? '?i=on' : '';
@@ -314,7 +319,7 @@ ${when} on ${htmlDate}`];
 
   const fastTomorrow = tomorrow.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
   if (fastTomorrow && fastTomorrow.url()) {
-    return fastDayGreeting(fastTomorrow);
+    return fastDayGreeting(ctx, fastTomorrow);
   }
 
   return [null, null];
@@ -322,11 +327,13 @@ ${when} on ${htmlDate}`];
 
 /**
  * @private
+ * @param {any} ctx
  * @param {Event} ev
  * @return {string[]}
  */
-function fastDayGreeting(ev) {
-  const d = dayjs(ev.getDate().greg());
+function fastDayGreeting(ctx, ev) {
+  const locale = ctx.state.locale;
+  const d = dayjs(ev.getDate().greg()).locale(locale);
   const htmlDate = myDateFormat(d);
   const url = shortenUrl(ev.url());
   return [TZOM_KAL,
@@ -336,17 +343,18 @@ function fastDayGreeting(ev) {
 
 /**
  * @private
+ * @param {any} ctx
  * @param {Event} ev
  * @param {boolean} il
  * @param {boolean} today
- * @param {string} tzid
  * @param {boolean} dateOverride
  * @return {string[]}
  */
-function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
+function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
   const url = shortenUrl(ev.url());
   const mask = ev.getFlags();
   if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES)) {
+    const tzid = ctx.state.timezone;
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
@@ -373,10 +381,11 @@ function getHolidayGreeting(ev, il, today, tzid, dateOverride) {
 
 const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir="rtl">חודש טוב</span>&nbsp;🌒';
 
-function getRoshChodeshGreeting(hd, ev) {
+function getRoshChodeshGreeting(ctx, hd, ev) {
+  const locale = ctx.state.locale;
   const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
   const url = shortenUrl(ev.url());
-  const d = dayjs(ev.getDate().greg());
+  const d = dayjs(ev.getDate().greg()).locale(locale);
   const today = dayjs(hd.greg()).isSame(d, 'day');
   if (today) {
     return [roshChodeshBlurb,
