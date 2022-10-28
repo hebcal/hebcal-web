@@ -58,7 +58,7 @@
     "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.16",
-    "geo-tz": "^7.0.2",
+    "geo-tz": "^7.0.3",
     "geolite2-redist": "^3.0.3",
     "google-protobuf": "^3.21.2",
     "haversine": "^1.1.1",

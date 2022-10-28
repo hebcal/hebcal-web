@@ -66,6 +66,7 @@ export async function yahrzeitApp(ctx) {
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (maxId > 0 && q.cfg === 'json') {
+    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.body = await renderJson(maxId, q);
     return;
   }
