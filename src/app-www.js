@@ -91,6 +91,12 @@ app.use(async function fixup0(ctx, next) {
     if (semi !== -1) {
       ctx.request.querystring = qs.replace(/;/g, '&');
     }
+    // We've seen weird qs that have ?back=foo appended
+    const qs2 = ctx.request.querystring;
+    const back = qs2.indexOf('?back=');
+    if (back !== -1) {
+      ctx.request.querystring = qs2.substring(0, back);
+    }
   }
   // Collapse duplicate identical key/values in querystring
   const query = Object.assign({}, ctx.request.query);
