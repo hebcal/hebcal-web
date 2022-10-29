@@ -374,6 +374,19 @@ export function getTodayDate(query) {
   return isToday ? {dt: new Date(), now: true} : {dt: makeGregDate(query.gy, query.gm, query.gd), now: false};
 }
 
+const israelCityOffset = {
+  'Jerusalem': 40,
+  'Haifa': 30,
+  'Zichron Ya‘akov': 30,
+  'Zichron Ya\'akov': 30,
+  'Zichron Yaakov': 30,
+  'Zikhron Ya‘akov': 30,
+  'Zikhron Ya‘aqov': 30,
+  'Zikhron Ya\'akov': 30,
+  'Zikhron Ya\'aqov': 30,
+  'Zikhron Yaakov': 30,
+};
+
 /**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
@@ -481,10 +494,11 @@ export function makeHebcalOptions(db, query) {
     }
     if (location.getIsrael()) {
       options.il = true;
-      if (location.getShortName() === 'Jerusalem' &&
+      const offset = israelCityOffset[location.getShortName()];
+      if (typeof offset === 'number' &&
           (typeof options.candleLightingMins !== 'number' ||
           options.candleLightingMins === 18)) {
-        options.candleLightingMins = 40;
+        options.candleLightingMins = offset;
       }
     }
   } else {
