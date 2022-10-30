@@ -8,6 +8,9 @@ import {htmlToText} from 'nodemailer-html-to-text';
  * @return {nodemailer.Transporter}
  */
 export function makeEmailTransport(iniConfig) {
+  if (process.env.NODE_ENV === 'production') {
+    return nodemailer.createTransport({host: 'localhost', port: 25});
+  }
   const transporter = nodemailer.createTransport({
     host: iniConfig['hebcal.email.shabbat.host'],
     port: 465,
