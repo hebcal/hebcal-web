@@ -35,7 +35,11 @@ ul.hebcal-results li {
 <div class="float-start">
   <svg width="60" height="60" class="me-1 mb-1"><use xlink:href="<%=cspriteHref%>#candles"></use></svg>
 </div>
+<% if (locale === 'he') { -%>
+<%- await include('partials/shabbat-items-he.ejs') -%>
+<% } else { -%>
 <%- await include('partials/shabbat-items.ejs') -%>
+<% } -%>
 <div class="mt-4 d-print-none">
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= gregRangeShort %>" rel="nofollow" href="<%= fridgeURL %>">
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>

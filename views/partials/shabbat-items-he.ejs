@@ -1,0 +1,11 @@
+<div lang="he" dir="rtl">
+<ul class="hebcal-results list-unstyled">
+<% items.forEach((i) => { -%>
+<% if (i.cat === 'parashat') { -%>
+<li class="<%= i.cat %>" id="<%= i.id %>"><a target="<%= q.tgt %>" href="<%= i.url %>"><%= i.desc %></a></li>
+<% } else { -%>
+<li class="<%= i.cat %>" id="<%= i.id %>"><% if (i.url) { %><a target="<%= q.tgt %>" href="<%= i.url %>"><% } %><%= i.desc %><% if (i.url) { %></a><% } %><% if (i.isoDateTime) { %>: <%= i.fmtTime %><% } %> <span class="text-nowrap"> ביום <%= i.fmtDate %></span></li>
+<% } -%>
+<% }); -%>
+</ul>
+</div>

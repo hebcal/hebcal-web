@@ -219,7 +219,7 @@ function makeProperties(ctx) {
   const gy = dt.getFullYear();
   const gyStr = gy > 0 ? pad4(gy) : pad4(-gy) + ' B.C.E.';
   const dateStr = d.format('ddd, D MMMM ') + gyStr;
-  const afterSunset = props.gs ? ' after sunset' : '';
+  const afterSunset = props.gs ? ' ' + Locale.gettext('after sunset', locale) : '';
   const hdate = props.hdate;
   const hdateStr = hdate.render(lg);
   const il = Boolean(query.i === 'on');

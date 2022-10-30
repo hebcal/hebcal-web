@@ -377,7 +377,8 @@ function eventToItem(ev, options, locale, cfg) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
-  const fmtDate = d.locale(locale).format('dddd, MMM D');
+  const monthFmt = locale === 'he' ? 'MMMM' : 'MMM';
+  const fmtDate = d.locale(locale).format(`dddd, ${monthFmt} D`);
   const isoDate = d.format('YYYY-MM-DD');
   const categories = getEventCategories(ev);
   const cat0 = categories[0];

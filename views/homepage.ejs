@@ -25,9 +25,9 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container text-center">
-<ul class="bullet-list-inline" dir="<%=locale==='he'?'rtl':'ltr'%>">
+<ul class="bullet-list-inline" lang="<%=locale%>" dir="<%=locale==='he'?'rtl':'ltr'%>">
 <% items.forEach((item) => { %>
-<li><span lang="<%=locale%>"><%- item %></span></li>
+<li><%- item %></li>
 <% }); %>
 </ul>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>

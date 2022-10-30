@@ -68,12 +68,14 @@ export async function homepage(ctx) {
 
 function mastheadDates(ctx, dt, afterSunset, hd) {
   const items = ctx.state.items;
-  const d = dayjs(dt).locale(ctx.state.locale);
+  const locale = ctx.state.locale;
+  const d = dayjs(dt).locale(locale);
   const isoDt = d.format('YYYY-MM-DD');
-  const fmtDt = d.format('ddd, D MMMM YYYY') + (afterSunset ? ' after sunset' : '');
+  const afterSunsetStr = afterSunset ? ' ' + Locale.gettext('after sunset', locale) : '';
+  const fmtDt = d.format('ddd, D MMMM YYYY') + afterSunsetStr;
   items.push(`<time datetime="${isoDt}">${fmtDt}</time>`);
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-  items.push(ctx.state.locale === 'he' ? hd.renderGematriya() : hd.render(lg));
+  items.push(locale === 'he' ? hd.renderGematriya() : hd.render(lg));
 }
 
 function mastheadParsha(ctx, hd, il) {
