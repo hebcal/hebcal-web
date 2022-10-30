@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
-  validateEmail} from './common';
+  validateEmail, queryDefaultCandleMins} from './common';
 import {mySendMail, getImgOpenHtml} from './common2';
 import {matomoTrack} from './matomoTrack';
 
@@ -350,7 +350,8 @@ function getHavdalahTzeit(q) {
 }
 
 function getCandleMins(q) {
-  return parseInt(q.b, 10) || 18;
+  const minDefault = queryDefaultCandleMins(q);
+  return parseInt(q.b, 10) || minDefault;
 }
 
 // allow zero as a valid Havdalah minutes past sundown

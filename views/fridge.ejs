@@ -89,7 +89,7 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
   href="<%- url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a></p>
 </td>
 <td class="text-center" style="padding: 0px 8px">
-<div><p>Candle-lighting times are <%= q.b || 18 %> min before sunset</p></div>
+<div><p>Candle-lighting times are <%= q.b || queryDefaultCandleMins(q) %> min before sunset</p></div>
 <div id="havdalah-footer" class="havdalah"><p>Havdalah times are
 <% if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) { -%>
 <%= options.havdalahMins %> min after sunset

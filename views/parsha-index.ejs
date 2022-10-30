@@ -47,11 +47,7 @@ href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and week
 <h4 id="<%=book%>"><%= book === 'DoubledParshiyot' ? 'Doubled Parshiyot' : book %></h4>
 <ol class="list-unstyled lh-lg">
 <%   for (const [anchor, parshaName] of parshaByBook.get(book)) { %>
-<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>">
-<% if (parsha === parshaName) { %><mark title="Read on <%=saturday.format('D MMMM YYYY')%>"><% } -%>
-<%= parshaName.replace(/'/g, '’') -%>
-<% if (parsha === parshaName) { %><mark><% } -%>
-</a></li>
+<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') -%></a></li>
 <%   } %>
 </ol>
 </div><!-- .col -->

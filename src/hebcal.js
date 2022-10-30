@@ -6,6 +6,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   getDefaultHebrewYear, makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
+  queryDefaultCandleMins,
   localeMap, eTagFromOptions, langNames} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {greg, HDate} from '@hebcal/core';
@@ -187,6 +188,7 @@ async function renderForm(ctx, error) {
     langNames,
     defaultYear,
     defaultYearHeb,
+    queryDefaultCandleMins,
   });
 }
 
@@ -292,6 +294,7 @@ function renderHtml(ctx) {
     langNames,
     defaultYear,
     defaultYearHeb,
+    queryDefaultCandleMins,
   });
 }
 

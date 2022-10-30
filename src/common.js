@@ -374,18 +374,43 @@ export function getTodayDate(query) {
   return isToday ? {dt: new Date(), now: true} : {dt: makeGregDate(query.gy, query.gm, query.gd), now: false};
 }
 
-const israelCityOffset = {
-  'Jerusalem': 40,
-  'Haifa': 30,
-  'Zichron Ya‘akov': 30,
-  'Zichron Ya\'akov': 30,
-  'Zichron Yaakov': 30,
-  'Zikhron Ya‘akov': 30,
-  'Zikhron Ya‘aqov': 30,
-  'Zikhron Ya\'akov': 30,
-  'Zikhron Ya\'aqov': 30,
-  'Zikhron Yaakov': 30,
+const geonameIdCandleOffset = {
+  '281184': 40, // Jerusalem
+  '294801': 30, // Haifa
+  '293067': 30, // Zikhron Yaakov
 };
+
+const DEFAULT_CANDLE_MINS = 18;
+
+/**
+ * @param {Location} location
+ * @return {number}
+ */
+export function locationDefaultCandleMins(location) {
+  if (location.getIsrael()) {
+    const geoid = location.getGeoId();
+    const offset = geonameIdCandleOffset[geoid];
+    if (typeof offset === 'number') {
+      return offset;
+    }
+  }
+  return DEFAULT_CANDLE_MINS;
+}
+
+/**
+ * @param {any} query
+ * @return {number}
+ */
+export function queryDefaultCandleMins(query) {
+  const geonameid = query.geonameid;
+  if (geonameid) {
+    const offset = geonameIdCandleOffset[geonameid];
+    if (typeof offset === 'number') {
+      return offset;
+    }
+  }
+  return DEFAULT_CANDLE_MINS;
+}
 
 /**
  * Read Koa request parameters and create HebcalOptions
@@ -494,11 +519,11 @@ export function makeHebcalOptions(db, query) {
     }
     if (location.getIsrael()) {
       options.il = true;
-      const offset = israelCityOffset[location.getShortName()];
-      if (typeof offset === 'number' &&
-          (typeof options.candleLightingMins !== 'number' ||
-          options.candleLightingMins === 18)) {
+      const offset = locationDefaultCandleMins(options.location);
+      if (typeof options.candleLightingMins !== 'number' ||
+          (offset !== DEFAULT_CANDLE_MINS && options.candleLightingMins === DEFAULT_CANDLE_MINS)) {
         options.candleLightingMins = offset;
+        query.b = String(offset);
       }
     }
   } else {

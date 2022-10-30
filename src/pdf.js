@@ -2,7 +2,7 @@ import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales';
-import {localeMap} from './common';
+import {localeMap, locationDefaultCandleMins} from './common';
 import {pad4, pad2, appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 
 const PDF_WIDTH = 792;
@@ -346,10 +346,7 @@ export function renderPdf(doc, events, options) {
 
     doc.fillColor('#000000');
     doc.font('plain').fontSize(8);
-    const leftText = options?.location?.name ?
-      options.location.name + ' · ' +
-      `Candle-lighting times ${options.candleLightingMins||18} min before sunset` :
-      options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
+    const leftText = makeLeftText(options);
     doc.text(leftText, PDF_LMARGIN, PDF_HEIGHT - 28);
 
     const str = 'Provided by Hebcal.com with a Creative Commons Attribution 4.0 International License';
@@ -358,4 +355,17 @@ export function renderPdf(doc, events, options) {
   }
 
   return doc;
+}
+
+/**
+ * @param {CalOptions} options
+ * @return {string}
+ */
+function makeLeftText(options) {
+  if (options?.location?.name) {
+    const offset = locationDefaultCandleMins(options.location);
+    return options.location.name + ' · ' +
+    `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
+  }
+  return options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
 }

@@ -101,7 +101,7 @@
 </div>
 <div class="row gx-2 mb-3">
   <div class="col-auto">
-    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b || 18 %>" size="2" maxlength="2" id="b1" pattern="\d*">
+    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b || queryDefaultCandleMins(q) %>" size="2" maxlength="2" id="b1" pattern="\d*">
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>

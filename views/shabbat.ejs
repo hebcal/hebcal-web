@@ -108,8 +108,8 @@ ul.hebcal-results li {
 [4140963, "Washington, DC"],
 [2657896, "Zürich"],
 ];
-for (const [geonameid, city] of worldCities) { -%>
-<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;b=<%=city==='Jerusalem'?40:18%>&amp;M=on&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
+for (const [geonameid, city, min] of worldCities) { -%>
+<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;b=<%= queryDefaultCandleMins({geonameid}) %>&amp;M=on&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
 <% } -%>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>

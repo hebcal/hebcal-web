@@ -11,6 +11,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   expiresSaturdayNight,
   makeGeoUrlArgs,
   shortenUrl,
+  queryDefaultCandleMins,
   localeMap, makeHebrewCalendar} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -97,6 +98,7 @@ export async function shabbatApp(ctx) {
     if (q.amp === '1') {
       p.amp = true;
     }
+    p.queryDefaultCandleMins = queryDefaultCandleMins;
     return ctx.render('shabbat', p);
   }
 }

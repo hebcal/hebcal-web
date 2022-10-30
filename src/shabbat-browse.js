@@ -7,7 +7,8 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import {langTzDefaults, CACHE_CONTROL_7DAYS, expiresSaturdayNight} from './common';
+import {langTzDefaults, CACHE_CONTROL_7DAYS, expiresSaturdayNight,
+  queryDefaultCandleMins} from './common';
 import flag from 'emoji-flag';
 
 dayjs.extend(utc);
@@ -93,29 +94,31 @@ function init() {
   didInit = true;
 }
 
-async function render(ctx, view, options) {
-  const cc = options.countryCode || 'US';
+async function render(ctx, view, props) {
+  const cc = props.countryCode || 'US';
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  options.lg = ccDefaults[0];
-  options.cc = cc;
+  props.lg = ccDefaults[0];
+  props.cc = cc;
   if (basename(ctx.request.path).endsWith('.xml')) {
-    return renderBrowseCountryXml(options, ctx);
+    return renderBrowseCountryXml(props, ctx);
   }
   if (ctx.request.query.amp === '1') {
-    options.amp = true;
+    props.amp = true;
   }
-  return ctx.render(view, options);
+  props.queryDefaultCandleMins = queryDefaultCandleMins;
+  return ctx.render(view, props);
 }
 
-async function renderBrowseCountryXml(options, ctx) {
-  const tzid = options?.results?.[0]?.timezone || 'America/New_York';
+async function renderBrowseCountryXml(props, ctx) {
+  const tzid = props?.results?.[0]?.timezone || 'America/New_York';
   ctx.response.remove('Cache-Control');
   const now = new Date();
   expiresSaturdayNight(ctx, now, tzid);
   ctx.type = 'text/xml';
-  options.writeResp = false;
-  options.lastmod = now.toISOString();
-  ctx.body = await ctx.render('shabbat-browse-country-xml', options);
+  props.writeResp = false;
+  props.lastmod = now.toISOString();
+  props.queryDefaultCandleMins = queryDefaultCandleMins;
+  ctx.body = await ctx.render('shabbat-browse-country-xml', props);
 }
 
 export async function shabbatBrowse(ctx) {

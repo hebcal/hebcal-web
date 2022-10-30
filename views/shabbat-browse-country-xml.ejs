@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <% for (const r of results) { -%>
-<url><loc>https://www.hebcal.com/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=s</loc>
+<url><loc>https://www.hebcal.com/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= queryDefaultCandleMins(r) %>&amp;M=on&amp;lg=s</loc>
 <lastmod><%=lastmod%></lastmod><changefreq>weekly</changefreq></url>
 <%   if (lg !== 's') { -%>
-<url><loc>https://www.hebcal.com/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= cc == 'IL' && r.name == 'Jerusalem' ? 40 : 18 %>&amp;M=on&amp;lg=<%= lg %></loc>
+<url><loc>https://www.hebcal.com/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= queryDefaultCandleMins(r) %>&amp;M=on&amp;lg=<%= lg %></loc>
 <lastmod><%=lastmod%></lastmod><changefreq>weekly</changefreq></url>
 <%   } -%>
 <% } -%>

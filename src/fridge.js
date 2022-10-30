@@ -1,5 +1,6 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
-import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty, cacheControl, getDefaultHebrewYear} from './common';
+import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty,
+  cacheControl, getDefaultHebrewYear, queryDefaultCandleMins} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -66,6 +67,7 @@ function makeProperties(ctx) {
     candleLightingStr: Locale.gettext('Candle lighting'),
     q: query,
     options,
+    queryDefaultCandleMins,
   };
 }
 
