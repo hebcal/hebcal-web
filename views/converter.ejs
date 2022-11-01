@@ -209,6 +209,19 @@ present.</p>
   <%= gregRangeShort %> Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
+<div id="future" class="row mt-4">
+<div class="col">
+<h4><%= hdate.render(locale, false) %></h4>
+<table class="table table-condensed table-striped">
+<col style="width:174px"><col>
+<tbody>
+<% futureYears.forEach((item) => { -%>
+<tr><td><%= item.d.format('ddd, D MMM YYYY') %></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.render(locale) %></a></td></tr>
+<% }); -%>
+</tbody>
+</table>
+</div><!-- .col -->
+</div><!-- .row -->
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

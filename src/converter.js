@@ -116,6 +116,7 @@ export async function hebrewDateConverter(ctx) {
     }
     makeCalendarUrl(p);
     makePrevNext(p);
+    makeFutureYears(ctx, p);
     return ctx.render('converter', p);
   }
 }
@@ -144,6 +145,19 @@ function makePrevNext(p) {
     p.prev = h2gURL(p.hdate.prev(), p.il);
   }
   p.next = h2gURL(p.hdate.next(), p.il);
+}
+
+// eslint-disable-next-line require-jsdoc
+function makeFutureYears(ctx, p) {
+  const locale = ctx.state.locale;
+  const arr = [];
+  for (let i = 1; i <= 50; i++) {
+    const hdate = new HDate(p.hd, p.hm, p.hy + i);
+    const d = dayjs(hdate.greg()).locale(locale);
+    arr.push({hd: hdate, d: d});
+  }
+  p.futureYears = arr;
+  p.h2gURL = h2gURL;
 }
 
 // eslint-disable-next-line require-jsdoc
