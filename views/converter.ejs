@@ -194,22 +194,26 @@ data-ad-slot="5342180883"></ins>
 month name, then the Hebrew year. <a
 href="/home/1824/numerical-values-of-hebrew-letters">Numerical values</a> are
 represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
-<h5 class="mt-4">Yahrzeit + Anniversary Calendar</h5>
-<p>Calculate anniversaries according to the Hebrew calendar. Print, subscribe
-to annual email reminders, and download a multi-year calendar feed to Apple,
-Google, Microsoft Outlook, and more.</p>
-<p><a class="btn btn-secondary" href="/yahrzeit" role="button">
-  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
-  Yahrzeit + Anniversary Calendar &raquo;</a></p>
-<h5 class="mt-4">Jewish Holiday Calendar</h5>
-<p>Holidays, candle-lighting times, and Torah readings for any year, past or
-present.</p>
-<p><a class="btn btn-secondary" href="<%=calendarUrl + yearArgs %>">
-  <svg class="icon icon-md mb-1 me-1"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
-  <%= gregRangeShort %> Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
-<div id="future" class="row mt-4">
+<div class="row d-print-none mt-3">
+<div class="col-sm-6 mb-3">
+<h5><svg class="icon icon-md mb-1 me-1 text-muted" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+ Yahrzeit + Anniversary Calendar</h5>
+<p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
+Hebrew Birthdays and Anniversaries for 20+ years.
+Free annual email reminders &amp; calendar downloads.
+<br><a href="/yahrzeit">Get started &raquo;</a></p>
+</div><!-- .col -->
+<div class="col-sm-6 mb-3">
+<h5><svg class="icon icon-md mb-1 me-1 text-muted" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+ Holiday Calendar</h5>
+<p>Jewish holidays, candle-lighting times, and Torah readings for any year,
+ past or present.
+<br><a href="<%=calendarUrl + yearArgs %>"><%= gregRangeShort %> Calendar &raquo;</a></p>
+</div><!-- .col -->
+</div><!-- .row -->
+<div id="future" class="row">
 <div class="col">
 <h4><%= hdate.render(locale, false) %></h4>
 <table class="table table-condensed table-striped">
