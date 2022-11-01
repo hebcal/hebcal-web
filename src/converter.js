@@ -151,13 +151,21 @@ function makePrevNext(p) {
 function makeFutureYears(ctx, p) {
   const locale = ctx.state.locale;
   const arr = [];
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 40; i++) {
     const hdate = new HDate(p.hd, p.hm, p.hy + i);
     const d = dayjs(hdate.greg()).locale(locale);
     arr.push({hd: hdate, d: d});
   }
-  p.futureYears = arr;
+  p.futureYearsHeb = arr;
   p.h2gURL = h2gURL;
+  const arr2 = [];
+  for (let i = 1; i <= 40; i++) {
+    const dt = makeGregDate(p.gy + i, p.gm, p.gd);
+    const hdate = new HDate(dt);
+    const d = dayjs(dt).locale(locale);
+    arr2.push({hd: hdate, d: d});
+  }
+  p.futureYearsGreg = arr2;
 }
 
 // eslint-disable-next-line require-jsdoc
