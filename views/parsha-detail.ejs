@@ -181,8 +181,8 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% if (typeof commentary['torah.org'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
 <% } %>
-<% if (typeof commentary['chabad.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org'].target%>">Chabad</a>
+<% if (typeof commentary['chabad.org'] === 'number') { %>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a>
 <% } %>
 <% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { %>
 <li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
@@ -193,11 +193,14 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
 <li><a class="outbound" title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
 <% } %>
-<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
-<% } %>
 <% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
 <li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
+<% } %>
+<% if (typeof commentary['aju.edu'] === 'number') { %>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a>
+<% } %>
+<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
+<li><a class="outbound" title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
 <% } %>
 </ul>
 </div><!-- .col -->

@@ -60,7 +60,7 @@ function addParshaToMeta(parshaName) {
     if (typeof obj === 'string') {
       const target = makeAnchor(obj);
       parshaAlias.set(target, anchor);
-    } else if (typeof obj === 'object' && obj.target) {
+    } else if (typeof obj === 'object' && obj !== null && obj.target) {
       const target = makeAnchor(obj.target);
       parshaAlias.set(target, anchor);
     }
