@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import {eventsToIcalendar} from '@hebcal/icalendar';
+import {locationToPlainObj} from '@hebcal/rest-api';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -63,16 +64,17 @@ export async function getZmanim(ctx) {
   } else {
     expires(ctx);
   }
+  const locObj = locationToPlainObj(loc);
   const roundMinute = q.sec === '1' ? false : true;
   if (isRange) {
     const times = getTimesForRange(startD, endD, loc, true, roundMinute);
     const start = startD.format('YYYY-MM-DD');
     const end = endD.format('YYYY-MM-DD');
-    ctx.body = {date: {start, end}, location: loc, times};
+    ctx.body = {date: {start, end}, location: locObj, times};
   } else {
     const times = getTimes(startD, loc, true, roundMinute);
     const isoDate = startD.format('YYYY-MM-DD');
-    ctx.body = {date: isoDate, location: loc, times};
+    ctx.body = {date: isoDate, location: locObj, times};
   }
 }
 

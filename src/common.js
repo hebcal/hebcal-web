@@ -1017,7 +1017,6 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
     }
     try {
       const location2 = getLocationFromQuery(ctx.db, geoip);
-      location2.geoip = gloc.geo;
       return location2;
     } catch (err) {
       // ignore
@@ -1349,9 +1348,6 @@ function makeGeoUrlArgs0(q, location) {
     args.set('zip', location.getGeoId() || q.zip);
   } else {
     args.set('geonameid', location.getGeoId());
-  }
-  if (location.geoip) {
-    args.set('geoip', location.geoip);
   }
   return args;
 }
