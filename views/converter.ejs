@@ -214,23 +214,23 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col -->
 </div><!-- .row -->
 <div id="future" class="row">
-<div class="col-md-6">
-<h4><%= d.format('D MMMM') %></h4>
-<table class="table table-condensed table-striped">
-<colgroup><col style="width:154px"><col></colgroup>
-<tbody>
-<% futureYearsGreg.forEach((item) => { -%>
-<tr><td><%= item.d.format('ddd, D MMM YYYY') %></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString() %></a></td></tr>
-<% }); -%>
-</tbody>
-</table>
-</div><!-- .col -->
-<div class="col-md-6">
+<div class="col-md-6" id="future-heb">
 <h4><%= hdate.render(locale, false) %></h4>
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
 <% futureYearsHeb.forEach((item) => { -%>
+<tr><td><%= item.d.format('ddd, D MMM YYYY') %></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString() %></a></td></tr>
+<% }); -%>
+</tbody>
+</table>
+</div><!-- .col -->
+<div class="col-md-6" id="future-greg">
+<h4><%= d.format('D MMMM') %></h4>
+<table class="table table-condensed table-striped">
+<colgroup><col style="width:154px"><col></colgroup>
+<tbody>
+<% futureYearsGreg.forEach((item) => { -%>
 <tr><td><%= item.d.format('ddd, D MMM YYYY') %></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString() %></a></td></tr>
 <% }); -%>
 </tbody>
