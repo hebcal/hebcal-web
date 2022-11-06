@@ -3,14 +3,14 @@
 <div class="col">
 <% if (updated) { %>
 <div class="alert alert-success">
-<svg class="icon m-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
 <strong>Success!</strong> Your subsciption information has been updated.
 <p>Email: <strong><%= emailAddress %></strong>
 <br>Location: <%= locationName %></p>
 </div><!-- .alert -->
 <% } else { %>
 <div class="alert alert-success">
-<svg class="icon m-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> A confirmation message has been sent to
 <strong><%= emailAddress %></strong> for <%= locationName %>.
 <br>Click the link within that message to confirm your subscription.
