@@ -142,9 +142,17 @@ ul {
   padding-left: 2rem;
 }
 ol,
-ul {
+ul,
+dl {
   margin-top: 0;
   margin-bottom: 1rem;
+}
+dt {
+  font-weight: 700;
+}
+dd {
+  margin-bottom: 0.5rem;
+  margin-left: 0;
 }
 small, .small {
   font-size: 0.875em;
@@ -314,6 +322,10 @@ button:not(:disabled),
   .col-md-4 {
     flex: 0 0 auto;
     width: 33.33333333%;
+  }
+  .col-md-6 {
+    flex: 0 0 auto;
+    width: 50%;
   }
   .col-md-8 {
     flex: 0 0 auto;
@@ -842,6 +854,16 @@ button:not(:disabled),
   background-color: #f8d7da;
   border-color: #f5c2c7;
 }
+.alert-dismissible {
+  padding-right: 3rem;
+}
+.alert-dismissible .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1.25rem 1rem;
+}
 .btn-close {
   display: none;
 }
@@ -1084,6 +1106,10 @@ button:not(:disabled),
   .d-sm-block {
     display: block;
   }
+  .col-sm-6 {
+    flex: 0 0 auto;
+    width: 50%;
+  }
 }
 @media (min-width: 768px) {
 
@@ -1159,6 +1185,11 @@ a:not([href]):not([tabindex]):focus {
 .icon.icon-sm {
   width: 1.0rem;
   height: 1.0rem;
+}
+.icon.icon-xs {
+  margin-top: -0.3rem;
+  width: 0.7rem;
+  height: 0.7rem;
 }
 .hebcal-footer {
   padding-top: 40px;
