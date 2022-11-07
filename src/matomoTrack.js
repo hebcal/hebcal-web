@@ -62,24 +62,34 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     }
   }
   const postData = args.toString();
+  const postLen = Buffer.byteLength(postData);
+  let path = '/ma/ma.php';
+  let sendPostBody = true;
+  if (postLen < 4000) {
+    path += '?' + postData;
+    sendPostBody = false;
+  }
   const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
   const xfwd = ctx.get('x-forwarded-for') || ipAddress;
+  const httpHost = 'www.hebcal.com';
   const headers = {
-    'Host': 'www.hebcal.com',
+    'Host': httpHost,
     'X-Forwarded-For': xfwd,
     'X-Client-IP': ipAddress,
     'X-Forwarded-Proto': 'https',
     'User-Agent': pkg.name + '/' + pkg.version,
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Content-Length': Buffer.byteLength(postData),
+    'Content-Length': sendPostBody ? postLen : 0,
   };
   if (ref && ref.length) {
     headers.Referer = ref;
   }
+  const hostname = isProduction ? 'www-internal.hebcal.com' : httpHost;
+  const port = isProduction ? 8080 : 80;
   const options = {
-    hostname: 'www-internal.hebcal.com',
-    port: 8080,
-    path: '/ma/ma.php',
+    hostname: hostname,
+    port: port,
+    path: path,
     method: 'POST',
     headers: headers,
   };
@@ -91,6 +101,8 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     ctx.logger.error(err);
   });
   req.setTimeout(1000);
-  req.write(postData);
+  if (sendPostBody) {
+    req.write(postData);
+  }
   req.end();
 }
