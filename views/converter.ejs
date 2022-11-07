@@ -252,19 +252,6 @@ document.addEventListener('DOMContentLoaded', function() {
     ctodayEl.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
   }
 });
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowLeft') {
-    var linkEl = document.querySelector('link[rel=prev]');
-    if (linkEl) {
-      document.location.href = linkEl.href;
-    }
-  } else if (e.key === 'ArrowRight') {
-    var linkEl = document.querySelector('link[rel=next]');
-    if (linkEl) {
-      document.location.href = linkEl.href;
-    }
-  }
-});
 </script>
 <% } -%>
 <%- await include('partials/footer.ejs') _%>
