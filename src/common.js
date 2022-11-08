@@ -160,6 +160,7 @@ export function urlArgsObj(query, override={}) {
     delete q.m;
   }
   delete q['.s'];
+  delete q.vis;
   for (const key of Object.keys(negativeOpts)) {
     if (off(q[key])) {
       q[key] = 'off';
