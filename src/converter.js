@@ -152,7 +152,11 @@ function makeFutureYears(ctx, p) {
   const locale = ctx.state.locale;
   const arr = [];
   for (let i = -5; i <= 25; i++) {
-    const hdate = new HDate(p.hd, p.hm, p.hy + i);
+    const hyear = p.hy + i;
+    if (hyear < 1) {
+      continue;
+    }
+    const hdate = new HDate(p.hd, p.hm, hyear);
     const d = dayjs(hdate.greg()).locale(locale);
     arr.push({hd: hdate, d: d});
   }
@@ -160,7 +164,11 @@ function makeFutureYears(ctx, p) {
   p.h2gURL = h2gURL;
   const arr2 = [];
   for (let i = -5; i <= 25; i++) {
-    const dt = makeGregDate(p.gy + i, p.gm, p.gd);
+    const gyear = p.gy + i;
+    if (gyear === 0 || gyear < -3760) {
+      continue;
+    }
+    const dt = makeGregDate(gyear, p.gm, p.gd);
     const hdate = new HDate(dt);
     const d = dayjs(dt).locale(locale);
     arr2.push({hd: hdate, d: d});
