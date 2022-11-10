@@ -1,6 +1,6 @@
 import send from 'koa-send';
 import {matomoTrack} from './matomoTrack';
-import {getIpAddress} from './common';
+import {getIpAddress, empty} from './common';
 import {transliterate} from 'transliteration';
 
 const DOCUMENT_ROOT = '/var/www/html';
@@ -8,6 +8,9 @@ const DOCUMENT_ROOT = '/var/www/html';
 // eslint-disable-next-line require-jsdoc
 export async function emailOpen(ctx) {
   const q = ctx.request.query;
+  if (empty(q.msgid)) {
+    return sendGif(ctx);
+  }
   if (!ctx.state.userId) {
     const msgid = q.msgid;
     const dot = msgid.indexOf('.');
@@ -18,6 +21,11 @@ export async function emailOpen(ctx) {
   const loc = transliterate(q.loc);
   matomoTrack(ctx, 'email-open', q['utm_campaign'], loc);
   await saveEmailOpenToDb(ctx, loc);
+  return sendGif(ctx);
+}
+
+// eslint-disable-next-line require-jsdoc
+function sendGif(ctx) {
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
   ctx.type = 'image/gif';
   return send(ctx, '/__utm.gif', {root: DOCUMENT_ROOT});
