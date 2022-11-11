@@ -1051,6 +1051,8 @@ export function makeGregDate(gy, gm, gd) {
     throw createError(400, `Gregorian month out of valid range 1-12: ${gm}`);
   } else if (yy > 9999) {
     throw createError(400, `Gregorian year cannot be greater than 9999: ${gy}`);
+  } else if (yy === 0) {
+    throw createError(400, `Invalid Gregorian year 0`);
   }
   const maxDay = greg.daysInMonth(mm, yy);
   if (dd < 1 || dd > maxDay) {

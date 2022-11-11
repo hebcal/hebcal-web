@@ -168,10 +168,14 @@ function makeFutureYears(ctx, p) {
     if (gyear === 0 || gyear < -3760) {
       continue;
     }
-    const dt = makeGregDate(gyear, p.gm, p.gd);
-    const hdate = new HDate(dt);
-    const d = dayjs(dt).locale(locale);
-    arr2.push({hd: hdate, d: d});
+    try {
+      const dt = makeGregDate(gyear, p.gm, p.gd);
+      const hdate = new HDate(dt);
+      const d = dayjs(dt).locale(locale);
+      arr2.push({hd: hdate, d: d});
+    } catch (err) {
+      // ignore error from makeGregDate
+    }
   }
   p.futureYearsGreg = arr2;
 }
