@@ -81,8 +81,8 @@ export async function shabbatApp(ctx) {
       ctx.state.options.heDateParts = true;
     }
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    const cb = q.callback;
-    if (typeof cb === 'string' && cb.length) {
+    const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
+    if (cb) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
     }
     ctx.body = obj;

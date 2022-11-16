@@ -54,8 +54,8 @@ export async function hebrewDateConverter(ctx) {
       ctx.lastModified = ctx.launchDate;
       ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
       let result = p;
-      const cb = q.callback;
-      if (typeof cb === 'string' && cb.length) {
+      const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
+      if (cb) {
         result = cb + '(' + JSON.stringify(result) + ')\n';
       }
       ctx.body = result;
@@ -85,8 +85,8 @@ export async function hebrewDateConverter(ctx) {
           result.il = p.il;
         }
       }
-      const cb = q.callback;
-      if (typeof cb === 'string' && cb.length) {
+      const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
+      if (cb) {
         result = cb + '(' + JSON.stringify(result) + ')\n';
       }
       ctx.body = result;

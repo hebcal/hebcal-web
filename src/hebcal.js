@@ -383,8 +383,8 @@ function renderJson(ctx) {
     options.heDateParts = true;
   }
   let obj = eventsToClassicApi(events, options, !leyningOff);
-  const cb = q.callback;
-  if (typeof cb === 'string' && cb.length) {
+  const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
+  if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
   const orig = ctx.request.query;
