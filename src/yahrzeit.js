@@ -192,9 +192,8 @@ async function makeFormResults(ctx) {
     if (hd.getMonth() >= months.ADAR_I) {
       ctx.state.adarInfo = true;
     }
-    const dt = hd.greg();
     return {
-      date: dayjs(dt).format('ddd, D MMM YYYY'),
+      d: dayjs(hd.greg()),
       desc: ev.render('en'),
       year: hd.getFullYear(),
     };
