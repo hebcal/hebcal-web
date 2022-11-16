@@ -85,7 +85,7 @@ function getEventClassName(evt) {
   const link = evt.link;
   if (typeof link === 'string' &&
     link.substring(0, 4) === 'http' &&
-    link.substring(0, 22) !== 'https://www.hebcal.com') {
+    link.substring(0, 23) !== 'https://www.hebcal.com/') {
     className += ' outbound';
   }
   return className;
