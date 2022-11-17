@@ -55,6 +55,7 @@ how Hebcal calculates Hebrew anniversaries occurring in Adar</a>.
 The date entered for <strong><%=futureDate.name%></strong> is
 <time datetime="<%=futureDate.day.format('YYYY-MM-DD')%>"><%=futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
 <br>Please double-check the date to ensure you have entered it correctly.
+<br><a class="small" href="#form">Edit names and dates</a>
 </div><!-- .alert -->
 <% } -%>
 <% if (distantPastDate) { -%>
@@ -65,6 +66,7 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 <time datetime="<%=distantPastDate.day.format('YYYY-MM-DD')%>"><%=distantPastDate.day.format('ddd, D MMM YYYY')%></time>, which is in the distant past.
 <br>Please double-check the date to ensure you have entered it correctly.
 <br>Be sure to use 4-digit years (e.g. 2015 instead of 15).
+<br><a class="small" href="#form">Edit names and dates</a>
 </div><!-- .alert -->
 <% } -%>
 <% tables.forEach((items, heading) => { -%>
@@ -104,14 +106,28 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 <p>In the form below, enter the date of death (or birth or anniversary).
 Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg> Add another name</span> button at the bottom of the page to add
 additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active" aria-current="page" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Form</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" id="import-csv-tab" data-bs-toggle="tab" data-bs-target="#import-csv" type="button" role="tab" aria-controls="import-csv" aria-selected="false">Import</a>
+  </li>
+</ul>
 </div><!-- .d-print-none -->
+<div class="tab-content">
+<div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 <form class="d-print-none" method="post" action="/yahrzeit">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
-<% if (num === 1 || typeof q['t'+num] === 'string') { -%>
+<% if (typeof q['t'+num] === 'string') { -%>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
 <% } -%>
 <% } %>
+<% if (count === 1 && typeof q.t1 !== 'string') { -%>
+<!-- empty form -->
+<%- await include('partials/yahrzeit-row.ejs', {num: 1}) -%>
+<% } -%>  
 </div><!-- #rows -->
 <div class="clearfix">
 <p class="text-end float-sm-end">
@@ -151,6 +167,122 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <button type="submit" class="btn btn-primary"><%=isEditPage?'Update':'Create'%> Calendar</button>
 </form>
+</div><!-- #home -->
+<div class="tab-pane" id="import-csv" role="tabpanel" aria-labelledby="import-csv-tab" tabindex="0">
+<p class="mt-3">You can import a Comma Separated Values (CSV) file into this page.
+  The file must be formatted carefully for the import to work correctly.</p>
+<p>The CSV file may contain 1-4 columns. Column names and types are listed below.
+  A header row is optional.</p>
+<ol>
+  <li>Date: <code>mm/dd/yyyy</code>. Gregorian date of death (or birth), USA date format with 4-digit year.</li>
+  <li>Name: If blank, defaults to <code>Person1</code>, <code>Person2</code>, ...</li>
+  <li>After sunset: <code>true</code> or <code>TRUE</code> for after sunset; <code>false</code>, <code>FALSE</code>, or (blank) for before sunset. If blank, defaults to <strong>false</strong>.</li>
+  <li>Type: <code>Yahrzeit</code>, <code>Birthday</code>, or <code>Anniversary</code>. If blank, defaults to <strong>Yahrzeit</strong>.</li>
+</ol>
+<form id="import-form" action="#">
+  <input class="form-control mb-3" type="file" id="formFile" accept=".csv,text/csv">
+  <button type="submit" class="btn btn-primary mb-3">Import</button>
+</form>
+<div id="nofile-alert" class="alert alert-danger" role="alert" hidden>
+  Please choose a CSV file to upload.
+  <br>Or, click the <strong>Form</strong> tab above to enter names and dates.
+</div><!-- .alert -->
+<div id="badimport-alert" class="alert alert-danger" role="alert" hidden>
+  Error: 0 records imported. Please check the CSV file format and try again.
+</div><!-- .alert -->
+<div id="success-alert" class="alert alert-success" role="alert" hidden>
+  <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+  Successfully imported <span id="success-numrecords">?</span> records from <span id="success-filename">?</span>.
+  <br>Click the <strong>Form</strong> tab above to continue.  
+</div><!-- .alert -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+<script>
+function processRow(row) {
+  var parts = row[0].trim().split('/');
+  var mm = parseInt(parts[0], 10);
+  var dd = parseInt(parts[1], 10);
+  var yy = parseInt(parts[2], 10);
+  if (isNaN(mm) || isNaN(dd) || isNaN(yy)) {
+    return false;
+  }
+  var n = getCurrentCount();
+  if (document.getElementById('y'+n).value && document.getElementById('m'+n).value && document.getElementById('d'+n).value) {
+    n = addNewRow();
+  }
+  document.getElementById('d'+n).value = ''+dd;
+  document.getElementById('m'+n).value = ''+mm;
+  document.getElementById('y'+n).value = ''+yy;
+  if (typeof row[1] === 'string') {
+    var name = row[1].trim();
+    document.getElementById('n'+n).value = name;
+  }
+  if (typeof row[2] === 'boolean' && row[2]) {
+    document.getElementById('s'+n+'-0').checked = false;
+    document.getElementById('s'+n+'-1').checked = true;
+  }
+  if (typeof row[3] === 'string') {
+    var typ = row[3].trim().toLowerCase();
+    var el = document.getElementById('t'+n);
+    switch (typ[0]) {
+      case 'y':
+      el.value = 'Yahrzeit';
+      break;
+      case 'b':
+      el.value = 'Birthday';
+      break;
+      case 'a':
+      el.value = 'Anniversary';
+      break;
+    }
+  }
+  addNewRow();
+  return true;
+}
+var formFileEl = document.getElementById('formFile');
+var formEl = document.getElementById('import-form');
+formEl.addEventListener('submit', function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  var nofileAlertEl = document.getElementById('nofile-alert');
+  var badimportAlertEl = document.getElementById('badimport-alert');
+  var successAlertEl = document.getElementById('success-alert');
+  if (formFileEl.files.length == 0) {
+    nofileAlertEl.hidden = false;
+    badimportAlertEl.hidden = true;
+    successAlertEl.hidden = true;
+  } else {
+    nofileAlertEl.hidden = true;
+    badimportAlertEl.hidden = true;
+    successAlertEl.hidden = true;
+    var file = formFileEl.files[0];
+    console.log(file);
+    Papa.parse(file, {
+      dynamicTyping: true,
+      complete: function(results) {
+        var numOK = 0;
+        for (var i = 0; i < results.data.length; i++) {
+          var row = results.data[i];
+          if (typeof row[0] === 'string') {
+            var ok = processRow(row);
+            if (ok) {
+              numOK++;
+            }
+          }
+        }
+        if (numOK) {
+          document.getElementById('success-numrecords').innerHTML = numOK;
+          document.getElementById('success-filename').innerHTML = file.name;
+          successAlertEl.hidden = false;
+        } else {
+          badimportAlertEl.hidden = false;
+        }
+      }
+    });
+  }
+});
+</script>
+</div><!-- #import-csv -->
+</div><!-- .tab-content -->
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row d-print-none mt-3">

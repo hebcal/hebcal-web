@@ -1,8 +1,8 @@
 <div class="yahrzeit-row" id="row<%=num%>">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
 <div class="col-auto"><%=num%>.</div>
-<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name (optional)">
-<label class="form-label" for="n<%=num%>">Name (optional)</label></div>
+<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name">
+<label class="form-label" for="n<%=num%>">Name</label></div>
 <div class="col-auto form-floating"><select name="t<%=num%>" id="t<%=num%>" class="form-select">
  <option <%= (q['t'+num] == 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
  <option <%= (q['t'+num] == 'Birthday') ? 'selected' : '' %>>Birthday</option>
@@ -26,7 +26,7 @@
  <option <%= (q['m'+num] == 12) ? 'selected' : '' %> value="12">12 - December</option>
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
 <label class="form-label" for="y<%=num%>">Year</label></div>
 <div class="col-auto m-2">
  <div class="form-check">

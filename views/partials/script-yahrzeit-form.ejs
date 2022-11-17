@@ -1,12 +1,17 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 var count=<%=count%>;
+function getCurrentCount() {
+  return count;
+}
+window.getCurrentCount = getCurrentCount;
+
 function yahrzeitRow(n) {
   return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">'+
   '<div class="col-auto">'+n+'.</div>' +
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name (optional)">'+
-  '<label class="form-label" for="n'+n+'">Name (optional)</label></div>'+
+  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name">'+
+  '<label class="form-label" for="n'+n+'">Name</label></div>'+
   '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
   '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option></select>'+
   '<label class="form-label" for="t'+n+'">Type</label></div>'+
@@ -36,7 +41,8 @@ function yahrzeitRow(n) {
   ' Delete</button></div>'+
   '</div>';
 }
-document.getElementById("newrow").onclick = function() {
+
+function addNewRow() {
   var n = ++count;
   var newNode = document.createElement("div");
   newNode.className = "yahrzeit-row";
@@ -46,8 +52,14 @@ document.getElementById("newrow").onclick = function() {
   parentDiv.insertBefore(newNode, null);
   var delBtn = document.getElementById("del-"+n);
   clickToDelete(delBtn);
-  return false;
+  return n;
 }
+window.addNewRow = addNewRow;
+
+document.getElementById("newrow").addEventListener('click', function() {
+  addNewRow();
+  return false;
+});
 
   var checkbox = document.getElementById('yizkor');
   var radio0 = document.getElementById('i0');
