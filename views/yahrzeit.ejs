@@ -179,6 +179,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   <li>After sunset: <code>true</code> or <code>TRUE</code> for after sunset; <code>false</code>, <code>FALSE</code>, or (blank) for before sunset. If blank, defaults to <strong>false</strong>.</li>
   <li>Type: <code>Yahrzeit</code>, <code>Birthday</code>, or <code>Anniversary</code>. If blank, defaults to <strong>Yahrzeit</strong>.</li>
 </ol>
+<p>Example file: <a href="/etc/yahrzeit-example.csv" download="yahrzeit-example.csv">yahrzeit-example.csv</a></p>
 <form id="import-form" action="#">
   <input class="form-control mb-3" type="file" id="formFile" accept=".csv,text/csv">
   <button type="submit" class="btn btn-primary mb-3">Import</button>
@@ -206,6 +207,9 @@ function processRow(row) {
     return false;
   }
   var n = getCurrentCount();
+  if (!document.getElementById('y'+n) || !document.getElementById('m'+n) || !document.getElementById('d'+n)) {
+    n = addNewRow();
+  }
   if (document.getElementById('y'+n).value && document.getElementById('m'+n).value && document.getElementById('d'+n).value) {
     n = addNewRow();
   }
@@ -255,7 +259,6 @@ formEl.addEventListener('submit', function(event) {
     badimportAlertEl.hidden = true;
     successAlertEl.hidden = true;
     var file = formFileEl.files[0];
-    console.log(file);
     Papa.parse(file, {
       dynamicTyping: true,
       complete: function(results) {

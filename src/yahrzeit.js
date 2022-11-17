@@ -88,7 +88,7 @@ export async function yahrzeitApp(ctx) {
         }
         if (info.day.isAfter(today)) {
           ctx.state.futureDate = info;
-        } else if ((today.year() - info.day.year()) > 150) {
+        } else if ((today.year() - info.day.year()) > 200) {
           ctx.state.distantPastDate = info;
         }
       }
