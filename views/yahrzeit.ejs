@@ -95,17 +95,15 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 </div>
 </div><!-- .btn-toolbar -->
 <% } %>
-<div class="d-print-none">
+<div class="d-print-none mt-2">
+<div class="float-start">
+  <svg width="64" height="64" class="me-3 mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+</div>
 <p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 and Hebrew Anniversaries.</p>
-<div class="float-start">
-  <svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
-</div>
 <p>Print, subscribe to annual email reminders, and download a multi-year
 calendar feed to Apple, Google, Outlook, and more.</p>
-<p>In the form below, enter the date of death (or birth or anniversary).
-Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg> Add another name</span> button at the bottom of the page to add
-additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
+<div class="clearfix"></div>
 <ul class="nav nav-tabs" role="tablist">
   <li class="nav-item" role="presentation">
     <a class="nav-link active" aria-current="page" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Form</a>
@@ -117,6 +115,10 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 </div><!-- .d-print-none -->
 <div class="tab-content">
 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+<p class="mt-3">In the form below, enter the date of death (or birth or anniversary).
+Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+Add another name</span> button at the bottom of the page to add
+additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form class="d-print-none" method="post" action="/yahrzeit">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
@@ -169,17 +171,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 </form>
 </div><!-- #home -->
 <div class="tab-pane" id="import-csv" role="tabpanel" aria-labelledby="import-csv-tab" tabindex="0">
-<p class="mt-3">You can import a Comma Separated Values (CSV) file into this page.
-  The file must be formatted carefully for the import to work correctly.</p>
-<p>The CSV file may contain 1-4 columns. Column names and types are listed below.
-  A header row is optional.</p>
-<ol>
-  <li>Date: <code>mm/dd/yyyy</code>. Gregorian date of death (or birth), USA date format with 4-digit year.</li>
-  <li>Name: If blank, defaults to <code>Person1</code>, <code>Person2</code>, ...</li>
-  <li>After sunset: <code>true</code> or <code>TRUE</code> for after sunset; <code>false</code>, <code>FALSE</code>, or (blank) for before sunset. If blank, defaults to <strong>false</strong>.</li>
-  <li>Type: <code>Yahrzeit</code>, <code>Birthday</code>, or <code>Anniversary</code>. If blank, defaults to <strong>Yahrzeit</strong>.</li>
-</ol>
-<p>Example file: <a href="/etc/yahrzeit-example.csv" download="yahrzeit-example.csv">yahrzeit-example.csv</a></p>
+<p class="mt-3">Import a Comma Separated Values (CSV) file with names and dates.</p>
 <form id="import-form" action="#">
   <input class="form-control mb-3" type="file" id="formFile" accept=".csv,text/csv">
   <button type="submit" class="btn btn-primary mb-3">Import</button>
@@ -196,6 +188,16 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   Successfully imported <span id="success-numrecords">?</span> records from <span id="success-filename">?</span>.
   <br>Click the <strong>Form</strong> tab above to continue.  
 </div><!-- .alert -->
+<h5>CSV file format</h5>
+<p>The CSV file may contain 1-4 columns. Column names and types are as follows:</p>
+<ol>
+  <li>Date: <code>mm/dd/yyyy</code>. Gregorian date of death (or birth), USA date format with 4-digit year.</li>
+  <li>Name: If blank, defaults to <code>Person1</code>, <code>Person2</code>, ...</li>
+  <li>After sunset: <code>true</code> or <code>TRUE</code> for after sunset; <code>false</code>, <code>FALSE</code>, or (blank) for before sunset. If blank, defaults to <strong>false</strong>.</li>
+  <li>Type: <code>Yahrzeit</code>, <code>Birthday</code>, or <code>Anniversary</code>. If blank, defaults to <strong>Yahrzeit</strong>.</li>
+</ol>
+<p>The CSV file may optionally contain a header line.</p>
+<p>Example file: <a href="/etc/yahrzeit-example.csv" download="yahrzeit-example.csv">yahrzeit-example.csv</a></p>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 <script>
 function processRow(row) {
