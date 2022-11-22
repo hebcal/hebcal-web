@@ -128,7 +128,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daf Yomi', id: 'daf-yomi',
   emoji: '📖',
-  summary: '<p>Daily regimen of learning the Talmud</p>',
+  summary: '<p>Daily regimen of learning the Babylonian Talmud</p>',
   feedLength: 365,
   years: 5,
 }) -%>
@@ -137,6 +137,13 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   emoji: '📖',
   summary: `<p>A program of daily learning in which participants study two Mishnayot
 each day in order to finish the entire Mishnah in ~6 years</p>`,
+  feedLength: 365,
+  years: 5,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Yerushalmi Yomi', id: 'yerushalmi-vilna',
+  emoji: '📖',
+  summary: `<p>Daily regimen of learning the Jerusalem Talmud (Vilna Edition)</p>`,
   feedLength: 365,
   years: 5,
 }) -%>

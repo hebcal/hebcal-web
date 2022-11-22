@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
+  YerushalmiYomiEvent, yerushalmiYomi, vilna,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
@@ -126,6 +127,8 @@ function mastheadDafYomi(ctx, hd) {
   const myomiIndex = new MishnaYomiIndex();
   const mishnaYomi = myomiIndex.lookup(hd);
   ctx.state.mishnaYomi = new MishnaYomiEvent(hd, mishnaYomi);
+  const daf = yerushalmiYomi(hd, vilna);
+  ctx.state.yerushalmiVilna = new YerushalmiYomiEvent(hd, daf);
 }
 
 function myDateFormat(d) {

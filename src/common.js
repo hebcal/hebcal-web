@@ -110,6 +110,7 @@ const booleanOpts = {
   euro: 'euro',
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',
+  yyomi: 'yerushalmi',
 };
 
 const numberOpts = {
