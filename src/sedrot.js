@@ -29,8 +29,25 @@ for (const parshaName of allParshiot) {
   items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
-items15yrIsrael.set(VEZOT_HABERAKHAH, []);
-items15yrDiaspora.set(VEZOT_HABERAKHAH, []);
+
+function makeVezotEvents(il) {
+  const startYear = new HDate().getFullYear() - 2;
+  const mday = il ? 22 : 23;
+  const events = [];
+  for (let i = 0; i < 18; i++) {
+    const hyear = startYear + i;
+    const pe = new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [VEZOT_HABERAKHAH], il);
+    events.push(pe);
+  }
+  return events;
+}
+
+items15yrIsrael.set(VEZOT_HABERAKHAH, makeVezotEvents(true).map((ev) => {
+  return eventToItem(ev, true);
+}));
+items15yrDiaspora.set(VEZOT_HABERAKHAH, makeVezotEvents(false).map((ev) => {
+  return eventToItem(ev, false);
+}));
 
 /**
  * Returns Parsha events during 15 year period that match this parshaName
@@ -48,24 +65,28 @@ function get15yrEvents(parshaName, il) {
   }
   const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
   return events.map(function(ev) {
-    const desc = ev.getDesc().substring(9);
-    const item = {
-      event: ev,
-      desc: desc,
-      anchor: makeAnchor(desc),
-      d: dayjs(ev.getDate().greg()),
-      hyear: ev.getDate().getFullYear(),
-    };
-    const fk = getLeyningForParshaHaShavua(ev, il);
-    if (fk.reason?.haftara) {
-      item.haftara = fk.haftara;
-      item.haftaraReason = fk.reason.haftara;
-    }
-    if (fk.reason?.M) {
-      item.maftir = fk.fullkriyah.M;
-    }
-    return item;
+    return eventToItem(ev, il);
   });
+}
+
+function eventToItem(ev, il) {
+  const desc = ev.getDesc().substring(9);
+  const item = {
+    event: ev,
+    desc: desc,
+    anchor: makeAnchor(desc),
+    d: dayjs(ev.getDate().greg()),
+    hyear: ev.getDate().getFullYear(),
+  };
+  const fk = getLeyningForParshaHaShavua(ev, il);
+  if (fk.reason?.haftara) {
+    item.haftara = fk.haftara;
+    item.haftaraReason = fk.reason.haftara;
+  }
+  if (fk.reason?.M) {
+    item.maftir = fk.fullkriyah.M;
+  }
+  return item;
 }
 
 const parshaDateRe = /^([^\d]+)-(\d+)$/;
