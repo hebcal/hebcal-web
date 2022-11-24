@@ -110,10 +110,12 @@ table.tbody-striped > thead > * > * {
 <select class="form-select nav-year" id="nav-year1" aria-label="Year selector">
 <% if (isHebrewYear) { %>
 <%   for (let i = calendarYear - 2; i <= calendarYear + 10; i++) { %>
+<%     if (i < 3762) { continue; } -%>
 <option <%= i === calendarYear ? ' selected' : ''%>><%=i-3761%>-<%=i-3760%></option>
 <%   } %>
 <% } else { %>
 <%   for (let i = greg1 - 2; i <= greg1+6; i++) { %>
+<%     if (i < 1) { continue; } -%>
 <option <%= i == greg1 ? ' selected' : ''%>><%=i%></option>
 <%   } %>
 <% } %>
