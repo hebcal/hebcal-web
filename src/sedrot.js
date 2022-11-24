@@ -29,6 +29,8 @@ for (const parshaName of allParshiot) {
   items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
+items15yrIsrael.set(VEZOT_HABERAKHAH, []);
+items15yrDiaspora.set(VEZOT_HABERAKHAH, []);
 
 /**
  * Returns Parsha events during 15 year period that match this parshaName
