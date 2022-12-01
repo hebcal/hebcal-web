@@ -53,6 +53,7 @@ export function deserializeDownload(data) {
   if (msg.getAddhebrewdates()) q.d = 'on';
   if (msg.getAddhebrewdatesforevents()) q.D = 'on';
   if (msg.getYomkippurkatan()) q.ykk = 'on';
+  if (msg.getYerushalmiyomi()) q.yyomi = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();

@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.Download', null, global);
 goog.exportSymbol('proto.Download.EndOneofCase', null, global);
@@ -194,7 +194,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     end: jspb.Message.getFieldWithDefault(msg, 44, 0),
     yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
     hour12: jspb.Message.getFieldWithDefault(msg, 39, 0),
-    cityname: jspb.Message.getFieldWithDefault(msg, 40, "")
+    cityname: jspb.Message.getFieldWithDefault(msg, 40, ""),
+    yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false)
   };
 
   if (includeInstance) {
@@ -394,6 +395,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 40:
       var value = /** @type {string} */ (reader.readString());
       msg.setCityname(value);
+      break;
+    case 45:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setYerushalmiyomi(value);
       break;
     default:
       reader.skipField();
@@ -708,6 +713,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f.length > 0) {
     writer.writeString(
       40,
+      f
+    );
+  }
+  f = message.getYerushalmiyomi();
+  if (f) {
+    writer.writeBool(
+      45,
       f
     );
   }
@@ -1602,6 +1614,24 @@ proto.Download.prototype.getCityname = function() {
  */
 proto.Download.prototype.setCityname = function(value) {
   return jspb.Message.setProto3StringField(this, 40, value);
+};
+
+
+/**
+ * optional bool yerushalmiYomi = 45;
+ * @return {boolean}
+ */
+proto.Download.prototype.getYerushalmiyomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 45, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setYerushalmiyomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 45, value);
 };
 
 

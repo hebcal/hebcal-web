@@ -60,4 +60,5 @@ message Download {
   }
   Hour12 hour12 = 39;
   string cityName = 40;
+  bool yerushalmiYomi = 45;
 }

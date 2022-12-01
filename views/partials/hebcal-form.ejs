@@ -1,7 +1,35 @@
 <form id="f1" name="f1" autocomplete="off" action="/hebcal">
 <input type="hidden" name="v" value="1">
 <div class="row">
-<div class="col-sm-auto mb-3">
+<div class="col-sm-auto mb-2">
+<fieldset class="mb-3">
+<div class="row align-items-center gx-3">
+<div class="form-floating col-auto mb-1">
+<input type="text" inputmode="numeric" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
+<label for="year">Year</label>
+</div><!-- .form-floating -->
+<div class="col-auto">
+<div class="form-check mb-1">
+  <input class="form-check-input" type="radio" name="yt" value="G" id="ytG" <%- q.yt !== 'H' ? 'checked' : '' %>>
+  <label class="form-check-label" for="ytG">Gregorian year <small>(common era)</small></label>
+  </div>
+<div class="form-check mb-1">
+  <input class="form-check-input" type="radio" name="yt" value="H" id="ytH" <%- q.yt === 'H' ? 'checked' : '' %>>
+  <label class="form-check-label" for="ytH">Hebrew year</label>
+</div>
+</div><!-- .col-auto -->
+</div><!-- .row -->
+</fieldset>
+<fieldset class="mb-3">
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' -%> value="off">
+    <label class="form-check-label" for="i0">Diaspora holiday schedule</label>
+  </div>
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' -%> value="on">
+    <label class="form-check-label" for="i1">Israel holiday schedule</label>
+  </div>
+</fieldset>
 <fieldset>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="maj" value="on" <%= q.maj === 'on' ? 'checked' : '' -%> id="maj">
@@ -25,43 +53,15 @@
 <input class="form-check-input" type="checkbox" name="o" value="on" <%= q.o === 'on' ? 'checked' : '' -%> id="o">
 <label class="form-check-label" for="o">Days of the Omer</label>
 </div><div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
-<label class="form-check-label" for="F">Daf Yomi</label>
-</div><div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="myomi" value="on" <%= q.myomi === 'on' ? 'checked' : '' -%> id="myomi">
-<label class="form-check-label" for="myomi">Mishna Yomi</label>
+<input class="form-check-input" type="checkbox" name="ykk" value="on" <%= q.ykk === 'on' ? 'checked' : '' -%> id="ykk">
+<label class="form-check-label" for="ykk">Yom Kippur Katan</label>
+ &nbsp;<span title="Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' -%> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
-<fieldset class="mt-3">
-  <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' -%> value="off">
-    <label class="form-check-label" for="i0">Diaspora holiday schedule</label>
-  </div>
-  <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' -%> value="on">
-    <label class="form-check-label" for="i1">Israel holiday schedule</label>
-  </div>
-</fieldset>
-<div class="row align-items-center gx-3 mt-3">
-<div class="form-floating col-auto mb-1">
-<input type="text" inputmode="numeric" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
-<label for="year">Year</label>
-</div><!-- .form-floating -->
-<div class="col-auto">
-<div class="form-check mb-1">
-  <input class="form-check-input" type="radio" name="yt" value="G" id="ytG" <%- q.yt !== 'H' ? 'checked' : '' %>>
-  <label class="form-check-label" for="ytG">Gregorian year <small>(common era)</small></label>
-  </div>
-<div class="form-check mb-1">
-  <input class="form-check-input" type="radio" name="yt" value="H" id="ytH" <%- q.yt === 'H' ? 'checked' : '' %>>
-  <label class="form-check-label" for="ytH">Hebrew year</label>
-</div>
-</div><!-- .col-auto -->
-</div><!-- .row -->
 </div><!-- .col-sm-6 -->
-<div class="col-sm-auto mb-3">
+<div class="col-sm-auto mb-2">
 <fieldset>
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
@@ -87,6 +87,19 @@
 <input class="form-check-input" type="checkbox" name="d" value="on" <%= q.d === 'on' ? 'checked' : '' -%> id="d2">
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
 </div>
+<div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
+<label class="form-check-label" for="F">Daf Yomi</label>
+ &nbsp;<span title="Daily regimen of learning the Babylonian Talmud" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="myomi" value="on" <%= q.myomi === 'on' ? 'checked' : '' -%> id="myomi">
+<label class="form-check-label" for="myomi">Mishna Yomi</label>
+ &nbsp;<span title="Daily study of two Mishnayot each day in order to finish the entire Mishnah in ~6 years" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="yyomi" value="on" <%= q.yyomi === 'on' ? 'checked' : '' -%> id="yyomi">
+<label class="form-check-label" for="yyomi">Yerushalmi Yomi</label>
+ &nbsp;<span title="Daily study of the Jerusalem Talmud (Vilna Edition)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
 </fieldset>
 <fieldset class="mt-2">
 <div class="mb-3">
@@ -106,23 +119,27 @@
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
 <div class="mb-1">Havdalah</div>
-<div class="form-check mb-2">
+<div class="form-check mb-1">
   <input class="form-check-input" type="radio" name="M" id="M1" <%- q.M !== 'off' ? 'checked' : '' %> value="on">
   <label class="form-check-label" for="M1">nightfall (tzeit hakochavim)</label>
   &nbsp;<span title="the point when 3 small stars are observable in the night time sky with the naked eye" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
-<div class="form-check mb-2">
-  <input class="form-check-input" type="radio" name="M" id="M0" <%- q.M === 'off' ? 'checked' : '' %> value="off">
-  <label class="form-check-label" for="M0">minutes past sundown</label>
-  &nbsp;<span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<div class="row gx-2 mb-3">
+<div class="col-auto">
+<div class="form-check">
+  <input class="form-check-input" style="margin-top: 0.75em" type="radio" name="M" id="M0" <%- q.M === 'off' ? 'checked' : '' %> value="off">
+  <label class="col-auto col-form-label" for="M0">minutes past sundown:</label>
 </div><!-- .form-check -->
-<div class="mb-3">
-  <input type="text" inputmode="numeric" class="form-control" name="m" value="<%= q.m || '' %>" size="3" maxlength="2" placeholder="minutes past sundown" pattern="\d*">
-</div><!-- .mb-3 -->
+</div><!-- .col-auto -->
+<div class="col-auto">
+  <input class="form-control" inputmode="numeric" type="text" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" id="m" pattern="\d*">
+</div>
+<div class="col-auto" style="margin: auto 0">
+  <span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
+</div><!-- .row -->
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
-<input type="hidden" name="ykk" value="<%= q.ykk || 'off' %>" id="ykk">
-<input type="hidden" name="yyomi" value="<%= q.yyomi || 'off' %>" id="yyomi">
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
