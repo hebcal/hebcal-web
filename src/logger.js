@@ -146,7 +146,7 @@ export function errorLogger(logger) {
     }
     if (ctx && ctx.status && ctx.status != 200 &&
         (ctx.status !== 404 || !ignore404.has(ctx.request.path))) {
-      matomoTrack(ctx, 'Error', ctx.status, null, {
+      matomoTrack(ctx, 'Error', ctx.status, err?.message, {
         url: ctx.request.href,
       });
     }
