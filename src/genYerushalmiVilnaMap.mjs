@@ -1,15 +1,12 @@
 /* eslint-disable require-jsdoc */
 import {vilna} from '@hebcal/core';
-import pino from 'pino';
 
-const logger = pino();
 const allRefs = {};
 
 (async () => {
-  // ignore number of dapim
-  for (const [masechet] of vilna.shas) {
-    logger.info(masechet);
-    allRefs[masechet] = [];
+  for (const [masechet, dapim] of vilna.shas) {
+    console.error(masechet);
+    allRefs[masechet] = Array(dapim);
     await handleTractate(masechet);
   }
   console.log(JSON.stringify(allRefs));
@@ -22,14 +19,30 @@ async function handleTractate(masechet) {
   const nodes = responseData.alts.Vilna.nodes;
   for (const node of nodes) {
     if (node.nodeType !== 'ArrayMapNode') {
+      console.error(`ignoring ${masechet} nodeType ${node.nodeType}`);
       continue;
     }
+    if (!Array.isArray(node.refs)) {
+      console.error(`ignoring ${masechet} ArrayMapNode without refs`);
+      continue;
+    }
+    const startPage = parseInt(node.startingAddress, 10);
+    const startSide = node.startingAddress[node.startingAddress.length - 1]; // a or b
+    let currentSide = startSide === 'a';
+    let currentPage = startPage;
     const prefix = `Jerusalem Talmud ${masechet} `;
     for (let ref of node.refs) {
       if (ref.startsWith(prefix)) {
         ref = ref.substring(prefix.length);
       }
-      allRefs[masechet].push(ref);
+      if (currentSide) {
+        allRefs[masechet][currentPage] = ref;
+      }
+      if (!currentSide) {
+        currentPage++;
+      }
+      currentSide = !currentSide;
     }
   }
+  allRefs[masechet] = allRefs[masechet].slice(1);
 }
