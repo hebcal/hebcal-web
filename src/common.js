@@ -535,6 +535,11 @@ export function makeHebcalOptions(db, query) {
       ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
   }
+  const yerushalmiEd = query.yye;
+  if (typeof yerushalmiEd === 'string' &&
+      yerushalmiEd.toLowerCase()[0] === 's') {
+    options.yerushalmiEdition = 2;
+  }
   return options;
 }
 

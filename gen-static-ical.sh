@@ -91,7 +91,11 @@ fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=
 compress_file $FILE
 
 FILE="yerushalmi-vilna"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Vilna%29&color=%23BF5AF2"
+compress_file $FILE
+
+FILE="yerushalmi-schottenstein"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="yom-kippur-katan"
