@@ -215,7 +215,10 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .row -->
 <div id="future" class="row">
 <div class="col-md-6" id="future-heb">
-<h4><%= hdate.render(locale, false) %></h4>
+<h4><%= hdate.render(locale, false) %>
+ <a class="ms-2" title="Download CSV" download href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
+  <svg class="icon icon-md" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+ </a></h4>
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>

@@ -7,7 +7,7 @@ import {
   CACHE_CONTROL_IMMUTABLE,
 } from './common';
 import {geoAutoComplete} from './complete';
-import {hebrewDateConverter} from './converter';
+import {hebrewDateConverter, dateConverterCsv} from './converter';
 import {emailForm, emailVerify} from './email';
 import {emailOpen} from './emailOpen';
 import {fridgeShabbat} from './fridge';
@@ -100,6 +100,8 @@ export function wwwRouter() {
       return;
     } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
       return fridgeShabbat(ctx);
+    } else if (rpath.startsWith('/converter/csv')) {
+      return dateConverterCsv(ctx);
     } else if (rpath.startsWith('/converter')) {
       return hebrewDateConverter(ctx);
     } else if (rpath.startsWith('/shabbat/browse')) {

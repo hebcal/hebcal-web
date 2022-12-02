@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya} from '@hebcal/core';
+import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
@@ -7,7 +7,7 @@ import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   getDefaultYear, urlArgs,
 } from './common';
 import createError from 'http-errors';
-import {pad4, pad2} from '@hebcal/rest-api';
+import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales';
 import {gematriyaDate} from './gematriyaDate';
 
@@ -150,26 +150,32 @@ function makePrevNext(p) {
 // eslint-disable-next-line require-jsdoc
 function makeFutureYears(ctx, p) {
   const locale = ctx.state.locale;
-  const arr = [];
-  for (let i = -5; i <= 25; i++) {
-    const hyear = p.hy + i;
-    if (hyear < 1) {
-      continue;
-    }
-    const hdate = new HDate(p.hd, p.hm, hyear);
-    const d = dayjs(hdate.greg()).locale(locale);
-    arr.push({hd: hdate, d: d});
-  }
+  const arr = makeFutureYearsHeb(p.hdate, 25, locale);
   p.futureYearsHeb = arr;
   p.h2gURL = h2gURL;
+  const arr2 = makeFutureYearsGreg(p.d, locale);
+  p.futureYearsGreg = arr2;
+}
+
+/**
+ * @private
+ * @param {dayjs.Dayjs} d
+ * @param {string} locale
+ * @return {any[]}
+ */
+function makeFutureYearsGreg(d, locale) {
   const arr2 = [];
+  const gy = d.year();
+  const gm = d.month() + 1;
+  const gd0 = d.date();
   for (let i = -5; i <= 25; i++) {
-    const gyear = p.gy + i;
+    const gyear = gy + i;
     if (gyear === 0 || gyear < -3760) {
       continue;
     }
+    const gd = gm === 2 && gd0 === 29 && !greg.isLeapYear(gyear) ? 28 : gd0;
     try {
-      const dt = makeGregDate(gyear, p.gm, p.gd);
+      const dt = makeGregDate(gyear, gm, gd);
       const hdate = new HDate(dt);
       const d = dayjs(dt).locale(locale);
       arr2.push({hd: hdate, d: d});
@@ -177,7 +183,31 @@ function makeFutureYears(ctx, p) {
       // ignore error from makeGregDate
     }
   }
-  p.futureYearsGreg = arr2;
+  return arr2;
+}
+
+/**
+ * @private
+ * @param {HDate} hdate
+ * @param {number} numYears
+ * @param {string} locale
+ * @return {any[]}
+ */
+function makeFutureYearsHeb(hdate, numYears, locale) {
+  const hy = hdate.getFullYear();
+  const hm = hdate.getMonth();
+  const hd = hdate.getDate();
+  const arr = [];
+  for (let i = -5; i <= numYears; i++) {
+    const hyear = hy + i;
+    if (hyear < 1) {
+      continue;
+    }
+    const hdate = new HDate(hd, hm, hyear);
+    const d = dayjs(hdate.greg()).locale(locale);
+    arr.push({hd: hdate, d: d});
+  }
+  return arr;
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -514,4 +544,29 @@ function g2h(dt, gs, noCache) {
     hdate = hdate.next();
   }
   return {type: 'g2h', dt, hdate, gs, noCache};
+}
+
+/**
+ * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ */
+export async function dateConverterCsv(ctx) {
+  if (ctx.method === 'POST') {
+    ctx.set('Allow', 'GET');
+    ctx.throw(405, 'POST not allowed; try using GET instead');
+  }
+  const p = parseConverterQuery(ctx);
+  const hdate = p.hdate;
+  const arr = makeFutureYearsHeb(hdate, 75, 'en');
+  let csv = 'Gregorian Date,Hebrew Date\r\n';
+  for (const item of arr) {
+    csv += item.d.format('YYYY-MM-DD') + ',' + item.hd.toString() + '\r\n';
+  }
+  if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
+    ctx.lastModified = ctx.launchDate;
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+  }
+  const suffix = hdate.getDate() + '-' + makeAnchor(hdate.getMonthName());
+  ctx.response.attachment(`hdate-${suffix}.csv`);
+  ctx.response.type = 'text/x-csv; charset=utf-8';
+  ctx.body = csv;
 }
