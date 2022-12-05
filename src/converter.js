@@ -188,21 +188,25 @@ function makeFutureYearsGreg(d, locale) {
 
 /**
  * @private
- * @param {HDate} hdate
+ * @param {HDate} orig
  * @param {number} numYears
  * @param {string} locale
  * @return {any[]}
  */
-function makeFutureYearsHeb(hdate, numYears, locale) {
-  const hy = hdate.getFullYear();
-  const hm = hdate.getMonth();
-  const hd = hdate.getDate();
+function makeFutureYearsHeb(orig, numYears, locale) {
+  const hy = orig.getFullYear();
+  const month = orig.getMonth();
+  const day = orig.getDate();
+  const isAdar30 = month === months.ADAR_I && day === 30;
   const arr = [];
   for (let i = -5; i <= numYears; i++) {
     const hyear = hy + i;
     if (hyear < 1) {
       continue;
     }
+    const isNonLeap = !HDate.isLeapYear(hyear);
+    const hm = isAdar30 && isNonLeap ? months.NISAN : month;
+    const hd = isAdar30 && isNonLeap ? 1 : day;
     const hdate = new HDate(hd, hm, hyear);
     const d = dayjs(hdate.greg()).locale(locale);
     arr.push({hd: hdate, d: d});
@@ -564,6 +568,8 @@ export async function dateConverterCsv(ctx) {
   if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
     ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+  } else {
+    ctx.lastModified = new Date();
   }
   const suffix = hdate.getDate() + '-' + makeAnchor(hdate.getMonthName());
   ctx.response.attachment(`hdate-${suffix}.csv`);
