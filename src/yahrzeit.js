@@ -37,7 +37,6 @@ async function makeQuery(ctx) {
   if (rpath.startsWith('/yahrzeit/edit/') || (typeof qid === 'string' && qid.length === 26)) {
     const id = qid || basename(rpath);
     const contents = await getYahrzeitDetailsFromDb(ctx, id);
-    ctx.state.ulid = id;
     ctx.state.isEditPage = true;
     return contents;
   } else {
@@ -239,13 +238,23 @@ async function makeDownloadProps(ctx) {
   ctx.state.numYears = getNumYears(q.years);
   ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = type.toLowerCase();
-  const db = ctx.mysql;
   const id = ctx.state.ulid;
-  const ip = getIpAddress(ctx);
-  const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
   q.v = 'yahrzeit';
   delete q.ulid;
-  await db.query({sql, values: [id, ip, JSON.stringify(q)], timeout: 5000});
+  if (ctx.method === 'POST') {
+    const db = ctx.mysql;
+    const contents = JSON.stringify(q);
+    const ip = getIpAddress(ctx);
+    const sqlExists = 'SELECT created FROM yahrzeit WHERE id = ?';
+    const results = await db.query({sql: sqlExists, values: [id], timeout: 5000});
+    if (!results || !results[0]) {
+      const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
+      await db.execute({sql, values: [id, ip, contents], timeout: 5000});
+    } else {
+      const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
+      await db.execute({sql, values: [contents, ip, id], timeout: 5000});
+    }
+  }
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
   const usaCSV = '_usa.csv';
@@ -299,7 +308,7 @@ function removeEmptyArgs(q) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 async function getDetailsFromDb(ctx) {
-  const id = ctx.state.ulid = ctx.request.path.substring(4, 30);
+  const id = ctx.request.path.substring(4, 30);
   const obj = await getYahrzeitDetailsFromDb(ctx, id);
   ctx.state.relcalid = id;
   return obj;

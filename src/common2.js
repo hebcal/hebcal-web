@@ -76,10 +76,11 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
   const row = results[0];
   const obj = row.contents;
   if (!row.downloaded) {
-    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-    await db.query({sql: sqlUpdate, values: [id], timeout: 5000});
+    const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
+    await db.execute({sql: sqlUpdate, values: [id], timeout: 5000});
   }
   obj.lastModified = row.updated;
+  ctx.state.ulid = id;
   return obj;
 }
 
