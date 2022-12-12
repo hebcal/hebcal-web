@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
@@ -8,6 +8,7 @@ import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   empty, langNames} from './common';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
+  parshiot54,
   lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon';
 import dayjs from 'dayjs';
 import drash from './drash.json';
@@ -24,7 +25,7 @@ const allEvts15yrIsrael = HebrewCalendar.calendar(Object.assign({il: true}, opti
 const allEvts15yrDiaspora = HebrewCalendar.calendar(Object.assign({il: false}, options15yr));
 const items15yrIsrael = new Map();
 const items15yrDiaspora = new Map();
-const allParshiot = [].concat(parshiot, doubledParshiyot);
+const allParshiot = [].concat(parshiot54, doubledParshiyot);
 for (const parshaName of allParshiot) {
   items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
@@ -42,13 +43,6 @@ function makeVezotEvents(il) {
   return events;
 }
 
-items15yrIsrael.set(VEZOT_HABERAKHAH, makeVezotEvents(true).map((ev) => {
-  return eventToItem(ev, true);
-}));
-items15yrDiaspora.set(VEZOT_HABERAKHAH, makeVezotEvents(false).map((ev) => {
-  return eventToItem(ev, false);
-}));
-
 /**
  * Returns Parsha events during 15 year period that match this parshaName
  * @param {string} parshaName
@@ -56,6 +50,11 @@ items15yrDiaspora.set(VEZOT_HABERAKHAH, makeVezotEvents(false).map((ev) => {
  * @return {any[]}
  */
 function get15yrEvents(parshaName, il) {
+  if (parshaName === VEZOT_HABERAKHAH) {
+    return makeVezotEvents(il).map((ev) => {
+      return eventToItem(ev, il);
+    });
+  }
   const allEvents = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
   const prefix = 'Parashat ';
   const descs = [prefix + parshaName];
@@ -111,12 +110,13 @@ export async function parshaDetail(ctx) {
     }
     throw createError(404, `Parsha not found: ${base0}`);
   }
-  if (date && date.length !== 8) {
-    httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
-    return;
-  }
   const q = ctx.request.query;
   const il = q.i === 'on';
+  const iSuffix = il ? '?i=on' : '';
+  if (date && date.length !== 8) {
+    httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
+    return;
+  }
   if (!empty(q.gy)) {
     const year = parseInt(q.gy, 10);
     if (year >= 1000 && year <= 9999) {
@@ -124,32 +124,32 @@ export async function parshaDetail(ctx) {
       const parshaEv = findParshaEvent(events, parshaName0, il);
       if (parshaEv) {
         const dateStr = dayjs(parshaEv.getDate().greg()).format('YYYYMMDD');
-        const suffix = il ? '?i=on' : '';
         const anchor = makeAnchor(parshaEv.getDesc().substring(9));
-        httpRedirect(ctx, `/sedrot/${anchor}-${dateStr}${suffix}`);
+        httpRedirect(ctx, `/sedrot/${anchor}-${dateStr}${iSuffix}`);
         return;
       }
     }
+    httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
+    return;
   }
   if (date) {
     const dt = parse8digitDateStr(date);
     if (dt.getFullYear() > ctx.launchDate.getFullYear() + 1000) {
-      httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
+      httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;
     }
   }
   const parshaEv = getParshaEvent(il, date, parshaName0);
   if (!parshaEv) {
     if (date) {
-      httpRedirect(ctx, `/sedrot/${parshaAnchor}`);
+      httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;
     }
     throw createError(500, `Internal error: ${parshaName0}`);
   }
   if (base0 !== base) {
     // fix capitalization
-    const suffix = il ? '?i=on' : '';
-    httpRedirect(ctx, `/sedrot/${base}${suffix}`);
+    httpRedirect(ctx, `/sedrot/${base}${iSuffix}`);
     return;
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
@@ -201,7 +201,6 @@ export async function parshaDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat('Parashat ' + parsha.name);
   const translations = Array.from(new Set(translations0)).sort();
-  const iSuffix = il ? '?i=on' : '';
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} - Hebcal`,
     parsha,
@@ -228,8 +227,8 @@ export async function parshaDetail(ctx) {
 function makePrevNext(parsha, date, hd, il) {
   const prevNum = parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
   const nextNum = parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
-  const prevName = parshiot[prevNum];
-  const nextName = parshiot[nextNum];
+  const prevName = parshiot54[prevNum];
+  const nextName = parshiot54[nextNum];
   if (date) {
     const abs = hd.abs();
     const events = HebrewCalendar.calendar({
@@ -242,8 +241,11 @@ function makePrevNext(parsha, date, hd, il) {
     parsha.prev = prevName && findParshaDate(events, prevName, il);
     parsha.next = nextName && findParshaDate(events, nextName, il);
   } else {
-    parsha.prev = prevName && {name: prevName, anchor: makeAnchor(prevName)};
-    parsha.next = nextName && {name: nextName, anchor: makeAnchor(nextName)};
+    const iSuffix = il ? '?i=on' : '';
+    parsha.prev = prevName && {name: prevName,
+      anchor: makeAnchor(prevName) + iSuffix};
+    parsha.next = nextName && {name: nextName,
+      anchor: makeAnchor(nextName) + iSuffix};
   }
 }
 
@@ -267,7 +269,8 @@ function getParshaDateAnchor(ev) {
   const dateStr = d.format('YYYYMMDD');
   const name = ev.getDesc().substring(9);
   const desc = makeAnchor(name);
-  return {anchor: desc + '-' + dateStr, d, ev, name};
+  const iSuffix = ev.il ? '?i=on' : '';
+  return {anchor: desc + '-' + dateStr + iSuffix, d, ev, name};
 }
 
 function makeTriennial(date, parshaEv, hyear, parshaName) {

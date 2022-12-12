@@ -6,7 +6,7 @@ import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeAnchor} from '@hebcal/rest-api';
-import {localeMap} from './common';
+import {localeMap, shortenUrl} from './common';
 import {downloadHref2} from './makeDownloadProps';
 import createError from 'http-errors';
 
@@ -64,6 +64,7 @@ export async function parshaYear(ctx) {
       d: dayjs(hd.greg()).locale(locale),
       hd,
       reading,
+      url: shortenUrl(ev.url()),
     };
     items.push(item);
   }

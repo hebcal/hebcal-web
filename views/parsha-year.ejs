@@ -62,7 +62,7 @@ Download Calendar .ics</a>
 <% for (const item of items) { %>
 <ul class="list-unstyled">
 <li id="<%=item.anchor%>"><a class="text-big"
-href="<%=item.event.url()%>"><%=item.title%> /
+href="<%=item.url%>"><%=item.title%> /
 <span lang="he" dir="rtl" class="text-nowrap"><%=item.hebrew%></span></a>
 <li><time class="text-nowrap text-burgundy" datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('dddd, MMMM D, YYYY')%></time>
 ·

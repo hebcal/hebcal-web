@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.18.9",
     "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-terser": "^0.2.0",
     "corejs-typeahead": "^1.3.1",
@@ -42,7 +42,7 @@
     "eslint": "^8.29.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.6.1",
-    "rollup": "^3.6.0"
+    "rollup": "^3.7.3"
   },
   "dependencies": {
     "@hebcal/core": "^3.46.6",
@@ -53,7 +53,7 @@
     "@hebcal/rest-api": "^4.3.9",
     "@hebcal/triennial": "^1.0.4",
     "better-sqlite3": "^8.0.1",
-    "dayjs": "^1.11.6",
+    "dayjs": "^1.11.7",
     "ejs": "^3.1.8",
     "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
@@ -64,7 +64,7 @@
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
     "ini": "^3.0.1",
-    "koa": "^2.13.4",
+    "koa": "^2.14.1",
     "koa-better-response-time": "^1.2.0",
     "koa-bodyparser": "^4.3.0",
     "koa-compress": "^5.1.0",

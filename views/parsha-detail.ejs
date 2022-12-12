@@ -234,6 +234,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <div class="col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" required name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d*">
 </div><!-- .col -->
+<% if (il) { %><input type="hidden" name="i" value="on"><%}%>
 <div class="col-auto mb-2">
 <button type="submit" class="btn btn-primary">Go</button>
 </div><!-- .col -->
