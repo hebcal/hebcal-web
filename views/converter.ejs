@@ -102,18 +102,18 @@ const isPast = hy < todayHebYear;
 </div><!-- .col -->
 <div class="form-floating col-auto mb-2">
 <select name="gm" id="gm" class="form-select">
- <option <%- (gm === 1) ? 'selected' : '' -%> value="1">01 - January</option>
- <option <%- (gm === 2) ? 'selected' : '' -%> value="2">02 - February</option>
- <option <%- (gm === 3) ? 'selected' : '' -%> value="3">03 - March</option>
- <option <%- (gm === 4) ? 'selected' : '' -%> value="4">04 - April</option>
- <option <%- (gm === 5) ? 'selected' : '' -%> value="5">05 - May</option>
- <option <%- (gm === 6) ? 'selected' : '' -%> value="6">06 - June</option>
- <option <%- (gm === 7) ? 'selected' : '' -%> value="7">07 - July</option>
- <option <%- (gm === 8) ? 'selected' : '' -%> value="8">08 - August</option>
- <option <%- (gm === 9) ? 'selected' : '' -%> value="9">09 - September</option>
- <option <%- (gm === 10) ? 'selected' : '' -%> value="10">10 - October</option>
- <option <%- (gm === 11) ? 'selected' : '' -%> value="11">11 - November</option>
- <option <%- (gm === 12) ? 'selected' : '' -%> value="12">12 - December</option>
+ <option <%- (gm === 1) ? 'selected' : '' -%> value="1">01-Jan</option>
+ <option <%- (gm === 2) ? 'selected' : '' -%> value="2">02-Feb</option>
+ <option <%- (gm === 3) ? 'selected' : '' -%> value="3">03-Mar</option>
+ <option <%- (gm === 4) ? 'selected' : '' -%> value="4">04-Apr</option>
+ <option <%- (gm === 5) ? 'selected' : '' -%> value="5">05-May</option>
+ <option <%- (gm === 6) ? 'selected' : '' -%> value="6">06-Jun</option>
+ <option <%- (gm === 7) ? 'selected' : '' -%> value="7">07-Jul</option>
+ <option <%- (gm === 8) ? 'selected' : '' -%> value="8">08-Aug</option>
+ <option <%- (gm === 9) ? 'selected' : '' -%> value="9">09-Sep</option>
+ <option <%- (gm === 10) ? 'selected' : '' -%> value="10">10-Oct</option>
+ <option <%- (gm === 11) ? 'selected' : '' -%> value="11">11-Nov</option>
+ <option <%- (gm === 12) ? 'selected' : '' -%> value="12">12-Dec</option>
 </select>
 <label for="gm">Month</label>
 </div><!-- .col -->
@@ -216,7 +216,7 @@ Free annual email reminders &amp; calendar downloads.
 <div id="future" class="row">
 <div class="col-md-6" id="future-heb">
 <h4><%= hdate.render(locale, false) %>
- <a class="ms-2" title="Download CSV" download href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
+ <a class="ms-2" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
   <svg class="icon icon-md" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
  </a></h4>
 <table class="table table-condensed table-striped">
