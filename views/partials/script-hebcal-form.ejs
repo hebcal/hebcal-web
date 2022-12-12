@@ -15,5 +15,9 @@ d.getElementById("maj").addEventListener("click", function(){
 ["nx","mf","ss","min","mod"].forEach(function(x){
  d.getElementById(x).addEventListener("click", function(){if(this.checked==true){d.f1.maj.checked=true}});
 });
+d.getElementById("m").addEventListener("focus",function(){
+  d.getElementById("M1").checked = false;
+  d.getElementById("M0").checked = true;
+});
 });
 </script>

@@ -11,16 +11,22 @@
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
 <div class="mb-1">Havdalah</div>
-<div class="form-check mb-3">
+<div class="form-check mb-1">
   <input class="form-check-input" type="radio" name="M" id="M1" <%- (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? '' : 'checked' %> value="on">
   <label class="form-check-label" for="M1">nightfall (tzeit hakochavim)</label>
   &nbsp; <span id="M1t" title="the point when 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
-<div class="form-check mb-3">
-  <input class="form-check-input" type="radio" name="M" id="M0" <%- (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? 'checked' : '' %> value="off">
-  <label class="form-check-label" for="M0">minutes past sundown</label>
-  &nbsp; <span id="M0t" title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<div class="row gx-2 mb-3">
+<div class="col-auto">
+<div class="form-check">
+  <input class="form-check-input" style="margin-top: 0.75em" type="radio" name="M" id="M0" <%- (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? 'checked' : '' %> value="off">
+  <label class="col-auto col-form-label" for="M0">minutes past sundown:</label>
 </div><!-- .form-check -->
-<div class="mb-3">
-  <input type="text" inputmode="numeric" class="form-control" id="m1" name="m" value="<%= q.m %>" size="2" maxlength="2" placeholder="minutes" pattern="\d*">
-</div><!-- .mb-3 -->
+</div><!-- .col-auto -->
+<div class="col-auto">
+  <input class="form-control" inputmode="numeric" type="text" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" id="m" pattern="\d*">
+</div>
+<div class="col-auto" style="margin: auto 0">
+  <span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
+</div><!-- .row -->
