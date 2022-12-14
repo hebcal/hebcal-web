@@ -305,9 +305,12 @@ function makeMonthTableBody(month) {
     html += '<td>&nbsp;</td>';
   }
   let n = dow;
+  const today = dayjs();
   const days = day1.daysInMonth();
   for (let i = 1; i <= days; i++) {
-    html += `<td><p><b>${i}</b></p>`;
+    const d = makeDayjs(month.month + '-' + pad2(i));
+    const clazz = today.isSame(d, 'd') ? ' class="fc-daygrid-day fc-day-today"' : '';
+    html += `<td${clazz}><p><b>${i}</b></p>`;
     const evts = dayMap[i] || [];
     evts.forEach(function(evt) {
       html += renderEventHtml(evt);
