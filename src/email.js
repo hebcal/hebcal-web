@@ -280,6 +280,9 @@ ${imgOpen}</div>
 async function unsubscribe(ctx, emailAddress, subInfo) {
   const db = ctx.mysql;
   subInfo = subInfo || await getSubInfo(db, emailAddress);
+  if (subInfo && typeof subInfo.k === 'string') {
+    ctx.state.subscriptionId = subInfo.k;
+  }
   let success;
   if (!subInfo) {
     ctx.state.message = `Sorry, ${emailAddress} is not currently subscribed`;

@@ -7,6 +7,17 @@
 <style>
 body { background-color: #eee;}
 .container { max-width: 600px; margin-top: 50px;}
+.icon {
+  display: inline-block;
+  width: 1.3rem;
+  height: 1.3rem;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+.mt-n05 {
+  margin-top: -0.125rem !important;
+}
 .icon-lg {
   display: inline-block;
   width: 2rem;
@@ -31,7 +42,16 @@ body { background-color: #eee;}
     <% if (success) { %> has been <% } else { %> was previously <% } %>
     removed from the email subscription list.
   </p>
-  <p><a class="btn btn-primary" href="/">Go to Hebcal »</a></p>
+  <p class="small">You will no longer receive email from this list.</p>
+  <form method="post" action="/email/verify.php">
+    <input type="hidden" name="k" value="<%=subscriptionId%>">
+    <input type="hidden" name="commit" value="1">
+    <button type="submit" class="btn btn-secondary me-2">
+      <svg class="icon mt-n05"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+      Resubscribe
+    </button>
+    <a class="btn btn-secondary" href="/">Go to Hebcal »</a>
+  </form>
 </div>
 </div>
 </div><!-- .col -->
