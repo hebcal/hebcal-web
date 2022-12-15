@@ -31,6 +31,7 @@ import {hebrewDateCalc} from './calc';
 import {omerApp} from './omerApp';
 import {sitemapZips} from './sitemapZips';
 import {getLeyning} from './leyning';
+import {sendGif} from './sendGif';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -176,12 +177,19 @@ export function wwwRouter() {
     } else if (rpath === '/sitemap_zips.txt') {
       return sitemapZips(ctx);
     } else if (rpath === '/matomo/matomo.js' ||
-               rpath === '/ma/ma.js' ||
                (rpath.startsWith('/a/js/') && rpath.endsWith('.js'))) {
+      ctx.set('Cache-Control', 'private, max-age=0');
       ctx.type = 'application/javascript';
       ctx.body = '/* Nothing to see here */\n';
       return;
+    } else if (rpath === '/ma/ma.php' || rpath === '/matomo/matomo.php') {
+      if (ctx.request.query.send_image == '0') {
+        ctx.status = 204;
+        return;
+      }
+      return sendGif(ctx);
     } else if (rpath === '/a/api/event') {
+      ctx.set('Cache-Control', 'private, max-age=0');
       ctx.status = 202;
       ctx.type = 'text/plain';
       ctx.body = 'bogus';

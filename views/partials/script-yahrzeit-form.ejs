@@ -83,3 +83,95 @@ var delBtns = [].slice.call(document.querySelectorAll('button.del'));
 delBtns.forEach(clickToDelete);
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+function processRow(row) {
+  var parts = row[0].trim().split('/');
+  var mm = parseInt(parts[0], 10);
+  var dd = parseInt(parts[1], 10);
+  var yy = parseInt(parts[2], 10);
+  if (isNaN(mm) || isNaN(dd) || isNaN(yy)) {
+    return false;
+  }
+  var n = getCurrentCount();
+  if (!document.getElementById('y'+n) || !document.getElementById('m'+n) || !document.getElementById('d'+n)) {
+    n = addNewRow();
+  }
+  if (document.getElementById('y'+n).value && document.getElementById('m'+n).value && document.getElementById('d'+n).value) {
+    n = addNewRow();
+  }
+  document.getElementById('d'+n).value = ''+dd;
+  document.getElementById('m'+n).value = ''+mm;
+  document.getElementById('y'+n).value = ''+yy;
+  if (typeof row[1] === 'string') {
+    var name = row[1].trim();
+    document.getElementById('n'+n).value = name;
+  }
+  if (typeof row[2] === 'boolean' && row[2]) {
+    document.getElementById('s'+n+'-0').checked = false;
+    document.getElementById('s'+n+'-1').checked = true;
+  }
+  if (typeof row[3] === 'string') {
+    var typ = row[3].trim().toLowerCase();
+    var el = document.getElementById('t'+n);
+    switch (typ[0]) {
+      case 'y':
+      el.value = 'Yahrzeit';
+      break;
+      case 'b':
+      el.value = 'Birthday';
+      break;
+      case 'a':
+      el.value = 'Anniversary';
+      break;
+    }
+  }
+  addNewRow();
+  return true;
+}
+var formFileEl = document.getElementById('formFile');
+var formEl = document.getElementById('import-form');
+formEl.addEventListener('submit', function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  var nofileAlertEl = document.getElementById('nofile-alert');
+  var badimportAlertEl = document.getElementById('badimport-alert');
+  var successAlertEl = document.getElementById('success-alert');
+  if (formFileEl.files.length == 0) {
+    nofileAlertEl.hidden = false;
+    badimportAlertEl.hidden = true;
+    successAlertEl.hidden = true;
+  } else {
+    nofileAlertEl.hidden = true;
+    badimportAlertEl.hidden = true;
+    successAlertEl.hidden = true;
+    var file = formFileEl.files[0];
+    Papa.parse(file, {
+      dynamicTyping: true,
+      complete: function(results) {
+        var numOK = 0;
+        for (var i = 0; i < results.data.length; i++) {
+          var row = results.data[i];
+          if (typeof row[0] === 'string') {
+            var ok = processRow(row);
+            if (ok) {
+              numOK++;
+            }
+          }
+        }
+        if (numOK) {
+          document.getElementById('success-numrecords').innerHTML = numOK;
+          document.getElementById('success-filename').innerHTML = file.name;
+          successAlertEl.hidden = false;
+          var _paq = window._paq = window._paq || [];
+          _paq.push(['trackEvent', 'Upload', 'csv-import', file.name, numOK]);
+        } else {
+          badimportAlertEl.hidden = false;
+        }
+      }
+    });
+  }
+});
+});
+</script>
