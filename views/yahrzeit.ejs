@@ -268,7 +268,10 @@ instructions</a>.</p>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
-<%- await include('partials/email-modal-script.ejs', {resource: '/yahrzeit/email'}) -%>
+<%- await include('partials/email-modal-script.ejs', {
+  resource: '/yahrzeit/email',
+  action: 'yahrzeit-reminder',
+}) -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
 <%- await include('partials/footer.ejs', {

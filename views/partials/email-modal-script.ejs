@@ -26,6 +26,13 @@ function validateEmail(email) {
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
+function myFail(name) {
+  show(emailModalFailure);
+  emailSubscribeBtn.textContent = 'Subscribe';
+  emailSubscribeBtn.disabled = false;
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackEvent', 'Error', '500', '<%=action%>: ' + name]);
+}
 function doSubscribe(event) {
   event.preventDefault();
   event.stopPropagation();
@@ -44,6 +51,9 @@ function doSubscribe(event) {
     return;
   }
   emailForm.classList.add('was-validated');
+
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackEvent', 'Signup', '<%=action%>', emailInput.value]);
 
   emailSubscribeBtn.textContent = 'Subscribing...';
   emailSubscribeBtn.disabled = true;
@@ -73,16 +83,16 @@ function doSubscribe(event) {
           hide(emailModalEntry);
           hide(emailSubscribeBtn);
         } else {
-          show(emailModalFailure);
-          emailSubscribeBtn.textContent = 'Subscribe';
-          emailSubscribeBtn.disabled = false;
+          myFail(emailInput.value);
         }
+      }).catch(function(err) {
+        myFail(err.message);
       });
     } else {
-      show(emailModalFailure);
-      emailSubscribeBtn.textContent = 'Subscribe';
-      emailSubscribeBtn.disabled = false;
+      myFail(emailInput.value);
     }
+  }).catch(function(err) {
+    myFail(err.message);
   });
 };
 emailForm.addEventListener('submit', doSubscribe);

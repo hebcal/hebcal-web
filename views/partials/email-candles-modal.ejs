@@ -45,4 +45,7 @@
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->  
-<%- await include('email-modal-script.ejs', {resource: '/email/'}) -%>
+<%- await include('email-modal-script.ejs', {
+  resource: '/email/',
+  action: 'shabbat-weekly',
+}) -%>
