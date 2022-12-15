@@ -53,7 +53,7 @@ function doSubscribe(event) {
   emailForm.classList.add('was-validated');
 
   var _paq = window._paq = window._paq || [];
-  _paq.push(['trackEvent', 'Signup', '<%=action%>', emailInput.value]);
+  _paq.push(['trackEvent', 'Email', 'signup', '<%=action%>']);
 
   emailSubscribeBtn.textContent = 'Subscribing...';
   emailSubscribeBtn.disabled = true;

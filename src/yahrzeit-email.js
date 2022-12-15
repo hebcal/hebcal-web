@@ -25,11 +25,8 @@ export async function yahrzeitEmailVerify(ctx) {
     const ip = getIpAddress(ctx);
     const db = ctx.mysql;
     await db.query(sqlUpdate, [ip, subscriptionId]);
-    matomoTrack(ctx, 'Signup', 'yahrzeit-reminder', contents.type, {
-      email: emailAddress,
-      verified: true,
-      calendarId: calendarId,
-      subscriptionId: subscriptionId,
+    matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
+      url: ctx.request.href,
     });
     await sendConfirmEmail(ctx, contents, subscriptionId);
   } else {
@@ -114,7 +111,6 @@ export async function yahrzeitEmailSub(ctx) {
   await db.query(sqlUpdate, q.ulid);
   let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
   const ip = getIpAddress(ctx);
-  let alreadySubscribed = false;
   if (id === false) {
     id = ulid().toLowerCase();
     const sql = `INSERT INTO yahrzeit_email
@@ -125,16 +121,13 @@ export async function yahrzeitEmailSub(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
     await db.query(sqlUpdate, [id]);
     ctx.body = {ok: true, alreadySubscribed: true};
-    alreadySubscribed = true;
     return;
   } else {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
     await db.query(sqlUpdate, [ip, id]);
   }
-  matomoTrack(ctx, 'Signup', 'yahrzeit-reminder', q.type, {
-    email: q.em,
-    verified: alreadySubscribed,
-    calendarId: q.ulid,
+  matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
+    url: ctx.request.href,
   });
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
@@ -225,9 +218,8 @@ async function unsub(ctx, q) {
     const nameHash = num == 0 ? null : (q.hash || null);
     await db.query(sql, [q.id, nameHash, num]);
   }
-  matomoTrack(ctx, 'Unsubscribe', 'yahrzeit-reminder', null, {
-    num: q.num,
-    subscriptionId: q.id,
+  matomoTrack(ctx, 'Email', 'unsubscribe', 'yahrzeit-reminder', {
+    url: ctx.request.href,
   });
   if (q.cfg === 'json') {
     ctx.body = {ok: true};

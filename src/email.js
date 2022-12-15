@@ -175,7 +175,9 @@ export async function emailForm(ctx) {
     } else if (q.unsubscribe === '1') {
       const emailAddress = ctx.state.emailAddress = q.em;
       const ok = await unsubscribe(ctx, q.em);
-      matomoTrack(ctx, 'Unsubscribe', 'shabbat-weekly', emailAddress);
+      matomoTrack(ctx, 'Email', 'unsubscribe', 'shabbat-weekly', {
+        url: ctx.request.href,
+      });
       if (ok) {
         if (isJSON) {
           ctx.body = {ok: true, unsubscribe: true, emailAddress};
@@ -248,9 +250,8 @@ async function updateActiveSub(ctx, db, q) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const locationName = ctx.state.locationName;
-  matomoTrack(ctx, 'Signup', 'shabbat-weekly', locationName, {
-    verified: true,
-    email: emailAddress,
+  matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly', {
+    url: ctx.request.href,
   });
   const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-update');
   const footerHtml = makeFooter(emailAddress);
@@ -390,9 +391,8 @@ async function writeStagingInfo(ctx, db, q) {
     ip,
   ]);
   const locationName = ctx.state.locationName;
-  matomoTrack(ctx, 'Signup', 'shabbat-weekly', locationName, {
-    verified: false,
-    email: q.em,
+  matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly', {
+    url: ctx.request.href,
   });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const msgid = `${subscriptionId}.${Date.now()}`;
