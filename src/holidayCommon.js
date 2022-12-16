@@ -235,7 +235,7 @@ export function makeEventJsonLD(ev, meta, il) {
       'url': url,
     },
   };
-  if (meta.photo) {
+  if (meta?.photo) {
     jsonLD.image = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo.fn}`);
   }
   return jsonLD;

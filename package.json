@@ -45,12 +45,12 @@
     "rollup": "^3.7.4"
   },
   "dependencies": {
-    "@hebcal/core": "^3.46.8",
+    "@hebcal/core": "^3.47.1",
     "@hebcal/geo-sqlite": "^4.8.0",
     "@hebcal/icalendar": "^4.18.5",
-    "@hebcal/leyning": "^6.2.3",
+    "@hebcal/leyning": "^6.2.4",
     "@hebcal/locales": "^3.5.1",
-    "@hebcal/rest-api": "^4.3.9",
+    "@hebcal/rest-api": "^4.3.10",
     "@hebcal/triennial": "^1.0.4",
     "better-sqlite3": "^8.0.1",
     "dayjs": "^1.11.7",

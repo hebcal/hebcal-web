@@ -99,6 +99,15 @@
   "israelOnly": true,
   "yomtov": false
  },
+ "Chag HaBanot": {
+  "about": {
+    "href": "https://rossingcenter.org/judaisms/chag-habanot/"
+  },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Girls_Day_(Judaism)",
+    "text": "Rosh Chodesh l'banot (ראש חודש לבנות‎ also known as Chag habanot חג הבנות‎ [Girls' Day] or in French: Fête des Filles) is a holiday, celebrated by some of the Jewish communities in the Middle East on Rosh Chodesh of the Jewish month of Tevet, during the Jewish holiday of Chanukah. The Jewish community where the holiday was most preserved is in Tunisia. But there is also evidence that it was also celebrated in Jewish communities in Libya, Algeria, Kushta, Morocco and Thessaloniki."
+  }
+ },
  "Chanukah": {
   "about": {
    "href": "https://www.jewfaq.org/holiday7.htm"
