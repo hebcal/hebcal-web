@@ -107,7 +107,6 @@ export async function holidayDetail(ctx) {
   }
   const meta = await getHolidayMeta(holiday);
   const holidayBegin = getHolidayBegin(holiday, year, il);
-  const category = categories[meta.category] || {};
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
   if (holiday === OMER_TITLE) {
     for (const item of occursOn) {
@@ -122,6 +121,9 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
+  const cats = next.categories;
+  const category0 = cats.length === 1 ? cats[0] : cats[1];
+  const category = categories[category0] || {id: 'unknown', name: 'Unknown'};
   next.ppf = 'current';
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);

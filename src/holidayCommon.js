@@ -21,6 +21,7 @@ export const categories = {
   shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot', emoji: '🕍'},
   roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh', emoji: '🌒'},
 };
+categories.omer = categories.minor;
 
 /**
  * @param {Event[]} events
