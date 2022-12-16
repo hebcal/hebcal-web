@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.7.6",
+  "version": "2.7.7",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
