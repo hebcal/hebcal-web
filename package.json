@@ -50,7 +50,7 @@
     "@hebcal/icalendar": "^4.18.5",
     "@hebcal/leyning": "^6.2.4",
     "@hebcal/locales": "^3.5.1",
-    "@hebcal/rest-api": "^4.3.10",
+    "@hebcal/rest-api": "^4.3.11",
     "@hebcal/triennial": "^1.0.4",
     "better-sqlite3": "^8.0.1",
     "dayjs": "^1.11.7",
