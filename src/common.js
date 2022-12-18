@@ -107,6 +107,7 @@ const booleanOpts = {
   s: 'sedrot',
   F: 'dafyomi',
   myomi: 'mishnaYomi',
+  nyomi: 'nachYomi',
   euro: 'euro',
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',

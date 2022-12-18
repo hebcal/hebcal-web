@@ -195,7 +195,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
     hour12: jspb.Message.getFieldWithDefault(msg, 39, 0),
     cityname: jspb.Message.getFieldWithDefault(msg, 40, ""),
-    yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false)
+    yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false),
+    nachyomi: jspb.Message.getBooleanFieldWithDefault(msg, 46, false)
   };
 
   if (includeInstance) {
@@ -399,6 +400,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 45:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setYerushalmiyomi(value);
+      break;
+    case 46:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setNachyomi(value);
       break;
     default:
       reader.skipField();
@@ -720,6 +725,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       45,
+      f
+    );
+  }
+  f = message.getNachyomi();
+  if (f) {
+    writer.writeBool(
+      46,
       f
     );
   }
@@ -1632,6 +1644,24 @@ proto.Download.prototype.getYerushalmiyomi = function() {
  */
 proto.Download.prototype.setYerushalmiyomi = function(value) {
   return jspb.Message.setProto3BooleanField(this, 45, value);
+};
+
+
+/**
+ * optional bool nachYomi = 46;
+ * @return {boolean}
+ */
+proto.Download.prototype.getNachyomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 46, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setNachyomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 46, value);
 };
 
 

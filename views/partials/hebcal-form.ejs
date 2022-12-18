@@ -83,7 +83,7 @@
 <input class="form-check-input" type="checkbox" name="D" value="on" <%= q.D === 'on' ? 'checked' : '' -%> id="d1">
 <label class="form-check-label" for="d1">Show Hebrew date for dates with some event</label>
 </div>
-<div class="form-check mb-2">
+<div class="form-check mb-3">
 <input class="form-check-input" type="checkbox" name="d" value="on" <%= q.d === 'on' ? 'checked' : '' -%> id="d2">
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
 </div>
@@ -95,6 +95,10 @@
 <input class="form-check-input" type="checkbox" name="myomi" value="on" <%= q.myomi === 'on' ? 'checked' : '' -%> id="myomi">
 <label class="form-check-label" for="myomi">Mishna Yomi</label>
  &nbsp;<span title="Daily study of two Mishnayot each day in order to finish the entire Mishnah in ~6 years" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="nyomi" value="on" <%= q.nyomi === 'on' ? 'checked' : '' -%> id="nyomi">
+<label class="form-check-label" for="nyomi">Nach Yomi</label>
+ &nbsp;<span title="Daily study of the books of Nevi'im (Prophets) and Ketuvim (Writings)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="yyomi" value="on" <%= q.yyomi === 'on' ? 'checked' : '' -%> id="yyomi">
 <label class="form-check-label" for="yyomi">Yerushalmi Yomi</label>

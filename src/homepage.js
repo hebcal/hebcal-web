@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   YerushalmiYomiEvent, yerushalmiYomi, vilna,
+  NachYomiIndex, NachYomiEvent,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
@@ -129,6 +130,9 @@ function mastheadDafYomi(ctx, hd) {
   ctx.state.mishnaYomi = new MishnaYomiEvent(hd, mishnaYomi);
   const daf = yerushalmiYomi(hd, vilna);
   ctx.state.yerushalmiVilna = new YerushalmiYomiEvent(hd, daf);
+  const nachYomiIdx = new NachYomiIndex();
+  const nachYomi = nachYomiIdx.lookup(hd);
+  ctx.state.nachYomi = new NachYomiEvent(hd, nachYomi);
 }
 
 function myDateFormat(d) {
@@ -237,7 +241,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const emoji = isTishrei ? '🌿🍋' : '🫓';
     const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מועדים לשמחה</span>&nbsp;${emoji}`;
     return [blurb, `<strong>Moadim L\'Simcha!</strong> We wish you a very happy ${holiday}`];
-  } else if (mm == months.KISLEV && dd <= 24) {
+  } else if (mm === months.KISLEV && dd <= 24 && dd >= 2) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
     const dow = erevChanukah.day();

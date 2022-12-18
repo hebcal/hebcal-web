@@ -141,6 +141,14 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
   years: 5,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Nach Yomi', id: 'nach-yomi',
+  emoji: '📖',
+  summary: `<p>A daily regimen of learning the books of Nevi'im
+(Prophets) and Ketuvim (Writings)</p>`,
+  feedLength: 365,
+  years: 5,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yerushalmi Yomi (Vilna)', id: 'yerushalmi-vilna',
   emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Vilna Edition).

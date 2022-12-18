@@ -50,6 +50,7 @@ export function deserializeDownload(data) {
   if (msg.getOmer()) q.o = 'on';
   if (msg.getDafyomi()) q.F = 'on';
   if (msg.getMishnayomi()) q.myomi = 'on';
+  if (msg.getNachyomi()) q.nyomi = 'on';
   if (msg.getAddhebrewdates()) q.d = 'on';
   if (msg.getAddhebrewdatesforevents()) q.D = 'on';
   if (msg.getYomkippurkatan()) q.ykk = 'on';

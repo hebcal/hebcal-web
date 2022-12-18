@@ -90,6 +90,10 @@ FILE="mishna-yomi"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
 compress_file $FILE
 
+FILE="nach-yomi"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
+compress_file $FILE
+
 FILE="yerushalmi-vilna"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Vilna%29&color=%23BF5AF2"
 compress_file $FILE
