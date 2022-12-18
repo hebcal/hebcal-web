@@ -237,6 +237,16 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const emoji = isTishrei ? '🌿🍋' : '🫓';
     const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מועדים לשמחה</span>&nbsp;${emoji}`;
     return [blurb, `<strong>Moadim L\'Simcha!</strong> We wish you a very happy ${holiday}`];
+  } else if (mm == months.KISLEV && dd <= 24) {
+    // immediately after Rosh Chodesh Kislev, show Chanukah greeting
+    const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
+    const dow = erevChanukah.day();
+    const htmlDate = myDateFormat(erevChanukah);
+    const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
+    return ['🕎&nbsp;<span lang="he" dir="rtl">חנוכה שמח</span>&nbsp;🕎',
+      `<strong>Happy Chanukah!</strong> Light the first
+ <a class="text-green1 text-nowrap" href="/holidays/chanukah-${gy}">Chanukah candle</a>
+${when} on ${htmlDate}`];
   }
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
@@ -269,16 +279,6 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
       `<strong>Shana Tova!</strong> We wish you a happy and healthy New Year.
  <a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-${gy}">Rosh Hashana ${nextYear}</a>
  begins at sundown on ${htmlDate}`];
-  } else if (mm == months.KISLEV && dd < 24) {
-    // immediately after Rosh Chodesh Kislev, show Chanukah greeting
-    const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
-    const dow = erevChanukah.day();
-    const htmlDate = myDateFormat(erevChanukah);
-    const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
-    return ['🕎&nbsp;<span lang="he" dir="rtl">חנוכה שמח</span>&nbsp;🕎',
-      `<strong>Happy Chanukah!</strong> Light the first
- <a class="text-green1 text-nowrap" href="/holidays/chanukah-${gy}">Chanukah candle</a>
-${when} on ${htmlDate}`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
     const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevLagBaOmer);
@@ -356,24 +356,19 @@ function fastDayGreeting(ctx, ev) {
  * @return {string[]}
  */
 function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
-  const url = shortenUrl(ev.url());
   const mask = ev.getFlags();
-  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES)) {
+  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
     const tzid = ctx.state.timezone;
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
     const holidays = HebrewCalendar.getHolidaysOnDate(hd, il);
-    ev = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
-    const dow = d.day();
-    const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
-    const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
-    const nth = Locale.ordinal(candles);
-    const dowStr = d.format('dddd');
-    return [`🕎&nbsp;<span lang="he" dir="rtl">חג אורים שמח</span>&nbsp;🕎`,
-      `<strong>Happy Chanukah!</strong> Light the ${nth}
-<a class="text-green1 text-nowrap" href="${url}">Chanukah candle</a> ${dowStr} evening ${when}`];
+    const ev2 = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
+    if (ev2) {
+      return getChanukahGreeting(d, ev2);
+    }
   }
+  const url = shortenUrl(ev.url());
   const title = ev.basename();
   const emoji0 = ev.getEmoji();
   const emoji = emoji0 ? `<span class="text-nowrap">${emoji0}</span>` : '';
@@ -385,6 +380,18 @@ function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
 }
 
 const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir="rtl">חודש טוב</span>&nbsp;🌒';
+
+function getChanukahGreeting(d, ev) {
+  const url = shortenUrl(ev.url());
+  const dow = d.day();
+  const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
+  const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
+  const nth = Locale.ordinal(candles);
+  const dowStr = d.format('dddd');
+  return [`🕎&nbsp;<span lang="he" dir="rtl">חג אורים שמח</span>&nbsp;🕎`,
+    `<strong>Happy Chanukah!</strong> Light the ${nth}
+<a class="text-green1 text-nowrap" href="${url}">Chanukah candle</a> ${dowStr} evening ${when}`];
+}
 
 function getRoshChodeshGreeting(ctx, hd, ev) {
   const locale = ctx.state.locale;
