@@ -43,14 +43,15 @@ body { background-color: #eee;}
     removed from the email subscription list.
   </p>
   <p class="small">You will no longer receive email from this list.</p>
+  <p><a class="btn btn-secondary" href="/">Go to Hebcal »</a></p>
+  <p class="small">Unsubscribed by mistake?</p>
   <form method="post" action="/email/verify.php">
     <input type="hidden" name="k" value="<%=subscriptionId%>">
     <input type="hidden" name="commit" value="1">
-    <button type="submit" class="btn btn-secondary me-2">
+    <button type="submit" class="btn btn-secondary">
       <svg class="icon mt-n05"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
-      Resubscribe
+      Subscribe again
     </button>
-    <a class="btn btn-secondary" href="/">Go to Hebcal »</a>
   </form>
 </div>
 </div>
