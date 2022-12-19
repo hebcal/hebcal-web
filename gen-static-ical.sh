@@ -91,7 +91,7 @@ fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=
 compress_file $FILE
 
 FILE="nach-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Nach+Yomi&caldesc=Daily+study+of+books+of+Nevi%27im+%28Prophets%29+and+Ketuvim+%28Writings%29&color=%23003399"
 compress_file $FILE
 
 FILE="yerushalmi-vilna"
