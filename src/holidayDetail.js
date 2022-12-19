@@ -123,7 +123,7 @@ export async function holidayDetail(ctx) {
   }
   const cats = next.categories;
   const category0 = cats.length === 1 ? cats[0] : cats[1];
-  const category = categories[category0] || {id: 'unknown', name: 'Unknown'};
+  const category = categories[category0] || categories.minor;
   next.ppf = 'current';
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
