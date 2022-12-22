@@ -66,7 +66,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia
 </em></small></p>
 
 <% if (holiday === 'Chanukah' && chanukahItems !== null) { %>
-<div class="table-responsive">
+<div class="table-responsive" id="chanukah-candles">
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
 <thead>
@@ -75,7 +75,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia
 <tbody class="table-group-divider">
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
 <tr class="<%=item.ppf%>">
-<td><time datetime="<%=item.startIsoDate%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
 <%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
 <%   } else { %>
@@ -85,7 +85,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia
 <% } %>
 </tbody>
 </table>
-</div><!-- chanukah -->
+</div><!-- #chanukah-candles -->
 <% } %>
 
 <div class="d-flex justify-content-center d-print-none">
