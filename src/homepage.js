@@ -390,7 +390,7 @@ function getChanukahGreeting(d, ev) {
   const dow = d.day();
   const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
   const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
-  const nth = Locale.ordinal(candles);
+  const nth = Locale.ordinal(candles, 'en');
   const dowStr = d.format('dddd');
   return [`🕎&nbsp;<span lang="he" dir="rtl">חג אורים שמח</span>&nbsp;🕎`,
     `<strong>Happy Chanukah!</strong> Light the ${nth}
