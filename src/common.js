@@ -16,8 +16,8 @@ dayjs.extend(timezone);
 export const langNames = {
   's': ['Sephardic transliterations', null],
   'a': ['Ashkenazic transliterations', null],
-  'he-x-NoNikud': ['עברית', 'Hebrew'],
-  'h': ['עִברִית', 'Hebrew with nikud'],
+  'h': ['עִברִית', 'Hebrew'],
+  'he-x-NoNikud': ['עברית', 'Hebrew (no nikud)'],
   'fi': ['Suomalainen', 'Finnish'],
   'fr': ['français', 'French'],
   'de': ['Deutsch', 'German'],
@@ -572,6 +572,9 @@ export function getLocationFromQuery(db, query) {
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {
+    if (!is5DigitZip(query.zip)) {
+      throw createError(400, `Sorry, invalid ZIP code: ${query.zip}`);
+    }
     const zip = query.zip.trim().substring(0, 5); // truncate ZIP+4 to 5-digit ZIP
     const location = db.lookupZip(zip);
     if (location == null) {

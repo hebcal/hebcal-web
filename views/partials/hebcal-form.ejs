@@ -65,7 +65,7 @@
 <fieldset>
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
-<% for (const langName of ['s', 'a', 'he-x-NoNikud', 'h']) {
+<% for (const langName of ['s', 'a', 'h', 'he-x-NoNikud']) {
   const desc = langNames[langName]; -%>
 <option <%- (q.lg === langName) ? 'selected' : '' -%> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
 <% } -%>
