@@ -1,5 +1,6 @@
 import {Zmanim, TimedEvent, HDate, flags} from '@hebcal/core';
-import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone} from './common';
+import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
+  lgToLocale} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -163,59 +164,59 @@ function expires(ctx) {
 
 const ZMAN_NAMES = {
   chatzotNight: [
-    'Midnight - Chatzot',
+    'Chatzot HaLailah',
     'Sunset plus 6 halachic hours',
   ],
   alotHaShachar: [
-    'Dawn - Alot haShachar',
+    'Alot haShachar',
     'Sun is 16.1° below the horizon in the morning',
   ],
   misheyakir: [
-    'Earliest talis & tefillin - Misheyakir',
-    'Sun is 11.5° below the horizon in the morning',
+    'Misheyakir',
+    'Earliest talis & tefillin. Sun is 11.5° below the horizon in the morning',
   ],
   misheyakirMachmir: [
-    'Earliest talis & tefillin - Misheyakir Machmir',
-    'Sun is 10.2° below the horizon in the morning',
+    'Misheyakir Machmir',
+    'Earliest talis & tefillin. Sun is 10.2° below the horizon in the morning',
   ],
   dawn: [
-    'Civl dawn',
-    'Sun is 6° below the horizon in the morning',
+    'Dawn',
+    'Civil dawn. Sun is 6° below the horizon in the morning',
   ],
   sunrise: [
     'Sunrise',
     'Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)',
   ],
   sofZmanShma: [
-    'Latest Shema (Gra)',
-    'Sunrise plus 3 halachic hours, according to the Gra',
+    'Kriat Shema, sof zeman',
+    'Latest Shema (Gra). Sunrise plus 3 halachic hours, according to the Gra',
   ],
   sofZmanTfilla: [
-    'Latest Shacharit (Gra)',
-    'Sunrise plus 4.5 halachic hours, according to the Gra',
+    'Tefilah, sof zeman',
+    'Latest Shacharit (Gra). Sunrise plus 4 halachic hours, according to the Gra',
   ],
   sofZmanShmaMGA: [
-    'Latest Shema (MGA)',
-    'Sunrise plus 3 halachic hours, according to Magen Avraham',
+    'Kriat Shema, sof zeman (MGA)',
+    'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham',
   ],
   sofZmanTfillaMGA: [
-    'Latest Shacharit (MGA)',
-    'Sunrise plus 4.5 halachic hours, according to Magen Avraham',
+    'Tefilah, sof zeman (MGA)',
+    'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham',
   ],
   chatzot: [
-    'Midday - Chatzot',
-    'Sunrise plus 6 halachic hours',
+    'Chatzot hayom',
+    'Midday. Sunrise plus 6 halachic hours',
   ],
   minchaGedola: [
-    'Earliest Mincha - Mincha Gedola',
-    'Sunrise plus 6.5 halachic hours',
+    'Mincha Gedolah',
+    'Earliest Mincha. Sunrise plus 6.5 halachic hours',
   ],
   minchaKetana: [
-    'Preferable earliest time to recite Minchah - Mincha Ketana',
-    'Sunrise plus 9.5 halachic hours',
+    'Mincha Ketanah',
+    'Preferable earliest time to recite Minchah. Sunrise plus 9.5 halachic hours',
   ],
   plagHaMincha: [
-    'Plag haMincha',
+    'Plag HaMincha',
     'Sunrise plus 10.75 halachic hours',
   ],
   sunset: [
@@ -223,28 +224,28 @@ const ZMAN_NAMES = {
     'When the upper edge of the Sun disappears below the horizon (0.833° below horizon)',
   ],
   dusk: [
-    'Civil dusk',
-    'Sun is 6° below the horizon in the evening',
+    'Dusk',
+    'Civil dusk. Sun is 6° below the horizon in the evening',
   ],
   tzeit7083deg: [
-    'Nightfall (3 medium stars) - Tzeit 7.083°',
-    'When 3 medium stars are observable in the night sky with the naked eye (sun 7.083° below the horizon)',
+    'Tzeit 7.083 deg',
+    'Nightfall. When 3 medium stars are observable in the night sky with the naked eye (sun 7.083° below the horizon)',
   ],
   tzeit85deg: [
-    'Nightfall (3 small stars) - Tzeit 8.5°',
-    'When 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)',
+    'Tzeit 8.5 deg',
+    'Nightfall. When 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)',
   ],
   tzeit42min: [
-    'Nightfall (3 medium stars) - Tzeit 42 minutes',
-    'When 3 small stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)',
+    'Tzeit 42 min',
+    'Nightfall. When 3 medium stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)',
   ],
   tzeit50min: [
-    'Nightfall (3 small stars) - Tzeit 50 minutes',
-    'When 3 small stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)',
+    'Tzeit 50 min',
+    'Nightfall. When 3 small stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)',
   ],
   tzeit72min: [
-    'Nightfall (Rabbeinu Tam) - Tzeit 72 minutes',
-    'When 3 small stars are observable in the night sky with the naked eye (fixed 72 minutes after sunset)',
+    'Tzeit 72 min (Rabbeinu Tam)',
+    'Nightfall. When 3 small stars are observable in the night sky with the naked eye (fixed 72 minutes after sunset)',
   ],
 };
 
@@ -253,7 +254,8 @@ const ZMAN_NAMES = {
  * @param {any} ctx
  */
 export async function zmanimIcalendar(ctx) {
-  const location = getLocationFromQuery(ctx.db, ctx.request.query);
+  const query = ctx.request.query;
+  const location = getLocationFromQuery(ctx.db, query);
   if (location === null) {
     throw createError(400, 'Location is required');
   }
@@ -279,6 +281,10 @@ export async function zmanimIcalendar(ctx) {
     title: `Hebcal Zmanim ${location.getShortName()}`,
     publishedTTL: 'PT1D',
   };
+  if (!empty(query.lg)) {
+    const lg = query.lg;
+    options.locale = lgToLocale[lg] || lg;
+  }
   ctx.set('Cache-Control', 'max-age=86400');
   ctx.lastModified = new Date();
   ctx.response.type = 'text/calendar; charset=utf-8';
