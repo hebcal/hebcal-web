@@ -35,9 +35,12 @@ async function main() {
   const obj = {};
   const records = await processFile(filename);
   for (const r of records) {
-    const dateParts = r[0].split(' ');
+    const dateParts = r[0].split(/\s+/);
     const month = monthNames[dateParts[1]];
     const day = parseInt(dateParts[2]);
+    if (isNaN(day)) {
+      continue;
+    }
     const dt = pad2(month) + '-' + pad2(day);
     const title = cleanStr(r[2]);
     const quote = cleanStr(r[3]);
@@ -53,7 +56,7 @@ async function processFile(filename) {
     // CSV options if any
   }));
   for await (const record of parser) {
-    const dateParts = record[0].split(' ');
+    const dateParts = record[0].split(/\s+/);
     const month = monthNames[dateParts[1]];
     if (!month) {
       continue;
