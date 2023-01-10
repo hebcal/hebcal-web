@@ -12,7 +12,7 @@
 <% if (typeof noToolbar === 'undefined') { %><%- await include('ical-toolbar.ejs', {
   name: name,
   basename: id,
-  noOutlook: (typeof noCSV === 'boolean' && noCSV) ? true : undefined,
+  noCSV: (typeof noCSV === 'boolean' && noCSV) ? true : undefined,
 }) -%><% } %>
 <% if (typeof moreInfo === 'string') { %><%-moreInfo%><% } %>
 </div>

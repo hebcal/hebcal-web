@@ -100,21 +100,21 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (English)', id: 'hdate-en',
-  summary: `<p>Displays the Hebrew date (such as <strong class="text-nowrap">18th of Tevet</strong>) every day of the week. Sephardic transliteration.</p>
-<p>Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap">1st of Kislev, 5782</strong>)</p>`,
+  summary: `<p>Displays the Hebrew date (such as <strong class="text-nowrap text-burgundy">18th of Tevet</strong>) every day of the week. Sephardic transliteration.</p>
+<p>Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap text-burgundy">1st of Kislev, 5782</strong>)</p>`,
   feedLength: 365,
   years: 2,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew)', id: 'hdate-he-v2',
-  summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap">י״ח טבת</span>) every day of the week.</p>
-<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap">א׳ כסלו תשפ״ב</span>)</p>`,
+  summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">י״ח טבת</span>) every day of the week.</p>
+<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">א׳ כסלו תשפ״ב</span>)</p>`,
   feedLength: 365,
   years: 2,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew with nikud)', id: 'hdate-he',
-  summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap">י״ח טֵבֵת</span>) every day of the week</p>`,
+  summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">י״ח טֵבֵת</span>) every day of the week</p>`,
   feedLength: 365,
   years: 2,
 }) -%>
@@ -152,7 +152,7 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
   name: 'Yerushalmi Yomi (Vilna)', id: 'yerushalmi-vilna',
   emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Vilna Edition).
-Using the Vilna edition, the Yerushalmi Daf Yomi program takes ~4.25 years or 51 months.
+Using the Vilna edition, the Yerushalmi Daf Yomi program takes 4¼ years to complete.
 Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and Tisha B'Av.</p>`,
   feedLength: 363,
   years: 5,
@@ -161,7 +161,8 @@ Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and
   name: 'Yerushalmi Yomi (Schottenstein)', id: 'yerushalmi-schottenstein',
   emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Schottenstein Edition).
-The Schottenstein edition of Yerushalmi Daf Yomi uses different page numbers and takes ~6 years to complete.</p>`,
+The Schottenstein edition of Yerushalmi Daf Yomi uses different page numbers
+than the Vilna and takes 5¾ years to complete.</p>`,
   feedLength: 365,
   years: 5,
 }) -%>
