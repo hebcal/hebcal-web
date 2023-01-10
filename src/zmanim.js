@@ -1,6 +1,6 @@
 import {Zmanim, TimedEvent, HDate, flags} from '@hebcal/core';
 import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
-  lgToLocale} from './common';
+  lgToLocale, eTagFromOptions} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -286,7 +286,13 @@ export async function zmanimIcalendar(ctx) {
     const lg = query.lg;
     options.locale = lgToLocale[lg] || lg;
   }
-  ctx.set('Cache-Control', 'max-age=86400');
+  ctx.response.etag = eTagFromOptions(options, {dt: today.format('YYYY-MM-DD')});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
+  ctx.set('Cache-Control', 'max-age=64800');
   ctx.lastModified = new Date();
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await eventsToIcalendar(events, options);
