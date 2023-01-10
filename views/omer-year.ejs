@@ -20,11 +20,11 @@
   <sup><a class="outbound" title="Counting of the Omer from Wikipedia"
     href="https://en.wikipedia.org/wiki/Counting_of_the_Omer">[2]</a></sup>
 </p>
-<p>We begin counting on the evening of the 2nd night of Pesach:
+<p>We begin counting on the evening of the second night of Pesach:
   <time class="text-burgundy text-nowrap" datetime="<%=items[1].d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=items[1].d.subtract(1, 'd').format('dddd, D MMMM YYYY')%></time>,
   corresponding to the <span class="text-nowrap"><%=items[1].hd.render('en')%></span>.
-  The counting concludes on Erev Shavuot:
-  <time class="text-burgundy text-nowrap" datetime="<%=items[49].d.format('YYYY-MM-DD')%>"><%=items[49].d.format('dddd, D MMMM YYYY')%></time>,
+  The counting concludes on the night before Shavuot:
+  <time class="text-burgundy text-nowrap" datetime="<%=items[49].d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=items[49].d.subtract(1, 'd').format('dddd, D MMMM YYYY')%></time>,
   corresponding to the <span class="text-nowrap"><%=items[49].hd.render('en')%></span>.</p>
 <div class="table-responsive mt-3">
 <table class="table table-striped">
