@@ -261,7 +261,7 @@ export async function zmanimIcalendar(ctx) {
   }
   const today = nowInTimezone(location.getTzid());
   const startD = today.subtract(2, 'day');
-  const endD = today.add(4, 'day');
+  const endD = today.add(6, 'day');
   const times = getTimesForRange(startD, endD, location, false, true);
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
@@ -272,6 +272,7 @@ export async function zmanimIcalendar(ctx) {
       const ev = new TimedEvent(hd, desc[0], flags.USER_EVENT, dt, location);
       ev.category = zman;
       ev.memo = desc[1];
+      ev.alarm = false;
       events.push(ev);
     }
   }
