@@ -252,10 +252,21 @@ export function possiblySetCookie(ctx, query) {
     return false;
   }
   if (prevCookie) {
-    const prev = prevCookie.substring(prevCookie.indexOf('&'));
+    const prev0 = prevCookie.substring(prevCookie.indexOf('&'));
+    const prevExp = prev0.indexOf('&exp=');
+    const prev = prevExp === -1 ? prev0 : prev0.substring(0, prevExp);
     const current = newCookie.substring(ampersand);
     if (prev === current) {
-      return false;
+      if (prevExp === -1) {
+        return false;
+      } else {
+        const expDt = isoDateStringToDate(prev0.substring(prevExp + 5));
+        const now = new Date();
+        const diff = (expDt.getTime() - now.getTime()) / (24 * 60 * 60 * 1000);
+        if (diff > 90) {
+          return false;
+        }
+      }
     }
   }
   setCookie(ctx, newCookie);
@@ -267,8 +278,10 @@ export function possiblySetCookie(ctx, query) {
  * @param {string} newCookie
  */
 function setCookie(ctx, newCookie) {
+  const expires = dayjs().add(1, 'year').toDate();
+  newCookie += '&exp=' + expires.toISOString().substring(0, 10);
   ctx.cookies.set('C', newCookie, {
-    expires: dayjs().add(1, 'year').toDate(),
+    expires: expires,
     overwrite: true,
     httpOnly: false,
   });

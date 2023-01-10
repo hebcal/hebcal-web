@@ -138,7 +138,8 @@ function setYahrzeitCookie(ctx) {
   });
   if (!cCookie) {
     const userId = uuid();
-    ctx.cookies.set('C', 'uid=' + userId, {
+    const val = 'uid=' + userId + '&exp=' + expires.toISOString().substring(0, 10);
+    ctx.cookies.set('C', val, {
       expires: expires,
       path: '/',
       overwrite: true,
