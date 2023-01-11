@@ -59,7 +59,8 @@ function myRedir(ctx, anchor, year) {
 export async function holidayDetail(ctx) {
   const rpath = ctx.request.path;
   const base0 = decodeURIComponent(basename(rpath));
-  const base = base0.toLowerCase();
+  const baseLc = base0.toLowerCase();
+  const base = baseLc.endsWith('.html') ? baseLc.substring(0, baseLc.length - 5) : baseLc;
   const matches = base.match(holidayYearRe);
   const dateSuffix = matches?.[2];
   const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
