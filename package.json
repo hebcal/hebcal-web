@@ -76,7 +76,7 @@
     "koa-timeout-v2": "^1.0.0",
     "maxmind": "^4.3.8",
     "murmurhash3": "^0.5.0",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.0.1",
     "nodemailer": "^6.8.0",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
