@@ -110,14 +110,12 @@ export async function hebcalApp(ctx) {
       ctx.body = renderLegacyJavascript(ctx);
       break;
     case 'csv':
-      ctx.response.attachment(getDownloadFilename(options) + '.csv');
       ctx.body = renderCsv(ctx);
       break;
     case 'rss':
       ctx.body = renderRss(ctx);
       break;
     case 'ics':
-      ctx.response.attachment(getDownloadFilename(options) + '.ics');
       return renderIcal(ctx);
     default:
       if (q.v === '1') {
@@ -136,6 +134,10 @@ async function renderIcal(ctx) {
     return;
   }
   const events = makeHebrewCalendar(ctx, options);
+  if (events.length === 0) {
+    ctx.throw(400, 'No events');
+  }
+  ctx.response.attachment(getDownloadFilename(options) + '.ics');
   ctx.response.type = 'text/calendar; charset=utf-8';
   icalOpt.utmSource = 'api';
   icalOpt.utmMedium = 'icalendar';
@@ -167,6 +169,7 @@ function renderCsv(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
   const csv = eventsToCsv(events, options);
+  ctx.response.attachment(getDownloadFilename(options) + '.csv');
   ctx.response.type = 'text/x-csv; charset=utf-8';
   const locale = localeMap[options.locale] || 'en';
   const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
