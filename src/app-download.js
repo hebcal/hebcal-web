@@ -223,7 +223,7 @@ app.use(async function router(ctx, next) {
     const vv = ctx.request.query.v;
     if (typeof vv === 'string' && vv[0] === 'y') {
       return yahrzeitDownload(ctx);
-    } else if (vv == '1') {
+    } else if (vv === '1' || vv === 'now') {
       return hebcalDownload(ctx);
     } else {
       const status = typeof vv === 'undefined' ? 404 : 400;
