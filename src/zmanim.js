@@ -40,6 +40,8 @@ const TZEIT_TIMES = {
   tzeit72min: 72,
 };
 
+const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
+
 /**
  * @private
  * @param {any} ctx
@@ -68,12 +70,12 @@ export async function getZmanim(ctx) {
   const locObj = locationToPlainObj(loc);
   const roundMinute = q.sec === '1' ? false : true;
   if (isRange) {
-    const times = getTimesForRange(startD, endD, loc, true, roundMinute);
+    const times = getTimesForRange(ALL_TIMES, startD, endD, loc, true, roundMinute);
     const start = startD.format('YYYY-MM-DD');
     const end = endD.format('YYYY-MM-DD');
     ctx.body = {date: {start, end}, location: locObj, times};
   } else {
-    const times = getTimes(startD, loc, true, roundMinute);
+    const times = getTimes(ALL_TIMES, startD, loc, true, roundMinute);
     const isoDate = startD.format('YYYY-MM-DD');
     ctx.body = {date: isoDate, location: locObj, times};
   }
@@ -96,6 +98,7 @@ function myGetStartAndEnd(ctx, q, tzid) {
 }
 
 /**
+ * @param {string[]} names
  * @param {dayjs.Dayjs} startD
  * @param {dayjs.Dayjs} endD
  * @param {Location} loc
@@ -103,13 +106,13 @@ function myGetStartAndEnd(ctx, q, tzid) {
  * @param {boolean} roundMinute
  * @return {any}
  */
-function getTimesForRange(startD, endD, loc, formatAsString, roundMinute) {
+function getTimesForRange(names, startD, endD, loc, formatAsString, roundMinute) {
   const times = {};
-  for (const func of Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES))) {
+  for (const func of names) {
     times[func] = {};
   }
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-    const t = getTimes(d, loc, formatAsString, roundMinute);
+    const t = getTimes(names, d, loc, formatAsString, roundMinute);
     const isoDate = d.format('YYYY-MM-DD');
     for (const [key, val] of Object.entries(t)) {
       times[key][isoDate] = val;
@@ -120,20 +123,23 @@ function getTimesForRange(startD, endD, loc, formatAsString, roundMinute) {
 
 /**
  * @private
+ * @param {string[]} names
  * @param {dayjs.Dayjs} d
  * @param {Location} location
  * @param {boolean} formatAsString
  * @param {boolean} roundMinute
  * @return {Object<string,string>}
  */
-function getTimes(d, location, formatAsString, roundMinute) {
+function getTimes(names, d, location, formatAsString, roundMinute) {
   const times = {};
   const zman = new Zmanim(d.toDate(), location.getLatitude(), location.getLongitude());
-  for (const func of Object.keys(TIMES)) {
-    times[func] = zman[func]();
-  }
-  for (const [name, num] of Object.entries(TZEIT_TIMES)) {
-    times[name] = name.endsWith('deg') ? zman.tzeit(num) : zman.sunsetOffset(num, roundMinute);
+  for (const name of names) {
+    if (TIMES[name]) {
+      times[name] = zman[name]();
+    } else if (typeof TZEIT_TIMES[name] === 'number') {
+      const num = TZEIT_TIMES[name];
+      times[name] = name.endsWith('deg') ? zman.tzeit(num) : zman.sunsetOffset(num, roundMinute);
+    }
   }
   if (roundMinute) {
     for (const [name, dt] of Object.entries(times)) {
@@ -260,9 +266,11 @@ export async function zmanimIcalendar(ctx) {
     throw createError(400, 'Location is required');
   }
   const today = nowInTimezone(location.getTzid());
-  const startD = today.subtract(2, 'day');
-  const endD = today.add(6, 'day');
-  const times = getTimesForRange(startD, endD, location, false, true);
+  const startD = today.subtract(1, 'day');
+  const endD = today.add(10, 'day');
+  const riseSetOnly = ctx.request.path.startsWith('/sunrs');
+  const names = riseSetOnly ? ['sunrise', 'sunset'] : ALL_TIMES;
+  const times = getTimesForRange(names, startD, endD, location, false, true);
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
@@ -277,10 +285,15 @@ export async function zmanimIcalendar(ctx) {
     }
   }
   events.sort((a, b) => a.eventTime - b.eventTime);
+  const titlePrefix = riseSetOnly ? 'Sunrise and Sunset' : 'Hebcal Zmanim';
+  const caldesc = riseSetOnly ?
+    'Times for ' + location.getName() :
+    'Halachic times for ' + location.getName();
   const options = {
     location,
-    title: `Hebcal Zmanim ${location.getShortName()}`,
+    title: `${titlePrefix} ${location.getShortName()}`,
     publishedTTL: 'PT1D',
+    caldesc,
   };
   if (!empty(query.lg)) {
     const lg = query.lg;

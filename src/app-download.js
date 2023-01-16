@@ -229,7 +229,7 @@ app.use(async function router(ctx, next) {
       const status = typeof vv === 'undefined' ? 404 : 400;
       ctx.throw(status, `Invalid download URL: v=${vv}`);
     }
-  } else if (rpath.startsWith('/zmanim')) {
+  } else if (rpath.startsWith('/zmanim') || rpath.startsWith('/sunrs')) {
     return zmanimIcalendar(ctx);
   }
   await next();
