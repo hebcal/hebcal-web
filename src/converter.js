@@ -159,6 +159,16 @@ function makeFutureYears(ctx, p) {
 
 /**
  * @private
+ * @param {Date} dt
+ * @return {string}
+ */
+function dateToISOString(dt) {
+  const s = dt.toISOString();
+  return s.substring(0, s.indexOf('T'));
+}
+
+/**
+ * @private
  * @param {dayjs.Dayjs} d
  * @param {string} locale
  * @return {any[]}
@@ -170,7 +180,7 @@ function makeFutureYearsGreg(d, locale) {
   const gd0 = d.date();
   for (let i = -5; i <= 25; i++) {
     const gyear = gy + i;
-    if (gyear === 0 || gyear < -3760) {
+    if (gyear < -3760) {
       continue;
     }
     const gd = gm === 2 && gd0 === 29 && !greg.isLeapYear(gyear) ? 28 : gd0;
@@ -178,7 +188,7 @@ function makeFutureYearsGreg(d, locale) {
       const dt = makeGregDate(gyear, gm, gd);
       const hdate = new HDate(dt);
       const d = dayjs(dt).locale(locale);
-      arr2.push({hd: hdate, d: d});
+      arr2.push({hd: hdate, d: d, isoDate: dateToISOString(dt)});
     } catch (err) {
       // ignore error from makeGregDate
     }
@@ -208,8 +218,9 @@ function makeFutureYearsHeb(orig, numYears, locale) {
     const hm = isAdar30 && isNonLeap ? months.NISAN : month;
     const hd = isAdar30 && isNonLeap ? 1 : day;
     const hdate = new HDate(hd, hm, hyear);
-    const d = dayjs(hdate.greg()).locale(locale);
-    arr.push({hd: hdate, d: d});
+    const dt = hdate.greg();
+    const d = dayjs(dt).locale(locale);
+    arr.push({hd: hdate, d: d, isoDate: dateToISOString(dt)});
   }
   return arr;
 }
@@ -504,8 +515,9 @@ function convertDateRange(ctx, startD, endD) {
   const locale = ctx.state.locale;
   const hdates = {};
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-    const isoDate = d.format('YYYY-MM-DD');
-    const hdate = new HDate(d.toDate());
+    const dt = d.toDate();
+    const isoDate = dateToISOString(dt);
+    const hdate = new HDate(dt);
     const hy = hdate.getFullYear();
     const hm = hdate.getMonthName();
     const hd = hdate.getDate();
@@ -528,8 +540,8 @@ function convertDateRange(ctx, startD, endD) {
     hdates[isoDate] = result;
   }
   return {
-    start: startD.format('YYYY-MM-DD'),
-    end: endD.format('YYYY-MM-DD'),
+    start: dateToISOString(startD.toDate()),
+    end: dateToISOString(endD.toDate()),
     locale,
     hdates,
   };
@@ -563,7 +575,8 @@ export async function dateConverterCsv(ctx) {
   const arr = makeFutureYearsHeb(hdate, 75, 'en');
   let csv = 'Gregorian Date,Hebrew Date\r\n';
   for (const item of arr) {
-    csv += item.d.format('YYYY-MM-DD') + ',' + item.hd.toString() + '\r\n';
+    const isoDate = dateToISOString(item.d.toDate());
+    csv += isoDate + ',' + item.hd.toString() + '\r\n';
   }
   if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
     ctx.lastModified = ctx.launchDate;
