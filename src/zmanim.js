@@ -1,5 +1,6 @@
 import {Zmanim, TimedEvent, HDate, flags} from '@hebcal/core';
 import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
+  CACHE_CONTROL_7DAYS,
   lgToLocale, eTagFromOptions} from './common';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
@@ -227,7 +228,7 @@ const ZMAN_NAMES = {
   ],
   sunset: [
     'Sunset',
-    'When the upper edge of the Sun disappears below the horizon (0.833° below horizon)',
+    'Upper edge of the Sun disappears below the western horizon in the evening (0.833° below horizon)',
   ],
   dusk: [
     'Dusk',
@@ -266,9 +267,9 @@ export async function zmanimIcalendar(ctx) {
     throw createError(400, 'Location is required');
   }
   const today = nowInTimezone(location.getTzid());
-  const startD = today.subtract(1, 'day');
-  const endD = today.add(10, 'day');
   const riseSetOnly = ctx.request.path.startsWith('/sunrs');
+  const startD = today.subtract(1, 'day');
+  const endD = today.add(riseSetOnly ? 365 : 60, 'day');
   const names = riseSetOnly ? ['sunrise', 'sunset'] : ALL_TIMES;
   const times = getTimesForRange(names, startD, endD, location, false, true);
   const events = [];
@@ -292,7 +293,7 @@ export async function zmanimIcalendar(ctx) {
   const options = {
     location,
     title: `${titlePrefix} ${location.getShortName()}`,
-    publishedTTL: 'PT1D',
+    publishedTTL: 'PT7D',
     caldesc,
   };
   if (!empty(query.lg)) {
@@ -305,7 +306,7 @@ export async function zmanimIcalendar(ctx) {
     ctx.status = 304;
     return;
   }
-  ctx.set('Cache-Control', 'max-age=64800');
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.lastModified = new Date();
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await eventsToIcalendar(events, options);
