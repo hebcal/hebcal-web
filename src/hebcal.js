@@ -268,7 +268,7 @@ function renderHtml(ctx) {
   if (gy >= 3762 && q.yt === 'G') {
     ctx.state.futureYears = gy - today.year();
     ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
-  } else if (gy < 0 && q.yt === 'H') {
+  } else if (gy <= 0 && q.yt === 'H') {
     ctx.state.hebrewYear = options.year;
     ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
   }
@@ -303,6 +303,15 @@ function renderHtml(ctx) {
 
 /**
  * @private
+ * @param {number} year
+ * @return {string}
+ */
+function yearTitle(year) {
+  return year > 0 ? '' + year : '' + (-(year-1)) + ' B.C.E.';
+}
+
+/**
+ * @private
  * @param {CalOptions} options
  * @param {Event[]} events
  * @return {string}
@@ -313,8 +322,7 @@ function pageTitle(options, events) {
     shortTitle += greg.monthNames[options.month] + ' ';
   }
   if (typeof options.year === 'number') {
-    const yearStr = options.year >= 0 ? options.year : -options.year + ' B.C.E.';
-    return shortTitle + yearStr;
+    return shortTitle + yearTitle(options.year);
   }
   const gy1 = events[0].getDate().greg().getFullYear();
   const gy2 = events[events.length - 1].getDate().greg().getFullYear();
@@ -328,7 +336,7 @@ function makePrevNextUrl(q, options, events, isNext) {
   const numYears = isNext ? 1 : -1;
   if (typeof options.year === 'number') {
     return {
-      title: options.year + numYears,
+      title: yearTitle(options.year + numYears),
       href: '/hebcal?' + urlArgs(q, {year: options.year + numYears}),
     };
   }
@@ -338,7 +346,7 @@ function makePrevNextUrl(q, options, events, isNext) {
   delete q2.start;
   delete q2.end;
   return {
-    title: gy + numYears,
+    title: yearTitle(gy + numYears),
     href: '/hebcal?' + urlArgs(q2, {yt: 'G', year: gy + numYears}),
   };
 }

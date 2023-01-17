@@ -76,7 +76,7 @@ div#hebcal-loading h3 {
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 You are viewing <strong>Hebrew year <%=hebrewYear%></strong>,
-which is equivalent to Gregorian year <%=-gy%> B.C.E. (Before the Common Era).
+which is equivalent to Gregorian year <%=-(gy-1)%> B.C.E. (Before the Common Era).
 Hebrew date conversion before year 1 C.E. may be inaccurate.<br>
 Perhaps you intended to view the calendar for
 <a href="<%-sameUrlGregYear%>">Gregorian year <%=hebrewYear%></a>?

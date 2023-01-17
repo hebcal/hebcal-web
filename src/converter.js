@@ -285,7 +285,7 @@ function makeProperties(ctx) {
   const dt = props.dt;
   const d = dayjs(dt).locale(locale);
   const gy = dt.getFullYear();
-  const gyStr = gy > 0 ? pad4(gy) : pad4(-gy) + ' B.C.E.';
+  const gyStr = gy > 0 ? pad4(gy) : pad4(-(gy-1)) + ' B.C.E.';
   const dateStr = d.format('ddd, D MMMM ') + gyStr;
   const afterSunset = props.gs ? ' ' + Locale.gettext('after sunset', locale) : '';
   const hdate = props.hdate;

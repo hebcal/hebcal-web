@@ -256,7 +256,7 @@ function getMonthTitle(month, center, prevNext) {
   const yearMonth = month.month;
   const yyStr = yearMonth.substring(0, yearMonth.length - 3);
   const yy = parseInt(yyStr, 10);
-  const yearStr = yy >= 0 ? yy : -yy + ' ' + (isHebrew ? 'לפנה״ס' : 'B.C.E.');
+  const yearStr = yy > 0 ? yy : -(yy-1) + ' ' + (isHebrew ? 'לפנה״ס' : 'B.C.E.');
   const monthStr = yearMonth.substring(yearMonth.length - 2);
   const mm = parseInt(monthStr, 10);
   const titleText = localeData.months[mm - 1] + ' ' + yearStr;

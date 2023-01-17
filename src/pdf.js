@@ -113,7 +113,7 @@ function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
 // eslint-disable-next-line require-jsdoc
 function renderPdfMonthTitle(doc, d, rtl) {
   const yy = d.year();
-  const titleYear = yy >= 0 ? yy : -yy + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
+  const titleYear = yy > 0 ? yy : -(yy-1) + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
   const monthTitle0 = d.format('MMMM') + ' ' + titleYear;
   const monthTitle = rtl ? reverseHebrewWords(monthTitle0) : monthTitle0;
   const monthFont = rtl ? 'hebrew' : 'semi';
