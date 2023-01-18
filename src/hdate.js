@@ -57,6 +57,25 @@ var yy = hd.getFullYear();
 var dateStr = hebcal.gematriya(dd) + ' ' + mm + ' ' + hebcal.gematriya(yy);
 document.write(dateStr);`;
 
+const bodyHebrewNoNikud = `
+var dt = new Date();
+var hd = new hebcal.HDate(dt);
+if (dt.getHours() > 19) {
+  hd = hd.next();
+}
+var dd = hd.getDate();
+var monthName = hd.getMonthName();
+var mm = hebcal.Locale.gettext(monthName, 'he-x-NoNikud');
+var yy = hd.getFullYear();
+var dateStr = hebcal.gematriya(dd) + ' ' + mm + ' ' + hebcal.gematriya(yy);
+document.write(dateStr);`;
+
+const config = {
+  'en': [hdateMinEnPath, bodyEn],
+  'he': [hdateMinJsPath, bodyHebrew],
+  'he-x-NoNikud': [hdateMinJsPath, bodyHebrewNoNikud],
+};
+
 export async function hdateJavascript(ctx) {
   ctx.lastModified = ctx.launchDate;
   ctx.status = 200;
@@ -64,11 +83,16 @@ export async function hdateJavascript(ctx) {
     ctx.status = 304;
     return;
   }
-  const hebrew = ctx.request.path.startsWith('/etc/hdate-he.js');
-  const minJs = hebrew ? await fs.readFile(hdateMinJsPath) : await fs.readFile(hdateMinEnPath);
+  const rpath = ctx.request.path;
+  const locale = rpath.startsWith('/etc/hdate-he.js') ? 'he' :
+    rpath.startsWith('/etc/hdate-en.js') ? 'en' :
+    rpath.startsWith('/etc/hdate-he-v2.js') ? 'he-x-NoNikud' :
+    'en';
+  const jsPath = config[locale][0];
+  const minJs = await fs.readFile(jsPath);
   const isoDate = ctx.launchDate.toISOString();
   const bodyPrefix = `/* ${isoDate} */\n(function(){\n` + minJs;
-  const bodyInner = hebrew ? bodyHebrew : bodyEn;
+  const bodyInner = config[locale][1];
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.type = 'text/javascript';
   ctx.body = bodyPrefix + bodyInner + bodySuffix;

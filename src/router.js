@@ -149,7 +149,7 @@ export function wwwRouter() {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars - Hebcal',
         langNames,
       });
-    } else if (rpath === '/etc/hdate-he.js' || rpath === '/etc/hdate-en.js') {
+    } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.js')) {
       return hdateJavascript(ctx);
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.xml')) {
       return hdateXml(ctx);
