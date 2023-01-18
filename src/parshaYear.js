@@ -66,6 +66,9 @@ export async function parshaYear(ctx) {
       reading,
       url: shortenUrl(ev.url()),
     };
+    if (!isParsha) {
+      item.url += '#r-' + item.d.format('YYYY-MM-DD');
+    }
     items.push(item);
   }
   const dlfilename = `hebcal_${hyear}h.ics`;

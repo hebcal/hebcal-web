@@ -347,6 +347,18 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
         makeHolidayReading(holiday, key, meta, reading, ev, il);
         const hd = reading.hd = ev.getDate();
         reading.d = dayjs(hd.greg());
+        // Add Mincha reading if available
+        const minchaKey0 = key0 + ' (Mincha)';
+        const minchaKey1 = desc + ' (Mincha)';
+        const readingMincha1 = getLeyningForHolidayKey(minchaKey1);
+        const readingMincha = readingMincha1 || getLeyningForHolidayKey(minchaKey0);
+        if (readingMincha) {
+          const minchaKey = readingMincha1 ? minchaKey1 : minchaKey0;
+          meta.items.push(minchaKey);
+          makeHolidayReading(holiday, minchaKey, meta, readingMincha, ev, il);
+          readingMincha.hd = reading.hd;
+          readingMincha.d = reading.d;
+        }
       }
     }
     if (meta.items.length === 0) {
@@ -404,7 +416,9 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   if (itemReading.seph) {
     itemReading.sephardicHtml = makeLeyningHtmlFromParts(itemReading.seph);
   }
-  if (item.startsWith(holiday)) {
+  if (item.endsWith(' (Mincha)')) {
+    itemReading.shortName = 'Mincha';
+  } else if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {
       itemReading.shortName = 'Tanakh';
     } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {

@@ -121,9 +121,9 @@ data-ad-slot="5342180883"></ins>
 <nav class="d-none d-md-block">
 <ul class="pagination<%= meta.items.length > 3 ? ' pagination-sm' : ''%>">
 <li class="page-item"><a class="page-link" href="#dates">Dates</a></li>
-<% for (const reading of Object.values(meta.reading)) { %>
+<% for (const reading of Object.values(meta.reading)) { -%>
 <li class="page-item"><a class="page-link" href="#reading<%=reading.shortName === 'Tanakh' ? '' : '-'+reading.id %>"><%=reading.shortName%></a></li>
-<% } // ... for %>
+<% } // ... for -%>
 <li class="page-item"><a class="page-link" href="#ref">References</a></li>
 </ul><!-- .pagination -->
 </nav>
@@ -168,6 +168,7 @@ data-ad-slot="5342180883"></ins>
 <% if (typeof meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-3">Tanakh</h3>
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
+<% if (typeof reading.d !== 'undefined') { %><div id="r-<%=reading.d.format('YYYY-MM-DD')%><%= item.endsWith(" (Mincha)") ? '-mincha':''%>"></div><% } -%>
 <h4 id="reading-<%=reading.id%>"><%=item.replace(/'/g, '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
