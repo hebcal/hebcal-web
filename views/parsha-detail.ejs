@@ -252,34 +252,31 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 </a>
 <dd>Sefaria, Inc.
 <% } %>
-<dt><em><a class="amzn" id="chumash-2" rel="sponsored"
-href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20">The
-Chumash: The Stone Edition (Artscroll Series)
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em> <small class="text-muted">(paid link)</small>
+<dt><a class="amzn" id="chumash-2" rel="sponsored"
+href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
+Chumash: The Stone Edition (Artscroll Series)</em>
+<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+<small class="text-muted">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <% if (hasTriennial) { %>
-<dt><em><a class="outbound"
-href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf">A
-Complete Triennial System for Reading the Torah
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em>
+<dt><a class="outbound"
+href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf"><em>A
+Complete Triennial System for Reading the Torah</em>
+<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 1988
-<% if (parsha.name === 'Vayakhel' || parsha.name === 'Pekudei') { %>
-<dt><em><a class="outbound"
-href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/heller-triennial-emendation.pdf">An
-Emendation to Richard Eisenberg’s Complete Triennial System for Reading Torah,
-to Address a Rare Situation
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em>
-<dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 2012
-<% } %>
 <% if (parsha.combined || doubled.get(parsha.name) || parsha.name === 'Miketz') { %>
-<dt><em><a href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/cohen-triennial.pdf">Modification of the
-Triennial Cycle Readings for Combined Parashot in Certain Years
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em>
+<dt><a href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/cohen-triennial.pdf"><em>Modification
+of the Triennial Cycle Readings for Combined Parashot in Certain Years</em>
+<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
 <dd>Rabbi Miles B. Cohen, 2020
+<% } %>
+<% if (parsha.name === 'Vayakhel' || parsha.name === 'Pekudei') { %>
+<dt><a class="outbound"
+href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/heller-triennial-emendation.pdf"><em>An
+Emendation to Richard Eisenberg’s Complete Triennial System for Reading Torah,
+to Address a Rare Situation</em>
+<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+<dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 2012
 <% } %>
 <% } %>
 </dl>
