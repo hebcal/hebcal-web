@@ -221,6 +221,7 @@ export async function parshaDetail(ctx) {
     commentary: drash[parsha.name],
     summary: parsha.summaryHtml,
     translations,
+    doubled,
   });
 }
 

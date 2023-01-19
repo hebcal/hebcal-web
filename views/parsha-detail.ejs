@@ -274,11 +274,13 @@ to Address a Rare Situation
 </a></em>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 2012
 <% } %>
+<% if (parsha.combined || doubled.get(parsha.name) || parsha.name === 'Miketz') { %>
 <dt><em><a href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/cohen-triennial.pdf">Modification of the
 Triennial Cycle Readings for Combined Parashot in Certain Years
 <svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
 </a></em>
 <dd>Rabbi Miles B. Cohen, 2020
+<% } %>
 <% } %>
 </dl>
 
