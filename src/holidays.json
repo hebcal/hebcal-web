@@ -49,6 +49,10 @@
   "about": {
     "href": "https://en.wikipedia.org/wiki/Family_Day#Israel"
    },
+  "wikipedia": {
+    "href": "https://en.wikipedia.org/wiki/Family_Day#Israel",
+    "text": "Yom HaMishpacha (Hebrew: יום המשפחה) is a day to honor the family unit, as a whole, and its centrality to our lives. In the 1990s, the last day of Shevat was declared Family Day in Israel, in memory of Henrietta Szold, American-born founder of Hadassah, the Women's Zionist Organization of America."
+  },
   "israelOnly": true
  },
  "Herzl Day": {

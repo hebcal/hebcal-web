@@ -132,9 +132,7 @@ export async function holidayDetail(ctx) {
   const descrMedium = appendPeriod(getHolidayDescription(next.event, false));
   const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
-  const titleHebrew = Locale.hebrewStripNikkud(hebrew);
-  const titleYear = year ? ' ' + year : '';
-  const title = `${holiday}${titleYear} - ${descrShort} - ${titleHebrew} - Hebcal`;
+  const title = makePageTitle(holiday, year, il, descrShort);
   const now = new Date();
   const today = dayjs(now);
   const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
@@ -174,6 +172,15 @@ export async function holidayDetail(ctx) {
 }
 
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
+
+function makePageTitle(holiday, year, il, descrShort) {
+  const hebrew = Locale.gettext(holiday, 'he');
+  const titleHebrew = Locale.hebrewStripNikkud(hebrew);
+  const titleYear = year ? ' ' + year : '';
+  const ilDiaspora = holiday === 'Pesach' || holiday === 'Shavuot' ?
+    (il ? ' (Israel)' : ' (Diaspora)') : '';
+  return `${holiday}${ilDiaspora}${titleYear} - ${descrShort} - ${titleHebrew} - Hebcal`;
+}
 
 function makeJsonLD(noindex, year, ev, il, meta) {
   if (noindex) {
