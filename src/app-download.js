@@ -124,6 +124,7 @@ app.use(async function fixup2(ctx, next) {
   const path = ctx.request.path;
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
+      path.startsWith('/yahrzeit/index.cgi/') ||
       path.startsWith('/hebcal/index.cgi/')) {
     // note we use unescape() instead of decodeURIComponent() due to ancient latin-1 encoding
     if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
@@ -254,6 +255,5 @@ app.listen(port, () => {
 // eslint-disable-next-line require-jsdoc
 function redirEncQuery(path, encQuery, ctx) {
   const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
-  const path2 = path.substring(0, encQuery + 4);
-  httpRedirect(ctx, `${path2}?redir=1&${qs}`, 301);
+  httpRedirect(ctx, `/export/export.ics?redir=1&${qs}`, 301);
 }
