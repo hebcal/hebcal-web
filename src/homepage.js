@@ -35,6 +35,11 @@ export async function homepage(ctx) {
   const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
   const geoUrlArgs = makeGeoUrlArgs2(q, location);
   ctx.state.shabbatUrl = '/shabbat?' + geoUrlArgs;
+  const gloc = ctx.state.geoip;
+  if (gloc && gloc.geo !== 'none') {
+    const mode = gloc.zip ? 'zip' : gloc.nn ? 'nn' : 'geonameid';
+    ctx.state.shabbatUrl += `&geoip=${mode}`;
+  }
   ctx.state.lang = 'en';
   const {gy, gd, gm, dt, afterSunset, dateOverride} = getSunsetAwareDate(q, ctx.state.location);
   ctx.state.gy = gy;
