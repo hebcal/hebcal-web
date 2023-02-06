@@ -20,8 +20,8 @@ export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
   const yearNum = parseInt(year, 10);
-  if (isNaN(yearNum) || yearNum < 1) {
-    throw createError(400, `Invalid holiday index year: ${year}`);
+  if (isNaN(yearNum) || yearNum < 1 || yearNum > 9999) {
+    throw createError(400, `Sorry, can't display holidays for year ${year}`);
   }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
