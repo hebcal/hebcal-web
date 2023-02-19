@@ -194,6 +194,10 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
 </p>
 <% } // reading.haftara %>
+<% if (reading.megillah) { -%>
+<h5 class="megillah">Megillah</h5>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.megillah}) -%>
+<% } // reading.megillah -%>
 <% } // ... for %>
 <% } // meta.reading %>
 <h3 id="ref">References</h3>

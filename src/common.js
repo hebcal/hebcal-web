@@ -112,6 +112,7 @@ const booleanOpts = {
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',
   yyomi: 'yerushalmi',
+  molad: 'molad',
 };
 
 const numberOpts = {

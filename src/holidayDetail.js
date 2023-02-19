@@ -401,6 +401,9 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   if (reading.fullkriyah) {
     addLinksToLeyning(reading.fullkriyah, true);
   }
+  if (reading.megillah) {
+    addLinksToLeyning(reading.megillah, true);
+  }
   const itemReading = meta.reading[item] = reading;
   const hebrew = Locale.lookupTranslation(item, 'he');
   if (typeof hebrew === 'string') {
