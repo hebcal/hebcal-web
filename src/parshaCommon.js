@@ -114,9 +114,11 @@ export function addLinksToLeyning(aliyot, showBook) {
     aliyah.verses = showBook || (book1 != aliyah.k) ? `${aliyah.k} ${verses}` : verses;
     aliyah.href = sefariaAliyahHref(aliyah, !showBook);
     const bid = bookId[aliyah.k];
-    aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
-    const startCV = `${aliyah.k}.${begin[0]}.${begin[1]}`;
-    aliyah.pocketTorahAudio = `https://www.sefaria.org/${startCV}?lang=bi&with=Torah%20Readings&lang2=en`;
+    if (typeof bid === 'number') {
+      aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
+      const startCV = `${aliyah.k}.${begin[0]}.${begin[1]}`;
+      aliyah.pocketTorahAudio = `https://www.sefaria.org/${startCV}?lang=bi&with=Torah%20Readings&lang2=en`;
+    }
   });
 }
 
