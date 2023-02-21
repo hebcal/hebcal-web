@@ -54,14 +54,12 @@ class="img-fluid">
 <p class="mt-3"><%-descrLong%></p>
 <p><small class="d-print-none"><em>Read more from <a class="outbound"
 title="More about <%=holiday%> from <%=meta.about.name%>"
-href="<%=meta.about.href%>"><%=meta.about.name%>
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a>
+href="<%=meta.about.href%>"><%=meta.about.name%>&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
 <% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
 or <a class="outbound" title="More about <%=holiday%> from Wikipedia"
-href="<%=meta.wikipedia.href%>">Wikipedia
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a>
+href="<%=meta.wikipedia.href%>">Wikipedia&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
 <% } // wikipedia %>
 </em></small></p>
 
@@ -205,29 +203,27 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
 <dt><em><a class="amzn" id="strassfeld-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
-Jewish Holidays: A Guide &amp; Commentary
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em> <small class="text-muted">(paid link)</small>
+Jewish Holidays: A Guide &amp; Commentary&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a></em>
+<small class="text-muted">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% } -%>
 <% if (typeof meta.reading !== 'undefined') { %>
 <dt><em><a class="outbound"
-href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em>
+href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a></em>
 <dd>Sefaria.org
 <dt><em><a class="amzn" id="jps-tanakh-1" rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
-The Holy Scriptures
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a></em> <small class="text-muted">(paid link)</small>
+The Holy Scriptures&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a></em>
+<small class="text-muted">(paid link)</small>
 <dd>Jewish Publication Society
 <% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-<dt><a class="outbound" href="<%=meta.wikipedia.href%>">"<%=meta.wikipedia.title%>" in <em>Wikipedia: The Free Encyclopedia</em>
-<svg class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg>
-</a>
+<dt><a class="outbound" href="<%=meta.wikipedia.href%>">"<%=meta.wikipedia.title%>" in <em>Wikipedia: The Free Encyclopedia</em>&nbsp;<svg
+ class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>
