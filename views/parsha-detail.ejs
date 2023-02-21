@@ -34,11 +34,10 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <% if (reading.torahHtml) { -%><%- reading.torahHtml -%>
 <% } else { -%>
 <a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
-title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%>&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%></a>
 <% } -%>
 </h4>
-<% if (typeof summary === 'object') { %><p><%- summary.html %>&nbsp;<sup><a class="outbound" title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
+<% if (typeof summary === 'object') { %><p><%- summary.html %>&nbsp;<sup><a title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -48,14 +47,14 @@ title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.ver
 <h5>Full Kriyah</h5>
 <ol class="list-unstyled">
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
-<li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a class="outbound" title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
+<li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
 <span class="text-muted d-print-none">·</span>
 <span class="text-nowrap">
-<a class="outbound d-print-none" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
+<a class="d-print-none" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<a class="d-none d-sm-inline ms-2 outbound d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
+<a class="d-none d-sm-inline ms-2 d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
 </span>
 <% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
@@ -82,7 +81,7 @@ if (!date && spMaftirItems.length !== 0) { -%>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>
 <p class="haftara">Haftarah for Sephardim<% if (reading.reason && reading.reason.haftara) { %><span class="text-success">*</span><% } %>:
-<a class="outbound text-nowrap" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
+<a class="text-nowrap" href="<%=reading.sephardicHref%>"><%=reading.sephardic%></a>
 <%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
 <% if (reading.reason && reading.reason.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
 </p>
@@ -169,37 +168,37 @@ if (!date && spHaftItems.length !== 0) { -%>
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
 <% if (typeof commentary['sefaria'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
+<li><a title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
 <% } %>
 <% if (typeof commentary['wikipedia'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
+<li><a title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
 <% } %>
 <% if (typeof commentary['ou.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
+<li><a title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
 <% } %>
 <% if (typeof commentary['torah.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
+<li><a title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
 <% } %>
 <% if (typeof commentary['chabad.org'] === 'number') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a>
+<li><a title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a>
 <% } %>
 <% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
+<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
 <% } %>
 <% if (typeof commentary['reformjudaism.org'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
+<li><a title="Parashat <%=parshaName%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
+<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
 <% } %>
 <% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
+<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
 <% } %>
 <% if (typeof commentary['aju.edu'] === 'number') { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a>
+<li><a title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a>
 <% } %>
 <% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
-<li><a class="outbound" title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
+<li><a title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
 <% } %>
 </ul>
 </div><!-- .col -->
@@ -246,34 +245,30 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <h4 id="ref">References</h4>
 <dl>
 <% if (typeof summary === 'object') { %>
-<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
-<dt><a class="amzn" id="chumash-2" rel="sponsored"
+<dt><a class="amzn outbound" id="chumash-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
-Chumash: The Stone Edition (Artscroll Series)</em>&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+Chumash: The Stone Edition (Artscroll Series)</em></a>
 <small class="text-muted">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <% if (hasTriennial) { %>
 <dt><a class="outbound"
 href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/19861990/eisenberg_triennial.pdf"><em>A
-Complete Triennial System for Reading the Torah</em>&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+Complete Triennial System for Reading the Torah</em></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 1988
 <% if (parsha.combined || doubled.get(parsha.name) || parsha.name === 'Miketz') { %>
-<dt><a href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/cohen-triennial.pdf"><em>Modification
-of the Triennial Cycle Readings for Combined Parashot in Certain Years</em>&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+<dt><a class="outbound"
+href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/cohen-triennial.pdf"><em>Modification
+of the Triennial Cycle Readings for Combined Parashot in Certain Years</em></a>
 <dd>Rabbi Miles B. Cohen, 2020
 <% } %>
 <% if (parsha.name === 'Vayakhel' || parsha.name === 'Pekudei') { %>
 <dt><a class="outbound"
 href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/heller-triennial-emendation.pdf"><em>An
 Emendation to Richard Eisenberg’s Complete Triennial System for Reading Torah,
-to Address a Rare Situation</em>&nbsp;<svg
- class="icon icon-xs"><use xlink:href="<%=spriteHref%>#bi-box-arrow-up-right"></use></svg></a>
+to Address a Rare Situation</em></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 2012
 <% } %>
 <% } %>

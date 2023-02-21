@@ -204,7 +204,7 @@ export function makeLeyningHtmlFromParts(parts) {
     const part = parts[i];
     const showBook = (part.k !== prev.k);
     const delim = i === 0 ? '' : showBook ? '; ' : ', ';
-    summary += delim + '<a class="outbound" href="' +
+    summary += delim + '<a href="' +
       sefariaAliyahHref(part, false) + '">' +
       formatAliyahShort(part, showBook) + '</a>';
     prev = part;
