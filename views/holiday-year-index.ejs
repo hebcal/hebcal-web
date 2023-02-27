@@ -138,9 +138,8 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
 <div class="card-body">
 <% if (typeof item?.meta?.photo === 'object') { -%>
 <a href="<%=item.href%>"><img alt="<%=item.meta.photo.caption||holiday%>"
-src="/i/is/400/<%=item.meta.photo.fn%>"
-width="<%=Math.floor(item.meta.photo.dimensions[400].width/2)%>"
-height="<%=Math.floor(item.meta.photo.dimensions[400].height/2)%>"
+src="/i/is/1x1-200/<%=item.meta.photo.fn%>"
+width="150" height="150"
 class="rounded float-end ms-3 mb-3"></a>
 <% } -%>
 <h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
@@ -182,7 +181,7 @@ data-ad-slot="5342180883"></ins>
 <nav>
 <ul class="pagination pagination-sm">
 <li class="page-item"><a class="page-link" href="<%=greg1 - 3%><%=iSuffix%>"<%- (greg1 - 3 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 3%></a></li>
-<% for (let i = greg1 - 2; i < greg1+6; i++) { %>
+<% for (let i = greg1 - 1; i < greg1+4; i++) { %>
 <li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
 <li class="page-item"><a class="page-link" href="<%=greg1+6%><%=iSuffix%>"<%- (greg1+6 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+6%>&nbsp;&raquo;</a></li>
