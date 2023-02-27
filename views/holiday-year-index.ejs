@@ -143,12 +143,12 @@ width="150" height="150"
 class="rounded float-end ms-3 mb-3"></a>
 <% } -%>
 <h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
-<% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
+<% if (item.emoji && typeof item?.meta?.photo !== 'object') { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
 <% if (item.jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script><% } -%>
-<div class="card-text"><%=item.descrMedium%></div>
+<div class="card-text"><%=item.descrMedium%><% if (item.emoji && typeof item?.meta?.photo === 'object') { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></div>
 </div><!-- .card-body -->
 <div class="card-footer">
-<time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '')%></small> -
+<time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small> -
  <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small>nightfall</small>
 <br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </div><!-- .card-footer -->
