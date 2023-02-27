@@ -124,52 +124,39 @@ table.tbody-striped > thead > * > * {
 </div><!-- .row -->
 <div id="calendar"></div>
 <div id="list-view">
-<div class="row"><div class="col">
-<p>Except for minor fasts, holidays begin at sundown on the first date specified and
-end at nightfall on the last date specified.
-<br>For example, if the dates for Rosh Hashana are listed as
-<strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
-then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
-and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
 The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
-</div></div>
-<% for (const [catId, category] of Object.entries(categories)) { %>
-<div class="row mt-3" id="<%=category.id%>">
-<div class="col">
-<h3><%=category.name%> <span class="h4 text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
-<% if ('major-holidays' === category.id) { %>
-<p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
-obligations and restrictions to Shabbat in the sense that normal “work”
-is forbidden.</p>
-<% } else if ('minor-fasts' === category.id) { %>
+<% for (const [catId, category] of Object.entries(categories)) { -%>
+<h3 id="<%=category.id%>" class="pb-2"><%=category.emoji%>&nbsp;&nbsp;<%=category.name%> <span class="h4 text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
+<% if ('minor-fasts' === category.id) { -%>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
-<p>Tish'a B'Av begins at sundown on the first date specified and ends at
-nightfall on the second date specified.</p>
-<% } // major-holidays %>
-<table class="table table-borderless table-sm tbody-striped">
-<colgroup>
-<col style="width:200px"><col style="width:<%=isHebrewYear ? 180 : 156%>px"><col>
-</colgroup>
-<thead><tr><th>Holiday</th><th>Dates</th></tr></thead>
+<% } -%>
+<div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
 <% for (const item of items[catId]) { %>
-<tbody class="table-group-divider">
-<tr id="<%=item.id%>"><td><a class="lead" href="<%=item.href%>"><%=item.name%></a>&nbsp;&nbsp;<span class="text-nowrap"><%=item.emoji%></span>
-<% if (item.jsonLD) { -%>
-<script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script>
+<div class="col">
+<div class="card" id="<%=item.id%>">
+<div class="card-body">
+<% if (typeof item?.meta?.photo === 'object') { -%>
+<a href="<%=item.href%>"><img alt="<%=item.meta.photo.caption||holiday%>"
+src="/i/is/400/<%=item.meta.photo.fn%>"
+width="<%=Math.floor(item.meta.photo.dimensions[400].width/2)%>"
+height="<%=Math.floor(item.meta.photo.dimensions[400].height/2)%>"
+class="rounded float-end ms-3 mb-3"></a>
 <% } -%>
-</td>
-<td><%-item.dates%><br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small></td>
-</tr>
-<tr><td colspan="2"><em><%=item.descrShort%></em>
-<% if (il && (item.name === 'Pesach' || item.name === 'Sukkot' || item.name === 'Shavuot')) { -%>
-<div class="small text-muted mt-1"><span class="text-success">*</span> These are the dates of observance in <span class="text-success">Israel</span>.
-<br><a href="<%=rpath%>#<%=item.id%>">The Diaspora</a> observes a second festival day.</div>
+<h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
+<% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
+<% if (item.jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script><% } -%>
+<div class="card-text"><%=item.descrMedium%></div>
+</div><!-- .card-body -->
+<div class="card-footer">
+<time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '')%></small> -
+ <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small>nightfall</small>
+<br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
+</div><!-- .card-footer -->
+</div><!-- .card #<%=item.id %> -->
+</div><!-- .col -->
 <% } -%>
-</td></tr>
-</tbody>
-<% } %>
-</table>
+</div><!-- .row #<%=category.id %> -->
 <% if ('major-holidays' === category.id) { -%>
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-muted mb-1">Advertisement</h6>
@@ -187,10 +174,8 @@ data-ad-slot="5342180883"></ins>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-print-none -->
-<% } -%>
-</div><!-- .col -->
-</div><!-- .row #<%=category.id%> -->
-<% } // ... for %>
+<% } // advertisement -%>
+<% } // categories -%>
 </div><!-- #list-view -->
 <div class="row d-print-none mt-3">
 <div class="col">

@@ -122,9 +122,13 @@ function makeItems(events, il, showYear, addIsraelAsterisk) {
     const category = item.categories.length === 1 ? item.categories[0] : item.categories[1];
     item.dates = tableCellObserved(item, il, showYear, addIsraelAsterisk);
     item.descrShort = getHolidayDescription(ev, true);
+    const descrMedium = getHolidayDescription(ev, false);
+    const sentences = descrMedium.split(/\.\s+/).slice(0, 2);
+    const firstTwo = sentences.join('. ');
+    item.descrMedium = sentences.length == 2 ? firstTwo + '.' : firstTwo;
+    const meta = item.meta = holidayMeta[item.name];
     items[category].push(item);
     if (today.isBefore(item.d) && ev.url()) {
-      const meta = holidayMeta[item.name];
       item.jsonLD = makeEventJsonLD(ev, meta, il);
     }
   }
@@ -143,6 +147,7 @@ function makeOmerItem(hyear, il, showYear) {
   omer.href = `/omer/${hyear}`;
   omer.dates = tableCellObserved(omer, il, showYear, false);
   omer.descrShort = getHolidayDescription(omerEv, true);
+  omer.descrMedium = getHolidayDescription(omerEv, false);
   return omer;
 }
 
