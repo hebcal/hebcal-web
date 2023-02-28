@@ -130,6 +130,10 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
 <h3 id="<%=category.id%>" class="pb-2"><%=category.emoji%>&nbsp;&nbsp;<%=category.name%> <span class="h4 text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('minor-fasts' === category.id) { -%>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
+<% } else if ('rosh-chodesh' === category.id) { -%>
+<p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
+  Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
+  beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
 <% } -%>
 <div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
 <% for (const item of items[catId]) { %>
@@ -149,7 +153,9 @@ class="rounded float-end ms-3 mb-3"></a>
 </div><!-- .card-body -->
 <div class="card-footer">
 <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small> -
- <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small>nightfall</small>
+<% if (item.duration > 0) { -%>
+ <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time>
+<% } -%> <small>nightfall</small>
 <br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </div><!-- .card-footer -->
 </div><!-- .card #<%=item.id %> -->
@@ -160,7 +166,7 @@ class="rounded float-end ms-3 mb-3"></a>
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-muted mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
-<div class="d-print-none mb-2">
+<div class="d-print-none mb-5">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
