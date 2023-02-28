@@ -186,11 +186,11 @@ data-ad-slot="5342180883"></ins>
 <div class="col">
 <nav>
 <ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%=greg1 - 3%><%=iSuffix%>"<%- (greg1 - 3 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 3%></a></li>
-<% for (let i = greg1 - 1; i < greg1+4; i++) { %>
+<li class="page-item"><a class="page-link" href="<%=greg1 - 2%><%=iSuffix%>"<%- (greg1 - 2 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 2%></a></li>
+<% for (let i = greg1 - 1; i < greg1+3; i++) { %>
 <li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
 <% } %>
-<li class="page-item"><a class="page-link" href="<%=greg1+6%><%=iSuffix%>"<%- (greg1+6 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+6%>&nbsp;&raquo;</a></li>
+<li class="page-item"><a class="page-link" href="<%=greg1+3%><%=iSuffix%>"<%- (greg1+3 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+3%>&nbsp;&raquo;</a></li>
 </ul>
 </nav>
 </div><!-- .col -->
