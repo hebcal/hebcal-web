@@ -106,17 +106,18 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
+  const calendarId = q.ulid;
+  // will throw if not found. sets downloaded=1 if found.
+  await getYahrzeitDetailsFromDb(ctx, calendarId);
   const db = ctx.mysql;
-  const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1 WHERE id = ?';
-  await db.query(sqlUpdate, q.ulid);
-  let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, q.ulid);
+  let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   const ip = getIpAddress(ctx);
   if (id === false) {
     id = ulid().toLowerCase();
     const sql = `INSERT INTO yahrzeit_email
     (id, email_addr, calendar_id, sub_status, created, ip_addr)
     VALUES (?, ?, ?, 'pending', NOW(), ?)`;
-    await db.query(sql, [id, q.em, q.ulid, ip]);
+    await db.query(sql, [id, q.em, calendarId, ip]);
   } else if (status === 'active') {
     const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
     await db.query(sqlUpdate, [id]);
@@ -131,7 +132,7 @@ export async function yahrzeitEmailSub(ctx) {
   });
   const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
-  const msgid = `${q.ulid}.${id}.${Date.now()}`;
+  const msgid = `${calendarId}.${id}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-verify');
   const message = {
     to: q.em,
