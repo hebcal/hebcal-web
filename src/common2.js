@@ -80,6 +80,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
     await db.execute({sql: sqlUpdate, values: [id], timeout: 5000});
   }
   obj.lastModified = row.updated;
+  obj.v = 'yahrzeit';
   ctx.state.ulid = id;
   return obj;
 }

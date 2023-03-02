@@ -241,10 +241,12 @@ async function makeDownloadProps(ctx) {
   const filename = type.toLowerCase();
   const id = ctx.state.ulid;
   q.v = 'yahrzeit';
-  delete q.ulid;
   if (ctx.method === 'POST') {
     const db = ctx.mysql;
-    const contents = JSON.stringify(q);
+    const toSave = Object.assign({}, q);
+    delete toSave.ulid;
+    delete toSave.v;
+    const contents = JSON.stringify(toSave);
     const ip = getIpAddress(ctx);
     const sqlExists = 'SELECT created FROM yahrzeit WHERE id = ?';
     const results = await db.query({sql: sqlExists, values: [id], timeout: 5000});
