@@ -7,6 +7,7 @@ import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
+import {makeLogInfo} from './logger';
 import util from 'util';
 import mmh3 from 'murmurhash3';
 import uuid from 'uuid-random';
@@ -75,7 +76,7 @@ export async function yahrzeitApp(ctx) {
   ctx.state.distantPastDate = false;
   ctx.state.url = {};
   if (maxId > 0) {
-    const id = q.ulid || ctx.state.ulid || ulid().toLowerCase();
+    const id = getOrMakeUlid(ctx);
     q.ulid = ctx.state.ulid = id;
     const tables = ctx.state.tables = await makeFormResults(ctx);
     if (tables !== null) {
@@ -101,6 +102,23 @@ export async function yahrzeitApp(ctx) {
   await ctx.render('yahrzeit', {
     count,
   });
+}
+
+// eslint-disable-next-line require-jsdoc
+function getOrMakeUlid(ctx) {
+  const q = ctx.state.q;
+  const existing = q.ulid || ctx.state.ulid;
+  if (existing) {
+    return existing;
+  }
+  const id = ulid().toLowerCase();
+  const logInfo = makeLogInfo(ctx);
+  delete logInfo.duration;
+  delete logInfo.status;
+  logInfo.calendarId = id;
+  logInfo.msg = `yahrzeit: created calendarId=${id}`;
+  ctx.logger.info(logInfo);
+  return id;
 }
 
 // eslint-disable-next-line require-jsdoc

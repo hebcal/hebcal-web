@@ -5,6 +5,7 @@ import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetails
 import {ulid} from 'ulid';
 import {basename} from 'path';
 import {matomoTrack} from './matomoTrack';
+import {makeLogInfo} from './logger';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
@@ -80,6 +81,17 @@ async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
   return {id: results[0].id, status: results[0].sub_status};
 }
 
+function makeUlid(ctx) {
+  const id = ulid().toLowerCase();
+  const logInfo = makeLogInfo(ctx);
+  delete logInfo.status;
+  delete logInfo.duration;
+  logInfo.subscriptionId = id;
+  logInfo.msg = `yahrzeit-email: created subscriptionId=${id}`;
+  ctx.logger.info(logInfo);
+  return id;
+}
+
 export async function yahrzeitEmailSub(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
@@ -113,7 +125,7 @@ export async function yahrzeitEmailSub(ctx) {
   let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   const ip = getIpAddress(ctx);
   if (id === false) {
-    id = ulid().toLowerCase();
+    id = makeUlid(ctx);
     const sql = `INSERT INTO yahrzeit_email
     (id, email_addr, calendar_id, sub_status, created, ip_addr)
     VALUES (?, ?, ?, 'pending', NOW(), ?)`;

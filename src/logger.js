@@ -60,7 +60,7 @@ function empty(val) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  * @return {Object}
  */
-function makeLogInfo(ctx) {
+export function makeLogInfo(ctx) {
   const info = {
     status: ctx.response.status,
     length: ctx.response.length,
