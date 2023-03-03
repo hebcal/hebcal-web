@@ -8,6 +8,7 @@ import {ulid} from 'ulid';
 import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
   isNumKey, summarizeAnniversaryTypes} from './common2';
 import {makeLogInfo} from './logger';
+import {isDeepStrictEqual} from 'node:util';
 import util from 'util';
 import mmh3 from 'murmurhash3';
 import uuid from 'uuid-random';
@@ -257,25 +258,11 @@ async function makeDownloadProps(ctx) {
   ctx.state.numYears = getNumYears(q.years);
   ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = type.toLowerCase();
-  const id = ctx.state.ulid;
   q.v = 'yahrzeit';
-  if (ctx.method === 'POST') {
-    const db = ctx.mysql;
-    const toSave = Object.assign({}, q);
-    delete toSave.ulid;
-    delete toSave.v;
-    const contents = JSON.stringify(toSave);
-    const ip = getIpAddress(ctx);
-    const sqlExists = 'SELECT created FROM yahrzeit WHERE id = ?';
-    const results = await db.query({sql: sqlExists, values: [id], timeout: 5000});
-    if (!results || !results[0]) {
-      const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
-      await db.execute({sql, values: [id, ip, contents], timeout: 5000});
-    } else {
-      const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
-      await db.execute({sql, values: [contents, ip, id], timeout: 5000});
-    }
+  if (!ctx.state.isEditPage) {
+    await saveDataToDb(ctx);
   }
+  const id = ctx.state.ulid;
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
   const usaCSV = '_usa.csv';
@@ -295,6 +282,44 @@ async function makeDownloadProps(ctx) {
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
     title: makeCalendarTitle(q, 64),
   };
+}
+
+const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text'];
+
+// eslint-disable-next-line require-jsdoc
+async function saveDataToDb(ctx) {
+  const toSave = Object.assign({}, ctx.state.q);
+  noSaveFields.forEach((key) => delete toSave[key]);
+  const id = ctx.state.ulid;
+  const logInfo = makeLogInfo(ctx);
+  delete logInfo.duration;
+  delete logInfo.status;
+  logInfo.calendarId = id;
+  const db = ctx.mysql;
+  const sqlExists = 'SELECT contents FROM yahrzeit WHERE id = ?';
+  const results = await db.query({sql: sqlExists, values: [id], timeout: 5000});
+  if (results && results[0]) {
+    const prev = results[0].contents;
+    noSaveFields.forEach((key) => delete prev[key]);
+    if (isDeepStrictEqual(toSave, prev)) {
+      logInfo.msg = `yahrzeit-db: no change to calendarId=${id}`;
+      ctx.logger.info(logInfo);
+      return;
+    }
+  }
+  const contents = JSON.stringify(toSave);
+  const ip = getIpAddress(ctx);
+  if (!results || !results[0]) {
+    const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
+    await db.execute({sql, values: [id, ip, contents], timeout: 5000});
+    logInfo.msg = `yahrzeit-db: created calendarId=${id}`;
+    ctx.logger.info(logInfo);
+  } else {
+    const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
+    await db.execute({sql, values: [contents, ip, id], timeout: 5000});
+    logInfo.msg = `yahrzeit-db: updated calendarId=${id}`;
+    ctx.logger.info(logInfo);
+  }
 }
 
 // eslint-disable-next-line require-jsdoc
