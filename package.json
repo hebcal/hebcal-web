@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -54,7 +54,7 @@
     "@hebcal/triennial": "^1.1.0",
     "better-sqlite3": "^8.2.0",
     "dayjs": "^1.11.7",
-    "ejs": "^3.1.8",
+    "ejs": "^3.1.9",
     "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.16",

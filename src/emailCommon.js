@@ -49,6 +49,7 @@ export async function mySendMail(ctx, message) {
     }));
   }
   const result = await transporter.sendMail(message);
+  delete result.ehlo;
   const logInfo = {
     url: ctx.request.originalUrl,
     vid: ctx.state.visitorId,
