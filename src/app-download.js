@@ -10,7 +10,7 @@ import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {join} from 'path';
-import {makeLogger, errorLogger, accessLogger} from './logger';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger';
 import {httpRedirect, stopIfTimedOut, CACHE_CONTROL_IMMUTABLE} from './common';
 import {hebcalDownload} from './hebcal-download';
 import {yahrzeitDownload} from './yahrzeit';
@@ -46,7 +46,15 @@ app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
 
-app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+app.use(timeout(6000, {
+  status: 503,
+  message: 'Service Unavailable',
+  callback: function(ctx) {
+    const logInfo = makeLogInfo(ctx);
+    logInfo.status = 503;
+    ctx.logger.warn(logInfo);
+  },
+}));
 
 app.use(stopIfTimedOut());
 

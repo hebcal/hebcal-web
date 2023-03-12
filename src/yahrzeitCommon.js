@@ -120,7 +120,7 @@ export function getYahrzeitDetailForId(query, id) {
  * @param {number} id
  * @return {any}
  */
-export function getDateForId(query, id) {
+function getDateForId(query, id) {
   const date = query['x' + id];
   if (typeof date === 'string' && date.length === 10) {
     const yy = date.substring(0, 4);

@@ -62,14 +62,18 @@ function doSubscribe(event) {
   for (const pair of formData) {
     params.append(pair[0], pair[1]);
   }
-  fetch(resource, {
+  var options = {
     method: 'POST',
     credentials: 'omit',
     body: params,
     headers: {
       'Accept': 'application/json',
     },
-  }).then(function(response) {
+  };
+  if (typeof AbortSignal === 'function') {
+    options.signal = AbortSignal.timeout(9000);
+  }
+  fetch(resource, options).then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
         if (data.alreadySubscribed) {
@@ -92,6 +96,16 @@ function doSubscribe(event) {
       myFail(emailInput.value);
     }
   }).catch(function(err) {
+    if (err.name === "TimeoutError") {
+      console.error("Timeout: It took more than 9 seconds to get the result!");
+    } else if (err.name === "AbortError") {
+      console.error("Fetch aborted by user action (browser stop button, closing tab, etc.");
+    } else if (err.name === "TypeError") {
+      console.error("AbortSignal.timeout() method is not supported");
+    } else {
+      // A network error, or some other problem.
+      console.error(`Error: type: ${err.name}, message: ${err.message}`);
+    }
     myFail(err.message);
   });
 };

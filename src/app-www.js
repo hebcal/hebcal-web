@@ -12,7 +12,7 @@ import maxmind from 'maxmind';
 import path from 'path';
 import os from 'os';
 import zlib from 'zlib';
-import {makeLogger, errorLogger, accessLogger} from './logger';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router';
 import {MysqlDb} from './db';
@@ -68,7 +68,15 @@ app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
 
-app.use(timeout(5000, {status: 503, message: 'Service Unavailable'}));
+app.use(timeout(6000, {
+  status: 503,
+  message: 'Service Unavailable',
+  callback: function(ctx) {
+    const logInfo = makeLogInfo(ctx);
+    logInfo.status = 503;
+    ctx.logger.warn(logInfo);
+  },
+}));
 
 app.use(stopIfTimedOut());
 

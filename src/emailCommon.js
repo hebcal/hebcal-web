@@ -14,6 +14,7 @@ export function makeEmailTransport(iniConfig) {
     host: iniConfig['hebcal.email.shabbat.host'],
     port: 465,
     secure: true,
+    pool: true,
     auth: {
       user: iniConfig['hebcal.email.shabbat.user'],
       pass: iniConfig['hebcal.email.shabbat.password'],
@@ -28,6 +29,7 @@ export function makeEmailTransport(iniConfig) {
  * @return {Promise}
  */
 export async function mySendMail(ctx, message) {
+  const startTime = Date.now();
   message.from = 'Hebcal <shabbat-owner@hebcal.com>';
   message.replyTo = 'no-reply@hebcal.com';
   const ip = getIpAddress(ctx);
@@ -46,8 +48,15 @@ export async function mySendMail(ctx, message) {
       ],
     }));
   }
-  await transporter.sendMail(message);
-  // return Promise.resolve({response: '250 OK', messageId: 'foo'});
+  const result = await transporter.sendMail(message);
+  const logInfo = {
+    url: ctx.request.originalUrl,
+    vid: ctx.state.visitorId,
+    duration: Date.now() - startTime,
+    mail: result,
+  };
+  ctx.logger.info(logInfo);
+  return result;
 }
 
 /**
