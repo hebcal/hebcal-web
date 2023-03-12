@@ -172,7 +172,7 @@ function setYahrzeitCookie(ctx) {
 // eslint-disable-next-line require-jsdoc
 async function renderJson(maxId, q) {
   delete q.ulid;
-  const events = await makeYahrzeitEvents(maxId, q);
+  const events = await makeYahrzeitEvents(maxId, q, false);
   const options = {includeEvent: true};
   if (q.hdp === '1') {
     options.heDateParts = true;
@@ -202,7 +202,7 @@ async function renderJson(maxId, q) {
 // eslint-disable-next-line require-jsdoc
 async function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events = await makeYahrzeitEvents(ctx.state.maxId, q);
+  const events = await makeYahrzeitEvents(ctx.state.maxId, q, false);
   if (events.length === 0) {
     return null;
   }
@@ -388,7 +388,7 @@ export async function yahrzeitDownload(ctx) {
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
-  const events = await makeYahrzeitEvents(maxId, query);
+  const events = await makeYahrzeitEvents(maxId, query, true);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
@@ -467,9 +467,10 @@ function getDefaultStartYear() {
 /**
  * @param {number} maxId
  * @param {any} query
- * @return {Event[]}
+ * @param {boolean} reminder
+ * @return {Promise<Event[]>}
  */
-async function makeYahrzeitEvents(maxId, query) {
+async function makeYahrzeitEvents(maxId, query, reminder) {
   const years = getNumYears(query.years);
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
@@ -477,6 +478,31 @@ async function makeYahrzeitEvents(maxId, query) {
   for (let id = 1; id <= maxId; id++) {
     const events0 = await getEventsForId(query, id, startYear, years);
     events = events.concat(events0);
+    if (reminder) {
+      const reminders = events0
+          .filter((ev) => ev.type === 'Yahrzeit')
+          .map((ev) => {
+            const hd = ev.getDate().prev();
+            const dt = hd.greg();
+            const eventTimeStr = hd.getDay() === 6 ? '20:00' : '16:30';
+            const uid = 'reminder-' + dayjs(dt).format('YYYYMMDD') + '-' + ev.hash + '-' + id;
+            return new Event(
+                hd,
+                `${ev.name} Yahrzeit reminder`,
+                flags.USER_EVENT,
+                {
+                  eventTime: dt,
+                  eventTimeStr,
+                  memo: ev.memo,
+                  emoji: ev.emoji,
+                  alarm: 'P0DT0H0M0S',
+                  uid,
+                  category: 'Personal',
+                },
+            );
+          });
+      events = events.concat(reminders);
+    }
   }
   const yizkor = query.yizkor;
   if (yizkor === 'on' || yizkor === '1') {
@@ -497,7 +523,7 @@ async function makeYahrzeitEvents(maxId, query) {
  * @param {number} id
  * @param {number} startYear
  * @param {number} numYears
- * @return {Event[]}
+ * @return {Promise<Event[]>}
  */
 async function getEventsForId(query, id, startYear, numYears) {
   const events = [];
@@ -524,7 +550,7 @@ async function getEventsForId(query, id, startYear, numYears) {
  * @param {boolean} appendHebDate
  * @param {string} calendarId
  * @param {boolean} includeUrl
- * @return {Event}
+ * @return {Promise<Event>}
  */
 async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl) {
   const type = info.type;
@@ -580,6 +606,10 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   ev.name = name;
   ev.type = type;
   ev.anniversary = yearNumber;
+  if (isYahrzeit) {
+    ev.alarm = false;
+    ev.hash = hash;
+  }
   return ev;
 }
 
