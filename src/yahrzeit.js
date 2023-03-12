@@ -1,6 +1,6 @@
 import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
-import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
+import {eventsToCsv, eventsToClassicApi, pad4, pad2} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
@@ -290,6 +290,7 @@ const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text'];
 async function saveDataToDb(ctx) {
   const toSave = Object.assign({}, ctx.state.q);
   noSaveFields.forEach((key) => delete toSave[key]);
+  convertDateFields(toSave);
   const id = ctx.state.ulid;
   const logInfo = makeLogInfo(ctx);
   delete logInfo.duration;
@@ -319,6 +320,28 @@ async function saveDataToDb(ctx) {
     await db.execute({sql, values: [contents, ip, id], timeout: 5000});
     logInfo.msg = `yahrzeit-db: updated calendarId=${id}`;
     ctx.logger.info(logInfo);
+  }
+}
+
+// eslint-disable-next-line require-jsdoc
+function convertDateFields(obj) {
+  const maxId = getMaxYahrzeitId(obj);
+  for (let i = 1; i <= maxId; i++) {
+    const yk = 'y' + i;
+    const mk = 'm' + i;
+    const dk = 'd' + i;
+    const yy = obj[yk];
+    const mm = obj[mk];
+    const dd = obj[dk];
+    if (!empty(dd) && !empty(mm) && !empty(yy)) {
+      const yy4 = yy.length === 4 ? yy : pad4(+yy);
+      const mm2 = mm.length === 2 ? mm : pad2(+mm);
+      const dd2 = dd.length === 2 ? dd : pad2(+dd);
+      obj['x' + i] = yy4 + '-' + mm2 + '-' + dd2;
+      delete obj[yk];
+      delete obj[mk];
+      delete obj[dk];
+    }
   }
 }
 

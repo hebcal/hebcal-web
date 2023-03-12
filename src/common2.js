@@ -79,6 +79,18 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
     const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
     await db.execute({sql: sqlUpdate, values: [id], timeout: 5000});
   }
+  // convert from 'x' fields back into ymd fields
+  const maxId = getMaxYahrzeitId(obj);
+  for (let i = 1; i <= maxId; i++) {
+    const date = obj['x' + i];
+    if (typeof date === 'string' && date.length === 10) {
+      const {yy, mm, dd} = getDateForId(obj, i);
+      obj['y' + i] = yy;
+      obj['m' + i] = mm;
+      obj['d' + i] = dd;
+      delete obj['x' + i];
+    }
+  }
   obj.lastModified = row.updated;
   obj.v = 'yahrzeit';
   ctx.state.ulid = id;
@@ -123,18 +135,22 @@ export function summarizeAnniversaryTypes(query, long=false) {
  * @return {number}
  */
 export function getMaxYahrzeitId(query) {
-  const ids = Object.keys(query)
-      .filter((k) => k[0] == 'y' && isNumKey(k))
-      .map((k) => +(k.substring(1)))
-      .map((id) => empty(query['y' + id]) ? 0 : id);
-  const max = Math.max(...ids);
-  const valid = [];
-  for (let i = 1; i <= max; i++) {
-    if (!empty(query['d' + i]) && !empty(query['m' + i]) && !empty(query['y' + i])) {
-      valid.push(i);
+  let max = 0;
+  for (const k of Object.keys(query)) {
+    const k0 = k[0];
+    if ((k0 === 'y' || k0 === 'x') && isNumKey(k)) {
+      let id = +(k.substring(1));
+      if (empty(query[k])) {
+        id = 0;
+      } else if (k0 === 'y' && (empty(query['d' + id]) || empty(query['m' + id]))) {
+        id = 0;
+      }
+      if (id > max) {
+        max = id;
+      }
     }
   }
-  return valid.length === 0 ? 0 : Math.max(...valid);
+  return max;
 }
 
 /**
@@ -143,9 +159,7 @@ export function getMaxYahrzeitId(query) {
  * @return {*}
  */
 export function getYahrzeitDetailForId(query, id) {
-  const dd = query[`d${id}`];
-  const mm = query[`m${id}`];
-  const yy = query[`y${id}`];
+  const {yy, mm, dd} = getDateForId(query, id);
   if (empty(dd) || empty(mm) || empty(yy)) {
     return null;
   }
@@ -157,5 +171,27 @@ export function getYahrzeitDetailForId(query, id) {
   if (sunset === 'on') {
     day = day.add(1, 'day');
   }
-  return {dd, mm, yy, sunset, type, name, day};
+  return {yy, mm, dd, sunset, type, name, day};
+}
+
+/**
+ * @private
+ * @param {Object<string,string>} query
+ * @param {number} id
+ * @return {any}
+ */
+function getDateForId(query, id) {
+  const date = query['x' + id];
+  if (typeof date === 'string' && date.length === 10) {
+    const yy = date.substring(0, 4);
+    const gm = date.substring(5, 7);
+    const mm = gm[0] === '0' ? gm[1] : gm;
+    const gd = date.substring(8, 10);
+    const dd = gd[0] === '0' ? gd[1] : gd;
+    return {yy, mm, dd};
+  }
+  const yy = query['y' + id];
+  const mm = query['m' + id];
+  const dd = query['d' + id];
+  return {yy, mm, dd};
 }
