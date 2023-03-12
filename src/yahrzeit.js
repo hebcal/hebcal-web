@@ -5,8 +5,8 @@ import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
 import {ulid} from 'ulid';
-import {getMaxYahrzeitId, getYahrzeitDetailsFromDb, getYahrzeitDetailForId,
-  isNumKey, summarizeAnniversaryTypes} from './common2';
+import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
+  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
 import {makeLogInfo} from './logger';
 import {isDeepStrictEqual} from 'node:util';
 import util from 'util';

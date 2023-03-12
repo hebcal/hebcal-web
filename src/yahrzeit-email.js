@@ -1,7 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {getIpAddress, validateEmail, empty} from './common';
-import {mySendMail, getMaxYahrzeitId, getYahrzeitDetailForId, getYahrzeitDetailsFromDb,
-  summarizeAnniversaryTypes, getImgOpenHtml} from './common2';
+import {mySendMail, getImgOpenHtml} from './emailCommon';
+import {getMaxYahrzeitId, summarizeAnniversaryTypes,
+  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
 import {ulid} from 'ulid';
 import {basename} from 'path';
 import {matomoTrack} from './matomoTrack';

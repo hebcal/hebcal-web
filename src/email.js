@@ -2,7 +2,7 @@
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
   validateEmail, queryDefaultCandleMins} from './common';
-import {mySendMail, getImgOpenHtml} from './common2';
+import {mySendMail, getImgOpenHtml} from './emailCommon';
 import {matomoTrack} from './matomoTrack';
 
 const BLANK = '<div>&nbsp;</div>';
