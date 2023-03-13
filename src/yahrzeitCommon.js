@@ -104,11 +104,13 @@ export function getMaxYahrzeitId(query) {
  * @return {string}
  */
 function getAnniversaryType(str) {
-  const s = str.toLowerCase();
-  switch (s[0]) {
-    case 'y': return 'Yahrzeit';
-    case 'b': return 'Birthday';
-    case 'a': return 'Anniversary';
+  if (typeof str === 'string') {
+    const s = str.toLowerCase();
+    switch (s[0]) {
+      case 'y': return 'Yahrzeit';
+      case 'b': return 'Birthday';
+      case 'a': return 'Anniversary';
+    }
   }
   return 'Yahrzeit';
 }
