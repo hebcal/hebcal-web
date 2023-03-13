@@ -30,6 +30,11 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
       obj['d' + i] = dd;
       delete obj['x' + i];
     }
+    obj['t' + i] = getAnniversaryType(obj['t' + i]);
+    const sunset = obj['s' + i];
+    if (typeof sunset === 'number') {
+      obj['s' + i] = sunset ? 'on' : 'off';
+    }
   }
   obj.lastModified = row.updated;
   obj.v = 'yahrzeit';
@@ -54,7 +59,7 @@ export function isNumKey(k) {
 export function summarizeAnniversaryTypes(query, long=false) {
   const types0 = Object.entries(query)
       .filter(([k, val]) => k[0] == 't' && isNumKey(k))
-      .map((x) => x[1]);
+      .map((x) => getAnniversaryType(x[1]));
   const types = Array.from(new Set(types0));
   const anniversaryType = types.length === 0 ? 'Yahrzeit' :
     types.length === 1 ? types[0] : 'Anniversary';
@@ -94,6 +99,21 @@ export function getMaxYahrzeitId(query) {
 }
 
 /**
+ * @private
+ * @param {string} str
+ * @return {string}
+ */
+function getAnniversaryType(str) {
+  const s = str.toLowerCase();
+  switch (s[0]) {
+    case 'y': return 'Yahrzeit';
+    case 'b': return 'Birthday';
+    case 'a': return 'Anniversary';
+  }
+  return 'Yahrzeit';
+}
+
+/**
  * @param {Object<string,any>} query
  * @param {number} id
  * @return {*}
@@ -103,12 +123,12 @@ export function getYahrzeitDetailForId(query, id) {
   if (empty(dd) || empty(mm) || empty(yy)) {
     return null;
   }
-  const type = query[`t${id}`] || 'Yahrzeit';
+  const type = getAnniversaryType(query['t' + id]);
   const sunset = query[`s${id}`];
   const name0 = query[`n${id}`] && query[`n${id}`].trim();
   const name = name0 || `Person${id}`;
   let day = dayjs(makeGregDate(yy, mm, dd));
-  if (sunset === 'on') {
+  if (sunset === 'on' || sunset == 1) {
     day = day.add(1, 'day');
   }
   return {yy, mm, dd, sunset, type, name, day};

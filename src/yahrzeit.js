@@ -290,7 +290,7 @@ const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text'];
 async function saveDataToDb(ctx) {
   const toSave = Object.assign({}, ctx.state.q);
   noSaveFields.forEach((key) => delete toSave[key]);
-  convertDateFields(toSave);
+  compactJsonToSave(toSave);
   const id = ctx.state.ulid;
   const logInfo = makeLogInfo(ctx);
   delete logInfo.duration;
@@ -324,7 +324,7 @@ async function saveDataToDb(ctx) {
 }
 
 // eslint-disable-next-line require-jsdoc
-function convertDateFields(obj) {
+function compactJsonToSave(obj) {
   const maxId = getMaxYahrzeitId(obj);
   for (let i = 1; i <= maxId; i++) {
     const yk = 'y' + i;
@@ -342,6 +342,9 @@ function convertDateFields(obj) {
       delete obj[mk];
       delete obj[dk];
     }
+    obj['t' + i] = obj['t' + i][0].toLowerCase();
+    const sunset = obj['s' + i];
+    obj['s' + i] = (sunset === 'on' || sunset == 1) ? 1 : 0;
   }
 }
 
