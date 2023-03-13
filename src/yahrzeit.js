@@ -66,9 +66,15 @@ export async function yahrzeitApp(ctx) {
   }
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
-  if (maxId > 0 && q.cfg === 'json') {
+  if (q.cfg === 'json') {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.body = await renderJson(maxId, q);
+    return;
+  } else if (q.cfg === 'xml') {
+    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.status = 400;
+    ctx.type = 'text/xml';
+    ctx.body = `<?xml version="1.0" ?>\n<error message="This API does not support cfg=xml" />\n`;
     return;
   }
   const count = Math.max(+q.count || 1, maxId);
