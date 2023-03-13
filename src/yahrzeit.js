@@ -342,9 +342,14 @@ function compactJsonToSave(obj) {
       delete obj[mk];
       delete obj[dk];
     }
-    obj['t' + i] = obj['t' + i][0].toLowerCase();
+    const anniversaryType = obj['t' + i];
+    if (anniversaryType) {
+      obj['t' + i] = anniversaryType[0].toLowerCase();
+    }
     const sunset = obj['s' + i];
-    obj['s' + i] = (sunset === 'on' || sunset == 1) ? 1 : 0;
+    if (typeof sunset !== 'undefined') {
+      obj['s' + i] = (sunset === 'on' || sunset == 1) ? 1 : 0;
+    }
   }
 }
 
