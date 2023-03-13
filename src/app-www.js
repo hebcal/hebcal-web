@@ -159,6 +159,17 @@ app.use(error({
 app.use(stopIfTimedOut());
 
 app.use(bodyParser({
+  formLimit: '256kb',
+  qs: {
+    parse: function(str, opts) {
+      const sp = new URLSearchParams(str);
+      const obj = {};
+      for (const [key, value] of sp.entries()) {
+        obj[key] = value;
+      }
+      return obj;
+    },
+  },
   extendTypes: {
     json: ['text/plain'], // will parse text/plain type body as a JSON string
   },
