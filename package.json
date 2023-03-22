@@ -30,7 +30,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.21.0",
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.3",
     "@babel/preset-env": "^7.20.2",
     "@babel/register": "^7.21.0",
     "@rollup/plugin-babel": "^6.0.3",
@@ -42,10 +42,10 @@
     "eslint": "^8.36.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.6.4",
-    "rollup": "^3.19.1"
+    "rollup": "^3.20.0"
   },
   "dependencies": {
-    "@hebcal/core": "^3.50.3",
+    "@hebcal/core": "^3.50.4",
     "@hebcal/geo-sqlite": "^4.8.1",
     "@hebcal/icalendar": "^4.19.0",
     "@hebcal/leyning": "^7.2.1",
@@ -63,10 +63,10 @@
     "google-protobuf": "^3.21.2",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
-    "ini": "^3.0.1",
+    "ini": "^4.0.0",
     "koa": "^2.14.1",
     "koa-better-response-time": "^1.2.0",
-    "koa-bodyparser": "^4.3.0",
+    "koa-bodyparser": "^4.4.0",
     "koa-compress": "^5.1.0",
     "koa-conditional-get": "^3.0.0",
     "koa-ejs": "^4.3.0",

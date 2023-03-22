@@ -5,16 +5,6 @@ d1.addEventListener("click", function(){if(this.checked){d2.checked=false}});
 d2.addEventListener("click", function(){if(this.checked){d1.checked=false}});
 d.getElementById("ytH").addEventListener("click", function(){d.f1.year.value="<%=defaultYearHeb%>"});
 d.getElementById("ytG").addEventListener("click", function(){d.f1.year.value="<%=defaultYear%>"});
-d.getElementById("maj").addEventListener("click", function(){
- if (this.checked == false) {
-  ["nx","mf","ss","min","mod"].forEach(function(x){
-   d.f1[x].checked = false;
-  });
- }
-});
-["nx","mf","ss","min","mod"].forEach(function(x){
- d.getElementById(x).addEventListener("click", function(){if(this.checked==true){d.f1.maj.checked=true}});
-});
 d.getElementById("m").addEventListener("focus",function(){
   d.getElementById("M1").checked = false;
   d.getElementById("M0").checked = true;

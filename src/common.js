@@ -1,4 +1,4 @@
-import {HDate, Location, months, HebrewCalendar, greg, Zmanim} from '@hebcal/core';
+import {HDate, Location, months, HebrewCalendar, flags, greg, Zmanim} from '@hebcal/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -73,7 +73,7 @@ export const lgToLocale = {
 };
 
 const negativeOpts = {
-  maj: 'noHolidays',
+  maj: 'noMajor',
   min: 'noMinorHolidays',
   nx: 'noRoshChodesh',
   mod: 'noModern',
@@ -81,21 +81,26 @@ const negativeOpts = {
   ss: 'noSpecialShabbat',
 };
 
-/*
 const optsToMask = {
   maj: flags.YOM_TOV_ENDS | flags.MAJOR_FAST |
-    flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS | flags.CHANUKAH_CANDLES,
+    flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS |
+    flags.MINOR_HOLIDAY | flags.EREV | flags.CHOL_HAMOED |
+    flags.CHANUKAH_CANDLES,
   nx: flags.ROSH_CHODESH,
   mod: flags.MODERN_HOLIDAY,
   mf: flags.MINOR_FAST,
-  ss: flags.SPECIAL_SHABBAT | flags.SHABBAT_MEVARCHIM,
-  c: flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS,
+  ss: flags.SPECIAL_SHABBAT,
   o: flags.OMER_COUNT,
   s: flags.PARSHA_HASHAVUA,
   F: flags.DAF_YOMI,
   i: flags.IL_ONLY,
+  myomi: flags.MISHNA_YOMI,
+  nyomi: flags.NACH_YOMI,
+  ykk: flags.YOM_KIPPUR_KATAN,
+  yyomi: flags.YERUSHALMI_YOMI,
+  molad: flags.MOLAD,
+  min: flags.MINOR_HOLIDAY,
 };
-*/
 
 const booleanOpts = {
   d: 'addHebrewDates',
@@ -430,6 +435,20 @@ export function queryDefaultCandleMins(query) {
 }
 
 /**
+ * @param {Object.<string,string>} query
+ * @return {number}
+ */
+function getMaskFromQuery(query) {
+  let mask = 0;
+  for (const [key, val] of Object.entries(optsToMask)) {
+    if (query[key] === 'on' || query[key] === '1') {
+      mask |= val;
+    }
+  }
+  return mask;
+}
+
+/**
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {Object.<string,string>} query
@@ -448,11 +467,11 @@ export function makeHebcalOptions(db, query) {
     delete query.m;
   }
   for (const [key, val] of Object.entries(booleanOpts)) {
-    if (typeof query[key] === 'string' &&
-      (query[key] === 'on' || query[key] === '1')) {
+    if (query[key] === 'on' || query[key] === '1') {
       options[val] = true;
     }
   }
+  options.mask = getMaskFromQuery(query);
   if (!empty(query.h12)) {
     options.hour12 = !off(query.h12);
   }
@@ -461,8 +480,8 @@ export function makeHebcalOptions(db, query) {
       options[val] = true;
     }
   }
-  if (!options.noRoshChodesh && !options.noSpecialShabbat) {
-    options.shabbatMevarchim = true;
+  if ((options.mask & flags.ROSH_CHODESH) && (options.mask & flags.SPECIAL_SHABBAT)) {
+    options.mask |= flags.SHABBAT_MEVARCHIM;
   }
   // Before we parse numberOpts, check for tzeit preference
   if (options.havdalahTzeit) {
