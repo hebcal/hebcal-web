@@ -106,6 +106,10 @@ FILE="yom-kippur-katan"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&ykk=on&relcalid=457ce561-311f-4eeb-9033-65561b7f7503&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yom+Kippur+Katan&caldesc=%D7%99%D7%95%D6%B9%D7%9D+%D7%9B%D6%BC%D6%B4%D7%A4%D6%BC%D7%95%D6%BC%D7%A8+%D7%A7%D6%B8%D7%98%D6%B8%D7%9F%2C+minor+day+of+atonement+on+the+day+preceeding+each+Rosh+Chodesh"
 compress_file $FILE
 
+FILE="rosh-chodesh"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=off&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=on&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Rosh+Chodesh&caldesc=Rosh+Chodesh+is+a+minor+holiday+observed+at+the+beginning+of+every+month+in+the+Hebrew+calendar&color=%6F42C1F2"
+compress_file $FILE
+
 FILE="kindness"
 remove_file $FILE
 node dist/kindness.js

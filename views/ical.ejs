@@ -126,6 +126,13 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   years: 3,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Rosh Chodesh', id: 'rosh-chodesh',
+  emoji: '🌒',
+  summary: `<p>Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar, marked by the birth of a new moon.</p>`,
+  feedLength: 18,
+  years: 10,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daf Yomi', id: 'daf-yomi',
   emoji: '📖',
   summary: '<p>Daily regimen of learning the Babylonian Talmud</p>',
