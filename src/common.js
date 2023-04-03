@@ -93,7 +93,6 @@ const optsToMask = {
   o: flags.OMER_COUNT,
   s: flags.PARSHA_HASHAVUA,
   F: flags.DAF_YOMI,
-  i: flags.IL_ONLY,
   myomi: flags.MISHNA_YOMI,
   nyomi: flags.NACH_YOMI,
   ykk: flags.YOM_KIPPUR_KATAN,
