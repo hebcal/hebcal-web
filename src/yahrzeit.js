@@ -607,7 +607,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const yearNumber = hyear - origHyear;
   const nth = Locale.ordinal(yearNumber, 'en');
   const name = info.name;
-  let subj = `${name}'s ${nth} ${typeStr}`;
+  let subj = type === 'Other' ? name : `${name}'s ${nth} ${typeStr}`;
   if (appendHebDate) {
     const comma = hebdate.indexOf(',');
     subj += ' (' + hebdate.substring(0, comma) + ')';
@@ -619,11 +619,33 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
     ev.emoji = '🎂✡️';
   }
   const observed = dayjs(hd.greg());
+  ev.memo = makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId);
+  const hash = calendarId || await murmur32Hex(name);
+  ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
+  ev.name = name;
+  ev.type = type;
+  ev.anniversary = yearNumber;
+  if (isYahrzeit) {
+    ev.alarm = false;
+    ev.hash = hash;
+  }
+  return ev;
+}
+
+// eslint-disable-next-line require-jsdoc
+function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId) {
+  const type = info.type;
+  const isYahrzeit = (type === 'Yahrzeit');
+  const isBirthday = (type === 'Birthday');
+  const isOther = (type === 'Other');
+  const name = info.name;
+  const nameAndType = isOther ? name : `${name}'s ${typeStr}`;
   const erev = observed.subtract(1, 'day');
   const verb = isYahrzeit ? 'remembering' : 'honoring';
-  let memo = `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr} occurs on ` +
+  const prefix = isOther ? name : `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr}`;
+  let memo = `${prefix} occurs on ` +
     `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.\\n\\n` +
-    `${name}'s ${typeStr} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
+    `${nameAndType} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
     `sundown on the day of observance.`;
   if (isYahrzeit) {
     const dow = erev.day();
@@ -637,17 +659,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   if (includeUrl) {
     memo += `\\n\\nhttps://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
   }
-  ev.memo = memo;
-  const hash = calendarId || await murmur32Hex(name);
-  ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
-  ev.name = name;
-  ev.type = type;
-  ev.anniversary = yearNumber;
-  if (isYahrzeit) {
-    ev.alarm = false;
-    ev.hash = hash;
-  }
-  return ev;
+  return memo;
 }
 
 /**

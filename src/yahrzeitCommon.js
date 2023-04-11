@@ -110,6 +110,7 @@ function getAnniversaryType(str) {
       case 'y': return 'Yahrzeit';
       case 'b': return 'Birthday';
       case 'a': return 'Anniversary';
+      case 'o': return 'Other';
     }
   }
   return 'Yahrzeit';
@@ -127,13 +128,27 @@ export function getYahrzeitDetailForId(query, id) {
   }
   const type = getAnniversaryType(query['t' + id]);
   const sunset = query[`s${id}`];
-  const name0 = query[`n${id}`] && query[`n${id}`].trim();
-  const name = name0 || `Person${id}`;
+  const name = getAnniversaryName(query, id, type);
   let day = dayjs(makeGregDate(yy, mm, dd));
   if (sunset === 'on' || sunset == 1) {
     day = day.add(1, 'day');
   }
   return {yy, mm, dd, sunset, type, name, day};
+}
+
+/**
+ * @param {Object<string,any>} query
+ * @param {number} id
+ * @param {string} type
+ * @return {string}
+ */
+function getAnniversaryName(query, id, type) {
+  const name0 = query[`n${id}`] && query[`n${id}`].trim();
+  if (name0) {
+    return name0;
+  }
+  const prefix = type === 'Other' ? 'Untitled' : 'Person';
+  return prefix + id;
 }
 
 /**

@@ -13,7 +13,7 @@ function yahrzeitRow(n) {
   '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name">'+
   '<label class="form-label" for="n'+n+'">Name</label></div>'+
   '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
-  '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option></select>'+
+  '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option><option>Other</option></select>'+
   '<label class="form-label" for="t'+n+'">Type</label></div>'+
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
@@ -124,6 +124,9 @@ function processRow(row) {
       break;
       case 'a':
       el.value = 'Anniversary';
+      break;
+      case 'o':
+      el.value = 'Other';
       break;
     }
   }

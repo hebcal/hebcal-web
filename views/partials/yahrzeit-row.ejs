@@ -7,6 +7,7 @@
  <option <%= (q['t'+num] == 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
  <option <%= (q['t'+num] == 'Birthday') ? 'selected' : '' %>>Birthday</option>
  <option <%= (q['t'+num] == 'Anniversary') ? 'selected' : '' %>>Anniversary</option>
+ <option <%= (q['t'+num] == 'Other') ? 'selected' : '' %>>Other</option>
 </select>
 <label class="form-label" for="t<%=num%>">Type</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
