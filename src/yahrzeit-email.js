@@ -143,7 +143,7 @@ export async function yahrzeitEmailSub(ctx) {
   matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
     url: ctx.request.href,
   });
-  const anniversaryType = q.type === 'Yahrzeit' ? q.type : `Hebrew ${q.type}`;
+  const anniversaryType = q.type === 'Yahrzeit' ? 'yahrzeit' : 'personal calendar';
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${calendarId}.${id}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-verify');
@@ -212,7 +212,8 @@ async function lookupSubNum(ctx, q) {
   if (info === null) {
     ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
   }
-  const type = info.type;
+  const type0 = info.type;
+  const type = type0 === 'Other' ? 'Anniversary' : type0;
   info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
   info.calendarId = contents.calendarId;
   info.maxId = contents.maxId;
@@ -269,7 +270,7 @@ ${BLANK}
 }
 
 async function sendConfirmEmail(ctx, contents, subscriptionId) {
-  const anniversaryType = contents.anniversaryType;
+  const anniversaryType = contents.anniversaryType === 'Yahrzeit' ? 'yahrzeit' : 'personal calendar';
   const calendarId = contents.calendarId;
   const msgid = `${calendarId}.${subscriptionId}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-complete');

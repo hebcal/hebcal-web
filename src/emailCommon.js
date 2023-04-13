@@ -67,6 +67,7 @@ export async function mySendMail(ctx, message) {
  * @return {string}
  */
 export function getImgOpenHtml(msgid, loc, utmCampaign) {
+  loc = encodeURIComponent(loc);
   // eslint-disable-next-line max-len
   return `<img src="https://www.hebcal.com/email/open?msgid=${msgid}&amp;loc=${loc}&amp;utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=${utmCampaign}" alt="" width="1" height="1" border="0" style="height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important">`;
 }

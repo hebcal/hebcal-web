@@ -26,14 +26,15 @@ const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebrewDateConverter(ctx) {
-  if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
+  if (ctx.method === 'GET' && (ctx.request.querystring.length === 0 || ctx.request.querystring === 'cfg=json')) {
     setDefautLangTz(ctx);
     const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
+    const json = ctx.request.querystring === 'cfg=json' ? '&cfg=json' : '';
     ctx.set('Cache-Control', 'private, max-age=3600');
-    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1`;
+    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}`;
     httpRedirect(ctx, url, 302);
     return;
   }

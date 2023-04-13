@@ -78,7 +78,7 @@ async function updateDbAndEmail(ctx, db) {
   const emailAddress = ctx.state.emailAddress;
   const locationName = ctx.state.locationName;
   const msgid = `${subscriptionId}.${Date.now()}`;
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-complete');
+  const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-complete');
   const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
@@ -253,7 +253,7 @@ async function updateActiveSub(ctx, db, q) {
   matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly', {
     url: ctx.request.href,
   });
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-update');
+  const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-update');
   const footerHtml = makeFooter(emailAddress);
   const message = {
     to: emailAddress,
@@ -396,7 +396,7 @@ async function writeStagingInfo(ctx, db, q) {
   });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
   const msgid = `${subscriptionId}.${Date.now()}`;
-  const imgOpen = getImgOpenHtml(msgid, encodeURIComponent(locationName), 'shabbat-verify');
+  const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-verify');
   const message = {
     to: q.em,
     subject: 'Please confirm your request to subscribe to Hebcal',
