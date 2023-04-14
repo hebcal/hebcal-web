@@ -1,4 +1,4 @@
-import {months, HDate} from '@hebcal/core';
+import {months, HDate, Event, flags, Locale, gematriya} from '@hebcal/core';
 
 const Nisan = months.NISAN;
 const Iyyar = months.IYYAR;
@@ -15,15 +15,26 @@ const Adar = months.ADAR_I;
 const Adar1 = months.ADAR_I;
 const Adar2 = months.ADAR_II;
 
+const Hakdamah = 'Hakdamah';
+const Psichah = 'Psichah';
+const Lavin = 'Lavin';
+const Asin = 'Asin';
+const Arurin = 'Arurin';
+const HilchosLH = 'HilchosLH';
+const HilchosRechilus = 'HilchosRechilus';
+const Tziyurim = 'Tziyurim';
+
 const intro = 'Introduction to the Laws of the Prohibition of Lashon Hara and Rechilut';
-const Hakdamah = 'Preface';
-const Psichah = `${intro}, Opening Comments`;
-const Lavin = `${intro}, Negative Commandments`;
-const Asin = `${intro}, Positive Commandments`;
-const Arurin = `${intro}, Curses`;
-const HilchosLH = 'Part One, The Prohibition Against Lashon Hara';
-const HilchosRechilus = 'Part Two, The Prohibition Against Rechilut';
-const Tziyurim = 'Illustrations';
+const englishNames = {
+  Hakdamah: 'Preface',
+  Psichah: `${intro}, Opening Comments`,
+  Lavin: `${intro}, Negative Commandments`,
+  Asin: `${intro}, Positive Commandments`,
+  Arurin: `${intro}, Curses`,
+  HilchosLH: 'Part One, The Prohibition Against Lashon Hara',
+  HilchosRechilus: 'Part Two, The Prohibition Against Rechilut',
+  Tziyurim: 'Illustrations',
+};
 
 const simple = [
   [[1, Tishrei, 1, Shvat, 1, Sivan], Hakdamah, 1, 4],
@@ -331,6 +342,79 @@ function lookupReading(readings, day, month) {
   return result;
 }
 
-const hd = new HDate(29, 'Cheshvan', 5781);
+/**
+ * Event wrapper around a Chofetz Chaim instance
+ */
+class ChofetzChaimEvent extends Event {
+  /**
+   * @param {HDate} date
+   * @param {any} reading
+   */
+  constructor(date, reading) {
+    let desc = reading.k;
+    if (typeof reading.b !== 'undefined') {
+      desc += ' ' + reading.b;
+      if (typeof reading.e !== 'undefined' && reading.e != reading.b) {
+        desc += '-' + reading.e;
+      }
+    }
+    super(date, desc, flags.USER_EVENT);
+    this.reading = reading;
+    this.memo = this.render('memo');
+    this.alarm = false;
+    this.category = 'Chofetz Chaim';
+  }
+  /**
+   * Returns name of reading
+   * @param {string} [locale] Optional locale name (defaults to active locale).
+   * @return {string}
+   */
+  render(locale) {
+    locale = locale || Locale.getLocaleName();
+    if (typeof locale === 'string') {
+      locale = locale.toLowerCase();
+    }
+    const reading = this.reading;
+    const book = reading.k;
+    const book2 = book.replace('Hilchos', 'Hilchos ');
+    let name = locale === 'memo' ? englishNames[book] : Locale.gettext(book2, locale);
+    if (typeof reading.b !== 'undefined') {
+      name += ' ' + reading.b;
+      if (typeof reading.e !== 'undefined' && reading.e != reading.b) {
+        name += '-' + reading.e;
+      }
+    }
+    return name;
+  }
+  /**
+   * Returns a link to sefaria.org
+   *  e.g. https://www.sefaria.org/Chofetz_Chaim%2C_Part_One%2C_The_Prohibition_Against_Lashon_Hara%2C_Principle_7.7
+   * @return {string}
+   */
+  url() {
+    const reading = this.reading;
+    const book = reading.k;
+    let name = 'Chofetz Chaim, ' + englishNames[book];
+    let separator = '.';
+    if (book === HilchosLH || book === HilchosRechilus) {
+      name += ', Principle';
+      separator = '_';
+    } else if (book === Tziyurim) {
+      name += ', Illustration';
+      separator = '_';
+    }
+    if (typeof reading.b !== 'undefined') {
+      name += separator + reading.b;
+    }
+    const urlName = encodeURIComponent(name.replace(/ /g, '_'));
+    return `https://www.sefaria.org/${urlName}?lang=bi&with=Navigation&lang2=en`;
+  }
+}
+
+const hd = new HDate(15, 'Tishrei', 5781);
 const a = chofetzChaim(hd);
 console.log(a);
+const b = new ChofetzChaimEvent(hd, a);
+console.log(b.render('en'));
+console.log(b.url());
+console.log(b);
