@@ -78,25 +78,29 @@ export function summarizeAnniversaryTypes(query, long=false) {
 
 /**
  * @param {Object<string,any>} query
+ * @return {number[]}
+ */
+export function getYahrzeitIds(query) {
+  const set = new Set();
+  const numKeys = Object.keys(query).filter(isNumKey);
+  for (const key of numKeys) {
+    const id = +(key.substring(1));
+    if (key[0] === 'x' && !empty(query[key])) {
+      set.add(id);
+    } else if (!empty(query['y' + id]) && !empty(query['m' + id]) && !empty(query['d' + id])) {
+      set.add(id);
+    }
+  }
+  return Array.from(set.values());
+}
+
+/**
+ * @param {Object<string,any>} query
  * @return {number}
  */
 export function getMaxYahrzeitId(query) {
-  let max = 0;
-  for (const k of Object.keys(query)) {
-    const k0 = k[0];
-    if ((k0 === 'y' || k0 === 'x') && isNumKey(k)) {
-      let id = +(k.substring(1));
-      if (empty(query[k])) {
-        id = 0;
-      } else if (k0 === 'y' && (empty(query['d' + id]) || empty(query['m' + id]))) {
-        id = 0;
-      }
-      if (id > max) {
-        max = id;
-      }
-    }
-  }
-  return max;
+  const ids = getYahrzeitIds(query);
+  return Math.max(...ids);
 }
 
 /**

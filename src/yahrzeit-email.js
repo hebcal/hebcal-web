@@ -2,6 +2,7 @@
 import {getIpAddress, validateEmail, empty} from './common';
 import {mySendMail, getImgOpenHtml} from './emailCommon';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
+  getYahrzeitIds,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
 import {ulid} from 'ulid';
 import {basename} from 'path';
@@ -196,6 +197,7 @@ AND e.calendar_id = y.id`;
   contents.emailAddress = row.email_addr;
   contents.calendarId = row.calendar_id;
   contents.maxId = getMaxYahrzeitId(contents);
+  contents.numIds = getYahrzeitIds(contents).length;
   const type = contents.type = contents.anniversaryType = summarizeAnniversaryTypes(contents, false);
   contents.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
   contents.lastModified = row.updated;
@@ -217,6 +219,7 @@ async function lookupSubNum(ctx, q) {
   info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
   info.calendarId = contents.calendarId;
   info.maxId = contents.maxId;
+  info.numIds = contents.numIds;
   info.anniversaryType = contents.anniversaryType;
   return {info, emailAddress: contents.emailAddress};
 }
