@@ -40,13 +40,13 @@ const englishNames = {
 };
 
 const simple = [
-  [[1, Tishrei, 1, Shvat, 1, Sivan], Hakdamah, 1, 4],
-  [[2, Tishrei, 2, Shvat, 2, Sivan], Hakdamah, 5, 10],
-  [[3, Tishrei, 3, Shvat, 3, Sivan], Hakdamah, 11, 16],
-  [[4, Tishrei, 4, Shvat, 4, Sivan], Hakdamah, 17, 22],
-  [[5, Tishrei, 5, Shvat, 5, Sivan], Hakdamah, 23, 27],
-  [[6, Tishrei, 6, Shvat, 6, Sivan], Hakdamah, 28, 34],
-  [[7, Tishrei, 6, Shvat, 6, Sivan], Hakdamah, 0, 0],
+  [[1, Tishrei, 1, Shvat, 1, Sivan], Hakdamah, 1, 4, 'ברוך ד׳', 'שכינתו בתוכנו'],
+  [[2, Tishrei, 2, Shvat, 2, Sivan], Hakdamah, 5, 10, 'וכאשר נחפשה', 'מגדל העון'],
+  [[3, Tishrei, 3, Shvat, 3, Sivan], Hakdamah, 11, 16, 'ונראה פשוט', 'לאין שעור'],
+  [[4, Tishrei, 4, Shvat, 4, Sivan], Hakdamah, 17, 22, 'ואחשבה', 'בפנים הספר'],
+  [[5, Tishrei, 5, Shvat, 5, Sivan], Hakdamah, 23, 27, 'על כן', 'צד הדי'],
+  [[6, Tishrei, 6, Shvat, 6, Sivan], Hakdamah, 28, [33, 34], 'ואחלה להקורא', 'במהרה בימינו אמן'],
+  [[7, Tishrei, 6, Shvat, 6, Sivan], Hakdamah, 29, 32, 'ואל יפלא', 'לעון כלל'],
   [[8, Tishrei, 7, Shvat, 7, Sivan], Psichah, 1, 4],
   [[9, Tishrei, 8, Shvat, 8, Sivan], Psichah, 5, 11],
   [[10, Tishrei, 9, Shvat, 9, Sivan], Lavin, 1, 2],
@@ -74,7 +74,7 @@ const simple = [
   [[2, Cheshvan, 1, Adar, 1, Tamuz], HilchosLH, 2.5, 2.6],
   [[3, Cheshvan, 2, Adar, 2, Tamuz], HilchosLH, 2.7, 2.8],
   [[4, Cheshvan, 3, Adar, 3, Tamuz], HilchosLH, 2.9, 2.10],
-  [[5, Cheshvan, 4, Adar, 4, Tamuz], HilchosLH, 2.11, 2.11],
+  [[5, Cheshvan, 4, Adar, 4, Tamuz], HilchosLH, 2.11],
   [[6, Cheshvan, 5, Adar, 5, Tamuz], HilchosLH, 2.12, 2.13],
   [[7, Cheshvan, 6, Adar, 6, Tamuz], HilchosLH, 3.1, 3.2],
   [[8, Cheshvan, 7, Adar, 7, Tamuz], HilchosLH, 3.3, 3.4],
@@ -85,7 +85,7 @@ const simple = [
   [[13, Cheshvan, 12, Adar, 12, Tamuz], HilchosLH, 4.5, 4.6],
   [[14, Cheshvan, 13, Adar, 13, Tamuz], HilchosLH, 4.7, 4.8],
   [[15, Cheshvan, 14, Adar, 14, Tamuz], HilchosLH, 4.9, 4.10],
-  [[16, Cheshvan, 15, Adar, 15, Tamuz], HilchosLH, 4.11, 4.11],
+  [[16, Cheshvan, 15, Adar, 15, Tamuz], HilchosLH, 4.11],
   [[17, Cheshvan, 16, Adar, 16, Tamuz], HilchosLH, 4.12, 5.1],
   [[18, Cheshvan, 17, Adar, 17, Tamuz], HilchosLH, 5.2, 5.4],
   [[19, Cheshvan, 18, Adar, 18, Tamuz], HilchosLH, 5.5, 5.6],
@@ -100,7 +100,7 @@ const simple = [
   [[28, Cheshvan, 27, Adar, 27, Tamuz], HilchosLH, 7.3, 7.4],
   [[29, Cheshvan, 28, Adar, 28, Tamuz], HilchosLH, 7.5, 7.6],
   [[30, Cheshvan, 29, Adar, 29, Tamuz], HilchosLH, 7.7, 7.8],
-  [[1, Kislev, 1, Nisan, 1, Av], HilchosLH, 7.9, 7.9],
+  [[1, Kislev, 1, Nisan, 1, Av], HilchosLH, 7.9],
   [[2, Kislev, 2, Nisan, 2, Av], HilchosLH, 7.10, 7.12],
   [[3, Kislev, 3, Nisan, 3, Av], HilchosLH, 7.13, 7.14],
   [[4, Kislev, 4, Nisan, 4, Av], HilchosLH, 8.1, 8.2],
@@ -108,7 +108,7 @@ const simple = [
   [[6, Kislev, 6, Nisan, 6, Av], HilchosLH, 8.5, 8.7],
   [[7, Kislev, 7, Nisan, 7, Av], HilchosLH, 8.8, 8.9],
   [[8, Kislev, 8, Nisan, 8, Av], HilchosLH, 8.10, 8.11],
-  [[9, Kislev, 9, Nisan, 9, Av], HilchosLH, 8.12, 8.12],
+  [[9, Kislev, 9, Nisan, 9, Av], HilchosLH, 8.12],
   [[10, Kislev, 10, Nisan, 10, Av], HilchosLH, 8.13, 8.14],
   [[11, Kislev, 11, Nisan, 11, Av], HilchosLH, 9.1, 9.2],
   [[12, Kislev, 12, Nisan, 12, Av], HilchosLH, 9.3, 9.4],
@@ -121,7 +121,7 @@ const simple = [
   [[19, Kislev, 19, Nisan, 19, Av], HilchosLH, 10.11, 10.12],
   [[20, Kislev, 20, Nisan, 20, Av], HilchosLH, 10.13, 10.14],
   [[21, Kislev, 21, Nisan, 21, Av], HilchosLH, 10.15, 10.16],
-  [[22, Kislev, 22, Nisan, 22, Av], HilchosLH, 10.17, 10.17],
+  [[22, Kislev, 22, Nisan, 22, Av], HilchosLH, 10.17],
   [[23, Kislev, 23, Nisan, 23, Av], HilchosRechilus, 1.1, 1.3],
   [[24, Kislev, 24, Nisan, 24, Av], HilchosRechilus, 1.4, 1.5],
   [[25, Kislev, 25, Nisan, 25, Av], HilchosRechilus, 1.6, 1.7],
@@ -129,21 +129,21 @@ const simple = [
   [[27, Kislev, 27, Nisan, 27, Av], HilchosRechilus, 1.10, 1.11],
   [[28, Kislev, 28, Nisan, 28, Av], HilchosRechilus, 2.1, 2.2],
   [[29, Kislev, 29, Nisan, 29, Av], HilchosRechilus, 2.3, 2.4],
-  [[30, Kislev, 30, Nisan, 30, Av], HilchosRechilus, 3.1, 3.1],
+  [[30, Kislev, 30, Nisan, 30, Av], HilchosRechilus, 3.1],
   [[1, Teves, 1, Iyyar, 1, Elul], HilchosRechilus, 3.2, 3.4],
   [[2, Teves, 2, Iyyar, 2, Elul], HilchosRechilus, 4.1, 4.3],
   [[3, Teves, 3, Iyyar, 3, Elul], HilchosRechilus, 5.1, 5.2],
   [[4, Teves, 4, Iyyar, 4, Elul], HilchosRechilus, 5.3, 5.4],
-  [[5, Teves, 5, Iyyar, 5, Elul], HilchosRechilus, 5.5, 5.5],
+  [[5, Teves, 5, Iyyar, 5, Elul], HilchosRechilus, 5.5],
   [[6, Teves, 6, Iyyar, 6, Elul], HilchosRechilus, 5.6, 5.7],
   [[7, Teves, 7, Iyyar, 7, Elul], HilchosRechilus, 6.1, 6.2],
   [[8, Teves, 8, Iyyar, 8, Elul], HilchosRechilus, 6.3, 6.4],
   [[9, Teves, 9, Iyyar, 9, Elul], HilchosRechilus, 6.5, 6.7],
   [[10, Teves, 10, Iyyar, 10, Elul], HilchosRechilus, 6.8, 6.10],
-  [[11, Teves, 11, Iyyar, 11, Elul], HilchosRechilus, 7.1, 7.1],
-  [[12, Teves, 12, Iyyar, 12, Elul], HilchosRechilus, 7.2, 7.2],
+  [[11, Teves, 11, Iyyar, 11, Elul], HilchosRechilus, 7.1],
+  [[12, Teves, 12, Iyyar, 12, Elul], HilchosRechilus, 7.2],
   [[13, Teves, 13, Iyyar, 13, Elul], HilchosRechilus, 7.3, 7.4],
-  [[14, Teves, 14, Iyyar, 14, Elul], HilchosRechilus, 7.5, 7.5],
+  [[14, Teves, 14, Iyyar, 14, Elul], HilchosRechilus, 7.5],
   [[15, Teves, 15, Iyyar, 15, Elul], HilchosRechilus, 8.1, 8.3],
   [[16, Teves, 16, Iyyar, 16, Elul], HilchosRechilus, 8.4, 8.5],
   [[17, Teves, 17, Iyyar, 17, Elul], HilchosRechilus, 9.1, 9.2],
@@ -152,7 +152,7 @@ const simple = [
   [[20, Teves, 20, Iyyar, 20, Elul], HilchosRechilus, 9.7, 9.9],
   [[21, Teves, 21, Iyyar, 21, Elul], HilchosRechilus, 9.10, 9.10],
   [[22, Teves, 22, Iyyar, 22, Elul], HilchosRechilus, 9.11, 9.12],
-  [[23, Teves, 23, Iyyar, 23, Elul], HilchosRechilus, 9.13, 9.13],
+  [[23, Teves, 23, Iyyar, 23, Elul], HilchosRechilus, 9.13],
   [[24, Teves, 24, Iyyar, 24, Elul], HilchosRechilus, 9.14, 9.15],
   [[25, Teves, 25, Iyyar, 25, Elul], Tziyurim, 1, 3],
   [[26, Teves, 26, Iyyar, 26, Elul], Tziyurim, 4, 5],
@@ -162,13 +162,13 @@ const simple = [
 ];
 
 const leap = [
-  [[1, Tishrei, 11, Shvat, 20, Iyyar], Hakdamah, 1, 4],
-  [[2, Tishrei, 12, Shvat, 21, Iyyar], Hakdamah, 5, 10],
-  [[3, Tishrei, 13, Shvat, 22, Iyyar], Hakdamah, 11, 16],
-  [[4, Tishrei, 14, Shvat, 23, Iyyar], Hakdamah, 17, 22],
-  [[5, Tishrei, 15, Shvat, 24, Iyyar], Hakdamah, 23, 27],
-  [[6, Tishrei, 16, Shvat, 25, Iyyar], Hakdamah, 28, 34],
-  [[7, Tishrei, 16, Shvat, 25, Iyyar], Hakdamah, 0, 0],
+  [[1, Tishrei, 11, Shvat, 20, Iyyar], Hakdamah, 1, 4, 'ברוך ד׳', 'שכינתו בתוכנו'],
+  [[2, Tishrei, 12, Shvat, 21, Iyyar], Hakdamah, 5, 10, 'וכאשר נחפשה', 'מגדל העון'],
+  [[3, Tishrei, 13, Shvat, 22, Iyyar], Hakdamah, 11, 16, 'ונראה פשוט', 'לאין שעור'],
+  [[4, Tishrei, 14, Shvat, 23, Iyyar], Hakdamah, 17, 22, 'ואחשבה', 'בפנים הספר'],
+  [[5, Tishrei, 15, Shvat, 24, Iyyar], Hakdamah, 23, 27, 'על כן', 'צד הדי'],
+  [[6, Tishrei, 16, Shvat, 25, Iyyar], Hakdamah, 28, [33, 34], 'ואחלה להקורא', 'במהרה בימינו אמן'],
+  [[7, Tishrei, 16, Shvat, 25, Iyyar], Hakdamah, 29, 32, 'ואל יפלא', 'לעון כלל'],
   [[8, Tishrei, 17, Shvat, 26, Iyyar], Psichah, 1, 4],
   [[9, Tishrei, 18, Shvat, 27, Iyyar], Psichah, 5, 11],
   [[10, Tishrei, 19, Shvat, 28, Iyyar], Lavin, 1, 2],
@@ -196,7 +196,7 @@ const leap = [
   [[2, Cheshvan, 11, Adar1, 21, Sivan], HilchosLH, 2.5, 2.6],
   [[3, Cheshvan, 12, Adar1, 22, Sivan], HilchosLH, 2.7, 2.8],
   [[4, Cheshvan, 13, Adar1, 23, Sivan], HilchosLH, 2.9, 2.10],
-  [[5, Cheshvan, 14, Adar1, 24, Sivan], HilchosLH, 2.11, 2.11],
+  [[5, Cheshvan, 14, Adar1, 24, Sivan], HilchosLH, 2.11],
   [[6, Cheshvan, 15, Adar1, 25, Sivan], HilchosLH, 2.12, 2.13],
   [[7, Cheshvan, 16, Adar1, 26, Sivan], HilchosLH, 3.1, 3.2],
   [[8, Cheshvan, 17, Adar1, 27, Sivan], HilchosLH, 3.3, 3.4],
@@ -207,7 +207,7 @@ const leap = [
   [[13, Cheshvan, 22, Adar1, 2, Tamuz], HilchosLH, 4.5, 4.6],
   [[14, Cheshvan, 23, Adar1, 3, Tamuz], HilchosLH, 4.7, 4.8],
   [[15, Cheshvan, 24, Adar1, 4, Tamuz], HilchosLH, 4.9, 4.10],
-  [[16, Cheshvan, 25, Adar1, 5, Tamuz], HilchosLH, 4.11, 4.11],
+  [[16, Cheshvan, 25, Adar1, 5, Tamuz], HilchosLH, 4.11],
   [[17, Cheshvan, 26, Adar1, 6, Tamuz], HilchosLH, 4.12, 4.12],
   [[18, Cheshvan, 27, Adar1, 7, Tamuz], HilchosLH, 5.1, 5.1],
   [[19, Cheshvan, 28, Adar1, 8, Tamuz], HilchosLH, 5.2, 5.2],
@@ -224,7 +224,7 @@ const leap = [
   [[30, Cheshvan, 9, Adar2, 19, Tamuz], HilchosLH, 7.3, 7.4],
   [[1, Kislev, 10, Adar2, 20, Tamuz], HilchosLH, 7.5, 7.6],
   [[2, Kislev, 11, Adar2, 21, Tamuz], HilchosLH, 7.7, 7.8],
-  [[3, Kislev, 12, Adar2, 22, Tamuz], HilchosLH, 7.9, 7.9],
+  [[3, Kislev, 12, Adar2, 22, Tamuz], HilchosLH, 7.9],
   [[4, Kislev, 13, Adar2, 23, Tamuz], HilchosLH, 7.10, 7.10],
   [[5, Kislev, 14, Adar2, 24, Tamuz], HilchosLH, 7.11, 7.12],
   [[6, Kislev, 15, Adar2, 25, Tamuz], HilchosLH, 7.13, 7.14],
@@ -234,7 +234,7 @@ const leap = [
   [[10, Kislev, 19, Adar2, 29, Tamuz], HilchosLH, 8.6, 8.7],
   [[11, Kislev, 20, Adar2, 1, Av], HilchosLH, 8.8, 8.9],
   [[12, Kislev, 21, Adar2, 2, Av], HilchosLH, 8.10, 8.11],
-  [[13, Kislev, 22, Adar2, 3, Av], HilchosLH, 8.12, 8.12],
+  [[13, Kislev, 22, Adar2, 3, Av], HilchosLH, 8.12],
   [[14, Kislev, 23, Adar2, 4, Av], HilchosLH, 8.13, 8.14],
   [[15, Kislev, 24, Adar2, 5, Av], HilchosLH, 9.1, 9.2],
   [[16, Kislev, 25, Adar2, 6, Av], HilchosLH, 9.3, 9.4],
@@ -249,7 +249,7 @@ const leap = [
   [[25, Kislev, 5, Nisan, 15, Av], HilchosLH, 10.13, 10.13],
   [[26, Kislev, 6, Nisan, 16, Av], HilchosLH, 10.14, 10.14],
   [[27, Kislev, 7, Nisan, 17, Av], HilchosLH, 10.15, 10.16],
-  [[28, Kislev, 8, Nisan, 18, Av], HilchosLH, 10.17, 10.17],
+  [[28, Kislev, 8, Nisan, 18, Av], HilchosLH, 10.17],
   [[29, Kislev, 9, Nisan, 19, Av], HilchosRechilus, 1.1, 1.2],
   [[30, Kislev, 10, Nisan, 20, Av], HilchosRechilus, 1.3, 1.3],
   [[1, Teves, 11, Nisan, 21, Av], HilchosRechilus, 1.4, 1.5],
@@ -258,12 +258,12 @@ const leap = [
   [[4, Teves, 14, Nisan, 24, Av], HilchosRechilus, 1.10, 1.11],
   [[5, Teves, 15, Nisan, 25, Av], HilchosRechilus, 2.1, 2.2],
   [[6, Teves, 16, Nisan, 26, Av], HilchosRechilus, 2.3, 2.4],
-  [[7, Teves, 17, Nisan, 27, Av], HilchosRechilus, 3.1, 3.1],
+  [[7, Teves, 17, Nisan, 27, Av], HilchosRechilus, 3.1],
   [[8, Teves, 18, Nisan, 28, Av], HilchosRechilus, 3.2, 3.4],
   [[9, Teves, 19, Nisan, 29, Av], HilchosRechilus, 4.1, 4.3],
   [[10, Teves, 20, Nisan, 30, Av], HilchosRechilus, 5.1, 5.2],
   [[11, Teves, 21, Nisan, 1, Elul], HilchosRechilus, 5.3, 5.4],
-  [[12, Teves, 22, Nisan, 2, Elul], HilchosRechilus, 5.5, 5.5],
+  [[12, Teves, 22, Nisan, 2, Elul], HilchosRechilus, 5.5],
   [[13, Teves, 23, Nisan, 3, Elul], HilchosRechilus, 5.6, 5.7],
   [[14, Teves, 24, Nisan, 4, Elul], HilchosRechilus, 6.1, 6.2],
   [[15, Teves, 25, Nisan, 5, Elul], HilchosRechilus, 6.3, 6.4],
@@ -271,10 +271,10 @@ const leap = [
   [[17, Teves, 27, Nisan, 7, Elul], HilchosRechilus, 6.7, 6.7],
   [[18, Teves, 28, Nisan, 8, Elul], HilchosRechilus, 6.8, 6.9],
   [[19, Teves, 29, Nisan, 9, Elul], HilchosRechilus, 6.10, 6.10],
-  [[20, Teves, 30, Nisan, 10, Elul], HilchosRechilus, 7.1, 7.1],
-  [[21, Teves, 1, Iyyar, 11, Elul], HilchosRechilus, 7.2, 7.2],
+  [[20, Teves, 30, Nisan, 10, Elul], HilchosRechilus, 7.1],
+  [[21, Teves, 1, Iyyar, 11, Elul], HilchosRechilus, 7.2],
   [[22, Teves, 2, Iyyar, 12, Elul], HilchosRechilus, 7.3, 7.4],
-  [[23, Teves, 3, Iyyar, 13, Elul], HilchosRechilus, 7.5, 7.5],
+  [[23, Teves, 3, Iyyar, 13, Elul], HilchosRechilus, 7.5],
   [[24, Teves, 4, Iyyar, 14, Elul], HilchosRechilus, 8.1, 8.3],
   [[25, Teves, 5, Iyyar, 15, Elul], HilchosRechilus, 8.4, 8.5],
   [[26, Teves, 6, Iyyar, 16, Elul], HilchosRechilus, 9.1, 9.2],
@@ -283,7 +283,7 @@ const leap = [
   [[29, Teves, 9, Iyyar, 19, Elul], HilchosRechilus, 9.7, 9.9],
   [[1, Shvat, 10, Iyyar, 20, Elul], HilchosRechilus, 9.10, 9.10],
   [[2, Shvat, 11, Iyyar, 21, Elul], HilchosRechilus, 9.11, 9.12],
-  [[3, Shvat, 12, Iyyar, 22, Elul], HilchosRechilus, 9.13, 9.13],
+  [[3, Shvat, 12, Iyyar, 22, Elul], HilchosRechilus, 9.13],
   [[4, Shvat, 13, Iyyar, 23, Elul], HilchosRechilus, 9.14, 9.15],
   [[5, Shvat, 14, Iyyar, 24, Elul], Tziyurim, 1, 2],
   [[6, Shvat, 15, Iyyar, 25, Elul], Tziyurim, 3, 3],
@@ -310,8 +310,8 @@ export function chofetzChaim(hdate) {
 
   const year = hdate.getFullYear();
   if (day === 29 &&
-    ((month === Kislev && HDate.shortKislev(year))) ||
-    ((month === Cheshvan && !HDate.longCheshvan(year)))) {
+      ((month === Kislev && HDate.shortKislev(year)) ||
+       (month === Cheshvan && !HDate.longCheshvan(year)))) {
     const extra = lookupReading(readings, 30, month);
     result.e = extra.e;
   }
@@ -337,12 +337,41 @@ function lookupReading(readings, day, month) {
         if (!result.k) {
           result.k = reading[1];
           result.b = reading[2];
+          if (typeof reading[4] === 'string') {
+            result.textBegin = reading[4];
+          }
         }
-        result.e = reading[3];
+        // Handle weird Sefaria layout of Hakdamah
+        if (Array.isArray(result.e)) {
+          result.e = result.e[result.e.length - 1];
+        } else {
+          result.e = reading[3];
+        }
+        if (typeof reading[5] === 'string') {
+          result.textEnd = reading[5];
+        }
       }
     }
   }
   return result;
+}
+
+/**
+ * @private
+ * @param {any} reading
+ * @return {string}
+ */
+function formatReadingPages(reading) {
+  let str = '';
+  if (typeof reading.b !== 'undefined') {
+    str += ' ' + reading.b;
+    if (Array.isArray(reading.e)) {
+      str += ', ' + reading.e.join(', ');
+    } else if (typeof reading.e !== 'undefined' && reading.e != reading.b) {
+      str += '-' + reading.e;
+    }
+  }
+  return str;
 }
 
 /**
@@ -354,13 +383,7 @@ class ChofetzChaimEvent extends Event {
    * @param {any} reading
    */
   constructor(date, reading) {
-    let desc = reading.k;
-    if (typeof reading.b !== 'undefined') {
-      desc += ' ' + reading.b;
-      if (typeof reading.e !== 'undefined' && reading.e != reading.b) {
-        desc += '-' + reading.e;
-      }
-    }
+    const desc = reading.k + formatReadingPages(reading);
     super(date, desc, flags.USER_EVENT);
     this.reading = reading;
     this.memo = this.render('memo');
@@ -381,11 +404,9 @@ class ChofetzChaimEvent extends Event {
     const book = reading.k;
     const book2 = book.replace('Hilchos', 'Hilchos ');
     let name = locale === 'memo' ? englishNames[book] : Locale.gettext(book2, locale);
-    if (typeof reading.b !== 'undefined') {
-      name += ' ' + reading.b;
-      if (typeof reading.e !== 'undefined' && reading.e != reading.b) {
-        name += '-' + reading.e;
-      }
+    name += formatReadingPages(reading);
+    if (typeof reading.textBegin === 'string') {
+      name += ' ' + reading.textBegin + ' - ' + reading.textEnd;
     }
     return name;
   }
@@ -410,7 +431,7 @@ class ChofetzChaimEvent extends Event {
       name += separator + reading.b;
     }
     const urlName = encodeURIComponent(name.replace(/ /g, '_'));
-    return `https://www.sefaria.org/${urlName}?lang=bi&with=Navigation&lang2=en`;
+    return `https://www.sefaria.org/${urlName}?lang=bi`;
   }
 }
 
