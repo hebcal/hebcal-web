@@ -37,8 +37,12 @@ div.yahrzeit-row {
 <a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
 </div><!-- .btn-toolbar -->
+<% if (typesSet.has('Yahrzeit')) { %>
 <p>Yahrzeit candles should be lit the evening before the date specified.
 This is because the Jewish day actually begins at sundown on the previous night.</p>
+<% } else { %>
+<p>Anniversaries begin at sundown on the evening before the date specified.</p>
+<% } %>
 <% if (adarInfo) { %>
 <div class="alert alert-info alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

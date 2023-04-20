@@ -6,6 +6,7 @@ import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
+  getAnniversaryTypes,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
 import {makeLogInfo} from './logger';
 import {isDeepStrictEqual} from 'node:util';
@@ -106,6 +107,7 @@ export async function yahrzeitApp(ctx) {
     ctx.state.tables = null;
   }
   q.years = getNumYears(q.years);
+  ctx.state.typesSet = getAnniversaryTypes(q);
   await ctx.render('yahrzeit', {
     count,
   });

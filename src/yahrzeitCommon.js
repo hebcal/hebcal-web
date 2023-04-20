@@ -57,11 +57,8 @@ export function isNumKey(k) {
  * @return {string}
  */
 export function summarizeAnniversaryTypes(query, long=false) {
-  const types0 = Object.entries(query)
-      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
-      .map((x) => getAnniversaryType(x[1]))
-      .map((x) => x === 'Other' ? 'Anniversary' : x);
-  const types = Array.from(new Set(types0));
+  const typesSet = getAnniversaryTypes(query);
+  const types = Array.from(typesSet);
   const anniversaryType = types.length === 0 ? 'Yahrzeit' :
     types.length === 1 ? types[0] : 'Anniversary';
   if (long) {
@@ -74,6 +71,18 @@ export function summarizeAnniversaryTypes(query, long=false) {
     }
   }
   return anniversaryType;
+}
+
+/**
+ * @param {Object<string,any>} query
+ * @return {Set<string>}
+ */
+export function getAnniversaryTypes(query) {
+  const types0 = Object.entries(query)
+      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
+      .map((x) => getAnniversaryType(x[1]))
+      .map((x) => x === 'Other' ? 'Anniversary' : x);
+  return new Set(types0);
 }
 
 /**
