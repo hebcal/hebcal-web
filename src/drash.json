@@ -745,36 +745,43 @@
 "Vayakhel-Pekudei":{
  "chabad.org":15569,
  "aju.edu":140,
+ "reformjudaism.org":{"target":"vayakheil-pkudei"},
  "uscj.org":{"target":"VayakhelPekudei"}
 },
 "Tazria-Metzora":{
  "chabad.org":15578,
  "aju.edu":169,
+ "reformjudaism.org":{"target":"tazria-mtzora"},
  "uscj.org":{"target":"TazriaMetzora"}
 },
 "Achrei Mot-Kedoshim":{
  "chabad.org":15581,
  "aju.edu":150,
+ "reformjudaism.org":{"target":"acharei-mot-kdoshim"},
  "uscj.org":{"target":"AhareiMotKedoshim"}
 },
 "Behar-Bechukotai":{
  "chabad.org":15585,
  "aju.edu":152,
+ "reformjudaism.org":{"target":"bhar-bchukotai"},
  "uscj.org":{"target":"BeharBehukotai"}
 },
 "Chukat-Balak":{
  "chabad.org":45613,
  "aju.edu":114,
+ "reformjudaism.org":{"target":"chukat-balak"},
  "uscj.org":{"target":"Hukkat_Balak"}
 },
 "Matot-Masei":{
  "chabad.org":52599,
  "aju.edu":122,
+ "reformjudaism.org":{"target":"matot-masei"},
  "uscj.org":{"target":"MattotMassey"}
 },
 "Nitzavim-Vayeilech":{
  "chabad.org":53151,
  "aju.edu":125,
+ "reformjudaism.org":{"target":"nitzavim-vayeilech"},
  "uscj.org":{"target":"NitzavimVayelekh"}
 }
 }

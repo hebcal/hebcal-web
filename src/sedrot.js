@@ -201,6 +201,13 @@ export async function parshaDetail(ctx) {
       .filter((s) => typeof s === 'string')
       .concat('Parashat ' + parsha.name);
   const translations = Array.from(new Set(translations0)).sort();
+  const commentary = {};
+  if (parsha.combined) {
+    const [p1] = parsha.name.split('-');
+    Object.assign(commentary, drash[p1]);
+  }
+  // doubled parsha overwrites first half
+  Object.assign(commentary, drash[parsha.name]);
   await ctx.render('parsha-detail', {
     title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} - Hebcal`,
     parsha,
@@ -218,7 +225,7 @@ export async function parshaDetail(ctx) {
     israelDiasporaDiffer,
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
-    commentary: drash[parsha.name],
+    commentary,
     summary: parsha.summaryHtml,
     translations,
     doubled,
