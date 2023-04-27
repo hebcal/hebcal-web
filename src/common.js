@@ -93,11 +93,7 @@ const optsToMask = {
   ss: flags.SPECIAL_SHABBAT,
   o: flags.OMER_COUNT,
   s: flags.PARSHA_HASHAVUA,
-  F: flags.DAF_YOMI,
-  myomi: flags.MISHNA_YOMI,
-  nyomi: flags.NACH_YOMI,
   ykk: flags.YOM_KIPPUR_KATAN,
-  yyomi: flags.YERUSHALMI_YOMI,
   molad: flags.MOLAD,
   min: flags.MINOR_HOLIDAY,
 };
@@ -117,7 +113,7 @@ const booleanOpts = {
 };
 
 const dailyLearningOpts = {
-  F: 'dafyomi',
+  F: 'dafYomi',
   myomi: 'mishnaYomi',
   nyomi: 'nachYomi',
   yyomi: 'yerushalmi',
@@ -482,6 +478,12 @@ export function makeHebcalOptions(db, query) {
       hasDailyLearning = true;
     }
   }
+  const yerushalmiEd = query.yye;
+  if (typeof yerushalmiEd === 'string' &&
+      yerushalmiEd.toLowerCase()[0] === 's') {
+    dailyLearning.yerushalmi = 2;
+    hasDailyLearning = true;
+  }
   if (hasDailyLearning) {
     options.dailyLearning = dailyLearning;
   }
@@ -582,11 +584,6 @@ export function makeHebcalOptions(db, query) {
   if (options.candlelighting && typeof options.year === 'number' &&
       ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
-  }
-  const yerushalmiEd = query.yye;
-  if (typeof yerushalmiEd === 'string' &&
-      yerushalmiEd.toLowerCase()[0] === 's') {
-    options.yerushalmiEdition = 2;
   }
   return options;
 }
@@ -1309,8 +1306,7 @@ const maxNumYear = {
   omer: 4,
   addHebrewDatesForEvents: 3,
   addHebrewDates: 2,
-  dafyomi: 2,
-  mishnaYomi: 2,
+  dailyLearning: 2,
 };
 
 /**
@@ -1336,7 +1332,7 @@ export function getNumYears(options) {
   }
   // reduce duration if 2+ daily options are specified
   const daily = (options.addHebrewDates ? 1 : 0) +
-    (options.dafyomi ? 1 : 0) + (options.mishnaYomi ? 1 : 0);
+    Object.keys(options.dailyLearning || {}).length;
   if (daily > 1) {
     numYears = 1;
   }
