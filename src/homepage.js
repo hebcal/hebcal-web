@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
-  YerushalmiYomiEvent, yerushalmiYomi, vilna,
-  NachYomiIndex, NachYomiEvent,
-  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
+import {YerushalmiYomiEvent, yerushalmiYomi, vilna,
+  NachYomiIndex, NachYomiEvent, chofetzChaim, ChofetzChaimEvent,
+  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   shortenUrl,
@@ -138,6 +138,8 @@ function mastheadDafYomi(ctx, hd) {
   const nachYomiIdx = new NachYomiIndex();
   const nachYomi = nachYomiIdx.lookup(hd);
   ctx.state.nachYomi = new NachYomiEvent(hd, nachYomi);
+  const chofetzChaimReading = chofetzChaim(hd);
+  ctx.state.chofetzChaim = new ChofetzChaimEvent(hd, chofetzChaimReading);
 }
 
 function myDateFormat(d) {

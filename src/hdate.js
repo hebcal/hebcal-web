@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, ParshaEvent, HebrewCalendar, flags, Locale,
-  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/core';
+import {HDate, ParshaEvent, HebrewCalendar, flags, Locale} from '@hebcal/core';
+import {DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';

@@ -1,4 +1,5 @@
 import {HDate, Location, months, HebrewCalendar, flags, greg, Zmanim} from '@hebcal/core';
+import '@hebcal/learning';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -109,14 +110,17 @@ const booleanOpts = {
   c: 'candlelighting',
   i: 'il',
   s: 'sedrot',
-  F: 'dafyomi',
-  myomi: 'mishnaYomi',
-  nyomi: 'nachYomi',
   euro: 'euro',
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',
-  yyomi: 'yerushalmi',
   molad: 'molad',
+};
+
+const dailyLearningOpts = {
+  F: 'dafyomi',
+  myomi: 'mishnaYomi',
+  nyomi: 'nachYomi',
+  yyomi: 'yerushalmi',
 };
 
 const numberOpts = {
@@ -212,7 +216,7 @@ function makeCookie(query, uid) {
   for (const key of Object.keys(negativeOpts)) {
     ck[key] = off(query[key]) ? 'off' : 'on';
   }
-  for (const key of Object.keys(booleanOpts)) {
+  for (const key of Object.keys(booleanOpts).concat(Object.keys(dailyLearningOpts))) {
     if (key === 'euro') {
       continue;
     }
@@ -469,6 +473,17 @@ export function makeHebcalOptions(db, query) {
     if (query[key] === 'on' || query[key] === '1') {
       options[val] = true;
     }
+  }
+  const dailyLearning = {};
+  let hasDailyLearning = false;
+  for (const [key, val] of Object.entries(dailyLearningOpts)) {
+    if (query[key] === 'on' || query[key] === '1') {
+      dailyLearning[val] = true;
+      hasDailyLearning = true;
+    }
+  }
+  if (hasDailyLearning) {
+    options.dailyLearning = dailyLearning;
   }
   options.mask = getMaskFromQuery(query);
   if (!empty(query.h12)) {
