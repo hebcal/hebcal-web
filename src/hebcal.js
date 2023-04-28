@@ -22,6 +22,7 @@ import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import './dayjs-locales';
+import '@hebcal/locales';
 
 dayjs.extend(localeData);
 
