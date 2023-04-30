@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%=lang%>"><head>
+<html lang="<%=lang%>" data-bs-theme="auto"><head>
 <meta charset="utf-8">
 <title><%= title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,12 +13,10 @@
   font-weight: 400;
 }
 a {
-  color: #007bff;
   text-decoration: none;
   background-color: transparent;
 }
 a:hover {
-  color: #0056b3;
   text-decoration: underline;
 }
 a:not([href]):not([tabindex]) {
@@ -112,4 +110,12 @@ a.outbound::after {
   }
 }
 .text-burgundy{color:#941003}
+[data-bs-theme=dark] {
+  .text-burgundy{color:#946063}
+}
 </style>
+<script>
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  document.documentElement.setAttribute('data-bs-theme', 'dark');
+}
+</script>
