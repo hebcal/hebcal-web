@@ -2,6 +2,7 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
 import {YerushalmiYomiEvent, yerushalmiYomi, vilna,
   NachYomiIndex, NachYomiEvent, chofetzChaim, ChofetzChaimEvent,
+  dailyRambam1, DailyRambamEvent,
   DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
@@ -140,6 +141,8 @@ function mastheadDafYomi(ctx, hd) {
   ctx.state.nachYomi = new NachYomiEvent(hd, nachYomi);
   const chofetzChaimReading = chofetzChaim(hd);
   ctx.state.chofetzChaim = new ChofetzChaimEvent(hd, chofetzChaimReading);
+  const rambam1 = dailyRambam1(hd);
+  ctx.state.rambam1 = new DailyRambamEvent(hd, rambam1);
 }
 
 function myDateFormat(d) {
