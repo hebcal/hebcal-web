@@ -115,6 +115,11 @@ remove_file $FILE
 node dist/chofetzChaim.js
 compress_file $FILE
 
+FILE="rambam1"
+remove_file $FILE
+node dist/dailyRambamStatic.js
+compress_file $FILE
+
 FILE="kindness"
 remove_file $FILE
 node dist/kindness.js
