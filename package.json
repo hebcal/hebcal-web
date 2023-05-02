@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.8.2",
+  "version": "2.9.0",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -45,7 +45,7 @@
     "rollup": "^3.21.2"
   },
   "dependencies": {
-    "@hebcal/core": "^4.0.0",
+    "@hebcal/core": "^4.0.1",
     "@hebcal/geo-sqlite": "^4.9.0",
     "@hebcal/icalendar": "^4.20.0",
     "@hebcal/learning": "^1.2.1",
