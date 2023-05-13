@@ -122,20 +122,13 @@ Spreadsheets for <em>leyning</em> coordinators.
 <svg width="80" height="69" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#book"></use></svg>
 <h3 class="text-center" class="text-body">Daily learning</h3>
 <div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
-<ul class="list-unstyled text-center small">
+<ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·
   <a class="text-nowrap" href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
    <li><span class="text-nowrap">Mishna Yomi</span> ·
    <a class="text-nowrap" href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
-   <li><span class="text-nowrap">Nach Yomi</span> ·
-   <a class="text-nowrap" href="<%- nachYomi.url() %>"><%= nachYomi.renderBrief(lg) %></a></li>
-   <li><span class="text-nowrap">Yerushalmi Yomi</span> ·
-  <a class="text-nowrap" href="<%- yerushalmiVilna.url() %>"><%= yerushalmiVilna.renderBrief(lg) %></a></li>
-   <li><span class="text-nowrap">Rambam</span> ·
-   <a class="text-nowrap" href="<%- rambam1.url() %>"><%= rambam1.renderBrief(lg) %></a></li>
-   <li><span class="text-nowrap">Chofetz Chaim</span> ·
-   <a class="text-nowrap" href="<%- chofetzChaim.url() %>"><%= chofetzChaim.renderBrief(lg) %></a></li>
- </ul>
+   <li><a href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">See more &raquo;</a></li>
+  </ul>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">

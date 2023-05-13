@@ -1,9 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
-import {YerushalmiYomiEvent, yerushalmiYomi, vilna,
-  NachYomiIndex, NachYomiEvent, chofetzChaim, ChofetzChaimEvent,
-  dailyRambam1, DailyRambamEvent,
-  DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
+import {DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   shortenUrl,
@@ -77,7 +74,7 @@ export async function homepage(ctx) {
 function mastheadDates(ctx, dt, afterSunset, hd) {
   const items = ctx.state.items;
   const locale = ctx.state.locale;
-  const d = dayjs(dt).locale(locale);
+  const d = ctx.state.d = dayjs(dt).locale(locale);
   const isoDt = d.format('YYYY-MM-DD');
   const afterSunsetStr = afterSunset ? ' ' + Locale.gettext('after sunset', locale) : '';
   const fmtDt = d.format('ddd, D MMMM YYYY') + afterSunsetStr;
@@ -129,20 +126,12 @@ function mastheadOmer(ctx, hd) {
   }
 }
 
+const myomiIndex = new MishnaYomiIndex();
+
 function mastheadDafYomi(ctx, hd) {
   ctx.state.dafYomi = new DafYomiEvent(hd);
-  const myomiIndex = new MishnaYomiIndex();
   const mishnaYomi = myomiIndex.lookup(hd);
   ctx.state.mishnaYomi = new MishnaYomiEvent(hd, mishnaYomi);
-  const daf = yerushalmiYomi(hd, vilna);
-  ctx.state.yerushalmiVilna = new YerushalmiYomiEvent(hd, daf);
-  const nachYomiIdx = new NachYomiIndex();
-  const nachYomi = nachYomiIdx.lookup(hd);
-  ctx.state.nachYomi = new NachYomiEvent(hd, nachYomi);
-  const chofetzChaimReading = chofetzChaim(hd);
-  ctx.state.chofetzChaim = new ChofetzChaimEvent(hd, chofetzChaimReading);
-  const rambam1 = dailyRambam1(hd);
-  ctx.state.rambam1 = new DailyRambamEvent(hd, rambam1);
 }
 
 function myDateFormat(d) {

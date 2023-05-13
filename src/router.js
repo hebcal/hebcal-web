@@ -32,6 +32,7 @@ import {omerApp} from './omerApp';
 import {sitemapZips} from './sitemapZips';
 import {getLeyning} from './leyning';
 import {sendGif} from './sendGif';
+import {dailyLearningApp} from './dailyLearning';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -94,6 +95,8 @@ export function wwwRouter() {
       return getZmanim(ctx);
     } else if (rpath.startsWith('/leyning')) {
       return getLeyning(ctx);
+    } else if (rpath.startsWith('/learning')) {
+      return dailyLearningApp(ctx);
     } else if (rpath.startsWith('/geo')) {
     // it's fine if this throws a Not Found exception
       ctx.response.type = ctx.request.header['accept'] = 'application/json';
