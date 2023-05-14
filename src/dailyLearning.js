@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {isoDateStringToDate, localeMap} from './common';
+import {isoDateStringToDate, localeMap, httpRedirect} from './common';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
@@ -10,7 +10,15 @@ const currentYear = new Date().getFullYear();
 // eslint-disable-next-line require-jsdoc
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
-  if (rpath === '/learning/sitemap.txt') {
+  if (rpath === '/learning/' || rpath === '/learning') {
+    let d = dayjs();
+    if (d.hour() > 19) {
+      d = d.add(1, 'day');
+    }
+    ctx.set('Cache-Control', 'private, max-age=3600');
+    httpRedirect(ctx, `/learning/${d.format('YYYY-MM-DD')}`, 302);
+    return;
+  } else if (rpath === '/learning/sitemap.txt') {
     const prefix = 'https://www.hebcal.com/learning';
     let body = '';
     for (let i = -1; i < 4; i++) {
