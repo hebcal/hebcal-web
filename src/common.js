@@ -110,6 +110,7 @@ const booleanOpts = {
   M: 'havdalahTzeit',
   ykk: 'yomKippurKatan',
   molad: 'molad',
+  yto: 'yomTovOnly',
 };
 
 const dailyLearningOpts = {
@@ -117,6 +118,9 @@ const dailyLearningOpts = {
   myomi: 'mishnaYomi',
   nyomi: 'nachYomi',
   yyomi: 'yerushalmi',
+  dr1: 'rambam1',
+  dcc: 'chofetzChaim',
+  dshl: 'shemiratHaLashon',
 };
 
 const numberOpts = {
@@ -213,7 +217,7 @@ function makeCookie(query, uid) {
     ck[key] = off(query[key]) ? 'off' : 'on';
   }
   for (const key of Object.keys(booleanOpts).concat(Object.keys(dailyLearningOpts))) {
-    if (key === 'euro') {
+    if (key === 'euro' || key === 'yto') {
       continue;
     }
     ck[key] = (query[key] === 'on' || query[key] == '1') ? 'on' : 'off';
@@ -882,18 +886,40 @@ export function httpRedirect(ctx, rpath, status=302) {
  */
 export function makeHebrewCalendar(ctx, options) {
   let events;
+  // stash away values to avoid warning
+  const yomTovOnly = options.yomTovOnly;
+  const noMinorHolidays = options.noMinorHolidays;
+  if (yomTovOnly) {
+    delete options.yomTovOnly;
+  }
+  if (noMinorHolidays) {
+    delete options.noMinorHolidays;
+  }
   try {
     events = HebrewCalendar.calendar(options);
   } catch (err) {
     const status = err.status || 400;
     ctx.throw(status, err);
   }
-  if (options.noMinorHolidays) {
+  if (yomTovOnly) {
+    events = events.filter((ev) => {
+      const categories = getEventCategories(ev);
+      return (categories[0] === 'holiday' && (ev.getFlags() & flags.CHAG));
+    });
+  } else if (noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
       return categories.length < 2 || categories[1] !== 'minor';
     });
   }
+  // restore values
+  if (yomTovOnly) {
+    options.yomTovOnly = true;
+  }
+  if (noMinorHolidays) {
+    options.noMinorHolidays = true;
+  }
+
   return events;
 }
 

@@ -56,10 +56,10 @@ export function dailyLearningApp(ctx) {
       dafYomi: true,
       mishnaYomi: true,
       nachYomi: true,
-      chofetzChaim: true,
-      shemiratHaLashon: true,
       rambam1: true,
       yerushalmi: true,
+      chofetzChaim: true,
+      shemiratHaLashon: true,
     },
   });
 
