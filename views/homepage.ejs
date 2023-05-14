@@ -119,8 +119,10 @@ Spreadsheets for <em>leyning</em> coordinators.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
+<a href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">
 <svg width="80" height="69" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#book"></use></svg>
-<h3 class="text-center" class="text-body">Daily learning</h3>
+</a>
+<h3 class="text-center"><a class="text-body" href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">Daily learning</a></h3>
 <div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
 <ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·

@@ -1,7 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: `Daily Learning - ${hd.toString()} - ${d.format('D MMMM YYYY')} - Hebcal`,
 }) -%>
-<% if (d.year() <= 1752 || d.year() > FUTURE_100_YEARS) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (d.year() < currentYear-10 || d.year() > currentYear+10) { %><meta name="robots" content="noindex, nofollow"><% } %>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -11,30 +11,30 @@
 <% if (d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h2>Learning for <%= hd.render(lg, true) %></h2>
+<h2>Learning for <span class="text-nowrap"><%= hd.render(lg, true) %></span></h2>
 <ul class="bullet-list-inline">
 <li class="text-nowrap fs-3 text-burgundy"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap"><%= d.format('dddd, D MMMM YYYY') %></time></li>
 <% for (const ev of holidays) { %>
-<li class="text-nowrap fs-4"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render(lg) %><% if (ev.url()) { %></a><% } %></li>
+<li class="text-nowrap fs-5"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render(lg) %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
 </ul>
 
-<ul class="list-unstyled">
-<% for (const reading of readings) { %>
-  <li class="fs-4 mt-2"><% if (reading.parshaNum) { %>Parashat <% } %><%= reading.name.en %>: <% if (reading.html) { %><%- reading.html %><% } else if (reading.summary) { %><%= reading.summary %><% } %></li>
-<% } %>
 <% for (const item of items) { %>
-  <li class="fs-4 mt-2"><%= item.prefix %>: <% if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %></li>
+<div class="lead mt-3"><%= item.category %></div>
+<div class="fs-4 mt-n1"><% if (item.html) { %><%- item.html %><% } else { %>
+<%   if (item.url) { %><a class="outbound" href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
+<%   } %>
+</div>
+<%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% } %>
-</ul>
 
 </div><!-- .col -->
 </div><!-- .row -->
-<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (d.year() > 1752) { -%>
+<div class="d-flex gx-2 mt-4 justify-content-between d-print-none">
+<% if (d.year() > currentYear-10) { -%>
 <div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.format('YYYY-MM-DD')%>"><span aria-hidden="true">←&nbsp;</span><%=hd.prev().render(lg, false)%></a></div>
 <% } -%>
-<% if (d.year() < FUTURE_100_YEARS) { -%>
+<% if (d.year() < currentYear+10) { -%>
 <div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.format('YYYY-MM-DD')%>"><%=hd.next().render(lg, false)%><span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>

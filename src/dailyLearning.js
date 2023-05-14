@@ -1,13 +1,11 @@
 import dayjs from 'dayjs';
 import {isoDateStringToDate, localeMap} from './common';
 import {basename} from 'path';
-import {HDate, HebrewCalendar} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon';
 
-const FUTURE_100_YEARS = new Date().getFullYear() + 100;
-// const CACHE_CONTROL_30DAYS = cacheControl(30);
-// const CACHE_CONTROL_1_YEAR = cacheControl(365);
+const currentYear = new Date().getFullYear();
 
 // eslint-disable-next-line require-jsdoc
 export function dailyLearningApp(ctx) {
@@ -15,8 +13,7 @@ export function dailyLearningApp(ctx) {
   if (rpath === '/learning/sitemap.txt') {
     const prefix = 'https://www.hebcal.com/learning';
     let body = '';
-    const currentYear = new Date().getFullYear();
-    for (let i = 0; i < 3; i++) {
+    for (let i = -1; i < 4; i++) {
       const year = currentYear + i;
       const startD = dayjs(new Date(year, 0, 1));
       const endD = dayjs(new Date(year + 1, 0, 1));
@@ -25,12 +22,17 @@ export function dailyLearningApp(ctx) {
       }
     }
     ctx.lastModified = ctx.launchDate;
-    // ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
     ctx.type = 'text/plain';
     ctx.body = body;
     return;
   }
   const dt = isoDateStringToDate(basename(rpath));
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const hd = new HDate(dt);
   const d = dayjs(dt);
   const q = ctx.request.query;
@@ -54,33 +56,53 @@ export function dailyLearningApp(ctx) {
   });
 
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  switch (hd.getMonth()) {
+    case months.NISAN:
+    case months.IYYAR:
+    case months.SIVAN:
+      const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
+      const abs = hd.abs();
+      if (abs >= beginOmer && abs < (beginOmer + 49)) {
+        const omer = abs - beginOmer + 1;
+        holidays.push(new OmerEvent(hd, omer));
+      }
+      break;
+    default:
+      break;
+  }
 
+  const items0 = [];
   const readings = getLeyningOnDate(hd, il, true);
   for (const reading of readings) {
+    const prefix = reading.weekday ? 'Weekday Torah reading' :
+      reading.fullkriyah && typeof reading.parshaNum === 'number' ? 'Shabbat Torah reading' :
+      reading.fullkriyah ? 'Holiday Torah reading' :
+      reading.megillah ? 'Megillah' : 'Reading';
+    const item = {
+      category: prefix + ': ' + Locale.gettext(reading.name.en, lg),
+    };
     const aliyot = reading.fullkriyah || reading.weekday || reading.megillah;
     if (reading.summaryParts) {
-      reading.html = makeLeyningHtmlFromParts(reading.summaryParts);
+      item.html = makeLeyningHtmlFromParts(reading.summaryParts);
     } else if (aliyot) {
       const parts = makeLeyningParts(aliyot);
-      reading.html = makeLeyningHtmlFromParts(parts);
+      item.html = makeLeyningHtmlFromParts(parts);
     }
     if (reading.haft) {
-      reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
+      item.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
     }
-    if (reading.seph) {
-      reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
-    }
+    items0.push(item);
   }
 
   const items = events.map((ev) => {
     return {
-      prefix: prefix(ev),
+      category: getCategory(ev),
       title: ev.renderBrief(lg),
       url: ev.url(),
     };
   });
-  ctx.lastModified = ctx.launchDate;
-  // ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+  items.unshift(...items0);
+
   return ctx.render('dailyLearning', {
     d,
     hd,
@@ -90,8 +112,7 @@ export function dailyLearningApp(ctx) {
     next: d.add(1, 'day'),
     items,
     holidays,
-    readings,
-    FUTURE_100_YEARS,
+    currentYear,
   });
 }
 
@@ -99,7 +120,7 @@ export function dailyLearningApp(ctx) {
  * @param {Event} ev
  * @return {string}
  */
-function prefix(ev) {
+function getCategory(ev) {
   const cats = ev.getCategories();
   switch (cats[0]) {
     case 'dafyomi': return 'Daf Yomi';
