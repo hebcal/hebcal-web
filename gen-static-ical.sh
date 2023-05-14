@@ -20,23 +20,25 @@ DOWNLOAD_URL="http://127.0.0.1:8080"
 
 remove_file() {
     file=$1
-    rm -f "${file}.ics" "${file}.csv" "${file}.ics.br" "${file}.csv.br" "${file}.ics.gz" "${file}.csv.gz"
+    rm -f "ical/${file}.ics" "ical/${file}.csv" "ical/${file}.ics.br" "ical/${file}.csv.br" "ical/${file}.ics.gz" "ical/${file}.csv.gz"
 }
 
 fetch_urls () {
     file=$1
     args=$2
     remove_file $file
-    curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.ics?${args}" && cp $TMPFILE "${file}.ics"
-    curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.csv?${args}" && cp $TMPFILE "${file}.csv"
-    chmod 0644 "${file}.ics" "${file}.csv"
+    curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.ics?${args}" && cp $TMPFILE "ical/${file}.ics"
+    curl -o $TMPFILE "${DOWNLOAD_URL}/export/${file}.csv?${args}" && cp $TMPFILE "ical/${file}.csv"
+    chmod 0644 "ical/${file}.ics" "ical/${file}.csv"
 }
 
 compress_file() {
     file=$1
-    nice brotli --keep --best "${file}.ics" "${file}.csv"
-    nice gzip --keep --best "${file}.ics" "${file}.csv"
+    nice brotli --keep --best "ical/${file}.ics" "ical/${file}.csv"
+    nice gzip --keep --best "ical/${file}.ics" "ical/${file}.csv"
 }
+
+mkdir -p ical
 
 FILE="jewish-holidays-v2"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
@@ -113,16 +115,19 @@ compress_file $FILE
 FILE="chofetz-chaim"
 remove_file $FILE
 node dist/chofetzChaim.js
+mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 
 FILE="rambam1"
 remove_file $FILE
 node dist/dailyRambamStatic.js
+mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 
 FILE="kindness"
 remove_file $FILE
 node dist/kindness.js
+mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 
 rm -f $TMPFILE
