@@ -119,17 +119,17 @@ Spreadsheets for <em>leyning</em> coordinators.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
-<a href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">
+<a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">
 <svg width="80" height="69" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#book"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body" href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">Daily learning</a></h3>
+<h3 class="text-center"><a class="text-body" href="/learning/<%=isoDt%><%=il?'?i=on':''%>">Daily learning</a></h3>
 <div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
 <ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·
   <a class="text-nowrap" href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
    <li><span class="text-nowrap">Mishna Yomi</span> ·
    <a class="text-nowrap" href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
-   <li><a href="/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">See more &raquo;</a></li>
+   <li><a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">See more &raquo;</a></li>
   </ul>
 </div><!-- .col-sm-4 -->
 
