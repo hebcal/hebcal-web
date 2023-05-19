@@ -129,7 +129,10 @@ export async function holidayDetail(ctx) {
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
-  const descrMedium = appendPeriod(getHolidayDescription(next.event, false));
+  const descrMedium0 = getHolidayDescription(next.event, false);
+  const descrMedium = appendPeriod(descrMedium0);
+  const sentences = descrMedium0.split(/\.\s+/).slice(0, 2);
+  const descFirstTwo = appendPeriod(sentences.join('. '));
   const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
   const hebrew = Locale.gettext(holiday, 'he');
   const title = makePageTitle(holiday, year, il, descrShort);
@@ -151,6 +154,7 @@ export async function holidayDetail(ctx) {
     hebrew,
     descrShort: descrShort.replace(/'/g, '’'),
     descrMedium: descrMedium.replace(/'/g, '’'),
+    descFirstTwo: descFirstTwo.replace(/'/g, '’'),
     descrLong: wrapHebrewInSpans(descrLong).replace(/'/g, '’'),
     categoryId: category.id,
     categoryName: category.name,

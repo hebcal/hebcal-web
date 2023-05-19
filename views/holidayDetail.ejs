@@ -4,7 +4,7 @@
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>">
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
-<meta name="description" content="Jewish holiday of <%=holiday%>, <%=nextObserved%>. <%=descrMedium%>">
+<meta name="description" content="<%=descFirstTwo%> <%=holiday%> <%=nextObserved%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
@@ -36,15 +36,15 @@
 <div>
 <% if (typeof amp === 'boolean' && amp) { -%>
 <amp-img alt="<%=meta.photo.caption||holiday%>"
-src="/i/is/800/<%=meta.photo.fn%>"
-width="<%=meta.photo.dimensions[800].width/meta.photo.dimensions[800].height%>"
+src="/i/is/640/<%=meta.photo.fn%>"
+width="<%=meta.photo.dimensions[640].width/meta.photo.dimensions[640].height%>"
 height="1"
 layout="responsive"></amp-img>
 <% } else { -%>
 <img alt="<%=meta.photo.caption||holiday%>"
-src="/i/is/800/<%=meta.photo.fn%>"
-width="<%=meta.photo.dimensions[800].width%>"
-height="<%=meta.photo.dimensions[800].height%>"
+src="/i/is/640/<%=meta.photo.fn%>"
+width="<%=meta.photo.dimensions[640].width%>"
+height="<%=meta.photo.dimensions[640].height%>"
 srcset="/i/is/800/<%=meta.photo.fn%> 800w, /i/is/640/<%=meta.photo.fn%> 640w, /i/is/400/<%=meta.photo.fn%> 400w"
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
 class="img-fluid">
