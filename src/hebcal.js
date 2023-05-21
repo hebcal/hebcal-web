@@ -214,13 +214,15 @@ function renderHtml(ctx) {
   const memos = {};
   const items = events.map((ev) => {
     const item0 = eventToClassicApiObject(ev, options, false);
-    const bn = ev.basename();
     const item = {
       title: item0.title,
       date: item0.date,
       category: item0.category,
-      bn,
     };
+    const bn = ev.basename();
+    if (bn !== item0.title) {
+      item.bn = bn;
+    }
     if (locale === 'he' || options.appendHebrewToSubject) {
       item.hebrew = item0.hebrew;
     }
@@ -231,7 +233,7 @@ function renderHtml(ctx) {
       item.yomtov = true;
     }
     if (item0.memo && typeof memos[bn] === 'undefined' && item0.date.indexOf('T') === -1) {
-      const fullStop = item0.memo.indexOf('.');
+      const fullStop = item0.memo.indexOf('. ');
       memos[bn] = fullStop === -1 ? item0.memo : item0.memo.substring(0, fullStop);
     }
     return item;

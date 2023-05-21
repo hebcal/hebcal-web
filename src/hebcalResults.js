@@ -171,7 +171,8 @@ function tableRow(evt) {
   if (evt.link) {
     subj = `<a href="${evt.link}">${subj}</a>`;
   }
-  const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
+  const basename = evt.bn || evt.title;
+  const memo0 = basename && window['hebcal'].memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
   return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}"${memo}>${subj}</span></td></tr>`;
 }
@@ -239,7 +240,8 @@ function renderEventHtml(evt) {
   if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
     subj += `<br><span lang="he" dir="rtl">${evt.hebrew}</span>`;
   }
-  const memo0 = evt.bn && window['hebcal'].memos[evt.bn];
+  const basename = evt.bn || evt.title;
+  const memo0 = basename && window['hebcal'].memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
   const url = evt.link;
   const ahref = url ? `<a href="${url}">` : '';
