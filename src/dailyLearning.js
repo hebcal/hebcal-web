@@ -86,9 +86,10 @@ export function dailyLearningApp(ctx) {
       reading.fullkriyah && typeof reading.parshaNum === 'number' ? 'Shabbat Torah reading' :
       reading.fullkriyah ? 'Holiday Torah reading' :
       reading.megillah ? 'Megillah' : 'Reading';
-    const item = {
-      category: prefix + ': ' + Locale.gettext(reading.name.en, lg),
-    };
+    const category = reading.name.en.startsWith('Rosh Chodesh ') ?
+      'Rosh Chodesh Torah reading' :
+      prefix + ': ' + Locale.gettext(reading.name.en, lg);
+    const item = {category};
     const aliyot = reading.fullkriyah || reading.weekday || reading.megillah;
     if (reading.summaryParts) {
       item.html = makeLeyningHtmlFromParts(reading.summaryParts);
