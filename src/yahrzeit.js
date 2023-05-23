@@ -134,7 +134,9 @@ function getOrMakeUlid(ctx) {
 async function getCalPickerIds(ctx, ids) {
   const db = ctx.mysql;
   const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
+  ctx.state.mysqlQuery = sql;
   const results = await db.query({sql, values: ids, timeout: 5000});
+  delete ctx.state.mysqlQuery;
   const calendars = results.map((row) => {
     const names = getCalendarNames(row.contents);
     const title = makeCalendarTitle(row.contents, 100);
@@ -306,7 +308,9 @@ async function saveDataToDb(ctx) {
   logInfo.calendarId = id;
   const db = ctx.mysql;
   const sqlExists = 'SELECT contents FROM yahrzeit WHERE id = ?';
+  ctx.state.mysqlQuery = sqlExists;
   const results = await db.query({sql: sqlExists, values: [id], timeout: 5000});
+  delete ctx.state.mysqlQuery;
   if (results && results[0]) {
     const prev = results[0].contents;
     noSaveFields.forEach((key) => delete prev[key]);
@@ -320,12 +324,16 @@ async function saveDataToDb(ctx) {
   const ip = getIpAddress(ctx);
   if (!results || !results[0]) {
     const sql = 'REPLACE INTO yahrzeit (id, created, ip, contents) VALUES (?, NOW(), ?, ?)';
+    ctx.state.mysqlQuery = sql;
     await db.execute({sql, values: [id, ip, contents], timeout: 5000});
+    delete ctx.state.mysqlQuery;
     logInfo.msg = `yahrzeit-db: created calendarId=${id}`;
     ctx.logger.info(logInfo);
   } else {
     const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
+    ctx.state.mysqlQuery = sql;
     await db.execute({sql, values: [contents, ip, id], timeout: 5000});
+    delete ctx.state.mysqlQuery;
     logInfo.msg = `yahrzeit-db: updated calendarId=${id}`;
     ctx.logger.info(logInfo);
   }

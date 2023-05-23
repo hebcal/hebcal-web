@@ -19,7 +19,7 @@ export class MysqlDb {
       user,
       password,
       database,
-      connectionLimit: 5,
+      connectionLimit: 10,
       waitForConnections: true,
       queueLimit: 0,
     });

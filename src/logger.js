@@ -112,6 +112,9 @@ export function makeLogInfo(ctx) {
       }
     }
   }
+  if (ctx.state.mysqlQuery) {
+    info.sql = mysqlQuery;
+  }
   return info;
 }
 

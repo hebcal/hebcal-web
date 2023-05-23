@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.10.2",
+  "version": "2.10.3",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -42,7 +42,7 @@
     "eslint": "^8.41.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.0",
-    "rollup": "^3.22.0"
+    "rollup": "^3.23.0"
   },
   "dependencies": {
     "@hebcal/core": "^4.0.3",
@@ -77,7 +77,7 @@
     "koa-timeout-v2": "^1.0.0",
     "maxmind": "^4.3.11",
     "murmurhash3": "^0.5.0",
-    "mysql2": "^3.3.1",
+    "mysql2": "^3.3.2",
     "nodemailer": "^6.9.2",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
