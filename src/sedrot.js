@@ -183,8 +183,8 @@ export async function parshaDetail(ctx) {
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
-  const hasTriennial = !il && hyear >= 5744;
-  const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName) : {};
+  const hasTriennial = hyear >= 5744;
+  const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName, il) : {};
   const titleYear = date ? ' ' + hyear : '';
   const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
   const otherLocationSedra = HebrewCalendar.getSedra(hyear, !il);
@@ -281,9 +281,9 @@ function getParshaDateAnchor(ev) {
   return {anchor: desc + '-' + dateStr + iSuffix, d, ev, name};
 }
 
-function makeTriennial(date, parshaEv, hyear, parshaName) {
+function makeTriennial(date, parshaEv, hyear, parshaName, il) {
   if (date) {
-    const reading = getTriennialForParshaHaShavua(parshaEv);
+    const reading = getTriennialForParshaHaShavua(parshaEv, il);
     if (parshaName === VEZOT_HABERAKHAH) {
       for (let i = 1; i <= 6; i++) {
         delete reading.aliyot[i].reason;
@@ -306,17 +306,17 @@ function makeTriennial(date, parshaEv, hyear, parshaName) {
   }
   const triennial = {};
   const startYear = Triennial.getCycleStartYear(hyear);
-  const tri = getTriennial(startYear);
+  const tri = getTriennial(startYear, il);
   triennial.readings = Array(3);
   for (let yr = 0; yr < 3; yr++) {
-    const reading = makeTriReading(tri, yr, parshaName);
+    const reading = makeTriReading(tri, yr, parshaName, il);
     reading.hyear = startYear + yr;
     triennial.readings[yr] = reading;
   }
   return triennial;
 }
 
-function makeTriReading(tri, yr, parshaName) {
+function makeTriReading(tri, yr, parshaName, il) {
   const triReading = tri.getReading(parshaName, yr);
   if (triReading.readSeparately) {
     triReading.p1d = dayjs(triReading.date1.greg());
@@ -328,8 +328,8 @@ function makeTriReading(tri, yr, parshaName) {
     return triReading;
   }
   const hd = triReading.date;
-  const ev = new ParshaEvent(hd, [parshaName], false);
-  const triReading2 = getTriennialForParshaHaShavua(ev);
+  const ev = new ParshaEvent(hd, [parshaName], il);
+  const triReading2 = getTriennialForParshaHaShavua(ev, il);
   addLinksToLeyning(triReading2.aliyot, false);
   for (const aliyah of Object.values(triReading2.aliyot)) {
     aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
@@ -338,16 +338,16 @@ function makeTriReading(tri, yr, parshaName) {
     }
   }
   triReading2.d = dayjs(hd.greg());
-  addSpecialHaftarahToTriennial(ev, triReading2);
+  addSpecialHaftarahToTriennial(ev, triReading2, il);
   return triReading2;
 }
 
-function addSpecialHaftarahToTriennial(ev, triReading2) {
+function addSpecialHaftarahToTriennial(ev, triReading2, il) {
   const parshaName = ev.parsha[0];
   if (parshaName === VEZOT_HABERAKHAH) {
     return;
   }
-  const fk = getLeyningForParshaHaShavua(ev, false);
+  const fk = getLeyningForParshaHaShavua(ev, il);
   if (fk.reason?.haftara) {
     triReading2.haftara = fk.haftara;
     triReading2.haftaraHtml = makeLeyningHtmlFromParts(fk.haft);

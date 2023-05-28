@@ -141,17 +141,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
 <% } // !date %>
-<% } else if (il && !date) { %>
-<div class="col-sm-6">
-<h5>Triennial</h5>
-<p class="small">See <a href="<%=parsha.anchor%>">Diaspora reading</a></p>
-</div>
-<% } else if (il && !israelDiasporaDiffer) { %>
-<div class="col-sm-6">
-<h5>Triennial</h5>
-<p class="small">See <a href="<%=parsha.anchor%>-<%=d.format('YYYYMMDD')%>">Diaspora reading</a></p>
-</div>
-<% } // !il %>
+<% } // !hasTriennial %>
 </div><!-- .row -->
 <div class="row">
 <div class="col">

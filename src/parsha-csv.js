@@ -9,7 +9,8 @@ import {HebrewCalendar, HDate, months} from '@hebcal/core';
 
 const reFullKriyahIL = /^fullkriyah-il-(\d+).csv$/;
 const reFullKriyahDiaspora = /^fullkriyah-(\d+).csv$/;
-const reTriennial = /^triennial-(\d+)-\d+.csv$/;
+const reTriennialIL = /^triennial-il-(\d+)-\d+.csv$/;
+const reTriennialDiaspora = /^triennial-(\d+)-\d+.csv$/;
 const reWeekday = /^weekday-\w+-(\d+).csv$/;
 
 export async function parshaCsv(ctx) {
@@ -20,7 +21,9 @@ export async function parshaCsv(ctx) {
     sendCsv(ctx, base, matches[1], true, writeFullKriyahCsv);
   } else if ((matches = reFullKriyahDiaspora.exec(base)) !== null) {
     sendCsv(ctx, base, matches[1], false, writeFullKriyahCsv);
-  } else if ((matches = reTriennial.exec(base)) !== null) {
+  } else if ((matches = reTriennialIL.exec(base)) !== null) {
+    sendCsv(ctx, base, matches[1], true, writeTriennialCsv);
+  } else if ((matches = reTriennialDiaspora.exec(base)) !== null) {
     sendCsv(ctx, base, matches[1], false, writeTriennialCsv);
   } else if ((matches = reWeekday.exec(base)) !== null) {
     const il = base.startsWith('weekday-il-');

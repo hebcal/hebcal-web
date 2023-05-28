@@ -41,7 +41,7 @@ export async function getLeyning(ctx) {
   }
 
   const startHd = new HDate(startD.toDate());
-  const doTriennial = !il && q.triennial !== 'off' && startHd.getFullYear() >= 5745;
+  const doTriennial = q.triennial !== 'off' && startHd.getFullYear() >= 5745;
   const items = [];
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
     const hd = new HDate(d.toDate());
@@ -50,7 +50,7 @@ export async function getLeyning(ctx) {
       const item = makeReadingItem(d, hd, reading);
       if (doTriennial && reading.parsha && hd.getDay() === 6) {
         const ev = new ParshaEvent(hd, reading.parsha, il);
-        const triReading = getTriennialForParshaHaShavua(ev);
+        const triReading = getTriennialForParshaHaShavua(ev, il);
         item.triennial = triReading.aliyot;
         item.triYear = triReading.yearNum + 1;
         item.triHaftara = triReading.haftara;

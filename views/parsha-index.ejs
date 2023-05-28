@@ -120,9 +120,8 @@ spreadsheet program.</p>
  <li>The <strong>Weekday CSV</strong> files contain Torah readings for Mondays &amp; Thursdays (and Shabbat mincha) when those days don't
     co-occur with one of the events above. In other words, these files are intended to be mutually exclusive with the
     Full Kriyah Shabbat/holiday files.</li>
- <li><strong>Triennial CSV</strong> files are available for the Diaspora only, as the USCJ/RA has not published aliyah-by-aliyah tables
-    that follow the
-    <a href="/home/51/what-is-the-differerence-between-the-diaspora-and-israeli-sedra-schemes">Israeli sedra scheme</a>.</li>
+ <li><strong>Triennial CSV</strong> files follow
+  <a href="/home/50/what-is-the-triennial-torah-reading-cycle">Triennial Torah Reading Cycle</a>.</li>
 </ul>
 </div><!-- .col -->
 </div><!-- .row -->
@@ -183,6 +182,20 @@ Weekday <%=yr-%>
 <% if (yr === hyear) { %><mark><% } -%>
 Full Kriyah <%=yr-%>
 <% if (yr === hyear) { %></mark><% } -%>
+</a></li>
+<% } %>
+</ul>
+</div><!-- .col-md -->
+
+<div class="col-md">
+<p>Israel Triennial
+  <svg class="icon me-1" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+<ul class="list-unstyled lh-lg" role="menu">
+<% for (let yr = triCycleStartYear - 3; yr <= triCycleStartYear + 12; yr += 3) { %>
+<li><a class="download" id="leyning-triennial-il-<%=yr%>" href="triennial-il-<%=yr%>-<%=yr+2%>.csv" rel="nofollow" download="triennial-il-<%=yr%>-<%=yr+2%>.csv">
+<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %><mark><% } -%>
+Triennial <%=yr%>-<%=yr+2-%>
+<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
