@@ -32,20 +32,14 @@
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="<%-dlhref%>" download="<%=dlfilename%>">
 <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
 Download Calendar .ics</a>
-<% if (il) { %>
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="fullkriyah-il-<%=hyear%>.csv" download="fullkriyah-il-<%=hyear%>.csv">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
-  Download Leyning</a>
-<% } else { %>
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="fullkriyah-<%=hyear%>.csv" download="fullkriyah-<%=hyear%>.csv">
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="fullkriyah-<%=il?'il-':''%><%=hyear%>.csv" download="fullkriyah-<%=il?'il-':''%><%=hyear%>.csv">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
   Download Leyning (Full Kriyah)</a>
 <%   if (triCycleStartYear) { %>
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv" download="triennial-<%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv">
+<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="triennial-<%=il?'il-':''%><%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv" download="triennial-<%=il?'il-':''%><%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
   Download Leyning (Triennial)</a>
 <%   } %>
-<% } %>
 </div>
 
 <nav class="d-print-none mb-3">
