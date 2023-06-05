@@ -39,10 +39,10 @@
     "@rollup/plugin-terser": "^0.4.3",
     "corejs-typeahead": "^1.3.1",
     "csv-parse": "^5.4.0",
-    "eslint": "^8.41.0",
+    "eslint": "^8.42.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.0",
-    "rollup": "^3.23.0"
+    "rollup": "^3.23.1"
   },
   "dependencies": {
     "@hebcal/core": "^4.0.3",
@@ -54,7 +54,7 @@
     "@hebcal/rest-api": "^4.5.1",
     "@hebcal/triennial": "^1.3.2",
     "better-sqlite3": "^8.4.0",
-    "dayjs": "^1.11.7",
+    "dayjs": "^1.11.8",
     "ejs": "^3.1.9",
     "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
