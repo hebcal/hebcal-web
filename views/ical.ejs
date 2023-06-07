@@ -156,6 +156,15 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
   years: 5,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Daily Tehillim (Psalms)', id: 'psalms',
+  emoji: '📖',
+  summary: `<p>Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim).
+The entire book is completed on the final day of each Hebrew month.
+On months with 29 days, the 30th portion is combined with the 29th portion.</p>`,
+  feedLength: 365,
+  years: 2,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yerushalmi Yomi (Vilna)', id: 'yerushalmi-vilna',
   emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Vilna Edition).

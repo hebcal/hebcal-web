@@ -56,6 +56,7 @@ export function dailyLearningApp(ctx) {
       dafYomi: true,
       mishnaYomi: true,
       nachYomi: true,
+      psalms: true,
       rambam1: true,
       yerushalmi: true,
       chofetzChaim: true,
@@ -132,13 +133,14 @@ export function dailyLearningApp(ctx) {
 function getCategory(ev) {
   const cats = ev.getCategories();
   switch (cats[0]) {
-    case 'dafyomi': return 'Daf Yomi';
+    case 'dafyomi': return 'Daf Yomi (Babylonian Talmud)';
     case 'mishnayomi': return 'Mishna Yomi';
     case 'nachyomi': return 'Nach Yomi';
+    case 'dailyPsalms': return 'Daily Tehillim (Psalms)';
     case 'chofetzChaim': return 'Sefer Chofetz Chaim';
     case 'shemiratHaLashon': return 'Shemirat HaLashon';
     case 'dailyRambam1': return 'Daily Rambam (Mishneh Torah)';
-    case 'yerushalmi': return 'Yerushalmi Yomi';
+    case 'yerushalmi': return 'Yerushalmi Yomi (Jerusalem Talmud)';
     case 'parashat': return 'Torah portion';
     default: return '';
   }

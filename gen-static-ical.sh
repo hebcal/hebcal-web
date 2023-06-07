@@ -112,6 +112,10 @@ FILE="rosh-chodesh"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=off&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=on&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Rosh+Chodesh&caldesc=Rosh+Chodesh+is+a+minor+holiday+observed+at+the+beginning+of+every+month+in+the+Hebrew+calendar&color=%236F42C1"
 compress_file $FILE
 
+FILE="psalms"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-48ac-bb29-076c77405361&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daily+Tehillim+%28Psalms%29&caldesc=TODO"
+compress_file $FILE
+
 FILE="chofetz-chaim"
 remove_file $FILE
 node dist/chofetzChaim.js

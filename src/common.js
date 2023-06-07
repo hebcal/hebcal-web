@@ -121,6 +121,7 @@ const dailyLearningOpts = {
   dr1: 'rambam1',
   dcc: 'chofetzChaim',
   dshl: 'shemiratHaLashon',
+  dps: 'psalms',
 };
 
 const numberOpts = {
