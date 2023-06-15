@@ -16,7 +16,7 @@ for (const [holiday, meta] of Object.entries(holidayMeta)) {
 export const categories = {
   major: {id: 'major-holidays', name: 'Major holidays', emoji: '✡️'},
   minor: {id: 'minor-holidays', name: 'Minor holidays', emoji: '✡️'},
-  fast: {id: 'minor-fasts', name: 'Minor fasts', emoji: '✡️'},
+  fast: {id: 'minor-fasts', name: 'Minor fasts', emoji: ''},
   modern: {id: 'modern-holidays', name: 'Modern holidays', emoji: '🇮🇱'},
   shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot', emoji: '🕍'},
   roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh', emoji: '🌒'},
