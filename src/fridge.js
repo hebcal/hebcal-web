@@ -49,7 +49,7 @@ function makeProperties(ctx) {
   let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
   for (const opt of ['a', 'i', 'b', 'm', 'M', 'lg']) {
     if (query[opt]) {
-      url += `&amp;${opt}=${query[opt]}`;
+      url += `&${opt}=${query[opt]}`;
     }
   }
   const locale = Locale.getLocaleName();

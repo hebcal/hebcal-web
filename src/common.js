@@ -471,16 +471,28 @@ export function makeHebcalOptions(db, query) {
     delete query.m;
   }
   for (const [key, val] of Object.entries(booleanOpts)) {
-    if (query[key] === 'on' || query[key] === '1') {
+    const qkv = query[key];
+    if (qkv === 'on' || qkv === '1') {
       options[val] = true;
+    } else if (typeof qkv === 'string' && qkv.length) {
+      const val2 = qkv.toLowerCase();
+      if (val2 !== 'off' && val2 !== '0') {
+        delete query[key];
+      }
     }
   }
   const dailyLearning = {};
   let hasDailyLearning = false;
   for (const [key, val] of Object.entries(dailyLearningOpts)) {
-    if (query[key] === 'on' || query[key] === '1') {
+    const qkv = query[key];
+    if (qkv === 'on' || qkv === '1') {
       dailyLearning[val] = true;
       hasDailyLearning = true;
+    } else if (typeof qkv === 'string' && qkv.length) {
+      const val2 = qkv.toLowerCase();
+      if (val2 !== 'off' && val2 !== '0') {
+        delete query[key];
+      }
     }
   }
   const yerushalmiEd = query.yye;
