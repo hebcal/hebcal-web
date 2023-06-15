@@ -179,8 +179,7 @@ export function wwwRouter() {
       return omerApp(rpath, ctx);
     } else if (rpath === '/sitemap_zips.txt') {
       return sitemapZips(ctx);
-    } else if (rpath === '/matomo/matomo.js' ||
-               (rpath.startsWith('/a/js/') && rpath.endsWith('.js'))) {
+    } else if (rpath === '/matomo/matomo.js') {
       ctx.set('Cache-Control', 'private, max-age=0');
       ctx.type = 'application/javascript';
       ctx.body = '/* Nothing to see here */\n';
@@ -191,11 +190,14 @@ export function wwwRouter() {
         return;
       }
       return sendGif(ctx);
-    } else if (rpath === '/a/api/event') {
-      ctx.set('Cache-Control', 'private, max-age=0');
-      ctx.status = 202;
+    } else if (rpath === '/.well-known/security.txt') {
+      ctx.lastModified = ctx.launchDate;
       ctx.type = 'text/plain';
-      ctx.body = 'bogus';
+      const expires0 = new Date(ctx.launchDate.getTime() + (365 * 24 * 60 * 60 * 1000));
+      const expires = expires0.toISOString();
+      ctx.body = 'Contact: mailto:security@hebcal.com\n' +
+        `Expires: ${expires}\n` +
+        'OpenBugBounty: https://openbugbounty.org/bugbounty/HebcalDotCom/\n';
       return;
     }
     await next();
