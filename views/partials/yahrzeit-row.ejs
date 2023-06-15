@@ -13,18 +13,18 @@
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
 <label class="form-label" for="d<%=num%>">Day</label></div>
 <div class="col-auto form-floating"><select name="m<%=num%>" id="m<%=num%>" class="form-select">
- <option <%- (q['m'+num] == 1) ? 'selected' : '' -%> value="1">01-Jan</option>
- <option <%- (q['m'+num] == 2) ? 'selected' : '' -%> value="2">02-Feb</option>
- <option <%- (q['m'+num] == 3) ? 'selected' : '' -%> value="3">03-Mar</option>
- <option <%- (q['m'+num] == 4) ? 'selected' : '' -%> value="4">04-Apr</option>
- <option <%- (q['m'+num] == 5) ? 'selected' : '' -%> value="5">05-May</option>
- <option <%- (q['m'+num] == 6) ? 'selected' : '' -%> value="6">06-Jun</option>
- <option <%- (q['m'+num] == 7) ? 'selected' : '' -%> value="7">07-Jul</option>
- <option <%- (q['m'+num] == 8) ? 'selected' : '' -%> value="8">08-Aug</option>
- <option <%- (q['m'+num] == 9) ? 'selected' : '' -%> value="9">09-Sep</option>
- <option <%- (q['m'+num] == 10) ? 'selected' : '' -%> value="10">10-Oct</option>
- <option <%- (q['m'+num] == 11) ? 'selected' : '' -%> value="11">11-Nov</option>
- <option <%- (q['m'+num] == 12) ? 'selected' : '' -%> value="12">12-Dec</option>
+ <option <%= (q['m'+num] == 1) ? 'selected' : '' -%> value="1">01-Jan</option>
+ <option <%= (q['m'+num] == 2) ? 'selected' : '' -%> value="2">02-Feb</option>
+ <option <%= (q['m'+num] == 3) ? 'selected' : '' -%> value="3">03-Mar</option>
+ <option <%= (q['m'+num] == 4) ? 'selected' : '' -%> value="4">04-Apr</option>
+ <option <%= (q['m'+num] == 5) ? 'selected' : '' -%> value="5">05-May</option>
+ <option <%= (q['m'+num] == 6) ? 'selected' : '' -%> value="6">06-Jun</option>
+ <option <%= (q['m'+num] == 7) ? 'selected' : '' -%> value="7">07-Jul</option>
+ <option <%= (q['m'+num] == 8) ? 'selected' : '' -%> value="8">08-Aug</option>
+ <option <%= (q['m'+num] == 9) ? 'selected' : '' -%> value="9">09-Sep</option>
+ <option <%= (q['m'+num] == 10) ? 'selected' : '' -%> value="10">10-Oct</option>
+ <option <%= (q['m'+num] == 11) ? 'selected' : '' -%> value="11">11-Nov</option>
+ <option <%= (q['m'+num] == 12) ? 'selected' : '' -%> value="12">12-Dec</option>
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">

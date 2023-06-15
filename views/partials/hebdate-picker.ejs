@@ -4,20 +4,20 @@
 </div><!-- /hd<%=suffix%> -->
 <div class="form-floating col-auto mb-2">
 <select name="hm<%=suffix%>" id="hm<%=suffix%>" class="form-select">
-<option <%- (hm === 1) ? 'selected' : '' -%> value="Nisan">Nisan</option>
-<option <%- (hm === 2) ? 'selected' : '' -%> value="Iyyar">Iyyar</option>
-<option <%- (hm === 3) ? 'selected' : '' -%> value="Sivan">Sivan</option>
-<option <%- (hm === 4) ? 'selected' : '' -%> value="Tamuz">Tamuz</option>
-<option <%- (hm === 5) ? 'selected' : '' -%> value="Av">Av</option>
-<option <%- (hm === 6) ? 'selected' : '' -%> value="Elul">Elul</option>
-<option <%- (hm === 7) ? 'selected' : '' -%> value="Tishrei">Tishrei</option>
-<option <%- (hm === 8) ? 'selected' : '' -%> value="Cheshvan">Cheshvan</option>
-<option <%- (hm === 9) ? 'selected' : '' -%> value="Kislev">Kislev</option>
-<option <%- (hm === 10) ? 'selected' : '' -%> value="Tevet">Tevet</option>
-<option <%- (hm === 11) ? 'selected' : '' -%> value="Shvat">Sh'vat</option>
-<option <%- (hm === 12 && !hleap) ? 'selected' : '' -%> value="Adar">Adar</option>
-<option <%- (hm === 12 && hleap) ? 'selected' : '' -%> value="Adar1">Adar I</option>
-<option <%- (hm === 13) ? 'selected' : '' -%> value="Adar2">Adar II</option>
+<option <%= (hm === 1) ? 'selected' : '' -%> value="Nisan">Nisan</option>
+<option <%= (hm === 2) ? 'selected' : '' -%> value="Iyyar">Iyyar</option>
+<option <%= (hm === 3) ? 'selected' : '' -%> value="Sivan">Sivan</option>
+<option <%= (hm === 4) ? 'selected' : '' -%> value="Tamuz">Tamuz</option>
+<option <%= (hm === 5) ? 'selected' : '' -%> value="Av">Av</option>
+<option <%= (hm === 6) ? 'selected' : '' -%> value="Elul">Elul</option>
+<option <%= (hm === 7) ? 'selected' : '' -%> value="Tishrei">Tishrei</option>
+<option <%= (hm === 8) ? 'selected' : '' -%> value="Cheshvan">Cheshvan</option>
+<option <%= (hm === 9) ? 'selected' : '' -%> value="Kislev">Kislev</option>
+<option <%= (hm === 10) ? 'selected' : '' -%> value="Tevet">Tevet</option>
+<option <%= (hm === 11) ? 'selected' : '' -%> value="Shvat">Sh'vat</option>
+<option <%= (hm === 12 && !hleap) ? 'selected' : '' -%> value="Adar">Adar</option>
+<option <%= (hm === 12 && hleap) ? 'selected' : '' -%> value="Adar1">Adar I</option>
+<option <%= (hm === 13) ? 'selected' : '' -%> value="Adar2">Adar II</option>
 </select>
 <label for="hm<%=suffix%>">Month</label>
 </div><!-- /hm<%=suffix%> -->
