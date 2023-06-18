@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.10.3",
+  "version": "2.10.4",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite10.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-5.0.1.min.js",
+    "clientapp": "hebcal-app-5.0.2.min.js",
     "typeaheadcss": "typeahead1.css"
   },
   "scripts": {
@@ -37,9 +37,9 @@
     "@rollup/plugin-commonjs": "^25.0.1",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
-    "corejs-typeahead": "^1.3.1",
+    "corejs-typeahead": "^1.3.3",
     "csv-parse": "^5.4.0",
-    "eslint": "^8.42.0",
+    "eslint": "^8.43.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.0",
     "rollup": "^3.25.1"
