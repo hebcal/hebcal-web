@@ -99,6 +99,7 @@ href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 <div>
  <a class="btn btn-secondary download mb-2" id="dl-gcal" rel="nofollow"
 title="Add <%= url.title %> to Google Calendar"
+target="_blank"
 data-hebcal-attr="href" data-hebcal-src="gcal"
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
@@ -154,6 +155,7 @@ Copy
 <div>
   <a class="btn btn-secondary download mb-2" id="dl-olcom" rel="nofollow"
 title="Add <%= url.title %> to Outlook.com"
+target="_blank"
 data-hebcal-attr="href" data-hebcal-src="olcom"
 href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(url.gcal) %>&amp;name=<%=encodeURIComponent(url.title)%>&amp;mkt=en-001">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
