@@ -7,6 +7,18 @@ import {makeLeyningHtmlFromParts} from './parshaCommon';
 
 const currentYear = new Date().getFullYear();
 
+const config = {
+  dafyomi: ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F'],
+  mishnayomi: ['Mishna Yomi', 'mishna-yomi', 'myomi'],
+  nachyomi: ['Nach Yomi', 'nach-yomi', 'nyomi'],
+  dailyPsalms: ['Daily Tehillim (Psalms)', 'psalms', 'dps'],
+  chofetzChaim: ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc'],
+  shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl'],
+  dailyRambam1: ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1'],
+  yerushalmi: ['Yerushalmi Yomi (Jerusalem Talmud)', 'yerushalmi-vilna', 'yyomi'],
+  parashat: ['Torah portion', 'torah-readings-diaspora', 's'],
+};
+
 // eslint-disable-next-line require-jsdoc
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
@@ -105,8 +117,14 @@ export function dailyLearningApp(ctx) {
   }
 
   const items = events.map((ev) => {
+    const cats = ev.getCategories();
+    const cat0 = cats[0];
+    const ids = config[cat0];
     return {
-      category: getCategory(ev),
+      id: cat0,
+      category: ids[0],
+      basename: ids[1],
+      flag: ids[2],
       title: ev.renderBrief(lg),
       url: ev.url(),
     };
@@ -124,24 +142,4 @@ export function dailyLearningApp(ctx) {
     holidays,
     currentYear,
   });
-}
-
-/**
- * @param {Event} ev
- * @return {string}
- */
-function getCategory(ev) {
-  const cats = ev.getCategories();
-  switch (cats[0]) {
-    case 'dafyomi': return 'Daf Yomi (Babylonian Talmud)';
-    case 'mishnayomi': return 'Mishna Yomi';
-    case 'nachyomi': return 'Nach Yomi';
-    case 'dailyPsalms': return 'Daily Tehillim (Psalms)';
-    case 'chofetzChaim': return 'Sefer Chofetz Chaim';
-    case 'shemiratHaLashon': return 'Shemirat HaLashon';
-    case 'dailyRambam1': return 'Daily Rambam (Mishneh Torah)';
-    case 'yerushalmi': return 'Yerushalmi Yomi (Jerusalem Talmud)';
-    case 'parashat': return 'Torah portion';
-    default: return '';
-  }
 }
