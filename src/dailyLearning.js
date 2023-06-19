@@ -15,7 +15,7 @@ const config = {
   chofetzChaim: ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc'],
   shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl'],
   dailyRambam1: ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1'],
-  yerushalmi: ['Yerushalmi Yomi (Jerusalem Talmud)', 'yerushalmi-vilna', 'yyomi'],
+  yerushalmi: ['Yerushalmi Yomi (J’lem Talmud)', 'yerushalmi-vilna', 'yyomi'],
   parashat: ['Torah portion', 'torah-readings-diaspora', 's'],
 };
 
