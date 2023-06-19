@@ -196,7 +196,11 @@ proto.Download.toObject = function(includeInstance, msg) {
     hour12: jspb.Message.getFieldWithDefault(msg, 39, 0),
     cityname: jspb.Message.getFieldWithDefault(msg, 40, ""),
     yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false),
-    nachyomi: jspb.Message.getBooleanFieldWithDefault(msg, 46, false)
+    nachyomi: jspb.Message.getBooleanFieldWithDefault(msg, 46, false),
+    rambam1: jspb.Message.getBooleanFieldWithDefault(msg, 47, false),
+    chofetzchaim: jspb.Message.getBooleanFieldWithDefault(msg, 48, false),
+    shemirathalashon: jspb.Message.getBooleanFieldWithDefault(msg, 49, false),
+    psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false)
   };
 
   if (includeInstance) {
@@ -404,6 +408,22 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 46:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setNachyomi(value);
+      break;
+    case 47:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setRambam1(value);
+      break;
+    case 48:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setChofetzchaim(value);
+      break;
+    case 49:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setShemirathalashon(value);
+      break;
+    case 50:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPsalms(value);
       break;
     default:
       reader.skipField();
@@ -732,6 +752,34 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       46,
+      f
+    );
+  }
+  f = message.getRambam1();
+  if (f) {
+    writer.writeBool(
+      47,
+      f
+    );
+  }
+  f = message.getChofetzchaim();
+  if (f) {
+    writer.writeBool(
+      48,
+      f
+    );
+  }
+  f = message.getShemirathalashon();
+  if (f) {
+    writer.writeBool(
+      49,
+      f
+    );
+  }
+  f = message.getPsalms();
+  if (f) {
+    writer.writeBool(
+      50,
       f
     );
   }
@@ -1662,6 +1710,78 @@ proto.Download.prototype.getNachyomi = function() {
  */
 proto.Download.prototype.setNachyomi = function(value) {
   return jspb.Message.setProto3BooleanField(this, 46, value);
+};
+
+
+/**
+ * optional bool rambam1 = 47;
+ * @return {boolean}
+ */
+proto.Download.prototype.getRambam1 = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 47, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setRambam1 = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 47, value);
+};
+
+
+/**
+ * optional bool chofetzChaim = 48;
+ * @return {boolean}
+ */
+proto.Download.prototype.getChofetzchaim = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 48, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setChofetzchaim = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 48, value);
+};
+
+
+/**
+ * optional bool shemiratHaLashon = 49;
+ * @return {boolean}
+ */
+proto.Download.prototype.getShemirathalashon = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 49, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setShemirathalashon = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 49, value);
+};
+
+
+/**
+ * optional bool psalms = 50;
+ * @return {boolean}
+ */
+proto.Download.prototype.getPsalms = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 50, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setPsalms = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 50, value);
 };
 
 

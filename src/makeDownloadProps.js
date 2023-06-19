@@ -71,6 +71,10 @@ export function downloadHref2(query, filename, override={}) {
   if (q.nyomi === 'on') msg.setNachyomi(true);
   if (q.ykk === 'on') msg.setYomkippurkatan(true);
   if (q.yyomi === 'on') msg.setYerushalmiyomi(true);
+  if (q.dr1 === 'on') msg.setRambam1(true);
+  if (q.dcc === 'on') msg.setChofetzchaim(true);
+  if (q.dshl === 'on') msg.setShemirathalashon(true);
+  if (q.dps === 'on') msg.setPsalms(true);
 
   if (q.d === 'on') msg.setAddhebrewdates(true);
   if (q.D === 'on') msg.setAddhebrewdatesforevents(true);

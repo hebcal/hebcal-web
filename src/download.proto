@@ -62,4 +62,8 @@ message Download {
   string cityName = 40;
   bool yerushalmiYomi = 45;
   bool nachYomi = 46;
+  bool rambam1 = 47;
+  bool chofetzChaim = 48;
+  bool shemiratHaLashon = 49;
+  bool psalms = 50;
 }
