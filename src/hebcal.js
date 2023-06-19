@@ -196,6 +196,46 @@ async function renderForm(ctx, error) {
   });
 }
 
+const optToName = {
+  sedrot: 'Torah Readings',
+  omer: 'Days of the Omer',
+  addHebrewDates: 'Hebrew Dates',
+  yomKippurKatan: 'Yom Kippur Katan',
+  dafYomi: 'Daf Yomi',
+  mishnaYomi: 'Mishna Yomi',
+  nachYomi: 'Nach Yomi',
+  psalms: 'Daily Tehillim',
+  chofetzChaim: 'Sefer Chofetz Chaim',
+  shemiratHaLashon: 'Shemirat HaLashon',
+  rambam1: 'Daily Rambam',
+  yerushalmi: 'Yerushalmi Yomi',
+};
+
+function makeLocationName(ctx, options) {
+  const loc = ctx.state.location;
+  if (loc) {
+    return loc.getName();
+  }
+  // If all default holidays are suppressed try to come up with a better name
+  const ilOrDiaspora = options.il ? 'Israel' : 'Diaspora';
+  if (options.noMajor && options.noMinorHolidays &&
+     options.noRoshChodesh && options.noModern &&
+     options.noMinorFast && options.noSpecialShabbat) {
+    const strs = [];
+    const dailyLearning = options.dailyLearning || {};
+    for (const [k, v] of Object.entries(optToName)) {
+      if (options[k] || dailyLearning[k]) {
+        strs.push(v);
+      }
+    }
+    if (strs.length) {
+      const name = strs.join(', ');
+      return options.sedrot ? ilOrDiaspora + ' ' + name : name;
+    }
+  }
+  return ilOrDiaspora;
+}
+
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
@@ -208,7 +248,7 @@ function renderHtml(ctx) {
     }
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
-  const locationName = ctx.state.location ? ctx.state.location.getName() : options.il ? 'Israel' : 'Diaspora';
+  const locationName = makeLocationName(ctx, options);
   const shortTitle = pageTitle(options, events);
   const locale = localeMap[options.locale] || 'en';
   const memos = {};
