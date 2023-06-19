@@ -98,7 +98,7 @@ accurate.
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
 <h2><%= shortTitle %>
-<% if (q.c === 'on') { %><br><% } %><span class="text-muted h4"><%= locationName -%>
+<% if (locationName.indexOf(' ') !== -1) { %><br><% } %><span class="text-muted h4"><%= locationName -%>
 <% if (options.il && typeof location === 'object' && location.getCountryCode() !== 'IL') { %> · <small class="text-nowrap">Israel 🇮🇱 holiday schedule</small><% } -%>
 </span></h2>
 <div class="d-print-none">
