@@ -22,17 +22,22 @@
 <% for (const item of items) { %>
 <div class="lead mt-3" id="<%= item.id %>"><%= item.category %>
 <% if (item.flag) { -%>
-<a class="ms-1" href="/hebcal?v=1&amp;<%= item.flag %>=on">
+<a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
 <% } -%>
 <% if (item.basename) { -%>
-<a class="ms-1" href="#sub-<%= item.id %>" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sub-<%= item.id %>">
+<a title="Subscribe to calendar feed" class="ms-2" href="#sub-<%= item.id %>" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sub-<%= item.id %>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg></a>
 <% } -%>
 </div>
+<div class="fs-4 mt-n1"><% if (item.html) { %><%- item.html %><% } else { %>
+<%   if (item.url) { %><a class="outbound" href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
+<%   } %>
+</div>
+<%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% if (item.basename) { -%>
 <div class="collapse" id="sub-<%= item.id %>">
- <div class="card card-body mt-2 mb-2">
+ <div class="card card-body mt-2 mb-3">
   <p class="small">Subscribe to <%=item.category%> calendar feed</p>
   <div class="btn-toolbar">
     <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-ical-<%=item.basename%>"
@@ -65,11 +70,6 @@
  </div>
 </div>
 <% } -%>
-<div class="fs-4 mt-n1"><% if (item.html) { %><%- item.html %><% } else { %>
-<%   if (item.url) { %><a class="outbound" href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
-<%   } %>
-</div>
-<%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% } %>
 
 </div><!-- .col -->

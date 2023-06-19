@@ -126,9 +126,9 @@ Spreadsheets for <em>leyning</em> coordinators.
 <div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
 <ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·
-  <a class="text-nowrap" href="<%- dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
+  <a class="text-nowrap" href="<%= dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
    <li><span class="text-nowrap">Mishna Yomi</span> ·
-   <a class="text-nowrap" href="<%- mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
+   <a class="text-nowrap" href="<%= mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
    <li><a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">See more &raquo;</a></li>
   </ul>
 </div><!-- .col-sm-4 -->
