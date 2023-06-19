@@ -20,7 +20,7 @@
 </ul>
 
 <% for (const item of items) { %>
-<div class="lead mt-3" id="<%= item.id %>"><%= item.category %>
+<div class="lead mt-3" id="<%= item.id %>"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
 <% if (item.flag) { -%>
 <a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
