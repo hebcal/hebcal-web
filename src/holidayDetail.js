@@ -57,8 +57,7 @@ function myRedir(ctx, anchor, year) {
 }
 
 export async function holidayDetail(ctx) {
-  const rpath = ctx.request.path;
-  const base0 = decodeURIComponent(basename(rpath));
+  const base0 = getHolidayBaseFromPath(ctx);
   const baseLc = base0.toLowerCase();
   const base = baseLc.endsWith('.html') ? baseLc.substring(0, baseLc.length - 5) : baseLc;
   const matches = base.match(holidayYearRe);
@@ -176,6 +175,15 @@ export async function holidayDetail(ctx) {
 }
 
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
+
+function getHolidayBaseFromPath(ctx) {
+  const rpath = ctx.request.path;
+  try {
+    return decodeURIComponent(basename(rpath));
+  } catch (err) {
+    ctx.throw(400, err.message, err);
+  }
+}
 
 function makePageTitle(holiday, year, il, descrShort) {
   const hebrew = Locale.gettext(holiday, 'he');

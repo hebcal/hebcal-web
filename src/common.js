@@ -1180,7 +1180,12 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
   } else if (hy > 32000) {
     throw createError(400, 'Hebrew year is too large');
   }
-  const hm = HDate.monthFromName(hmStr);
+  let hm;
+  try {
+    hm = HDate.monthFromName(hmStr);
+  } catch (err) {
+    throw createError(400, err.message);
+  }
   const maxDay = HDate.daysInMonth(hm, hy);
   if (hd < 1 || hd > maxDay) {
     const monthName = HDate.getMonthName(hm, hy);

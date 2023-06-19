@@ -20,6 +20,8 @@ export async function holidayPdf(ctx) {
   const yearNum = parseInt(year, 10);
   if (isNaN(yearNum)) {
     throw createError(400, `Invalid holiday year: ${year}`);
+  } else if (yearNum < 1 || yearNum > 32000) {
+    throw createError(400, `Invalid year number: ${yearNum}`);
   }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761) : yearNum;
