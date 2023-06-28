@@ -24,7 +24,7 @@ ul.hebcal-results li {
 <div class="row mt-3">
 <div class="col-md-8">
 <h2><%= Shabbat %> Times for <%= location.getShortName() %></h2>
-<h5 class="text-muted"><%= location.getName() %></h5>
+<h5 class="text-body-secondary"><%= location.getName() %></h5>
 <% if (typeof message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -120,7 +120,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
 </div><!-- .d-print-none -->
 </div><!-- .col-md-8 -->
 <div class="col-md-4 d-print-none" role="complementary">
-<h6 class="text-muted mb-1">Advertisement</h6>
+<h6 class="text-body-secondary mb-1">Advertisement</h6>
 <% if (typeof amp === 'boolean' && amp) { -%>
 <amp-ad width="100vw" height="320"
   type="adsense"

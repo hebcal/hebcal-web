@@ -27,7 +27,7 @@
 <% if (hyear <= 5513) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h2>Torah Readings <%=hyear%> <span class="h4 small text-muted"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
+<h2>Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? '🇮🇱' : 'Diaspora'%></span></h2>
 <div class="btn-toolbar d-print-none mb-2">
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="<%-dlhref%>" download="<%=dlfilename%>">
 <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>

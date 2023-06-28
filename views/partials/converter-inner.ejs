@@ -1,4 +1,4 @@
 <% items.forEach((item) => { -%>
 <li><%= item.emoji %> <% if (item.url) { %><a href="<%= item.url %>"><% } %><% if (locale === 'he') { %><span lang="he" dir="rtl"><% } %><%= item.desc %><% if (locale === 'he') { %></span><% } %><% if (item.url) { %></a><% } %> <%= item.emoji -%>
-<% if (location) { %> <span class="text-muted">in <%= location %></span><% } %></li>
+<% if (location) { %> <span class="text-body-secondary">in <%= location %></span><% } %></li>
 <% }); -%>

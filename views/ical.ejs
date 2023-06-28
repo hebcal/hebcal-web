@@ -16,7 +16,7 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<h1>Jewish Holiday downloads <small class="text-muted">for desktop, mobile and web calendars</small></h1>
+<h1>Jewish Holiday downloads <small class="text-body-secondary">for desktop, mobile and web calendars</small></h1>
 
 <p class="lead">Free Jewish holidays for Microsoft
 Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar),
@@ -78,7 +78,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   emoji: '🌐',
   summary: `<p>Create a custom calendar with event titles in different languages, candle-lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
 <ul>` + Object.entries(langNames).map(([langName, desc]) => {
-  return `<li><a href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a> <span class="text-muted">- ${desc[1]||desc[0]}</span></li>`;
+  return `<li><a href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a> <span class="text-body-secondary">- ${desc[1]||desc[0]}</span></li>`;
 }).join('\n') + `</ul>`,
   noToolbar: true,
 }) -%>

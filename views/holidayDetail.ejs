@@ -26,7 +26,7 @@
 <% if (year && year < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h4 class="text-muted"><%=descrShort%>&nbsp;<%=emoji%></h4>
+<h4 class="text-body-secondary"><%=descrShort%>&nbsp;<%=emoji%></h4>
 <p class="lead mt-3"><%=holiday%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
 <% if (currentItem.parsha) { %>
  This corresponds to Parashat <%= currentItem.parsha.join('-') %>.
@@ -85,7 +85,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 <% } %>
 
 <div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mb-1">Advertisement</h6>
+<h6 class="text-body-secondary mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
 <% if (typeof amp === 'boolean' && amp) { -%>
@@ -168,7 +168,7 @@ data-ad-slot="5342180883"></ins>
 <h4 id="reading-<%=reading.id%>"><%=item.replace(/'/g, '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (reading.note) { %><br><span class="text-burgundy small"><%=reading.note%></span><% } -%>
-<% if (typeof reading.d !== 'undefined') { %><br><time class="text-muted small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
+<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
@@ -203,7 +203,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <dt><em><a class="amzn outbound" id="strassfeld-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
-<small class="text-muted">(paid link)</small>
+<small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% } -%>
 <% if (typeof meta.reading !== 'undefined') { %>
@@ -214,7 +214,7 @@ href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
-<small class="text-muted">(paid link)</small>
+<small class="text-body-secondary">(paid link)</small>
 <dd>Jewish Publication Society
 <% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
@@ -225,7 +225,7 @@ The Holy Scriptures</a></em>
 </div><!-- .col-md-10 -->
 <% if (typeof meta.books !== 'undefined') { %>
 <div class="col-md-2">
-<h6 id="books">Books <small class="text-muted">(paid links)</small></h6>
+<h6 id="books">Books <small class="text-body-secondary">(paid links)</small></h6>
 <div class="row">
 <% meta.books.forEach((book) => { %>
 <div class="col">
@@ -253,7 +253,7 @@ style="border:none">
 </div><!-- .card -->
 </div><!-- .col -->
 <% }); %>
-<p class="text-muted small">When you buy a book using a link on this page, we receive a commission.
+<p class="text-body-secondary small">When you buy a book using a link on this page, we receive a commission.
 Thank you for supporting Hebcal.</p>
 </div><!-- .row -->
 </div><!-- .col-md-2 -->

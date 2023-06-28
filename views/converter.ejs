@@ -61,7 +61,7 @@
 const todayHebYear = todayHd.getFullYear();
 const isPast = hy < todayHebYear;
 -%>
-<p class="small text-muted">Hebrew year <strong><%= hy %></strong> <%= isPast ? 'was' : 'is' %> <%= hleap ? '' : 'not ' %> a leap year (note month: <strong><%= hmStr %></strong>)</p>
+<p class="small text-body-secondary">Hebrew year <strong><%= hy %></strong> <%= isPast ? 'was' : 'is' %> <%= hleap ? '' : 'not ' %> a leap year (note month: <strong><%= hmStr %></strong>)</p>
 <% } -%>
 </div><!-- #converter-results -->
 </div><!-- .col -->
@@ -160,7 +160,7 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-form -->
 
 <div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mt-2 mb-1">Advertisement</h6>
+<h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
 <% if (typeof amp === 'boolean' && amp) { -%>
@@ -198,7 +198,7 @@ represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon icon-md mb-1 me-1 text-muted" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<h5><svg class="icon icon-md mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
  Yahrzeit + Anniversary Calendar</h5>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
 Hebrew Birthdays and Anniversaries for 20+ years.
@@ -206,7 +206,7 @@ Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col -->
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon icon-md mb-1 me-1 text-muted" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+<h5><svg class="icon icon-md mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
  Holiday Calendar</h5>
 <p>Jewish holidays, candle-lighting times, and Torah readings for any year,
  past or present.

@@ -20,7 +20,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parshaName%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
 <% if (date) { -%>
-<p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString() %></span><% if (israelDiasporaDiffer) { %> <span class="text-muted">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
+<p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString() %></span><% if (israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
 <% } -%>
 <% if (date && d.year() < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
@@ -49,7 +49,7 @@ title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.ver
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-muted d-print-none">·</span>
+<span class="text-body-secondary d-print-none">·</span>
 <span class="text-nowrap">
 <a class="d-print-none" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
@@ -65,7 +65,7 @@ href="<%-aliyah.tikkun%>">
 <%
 const spMaftirItems = items.filter((item) => typeof item.maftir === 'object');
 if (!date && spMaftirItems.length !== 0) { -%>
-<p class="small text-muted">N.B. special maftir in years
+<p class="small text-body-secondary">N.B. special maftir in years
 <% for (let i = 0; i < spMaftirItems.length; i++) {
   const item = spMaftirItems[i]; -%>
 <a class="text-success" title="<%=item.maftir.reason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spMaftirItems.length - 1 ? ', ' : ''%>
@@ -89,7 +89,7 @@ if (!date && spMaftirItems.length !== 0) { -%>
 <%
 const spHaftItems = items.filter((item) => typeof item.haftara === 'string');
 if (!date && spHaftItems.length !== 0) { -%>
-<p class="small text-muted">N.B. special Haftarah in years
+<p class="small text-body-secondary">N.B. special Haftarah in years
 <% for (let i = 0; i < spHaftItems.length; i++) {
   const item = spHaftItems[i]; -%>
 <a class="text-success" title="<%=item.haftaraReason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spHaftItems.length - 1 ? ', ' : ''%>
@@ -100,7 +100,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% if (hasTriennial) { %>
 <% if (date) { %>
 <div class="col-sm-6">
-<h5>Triennial <small class="text-muted">year <%=triennial.yearNum%></small></h5>
+<h5>Triennial <small class="text-body-secondary">year <%=triennial.yearNum%></small></h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 <% if (triennial.haftara) { -%>
 <p class="haftara">Alternate Haftarah:
@@ -114,12 +114,12 @@ if (!date && spHaftItems.length !== 0) { -%>
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-lg-3 col-sm-6">
 <h5><span class="text-nowrap">Triennial Year <%=yr%></span>
-<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-muted"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
+<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-body-secondary"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
 <p>Read separately in <%=triReading.hyear%></p>
 <ul class="list-unstyled">
-<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%> <%=triReading.hyear%></a> <span class="text-muted">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
-<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%> <%=triReading.hyear%></a> <span class="text-muted">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>
+<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
+<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>
 </ul>
 <% } else if (triReading.readTogether) { %>
 <p class="small">See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></p>
@@ -147,7 +147,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 <div class="col">
 <% if (reading.weekday) { %>
 <h5 id="weekday">Weekday
-<small class="text-muted">for Shabbat afternoon, Monday &amp; Thursday</small>
+<small class="text-body-secondary">for Shabbat afternoon, Monday &amp; Thursday</small>
 </h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.weekday}) -%>
 <% } // reading.weekday %>
@@ -206,7 +206,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <ul class="list-unstyled mb-0">
 <% for (let j = 0; j < 6; j++) { -%>
 <% const item = items[(i * 6) + j]; if (item) { -%>
-<li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-muted">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
+<li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-body-secondary">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
 <% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
 <% } -%>
 <% } %>
@@ -241,7 +241,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <dt><a class="amzn outbound" id="chumash-2" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
 Chumash: The Stone Edition (Artscroll Series)</em></a>
-<small class="text-muted">(paid link)</small>
+<small class="text-body-secondary">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <% if (hasTriennial) { %>
 <dt><a class="outbound"

@@ -73,7 +73,7 @@ table.tbody-striped > thead > * > * {
 <div class="col">
 <h2>Jewish Holidays <%=year%>
 <% if (isHebrewYear && year.indexOf('-') !== -1) { -%>
-<span class="small text-muted text-nowrap">(Hebrew year <%=calendarYear%>)</span>
+<span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
 <% } -%>
 </h2>
 <% if (greg1 <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
@@ -126,7 +126,7 @@ table.tbody-striped > thead > * > * {
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
 The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <% for (const [catId, category] of Object.entries(categories)) { -%>
-<h3 id="<%=category.id%>" class="pb-2"><%=category.name%> <span class="h4 text-muted"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
+<h3 id="<%=category.id%>" class="pb-2"><%=category.name%> <span class="h4 text-body-secondary"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('minor-fasts' === category.id) { -%>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
 <% } else if ('rosh-chodesh' === category.id) { -%>
@@ -163,7 +163,7 @@ class="rounded float-end ms-3 mb-3"></a>
 </div><!-- .row #<%=category.id %> -->
 <% if ('major-holidays' === category.id) { -%>
 <div class="d-flex justify-content-center d-print-none">
-<h6 class="text-muted mb-1">Advertisement</h6>
+<h6 class="text-body-secondary mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-5">
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"

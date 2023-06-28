@@ -209,7 +209,7 @@ function shortDayOfWeek(d, delta) {
     const d2 = d.add(delta, 'd');
     s += '‑' + DoWtiny[d2.day()];
   }
-  return ` <small class="text-muted">${s}</small>`;
+  return ` <small class="text-body-secondary">${s}</small>`;
 }
 
 /**
