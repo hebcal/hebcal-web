@@ -56,11 +56,6 @@ table.tbody-striped > thead > * > * {
 .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
   padding: 2px 6px 2px 2px;
 }
-.well {
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
-  padding: 0.333rem 0.333rem;
-}
 </style>
 <% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=iSuffix%>"><%}%>
 <% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=iSuffix%>"><%}%>
@@ -93,7 +88,7 @@ table.tbody-striped > thead > * > * {
 </div><!-- .col-auto -->
 <% if (greg1 > 1752) { %>
 <div class="col-auto">
-<div class="well">
+<div class="card p-1">
 <div class="form-check form-switch">
 <input class="form-check-input" type="checkbox" role="switch" id="toggle-month">
 <label class="form-check-label" for="toggle-month">
@@ -101,7 +96,7 @@ table.tbody-striped > thead > * > * {
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
 </label>
 </div><!-- .form-switch -->
-</div><!-- .well -->
+</div><!-- .card -->
 </div><!-- .col-auto -->
 <% } -%>
 <div class="col-auto mb-3"><label for="nav-year1" class="col-form-label">Year</label></div>
