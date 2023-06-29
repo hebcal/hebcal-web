@@ -14,7 +14,7 @@
     "sprite": "sprite11.svg",
     "csprite": "color-icons4.svg",
     "clientapp": "hebcal-app-5.0.2.min.js",
-    "typeaheadcss": "typeahead1.css"
+    "typeaheadcss": "typeahead2.css"
   },
   "scripts": {
     "build": "babel src --out-dir dist",
