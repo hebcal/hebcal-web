@@ -10,6 +10,7 @@ import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 import {find as geoTzFind} from 'geo-tz';
 import pkg from '../package.json';
+import {basename} from 'path';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -1507,4 +1508,16 @@ export function shortenUrl(url) {
     }
   }
   return url;
+}
+
+/**
+ * @param {any} ctx
+ * @return {string}
+ */
+export function getBaseFromPath(ctx) {
+  try {
+    return decodeURIComponent(basename(ctx.request.path));
+  } catch (err) {
+    ctx.throw(400, err.message, err);
+  }
 }

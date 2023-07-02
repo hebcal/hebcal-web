@@ -3,10 +3,9 @@ import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
-import {basename} from 'path';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
-  empty, langNames} from './common';
+  getBaseFromPath, empty, langNames} from './common';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   parshiot54,
   lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon';
@@ -91,8 +90,7 @@ function eventToItem(ev, il) {
 const parshaDateRe = /^([^\d]+)-(\d+)$/;
 
 export async function parshaDetail(ctx) {
-  const rpath = ctx.request.path;
-  const base0 = decodeURIComponent(basename(rpath));
+  const base0 = getBaseFromPath(ctx);
   const base = base0.toLowerCase();
   const matches = base.match(parshaDateRe);
   const date = matches?.[2];

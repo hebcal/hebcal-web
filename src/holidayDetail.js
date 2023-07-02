@@ -7,7 +7,7 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, langNames, off} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath} from './common';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
@@ -57,7 +57,7 @@ function myRedir(ctx, anchor, year) {
 }
 
 export async function holidayDetail(ctx) {
-  const base0 = getHolidayBaseFromPath(ctx);
+  const base0 = getBaseFromPath(ctx);
   const baseLc = base0.toLowerCase();
   const base = baseLc.endsWith('.html') ? baseLc.substring(0, baseLc.length - 5) : baseLc;
   const matches = base.match(holidayYearRe);
@@ -175,15 +175,6 @@ export async function holidayDetail(ctx) {
 }
 
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
-
-function getHolidayBaseFromPath(ctx) {
-  const rpath = ctx.request.path;
-  try {
-    return decodeURIComponent(basename(rpath));
-  } catch (err) {
-    ctx.throw(400, err.message, err);
-  }
-}
 
 function makePageTitle(holiday, year, il, descrShort) {
   const hebrew = Locale.gettext(holiday, 'he');
