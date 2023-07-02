@@ -78,6 +78,8 @@ export async function yahrzeitApp(ctx) {
     ctx.body = `<?xml version="1.0" ?>\n<error message="This API does not support cfg=xml" />\n`;
     return;
   }
+  const seq = +(q.seq) || 0;
+  ctx.state.seq = seq + 1;
   const count = Math.max(+q.count || 1, maxId);
   ctx.state.adarInfo = false;
   ctx.state.futureDate = false;
@@ -118,6 +120,9 @@ function getOrMakeUlid(ctx) {
   const q = ctx.state.q;
   const existing = q.ulid || ctx.state.ulid;
   if (existing) {
+    if (existing.length != 26 || !(/^\w+$/.test(existing))) {
+      ctx.throw(400, 'Invalid calendar id: ' + existing);
+    }
     return existing;
   }
   const id = ulid().toLowerCase();
@@ -294,11 +299,12 @@ async function makeDownloadProps(ctx) {
   };
 }
 
-const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text'];
+const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'seq'];
 
 // eslint-disable-next-line require-jsdoc
 async function saveDataToDb(ctx) {
   const toSave = Object.assign({}, ctx.state.q);
+  const seq = +(toSave.seq) || 1;
   noSaveFields.forEach((key) => delete toSave[key]);
   compactJsonToSave(toSave);
   const id = ctx.state.ulid;
@@ -320,6 +326,7 @@ async function saveDataToDb(ctx) {
       return;
     }
   }
+  toSave.seq = seq;
   const contents = JSON.stringify(toSave);
   const ip = getIpAddress(ctx);
   if (!results || !results[0]) {
@@ -460,6 +467,7 @@ export async function yahrzeitDownload(ctx) {
       title: makeCalendarTitle(query, 64),
       relcalid: ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null,
       publishedTTL: 'PT1D',
+      sequence: +(query.seq) || 1,
     };
     const icalOpt = makeIcalOpts(opts, query);
     ctx.body = await eventsToIcalendar(events, icalOpt);
