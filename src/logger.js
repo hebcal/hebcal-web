@@ -113,7 +113,7 @@ export function makeLogInfo(ctx) {
     }
   }
   if (ctx.state.mysqlQuery) {
-    info.sql = mysqlQuery;
+    info.sql = ctx.state.mysqlQuery;
   }
   return info;
 }
