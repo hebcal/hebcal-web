@@ -117,7 +117,7 @@ export async function holidayDetail(ctx) {
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :
       occursOn.find((item) => item.ppf === 'future');
-  if (typeof next === 'undefined' && year) {
+  if (typeof next === 'undefined') {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
