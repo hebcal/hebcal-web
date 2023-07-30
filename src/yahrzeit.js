@@ -3,7 +3,9 @@ import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi, pad4, pad2} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {empty, getIpAddress, eTagFromOptions, makeIcalOpts} from './common';
+import {empty, getIpAddress, eTagFromOptions, makeIcalOpts,
+  hebcalFormDefaults,
+  doesCookieNeedRefresh, processCookieAndQuery, possiblySetCookie} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
@@ -12,7 +14,6 @@ import {makeLogInfo} from './logger';
 import {isDeepStrictEqual} from 'node:util';
 import util from 'util';
 import mmh3 from 'murmurhash3';
-import uuid from 'uuid-random';
 
 const murmur32Hex = util.promisify(mmh3.murmur32Hex);
 
@@ -102,6 +103,7 @@ export async function yahrzeitApp(ctx) {
           ctx.state.distantPastDate = info;
         }
       }
+      ctx.status = 200;
       setYahrzeitCookie(ctx);
       await makeDownloadProps(ctx);
     }
@@ -163,22 +165,17 @@ function setYahrzeitCookie(ctx) {
   const ids = new Set(prevIds);
   ids.add(ctx.state.ulid);
   const newCookie = Array.from(ids).join('|');
-  const expires = dayjs().add(1, 'year').toDate();
+  const expires = dayjs().add(399, 'd').toDate();
   ctx.cookies.set('Y', newCookie, {
     path: '/yahrzeit',
     expires: expires,
     overwrite: true,
     httpOnly: false,
   });
-  if (!cCookie) {
-    const userId = uuid();
-    const val = 'uid=' + userId + '&exp=' + expires.toISOString().substring(0, 10);
-    ctx.cookies.set('C', val, {
-      expires: expires,
-      path: '/',
-      overwrite: true,
-      httpOnly: false,
-    });
+  ctx.status = 200;
+  if (doesCookieNeedRefresh(ctx)) {
+    const ck = processCookieAndQuery(cCookie, hebcalFormDefaults, ctx.state.q);
+    possiblySetCookie(ctx, ck);
   }
   ctx.state.yahrzeitCookieSet = true;
   return true;

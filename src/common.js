@@ -66,6 +66,20 @@ export const langTzDefaults = {
   ZA: ['s', 'Africa/Johannesburg'],
 };
 
+export const hebcalFormDefaults = {
+  maj: 'on',
+  min: 'on',
+  nx: 'on',
+  mf: 'on',
+  ss: 'on',
+  mod: 'on',
+  i: 'off',
+  yt: 'G',
+  lg: 's',
+  b: 18,
+  M: 'on',
+};
+
 export const lgToLocale = {
   h: 'he',
   a: 'ashkenazi',
@@ -242,11 +256,34 @@ function makeCookie(query, uid) {
 
 /**
  * @param {any} ctx
+ * @return {boolean}
+ */
+export function doesCookieNeedRefresh(ctx) {
+  const prevCookie = ctx.cookies.get('C');
+  if (!prevCookie) {
+    return true;
+  } else if (prevCookie === 'opt_out') {
+    return false;
+  }
+  const prev0 = prevCookie.substring(prevCookie.indexOf('&'));
+  const prevExp = prev0.indexOf('&exp=');
+  if (prevExp === -1) {
+    return true;
+  }
+  const expDt = isoDateStringToDate(prev0.substring(prevExp + 5));
+  const expMillis = expDt.getTime();
+  const now = Date.now();
+  const diff = (expMillis - now) / (24 * 60 * 60 * 1000);
+  return diff < 90;
+}
+
+/**
+ * @param {any} ctx
  * @param {Object.<string,string>} query
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
-  if (ctx.status >= 400 || ctx.request.querystring.length === 0) {
+  if (ctx.status >= 400 || (ctx.method === 'GET' && ctx.request.querystring.length === 0)) {
     return false;
   }
   const prevCookie = ctx.cookies.get('C');
@@ -258,26 +295,14 @@ export function possiblySetCookie(ctx, query) {
   if (newCookie === false) {
     return false;
   }
-  const ampersand = newCookie.indexOf('&');
-  if (ampersand === -1) {
-    return false;
-  }
   if (prevCookie) {
     const prev0 = prevCookie.substring(prevCookie.indexOf('&'));
     const prevExp = prev0.indexOf('&exp=');
     const prev = prevExp === -1 ? prev0 : prev0.substring(0, prevExp);
+    const ampersand = newCookie.indexOf('&');
     const current = newCookie.substring(ampersand);
-    if (prev === current) {
-      if (prevExp === -1) {
-        return false;
-      } else {
-        const expDt = isoDateStringToDate(prev0.substring(prevExp + 5));
-        const now = new Date();
-        const diff = (expDt.getTime() - now.getTime()) / (24 * 60 * 60 * 1000);
-        if (diff > 90) {
-          return false;
-        }
-      }
+    if (prev === current && !doesCookieNeedRefresh(ctx)) {
+      return false;
     }
   }
   setCookie(ctx, newCookie);
@@ -289,7 +314,7 @@ export function possiblySetCookie(ctx, query) {
  * @param {string} newCookie
  */
 function setCookie(ctx, newCookie) {
-  const expires = dayjs().add(1, 'year').toDate();
+  const expires = dayjs().add(399, 'd').toDate();
   newCookie += '&exp=' + expires.toISOString().substring(0, 10);
   ctx.cookies.set('C', newCookie, {
     expires: expires,

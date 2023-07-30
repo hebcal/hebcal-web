@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   empty, urlArgs, getNumYears,
+  hebcalFormDefaults,
   makeIcalOpts,
   CACHE_CONTROL_7DAYS,
   getDefaultHebrewYear, makeHebrewCalendar,
@@ -25,20 +26,6 @@ import './dayjs-locales';
 import '@hebcal/locales';
 
 dayjs.extend(localeData);
-
-const hebcalFormDefaults = {
-  maj: 'on',
-  min: 'on',
-  nx: 'on',
-  mf: 'on',
-  ss: 'on',
-  mod: 'on',
-  i: 'off',
-  yt: 'G',
-  lg: 's',
-  b: 18,
-  M: 'on',
-};
 
 export async function hebcalApp(ctx) {
   if (ctx.method === 'POST') {
