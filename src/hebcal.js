@@ -228,9 +228,9 @@ function renderHtml(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     ctx.status = 400;
-    if (options.dafyomi) {
+    if (options.dailyLearning?.dafYomi) {
       return renderForm(ctx, {message: 'Daf Yomi cycle began in 5684 (September 1923)'});
-    } else if (options.mishnaYomi) {
+    } else if (options.dailyLearning?.mishnaYomi) {
       return renderForm(ctx, {message: 'Mishna Yomi cycle began in 5707 (May 1947)'});
     }
     return renderForm(ctx, {message: 'Please select at least one event option'});

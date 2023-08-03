@@ -125,7 +125,8 @@ function renderPdfMonthTitle(doc, d, rtl) {
 // eslint-disable-next-line require-jsdoc
 function eventColor(evt) {
   const f = evt.getFlags();
-  if (f & (flags.DAF_YOMI | flags.OMER_COUNT | flags.HEBREW_DATE | flags.MISHNA_YOMI)) {
+  if (f & (flags.DAF_YOMI | flags.OMER_COUNT | flags.HEBREW_DATE |
+    flags.MISHNA_YOMI | flags.YERUSHALMI_YOMI | flags.NACH_YOMI)) {
     return '#666666';
   }
   if (f & flags.ROSH_CHODESH) {
