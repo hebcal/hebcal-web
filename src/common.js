@@ -286,6 +286,15 @@ export function possiblySetCookie(ctx, query) {
   if (ctx.status >= 400 || (ctx.method === 'GET' && ctx.request.querystring.length === 0)) {
     return false;
   }
+  return setHebcalCookie(ctx, query);
+}
+
+/**
+ * @param {any} ctx
+ * @param {Object.<string,string>} query
+ * @return {boolean}
+ */
+export function setHebcalCookie(ctx, query) {
   const prevCookie = ctx.cookies.get('C');
   if (prevCookie === 'opt_out') {
     return false;

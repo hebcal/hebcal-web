@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts,
   hebcalFormDefaults,
-  doesCookieNeedRefresh, processCookieAndQuery, possiblySetCookie} from './common';
+  doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
@@ -112,6 +112,11 @@ export async function yahrzeitApp(ctx) {
   }
   q.years = getNumYears(q.years);
   ctx.state.typesSet = getAnniversaryTypes(q);
+  ctx.status = 200;
+  if (doesCookieNeedRefresh(ctx)) {
+    const ck = processCookieAndQuery(ctx.cookies.get('C'), hebcalFormDefaults, q);
+    setHebcalCookie(ctx, ck);
+  }
   await ctx.render('yahrzeit', {
     count,
   });
@@ -172,11 +177,6 @@ function setYahrzeitCookie(ctx) {
     overwrite: true,
     httpOnly: false,
   });
-  ctx.status = 200;
-  if (doesCookieNeedRefresh(ctx)) {
-    const ck = processCookieAndQuery(cCookie, hebcalFormDefaults, ctx.state.q);
-    possiblySetCookie(ctx, ck);
-  }
   ctx.state.yahrzeitCookieSet = true;
   return true;
 }
