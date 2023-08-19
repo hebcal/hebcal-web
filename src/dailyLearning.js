@@ -9,6 +9,7 @@ const currentYear = new Date().getFullYear();
 
 const config = {
   dafyomi: ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F'],
+  dafWeekly: ['Daf-a-Week', 'daf-weekly', 'dw'],
   mishnayomi: ['Mishna Yomi', 'mishna-yomi', 'myomi'],
   nachyomi: ['Nach Yomi', 'nach-yomi', 'nyomi'],
   dailyPsalms: ['Daily Tehillim (Psalms)', 'psalms', 'dps'],
@@ -73,6 +74,7 @@ export function dailyLearningApp(ctx) {
       yerushalmi: true,
       chofetzChaim: true,
       shemiratHaLashon: true,
+      dafWeekly: true,
     },
   });
 

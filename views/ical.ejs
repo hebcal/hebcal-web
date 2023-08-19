@@ -184,6 +184,7 @@ than the Vilna and takes 5¾ years to complete.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Rambam', id: 'rambam1',
+  emoji: '📖',
   summary: `<p>A learning program that divides Maimonides’ Mishneh Torah legal code
     into daily units, to complete the whole work in three years.</p>`,
   feedLength: 365,
@@ -191,11 +192,20 @@ than the Vilna and takes 5¾ years to complete.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Chofetz Chaim', id: 'chofetz-chaim',
+  emoji: '📖',
   summary: `<p>Daily study of the Sefer Chofetz Chaim, which deals with the
 Jewish ethics and laws of speech. The book is divided into 119 parts in a regular
 year and 129 parts in a leap year.</p>`,
   feedLength: 365,
   years: 2,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Daf-a-Week', id: 'daf-weekly',
+  emoji: '📖',
+  summary: `<p>A learning program that covers a page of Talmud a week.
+By going at a slower pace, it facilitates greater mastery and retention.</p>`,
+  feedLength: 365,
+  years: 5,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yom Kippur Katan', id: 'yom-kippur-katan',

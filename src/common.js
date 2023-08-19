@@ -137,6 +137,7 @@ const dailyLearningOpts = {
   dcc: 'chofetzChaim',
   dshl: 'shemiratHaLashon',
   dps: 'psalms',
+  dw: 'dafWeekly',
 };
 
 const numberOpts = {

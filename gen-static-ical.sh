@@ -104,6 +104,10 @@ FILE="yerushalmi-schottenstein"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
 compress_file $FILE
 
+FILE="daf-weekly"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
+compress_file $FILE
+
 FILE="yom-kippur-katan"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&ykk=on&relcalid=457ce561-311f-4eeb-9033-65561b7f7503&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yom+Kippur+Katan&caldesc=%D7%99%D7%95%D6%B9%D7%9D+%D7%9B%D6%BC%D6%B4%D7%A4%D6%BC%D7%95%D6%BC%D7%A8+%D7%A7%D6%B8%D7%98%D6%B8%D7%9F%2C+minor+day+of+atonement+on+the+day+preceeding+each+Rosh+Chodesh"
 compress_file $FILE
