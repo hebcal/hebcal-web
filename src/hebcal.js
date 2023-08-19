@@ -196,6 +196,7 @@ const optToName = {
   shemiratHaLashon: 'Shemirat HaLashon',
   rambam1: 'Daily Rambam',
   yerushalmi: 'Yerushalmi Yomi',
+  dafWeekly: 'Daf-a-Week',
 };
 
 function makeLocationName(ctx, options) {
