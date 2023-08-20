@@ -66,4 +66,5 @@ message Download {
   bool chofetzChaim = 48;
   bool shemiratHaLashon = 49;
   bool psalms = 50;
+  bool dafWeekly = 51;
 }

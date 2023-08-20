@@ -200,7 +200,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     rambam1: jspb.Message.getBooleanFieldWithDefault(msg, 47, false),
     chofetzchaim: jspb.Message.getBooleanFieldWithDefault(msg, 48, false),
     shemirathalashon: jspb.Message.getBooleanFieldWithDefault(msg, 49, false),
-    psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false)
+    psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false),
+    dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false)
   };
 
   if (includeInstance) {
@@ -424,6 +425,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 50:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setPsalms(value);
+      break;
+    case 51:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setDafweekly(value);
       break;
     default:
       reader.skipField();
@@ -780,6 +785,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       50,
+      f
+    );
+  }
+  f = message.getDafweekly();
+  if (f) {
+    writer.writeBool(
+      51,
       f
     );
   }
@@ -1782,6 +1794,24 @@ proto.Download.prototype.getPsalms = function() {
  */
 proto.Download.prototype.setPsalms = function(value) {
   return jspb.Message.setProto3BooleanField(this, 50, value);
+};
+
+
+/**
+ * optional bool dafWeekly = 51;
+ * @return {boolean}
+ */
+proto.Download.prototype.getDafweekly = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 51, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setDafweekly = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 51, value);
 };
 
 

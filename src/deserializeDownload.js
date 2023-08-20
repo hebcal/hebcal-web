@@ -58,6 +58,7 @@ export function deserializeDownload(data) {
   if (msg.getRambam1()) q.dr1 = 'on';
   if (msg.getChofetzchaim()) q.dcc = 'on';
   if (msg.getShemirathalashon()) q.dshl = 'on';
+  if (msg.getDafweekly()) q.dw = 'on';
   if (msg.getPsalms()) q.dps = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
