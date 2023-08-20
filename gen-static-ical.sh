@@ -105,7 +105,7 @@ fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=of
 compress_file $FILE
 
 FILE="daf-weekly"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
 compress_file $FILE
 
 FILE="yom-kippur-katan"
