@@ -97,8 +97,10 @@ export function dailyLearningApp(ctx) {
   const items0 = [];
   const readings = getLeyningOnDate(hd, il, true);
   for (const reading of readings) {
-    const prefix = reading.weekday ? 'Weekday Torah reading' :
-      reading.fullkriyah && typeof reading.parshaNum === 'number' ? 'Shabbat Torah reading' :
+    const isWeekday = Boolean(reading.weekday);
+    const isShabbatParsha = reading.fullkriyah && typeof reading.parshaNum === 'number';
+    const prefix = isWeekday ? 'Weekday Torah reading' :
+      isShabbatParsha ? 'Shabbat Torah reading' :
       reading.fullkriyah ? 'Holiday Torah reading' :
       reading.megillah ? 'Megillah' : 'Reading';
     const category = reading.name.en.startsWith('Rosh Chodesh ') ?
@@ -114,6 +116,9 @@ export function dailyLearningApp(ctx) {
     }
     if (reading.haft) {
       item.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
+    }
+    if (isWeekday || isShabbatParsha) {
+      item.flag = 's';
     }
     items0.push(item);
   }
@@ -143,5 +148,6 @@ export function dailyLearningApp(ctx) {
     items,
     holidays,
     currentYear,
+    il,
   });
 }
