@@ -22,7 +22,7 @@
 <% for (const item of items) { %>
 <div class="lead mt-3" id="<%= item.id %>"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
 <% if (item.flag) { -%>
-<a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;set=off">
+<a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;start=<%= d.format('YYYY-MM')%>-01&amp;end=<%= d.month() > 5 ? d.year() + 1 : d.year() %>-12-31&amp;set=off">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
 <% } -%>
 <% if (item.basename) { -%>
