@@ -4,7 +4,7 @@
   font-size: .85em;
   line-height: 1.3;
   border-radius: 3px;
-  color: var(--bs-body-bg);
+  color: #fff;
   border: 1px solid #3a87ad; /* default BORDER color */
   background-color: #3a87ad; /* default BACKGROUND color */
   margin: 1px 2px 0; /* spacing between events and edges */
@@ -14,11 +14,11 @@
   font-weight: bold;
 }
 .fc-event a {
-  color: var(--bs-body-bg);
+  color: #fff;
 }
 .fc-event a:hover,
 .fc-event a:focus {
-    color: var(--bs-body-bg);
+  color: #fff;
 }
 .fc-event.omer a,
 .fc-event.hebdate, .fc-event.hebdate .fc-event-title,
@@ -26,10 +26,6 @@
   background-color:var(--bs-body-bg);
   border: 0px;
   color: var(--bs-secondary-color);
-}
-.fc-event.omer a:hover,
-.fc-event.omer a:focus {
-  color:#666;
 }
 .fc-event.nachyomi,
 .fc-event.nachyomi a,
@@ -40,10 +36,14 @@
 .fc-event.shemiratHaLashon,
 .fc-event.shemiratHaLashon a,
 .fc-event.mishnayomi,
-.fc-event.mishnayomi a {
+.fc-event.mishnayomi a,
+.fc-event.yerushalmi,
+.fc-event.yerushalmi a,
+.fc-event.dafyomi,
+.fc-event.dafyomi a {
   background-color:var(--bs-body-bg);
   border: 0px;
-  color:var(--bs-success);
+  color:var(--bs-link-color);
 }
 .fc-event.nachyomi a:hover,
 .fc-event.nachyomi a:focus,
@@ -54,17 +54,7 @@
 .fc-event.shemiratHaLashon a:hover,
 .fc-event.shemiratHaLashon a:focus,
 .fc-event.mishnayomi a:hover,
-.fc-event.mishnayomi a:focus {
-  color: #15713b;
-}
-.fc-event.yerushalmi,
-.fc-event.yerushalmi a,
-.fc-event.dafyomi,
-.fc-event.dafyomi a {
-  background-color:var(--bs-body-bg);
-  border: 0px;
-  color:var(--bs-link-color);
-}
+.fc-event.mishnayomi a:focus,
 .fc-event.yerushalmi a:hover,
 .fc-event.yerushalmi a:focus,
 .fc-event.dafyomi a:hover,
@@ -75,12 +65,12 @@
 .fc-event.holiday.timed {
   background-color:#3a87ad;
   border: 1px solid #3a87ad;
-  color:var(--bs-body-bg);
+  color:#FFF;
 }
 .fc-event.fast {
   background-color:#fd7e14;
   border: 1px solid #fd7e14;
-  color:var(--bs-body-bg);
+  color:#FFF;
 }
 .fc-event.timed,
 .fc-event.holiday.timed.fast {
@@ -91,19 +81,19 @@
 .fc-event.holiday.yomtov,
 .fc-event.holiday.yomtov a,
 .fc-event.holiday.yomtov .fc-event-title {
-  background-color:var(--bs-warning-bg-subtle);
-  border: 1px solid var(--bs-warning-bg-subtle);
-  color:var(--bs-body-color);
+  background-color:#ffd446;
+  border: 1px solid #ffd446;
+  color:#333;
 }
 .fc-event.parashat {
   background-color:var(--bs-success);
   border: 1px solid var(--bs-success);
-  color:var(--bs-body-bg);
+  color:#FFF;
 }
 .fc-event.roshchodesh {
   background-color:#6f42c1;
   border: 1px solid #6f42c1;
-  color:var(--bs-body-bg);
+  color:#FFF;
 }
 .fc-event.hebrew .fc-time {
   direction:ltr;

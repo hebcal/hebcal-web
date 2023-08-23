@@ -61,6 +61,7 @@ table.tbody-striped > thead > * > * {
 <% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=iSuffix%>"><%}%>
 <% if (greg1 <= 1752 || greg1 > today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
+</head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
