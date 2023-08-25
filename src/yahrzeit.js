@@ -38,7 +38,7 @@ async function makeQuery(ctx) {
   }
   const rpath = ctx.request.path;
   const qid = query.id;
-  if (rpath.startsWith('/yahrzeit/edit/') || (typeof qid === 'string' && qid.length === 26)) {
+  if (rpath.startsWith('/yahrzeit/edit/') || isValidUlid(qid)) {
     const id = qid || basename(rpath);
     const contents = await getYahrzeitDetailsFromDb(ctx, id);
     ctx.state.isEditPage = true;
@@ -109,6 +109,10 @@ export async function yahrzeitApp(ctx) {
     }
   } else {
     ctx.state.tables = null;
+    if (seq > 0 && !ctx.state.isEditPage && isValidUlid(q.ulid)) {
+      ctx.state.ulid = q.ulid;
+      await saveDataToDb(ctx);
+    }
   }
   q.years = getNumYears(q.years);
   ctx.state.typesSet = getAnniversaryTypes(q);
@@ -122,12 +126,21 @@ export async function yahrzeitApp(ctx) {
   });
 }
 
+/**
+ * @private
+ * @param {string} str
+ * @return {boolean}
+ */
+function isValidUlid(str) {
+  return typeof str === 'string' && str.length === 26 && /^\w+$/.test(str);
+}
+
 // eslint-disable-next-line require-jsdoc
 function getOrMakeUlid(ctx) {
   const q = ctx.state.q;
   const existing = q.ulid || ctx.state.ulid;
   if (existing) {
-    if (existing.length != 26 || !(/^\w+$/.test(existing))) {
+    if (!isValidUlid(existing)) {
       ctx.throw(400, 'Invalid calendar id: ' + existing);
     }
     return existing;

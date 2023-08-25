@@ -113,6 +113,9 @@ export function getYahrzeitIds(query) {
  */
 export function getMaxYahrzeitId(query) {
   const ids = getYahrzeitIds(query);
+  if (ids.length === 0) {
+    return 0;
+  }
   return Math.max(...ids);
 }
 
