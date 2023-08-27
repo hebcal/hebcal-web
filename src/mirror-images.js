@@ -27,7 +27,7 @@ async function main() {
       await access(path, fs.constants.R_OK);
       logger.info(`skipping ${asin}`);
     } catch {
-      const url = `http://images.amazon.com/images/P/${asin}.01.MZZZZZZZ.jpg`;
+      const url = `https://images.amazon.com/images/P/${asin}.01.MZZZZZZZ.jpg`;
       logger.info(url);
       const res = await fetch(url);
       if (res.ok) {
