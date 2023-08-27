@@ -461,7 +461,7 @@ function parseConverterQuery(ctx) {
     for (const param of ['hy', 'hm', 'hd']) {
       if (empty(query[param])) {
         if (query.strict === '1') {
-          throw createError(400, `h2g=1 requires parameter '${param}'`);
+          throw createError(400, `Missing parameter '${param}' for conversion from Hebrew to Gregorian`);
         } else {
           return g2h(new Date(), false, true);
         }
@@ -487,7 +487,7 @@ function parseConverterQuery(ctx) {
     } else {
       for (const param of ['gy', 'gm', 'gd']) {
         if (empty(query[param])) {
-          throw createError(400, `Missing parameter '${param}'`);
+          throw createError(400, `Missing parameter '${param}' for conversion from Gregorian to Hebrew`);
         }
       }
     }
