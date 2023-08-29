@@ -184,7 +184,6 @@ export async function parshaDetail(ctx) {
   const hasTriennial = hyear >= 5744;
   const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName, il) : {};
   const titleYear = date ? ' ' + hyear : '';
-  const titleHebrew = Locale.hebrewStripNikkud(parsha.hebrew);
   const otherLocationSedra = HebrewCalendar.getSedra(hyear, !il);
   const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
   const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
@@ -207,7 +206,7 @@ export async function parshaDetail(ctx) {
   // doubled parsha overwrites first half
   Object.assign(commentary, drash[parsha.name]);
   await ctx.render('parsha-detail', {
-    title: `${parsha.name}${titleYear} - Torah Portion - ${titleHebrew} - Hebcal`,
+    title: `${parsha.name}${titleYear} - Torah Portion - Hebcal`,
     parsha,
     parshaName: parsha.name.replace(/'/g, '’'),
     parshaAnchor,

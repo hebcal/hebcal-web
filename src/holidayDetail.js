@@ -177,12 +177,10 @@ export async function holidayDetail(ctx) {
 const shaloshRegalim = {Sukkot: true, Pesach: true, Shavuot: true};
 
 function makePageTitle(holiday, year, il, descrShort) {
-  const hebrew = Locale.gettext(holiday, 'he');
-  const titleHebrew = Locale.hebrewStripNikkud(hebrew);
   const titleYear = year ? ' ' + year : '';
   const ilDiaspora = holiday === 'Pesach' || holiday === 'Shavuot' ?
     (il ? ' (Israel)' : ' (Diaspora)') : '';
-  return `${holiday}${ilDiaspora}${titleYear} - ${descrShort} - ${titleHebrew} - Hebcal`;
+  return `${holiday}${ilDiaspora}${titleYear} - ${descrShort} - Hebcal`;
 }
 
 function makeJsonLD(noindex, year, ev, il, meta) {
