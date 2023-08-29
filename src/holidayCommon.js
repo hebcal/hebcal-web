@@ -123,10 +123,11 @@ export function eventToHolidayItem(ev, il) {
   }
   const iSuffix = il ? '?i=on' : '';
   const href = anchor + '-' + anchorDate + iSuffix;
+  const id = holiday === 'Asara B\'Tevet' ? anchor + '-' + anchorDate : anchor;
   const item = {
     name: holiday,
     mask,
-    id: anchor,
+    id,
     href,
     hd,
     beginsWhen,
