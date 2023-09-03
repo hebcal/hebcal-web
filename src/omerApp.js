@@ -2,12 +2,13 @@ import dayjs from 'dayjs';
 import {cacheControl, httpRedirect} from './common';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
+import {getHolidayMeta} from './getHolidayMeta';
 
 const CACHE_CONTROL_30DAYS = cacheControl(30);
 const CACHE_CONTROL_1_YEAR = cacheControl(365);
 
 // eslint-disable-next-line require-jsdoc
-export function omerApp(rpath, ctx) {
+export async function omerApp(rpath, ctx) {
   if (rpath === '/omer/sitemap.txt') {
     const prefix = 'https://www.hebcal.com/omer';
     let body = '';
@@ -43,9 +44,11 @@ export function omerApp(rpath, ctx) {
     }
     ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+    const meta = await getHolidayMeta('Days of the Omer');
     return ctx.render('omer-year', {
       hyear,
       items,
+      books: meta.books,
     });
   }
   const hyear = parseInt(yearStr, 10);
