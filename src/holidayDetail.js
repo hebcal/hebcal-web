@@ -453,11 +453,14 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     itemReading.shortName = 'Mincha';
   } else if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {
-      itemReading.shortName = 'Tanakh';
+      itemReading.shortName = item;
     } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
       itemReading.shortName = item.substring(holiday.length + 1);
     } else if (item.startsWith(`${holiday} Day`)) {
       itemReading.shortName = item.substring(holiday.length + 1);
+    } else if (item.startsWith(`${holiday} (`)) {
+      const tmp = item.substring(holiday.length + 2);
+      itemReading.shortName = tmp.substring(0, tmp.length - 1);
     } else {
       itemReading.shortName = 'Day ' + item.substring(holiday.length + 1);
     }
