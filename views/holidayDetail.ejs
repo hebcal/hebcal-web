@@ -82,6 +82,26 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </tbody>
 </table>
 </div><!-- #chanukah-candles -->
+<% } else if (pesachSukkotItems !== null) { %>
+<div class="table-responsive" id="shalosh-regalim">
+<table class="table table-striped">
+<colgroup><col><col></colgroup>
+<thead>
+<tr><th>Date</th><th>Detail</th></tr>
+</thead>
+<tbody class="table-group-divider">
+<% for (let i = 0; i < pesachSukkotItems.length; i++) { const item = pesachSukkotItems[i]; %>
+<tr class="<%=item.ppf%>">
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
+<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc%></td>
+</tr>
+<% } %>
+</tbody>
+</table>
+</div><!-- #shalosh-regalim -->
+<p>Dates in <strong>bold</strong> are <em>yom tov</em>, so they have similar
+obligations and restrictions to Shabbat in the sense that normal “work”
+is forbidden.</p>
 <% } %>
 
 <div class="d-flex justify-content-center d-print-none">

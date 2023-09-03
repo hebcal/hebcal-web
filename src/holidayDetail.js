@@ -145,6 +145,9 @@ export async function holidayDetail(ctx) {
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
   const jsonLD = makeJsonLD(noindex, year, next.event, il, meta);
+  const pesachSukkotItems = shaloshRegalim[holiday] && holiday !== 'Shavuot' ?
+    makeMultiDayHolidayItems(holiday, upcomingHebrewYear, il) :
+    null;
   await ctx.render('holidayDetail', {
     title,
     year,
@@ -168,6 +171,7 @@ export async function holidayDetail(ctx) {
     jsonLD,
     il,
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
+    pesachSukkotItems,
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
     amp: (q.amp === '1') ? true : undefined,
@@ -289,6 +293,36 @@ const KEYCAP_DIGITS = [
 ];
 
 /**
+ * @param {string} holiday
+ * @param {number} hyear
+ * @param {boolean} il
+ * @return {any[]}
+ */
+function makeMultiDayHolidayItems(holiday, hyear, il) {
+  const nowHd = new HDate();
+  const nowAbs = nowHd.abs();
+  const events = HebrewCalendar.calendar({year: hyear, isHebrewYear: true, il});
+  const items = events
+      .filter((ev) => ev.basename() === holiday)
+      .map((ev) => {
+        const hd = ev.getDate();
+        const d = dayjs(hd.greg());
+        const abs = hd.abs();
+        const ppf = abs === nowAbs ? 'current' : abs < nowAbs ? 'past' : 'future';
+        return {
+          hd,
+          d,
+          ppf,
+          desc: ev.render('en'),
+          event: ev,
+          yomtov: Boolean(ev.getFlags() & flags.CHAG),
+          monthDayHtml: wrapDisplaySpans('sm', d.format('MMM D'), d.format('MMMM D')),
+        };
+      });
+  return items;
+}
+
+/**
  * @param {number} hyear
  * @return {any[]}
  */
@@ -297,31 +331,19 @@ function makeChanukahItems(hyear) {
   if (hyear < nowHd.getFullYear()) {
     return null;
   }
-  const nowAbs = nowHd.abs();
-  const events = HebrewCalendar.calendar({year: hyear, isHebrewYear: true, il: false});
-  const items = events
-      .filter((ev) => ev.basename() === 'Chanukah')
-      .map((ev) => {
-        const hd = ev.getDate();
-        const d = dayjs(hd.greg());
-        const dow = hd.getDay();
-        const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
-        const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
-        const abs = hd.abs();
-        const ppf = abs === nowAbs ? 'current' : abs < nowAbs ? 'past' : 'future';
-        return {
-          hd,
-          d,
-          candles,
-          when,
-          ppf,
-          desc: ev.render('en'),
-          event: ev,
-          digit: KEYCAP_DIGITS[candles],
-          monthDayHtml: wrapDisplaySpans('sm', d.format('MMM D'), d.format('MMMM D')),
-        };
-      });
-  items[8].day8 = true;
+  const items = makeMultiDayHolidayItems('Chanukah', hyear, false);
+  for (const item of items) {
+    const dow = item.hd.getDay();
+    item.when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
+    const ev = item.event;
+    const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
+    if (candles === 9) {
+      item.day8 = true;
+    } else {
+      item.candles = candles;
+      item.digit = KEYCAP_DIGITS[candles];
+    }
+  }
   return items;
 }
 
