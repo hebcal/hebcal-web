@@ -73,11 +73,9 @@ table.tbody-striped > thead > * > * {
 <% } -%>
 </h2>
 <% if (greg1 <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 </div><!-- .col -->
 </div><!-- .row -->
-<div class="row gx-3 mt-1 d-print-none">
+<div class="row gx-3 mt-2 d-print-none">
 <div class="col-auto">
 <div class="btn-group me-1 mb-2" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
@@ -119,6 +117,8 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
 </select>
 </div><!-- .col-auto -->
 </div><!-- .row -->
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>  
 <div id="calendar"></div>
 <div id="list-view">
 <% for (const [catId, category] of Object.entries(categories)) { -%>
