@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent} from '@hebcal/core';
+import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent, HolidayEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
 import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon';
@@ -372,10 +372,22 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
         const key0 = getLeyningKeyForEvent(ev, il) || desc;
         const key1 = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
         const key = dupes.has(key1) ? key1 + ' Day 2' : key1;
+        const hd = ev.getDate();
+        if (key === 'Simchat Torah') {
+          const erevST = 'Erev ' + key;
+          const erevHD = hd.prev();
+          const erevEv = new HolidayEvent(erevHD, erevST, flags.EREV);
+          const readingErev = getLeyningForHolidayKey(erevST, undefined, il);
+          meta.items.push(erevST);
+          dupes.add(erevST);
+          makeHolidayReading(holiday, erevST, meta, readingErev, erevEv, il);
+          readingErev.hd = hd;
+          readingErev.d = dayjs(erevHD.greg());
+        }
         meta.items.push(key);
         dupes.add(key);
         makeHolidayReading(holiday, key, meta, reading, ev, il);
-        const hd = reading.hd = ev.getDate();
+        reading.hd = hd;
         reading.d = dayjs(hd.greg());
         // Add Mincha reading if available
         const minchaKey0 = key0 + ' (Mincha)';
