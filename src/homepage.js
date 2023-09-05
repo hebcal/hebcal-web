@@ -160,6 +160,8 @@ const chagSameach = {
 };
 
 const TZOM_KAL = '✡️&nbsp;Tzom Kal!&nbsp;&nbsp;<span lang="he" dir="rtl">צום קל</span>&nbsp;✡️';
+const SHANA_TOVA = '🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שָׁנָה טוֹבָה וּמְתוּקָה</span>&nbsp;🍯&nbsp;🍏';
+const SHANA_TOVA2 = '<strong>Shana Tova u\'Metukah!</strong> We wish you a happy and healthy New Year';
 
 /**
  * @private
@@ -179,8 +181,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   const isElul = mm === months.ELUL;
   const isTishrei = mm === months.TISHREI;
   if ((isElul && dd === 29) || (isTishrei && (dd === 1 || dd === 2))) {
-    const blurb = '🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שנה טובה ומתוקה</span>&nbsp;🍯&nbsp;🍏';
-    return [blurb, '<strong>Shana Tova u\'Metukah!</strong> We wish you a happy and healthy New Year'];
+    return [SHANA_TOVA, SHANA_TOVA2];
   } else if (isTishrei && dd > 4 && dd <= 10) {
     // between RH & YK
     let longText = '<strong>G\'mar Chatima Tova!</strong> We wish you a good inscription in the Book of Life';
@@ -279,8 +280,7 @@ ${when} on ${htmlDate}`];
     const nextYear = yy + 1;
     const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg()).locale(locale);
     const htmlDate = myDateFormat(erevRH);
-    return ['🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שנה טובה</span>&nbsp;🍯&nbsp;🍏',
-      `<strong>Shana Tova!</strong> We wish you a happy and healthy New Year.
+    return [SHANA_TOVA, SHANA_TOVA2 + `.<br>
  <a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-${gy}">Rosh Hashana ${nextYear}</a>
  begins at sundown on ${htmlDate}`];
   } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
