@@ -191,7 +191,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
       longText += `.\n<br><a class="text-green1 text-nowrap" href="/holidays/yom-kippur-${gy}">Yom Kippur</a>
  begins at sundown on ${htmlDate}`;
     }
-    return ['✡️&nbsp;<span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span>&nbsp;✡️',
+    return ['✡️&nbsp;<span lang="he" dir="rtl">גְּמַר חֲתִימָה טוֹבָה</span>&nbsp;✡️',
       longText];
   } else if (isTishrei && dd >= 11 && dd <= 14) {
     const erevSukkot = dayjs(new HDate(14, months.TISHREI, yy).greg()).locale(locale);

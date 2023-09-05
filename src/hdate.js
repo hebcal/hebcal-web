@@ -39,16 +39,16 @@ var hd = new hebcal.HDate(dt);
 if (dt.getHours() > 19) {
   hd = hd.next();
 }
-var heInStr = 'בְּ';
+var heInStr = 'בְּ';
 var monthInPrefix = {
-  'Tamuz': 'בְּתַמּוּז',
-  'Elul': 'בֶּאֱלוּל',
-  'Tishrei': 'בְּתִשְׁרֵי',
-  'Kislev': 'בְּכִסְלֵו',
-  "Sh'vat": 'בִּשְׁבָט',
-  'Adar': 'בַּאֲדָר',
-  'Adar I': 'בַּאֲדָר א׳',
-  'Adar II': 'בַּאֲדָר ב׳',
+  'Tamuz': 'בְּתַמּוּז',
+  'Elul': 'בֶּאֱלוּל',
+  'Tishrei': 'בְּתִשְׁרֵי',
+  'Kislev': 'בְּכִסְלֵו',
+  "Sh'vat": 'בִּשְׁבָט',
+  'Adar': 'בַּאֲדָר',
+  'Adar I': 'בַּאֲדָר א׳',
+  'Adar II': 'בַּאֲדָר ב׳',
 };
 var dd = hd.getDate();
 var monthName = hd.getMonthName();
