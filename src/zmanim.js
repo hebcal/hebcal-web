@@ -1,4 +1,5 @@
-import {Zmanim, TimedEvent, HDate, flags} from '@hebcal/core';
+import {Zmanim, TimedEvent, HDate, flags,
+  HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
 import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
   CACHE_CONTROL_7DAYS,
   lgToLocale, eTagFromOptions} from './common';
@@ -7,7 +8,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import {eventsToIcalendar} from '@hebcal/icalendar';
+import {eventsToIcalendar, IcalEvent} from '@hebcal/icalendar';
 import {locationToPlainObj} from '@hebcal/rest-api';
 
 dayjs.extend(utc);
@@ -268,10 +269,89 @@ export async function zmanimIcalendar(ctx) {
   }
   const today = nowInTimezone(location.getTzid());
   const riseSetOnly = ctx.request.path.startsWith('/sunrs');
+  const zmanimAllDay = ctx.request.path.startsWith('/zmanim2');
   const startD = today.subtract(1, 'day');
-  const endD = today.add(riseSetOnly ? 365 : 60, 'day');
+  const duration = zmanimAllDay ? 90 : riseSetOnly ? 365 : 60;
+  const endD = today.add(duration, 'day');
   const names = riseSetOnly ? ['sunrise', 'sunset'] : ALL_TIMES;
   const times = getTimesForRange(names, startD, endD, location, false, true);
+  const lg = query.lg;
+  const locale = lgToLocale[lg] || lg || 's';
+  const events = zmanimAllDay ? makeAllDayEvents(times, location, locale) : makeEvents(times, location);
+  const titlePrefix = riseSetOnly ? 'Sunrise and Sunset' : 'Hebcal Zmanim';
+  const caldesc = riseSetOnly ?
+    'Times for ' + location.getName() :
+    'Halachic times for ' + location.getName();
+  const options = {
+    location,
+    title: `${titlePrefix} ${location.getShortName()}`,
+    publishedTTL: 'PT7D',
+    caldesc,
+    locale,
+  };
+  ctx.response.etag = eTagFromOptions(options, {dt: today.format('YYYY-MM-DD')});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+  ctx.lastModified = new Date();
+  ctx.response.type = 'text/calendar; charset=utf-8';
+  ctx.body = await eventsToIcalendar(events, options);
+}
+
+/**
+ * @private
+ * @param {any} times
+ * @param {Location} location
+ * @param {string} locale
+ * @return {Event[]}
+ */
+function makeAllDayEvents(times, location, locale) {
+  const byDate = {};
+  for (const [zman, map] of Object.entries(times)) {
+    for (const [isoDate, dt] of Object.entries(map)) {
+      byDate[isoDate] = byDate[isoDate] || [];
+      byDate[isoDate].push([dt, zman]);
+    }
+  }
+  const events = [];
+  const timeFormat = location.getTimeFormatter();
+  const locationName = location.getShortName();
+  const geoid = location.getGeoId();
+  const options = {location, locale};
+  for (const [isoDate, arr] of Object.entries(byDate)) {
+    const date = new Date(isoDate);
+    const hd = new HDate(date);
+    const ev = new HebrewDateEvent(hd, locale);
+    const lines = [];
+    for (const [dt, zman] of arr) {
+      const desc = ZMAN_NAMES[zman][0];
+      const time = Zmanim.formatTime(dt, timeFormat);
+      const str = HebrewCalendar.reformatTimeStr(time, 'pm', options);
+      const hourMin = str.split(':');
+      const prefix = hourMin[0].length === 2 ? '' : ' ';
+      lines.push(prefix + str + ' ' + Locale.gettext(desc, locale));
+    }
+    ev.memo = lines.join('\n');
+    ev.alarm = false;
+    ev.location = location;
+    ev.locationName = locationName;
+    const startDate = IcalEvent.formatYYYYMMDD(date);
+    ev.uid = `hebcal-zmanim2-${startDate}-${geoid}`;
+    events.push(ev);
+  }
+  return events;
+}
+
+/**
+ * @private
+ * @param {any} times
+ * @param {Location} location
+ * @return {Event[]}
+ */
+function makeEvents(times, location) {
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
@@ -286,28 +366,5 @@ export async function zmanimIcalendar(ctx) {
     }
   }
   events.sort((a, b) => a.eventTime - b.eventTime);
-  const titlePrefix = riseSetOnly ? 'Sunrise and Sunset' : 'Hebcal Zmanim';
-  const caldesc = riseSetOnly ?
-    'Times for ' + location.getName() :
-    'Halachic times for ' + location.getName();
-  const options = {
-    location,
-    title: `${titlePrefix} ${location.getShortName()}`,
-    publishedTTL: 'PT7D',
-    caldesc,
-  };
-  if (!empty(query.lg)) {
-    const lg = query.lg;
-    options.locale = lgToLocale[lg] || lg;
-  }
-  ctx.response.etag = eTagFromOptions(options, {dt: today.format('YYYY-MM-DD')});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return;
-  }
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-  ctx.lastModified = new Date();
-  ctx.response.type = 'text/calendar; charset=utf-8';
-  ctx.body = await eventsToIcalendar(events, options);
+  return events;
 }
