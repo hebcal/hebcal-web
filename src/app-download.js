@@ -77,7 +77,7 @@ app.use(async function fixup0(ctx, next) {
     await next();
   } catch (err) {
     ctx.status = err.status || 500;
-    ctx.body = err.message;
+    ctx.body = err.message + '\n';
     ctx.app.emit('error', err, ctx);
   }
 });
