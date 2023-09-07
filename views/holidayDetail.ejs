@@ -10,8 +10,7 @@
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>
-.past {color: rgba(0, 0, 0, 0.5) !important;}
-.current {background-color: #ffc;}
+.past {color: var(--bs-secondary-color) !important}
 </style>
 <% } -%>
 </head>
@@ -70,7 +69,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </thead>
 <tbody class="table-group-divider">
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
-<tr class="<%=item.ppf%>">
+<tr>
 <td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
 <%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
@@ -91,8 +90,8 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </thead>
 <tbody class="table-group-divider">
 <% for (let i = 0; i < pesachSukkotItems.length; i++) { const item = pesachSukkotItems[i]; %>
-<tr class="<%=item.ppf%>">
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
+<tr>
+<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
 <td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc%></td>
 </tr>
 <% } %>
@@ -141,13 +140,13 @@ data-ad-slot="5342180883"></ins>
 </thead>
 <tbody class="table-group-divider">
 <% occursOn.forEach((item) => { %>
-<tr class="<%=item.ppf%>">
+<tr>
 <td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
-<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
-<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
-<td class="small"><%=item.hdRange%></td>
+<td><time class="<%=item.ppf === 'current' ? 'text-burgundy' : item.ppf%>" datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time class="<%=item.ppf === 'current' ? 'text-burgundy' : item.ppf%>" datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
+<td class="small <%=item.ppf%>"><%=item.hdRange%></td>
 </tr>
 <% }); %>
 </tbody>
