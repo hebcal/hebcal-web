@@ -4,6 +4,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   hebcalFormDefaults,
   makeIcalOpts,
   CACHE_CONTROL_7DAYS,
+  getDefaultYear,
   getDefaultHebrewYear, makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
@@ -72,9 +73,17 @@ export async function hebcalApp(ctx) {
   const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
   if (empty(q.year) && !startEnd) {
     const dt = new Date();
-    q.year = options.year = options.isHebrewYear ?
-      getDefaultHebrewYear(new HDate(dt)) :
-      dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
+    const hd = new HDate(dt);
+    const yearInfo = getDefaultYear(dt, hd);
+    const ytStr = ctx.request.query.yt;
+    if (empty(ytStr)) {
+      const isHebrewYear = options.isHebrewYear = yearInfo.isHebrewYear;
+      q.yt = isHebrewYear ? 'H' : 'G';
+      q.year = options.year = isHebrewYear ? yearInfo.hy : yearInfo.gregRange;
+    } else {
+      q.year = options.year = (ytStr === 'H') ? yearInfo.hy :
+        dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
+    }
   }
   if (ctx.status < 400 && q.v === '1') {
     ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
