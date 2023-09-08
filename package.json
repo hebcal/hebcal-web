@@ -30,7 +30,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.15",
+    "@babel/core": "^7.22.17",
     "@babel/preset-env": "^7.22.15",
     "@babel/register": "^7.22.15",
     "@rollup/plugin-babel": "^6.0.3",
@@ -81,7 +81,7 @@
     "nodemailer": "^6.9.5",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
-    "pino": "^8.15.0",
+    "pino": "^8.15.1",
     "probe-image-size": "^7.2.3",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",

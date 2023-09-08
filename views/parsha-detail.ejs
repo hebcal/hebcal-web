@@ -179,7 +179,7 @@ if (!date && spHaftItems.length !== 0) { -%>
 <li><a title="Parashat <%=parshaName%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/tag/<%=commentary['ajr.edu'].target%>/">Academy for Jewish Religion</a>
+<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=commentary['ajr.edu'].target%>">Academy for Jewish Religion</a>
 <% } %>
 <% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
 <li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
