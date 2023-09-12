@@ -217,7 +217,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <h3 id="ref">References</h3>
 <dl>
 <% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
-<dt><em><a class="amzn outbound" id="strassfeld-2" rel="sponsored"
+<dt><em><a class="outbound" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <small class="text-body-secondary">(paid link)</small>
@@ -227,7 +227,7 @@ Jewish Holidays: A Guide &amp; Commentary</a></em>
 <dt><em><a class="outbound"
 href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dd>Sefaria.org
-<dt><em><a class="amzn outbound" id="jps-tanakh-1" rel="sponsored"
+<dt><em><a class="outbound" rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
@@ -247,7 +247,7 @@ The Holy Scriptures</a></em>
 <% meta.books.forEach((book) => { %>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
-<a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
+<a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
 <% if (typeof amp === 'boolean' && amp) { -%>
 <amp-img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
@@ -264,7 +264,7 @@ style="border:none">
 <% } -%>
 </a>
 <div class="card-body">
-<p class="card-text small"><a class="amzn" rel="sponsored" id="<%=holidayAnchor%>-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
+<p class="card-text small"><a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
 <% if (book.author) { %><br>by <%=book.author%><% } %></p>
 </div><!-- .card-body -->
 </div><!-- .card -->

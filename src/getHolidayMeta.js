@@ -41,6 +41,13 @@ export async function getHolidayMeta(holiday) {
       meta.wikipedia.title = meta.wikipedia.title.substring(anchorIdx + 1);
     }
   }
+  if (!meta.israelOnly && !Array.isArray(meta.books)) {
+    meta.books = [{
+      'ASIN': '0062720082',
+      'author': 'Michael Strassfeld',
+      'text': 'The Jewish Holidays: A Guide & Commentary',
+    }];
+  }
   if (Array.isArray(meta.books)) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');

@@ -64,7 +64,7 @@
 <% books.forEach((book) => { %>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
-<a class="amzn" rel="sponsored" id="omer-<%=book.ASIN%>-1" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
+<a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
 <% if (typeof amp === 'boolean' && amp) { -%>
 <amp-img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
@@ -81,7 +81,7 @@ style="border:none">
 <% } -%>
 </a>
 <div class="card-body">
-<p class="card-text small"><a class="amzn" rel="sponsored" id="omer-<%=book.ASIN%>-2" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
+<p class="card-text small"><a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>
 <% if (book.author) { %><br>by <%=book.author%><% } %></p>
 </div><!-- .card-body -->
 </div><!-- .card -->
