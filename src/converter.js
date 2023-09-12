@@ -1,4 +1,5 @@
-import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya, greg} from '@hebcal/core';
+import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
+  OmerEvent, gematriya, greg, flags} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
@@ -10,6 +11,7 @@ import createError from 'http-errors';
 import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales';
 import {gematriyaDate} from './gematriyaDate';
+import {getLeyningOnDate} from '@hebcal/leyning';
 
 const CACHE_CONTROL_ONE_YEAR = cacheControl(365);
 /**
@@ -417,10 +419,16 @@ function getEvents(hdate, il) {
       const pe = new ParshaEvent(saturday, parsha.parsha, il);
       events = events.concat(pe);
     } else if (saturday.abs() != hdate.abs()) {
-      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
-      for (const ev of satHolidays) {
-        const pe = new PseudoParshaEvent(ev);
-        events = events.concat(pe);
+      const chagToday = events.find((ev) => ev.getFlags() & flags.CHAG);
+      if (typeof chagToday === 'undefined') {
+        const readings = getLeyningOnDate(hdate, il, false);
+        if (typeof readings === 'undefined') {
+          const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+          for (const ev of satHolidays) {
+            const pe = new PseudoParshaEvent(ev);
+            events = events.concat(pe);
+          }
+        }
       }
     }
   }
