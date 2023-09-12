@@ -208,6 +208,9 @@ function makeOptions(ctx) {
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q0[k] = 'on';
   }
+  if (empty(q0.M) && empty(q0.m)) {
+    q0.M = 'on';
+  }
   const cfg = q0.cfg;
   const isApi = (cfg === 'json' || cfg === 'i' || cfg === 'r' || cfg === 'j' || cfg === 'i2');
   const q = isApi ? q0 : processCookieAndQuery(ctx.cookies.get('C'), {}, q0);
