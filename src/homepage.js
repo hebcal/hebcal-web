@@ -2,6 +2,7 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
 import {DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
+  doesCookieNeedRefresh, setHebcalCookie,
   processCookieAndQuery, urlArgs,
   shortenUrl,
   makeGeoUrlArgs2,
@@ -67,6 +68,9 @@ export async function homepage(ctx) {
     ctx.state.holidayLongText = longText;
   } else {
     ctx.state.holidayBlurb = false;
+  }
+  if (doesCookieNeedRefresh(ctx)) {
+    setHebcalCookie(ctx, q);
   }
   return ctx.render('homepage');
 }
