@@ -198,7 +198,7 @@ represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon icon-md mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
  Yahrzeit + Anniversary Calendar</h5>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
 Hebrew Birthdays and Anniversaries for 20+ years.
@@ -206,7 +206,7 @@ Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col -->
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon icon-md mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
  Holiday Calendar</h5>
 <p>Jewish holidays, candle-lighting times, and Torah readings for any year,
  past or present.
@@ -215,10 +215,14 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .row -->
 <div id="future" class="row">
 <div class="col-md-6" id="future-heb">
-<h4><%= hdate.render(locale, false) %>
- <a class="ms-2" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
-  <svg class="icon icon-md" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
- </a></h4>
+<div class="row">
+ <div class="col-auto"><h4><%= hdate.render(locale, false) %></h4></div>
+ <div class="col-auto"><a
+  class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
+  <svg class="icon" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  Download CSV</a>
+ </div>
+</div>
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
@@ -243,17 +247,31 @@ Free annual email reminders &amp; calendar downloads.
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var switchEl = document.querySelector("#nikud-checkbox");
-  var hebdateEl = document.querySelector("#jumbo-hebdate");
+  var d = document;
+  var switchEl = d.querySelector("#nikud-checkbox");
+  var hebdateEl = d.querySelector("#jumbo-hebdate");
   switchEl.addEventListener('change', function(event) {
     hebdateEl.innerHTML = event.target.checked ? '<%= hebrew %>' : '<%= hebrewNoNikkud %>';
   });
   var gy=<%=gy%>, gm=<%=gm%>, gd=<%=gd%>;
   var dt = new Date();
   if (dt.getFullYear() != gy || dt.getMonth()+1 != gm || dt.getDate() != gd) {
-    var ctodayEl = document.querySelector("#ctoday");
-    ctodayEl.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
+    var el = d.querySelector("#ctoday");
+    el.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
   }
+  d.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' && !e.metaKey) {
+      var el = d.querySelector('link[rel=prev]');
+      if (el) {
+        d.location.href = el.href;
+      }
+    } else if (e.key === 'ArrowRight' && !e.metaKey) {
+      var el = d.querySelector('link[rel=next]');
+      if (el) {
+        d.location.href = el.href;
+      }
+    }
+  });
 });
 </script>
 <% } -%>

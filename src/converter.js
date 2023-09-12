@@ -11,7 +11,6 @@ import createError from 'http-errors';
 import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales';
 import {gematriyaDate} from './gematriyaDate';
-import {getLeyningOnDate} from '@hebcal/leyning';
 
 const CACHE_CONTROL_ONE_YEAR = cacheControl(365);
 /**
@@ -420,14 +419,12 @@ function getEvents(hdate, il) {
       events = events.concat(pe);
     } else if (saturday.abs() != hdate.abs()) {
       const chagToday = events.find((ev) => ev.getFlags() & flags.CHAG);
-      if (typeof chagToday === 'undefined') {
-        const readings = getLeyningOnDate(hdate, il, false);
-        if (typeof readings === 'undefined') {
-          const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
-          for (const ev of satHolidays) {
-            const pe = new PseudoParshaEvent(ev);
-            events = events.concat(pe);
-          }
+      const cholHaMoed = events.find((ev) => ev.getFlags() & flags.CHOL_HAMOED);
+      if (typeof chagToday === 'undefined' && typeof cholHaMoed === 'undefined') {
+        const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+        for (const ev of satHolidays) {
+          const pe = new PseudoParshaEvent(ev);
+          events = events.concat(pe);
         }
       }
     }
