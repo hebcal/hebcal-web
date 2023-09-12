@@ -2,6 +2,8 @@
   title: `Daily Learning - ${hd.toString()} - ${d.format('D MMMM YYYY')} - Hebcal`,
 }) -%>
 <% if (d.year() < currentYear-10 || d.year() > currentYear+10) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (d.year() > currentYear-10) { %><link rel="prev" href="<%=prev.format('YYYY-MM-DD')%>"><% } %>
+<% if (d.year() < currentYear+10) { %><link rel="next" href="<%=next.format('YYYY-MM-DD')%>"><% } %>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -82,6 +84,24 @@
 <div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.format('YYYY-MM-DD')%>"><%=hd.next().render(lg, false)%><span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var d = document;
+  d.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' && !e.metaKey) {
+      var el = d.querySelector('link[rel=prev]');
+      if (el) {
+        d.location.href = el.href;
+      }
+    } else if (e.key === 'ArrowRight' && !e.metaKey) {
+      var el = d.querySelector('link[rel=next]');
+      if (el) {
+        d.location.href = el.href;
+      }
+    }
+  });
+});
+</script>
 <%- await include('partials/footer.ejs', {
   footerScripts: {clipboard: true},
 }) _%>
