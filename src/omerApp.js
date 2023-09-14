@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {cacheControl, httpRedirect} from './common';
+import {cacheControl, httpRedirect, getDefaultHebrewYear} from './common';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
 import {getHolidayMeta} from './getHolidayMeta';
@@ -88,6 +88,7 @@ export async function omerApp(rpath, ctx) {
 // eslint-disable-next-line require-jsdoc
 function redirCurrentYear(ctx) {
   const hd = new HDate();
-  httpRedirect(ctx, `/omer/${hd.getFullYear()}`, 302);
+  const hyear = getDefaultHebrewYear(hd);
+  httpRedirect(ctx, `/omer/${hyear}`, 302);
   return;
 }

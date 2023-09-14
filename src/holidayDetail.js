@@ -105,7 +105,7 @@ export async function holidayDetail(ctx) {
     return;
   }
   const meta = await getHolidayMeta(holiday);
-  const holidayBegin = getHolidayBegin(holiday, year, il);
+  const {multiYearBegin, holidayBegin} = getHolidayBegin(holiday, year, il);
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
   if (holiday === OMER_TITLE) {
     for (const item of occursOn) {
@@ -119,6 +119,22 @@ export async function holidayDetail(ctx) {
   if (typeof next === 'undefined') {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
+  }
+  const idx = year ? multiYearBegin.findIndex((ev) => ev === next.event) : -1;
+  const prevNext = {};
+  if (idx !== -1) {
+    const ev0 = multiYearBegin[idx - 1];
+    const ev1 = multiYearBegin[idx + 1];
+    prevNext.prev = {
+      title: ev0.basename(),
+      href: ev0.url(),
+      d: dayjs(ev0.getDate().greg()),
+    };
+    prevNext.next = {
+      title: ev1.basename(),
+      href: ev1.url(),
+      d: dayjs(ev1.getDate().greg()),
+    };
   }
   const cats = next.categories;
   const category0 = cats.length === 1 ? cats[0] : cats[1];
@@ -174,6 +190,8 @@ export async function holidayDetail(ctx) {
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
     amp: (q.amp === '1') ? true : undefined,
+    prev: prevNext.prev,
+    next: prevNext.next,
   });
 }
 
@@ -225,7 +243,9 @@ function getHolidayBegin(holiday, year, il) {
     il,
   });
   const events = events0.filter((ev) => ev.basename() === holiday);
-  return getFirstOcccurences(events);
+  const multiYearBegin = getFirstOcccurences(events0);
+  const holidayBegin = getFirstOcccurences(events);
+  return {multiYearBegin, holidayBegin};
 }
 
 function doIsraelRedir(ctx, holiday) {
