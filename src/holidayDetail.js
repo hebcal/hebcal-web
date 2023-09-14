@@ -7,7 +7,8 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath,
+  shortenUrl} from './common';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
@@ -127,12 +128,12 @@ export async function holidayDetail(ctx) {
     const ev1 = multiYearBegin[idx + 1];
     prevNext.prev = {
       title: ev0.basename(),
-      href: ev0.url(),
+      href: shortenUrl(ev0.url()),
       d: dayjs(ev0.getDate().greg()),
     };
     prevNext.next = {
       title: ev1.basename(),
-      href: ev1.url(),
+      href: shortenUrl(ev1.url()),
       d: dayjs(ev1.getDate().greg()),
     };
   }
@@ -239,7 +240,8 @@ function getHolidayBegin(holiday, year, il) {
     year: startYear,
     isHebrewYear: false,
     numYears,
-    yomKippurKatan: true,
+    yomKippurKatan: false,
+    shabbatMevarchim: false,
     il,
   });
   const events = events0.filter((ev) => ev.basename() === holiday);
@@ -380,7 +382,8 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       year: next.event.getDate().getFullYear(),
       isHebrewYear: true,
       il,
-      yomKippurKatan: true,
+      yomKippurKatan: false,
+      shabbatMevarchim: false,
     }).filter((ev) => holiday === ev.basename());
     meta.items = [];
     const dupes = new Set(); // for Rosh Chodesh day 2
