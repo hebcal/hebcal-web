@@ -285,8 +285,8 @@ Thank you for supporting Hebcal.</p>
 </div>
 <% if (typeof prev !== 'undefined' || typeof next !== 'undefined') { %>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.d.format('YYYY-MM-DD')%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.title%></a></div><% } %>
-<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.title%> · <time datetime="<%=next.d.format('YYYY-MM-DD')%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
+<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name%></a></div><% } %>
+<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
 <%- await include('partials/footer.ejs') _%>

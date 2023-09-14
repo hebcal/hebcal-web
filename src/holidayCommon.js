@@ -110,7 +110,7 @@ function hebrewDateRange(hd, duration, showYear=true) {
  * @param {boolean} il
  * @return {any}
  */
-export function eventToHolidayItem(ev, il) {
+export function eventToHolidayItemBase(ev, il) {
   const {hd, d, duration, endD, beginsWhen} = holidayStartAndEnd(ev, il);
   const holiday = ev.basename();
   const mask = ev.getFlags();
@@ -133,26 +133,43 @@ export function eventToHolidayItem(ev, il) {
     beginsWhen,
     d,
     startIsoDate: d.format('YYYY-MM-DD'),
-    startDowHtml: wrapDisplaySpans('md', d.format('ddd'), d.format('dddd')),
-    startMonDayHtml: wrapDisplaySpans('md', d.format('MMM D'), d.format('MMMM D')),
     duration,
     endD,
-    endIsoDate: endD.format('YYYY-MM-DD'),
-    endDowHtml: wrapDisplaySpans('lg', endD.format('ddd'), endD.format('dddd')),
-    endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
-    hdRange: hebrewDateRange(hd, duration, true),
-    hdRangeNoYear: hebrewDateRange(hd, duration, false),
     desc: ev.render('en'),
     basename: ev.basename(),
     endAbs: duration ? hd.abs() + duration - 1 : hd.abs(),
     event: ev,
     emoji,
     anchorDate,
-    categories: getEventCategories(ev),
   };
   if (israelOnly.has(holiday)) {
     item.ilOnly = true;
   }
+  return item;
+}
+
+/**
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {any}
+ */
+export function eventToHolidayItem(ev, il) {
+  const item = eventToHolidayItemBase(ev, il);
+  const hd = item.hd;
+  const d = item.d;
+  const duration = item.duration;
+  const endD = item.endD;
+  const mask = item.mask;
+  Object.assign(item, {
+    startDowHtml: wrapDisplaySpans('md', d.format('ddd'), d.format('dddd')),
+    startMonDayHtml: wrapDisplaySpans('md', d.format('MMM D'), d.format('MMMM D')),
+    endIsoDate: endD.format('YYYY-MM-DD'),
+    endDowHtml: wrapDisplaySpans('lg', endD.format('ddd'), endD.format('dddd')),
+    endMonDayHtml: wrapDisplaySpans('xl', endD.format('MMM D'), endD.format('MMMM D')),
+    hdRange: hebrewDateRange(hd, duration, true),
+    hdRangeNoYear: hebrewDateRange(hd, duration, false),
+    categories: getEventCategories(ev),
+  });
   if (mask & flags.SPECIAL_SHABBAT) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha0 = sedra.lookup(hd);

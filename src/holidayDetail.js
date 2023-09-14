@@ -7,9 +7,9 @@ import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath,
-  shortenUrl} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath} from './common';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
+  eventToHolidayItemBase,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
@@ -124,18 +124,8 @@ export async function holidayDetail(ctx) {
   const idx = year ? multiYearBegin.findIndex((ev) => ev === next.event) : -1;
   const prevNext = {};
   if (idx !== -1) {
-    const ev0 = multiYearBegin[idx - 1];
-    const ev1 = multiYearBegin[idx + 1];
-    prevNext.prev = {
-      title: ev0.basename(),
-      href: shortenUrl(ev0.url()),
-      d: dayjs(ev0.getDate().greg()),
-    };
-    prevNext.next = {
-      title: ev1.basename(),
-      href: shortenUrl(ev1.url()),
-      d: dayjs(ev1.getDate().greg()),
-    };
+    prevNext.prev = eventToHolidayItemBase(multiYearBegin[idx - 1], il);
+    prevNext.next = eventToHolidayItemBase(multiYearBegin[idx + 1], il);
   }
   const cats = next.categories;
   const category0 = cats.length === 1 ? cats[0] : cats[1];
