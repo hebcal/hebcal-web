@@ -220,7 +220,8 @@ const holidayYearRange = {
 
 function getHolidayBegin(holiday, year, il) {
   if (holiday === OMER_TITLE) {
-    return makeOmerEvents(year);
+    const events = makeOmerEvents(year);
+    return {multiYearBegin: [], holidayBegin: events};
   }
   year = year || new Date().getFullYear();
   const range = holidayYearRange[holiday] || [3, 8];

@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.11.2",
+  "version": "2.11.3",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.17",
+    "@babel/core": "^7.22.19",
     "@babel/preset-env": "^7.22.15",
     "@babel/register": "^7.22.15",
     "@rollup/plugin-babel": "^6.0.3",
@@ -42,7 +42,7 @@
     "eslint": "^8.49.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^3.29.1"
+    "rollup": "^3.29.2"
   },
   "dependencies": {
     "@hebcal/core": "^4.3.3",
