@@ -30,8 +30,8 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.22.15",
-    "@babel/core": "^7.22.19",
-    "@babel/preset-env": "^7.22.15",
+    "@babel/core": "^7.22.20",
+    "@babel/preset-env": "^7.22.20",
     "@babel/register": "^7.22.15",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.4",
@@ -45,7 +45,7 @@
     "rollup": "^3.29.2"
   },
   "dependencies": {
-    "@hebcal/core": "^4.3.3",
+    "@hebcal/core": "^4.3.4",
     "@hebcal/geo-sqlite": "^4.9.0",
     "@hebcal/icalendar": "^4.21.0",
     "@hebcal/learning": "^1.5.1",

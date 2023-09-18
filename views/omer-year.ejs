@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: `Counting of the Omer ${hyear} - Hebcal`,
 }) -%>
+<link rel="canonical" href="https://www.hebcal.com/omer/<%=hyear%>">
 <% if (items[1].d.year() <= 1752 || items[1].d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="For Hebrew year <%=hyear%>, we count the Omer from <%=items[1].d.subtract(1, 'd').format('MMMM D') %> through <%=items[49].d.format('MMMM D, YYYY') %>">
 </head>

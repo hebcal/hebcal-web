@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs', {
   title: `${ev.render('en')}, ${hyear} - ${d.format('D MMMM YYYY')} - Hebcal`,
 }) -%>
+<link rel="canonical" href="https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>">
 <% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
 #today {text-align: center}
