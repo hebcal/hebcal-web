@@ -225,7 +225,8 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     doc.font(heFontName).fontSize(11);
     const hebrewWidth = doc.widthOfString(hebrew);
     if ((timedWidth + width + widthSlash + hebrewWidth) > (PDF_COLWIDTH - 8)) {
-      y += (fontSize * 1.35);
+      y += (numLines * fontSize * 1.35);
+      numLines = 1;
     } else {
       x += width;
       doc.font(fontStyle).fontSize(fontSize);
@@ -269,7 +270,11 @@ export function createPdfDoc(title, options) {
 
   doc.info['Title'] = title;
   doc.info['Subject'] = title;
-  doc.info['Keywords'] = 'Hebrew calendar, Jewish holidays';
+  let keywords = 'Hebrew calendar, Jewish holidays';
+  if (options?.location?.name) {
+    keywords += ', ' + options.location.name;
+  }
+  doc.info['Keywords'] = keywords;
   doc.info['Author'] = 'Hebcal Jewish Calendar (hebcal.com)';
 
   doc.registerFont('plain', './fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
