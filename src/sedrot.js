@@ -230,8 +230,8 @@ export async function parshaDetail(ctx) {
 }
 
 function makePrevNext(parsha, date, hd, il) {
-  const prevNum = parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
-  const nextNum = parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
+  const prevNum = parsha.num === 1 ? 53 : parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
+  const nextNum = parsha.num === 54 ? 0 : parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
   const prevName = parshiot54[prevNum];
   const nextName = parshiot54[nextNum];
   if (date) {
