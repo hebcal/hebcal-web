@@ -34,7 +34,7 @@ setImmediate(async () => {
   try {
     app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath);
   } catch (err) {
-    logger.error(err);
+    logger.error(err, `while opening ${geoipCountryMmdbPath}`);
   }
 });
 
@@ -44,7 +44,7 @@ setImmediate(async () => {
   try {
     app.context.geoipCity = await maxmind.open(geoipCityMmdbPath);
   } catch (err) {
-    logger.error(err);
+    logger.error(err, `while opening ${geoipCityMmdbPath}`);
   }
 });
 

@@ -224,11 +224,12 @@ function getGeoKeysToRemove(geo) {
 }
 
 /**
+ * @param {any} ctx
  * @param {Object.<string,string>} query
  * @param {string} uid
  * @return {string}
  */
-function makeCookie(query, uid) {
+function makeCookie(ctx, query, uid) {
   const ck = {};
   for (const key of Object.keys(negativeOpts)) {
     ck[key] = off(query[key]) ? 'off' : 'on';
@@ -252,6 +253,7 @@ function makeCookie(query, uid) {
     return false;
   }
   uid = uid || uuid();
+  ctx.state.visitorId = ctx.state.userId = uid;
   return 'uid=' + uid + '&' + new URLSearchParams(ck).toString();
 }
 
@@ -301,7 +303,7 @@ export function setHebcalCookie(ctx, query) {
     return false;
   }
   const uid = prevCookie && prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
-  const newCookie = makeCookie(query, uid);
+  const newCookie = makeCookie(ctx, query, uid);
   if (newCookie === false) {
     return false;
   }
