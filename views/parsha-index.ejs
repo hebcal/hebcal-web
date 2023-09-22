@@ -17,12 +17,12 @@
 </h2>
 <% if (israelDiasporaDiffer) { %>
 <p class="lead">
- This week's Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
- <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia%></a> in the Diaspora</span>
- · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael%></a> in Israel 🇮🇱</span>
+ This week’s Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
+ <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia.replace(/'/g, '’')%></a> in the Diaspora</span>
+ · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael.replace(/'/g, '’')%></a> in Israel 🇮🇱</span>
 </p>
 <% } else { %>
-<p class="lead">This week's Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha%></a>
+<p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha.replace(/'/g, '’')%></a>
  (read on <time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>).</p>
 <% } %>
 <% if (typeof meta === 'object') { %>
