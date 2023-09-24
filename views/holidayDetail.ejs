@@ -44,13 +44,10 @@ layout="responsive"></amp-img>
 <% } else { -%>
 <picture>
 <source type="image/webp"
-alt="<%=meta.photo.caption||holiday%>"
-src="/i/is/640/<%=meta.photo.webp%>"
 width="<%=meta.photo.dimensions[640].width%>"
 height="<%=meta.photo.dimensions[640].height%>"
 srcset="/i/is/800/<%=meta.photo.webp%> 800w, /i/is/640/<%=meta.photo.webp%> 640w, /i/is/400/<%=meta.photo.webp%> 400w"
-sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
-class="img-fluid">
+sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px">
 <img alt="<%=meta.photo.caption||holiday%>"
 src="/i/is/640/<%=meta.photo.fn%>"
 width="<%=meta.photo.dimensions[640].width%>"
@@ -270,12 +267,9 @@ layout="responsive"></amp-img>
 <picture>
 <% if (typeof book.webp === 'object') { %>
 <source type="image/webp"
-alt="<%=book.text%>"
 srcset="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
-class="img-fluid card-img-top"
 width="<%=book.webp?.width||200%>"
-height="<%=book.webp?.height||160%>"
-style="border:none">
+height="<%=book.webp?.height||160%>">
 <% } %>
 <img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
