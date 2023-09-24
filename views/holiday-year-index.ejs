@@ -136,10 +136,16 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
 <div class="card" id="<%=item.id%>">
 <div class="card-body">
 <% if (typeof item?.meta?.photo === 'object') { -%>
-<a href="<%=item.href%>"><img alt="<%=item.meta.photo.caption||holiday%>"
+<a href="<%=item.href%>"><picture>
+<source type="image/webp"
+ srcset="/i/is/1x1-200/<%=item.meta.photo.webp%>"
+ alt="<%=item.meta.photo.caption||holiday%>"
+ width="150" height="150" class="rounded float-end ms-3 mb-3">
+<img alt="<%=item.meta.photo.caption||holiday%>"
 src="/i/is/1x1-200/<%=item.meta.photo.fn%>"
 width="150" height="150"
-class="rounded float-end ms-3 mb-3"></a>
+class="rounded float-end ms-3 mb-3">
+</picture></a>
 <% } -%>
 <h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
 <% if (item.emoji && typeof item?.meta?.photo !== 'object') { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>

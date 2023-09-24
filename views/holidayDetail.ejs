@@ -42,6 +42,15 @@ width="<%=meta.photo.dimensions[640].width/meta.photo.dimensions[640].height%>"
 height="1"
 layout="responsive"></amp-img>
 <% } else { -%>
+<picture>
+<source type="image/webp"
+alt="<%=meta.photo.caption||holiday%>"
+src="/i/is/640/<%=meta.photo.webp%>"
+width="<%=meta.photo.dimensions[640].width%>"
+height="<%=meta.photo.dimensions[640].height%>"
+srcset="/i/is/800/<%=meta.photo.webp%> 800w, /i/is/640/<%=meta.photo.webp%> 640w, /i/is/400/<%=meta.photo.webp%> 400w"
+sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
+class="img-fluid">
 <img alt="<%=meta.photo.caption||holiday%>"
 src="/i/is/640/<%=meta.photo.fn%>"
 width="<%=meta.photo.dimensions[640].width%>"
@@ -49,6 +58,7 @@ height="<%=meta.photo.dimensions[640].height%>"
 srcset="/i/is/800/<%=meta.photo.fn%> 800w, /i/is/640/<%=meta.photo.fn%> 640w, /i/is/400/<%=meta.photo.fn%> 400w"
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
 class="img-fluid">
+</picture>
 <% } -%>
 </div>
 <% } -%>
@@ -257,12 +267,23 @@ width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"
 layout="responsive"></amp-img>
 <% } else { -%>
+<picture>
+<% if (typeof book.webp === 'object') { %>
+<source type="image/webp"
+alt="<%=book.text%>"
+srcset="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
+class="img-fluid card-img-top"
+width="<%=book.webp?.width||200%>"
+height="<%=book.webp?.height||160%>"
+style="border:none">
+<% } %>
 <img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
 class="img-fluid card-img-top"
 width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"
 style="border:none">
+</picture>
 <% } -%>
 </a>
 <div class="card-body">

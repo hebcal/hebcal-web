@@ -23,17 +23,26 @@ function sourceName(href) {
   return primarySource[domain] || domain;
 }
 
+const cache = new Map();
+
 /**
  * @param {string} holiday
  * @return {Promise<any>}
  */
 export async function getHolidayMeta(holiday) {
+  const prev = cache.get(holiday);
+  if (prev) {
+    return prev;
+  }
   const meta0 = holidayMeta[holiday];
   if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
   const meta = Object.assign({}, meta0);
   meta.about.name = sourceName(meta.about.href);
+  if (meta.photo?.fn) {
+    meta.photo.webp = meta.photo.fn.replace(/.jpg$/, '.webp');
+  }
   if (meta.wikipedia?.href) {
     meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
     const anchorIdx = meta.wikipedia.title.indexOf('#');
@@ -52,10 +61,18 @@ export async function getHolidayMeta(holiday) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
+      const path0 = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ';
       try {
-        const path = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ.jpg';
+        const path = path0 + '.jpg';
         const rs = fs.createReadStream(path);
         book.dimensions = await probe(rs);
+      } catch (err) {
+        // ignore file not found
+      }
+      try {
+        const path = path0 + '.webp';
+        const rs = fs.createReadStream(path);
+        book.webp = await probe(rs);
       } catch (err) {
         // ignore file not found
       }
@@ -79,5 +96,6 @@ export async function getHolidayMeta(holiday) {
     console.log(JSON.stringify(a, null, 1));
   }
   */
+  cache.set(holiday, meta);
   return meta;
 }

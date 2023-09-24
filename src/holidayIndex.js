@@ -10,7 +10,7 @@ import {makeDownloadProps} from './makeDownloadProps';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
 import {holidayPdf} from './holidayPdf';
-import holidayMeta from './holidays.json';
+import {getHolidayMeta} from './getHolidayMeta';
 
 dayjs.extend(isSameOrAfter);
 
@@ -41,7 +41,7 @@ export async function holidayYearIndex(ctx) {
     events0 = eventsIlModern.concat(events0);
   }
   const events = getFirstOcccurences(events0);
-  const items = makeItems(events, il, isHebrewYear, true);
+  const items = await makeItems(events, il, isHebrewYear, true);
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
@@ -111,7 +111,7 @@ function makeQueryAndDownloadProps(ctx, options) {
   return q;
 }
 
-function makeItems(events, il, showYear, addIsraelAsterisk) {
+async function makeItems(events, il, showYear, addIsraelAsterisk) {
   const items = {};
   for (const key of Object.keys(categories)) {
     items[key] = [];
@@ -126,7 +126,7 @@ function makeItems(events, il, showYear, addIsraelAsterisk) {
     const sentences = descrMedium.split(/\.\s+/).slice(0, 2);
     const firstTwo = sentences.join('. ');
     item.descrMedium = sentences.length == 2 ? firstTwo + '.' : firstTwo;
-    const meta = item.meta = holidayMeta[item.name];
+    const meta = item.meta = await getHolidayMeta(item.name);
     items[category].push(item);
     if (today.isBefore(item.d) && ev.url()) {
       item.jsonLD = makeEventJsonLD(ev, meta, il);
@@ -300,7 +300,7 @@ export async function holidayMainIndex(ctx) {
       events0 = eventsIlModern.concat(events0);
     }
     const events = getFirstOcccurences(events0);
-    const items0 = makeItems(events, il, false, false);
+    const items0 = await makeItems(events, il, false, false);
     for (const [catId, items1] of Object.entries(items0)) {
       for (const item of items1) {
         if (!Array.isArray(items[catId][item.name])) {
