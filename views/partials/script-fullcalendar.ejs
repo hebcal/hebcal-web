@@ -1,19 +1,8 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
 <script>
-window['hebcal']=window['hebcal']||{};
-window['hebcal'].fcEvents=<%- JSON.stringify(fcEvents) %>;
-window['hebcal'].options=<%- JSON.stringify(options) %>;
-</script>
-<script>
 document.addEventListener('DOMContentLoaded', function() {
   var calendarEl = document.getElementById('calendar');
   calendarEl.style.display = 'none';
-  var events = window['hebcal'].fcEvents;
-  var lastEvent = events[events.length - 1];
-  var lastEvDate = lastEvent.start;
-  var lastYear = parseInt(lastEvDate.substring(0, 4), 10);
-  var lastMonth = parseInt(lastEvDate.substring(5, 7), 10);
-  var firstOfNextMonth = new Date(lastYear, lastMonth, 1);
   var opts = {
     initialView: 'dayGridMonth',
     headerToolbar: {
@@ -21,17 +10,59 @@ document.addEventListener('DOMContentLoaded', function() {
       center: 'title',
       right: '',
     },
-    events: events,
-    validRange: {
-        start: events[0].start.substring(0, 7) + '-01',
-        end: firstOfNextMonth,
+    initialDate: '<%=isoDateStart%>',
+    eventDisplay: 'block',
+    events: function(info, successCallback, failureCallback) {
+      var url = new URL(document.location.href);
+      url.pathname = '/hebcal';
+      var sp = url.searchParams;
+      sp.set('v', '1'); // Required, version 1
+      sp.set('cfg', 'fc'); // Required, mode = FullCalendar
+      sp.set('start', info.startStr);
+      sp.set('end', info.endStr);
+      sp.set('i', '<%=il?"on":"off"%>');  // Israel or Diaspora holiday schedule
+      sp.set('maj', 'on'); // Major holidays
+      sp.set('min', 'on'); // Minor holidays
+      sp.set('nx', 'on'); // Rosh Chodesh
+      sp.set('mf', 'on'); // Minor fasts
+      sp.set('ss', 'on'); // Special Shabbatot
+      sp.set('mod', 'on'); // Modern holidays
+      sp.set('D', 'on'); // Show Hebrew date for dates with some event
+      sp.set('lg', 's'); // Sephardic transliterations
+      var fetchOptions = {
+        method: 'GET',
+        credentials: 'omit',
+        mode: 'cors',
+      };
+      fetch(url.href, fetchOptions).then(function(fetchRes) {
+        if (fetchRes.ok) {
+          fetchRes.json().then(function(parsedResponse) {
+            var events = parsedResponse.map(function(ev) {
+              if (ev.emoji) {
+                ev.title += '\u00a0' + ev.emoji;
+              }
+              if (typeof ev.url == 'string') {
+                var u = new URL(ev.url);
+                var p = u.pathname;
+                if (p.substring(0, 3) == '/h/') {
+                  ev.url = '/holidays/' + p.substring(3);
+                }
+              }
+              return ev;
+            });
+            successCallback(events);
+          }, function(err) {
+            failureCallback(err);
+          });
+        } else {
+          failureCallback('Request failed');
+        }
+      }).catch(function(err) {
+        failureCallback(err);
+      });
     },
   };
-  var hopts = window['hebcal'].options;
-  if (hopts.isHebrewYear || hopts.year != new Date().getFullYear()) {
-    opts.initialDate = events[0].start;
-  }
-  var calendar = window['hebcal'].fullCalendar = new FullCalendar.Calendar(calendarEl, opts);
+  var calendar = new FullCalendar.Calendar(calendarEl, opts);
   var listViewEl = document.getElementById('list-view');
   var toggleMonth = document.getElementById('toggle-month');
   toggleMonth.onchange = function() {

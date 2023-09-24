@@ -420,7 +420,14 @@ function renderFullCalendar(ctx) {
   const tzid = location ? location.getTzid() : 'UTC';
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.lastModified = new Date();
-  ctx.body = events.map((ev) => eventToFullCalendar(ev, tzid, options.il));
+  ctx.body = events.map((ev) => {
+    const item = eventToFullCalendar(ev, tzid, options.il);
+    const emoji = ev.getEmoji();
+    if (emoji) {
+      item.emoji = emoji;
+    }
+    return item;
+  });
 }
 
 function renderJson(ctx) {

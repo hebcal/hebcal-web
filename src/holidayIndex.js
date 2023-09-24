@@ -39,6 +39,7 @@ export async function holidayYearIndex(ctx) {
       isHebrewYear,
     }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
     events0 = eventsIlModern.concat(events0);
+    events0.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   }
   const events = getFirstOcccurences(events0);
   const items = await makeItems(events, il, isHebrewYear, true);
@@ -46,7 +47,6 @@ export async function holidayYearIndex(ctx) {
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
-  const fcEvents = greg1 <= 1752 ? [] : makeFullCalendarEvents(options);
   await ctx.render('holiday-year-index', {
     today: dayjs(),
     year: year.padStart(4, '0'),
@@ -64,32 +64,10 @@ export async function holidayYearIndex(ctx) {
     iSuffix: il ? '?i=on' : '',
     DoWtiny,
     q,
-    fcEvents,
+    isoDateStart: dayjs(events0[0].getDate().greg()).format('YYYY-MM') + '-01',
     options,
     amp: (q.amp === '1') ? true : undefined,
   });
-}
-
-function makeFullCalendarEvents(options) {
-  const fcOptions = Object.assign({addHebrewDatesForEvents: true}, options);
-  const events2 = HebrewCalendar.calendar(fcOptions);
-  const il = options.il;
-  const fcEvents = events2.map((ev) => {
-    const fc = eventToFullCalendar(ev, null, il);
-    const emoji = ev.getEmoji();
-    if (emoji) {
-      fc.title += '\u00a0' + emoji;
-    }
-    const url = shortenUrl(ev.url());
-    if (url) {
-      fc.url = url;
-    }
-    delete fc.description; // not showing tooltips just yet
-    delete fc.hebrew; // not showing tooltips just yet
-    delete fc.allDay; // not needed
-    return fc;
-  });
-  return fcEvents;
 }
 
 function makeQueryAndDownloadProps(ctx, options) {
