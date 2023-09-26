@@ -69,7 +69,7 @@ export async function homepage(ctx) {
   } else {
     ctx.state.holidayBlurb = false;
   }
-  if (doesCookieNeedRefresh(ctx)) {
+  if (doesCookieNeedRefresh(ctx) && gloc?.details?.continent?.code !== 'EU') {
     setHebcalCookie(ctx, q);
   }
   return ctx.render('homepage');
