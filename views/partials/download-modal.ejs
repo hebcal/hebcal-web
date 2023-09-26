@@ -204,3 +204,12 @@ href="/home/12/outlook-csv-jewish-holidays">CSV for Outlook for Windows</a></p>
   </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const modalEl = document.getElementById('hcdl-modal');
+  modalEl.addEventListener('show.bs.modal', function () {
+    var _paq = window._paq = window._paq || [];
+    _paq.push(['trackEvent', 'Interaction', 'download-modal', '<%=url.title%>']);
+  });
+});
+</script>

@@ -20,6 +20,8 @@ emailModal.addEventListener('show.bs.modal', function () {
   emailSubscribeBtn.disabled = false;
   emailForm.classList.remove('was-validated');
   emailForm.classList.remove('is-invalid');
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackEvent', 'Interaction', 'email-modal', '<%=action%>']);
 });
 function validateEmail(email) {
   // eslint-disable-next-line max-len
@@ -42,12 +44,16 @@ function doSubscribe(event) {
   emailForm.classList.remove('was-validated');
   if (!emailForm.checkValidity()) {
     emailForm.classList.add('was-validated');
+    var _paq = window._paq = window._paq || [];
+    _paq.push(['trackEvent', 'Interaction', 'signup-invalid', '<%=action%>']);
     return;
   }
   emailInput.classList.remove('is-invalid');
   if (!validateEmail(emailInput.value)) {
     emailForm.classList.add('was-validated');
     emailInput.classList.add('is-invalid');
+    var _paq = window._paq = window._paq || [];
+    _paq.push(['trackEvent', 'Interaction', 'signup-invalid', '<%=action%>']);
     return;
   }
   emailForm.classList.add('was-validated');

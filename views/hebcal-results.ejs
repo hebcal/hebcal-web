@@ -244,6 +244,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   var loadingEl = d.getElementById('hebcal-loading');
   loadingEl.style.display = 'none';
+  var offcanvasEl = document.getElementById('offcanvas-settings');
+  offcanvasEl.addEventListener('show.bs.offcanvas', function () {
+    var _paq = window._paq = window._paq || [];
+    _paq.push(['trackEvent', 'Interaction', 'settings', '<%=shortTitle+" "+locationName%>']);
+  });
 });
 </script>
 <%- await include('partials/footer.ejs', {

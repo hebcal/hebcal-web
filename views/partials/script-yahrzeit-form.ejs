@@ -141,10 +141,12 @@ formEl.addEventListener('submit', function(event) {
   var nofileAlertEl = document.getElementById('nofile-alert');
   var badimportAlertEl = document.getElementById('badimport-alert');
   var successAlertEl = document.getElementById('success-alert');
+  var _paq = window._paq = window._paq || [];
   if (formFileEl.files.length == 0) {
     nofileAlertEl.hidden = false;
     badimportAlertEl.hidden = true;
     successAlertEl.hidden = true;
+    _paq.push(['trackEvent', 'Interaction', 'csv-nofile', '(none)', 0]);
   } else {
     nofileAlertEl.hidden = true;
     badimportAlertEl.hidden = true;
@@ -152,6 +154,9 @@ formEl.addEventListener('submit', function(event) {
     var file = formFileEl.files[0];
     Papa.parse(file, {
       dynamicTyping: true,
+      error: function(err, file, inputElem, reason) {
+        _paq.push(['trackEvent', 'Interaction', 'csv-error', file.name, 0]);
+      },
       complete: function(results) {
         var numOK = 0;
         for (var i = 0; i < results.data.length; i++) {
@@ -167,10 +172,10 @@ formEl.addEventListener('submit', function(event) {
           document.getElementById('success-numrecords').innerHTML = numOK;
           document.getElementById('success-filename').innerHTML = file.name;
           successAlertEl.hidden = false;
-          var _paq = window._paq = window._paq || [];
           _paq.push(['trackEvent', 'Upload', 'csv-import', file.name, numOK]);
         } else {
           badimportAlertEl.hidden = false;
+          _paq.push(['trackEvent', 'Interaction', 'csv-fail', file.name, 0]);
         }
       }
     });
