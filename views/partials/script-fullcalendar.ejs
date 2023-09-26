@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
       right: '',
     },
     initialDate: '<%=isoDateStart%>',
+    timeZone: 'UTC',
     eventDisplay: 'block',
     events: function(info, successCallback, failureCallback) {
       var url = new URL(document.location.href);
@@ -18,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
       var sp = url.searchParams;
       sp.set('v', '1'); // Required, version 1
       sp.set('cfg', 'fc'); // Required, mode = FullCalendar
-      sp.set('start', info.startStr);
-      sp.set('end', info.endStr);
+      sp.set('start', info.startStr.substring(0, 10));
+      sp.set('end', info.endStr.substring(0, 10));
       sp.set('i', '<%=il?"on":"off"%>');  // Israel or Diaspora holiday schedule
       sp.set('maj', 'on'); // Major holidays
       sp.set('min', 'on'); // Minor holidays

@@ -1,11 +1,11 @@
 /* eslint-disable require-jsdoc */
 import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
-import {getHolidayDescription, eventToFullCalendar} from '@hebcal/rest-api';
+import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear, getNumYears, shortenUrl} from './common';
+import {getDefaultHebrewYear, getNumYears} from './common';
 import {makeDownloadProps} from './makeDownloadProps';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon';
 import {holidayDetail} from './holidayDetail';
