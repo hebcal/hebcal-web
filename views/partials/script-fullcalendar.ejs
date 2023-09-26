@@ -1,8 +1,25 @@
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js" integrity="sha384-wv6yRjQC0TqzEnAjFQVXM2V0JrF6Nk0dh6QAGf1RwzTqPArdwU3luBZjVCi2YSVH" crossorigin="anonymous"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var calendarEl = document.getElementById('calendar');
-  calendarEl.style.display = 'none';
+ var calendar = null;
+ var calendarEl = document.getElementById('calendar');
+ calendarEl.style.display = 'none';
+ var listViewEl = document.getElementById('list-view');
+ var toggleMonth = document.getElementById('toggle-month');
+ toggleMonth.addEventListener('change', function(event) {
+  var fc = this.checked;
+  calendarEl.style.display = fc ? 'block' : 'none';
+  listViewEl.style.display = fc ? 'none' : 'block';
+  if (fc) {
+    makeFullCalendar();
+    calendar.render();
+  }
+  toggleMonth.blur();
+ });
+ function makeFullCalendar() {
+  if (calendar) {
+    return calendar;
+  }
   var opts = {
     initialView: 'dayGridMonth',
     headerToolbar: {
@@ -11,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
       right: '',
     },
     initialDate: '<%=isoDateStart%>',
-    timeZone: 'UTC',
+    timeZone: 'local',
     eventDisplay: 'block',
     events: function(info, successCallback, failureCallback) {
       var url = new URL(document.location.href);
@@ -63,15 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     },
   };
-  var calendar = new FullCalendar.Calendar(calendarEl, opts);
-  var listViewEl = document.getElementById('list-view');
-  var toggleMonth = document.getElementById('toggle-month');
-  toggleMonth.onchange = function() {
-    calendarEl.style.display = this.checked ? 'block' : 'none';
-    listViewEl.style.display = this.checked ? 'none' : 'block';
-    if (this.checked) { calendar.render(); }
-    toggleMonth.blur();
-  };
+  calendar = new FullCalendar.Calendar(calendarEl, opts);
   document.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft' && !e.metaKey) {
       calendar.prev();
@@ -79,5 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
       calendar.next();
     }
   });
+  return calendar;
+ }
 });
 </script>
