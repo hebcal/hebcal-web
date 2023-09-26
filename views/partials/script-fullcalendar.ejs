@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
       calendar.next();
     }
   });
+  var _paq = window._paq = window._paq || [];
+  _paq.push(['trackEvent', 'Interaction', 'fullcalendar', '<%=year%>']);
   return calendar;
  }
 });

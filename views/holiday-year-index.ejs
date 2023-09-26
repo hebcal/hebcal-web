@@ -131,7 +131,27 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
   beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
 <% } -%>
 <div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
-<% for (const item of items[catId]) { %>
+<% for (let i = 0; i < items[catId].length; i++) { const item = items[catId][i]; %>
+<% if (i === 4 && 'major-holidays' === category.id) { -%>
+</div>
+<div class="d-flex justify-content-center d-print-none">
+<h6 class="text-body-secondary mb-1">Advertisement</h6>
+</div><!-- .d-flex -->
+<div class="d-print-none mb-5">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+crossorigin="anonymous"></script>
+<ins class="adsbygoogle"
+style="display:block; text-align:center;"
+data-ad-layout="in-article"
+data-ad-format="fluid"
+data-ad-client="ca-pub-7687563417622459"
+data-ad-slot="5342180883"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</div><!-- .d-print-none -->
+<div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
+<% } // advertisement -%>
 <div class="col">
 <div class="card" id="<%=item.id%>">
 <div class="card-body">
@@ -162,24 +182,6 @@ class="rounded float-end ms-3 mb-3">
 </div><!-- .col -->
 <% } -%>
 </div><!-- .row #<%=category.id %> -->
-<% if ('major-holidays' === category.id) { -%>
-<div class="d-flex justify-content-center d-print-none">
-<h6 class="text-body-secondary mb-1">Advertisement</h6>
-</div><!-- .d-flex -->
-<div class="d-print-none mb-5">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
-crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-style="display:block; text-align:center;"
-data-ad-layout="in-article"
-data-ad-format="fluid"
-data-ad-client="ca-pub-7687563417622459"
-data-ad-slot="5342180883"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .d-print-none -->
-<% } // advertisement -%>
 <% } // categories -%>
 </div><!-- #list-view -->
 <div class="row d-print-none mt-3">
