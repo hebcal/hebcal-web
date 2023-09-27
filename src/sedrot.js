@@ -289,6 +289,8 @@ function makeTriennial(date, parshaEv, hyear, parshaName, il) {
     const triennial = {
       reading: reading.aliyot,
       yearNum: reading.yearNum + 1,
+      fullParsha: reading.fullParsha,
+      hyear: hyear,
     };
     if (reading.haft) {
       triennial.haftara = reading.haftara;

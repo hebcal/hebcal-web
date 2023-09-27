@@ -101,7 +101,11 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% if (date) { %>
 <div class="col-sm-6">
 <h5>Triennial <small class="text-body-secondary">year <%=triennial.yearNum%></small></h5>
+<% if (triennial.fullParsha) { %>
+<p><%=parshaName%> is read in its entirety in <%=triennial.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
+<% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
+<% } %>
 <% if (triennial.haftara) { -%>
 <p class="haftara">Alternate Haftarah:
 <%- triennial.haftaraHtml %>
@@ -124,7 +128,11 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% } else if (triReading.readTogether) { %>
 <p class="small">See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></p>
 <% } else { %>
+<% if (triReading.fullParsha) { %>
+<p class="small"><%=parshaName%> is read in its entirety in <%=triReading.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
+<% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
+<% } %>
 <% if (triReading.reason && triReading.reason.haftara) { -%>
 <p class="haftara">Haftarah<span class="text-success">*</span>:
 <%- triReading.haftaraHtml %>
