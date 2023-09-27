@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale} from '@hebcal/core';
-import {DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
+  DailyLearning} from '@hebcal/core';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   doesCookieNeedRefresh, setHebcalCookie,
   processCookieAndQuery, urlArgs,
@@ -131,12 +131,9 @@ function mastheadOmer(ctx, hd) {
   }
 }
 
-const myomiIndex = new MishnaYomiIndex();
-
 function mastheadDafYomi(ctx, hd) {
-  ctx.state.dafYomi = new DafYomiEvent(hd);
-  const mishnaYomi = myomiIndex.lookup(hd);
-  ctx.state.mishnaYomi = new MishnaYomiEvent(hd, mishnaYomi);
+  ctx.state.dafYomi = DailyLearning.lookup('dafYomi', hd);
+  ctx.state.mishnaYomi = DailyLearning.lookup('mishnaYomi', hd);
 }
 
 function myDateFormat(d) {

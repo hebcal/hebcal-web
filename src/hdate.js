@@ -1,6 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HDate, ParshaEvent, HebrewCalendar, flags, Locale} from '@hebcal/core';
-import {DafYomiEvent, MishnaYomiIndex, MishnaYomiEvent} from '@hebcal/learning';
+import {HDate, ParshaEvent, HebrewCalendar, flags, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
 import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
@@ -193,8 +192,6 @@ function createMemo(ev, il) {
   }
 }
 
-const myomiIndex = new MishnaYomiIndex();
-
 export async function dafYomiRss(ctx) {
   const rpath = ctx.request.path;
   const {dt} = getTodayDate(ctx.request.query);
@@ -204,7 +201,8 @@ export async function dafYomiRss(ctx) {
   const lang = getLang(rpath);
   const bn = basename(rpath);
   const isDafYomi = bn.startsWith('dafyomi');
-  const event = isDafYomi ? new DafYomiEvent(hd) : new MishnaYomiEvent(hd, myomiIndex.lookup(hd));
+  const calendarName = isDafYomi ? 'dafYomi' : 'mishnaYomi';
+  const event = DailyLearning.lookup(calendarName, hd);
   ctx.lastModified = utcString;
   expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
