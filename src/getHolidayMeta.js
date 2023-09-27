@@ -32,7 +32,7 @@ const cache = new Map();
 export async function getHolidayMeta(holiday) {
   const prev = cache.get(holiday);
   if (prev) {
-    return prev;
+    return Object.assign({}, prev);
   }
   const meta0 = holidayMeta[holiday];
   if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
@@ -97,5 +97,5 @@ export async function getHolidayMeta(holiday) {
   }
   */
   cache.set(holiday, meta);
-  return meta;
+  return Object.assign({}, meta);
 }
