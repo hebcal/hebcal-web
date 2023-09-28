@@ -200,6 +200,28 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% } %>
 </ul>
 </div><!-- .col -->
+<% if (commentary['asin']) {
+  const altText = parsha.p1||parshaName + ': The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)';
+%><div class="col-lg-4 mb-3">
+<div class="card">
+<div class="row">
+  <div class="col-8">
+    <div class="card-body">
+      <p class="card-text"><a rel="sponsored" href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><%=parsha.p1||parshaName%>:
+      The JPS B’nai Mitzvah Torah Commentary</a> <small>by Rabbi Jeffrey K. Salkin <span class="text-body-secondary text-nowrap">(paid link)</span></small></p>
+    </div>
+  </div>
+  <div class="col-4">
+    <a rel="sponsored" title="<%=altText%>" href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><picture>
+     <source type="image/webp" srcset="/i/0827612524.01.MZZZZZZZ.webp" width="160" height="240">
+     <img alt="<%=altText%>"
+      src="/i/0827612524.01.MZZZZZZZ.jpg" class="img-fluid" width="107" height="160">
+    </picture></a>
+  </div>
+</div>
+</div><!-- .card -->
+</div>
+<% } // books %>
 </div><!-- .d-print-none -->
 
 <div class="row mb-2">
@@ -246,6 +268,14 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
+<% if (commentary['asin']) { %>
+<dt><a class="outbound" rel="sponsored"
+href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><em><%=parsha.p1||parshaName%>
+(<%=reading.summary%>) and Haftarah (<%=reading.haftara%>):
+The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</a></em>
+<small class="text-body-secondary">(paid link)</small>
+<dd>Rabbi Jeffrey K. Salkin, Jewish Publication Society, 2017
+<% } %>
 <dt><a class="outbound" rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
 Chumash: The Stone Edition (Artscroll Series)</em></a>
@@ -275,6 +305,8 @@ href="http://www.rabbinicalassembly.org/sites/default/files/public/halakhah/tesh
 <dd>Avram Israel Reisner, 2014</dd>
 <% } %>
 </dl>
+<p><small class="text-body-secondary">When you buy a book using a link on this page, we receive a commission.
+ Thank you for supporting Hebcal.</small></p>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <% if (parsha.prev) { %><div>

@@ -1,5 +1,6 @@
 {
 "Bereshit":{
+ "asin":"0827613571",
  "rabbisacks.org":"bereishit",
  "ajr.edu":{"target":"bereisheet"},
  "aju.edu":153,
@@ -14,6 +15,7 @@
  "uscj.org":{"target":"Bereshit"}
 },
 "Noach":{
+ "asin":"0827613598",
  "rabbisacks.org":"noach",
  "ajr.edu":{"target":"noah"},
  "aju.edu":126,
@@ -28,6 +30,7 @@
  "uscj.org":{"target":"Noah"}
 },
 "Lech-Lecha":{
+ "asin":"0827613601",
  "rabbisacks.org":"lech-lecha",
  "ajr.edu":{"target":"lekh-lekha"},
  "aju.edu":121,
@@ -42,6 +45,7 @@
  "uscj.org":{"target":"LekhLekha"}
 },
 "Vayera":{
+ "asin":"0827613628",
  "rabbisacks.org":"vayera",
  "ajr.edu":{"target":"vayeira-sefer-bereisheet"},
  "aju.edu":142,
@@ -56,6 +60,7 @@
  "uscj.org":{"target":"Vayera"}
 },
 "Chayei Sara":{
+ "asin":"0827613636",
  "rabbisacks.org":"chayei-sarah",
  "ajr.edu":{"target":"hayei-sarah"},
  "aju.edu":113,
@@ -70,6 +75,7 @@
  "uscj.org":{"target":"HayeSarah"}
 },
 "Toldot":{
+ "asin":"0827613644",
  "rabbisacks.org":"toldot",
  "ajr.edu":{"target":"toledot"},
  "aju.edu":135,
@@ -84,6 +90,7 @@
  "uscj.org":{"target":"Toldot"}
 },
 "Vayetzei":{
+ "asin":"0827613652",
  "rabbisacks.org":"vayetse",
  "ajr.edu":{"target":"vayeitzei"},
  "aju.edu":144,
@@ -98,6 +105,7 @@
  "uscj.org":{"target":"Vayetze"}
 },
 "Vayishlach":{
+ "asin":"0827613660",
  "rabbisacks.org":"vayishlach",
  "ajr.edu":{"target":"vayishlah"},
  "aju.edu":147,
@@ -112,6 +120,7 @@
  "uscj.org":{"target":"Vayishlah"}
 },
 "Vayeshev":{
+ "asin":"0827613679",
  "rabbisacks.org":"vayeshev",
  "ajr.edu":{"target":"vayeishev-sefer-bereisheet"},
  "aju.edu":143,
@@ -126,6 +135,7 @@
  "uscj.org":{"target":"Vayeshev"}
 },
 "Miketz":{
+ "asin":"0827613687",
  "rabbisacks.org":"mikketz",
  "ajr.edu":{"target":"mikeitz"},
  "aju.edu":123,
@@ -140,6 +150,7 @@
  "uscj.org":{"target":"Miketz"}
 },
 "Vayigash":{
+ "asin":"0827613695",
  "rabbisacks.org":"vayigash",
  "ajr.edu":{"target":"vayigash"},
  "aju.edu":145,
@@ -154,6 +165,7 @@
  "uscj.org":{"target":"Vayigash"}
 },
 "Vayechi":{
+ "asin":"0827613709",
  "rabbisacks.org":"vayechi",
  "ajr.edu":{"target":"vayehi"},
  "aju.edu":141,
@@ -168,6 +180,7 @@
  "uscj.org":{"target":"Vayehi"}
 },
 "Shemot":{
+ "asin":"0827613717",
  "rabbisacks.org":"shemot",
  "ajr.edu":{"target":"shemot"},
  "aju.edu":167,
@@ -182,6 +195,7 @@
  "uscj.org":{"target":"Shemot"}
 },
 "Vaera":{
+ "asin":"0827613725",
  "rabbisacks.org":"vaera",
  "ajr.edu":{"target":"vaeira"},
  "aju.edu":138,
@@ -196,6 +210,7 @@
  "uscj.org":{"target":"Vaera"}
 },
 "Bo":{
+ "asin":"0827613733",
  "rabbisacks.org":"bo",
  "ajr.edu":{"target":"bo"},
  "aju.edu":155,
@@ -210,6 +225,7 @@
  "uscj.org":{"target":"Bo"}
 },
 "Beshalach":{
+ "asin":"0827613741",
  "rabbisacks.org":"beshallach",
  "ajr.edu":{"target":"beshalah"},
  "aju.edu":154,
@@ -224,6 +240,7 @@
  "uscj.org":{"target":"Beshalah"}
 },
 "Yitro":{
+ "asin":"0827614004",
  "rabbisacks.org":"yitro",
  "ajr.edu":{"target":"yitro"},
  "aju.edu":148,
@@ -238,6 +255,7 @@
  "uscj.org":{"target":"Yitro"}
 },
 "Mishpatim":{
+ "asin":"0827614012",
  "rabbisacks.org":"mishpatim",
  "ajr.edu":{"target":"mishpatim"},
  "aju.edu":160,
@@ -252,6 +270,7 @@
  "uscj.org":{"target":"Mishpatim"}
 },
 "Terumah":{
+ "asin":"0827614020",
  "rabbisacks.org":"terumah",
  "ajr.edu":{"target":"terumah"},
  "aju.edu":136,
@@ -266,6 +285,7 @@
  "uscj.org":{"target":"Terumah"}
 },
 "Tetzaveh":{
+ "asin":"0827614047",
  "rabbisacks.org":"tetzaveh",
  "ajr.edu":{"target":"tetzaveh"},
  "aju.edu":134,
@@ -280,6 +300,7 @@
  "uscj.org":{"target":"Tetzavah"}
 },
 "Ki Tisa":{
+ "asin":"0827614055",
  "rabbisacks.org":"ki-tissa",
  "ajr.edu":{"target":"ki-tissa"},
  "aju.edu":159,
@@ -294,6 +315,7 @@
  "uscj.org":{"target":"KiTissa"}
 },
 "Vayakhel":{
+ "asin":"0827614071",
  "rabbisacks.org":"vayakhel",
  "ajr.edu":{"target":"vayakhel"},
  "aju.edu":140,
@@ -308,6 +330,7 @@
  "uscj.org":{"target":"Vayakhel"}
 },
 "Pekudei":{
+ "asin":"082761408X",
  "rabbisacks.org":"pekudei",
  "ajr.edu":{"target":"pekudei"},
  "aju.edu":140,
@@ -322,6 +345,7 @@
  "uscj.org":{"target":"Pekudei"}
 },
 "Vayikra":{
+ "asin":"0827614098",
  "rabbisacks.org":"vayikra",
  "ajr.edu":{"target":"vayikra"},
  "aju.edu":171,
@@ -336,6 +360,7 @@
  "uscj.org":{"target":"Vayikra"}
 },
 "Tzav":{
+ "asin":"0827614101",
  "rabbisacks.org":"tzav",
  "ajr.edu":{"target":"tzav"},
  "aju.edu":170,
@@ -350,6 +375,7 @@
  "uscj.org":{"target":"Tzav"}
 },
 "Shmini":{
+ "asin":"082761411X",
  "rabbisacks.org":"shemini",
  "ajr.edu":{"target":"shemini"},
  "aju.edu":165,
@@ -364,6 +390,7 @@
  "uscj.org":{"target":"Shemini"}
 },
 "Tazria":{
+ "asin":"0827614128",
  "rabbisacks.org":"tazria",
  "ajr.edu":{"target":"tazria"},
  "aju.edu":169,
@@ -378,6 +405,7 @@
  "uscj.org":{"target":"Tazria"}
 },
 "Metzora":{
+ "asin":"0827614136",
  "rabbisacks.org":"metzora",
  "aju.edu":169,
  "jtsa.edu":"metzora",
@@ -391,6 +419,7 @@
  "uscj.org":{"target":"Metzora"}
 },
 "Achrei Mot":{
+ "asin":"0827614144",
  "rabbisacks.org":"acharei-mot",
  "ajr.edu":{"target":"aharei-mot"},
  "aju.edu":150,
@@ -405,6 +434,7 @@
  "uscj.org":{"target":"AhareiMot"}
 },
 "Kedoshim":{
+ "asin":"0827614152",
  "rabbisacks.org":"kedoshim",
  "ajr.edu":{"target":"kedoshim"},
  "aju.edu":150,
@@ -419,6 +449,7 @@
  "uscj.org":{"target":"Kedoshim"}
 },
 "Emor":{
+ "asin":"0827614160",
  "rabbisacks.org":"emor",
  "ajr.edu":{"target":"emor"},
  "aju.edu":158,
@@ -433,6 +464,7 @@
  "uscj.org":{"target":"Emor"}
 },
 "Behar":{
+ "asin":"0827614179",
  "rabbisacks.org":"behar",
  "ajr.edu":{"target":"bahar"},
  "aju.edu":152,
@@ -447,6 +479,7 @@
  "uscj.org":{"target":"Behar"}
 },
 "Bechukotai":{
+ "asin":"0827614187",
  "rabbisacks.org":"bechukotai",
  "ajr.edu":{"target":"behukotai"},
  "aju.edu":152,
@@ -461,6 +494,7 @@
  "uscj.org":{"target":"Behukotai"}
 },
 "Bamidbar":{
+ "asin":"0827614195",
  "rabbisacks.org":"bamidbar",
  "ajr.edu":{"target":"bemidbar"},
  "aju.edu":151,
@@ -475,6 +509,7 @@
  "uscj.org":{"target":"Bamidbar"}
 },
 "Nasso":{
+ "asin":"0827614209",
  "rabbisacks.org":"naso",
  "ajr.edu":{"target":"nasso"},
  "aju.edu":124,
@@ -489,6 +524,7 @@
  "uscj.org":{"target":"Naso"}
 },
 "Beha'alotcha":{
+ "asin":"0827614217",
  "rabbisacks.org":"behaalotcha",
  "ajr.edu":{"target":"behaalotekha"},
  "aju.edu":111,
@@ -503,6 +539,7 @@
  "uscj.org":{"target":"Behaalotekha"}
 },
 "Sh'lach":{
+ "asin":"0827614225",
  "rabbisacks.org":"shelach-lecha",
  "ajr.edu":{"target":"shelah"},
  "aju.edu":130,
@@ -517,6 +554,7 @@
  "uscj.org":{"target":"ShelachLekha"}
 },
 "Korach":{
+ "asin":"0827614233",
  "rabbisacks.org":"korach",
  "ajr.edu":{"target":"korah"},
  "aju.edu":120,
@@ -531,6 +569,7 @@
  "uscj.org":{"target":"Korach"}
 },
 "Chukat":{
+ "asin":"0827614241",
  "rabbisacks.org":"chukat",
  "ajr.edu":{"target":"hukkat"},
  "aju.edu":114,
@@ -545,6 +584,7 @@
  "uscj.org":{"target":"Hukkat"}
 },
 "Balak":{
+ "asin":"0827614500",
  "rabbisacks.org":"balak",
  "ajr.edu":{"target":"balak"},
  "aju.edu":114,
@@ -559,6 +599,7 @@
  "uscj.org":{"target":"Balak"}
 },
 "Pinchas":{
+ "asin":"0827614519",
  "rabbisacks.org":"pinchas",
  "ajr.edu":{"target":"pinhas"},
  "aju.edu":127,
@@ -573,6 +614,7 @@
  "uscj.org":{"target":"Pinhas"}
 },
 "Matot":{
+ "asin":"0827614527",
  "rabbisacks.org":"matot",
  "ajr.edu":{"target":"mattot"},
  "aju.edu":122,
@@ -587,6 +629,7 @@
  "uscj.org":{"target":"Mattot"}
 },
 "Masei":{
+ "asin":"0827614535",
  "rabbisacks.org":"masei",
  "ajr.edu":{"target":"massei"},
  "aju.edu":122,
@@ -601,6 +644,7 @@
  "uscj.org":{"target":"Massey"}
 },
 "Devarim":{
+ "asin":"0827614543",
  "rabbisacks.org":"devarim",
  "ajr.edu":{"target":"devarim"},
  "aju.edu":157,
@@ -615,6 +659,7 @@
  "uscj.org":{"target":"Devarim"}
 },
 "Vaetchanan":{
+ "asin":"0827614551",
  "rabbisacks.org":"vaetchanan",
  "ajr.edu":{"target":"vaethanan-sefer-devarim"},
  "aju.edu":139,
@@ -629,6 +674,7 @@
  "uscj.org":{"target":"Vaethanan"}
 },
 "Eikev":{
+ "asin":"082761456X",
  "rabbisacks.org":"eikev",
  "ajr.edu":{"target":"eikev"},
  "aju.edu":116,
@@ -643,6 +689,7 @@
  "uscj.org":{"target":"Ekev"}
 },
 "Re'eh":{
+ "asin":"0827614578",
  "rabbisacks.org":"reeh",
  "ajr.edu":{"target":"reeh"},
  "aju.edu":128,
@@ -657,6 +704,7 @@
  "uscj.org":{"target":"Reeh"}
 },
 "Shoftim":{
+ "asin":"0827614586",
  "rabbisacks.org":"shoftim",
  "ajr.edu":{"target":"shoftim"},
  "aju.edu":131,
@@ -671,6 +719,7 @@
  "uscj.org":{"target":"Shoftim"}
 },
 "Ki Teitzei":{
+ "asin":"0827614594",
  "rabbisacks.org":"ki-teitse",
  "ajr.edu":{"target":"ki-teitzei"},
  "aju.edu":119,
@@ -685,6 +734,7 @@
  "uscj.org":{"target":"KiTetze"}
 },
 "Ki Tavo":{
+ "asin":"0827614608",
  "rabbisacks.org":"ki-tavo",
  "ajr.edu":{"target":"ki-tavo"},
  "aju.edu":118,
@@ -699,6 +749,7 @@
  "uscj.org":{"target":"KiTavo"}
 },
 "Nitzavim":{
+ "asin":"0827614616",
  "rabbisacks.org":"nitzavim",
  "ajr.edu":{"target":"nitzavim"},
  "aju.edu":125,
@@ -713,6 +764,7 @@
  "uscj.org":{"target":"Nitzavim"}
 },
 "Vayeilech":{
+ "asin":"0827614624",
  "rabbisacks.org":"vayelech",
  "ajr.edu":{"target":"vayeilekh"},
  "aju.edu":125,
@@ -727,6 +779,7 @@
  "uscj.org":{"target":"Vayelekh"}
 },
 "Ha'azinu":{
+ "asin":"0827614632",
  "rabbisacks.org":"haazinu",
  "ajr.edu":{"target":"haazinu"},
  "aju.edu":117,
@@ -741,6 +794,7 @@
  "uscj.org":{"target":"Haazinu"}
 },
 "Vezot Haberakhah":{
+ "asin":"0827614640",
  "rabbisacks.org":"vezot-habracha",
  "aju.edu":null,
  "jtsa.edu":"vezot-haberakhah",
