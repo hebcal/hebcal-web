@@ -1,20 +1,20 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var dlURLs = <%- JSON.stringify(url) %>;
-  var calColor = '';
-  var emojiChecked = true;
+  const dlURLs = <%- JSON.stringify(url) %>;
+  let calColor = '';
+  let emojiChecked = true;
   function changeButtonTarget(id) {
-    var btn = document.getElementById(id);
-    var srcType = btn.dataset.hebcalSrc;
-    var baseUrl = srcType == 'olcom' ? 'gcal' : srcType;
-    var url = new URL(dlURLs[baseUrl]);
+    const btn = document.getElementById(id);
+    const srcType = btn.dataset.hebcalSrc;
+    const baseUrl = srcType == 'olcom' ? 'gcal' : srcType;
+    const url = new URL(dlURLs[baseUrl]);
     if (!emojiChecked) {
       url.searchParams.set('emoji', '0');
     }
     if (calColor && id == 'dl-ios') {
       url.searchParams.set('color', calColor);
     }
-    var href = url.href;
+    let href = url.href;
     if (srcType == 'gcal') {
       href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
     } else if (srcType == 'olcom') {
@@ -23,24 +23,24 @@ document.addEventListener('DOMContentLoaded', function() {
         '&mkt=en-001';
     }
     btn[btn.dataset.hebcalAttr] = href;
-    var btn2 = document.getElementById(id + '-alt');
+    const btn2 = document.getElementById(id + '-alt');
     if (btn2 && typeof btn2.href == 'string') {
-      var url = new URL(dlURLs.ics1year);
+      const url = new URL(dlURLs.ics1year);
       if (!emojiChecked) {
         url.searchParams.set('emoji', '0');
       }
       btn2.href = url.href;
     }
   }
-  var ccEl = document.getElementById('cal-color');
+  const ccEl = document.getElementById('cal-color');
   if (ccEl) {
     ccEl.addEventListener('change', function(event) {
       calColor = event.target.value;
       changeButtonTarget('dl-ios');
     }, false);
   }
-  document.querySelectorAll(".emoji-checkbox .form-check-input").forEach(function(el) {
-    var inputId = el.id.substring(2);
+  document.querySelectorAll('.emoji-checkbox .form-check-input').forEach(function(el) {
+    const inputId = el.id.substring(2);
     el.addEventListener('change', function(event) {
       emojiChecked = event.target.checked;
       changeButtonTarget(inputId);

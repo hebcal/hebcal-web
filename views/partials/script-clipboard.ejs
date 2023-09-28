@@ -1,32 +1,38 @@
 <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 <script>
-var grabBtnList = [].slice.call(document.querySelectorAll('.btn.grabBtn'));
-var grabContainer = document.getElementsByClassName('modal');
-grabBtnList.forEach(function (el) {
-  var clipboard = new ClipboardJS('#' + el.id, {
-    container: grabContainer && grabContainer[0]
+const grabBtnList = [].slice.call(document.querySelectorAll('.btn.grabBtn'));
+const grabContainer = document.getElementsByClassName('modal');
+grabBtnList.forEach(function(el) {
+  const clipboard = new ClipboardJS('#' + el.id, {
+    container: grabContainer && grabContainer[0],
   });
-  var tooltipBtn=new bootstrap.Tooltip(el, {
+  const tooltipBtn=new bootstrap.Tooltip(el, {
     trigger: 'manual',
   });
   clipboard.on('success', function(e) {
-    e.trigger.setAttribute('data-bs-original-title','Copied!');
+    e.trigger.setAttribute('data-bs-original-title', 'Copied!');
     tooltipBtn.show();
-    setTimeout(function(){tooltipBtn.hide()}, 2000);
+    setTimeout(function() {
+      tooltipBtn.hide();
+    }, 2000);
     e.clearSelection();
   });
   clipboard.on('error', function(e) {
-    var modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
-    var fallbackMsg='Press '+modifierKey+'C to copy';
-    e.trigger.setAttribute('data-bs-original-title',fallbackMsg);
+    const modifierKey=/mac/i.test(navigator.userAgent)?'\u2318':'Ctrl-';
+    const fallbackMsg='Press '+modifierKey+'C to copy';
+    e.trigger.setAttribute('data-bs-original-title', fallbackMsg);
     tooltipBtn.show();
-    setTimeout(function(){tooltipBtn.hide()}, 2000);
+    setTimeout(function() {
+      tooltipBtn.hide();
+    }, 2000);
   });
 });
-var grabLink = document.getElementById('grabLink');
+const grabLink = document.getElementById('grabLink');
 if (grabLink) {
   grabLink.addEventListener('focus', function(e) {
-    setTimeout(function(){grabLink.select()}, 100);
+    setTimeout(function() {
+      grabLink.select();
+    }, 100);
   });
 }
 </script>

@@ -86,15 +86,15 @@
 </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var d = document;
+  const d = document;
   d.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft' && !e.metaKey) {
-      var el = d.querySelector('link[rel=prev]');
+      const el = d.querySelector('link[rel=prev]');
       if (el) {
         d.location.href = el.href;
       }
     } else if (e.key === 'ArrowRight' && !e.metaKey) {
-      var el = d.querySelector('link[rel=next]');
+      const el = d.querySelector('link[rel=next]');
       if (el) {
         d.location.href = el.href;
       }

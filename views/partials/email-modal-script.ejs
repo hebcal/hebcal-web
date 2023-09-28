@@ -68,7 +68,7 @@ function doSubscribe(event) {
   for (const pair of formData) {
     params.append(pair[0], pair[1]);
   }
-  var options = {
+  const options = {
     method: 'POST',
     credentials: 'omit',
     body: params,

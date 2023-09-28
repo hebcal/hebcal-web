@@ -1,18 +1,18 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js" integrity="sha384-wv6yRjQC0TqzEnAjFQVXM2V0JrF6Nk0dh6QAGf1RwzTqPArdwU3luBZjVCi2YSVH" crossorigin="anonymous"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
- var calendar = null;
- var calendarEl = document.getElementById('calendar');
+ let calendar = null;
+ const calendarEl = document.getElementById('calendar');
  calendarEl.style.display = 'none';
- var listViewEl = document.getElementById('list-view');
- var toggleMonth = document.getElementById('toggle-month');
+ const listViewEl = document.getElementById('list-view');
+ const toggleMonth = document.getElementById('toggle-month');
  toggleMonth.addEventListener('change', function(event) {
-  var fc = this.checked;
+  const fc = this.checked;
   calendarEl.style.display = fc ? 'block' : 'none';
   listViewEl.style.display = fc ? 'none' : 'block';
   if (fc) {
-    makeFullCalendar();
-    calendar.render();
+   makeFullCalendar();
+   calendar.render();
   }
   toggleMonth.blur();
  });
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (calendar) {
     return calendar;
   }
-  var opts = {
+  const opts = {
     initialView: 'dayGridMonth',
     headerToolbar: {
       left: 'prev next',
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
     timeZone: 'local',
     eventDisplay: 'block',
     events: function(info, successCallback, failureCallback) {
-      var url = new URL(document.location.href);
+      const url = new URL(document.location.href);
       url.pathname = '/hebcal';
-      var sp = url.searchParams;
+      const sp = url.searchParams;
       sp.set('v', '1'); // Required, version 1
       sp.set('cfg', 'fc'); // Required, mode = FullCalendar
       sp.set('start', info.startStr.substring(0, 10));
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
       sp.set('mod', 'on'); // Modern holidays
       sp.set('D', 'on'); // Show Hebrew date for dates with some event
       sp.set('lg', 's'); // Sephardic transliterations
-      var fetchOptions = {
+      const fetchOptions = {
         method: 'GET',
         credentials: 'omit',
         mode: 'cors',
@@ -55,13 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
       fetch(url.href, fetchOptions).then(function(fetchRes) {
         if (fetchRes.ok) {
           fetchRes.json().then(function(parsedResponse) {
-            var events = parsedResponse.map(function(ev) {
+            const events = parsedResponse.map(function(ev) {
               if (ev.emoji) {
                 ev.title += '\u00a0' + ev.emoji;
               }
               if (typeof ev.url == 'string') {
-                var u = new URL(ev.url);
-                var p = u.pathname;
+                const u = new URL(ev.url);
+                const p = u.pathname;
                 if (p.substring(0, 3) == '/h/') {
                   ev.url = '/holidays/' + p.substring(3);
                 }

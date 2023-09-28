@@ -190,20 +190,20 @@ document.addEventListener('DOMContentLoaded', function() {
   window['hebcal'].events=<%- JSON.stringify(items) %>;
   window['hebcal'].memos=<%- JSON.stringify(memos) %>;
   window['hebcal'].opts=<%- JSON.stringify(opts) %>;
-  var d = document;
+  const d = document;
   function renderPagination(months) {
     if (window['hebcal'].paginationRendered) {
       return;
     }
-    var localeData = window['hebcal'].localeConfig;
+    const localeData = window['hebcal'].localeConfig;
     d.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
-      var finalChildNode = parentEl.children[parentEl.children.length - 1];
+      const finalChildNode = parentEl.children[parentEl.children.length - 1];
       months.forEach(function(month) {
-        var yearMonth = month.month;
-        var yearStr = yearMonth.substring(0, yearMonth.length - 3);
-        var monthStr = yearMonth.substring(yearMonth.length - 2);
-        var mm = parseInt(monthStr, 10);
-        var newNode = hebcalResults.paginationListItem({
+        const yearMonth = month.month;
+        const yearStr = yearMonth.substring(0, yearMonth.length - 3);
+        const monthStr = yearMonth.substring(yearMonth.length - 2);
+        const mm = parseInt(monthStr, 10);
+        const newNode = hebcalResults.paginationListItem({
           href: '#cal-' + yearMonth,
           title: localeData.months[mm - 1] + ' ' + yearStr,
           innerHTML: localeData.monthsShort[mm - 1],
@@ -217,17 +217,17 @@ document.addEventListener('DOMContentLoaded', function() {
   function show(el) { if (el) { el.style.display = 'block' } }
   function hide(el) { if (el) { el.style.display = 'none' } }
 
-  var months = hebcalResults.splitByMonth(window['hebcal'].events);
+  const months = hebcalResults.splitByMonth(window['hebcal'].events);
   renderPagination(months);
   hebcalResults.makeMonthDivs(months);
 
-  var toggleMonth = d.getElementById('toggle-month');
+  const toggleMonth = d.getElementById('toggle-month');
   toggleMonth.onchange = function() {
     d.querySelectorAll('div.agenda').forEach(hide);
     hebcalResults.renderCalendarGrids(months);
     d.querySelectorAll('div.cal').forEach(show);
   };
-  var toggleList = d.getElementById('toggle-list');
+  const toggleList = d.getElementById('toggle-list');
   toggleList.onchange = function() {
     d.querySelectorAll('div.cal').forEach(hide);
     hebcalResults.renderMonthTables(months);
@@ -242,9 +242,9 @@ document.addEventListener('DOMContentLoaded', function() {
     toggleList.checked = true;
     toggleMonth.checked = false;
   }
-  var loadingEl = d.getElementById('hebcal-loading');
+  const loadingEl = d.getElementById('hebcal-loading');
   loadingEl.style.display = 'none';
-  var offcanvasEl = document.getElementById('offcanvas-settings');
+  const offcanvasEl = document.getElementById('offcanvas-settings');
   offcanvasEl.addEventListener('show.bs.offcanvas', function () {
     var _paq = window._paq = window._paq || [];
     _paq.push(['trackEvent', 'Interaction', 'settings', '<%=shortTitle+" "+locationName%>']);

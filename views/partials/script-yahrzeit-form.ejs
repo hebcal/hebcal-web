@@ -1,6 +1,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-var count=<%=count%>;
+let count=<%=count%>;
 function getCurrentCount() {
   return count;
 }
@@ -43,58 +43,58 @@ function yahrzeitRow(n) {
 }
 
 function addNewRow() {
-  var n = ++count;
-  var newNode = document.createElement("div");
-  newNode.className = "yahrzeit-row";
-  newNode.id = "row" + n;
+  const n = ++count;
+  const newNode = document.createElement('div');
+  newNode.className = 'yahrzeit-row';
+  newNode.id = 'row' + n;
   newNode.innerHTML = yahrzeitRow(n);
-  var parentDiv = document.getElementById("rows");
+  const parentDiv = document.getElementById('rows');
   parentDiv.insertBefore(newNode, null);
-  var delBtn = document.getElementById("del-"+n);
+  const delBtn = document.getElementById('del-'+n);
   clickToDelete(delBtn);
   return n;
 }
 window.addNewRow = addNewRow;
 
-document.getElementById("newrow").addEventListener('click', function() {
+document.getElementById('newrow').addEventListener('click', function() {
   addNewRow();
   return false;
 });
 
-  var checkbox = document.getElementById('yizkor');
-  var radio0 = document.getElementById('i0');
-  var radio1 = document.getElementById('i1');
-  checkbox.addEventListener('change', function() {
-    radio0.disabled = !this.checked;
-    radio1.disabled = !this.checked;
-  });
+const checkbox = document.getElementById('yizkor');
+const radio0 = document.getElementById('i0');
+const radio1 = document.getElementById('i1');
+checkbox.addEventListener('change', function() {
+  radio0.disabled = !this.checked;
+  radio1.disabled = !this.checked;
+});
 
 function clickToDelete(el) {
-  var num = el.id.substring(4);
+  const num = el.id.substring(4);
   el.addEventListener('click', function() {
-    var node = document.getElementById('row' + num);
+    const node = document.getElementById('row' + num);
     node.innerHTML = '<div class="row mb-3 align-items-center mt-1"><div class="col-auto">'+num+'.</div>'+
       '<div class="col-auto"><span class="text-danger lead">Deleted.</span></div>'+
       '<div class="col-auto"><span class="text-burgundy">Click “Update Calendar” to save changes.</span></div>'+
       '</div>';
   });
 }
-var delBtns = [].slice.call(document.querySelectorAll('button.del'));
+const delBtns = [].slice.call(document.querySelectorAll('button.del'));
 delBtns.forEach(clickToDelete);
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.0/papaparse.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-function processRow(row) {
-  var parts = row[0].trim().split('/');
-  var mm = parseInt(parts[0], 10);
-  var dd = parseInt(parts[1], 10);
-  var yy = parseInt(parts[2], 10);
+  function processRow(row) {
+  const parts = row[0].trim().split('/');
+  const mm = parseInt(parts[0], 10);
+  const dd = parseInt(parts[1], 10);
+  const yy = parseInt(parts[2], 10);
   if (isNaN(mm) || isNaN(dd) || isNaN(yy)) {
     return false;
   }
-  var n = getCurrentCount();
+  let n = getCurrentCount();
   if (!document.getElementById('y'+n) || !document.getElementById('m'+n) || !document.getElementById('d'+n)) {
     n = addNewRow();
   }
@@ -105,7 +105,7 @@ function processRow(row) {
   document.getElementById('m'+n).value = ''+mm;
   document.getElementById('y'+n).value = ''+yy;
   if (typeof row[1] === 'string') {
-    var name = row[1].trim();
+    const name = row[1].trim();
     document.getElementById('n'+n).value = name;
   }
   if (typeof row[2] === 'boolean' && row[2]) {
@@ -113,34 +113,34 @@ function processRow(row) {
     document.getElementById('s'+n+'-1').checked = true;
   }
   if (typeof row[3] === 'string') {
-    var typ = row[3].trim().toLowerCase();
-    var el = document.getElementById('t'+n);
+    const typ = row[3].trim().toLowerCase();
+    const el = document.getElementById('t'+n);
     switch (typ[0]) {
       case 'y':
-      el.value = 'Yahrzeit';
-      break;
+        el.value = 'Yahrzeit';
+        break;
       case 'b':
-      el.value = 'Birthday';
-      break;
+        el.value = 'Birthday';
+        break;
       case 'a':
-      el.value = 'Anniversary';
-      break;
+        el.value = 'Anniversary';
+        break;
       case 'o':
-      el.value = 'Other';
-      break;
+        el.value = 'Other';
+        break;
     }
   }
   addNewRow();
   return true;
 }
-var formFileEl = document.getElementById('formFile');
-var formEl = document.getElementById('import-form');
+const formFileEl = document.getElementById('formFile');
+const formEl = document.getElementById('import-form');
 formEl.addEventListener('submit', function(event) {
   event.preventDefault();
   event.stopPropagation();
-  var nofileAlertEl = document.getElementById('nofile-alert');
-  var badimportAlertEl = document.getElementById('badimport-alert');
-  var successAlertEl = document.getElementById('success-alert');
+  const nofileAlertEl = document.getElementById('nofile-alert');
+  const badimportAlertEl = document.getElementById('badimport-alert');
+  const successAlertEl = document.getElementById('success-alert');
   var _paq = window._paq = window._paq || [];
   if (formFileEl.files.length == 0) {
     nofileAlertEl.hidden = false;
@@ -151,18 +151,18 @@ formEl.addEventListener('submit', function(event) {
     nofileAlertEl.hidden = true;
     badimportAlertEl.hidden = true;
     successAlertEl.hidden = true;
-    var file = formFileEl.files[0];
+    const file = formFileEl.files[0];
     Papa.parse(file, {
       dynamicTyping: true,
       error: function(err, file, inputElem, reason) {
         _paq.push(['trackEvent', 'Interaction', 'csv-error', file.name, 0]);
       },
       complete: function(results) {
-        var numOK = 0;
-        for (var i = 0; i < results.data.length; i++) {
-          var row = results.data[i];
+        let numOK = 0;
+        for (let i = 0; i < results.data.length; i++) {
+          const row = results.data[i];
           if (typeof row[0] === 'string') {
-            var ok = processRow(row);
+            const ok = processRow(row);
             if (ok) {
               numOK++;
             }
@@ -177,7 +177,7 @@ formEl.addEventListener('submit', function(event) {
           badimportAlertEl.hidden = false;
           _paq.push(['trackEvent', 'Interaction', 'csv-fail', file.name, 0]);
         }
-      }
+      },
     });
   }
 });

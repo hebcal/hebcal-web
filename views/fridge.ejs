@@ -110,12 +110,12 @@ for 3 small stars (sun 8.5° below the horizon)
 </div><!-- .container -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var checked = false;
-  var havdalahTd = [].slice.call(document.querySelectorAll('td.havdalah'));
-  var havdalahCol = [].slice.call(document.querySelectorAll('col.havdalah'));
-  var checkbox = document.getElementById('toggle-havdalah');
-  var fridgeTable = document.getElementById('fridge-table');
-  var havdalahFooter = document.getElementById('havdalah-footer');
+  const checked = false;
+  const havdalahTd = [].slice.call(document.querySelectorAll('td.havdalah'));
+  const havdalahCol = [].slice.call(document.querySelectorAll('col.havdalah'));
+  const checkbox = document.getElementById('toggle-havdalah');
+  const fridgeTable = document.getElementById('fridge-table');
+  const havdalahFooter = document.getElementById('havdalah-footer');
   checkbox.addEventListener('change', function() {
     if (this.checked) {
       fridgeTable.style.width = '620px';

@@ -150,7 +150,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
 <%- await include('partials/email-candles-modal.ejs') _%>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-var d=document;
+const d=document;
 d.getElementById("m").addEventListener("focus",function(){
   d.getElementById("M1").checked = false;
   d.getElementById("M0").checked = true;

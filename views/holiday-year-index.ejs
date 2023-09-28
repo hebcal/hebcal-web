@@ -198,10 +198,10 @@ class="rounded float-end ms-3 mb-3">
 </div><!-- .col -->
 </div><!-- .row -->
 <script>
-var navYears = [].slice.call(document.querySelectorAll('.nav-year'));
+const navYears = [].slice.call(document.querySelectorAll('.nav-year'));
 for (let i = 0; i < navYears.length; i++) {
   navYears[i].addEventListener('change', function(event) {
-    var url = event.target.value + location.search;
+    const url = event.target.value + location.search;
     location = url;
   });
 }

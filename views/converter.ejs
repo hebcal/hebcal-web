@@ -247,26 +247,26 @@ Free annual email reminders &amp; calendar downloads.
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var d = document;
-  var switchEl = d.querySelector("#nikud-checkbox");
-  var hebdateEl = d.querySelector("#jumbo-hebdate");
+  const d = document;
+  const switchEl = d.querySelector("#nikud-checkbox");
+  const hebdateEl = d.querySelector("#jumbo-hebdate");
   switchEl.addEventListener('change', function(event) {
     hebdateEl.innerHTML = event.target.checked ? '<%= hebrew %>' : '<%= hebrewNoNikkud %>';
   });
-  var gy=<%=gy%>, gm=<%=gm%>, gd=<%=gd%>;
-  var dt = new Date();
+  const gy=<%=gy%>, gm=<%=gm%>, gd=<%=gd%>;
+  const dt = new Date();
   if (dt.getFullYear() != gy || dt.getMonth()+1 != gm || dt.getDate() != gd) {
-    var el = d.querySelector("#ctoday");
+    const el = d.querySelector("#ctoday");
     el.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
   }
   d.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft' && !e.metaKey) {
-      var el = d.querySelector('link[rel=prev]');
+      const el = d.querySelector('link[rel=prev]');
       if (el) {
         d.location.href = el.href;
       }
     } else if (e.key === 'ArrowRight' && !e.metaKey) {
-      var el = d.querySelector('link[rel=next]');
+      const el = d.querySelector('link[rel=next]');
       if (el) {
         d.location.href = el.href;
       }

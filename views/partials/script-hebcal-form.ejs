@@ -1,6 +1,8 @@
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-var d=document,d1=d.getElementById("d1"),d2=d.getElementById("d2");
+const d=document;
+const d1=d.getElementById('d1');
+const d2=d.getElementById('d2');
 d1.addEventListener("click", function(){if(this.checked){d2.checked=false}});
 d2.addEventListener("click", function(){if(this.checked){d1.checked=false}});
 d.getElementById("ytH").addEventListener("click", function(){d.f1.year.value="<%=defaultYearHeb%>"});
