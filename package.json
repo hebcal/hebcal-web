@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.11.3",
+  "version": "2.12.0",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite11.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-5.0.2.min.js",
+    "clientapp": "hebcal-app-5.0.3.min.js",
     "typeaheadcss": "typeahead2.css"
   },
   "scripts": {
@@ -33,7 +33,6 @@
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
     "@babel/register": "^7.22.15",
-    "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.4",
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@rollup/plugin-terser": "^0.4.3",

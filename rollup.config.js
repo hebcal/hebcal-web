@@ -1,6 +1,5 @@
 const {nodeResolve} = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
-const babel = require('@rollup/plugin-babel');
 const terser = require('@rollup/plugin-terser');
 const pkg = require('./package.json');
 
@@ -17,33 +16,6 @@ module.exports = [
     ],
     plugins: [
       terser(),
-      babel({
-        babelHelpers: 'bundled',
-        presets: [
-          ['@babel/preset-env', {
-            modules: false,
-            exclude: [
-              'es.array.includes',
-              'es.parse-int',
-              'es.regexp.exec',
-              'es.string.includes',
-              'es.string.replace',
-              'es.string.split',
-              'es.string.trim',
-              'es.symbol.description',
-            ],
-            targets: {
-              edge: '16',
-              firefox: '60',
-              chrome: '58',
-              safari: '10',
-            },
-            useBuiltIns: 'usage',
-            corejs: 3,
-          }],
-        ],
-        exclude: ['node_modules/**'],
-      }),
       nodeResolve(),
       commonjs(),
     ],
@@ -60,33 +32,6 @@ module.exports = [
     ],
     plugins: [
       terser(),
-      babel({
-        babelHelpers: 'bundled',
-        presets: [
-          ['@babel/preset-env', {
-            modules: false,
-            exclude: [
-              'es.array.includes',
-              'es.parse-int',
-              'es.regexp.exec',
-              'es.string.includes',
-              'es.string.replace',
-              'es.string.split',
-              'es.string.trim',
-              'es.symbol.description',
-            ],
-            targets: {
-              edge: '16',
-              firefox: '60',
-              chrome: '58',
-              safari: '10',
-            },
-            useBuiltIns: 'usage',
-            corejs: 3,
-          }],
-        ],
-        exclude: ['node_modules/**'],
-      }),
       nodeResolve(),
       commonjs(),
     ],
