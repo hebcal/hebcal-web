@@ -44,6 +44,28 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
 <script><%- await include('analytics.js') -%></script>
 <% } -%>
+<% if (typeof cookieBanner === 'boolean' && cookieBanner) { -%>
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom">
+ <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
+  <div class="toast-header bg-body-tertiary">
+   <strong class="me-auto">Cookie policy</strong>
+   <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+   We use cookies for personalization, analytics and advertising.
+   By continuing to visit Hebcal you agree to our use of cookies
+   in accordance with our <a href="/home/about/privacy-policy">privacy policy</a>.
+  </div>
+ </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const toastEl = document.getElementById('cookie-toast')
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastEl);
+  toastBootstrap.show();
+});
+</script>
+<% } -%>
 </body>
 </html>
 <!-- <%= hostname %> <%= new Date().toISOString() %> -->

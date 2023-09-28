@@ -326,6 +326,7 @@ export function setHebcalCookie(ctx, query) {
  * @param {string} newCookie
  */
 function setCookie(ctx, newCookie) {
+  const prevCookie = ctx.cookies.get('C');
   const expires = dayjs().add(399, 'd').toDate();
   newCookie += '&exp=' + expires.toISOString().substring(0, 10);
   ctx.cookies.set('C', newCookie, {
@@ -333,6 +334,9 @@ function setCookie(ctx, newCookie) {
     overwrite: true,
     httpOnly: false,
   });
+  if (empty(prevCookie)) {
+    ctx.state.cookieBanner = true;
+  }
 }
 
 /**
