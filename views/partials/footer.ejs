@@ -43,7 +43,6 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <% } -%>
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
 <script><%- await include('analytics.js') -%></script>
-<% } -%>
 <% if (typeof cookieBanner === 'boolean' && cookieBanner) { -%>
 <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom">
  <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
@@ -65,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
   toastBootstrap.show();
 });
 </script>
+<% } -%>
 <% } -%>
 </body>
 </html>
