@@ -549,7 +549,8 @@ async function makeYahrzeitEvents(maxId, query, reminder) {
           .map((ev) => {
             const hd = ev.getDate().prev();
             const dt = hd.greg();
-            const eventTimeStr = hd.getDay() === 6 ? '20:00' : '16:30';
+            const dow = hd.getDay();
+            const eventTimeStr = dow === 6 ? '20:00' : dow === 5 ? '14:30' : '16:30';
             const uid = 'reminder-' + dayjs(dt).format('YYYYMMDD') + '-' + ev.hash + '-' + id;
             return new Event(
                 hd,
