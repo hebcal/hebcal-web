@@ -12,6 +12,13 @@
 <div class="float-start">
   <svg width="72" height="72" class="me-3 mb-3"><use xlink:href="<%=cspriteHref%>#torah-235339"></use></svg>
 </div>
+<% if (todayEv) { %>
+<h2>Today’s holiday Torah reading</h2>
+<p class="lead"><time class="text-body-secondary" datetime="<%=d.format('YYYY-MM-DD')%>"><%=d.format('dddd')%>, <span class="text-nowrap"><%=d.format('D MMMM YYYY')%></span> ·
+ <span class="text-nowrap"><%=hd.render('en')%></span></time> ·
+ <a href="<%= todayEv.url %>#reading"><%= todayEv.ev.render('en') %></a></p>
+<p>Torah reading: <%- todayEv.torahHtml %></p>
+<% } %>
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replace(/'/g, '’')%>
 <% if (israelDiasporaDiffer) { %><small class="text-body-secondary">· <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
 </h2>

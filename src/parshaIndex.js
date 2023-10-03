@@ -3,6 +3,8 @@ import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common';
 import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon';
+import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
+import {makeLeyningHtmlFromParts} from './parshaCommon';
 import dayjs from 'dayjs';
 
 const myLangNames = Object.assign({
@@ -18,7 +20,6 @@ delete myLangNames['he-x-NoNikud'];
 export async function parshaIndex(ctx) {
   const q = setDefautLangTz(ctx);
   const {dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
-  expiresSaturdayNight(ctx, new Date(), ctx.state.timezone);
   const hd0 = new HDate(dt);
   const hd = afterSunset ? hd0.next() : hd0;
   const saturday = hd.onOrAfter(6);
@@ -37,6 +38,13 @@ export async function parshaIndex(ctx) {
     makeParshaJsonLD(saturday, parsha, parshaHref, meta),
     makeParshaJsonLD(nextSaturday, parshaNext, parshaNextHref, metaNext),
   ];
+  const todayEv = getTodayHolidayEvent(hd, il);
+  const now = new Date();
+  if (todayEv) {
+    ctx.lastModified = now;
+  } else {
+    expiresSaturdayNight(ctx, now, ctx.state.timezone);
+  }
   await ctx.render('parsha-index', {
     title: `Weekly Torah Portion - Parashat haShavua - Hebcal`,
     il,
@@ -55,7 +63,27 @@ export async function parshaIndex(ctx) {
     langNames: myLangNames,
     meta,
     jsonLD,
+    todayEv,
+    hd,
+    d: dayjs(hd.greg()),
   });
+}
+
+function getTodayHolidayEvent(hd, il) {
+  if (hd.getDay() === 6) {
+    return undefined;
+  }
+  const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  for (const ev of events) {
+    const reading = getLeyningForHoliday(ev, il);
+    const url = ev.url();
+    if (reading && reading.fullkriyah && url) {
+      const parts = makeLeyningParts(reading.fullkriyah);
+      const torahHtml = makeLeyningHtmlFromParts(parts);
+      return {ev, url, torahHtml};
+    }
+  }
+  return undefined;
 }
 
 function getParsha(hd, il) {
