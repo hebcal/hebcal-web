@@ -260,12 +260,15 @@ document.addEventListener('DOMContentLoaded', function() {
     el.innerHTML = '<div class="small"><a href="/converter">Convert today’s date</a></div>';
   }
   d.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowLeft' && !e.metaKey) {
+    if (e.metaKey || e.target.nodeName === 'INPUT') {
+      return;
+    }
+    if (e.key === 'ArrowLeft') {
       const el = d.querySelector('link[rel=prev]');
       if (el) {
         d.location.href = el.href;
       }
-    } else if (e.key === 'ArrowRight' && !e.metaKey) {
+    } else if (e.key === 'ArrowRight') {
       const el = d.querySelector('link[rel=next]');
       if (el) {
         d.location.href = el.href;
