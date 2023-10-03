@@ -80,7 +80,7 @@
     "nodemailer": "^6.9.5",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.13.0",
-    "pino": "^8.15.3",
+    "pino": "^8.15.4",
     "probe-image-size": "^7.2.3",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",

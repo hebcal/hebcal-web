@@ -2,7 +2,7 @@
   ampAds: true,
   ampForm: true,
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>">
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on' : '' %>">
 <% if (typeof prev !== 'undefined') { %><link rel="prev" href="<%=prev.href%>"><% } %>
 <% if (typeof next !== 'undefined') { %><link rel="next" href="<%=next.href%>"><% } %>
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
@@ -10,7 +10,7 @@
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
-<link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on&amp=1' : '?amp=1' %>">
+<link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>
 .past {color: var(--bs-secondary-color) !important}
 </style>
@@ -91,6 +91,9 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </table>
 </div><!-- #chanukah-candles -->
 <% } else if (pesachSukkotItems !== null) { %>
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by
+Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <div class="table-responsive" id="shalosh-regalim">
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
@@ -140,12 +143,12 @@ data-ad-slot="5342180883"></ins>
 <% } -%>
 </div><!-- .d-print-none -->
 
-<h3 id="dates">Dates for <%=holiday.replace(/'/g, '’')%><% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in Israel&nbsp;🇮🇱<%}%></h3>
+<h3 id="dates">Dates for <%=holiday.replace(/'/g, '’')%><% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></h3>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup><col><col><col><col></colgroup>
 <thead>
-<tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && (holiday === 'Shavuot' || holiday === 'Pesach')) { %> in Israel&nbsp;🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
+<tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
 </thead>
 <tbody class="table-group-divider">
 <% occursOn.forEach((item) => { %>
@@ -176,7 +179,12 @@ data-ad-slot="5342180883"></ins>
 <% } %>
 
 <% if (typeof meta.reading !== 'undefined') { %>
-<h3 id="reading" class="mt-3">Tanakh</h3>
+<h3 id="reading" class="mt-4">Tanakh</h3>
+<% if (isShaloshRegalim) { %>
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by
+Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+<% } %>
 <% if (Object.keys(meta.reading).length >= 3) { %>
 <div class="d-print-none">
 <nav class="d-none d-lg-block">
@@ -223,7 +231,7 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } // reading.megillah -%>
 <% } // ... for %>
 <% } // meta.reading %>
-<h3 id="ref">References</h3>
+<h3 id="ref" class="mt-4">References</h3>
 <dl>
 <% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
 <dt><em><a class="outbound" rel="sponsored"

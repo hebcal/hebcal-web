@@ -151,7 +151,8 @@ export async function holidayDetail(ctx) {
       .concat(holiday);
   const translations = Array.from(new Set(translations0)).sort();
   const jsonLD = makeJsonLD(noindex, year, next.event, il, meta);
-  const pesachSukkotItems = shaloshRegalim[holiday] && holiday !== 'Shavuot' ?
+  const isShaloshRegalim = shaloshRegalim[holiday];
+  const pesachSukkotItems = isShaloshRegalim && holiday !== 'Shavuot' ?
     makeMultiDayHolidayItems(holiday, upcomingHebrewYear, il) :
     null;
   await ctx.render('holidayDetail', {
@@ -177,6 +178,7 @@ export async function holidayDetail(ctx) {
     jsonLD,
     il,
     chanukahItems: holiday === 'Chanukah' ? makeChanukahItems(upcomingHebrewYear) : null,
+    isShaloshRegalim,
     pesachSukkotItems,
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
