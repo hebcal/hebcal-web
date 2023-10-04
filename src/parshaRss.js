@@ -22,12 +22,13 @@ export async function parshaRss(ctx) {
   expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = eventsToRss2(events, {
-    mainUrl: 'https://www.hebcal.com/sedrot/',
+    mainUrl: 'https://www.hebcal.com/sedrot/' + (il ? '?i=on' : ''),
     selfUrl: 'https://www.hebcal.com' + ctx.request.path,
     buildDate: dt,
     title: hebrew && il ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
     description: 'Torah reading of the week from Hebcal.com' + suffix,
     il,
+    lang,
     utmSource,
     utmMedium,
     evPubDate: true,
