@@ -50,7 +50,7 @@
     "@hebcal/learning": "^1.5.1",
     "@hebcal/leyning": "^7.4.4",
     "@hebcal/locales": "^4.0.1",
-    "@hebcal/rest-api": "^4.5.4",
+    "@hebcal/rest-api": "^4.5.5",
     "@hebcal/triennial": "^1.4.0",
     "better-sqlite3": "^8.7.0",
     "dayjs": "^1.11.10",

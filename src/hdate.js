@@ -1,18 +1,12 @@
 /* eslint-disable require-jsdoc */
-import {HDate, ParshaEvent, HebrewCalendar, flags, Locale, DailyLearning} from '@hebcal/core';
+import {HDate, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate';
-import {pad2, getHolidayDescription, makeTorahMemoText, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
 import {basename} from 'path';
-import createError from 'http-errors';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import fs from 'fs/promises';
-
-function expires(ctx, dt) {
-  const exp = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + 1, 0, 0, 0);
-  ctx.set('Expires', exp.toUTCString());
-}
+import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon';
 
 const hdateMinEnPath = '/var/www/node_modules/@hebcal/core/dist/hdate0-bundle.min.js';
 const hdateMinJsPath = '/var/www/node_modules/@hebcal/core/dist/hdate-bundle.min.js';
@@ -103,19 +97,6 @@ const hmToArg = {
   'Adar II': 'Adar2',
 };
 
-const RSS_CONTENT_TYPE = 'application/rss+xml; charset=utf-8';
-
-function getLang(rpath) {
-  const bn = basename(rpath);
-  const dash = bn.indexOf('-');
-  const lang = dash === -1 ? 'en' : bn.substring(dash + 1, bn.indexOf('.'));
-  const locales = Locale.getLocaleNames();
-  if (locales.indexOf(lang) === -1) {
-    throw createError(404, `Unknown locale: ${lang}`);
-  }
-  return lang;
-}
-
 export async function hdateXml(ctx) {
   const rpath = ctx.request.path;
   const dt = new Date();
@@ -138,58 +119,6 @@ export async function hdateXml(ctx) {
   expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('hdate-xml', props);
-}
-
-export async function parshaRss(ctx) {
-  const rpath = ctx.request.path;
-  const {dt} = getTodayDate(ctx.request.query);
-  const saturday = dayjs(dt).day(6);
-  const hd = new HDate(dt);
-  const utcString = dt.toUTCString();
-  const bn = basename(rpath);
-  const il = bn.startsWith('israel');
-  const ev = getSaturdayEvent(hd.onOrAfter(6), il);
-  const suffix = il ? ' (Israel)' : ' (Diaspora)';
-  const lang = getLang(rpath);
-  const hebrew = lang === 'he';
-  const props = {
-    writeResp: false,
-    title: hebrew && il ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
-    description: 'Torah reading of the week from Hebcal.com' + suffix,
-    lang,
-    pubDate: utcString,
-    parsha: ev.render(lang),
-    memo: createMemo(ev, il),
-    link: appendIsraelAndTracking(ev.url(), il, 'sedrot-' + (il ? 'israel' : 'diaspora'), 'rss'),
-    dt: '' + dt.getFullYear() + pad2(dt.getMonth() + 1) + pad2(dt.getDate()),
-    year: dt.getFullYear(),
-    saturdayDate: saturday.locale(lang).format('D MMMM YYYY'),
-    parshaPubDate: saturday.format('ddd, DD MMM YYYY') + ' 12:00:00 GMT',
-  };
-  ctx.lastModified = utcString;
-  expires(ctx, saturday.toDate());
-  ctx.type = RSS_CONTENT_TYPE;
-  ctx.body = await ctx.render('parsha-rss', props);
-}
-
-function getSaturdayEvent(hd, il) {
-  const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
-  const parsha = sedra.lookup(hd);
-  return parsha.chag ? HebrewCalendar.getHolidaysOnDate(hd, il)[0] : new ParshaEvent(hd, parsha.parsha, il);
-}
-
-function createMemo(ev, il) {
-  const memoText = makeTorahMemoText(ev, il);
-  const memoHtml = memoText ? '<p>' + memoText.replace(/\n/g, '</p>\n<p>') + '</p>' : '';
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-    return memoHtml;
-  } else {
-    let memo = '<p>' + getHolidayDescription(ev) + '</p>';
-    if (memoHtml) {
-      memo += '\n' + memoHtml;
-    }
-    return memo;
-  }
 }
 
 export async function dafYomiRss(ctx) {

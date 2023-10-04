@@ -8,12 +8,6 @@
 <language><%= lang %></language>
 <copyright>Copyright (c) <%= year %> Michael J. Radwin. All rights reserved.</copyright>
 <lastBuildDate><%= pubDate %></lastBuildDate>
-<item>
-<title><%= parsha %> - <%= saturdayDate %></title>
-<link><%= link %></link>
-<description><![CDATA[<%- memo %>]]></description>
-<pubDate><%= parshaPubDate %></pubDate>
-<guid isPermaLink="false"><%= link %>&amp;dt=<%= dt %></guid>
-</item>
+<%- items -%>
 </channel>
 </rss>
