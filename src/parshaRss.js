@@ -1,6 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
-import {getHolidayDescription, makeTorahMemoText, eventToRssItem2} from '@hebcal/rest-api';
+import {getHolidayDescription, makeTorahMemoText, eventsToRss2} from '@hebcal/rest-api';
 import {getTodayDate} from './common';
 import {basename} from 'path';
 import dayjs from 'dayjs';
@@ -10,7 +10,6 @@ export async function parshaRss(ctx) {
   const rpath = ctx.request.path;
   const {dt} = getTodayDate(ctx.request.query);
   const saturday = dayjs(dt).day(6);
-  const utcString = dt.toUTCString();
   const bn = basename(rpath);
   const il = bn.startsWith('israel');
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
@@ -19,23 +18,20 @@ export async function parshaRss(ctx) {
   const utmSource = 'sedrot-' + (il ? 'israel' : 'diaspora');
   const utmMedium = 'rss';
   const events = makeEvents(dt, il, lang);
-  let str = '';
-  for (const evt of events) {
-    str += eventToRssItem2(evt, {il, utmSource, utmMedium, evPubDate: true});
-  }
-  const props = {
-    writeResp: false,
-    title: hebrew && il ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
-    description: 'Torah reading of the week from Hebcal.com' + suffix,
-    lang,
-    pubDate: utcString,
-    year: dt.getFullYear(),
-    items: str,
-  };
-  ctx.lastModified = utcString;
+  ctx.lastModified = dt.toUTCString();
   expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
-  ctx.body = await ctx.render('parsha-rss', props);
+  ctx.body = eventsToRss2(events, {
+    mainUrl: 'https://www.hebcal.com/sedrot/',
+    selfUrl: 'https://www.hebcal.com' + ctx.request.path,
+    buildDate: dt,
+    title: hebrew && il ? 'פרשת השבוע בישראל' : 'Hebcal Parashat ha-Shavua' + suffix,
+    description: 'Torah reading of the week from Hebcal.com' + suffix,
+    il,
+    utmSource,
+    utmMedium,
+    evPubDate: true,
+  });
 }
 
 function makeEvents(dt, il, lang) {
