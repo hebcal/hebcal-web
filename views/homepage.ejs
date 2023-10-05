@@ -116,7 +116,8 @@ href="https://www.hebcal.com/home/shabbat/fridge">Year at-a-glance &raquo;</a></
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
 Full kriyah, triennial cycle, weekday readings.
 Spreadsheets for <em>leyning</em> coordinators.
-<br><a href="/sedrot/<%=il?'?i=on':''%>">See more &raquo;</a></p>
+<br><% if (typeof parshaEvent === 'object') { %><a href="<%=parshaEvent.url()%>"><%=parshaEvent.renderBrief(lg)%></a> · <% } %>
+<a href="/sedrot/<%=il?'?i=on':''%>">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">

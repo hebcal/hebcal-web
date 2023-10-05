@@ -90,6 +90,7 @@ function mastheadParsha(ctx, hd, il) {
   const sedra = HebrewCalendar.getSedra(saturday.getFullYear(), il);
   if (sedra.isParsha(saturday)) {
     const pe = new ParshaEvent(saturday, sedra.get(saturday), il);
+    ctx.state.parshaEvent = pe;
     const url = shortenUrl(pe.url());
     const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
     items.push(`<a href="${url}">${pe.render(lg)}</a>`);
