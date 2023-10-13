@@ -47,6 +47,7 @@ function computeDelta(msgid) {
     if (delta < 0 || delta > 2147483647) {
       return null;
     }
+    return delta;
   }
   return null;
 }

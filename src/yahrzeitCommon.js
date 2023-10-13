@@ -150,7 +150,9 @@ export function getYahrzeitDetailForId(query, id) {
   const type = getAnniversaryType(query['t' + id]);
   const sunset = query[`s${id}`];
   const name = getAnniversaryName(query, id, type);
-  let day = dayjs(makeGregDate(yy, mm, dd));
+  // TODO: try/catch for invalid dates like December 32
+  const dt = makeGregDate(yy, mm, dd);
+  let day = dayjs(dt);
   if (sunset === 'on' || sunset == 1) {
     day = day.add(1, 'day');
   }
