@@ -74,6 +74,7 @@ export async function shabbatApp(ctx) {
     options.mainUrl = selfUrl;
     options.selfUrl = ctx.state.rssUrl;
     options.evPubDate = q.pubDate != 0;
+    options.title = ctx.state.title;
     ctx.body = eventsToRss2(ctx.state.events, options);
   } else if (q.cfg === 'json') {
     const leyningOff = (q.leyning === 'off' || q.leyning === '0');
