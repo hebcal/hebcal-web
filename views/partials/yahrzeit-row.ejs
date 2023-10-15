@@ -12,7 +12,7 @@
 <label class="form-label" for="t<%=num%>">Type</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
 <label class="form-label" for="d<%=num%>">Day</label>
-<div class="invalid-feedback">Day must be 1-31.</div>
+<div class="invalid-feedback">Please enter a valid day of month.</div>
 </div>
 <div class="col-auto form-floating"><select name="m<%=num%>" id="m<%=num%>" class="form-select">
  <option <%= (q['m'+num] == 1) ? 'selected' : '' -%> value="1">01-Jan</option>

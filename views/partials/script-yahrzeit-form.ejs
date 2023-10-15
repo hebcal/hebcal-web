@@ -18,7 +18,7 @@ function yahrzeitRow(n) {
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
   '<label class="form-label" for="d'+n+'">Day</label>'+
-  '<div class="invalid-feedback">Day must be 1-31.</div>'+
+  '<div class="invalid-feedback">Please enter a valid day of month.</div>'+
   '</div>'+
   '<div class="col-auto form-floating"><select name="m'+n+'" id="m'+n+'" class="form-select">'+
   '<option value="1">01-Jan</option><option value="2">02-Feb</option><option value="3">03-Mar</option>'+
@@ -95,6 +95,7 @@ mainFormEl.addEventListener('submit', function(event) {
   function checkNumber(el, event, min, max) {
     const value = el.value.trim();
     if (value.length === 0) {
+      el.classList.remove('is-invalid');
       return true;
     }
     const num = parseInt(value, 10);
@@ -115,6 +116,21 @@ mainFormEl.addEventListener('submit', function(event) {
   dayNumberInputs.forEach((el) => checkNumber(el, event, 1, 31));
   const yearInputs = allInputs.filter((el) => /^y\d+$/.test(el.id));
   yearInputs.forEach((el) => checkNumber(el, event, 1, maxYear));
+  dayNumberInputs.forEach((el) => {
+    const num = el.id.substring(1);
+    const dd = parseInt(el.value, 10);
+    const mm = parseInt(mainFormEl.querySelector('#m' + num).value, 10);
+    const yy = parseInt(mainFormEl.querySelector('#y' + num).value, 10);
+    if (!isNaN(dd) && !isNaN(mm) && !isNaN(yy)) {
+      const daysInMonth = new Date(yy, mm, 0).getDate();
+      if (dd > daysInMonth) {
+        event.preventDefault()
+        event.stopPropagation();
+        el.classList.add('is-invalid');
+        formInvalid = true;
+      }
+    }
+  });
   if (!mainFormEl.checkValidity()) {
     event.preventDefault()
     event.stopPropagation();
