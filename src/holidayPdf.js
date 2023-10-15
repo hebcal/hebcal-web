@@ -14,12 +14,12 @@ export async function holidayPdf(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   if (!base.startsWith('hebcal-')) {
-    throw createError(400, `Invalid PDF URL format: ${base}`);
+    throw createError(404, `Invalid PDF URL format: ${base}`);
   }
   const year = basename(base.substring(7));
   const yearNum = parseInt(year, 10);
   if (isNaN(yearNum)) {
-    throw createError(400, `Invalid holiday year: ${year}`);
+    throw createError(404, `Invalid holiday year: ${year}`);
   } else if (yearNum < 1 || yearNum > 32000) {
     throw createError(400, `Invalid year number: ${yearNum}`);
   }
