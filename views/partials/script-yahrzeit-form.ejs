@@ -17,7 +17,9 @@ function yahrzeitRow(n) {
   '<label class="form-label" for="t'+n+'">Type</label></div>'+
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
-  '<label class="form-label" for="d'+n+'">Day</label></div>'+
+  '<label class="form-label" for="d'+n+'">Day</label>'+
+  '<div class="invalid-feedback">Day must be 1-31.</div>'+
+  '</div>'+
   '<div class="col-auto form-floating"><select name="m'+n+'" id="m'+n+'" class="form-select">'+
   '<option value="1">01-Jan</option><option value="2">02-Feb</option><option value="3">03-Mar</option>'+
   '<option value="4">04-Apr</option><option value="5">05-May</option><option value="6">06-Jun</option>'+
@@ -27,7 +29,9 @@ function yahrzeitRow(n) {
   '<label class="form-label" for="m'+n+'">Month</label></div>'+
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="y'+n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year">'+
-  '<label class="form-label" for="y'+n+'">Year</label></div>'+
+  '<label class="form-label" for="y'+n+'">Year</label>'+
+  '<div class="invalid-feedback">Please enter a valid Gregorian year.</div>'+
+  '</div>'+
   '<div class="col-auto m-2"><div class="form-check">'+
   '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off">'+
   '<label class="form-check-label small" for="s'+n+'-0">Before sunset</label></div>'+
@@ -81,6 +85,47 @@ function clickToDelete(el) {
 }
 const delBtns = [].slice.call(document.querySelectorAll('button.del'));
 delBtns.forEach(clickToDelete);
+
+const maxYear = new Date().getFullYear() + 100;
+const mainFormEl = document.getElementById('f3');
+mainFormEl.addEventListener('submit', function(event) {
+  mainFormEl.classList.remove('was-validated');
+  var _paq = window._paq = window._paq || [];
+  let formInvalid = false;
+  function checkNumber(el, event, min, max) {
+    const value = el.value.trim();
+    if (value.length === 0) {
+      return true;
+    }
+    const num = parseInt(value, 10);
+    if (isNaN(num) || num < min || num > max) {
+      event.preventDefault()
+      event.stopPropagation();
+      el.classList.add('is-invalid');
+      formInvalid = true;
+      _paq.push(['trackEvent', 'Interaction', 'form-invalid', 'yahrzeit']);
+      return false;
+    } else {
+      el.classList.remove('is-invalid');
+      return true;
+    }
+  }
+  const allInputs = [].slice.call(mainFormEl.querySelectorAll('input'));
+  const dayNumberInputs = allInputs.filter((el) => /^d\d+$/.test(el.id));
+  dayNumberInputs.forEach((el) => checkNumber(el, event, 1, 31));
+  const yearInputs = allInputs.filter((el) => /^y\d+$/.test(el.id));
+  yearInputs.forEach((el) => checkNumber(el, event, 1, maxYear));
+  if (!mainFormEl.checkValidity()) {
+    event.preventDefault()
+    event.stopPropagation();
+    _paq.push(['trackEvent', 'Interaction', 'form-invalid', 'yahrzeit']);
+    return;
+  }
+  if (!formInvalid) {
+    mainFormEl.classList.add('was-validated');
+  }
+}, false);
+
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.0/papaparse.min.js"></script>

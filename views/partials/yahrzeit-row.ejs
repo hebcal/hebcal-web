@@ -11,7 +11,9 @@
 </select>
 <label class="form-label" for="t<%=num%>">Type</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
-<label class="form-label" for="d<%=num%>">Day</label></div>
+<label class="form-label" for="d<%=num%>">Day</label>
+<div class="invalid-feedback">Day must be 1-31.</div>
+</div>
 <div class="col-auto form-floating"><select name="m<%=num%>" id="m<%=num%>" class="form-select">
  <option <%= (q['m'+num] == 1) ? 'selected' : '' -%> value="1">01-Jan</option>
  <option <%= (q['m'+num] == 2) ? 'selected' : '' -%> value="2">02-Feb</option>
@@ -28,7 +30,9 @@
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
-<label class="form-label" for="y<%=num%>">Year</label></div>
+<label class="form-label" for="y<%=num%>">Year</label>
+<div class="invalid-feedback">Please enter a valid Gregorian year.</div>
+</div>
 <div class="col-auto m-2">
  <div class="form-check">
  <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' %> value="off">
