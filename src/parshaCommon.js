@@ -122,11 +122,17 @@ export function addLinksToLeyning(aliyot, showBook) {
   });
 }
 
+const parshaMetaCache = new Map();
+
 /**
  * @param {string} parshaName
  * @return {any}
  */
 export function lookupParshaMeta(parshaName) {
+  const meta = parshaMetaCache.get(parshaName);
+  if (typeof meta === 'object') {
+    return meta;
+  }
   const parsha0 = lookupParsha(parshaName);
   const parsha = Object.assign({
     name: parshaName,
@@ -154,6 +160,7 @@ export function lookupParshaMeta(parshaName) {
   const portion = parsha.combined ? parsha.num1 : parsha.num;
   parsha.ids = {portion, book, chapter, verse};
   parsha.summaryHtml = makeSummaryHtml(parsha);
+  parshaMetaCache.set(parshaName, parsha);
   return parsha;
 }
 

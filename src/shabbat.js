@@ -372,7 +372,7 @@ function makeJsonLDevent(item, location, subj, url) {
 
 /**
  * @param {Event} ev
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @param {string} locale
  * @param {string} cfg
  * @return {Object}

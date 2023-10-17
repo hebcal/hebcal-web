@@ -131,7 +131,7 @@ function getSubFilename(location) {
 /**
  * @param {any} ctx
  * @param {any} q
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  */
 export function makeDownloadProps(ctx, q, options) {
   const dlFilename = getDownloadFilename(options);

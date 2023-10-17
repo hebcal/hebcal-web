@@ -255,7 +255,7 @@ function reverseHebrewWords(subj) {
 /**
  * Creates an empty PDF doc so we can start streaming
  * @param {string} title
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {PDFDocument}
  */
 export function createPdfDoc(title, options) {

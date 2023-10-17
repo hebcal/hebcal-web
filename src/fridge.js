@@ -96,7 +96,7 @@ function getStartAndEnd(query) {
 
 /**
  * @param {Event[]} events
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {any[]}
  */
 function makeContents(events, options) {

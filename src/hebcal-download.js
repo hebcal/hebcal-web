@@ -1,3 +1,4 @@
+import {flags} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
@@ -5,6 +6,7 @@ import {createPdfDoc, renderPdf} from './pdf';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
   makeIcalOpts, getNumYears, localeMap} from './common';
+import {lookupParshaMeta} from './parshaCommon';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -51,6 +53,16 @@ export async function hebcalDownload(ctx) {
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
+    for (const ev of events) {
+      if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+        const parshaName = ev.getDesc().substring(9);
+        const meta = lookupParshaMeta(parshaName);
+        const memo = meta.summaryHtml?.html;
+        if (memo) {
+          ev.memo = memo;
+        }
+      }
+    }
     ctx.response.type = 'text/calendar; charset=utf-8';
     ctx.body = await eventsToIcalendar(events, icalOpt);
   } else if (csv) {
@@ -76,7 +88,7 @@ export async function hebcalDownload(ctx) {
 /**
  * @private
  * @param {Event[]} events
- * @param {HebrewCalendar.Options} options
+ * @param {CalOptions} options
  * @return {string}
  */
 function campaignName(events, options) {
