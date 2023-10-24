@@ -116,6 +116,10 @@ a.outbound::after {
 [data-bs-theme=dark] .text-burgundy{
   color:#da8f93 !important;
 }
+[data-bs-theme=dark] .btn-outline-primary{
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-border-color: var(--bs-link-color);
+}
 </style>
 <script>
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
