@@ -29,7 +29,7 @@ Hebrew date, a full Jewish Calendar, RSS feeds).</p>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML.</p>
 <pre><code class="html">&lt;div id="hebcal-shabbat"&gt;&lt;/div&gt;
-&lt;script defer&gt;
+&lt;script&gt;
 fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top')
   .then(response =&gt; response.text())
   .then(data =&gt; document.getElementById('hebcal-shabbat').innerHTML = data);
@@ -41,7 +41,7 @@ fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top'
 <div class="card">
 <div class="card-body">
 <div id="hebcal-shabbat"></div>
-<script defer>
+<script>
 fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>&tgt=_top')
   .then(response => response.text())
   .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
