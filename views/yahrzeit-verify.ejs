@@ -29,7 +29,7 @@ and complete your registration via the button below.</p>
 <ol>
 <% for (let num = 1; num <= maxId; num++) { -%>
 <%   if (details['date'+num]) { -%>
-<li><%= details['n'+num] || `Person${num}` %><% if (details['t'+num] !== 'Other') { %>'s <%= details['t'+num] %><% } %> - <%= details['date'+num] %>
+<li><%= details['n'+num] || `Person${num}` %><% if (details['t'+num] !== 'Other') { %>’s <%= details['t'+num] %><% } %> - <%= details['date'+num] %>
 <%   } -%>
 <% } -%>
 </ol>

@@ -636,7 +636,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const yearNumber = hyear - origHyear;
   const nth = Locale.ordinal(yearNumber, 'en');
   const name = info.name;
-  let subj = type === 'Other' ? name : `${name}'s ${nth} ${typeStr}`;
+  let subj = type === 'Other' ? name : `${name}’s ${nth} ${typeStr}`;
   if (appendHebDate) {
     const comma = hebdate.indexOf(',');
     subj += ' (' + hebdate.substring(0, comma) + ')';
@@ -668,7 +668,7 @@ function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calenda
   const isBirthday = (type === 'Birthday');
   const isOther = (type === 'Other');
   const name = info.name;
-  const nameAndType = isOther ? name : `${name}'s ${typeStr}`;
+  const nameAndType = isOther ? name : `${name}’s ${typeStr}`;
   const erev = observed.subtract(1, 'day');
   const verb = isYahrzeit ? 'remembering' : 'honoring';
   const prefix = isOther ? name : `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr}`;
@@ -680,7 +680,7 @@ function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calenda
     const dow = erev.day();
     const when = dow === 5 ? 'before sundown' : dow === 6 ? 'after nightfall' : 'at sundown';
     memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
-      'May your loved one\'s soul be bound up in the bond of eternal life and may their memory ' +
+      'May your loved one’s soul be bound up in the bond of eternal life and may their memory ' +
       'serve as a continued source of inspiration and comfort to you.';
   } else if (isBirthday) {
     memo += '\\n\\nMazel Tov!';
