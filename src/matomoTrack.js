@@ -2,10 +2,16 @@ import http from 'node:http';
 import pkg from '../package.json';
 
 const knownRobots = {
-  'check_http/v2.2 (monitoring-plugins 2.2)': 1,
-  'GuzzleHttp/7': 1,
-  'kube-probe/1.21': 1,
+  'check_http': 1,
+  'checkhttp2': 1,
+  'curl': 1,
+  'Excel': 1,
+  'GuzzleHttp': 1,
+  'kube-probe': 1,
+  'python-requests': 1,
   'Mediapartners-Google': 1,
+  'Mozilla/5.0 (compatible; Google-Apps-Script)': 1,
+  'Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)': 1,
   'Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)': 1,
   'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)': 1,
   'Mozilla/5.0 (compatible; BLEXBot/1.0; +http://webmeup-crawler.com/)': 1,
@@ -21,6 +27,28 @@ const knownRobots = {
 const isProduction = process.env.NODE_ENV === 'production';
 
 /**
+ * @private
+ * @param {string} userAgent
+ * @return {boolean}
+ */
+function isRobot(userAgent) {
+  if (typeof userAgent !== 'string' || userAgent.length === 0) {
+    return false;
+  }
+  if (knownRobots[userAgent]) {
+    return true;
+  }
+  const idx = userAgent.indexOf('/');
+  if (idx !== -1) {
+    const uaPrefix = userAgent.substring(0, idx);
+    if (knownRobots[uaPrefix]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
  * @param {*} ctx
  * @param {string} category
  * @param {string} action
@@ -29,7 +57,7 @@ const isProduction = process.env.NODE_ENV === 'production';
  */
 export function matomoTrack(ctx, category, action, name=null, params={}) {
   const userAgent = ctx.get('user-agent');
-  if (userAgent && knownRobots[userAgent]) {
+  if (isRobot(userAgent)) {
     return;
   }
   const args = new URLSearchParams(params);
