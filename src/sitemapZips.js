@@ -4,7 +4,7 @@ import {cacheControl} from './common';
 // eslint-disable-next-line require-jsdoc
 export async function sitemapZips(ctx) {
   const db = new Database('zips.sqlite3', {fileMustExist: true});
-  const stmt = db.prepare('SELECT ZipCode FROM ZIPCodes_Primary');
+  const stmt = db.prepare('SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0)');
   const results = stmt.all();
   const body = results
       .map((r) => `https://www.hebcal.com/shabbat?zip=${r.ZipCode}&b=18&M=on&lg=s\n`)
