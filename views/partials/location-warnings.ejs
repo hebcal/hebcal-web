@@ -21,12 +21,22 @@ href="https://www.timeanddate.com/time/us/arizona-no-dst.html">No
 DST in most of Arizona</a> to learn more.
 </div><!-- .alert -->
 <% } -%>
-<% if (location.getLatitude() >= 60.0 || location.getLatitude() <= -60.0) { -%>
+<% if (location.getLatitude() === 0.0 || location.getLongitude() === 0.0) { -%>
+<div class="alert alert-warning alert-dismissible">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Warning!</strong>
+<%=location.getName()%> has an unknown position
+(zero latitude, zero longitude). These times are
+guaranteed to be wrong. Please select a different location.
+</div><!-- .alert -->
+<% } else if (location.getLatitude() >= 60.0 || location.getLatitude() <= -60.0) { -%>
 <div class="alert alert-warning alert-dismissible">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
 Candle-lighting times are guaranteed to be wrong at extreme
-northern or southern latitudes.</span><br>Please consult your
+northern or southern latitudes. <strong><%=location.getShortName()%></strong>
+is located at <strong><%=location.getLatitude()%> latitude</strong>.
+<br>Please consult your
 local halachic authority for correct candle-lighting times.
 </div><!-- .alert -->
 <% } -%>
