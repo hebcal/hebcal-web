@@ -1,9 +1,10 @@
 <%- await include('partials/header.ejs', {
   title: `Daily Learning - ${hd.toString()} - ${d.format('D MMMM YYYY')} - Hebcal`,
 }) -%>
+<link rel="canonical" href="https://www.hebcal.com/learning/<%=d.format('YYYY-MM-DD')%><%=il?'?i=on':''%>">
 <% if (d.year() < currentYear-10 || d.year() > currentYear+10) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<% if (d.year() > currentYear-10) { %><link rel="prev" href="<%=prev.format('YYYY-MM-DD')%>"><% } %>
-<% if (d.year() < currentYear+10) { %><link rel="next" href="<%=next.format('YYYY-MM-DD')%>"><% } %>
+<% if (d.year() > currentYear-10) { %><link rel="prev" href="<%=prev.format('YYYY-MM-DD')%><%=il?'?i=on':''%>"><% } %>
+<% if (d.year() < currentYear+10) { %><link rel="next" href="<%=next.format('YYYY-MM-DD')%><%=il?'?i=on':''%>"><% } %>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -78,10 +79,10 @@
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-4 justify-content-between d-print-none">
 <% if (d.year() > currentYear-10) { -%>
-<div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.format('YYYY-MM-DD')%>"><span aria-hidden="true">←&nbsp;</span><%=hd.prev().render(lg, false)%></a></div>
+<div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.format('YYYY-MM-DD')%><%=il?'?i=on':''%>"><span aria-hidden="true">←&nbsp;</span><%=hd.prev().render(lg, false)%></a></div>
 <% } -%>
 <% if (d.year() < currentYear+10) { -%>
-<div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.format('YYYY-MM-DD')%>"><%=hd.next().render(lg, false)%><span aria-hidden="true">&nbsp;→</span></a></div>
+<div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.format('YYYY-MM-DD')%><%=il?'?i=on':''%>"><%=hd.next().render(lg, false)%><span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
 <script>
