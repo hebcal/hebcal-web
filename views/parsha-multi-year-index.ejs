@@ -1,0 +1,48 @@
+<%- await include('partials/header2.ejs', {
+  title: 'Weekly Torah Readings - Parashat haShavua - Hebcal',
+}) -%>
+<link rel="canonical" href="https://www.hebcal.com/sedrot/grid<%=il?'?i=on':''%>">
+</head>
+<body>
+<%- await include('partials/navbar.ejs') -%>
+<div class="container">
+<div class="row">
+<div class="col">
+<h2>Torah Readings</h2>
+<p>As observed in <%= il ? 'Israel' : 'the Diaspora' %>.
+<div class="table-responsive">
+<table class="table table-sm table-striped">
+<colgroup>
+<col style="width:200px"><col><col><col><col><col><col>
+</colgroup>
+<thead class="table-group-divider">
+<tr><th>Parsha</th>
+<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
+<th><a href="<%=yr%><%=il?'?i=on':''%>"><%=yr%></a></th>
+<% } %>
+</tr>
+</thead>
+<tbody class="table-group-divider">
+<% for (const book of torahBookNames.filter((book) => book !== 'DoubledParshiyot')) { %>
+<%   for (const [anchor, parshaName] of parshaByBook.get(book)) {
+  const years = byParsha.get(parshaName);
+%>
+<tr>
+  <td><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') -%></a></td>
+<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) {
+  const item = years.get(yr); %>
+<% if (item) { %>
+  <td><a href="<%= item.ev.url() %>"><%=item.d.format('D MMM YYYY')%></a></td>
+<% } else { %>
+  <td>-</td>
+<% } %>
+<%   } %>
+</tr>
+<%  } %>
+<% } %>
+</tbody>
+</table>
+</div>
+</div><!-- .col -->
+</div><!-- .row -->
+<%- await include('partials/footer.ejs') _%>

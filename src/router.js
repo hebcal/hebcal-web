@@ -20,6 +20,7 @@ import {parshaCsv} from './parsha-csv';
 import redirectMap from './redirect.json';
 import {parshaIndex} from './parshaIndex';
 import {parshaYear} from './parshaYear';
+import {parshaMultiYearIndex} from './parshaMultiIndex';
 import {parshaDetail} from './sedrot';
 import {shabbatApp} from './shabbat';
 import {shabbatBrowse} from './shabbat-browse';
@@ -162,6 +163,8 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/sedrot/')) {
       if (rpath === '/sedrot/') {
         return parshaIndex(ctx);
+      } else if (rpath === '/sedrot/grid') {
+        return parshaMultiYearIndex(ctx);
       } else if (rpath.endsWith('.xml')) {
         return parshaRss(ctx);
       } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
