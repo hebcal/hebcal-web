@@ -1,8 +1,10 @@
-import {HebrewCalendar, HDate} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshiot54, parshaByBook, torahBookNames} from './parshaCommon';
 import {getDefaultHebrewYear} from './common';
 import dayjs from 'dayjs';
+
+const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
 // eslint-disable-next-line require-jsdoc
 export async function parshaMultiYearIndex(ctx) {
@@ -23,6 +25,9 @@ export async function parshaMultiYearIndex(ctx) {
       noHolidays: true,
       sedrot: true,
     });
+    const mday = il ? 22 : 23;
+    const pe = new ParshaEvent(new HDate(mday, months.TISHREI, yr), [VEZOT_HABERAKHAH], il);
+    events.push(pe);
     for (const ev of events) {
       const reading = getLeyningForParshaHaShavua(ev, il);
       const d = dayjs(ev.getDate().greg());
@@ -35,6 +40,7 @@ export async function parshaMultiYearIndex(ctx) {
       }
     }
   }
+  ctx.lastModified = dt;
   await ctx.render('parsha-multi-year-index', {
     il,
     hyear,

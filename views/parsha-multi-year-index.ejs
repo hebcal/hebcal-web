@@ -8,22 +8,20 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<h2>Torah Readings</h2>
-<p>As observed in <%= il ? 'Israel' : 'the Diaspora' %>.
+<h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
+<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
+The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
+by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <div class="table-responsive">
-<table class="table table-sm table-striped">
+<table class="table table-striped">
 <colgroup>
-<col style="width:200px"><col><col><col><col><col><col>
+<col><col><col><col><col><col><col>
 </colgroup>
-<thead class="table-group-divider">
-<tr><th>Parsha</th>
-<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
-<th><a href="<%=yr%><%=il?'?i=on':''%>"><%=yr%></a></th>
-<% } %>
-</tr>
-</thead>
 <tbody class="table-group-divider">
 <% for (const book of torahBookNames.filter((book) => book !== 'DoubledParshiyot')) { %>
+<tr class="table-group-divider"><th><%=book%></th>
+<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %><th><%=yr%></th><% } %>
+</tr>
 <%   for (const [anchor, parshaName] of parshaByBook.get(book)) {
   const years = byParsha.get(parshaName);
 %>
@@ -32,7 +30,11 @@
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) {
   const item = years.get(yr); %>
 <% if (item) { %>
-  <td><a href="<%= item.ev.url() %>"><%=item.d.format('D MMM YYYY')%></a></td>
+<td><a href="<%= item.ev.url() %>"><time class="text-nowrap" datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
+<% if (item.reading.reason) { %>
+<br><small class="text-success"><%=item.reading.reason.M ||item.reading.reason.haftara%></small>
+<% } %>
+</td>
 <% } else { %>
   <td>-</td>
 <% } %>
