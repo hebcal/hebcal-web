@@ -36,7 +36,12 @@ export async function parshaMultiYearIndex(ctx) {
       // either 1- or 2-element array
       for (const parshaName of parsha) {
         const map = byParsha.get(parshaName);
-        map.set(yr, item);
+        const prev = map.get(yr);
+        if (prev) {
+          prev.push(item);
+        } else {
+          map.set(yr, [item]);
+        }
       }
     }
   }
