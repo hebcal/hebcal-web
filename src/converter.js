@@ -82,7 +82,7 @@ export async function hebrewDateConverter(ctx) {
         },
       };
       if (p.events.length) {
-        result.events = p.events.map(renameChanukah(p.locale));
+        result.events = p.events.map(renameChanukah(p.lg));
         if (typeof q.i !== 'undefined') {
           result.il = p.il;
         }
@@ -280,7 +280,8 @@ const hmonthArg = {
  */
 function makeProperties(ctx) {
   const query = ctx.request.query;
-  const lg = lgToLocale[query.lg || 's'] || query.lg;
+  ctx.state.lg = query.lg || 's';
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   const locale = ctx.state.locale = localeMap[lg] || 'en';
   let props;
   try {
@@ -342,14 +343,15 @@ function makeProperties(ctx) {
     hleap: hdate.isLeapYear(),
     il,
     locale,
+    lg,
     todayHd: new HDate(),
   };
 }
 
 // eslint-disable-next-line require-jsdoc
 function eventToItem(ctx, ev) {
-  const locale = ctx.state.locale;
-  const desc = renameChanukah(locale)(ev);
+  const lg = ctx.state.lg;
+  const desc = renameChanukah(lg)(ev);
   const emoji = ev.chanukahDay ? '🕎' : ev.omer ? '' : ev.getEmoji() || '';
   const url = ev.url();
   return {desc, emoji, url};
