@@ -244,10 +244,12 @@ async function unsub(ctx, q) {
     return;
   } else {
     if (q.num === 'all') {
-      const {emailAddress} = await lookupSubscription(ctx, q.id);
+      const {calendarId, emailAddress} = await lookupSubscription(ctx, q.id);
+      const info = {calendarId};
       return ctx.render('yahrzeit-optout', {
         title: `Anniversary Email Unsubscribe - Hebcal`,
         emailAddress,
+        info,
       });
     } else {
       const {info, emailAddress} = await lookupSubNum(ctx, q);

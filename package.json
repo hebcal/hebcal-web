@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "2.12.3",
+  "version": "2.12.4",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "eslint": "^8.53.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.3.0"
+    "rollup": "^4.4.0"
   },
   "dependencies": {
     "@hebcal/core": "^4.5.1",

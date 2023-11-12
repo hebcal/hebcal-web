@@ -6,11 +6,13 @@
 <div class="alert alert-success">
 <svg class="icon me-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
 Annual reminders
-<% if (typeof info === 'object') { -%>
+<% if (typeof info === 'object' && typeof info.name === 'string') { -%>
 of <strong><%= info.name %>’s <%= info.typeStr %></strong>
 <% } -%>
 will no longer be sent to <strong><%= emailAddress %></strong>.
 </div><!-- .alert -->
+<p><a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>">View Calendar &raquo;</a>
+<a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">Edit Calendar &raquo;</a></p>
 <p>To generate a new list of Yahrzeit (memorial) and Yizkor dates, Hebrew Birthdays,
 or Anniversaries for the next 20 years, visit our
 <a href="/yahrzeit">Yahrzeit + Anniversary Calendar</a>.</p>
