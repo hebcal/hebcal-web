@@ -1214,13 +1214,13 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
   const hy = parseInt(hyStr, 10);
   const hd = parseInt(hdStr, 10);
   if (isNaN(hd)) {
-    throw createError(400, 'Hebrew day must be numeric');
+    throw createError(400, `Hebrew day must be numeric: ${hdStr}`);
   } else if (isNaN(hy)) {
-    throw createError(400, 'Hebrew year must be numeric');
+    throw createError(400, `Hebrew year must be numeric: ${hyStr}`);
   } else if (hy < 1) {
-    throw createError(400, 'Hebrew year must be year 1 or later');
+    throw createError(400, `Hebrew year must be year 1 or later: ${hy}`);
   } else if (hy > 32000) {
-    throw createError(400, 'Hebrew year is too large');
+    throw createError(400, `Hebrew year is too large: ${hy}`);
   }
   let hm;
   try {

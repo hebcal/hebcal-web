@@ -27,19 +27,36 @@ const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebrewDateConverter(ctx) {
-  if (ctx.method === 'GET' && (ctx.request.querystring.length === 0 || ctx.request.querystring === 'cfg=json')) {
+  if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
     setDefautLangTz(ctx);
+  }
+  const query = ctx.request.query;
+  ctx.state.lg = query.lg || 's';
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
+  ctx.state.locale = localeMap[lg] || 'en';
+  let props;
+  try {
+    props = parseConverterQuery(ctx);
+  } catch (err) {
+    if (query.strict === '1') {
+      const status = err.status || 400;
+      ctx.throw(status, err);
+    }
+    props = Object.assign(g2h(new Date(), false, true), {message: err.message});
+  }
+  if (ctx.method === 'GET' && props.noCache && !props.message) {
     const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
-    const json = ctx.request.querystring === 'cfg=json' ? '&cfg=json' : '';
+    const json = query.cfg == 'json' ? '&cfg=json' : '';
+    const lg = empty(query.lg) ? '' : `&lg=${query.lg}`;
     ctx.set('Cache-Control', 'private, max-age=3600');
-    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}`;
+    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}${lg}`;
     httpRedirect(ctx, url, 302);
     return;
   }
-  const p = makeProperties(ctx);
+  const p = makeProperties(ctx, props);
   const q = ctx.request.query;
   if (p.message) {
     ctx.status = 400;
@@ -276,26 +293,16 @@ const hmonthArg = {
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {Object} props
  * @return {Object}
  */
-function makeProperties(ctx) {
-  const query = ctx.request.query;
-  ctx.state.lg = query.lg || 's';
-  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-  const locale = ctx.state.locale = localeMap[lg] || 'en';
-  let props;
-  try {
-    props = parseConverterQuery(ctx);
-  } catch (err) {
-    if (query.strict === '1') {
-      const status = err.status || 400;
-      ctx.throw(status, err);
-    }
-    props = Object.assign(g2h(new Date(), false, true), {message: err.message});
-  }
+function makeProperties(ctx, props) {
   if (typeof props.hdates === 'object') {
     return props;
   }
+  const query = ctx.request.query;
+  const lg = ctx.state.lg;
+  const locale = ctx.state.locale;
   const dt = props.dt;
   const d = dayjs(dt).locale(locale);
   const gy = dt.getFullYear();
@@ -464,18 +471,14 @@ function parseConverterQuery(ctx) {
       return g2h(startD.toDate(), false, false);
     }
   }
-  if (isset(query.h2g)) {
+  if (isset(query.h2g) && query.strict === '1') {
     for (const param of ['hy', 'hm', 'hd']) {
       if (empty(query[param])) {
-        if (query.strict === '1') {
-          throw createError(400, `Missing parameter '${param}' for conversion from Hebrew to Gregorian`);
-        } else {
-          return g2h(new Date(), false, true);
-        }
+        throw createError(400, `Missing parameter '${param}' for conversion from Hebrew to Gregorian`);
       }
     }
-    const hdate = makeHebDate(query.hy, query.hm, query.hd);
-    const dt = hdate.greg();
+  }
+  if (isset(query.h2g)) {
     if (!empty(query.ndays)) {
       const ndays = parseInt(query.ndays, 10);
       if (isNaN(ndays) || ndays < 1) {
@@ -486,6 +489,12 @@ function parseConverterQuery(ctx) {
       const endD = startD.add(numDays, 'days');
       return convertDateRange(ctx, startD, endD);
     }
+    if (empty(query.hy) && empty(query.hm) && empty(query.hd)) {
+      return g2h(new Date(), false, true);
+    }
+    // in either mode, this will throw if the params are invalid
+    const hdate = makeHebDate(query.hy, query.hm, query.hd);
+    const dt = hdate.greg();
     return {type: 'h2g', dt, hdate, gs: false};
   }
   if (isset(query.g2h) && query.strict === '1') {
