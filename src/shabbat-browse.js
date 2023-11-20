@@ -23,13 +23,14 @@ ORDER BY Continent, Country`;
 
 const COUNTRY_SQL = `SELECT g.geonameid, g.name, g.asciiname,
 a.name as admin1, a.asciiname as admin1ascii,
-g.latitude, g.longitude, g.timezone
+g.latitude, g.longitude, g.gtopo30 as elevation, g.timezone
 FROM geoname g
 LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
 WHERE g.country = ?
 ORDER BY g.name`;
 
-const COUNTRY_ADMIN_SQL = `SELECT g.geonameid, g.name, g.asciiname, g.latitude, g.longitude, g.timezone
+const COUNTRY_ADMIN_SQL = `SELECT g.geonameid, g.name, g.asciiname, g.latitude, g.longitude,
+g.gtopo30 as elevation, g.timezone
 FROM geoname g
 WHERE g.country = ? AND g.admin1 = ?
 ORDER BY g.name`;
@@ -271,6 +272,9 @@ function makeAdmin1(admin1) {
 function addCandleTime(friday, city) {
   const location = new Location(city.latitude, city.longitude, city.countryCode === 'IL',
       city.timezone, city.name, city.countryCode, city.geonameid);
+  if (city.elevation && city.elevation > 0) {
+    location.elevation = city.elevation;
+  }
   const dt = new Date(friday.year(), friday.month(), friday.date());
   const events = HebrewCalendar.calendar({
     noHolidays: true,
