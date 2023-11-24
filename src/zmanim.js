@@ -134,8 +134,7 @@ function getTimesForRange(names, startD, endD, loc, formatAsString, roundMinute)
  */
 function getTimes(names, d, location, formatAsString, roundMinute) {
   const times = {};
-  const zman = new Zmanim(d.toDate(), location.getLatitude(), location.getLongitude(),
-      location.elevation, location.getTzid());
+  const zman = new Zmanim(location, d.toDate());
   for (const name of names) {
     if (TIMES[name]) {
       times[name] = zman[name]();

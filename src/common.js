@@ -732,11 +732,9 @@ export function getLocationFromQuery(db, query) {
     }
     const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
-    const loc = new Location(latitude, longitude, il, query.tzid, cityName);
-    const elevation = parseFloat(query.elev);
-    if (elevation && elevation > 0) {
-      loc.elevation = elevation;
-    }
+    const elevation0 = parseFloat(query.elev);
+    const elevation = (elevation0 && elevation0 > 0) ? elevation0 : 0;
+    const loc = new Location(latitude, longitude, il, query.tzid, cityName, undefined, undefined, elevation);
     loc.geo = 'pos';
     return loc;
   } else if (hasLatLongLegacy(query)) {
@@ -1252,8 +1250,7 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
   const gm = parseInt(isoDate.substring(5, 7), 10);
   const gd = parseInt(isoDate.substring(8, 10), 10);
   const day = new Date(gy, gm - 1, gd);
-  const zman = new Zmanim(day, location.getLatitude(), location.getLongitude(),
-      location.elevation, location.getTzid());
+  const zman = new Zmanim(location, day);
   const sunset = zman.sunset();
   const afterSunset = Boolean(dt >= sunset);
   return {dt: day, afterSunset: afterSunset, gy, gd, gm};

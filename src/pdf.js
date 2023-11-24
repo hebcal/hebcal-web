@@ -271,8 +271,9 @@ export function createPdfDoc(title, options) {
   doc.info['Title'] = title;
   doc.info['Subject'] = title;
   let keywords = 'Hebrew calendar, Jewish holidays';
-  if (options?.location?.name) {
-    keywords += ', ' + options.location.name;
+  const locationName = options?.location?.getName();
+  if (locationName) {
+    keywords += ', ' + locationName;
   }
   doc.info['Keywords'] = keywords;
   doc.info['Author'] = 'Hebcal Jewish Calendar (hebcal.com)';
@@ -368,9 +369,10 @@ export function renderPdf(doc, events, options) {
  * @return {string}
  */
 function makeLeftText(options) {
-  if (options?.location?.name) {
+  const locationName = options?.location?.getName();
+  if (locationName) {
     const offset = locationDefaultCandleMins(options.location);
-    return options.location.name + ' · ' +
+    return locationName + ' · ' +
     `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
   }
   return options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
