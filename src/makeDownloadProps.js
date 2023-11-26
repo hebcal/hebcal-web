@@ -104,6 +104,8 @@ export function downloadHref2(query, filename, override={}) {
     if (!isNaN(longitude)) msg.setLongitude(longitude);
     if (!empty(q.tzid)) msg.setTzid(q.tzid);
     if (!empty(q['city-typeahead'])) msg.setCityname(q['city-typeahead']);
+    const elev = parseFloat(q.elev);
+    if (elev > 0) msg.setElev(elev);
   }
 
   const msgBin = msg.serializeBinary();

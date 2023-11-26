@@ -154,7 +154,7 @@ const geoposLegacy = {
 };
 
 const primaryGeoKeys = ['geonameid', 'zip', 'city'];
-const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'tzid']);
+const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'elev', 'tzid']);
 const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy)).concat(['city-typeahead']);
 const cookieOpts = geoKeys.concat(['geo', 'lg'], Object.keys(numberOpts));
 
@@ -1481,6 +1481,10 @@ function makeGeoUrlArgs0(q, location) {
     args.set('geo', 'pos');
     args.set('latitude', location.getLatitude());
     args.set('longitude', location.getLongitude());
+    const elev = location.getElevation();
+    if (elev > 0) {
+      args.set('elev', elev);
+    }
     args.set('tzid', location.getTzid());
     const cityName = q['city-typeahead'];
     if (!empty(cityName)) {

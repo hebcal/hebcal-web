@@ -64,6 +64,10 @@ export function deserializeDownload(data) {
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();
     q.longitude = msg.hasOldLongitude() ? msg.getOldLongitude() : msg.getLongitude();
+    const elev = msg.getElev();
+    if (elev > 0) {
+      q.elev = elev;
+    }
     q['city-typeahead'] = msg.getCityname() || undefined;
     q.geo = 'pos';
   }

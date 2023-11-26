@@ -67,4 +67,5 @@ message Download {
   bool shemiratHaLashon = 49;
   bool psalms = 50;
   bool dafWeekly = 51;
+  int32 elev = 52;
 }
