@@ -22,6 +22,7 @@ const TIMES = {
   misheyakirMachmir: 1,
   dawn: 1,
   sunrise: 1,
+  seaLevelSunrise: 1,
   sofZmanShma: 1,
   sofZmanShmaMGA: 1,
   sofZmanTfilla: 1,
@@ -30,6 +31,7 @@ const TIMES = {
   minchaGedola: 1,
   minchaKetana: 1,
   plagHaMincha: 1,
+  seaLevelSunset: 1,
   sunset: 1,
   dusk: 1,
 };
@@ -137,7 +139,13 @@ function getTimes(names, d, location, formatAsString, roundMinute) {
   const zman = new Zmanim(location, d.toDate());
   for (const name of names) {
     if (TIMES[name]) {
-      times[name] = zman[name]();
+      if (name.startsWith('seaLevel')) {
+        if (location.getElevation() > 0) {
+          times[name] = zman[name]();
+        }
+      } else {
+        times[name] = zman[name]();
+      }
     } else if (typeof TZEIT_TIMES[name] === 'number') {
       const num = TZEIT_TIMES[name];
       times[name] = name.endsWith('deg') ? zman.tzeit(num) : zman.sunsetOffset(num, roundMinute);
@@ -195,6 +203,10 @@ const ZMAN_NAMES = {
     'Sunrise',
     'Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)',
   ],
+  seaLevelSunrise: [
+    'Sunrise (Sea Level)',
+    'Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)',
+  ],
   sofZmanShma: [
     'Kriat Shema, sof zeman',
     'Latest Shema (Gra). Sunrise plus 3 halachic hours, according to the Gra',
@@ -226,6 +238,10 @@ const ZMAN_NAMES = {
   plagHaMincha: [
     'Plag HaMincha',
     'Sunrise plus 10.75 halachic hours',
+  ],
+  seaLevelSunset: [
+    'Sunset (Sea Level)',
+    'Upper edge of the Sun disappears below the western horizon in the evening (0.833° below horizon)',
   ],
   sunset: [
     'Sunset',
