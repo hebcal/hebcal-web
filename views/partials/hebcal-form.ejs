@@ -60,6 +60,29 @@
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' -%> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
+<fieldset>
+<!-- perhaps accordion? -->
+<div><a data-bs-toggle="collapse" href="#daily-learning" role="button" aria-expanded="false" aria-controls="daily-learning">Daily Learning</a></div>
+<div class="collapse" id="daily-learning">
+<div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
+<label class="form-check-label" for="F">Daf Yomi</label>
+ &nbsp;<span title="Daily regimen of learning the Babylonian Talmud" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="myomi" value="on" <%= q.myomi === 'on' ? 'checked' : '' -%> id="myomi">
+<label class="form-check-label" for="myomi">Mishna Yomi</label>
+ &nbsp;<span title="Daily study of two Mishnayot each day in order to finish the entire Mishnah in ~6 years" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="nyomi" value="on" <%= q.nyomi === 'on' ? 'checked' : '' -%> id="nyomi">
+<label class="form-check-label" for="nyomi">Nach Yomi</label>
+ &nbsp;<span title="Daily study of the books of Nevi'im (Prophets) and Ketuvim (Writings)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="yyomi" value="on" <%= q.yyomi === 'on' ? 'checked' : '' -%> id="yyomi">
+<label class="form-check-label" for="yyomi">Yerushalmi Yomi</label>
+ &nbsp;<span title="Daily study of the Jerusalem Talmud (Vilna Edition)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
+</div><!-- .collapse -->
+</fieldset>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-auto mb-2">
 <fieldset>
@@ -86,23 +109,6 @@
 <div class="form-check mb-3">
 <input class="form-check-input" type="checkbox" name="d" value="on" <%= q.d === 'on' ? 'checked' : '' -%> id="d2">
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
-</div>
-<div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
-<label class="form-check-label" for="F">Daf Yomi</label>
- &nbsp;<span title="Daily regimen of learning the Babylonian Talmud" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
-</div><div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="myomi" value="on" <%= q.myomi === 'on' ? 'checked' : '' -%> id="myomi">
-<label class="form-check-label" for="myomi">Mishna Yomi</label>
- &nbsp;<span title="Daily study of two Mishnayot each day in order to finish the entire Mishnah in ~6 years" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
-</div><div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="nyomi" value="on" <%= q.nyomi === 'on' ? 'checked' : '' -%> id="nyomi">
-<label class="form-check-label" for="nyomi">Nach Yomi</label>
- &nbsp;<span title="Daily study of the books of Nevi'im (Prophets) and Ketuvim (Writings)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
-</div><div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="yyomi" value="on" <%= q.yyomi === 'on' ? 'checked' : '' -%> id="yyomi">
-<label class="form-check-label" for="yyomi">Yerushalmi Yomi</label>
- &nbsp;<span title="Daily study of the Jerusalem Talmud (Vilna Edition)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 </fieldset>
 <fieldset class="mt-2">
@@ -142,6 +148,17 @@
   <span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 </div><!-- .row -->
+</fieldset>
+<div class="mb-1">Elevation</div>
+<fieldset class="mb-2">
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="ue" id="ue0" <%= q.ue !== 'on' ? 'checked' : '' -%> value="off">
+    <label class="form-check-label" for="ue0">Ignore elevation</label>
+  </div>
+  <div class="form-check mb-1">
+    <input class="form-check-input" type="radio" name="ue" id="ue1" <%= q.ue === 'on' ? 'checked' : '' -%> value="on">
+    <label class="form-check-label" for="ue1">Calculate sunset with elevation</label>
+  </div>
 </fieldset>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->

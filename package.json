@@ -41,10 +41,10 @@
     "eslint": "^8.54.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.5.2"
+    "rollup": "^4.6.0"
   },
   "dependencies": {
-    "@hebcal/core": "^5.0.0-rc3",
+    "@hebcal/core": "^5.0.0-rc4",
     "@hebcal/geo-sqlite": "^5.0.1",
     "@hebcal/icalendar": "^5.0.1",
     "@hebcal/learning": "^5.0.0",

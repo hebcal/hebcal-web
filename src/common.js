@@ -126,6 +126,7 @@ const booleanOpts = {
   ykk: 'yomKippurKatan',
   molad: 'molad',
   yto: 'yomTovOnly',
+  ue: 'useElevation',
 };
 
 const dailyLearningOpts = {
