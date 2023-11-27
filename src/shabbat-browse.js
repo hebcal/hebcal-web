@@ -106,7 +106,6 @@ async function render(ctx, view, props) {
   if (ctx.request.query.amp === '1') {
     props.amp = true;
   }
-  props.queryDefaultCandleMins = queryDefaultCandleMins;
   return ctx.render(view, props);
 }
 
@@ -118,8 +117,12 @@ async function renderBrowseCountryXml(props, ctx) {
   ctx.type = 'text/xml';
   props.writeResp = false;
   props.lastmod = now.toISOString();
-  props.queryDefaultCandleMins = queryDefaultCandleMins;
   ctx.body = await ctx.render('shabbat-browse-country-xml', props);
+}
+
+function addHref(r) {
+  const b = queryDefaultCandleMins(r);
+  r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=s`;
 }
 
 export async function shabbatBrowse(ctx) {
@@ -156,6 +159,7 @@ export async function shabbatBrowse(ctx) {
     const countryCode = countryA1.cc;
     const results = stmt.all(countryCode, countryA1.admin1);
     db.close();
+    results.forEach(addHref);
     const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
     const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
     return render(ctx, 'shabbat-browse-country-small', {
@@ -178,6 +182,7 @@ async function countryPage(ctx, countryCode) {
   const stmt = db.prepare(COUNTRY_SQL);
   const results = stmt.all(countryCode);
   db.close();
+  results.forEach(addHref);
   const admin1 = results.reduce((map, val) => {
     if (val.admin1ascii !== null) {
       map.set(val.admin1ascii, val.admin1);

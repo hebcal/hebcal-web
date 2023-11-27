@@ -22,7 +22,7 @@
 <h3><%=a1.name%></h3>
 <ul class="list-unstyled lh-lg">
 <% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
-<li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= queryDefaultCandleMins(r) %>&amp;M=on&amp;lg=s"><%= r.name %></a> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
+<li><a href="<%= r.href %>"><%= r.name %></a> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>
 </ul>
 </div><!-- .col -->

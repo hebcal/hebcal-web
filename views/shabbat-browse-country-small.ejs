@@ -16,7 +16,7 @@
 <p class="lead"><time datetime="<%= friday.format('YYYY-MM-DD') %>"><%= friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= parsha %></a></p>
 <ul class="list-unstyled lh-lg">
 <% for (const r of results) { -%>
-<li><a href="/shabbat?geonameid=<%= r.geonameid %>&amp;b=<%= queryDefaultCandleMins(r) %>&amp;M=on&amp;lg=s"><%= r.name %></a><% if (admin1.size > 1 && r.name != r.admin1) { %>, <small><%=r.admin1%></small><% } %> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
+<li><a href="<%= r.href %>"><%= r.name %></a><% if (admin1.size > 1 && r.name != r.admin1) { %>, <small><%=r.admin1%></small><% } %> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>
 </ul>
 </div><!-- .col -->
