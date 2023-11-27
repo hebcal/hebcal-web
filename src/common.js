@@ -1496,6 +1496,7 @@ function makeGeoUrlArgs0(q, location) {
   } else {
     args.set('geonameid', location.getGeoId());
   }
+  args.set('ue', off(q.ue) ? 'off' : 'on');
   return args;
 }
 
