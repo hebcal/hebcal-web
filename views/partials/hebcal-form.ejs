@@ -60,10 +60,9 @@
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' -%> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
-<fieldset>
-<!-- perhaps accordion? -->
-<div><a data-bs-toggle="collapse" href="#daily-learning" role="button" aria-expanded="false" aria-controls="daily-learning">Daily Learning</a></div>
-<div class="collapse" id="daily-learning">
+<details>
+<summary class="fw-bold mb-2">Daily Learning</summary>
+<div>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="F" value="on" <%= q.F === 'on' ? 'checked' : '' -%> id="F">
 <label class="form-check-label" for="F">Daf Yomi</label>
@@ -82,7 +81,7 @@
  &nbsp;<span title="Daily study of the Jerusalem Talmud (Vilna Edition)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 </div><!-- .collapse -->
-</fieldset>
+</details>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-auto mb-2">
 <fieldset>
@@ -111,9 +110,10 @@
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
 </div>
 </fieldset>
+<details <%= q['city-typeahead'] ? 'open' : ''%>>
+<summary class="fw-bold mb-2">Candle-lighting &amp; Fast times</summary>
 <fieldset class="mt-2">
 <div class="mb-3">
-<label class="form-label" for="city-typeahead">Candle-lighting &amp; Fast times</label>
 <input type="hidden" name="c" value="<%= q.c || 'off' %>" id="c">
 <input type="hidden" name="geo" value="<%= q.geo || 'none' %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip || '' %>" id="zip">
@@ -160,6 +160,7 @@
     <label class="form-check-label" for="ue1">Calculate sunset with elevation</label>
   </div>
 </fieldset>
+</details>
 </div><!-- .col-sm-6 -->
 </div><!-- .row -->
 <button type="submit" class="btn btn-primary">Create Calendar</button>
