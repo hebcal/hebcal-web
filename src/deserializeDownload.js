@@ -60,6 +60,7 @@ export function deserializeDownload(data) {
   if (msg.getShemirathalashon()) q.dshl = 'on';
   if (msg.getDafweekly()) q.dw = 'on';
   if (msg.getPsalms()) q.dps = 'on';
+  if (msg.getUseelevation()) q.ue = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();

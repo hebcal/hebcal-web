@@ -202,7 +202,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     shemirathalashon: jspb.Message.getBooleanFieldWithDefault(msg, 49, false),
     psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false),
     dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false),
-    elev: jspb.Message.getFieldWithDefault(msg, 52, 0)
+    elev: jspb.Message.getFieldWithDefault(msg, 52, 0),
+    useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false)
   };
 
   if (includeInstance) {
@@ -434,6 +435,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 52:
       var value = /** @type {number} */ (reader.readInt32());
       msg.setElev(value);
+      break;
+    case 53:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setUseelevation(value);
       break;
     default:
       reader.skipField();
@@ -804,6 +809,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeInt32(
       52,
+      f
+    );
+  }
+  f = message.getUseelevation();
+  if (f) {
+    writer.writeBool(
+      53,
       f
     );
   }
@@ -1842,6 +1854,24 @@ proto.Download.prototype.getElev = function() {
  */
 proto.Download.prototype.setElev = function(value) {
   return jspb.Message.setProto3IntField(this, 52, value);
+};
+
+
+/**
+ * optional bool useElevation = 53;
+ * @return {boolean}
+ */
+proto.Download.prototype.getUseelevation = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 53, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setUseelevation = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 53, value);
 };
 
 

@@ -68,4 +68,5 @@ message Download {
   bool psalms = 50;
   bool dafWeekly = 51;
   int32 elev = 52;
+  bool useElevation = 53;
 }

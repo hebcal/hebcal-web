@@ -76,6 +76,7 @@ export function downloadHref2(query, filename, override={}) {
   if (q.dshl === 'on') msg.setShemirathalashon(true);
   if (q.dps === 'on') msg.setPsalms(true);
   if (q.dw === 'on') msg.setDafweekly(true);
+  if (q.ue === 'on') msg.setUseelevation(true);
 
   if (q.d === 'on') msg.setAddhebrewdates(true);
   if (q.D === 'on') msg.setAddhebrewdatesforevents(true);

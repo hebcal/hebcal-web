@@ -371,9 +371,15 @@ export function renderPdf(doc, events, options) {
 function makeLeftText(options) {
   const locationName = options?.location?.getName();
   if (locationName) {
-    const offset = locationDefaultCandleMins(options.location);
-    return locationName + ' · ' +
+    const location = options.location;
+    const offset = locationDefaultCandleMins(location);
+    let str = locationName + ' · ' +
     `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
+    const elev = location.getElevation();
+    if (options?.useElevation && elev > 0) {
+      str += ` (elevation: ${elev} m)`;
+    }
+    return str;
   }
   return options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
 }
