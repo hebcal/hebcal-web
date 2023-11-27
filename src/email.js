@@ -326,7 +326,7 @@ async function getSubInfo(db, emailAddress) {
     M: r.email_havdalah_tzeit == 1 ? 'on' : 'off',
     t: r.email_created,
     b: r.email_sundown_candles,
-    ue: Boolean(r.email_use_elevation),
+    ue: r.email_use_elevation == 1 ? 'on' : 'off',
   }, getGeoFromRow(r));
 }
 
