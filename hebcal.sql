@@ -17,6 +17,7 @@ CREATE TABLE hebcal_shabbat_email (
   email_candles_zipcode varchar(5) DEFAULT NULL,
   email_candles_city varchar(64) DEFAULT NULL,
   email_candles_geonameid int DEFAULT NULL,
+  email_use_elevation tinyint(1) NOT NULL DEFAULT '0',
   email_candles_havdalah tinyint DEFAULT NULL,
   email_havdalah_tzeit tinyint(1) NOT NULL DEFAULT '0',
   email_sundown_candles tinyint NOT NULL DEFAULT '18',
