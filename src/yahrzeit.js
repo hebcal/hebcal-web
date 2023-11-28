@@ -452,7 +452,8 @@ export async function yahrzeitDownload(ctx) {
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
-  const events = await makeYahrzeitEvents(maxId, query, true);
+  const reminder = query.yrem !== '0' && query.yrem !== 'off';
+  const events = await makeYahrzeitEvents(maxId, query, reminder);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }

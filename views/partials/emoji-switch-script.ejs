@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const dlURLs = <%- JSON.stringify(url) %>;
   let calColor = '';
   let emojiChecked = true;
+  let yahrzeitReminderChecked = true;
   function changeButtonTarget(id) {
     const btn = document.getElementById(id);
     const srcType = btn.dataset.hebcalSrc;
@@ -13,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     if (calColor && id == 'dl-ios') {
       url.searchParams.set('color', calColor);
+    }
+    if (!yahrzeitReminderChecked) {
+      url.searchParams.set('yrem', '0');
     }
     let href = url.href;
     if (srcType == 'gcal') {
@@ -46,5 +50,13 @@ document.addEventListener('DOMContentLoaded', function() {
       changeButtonTarget(inputId);
     }, false);
   });
+  document.querySelectorAll('.reminder-checkbox .form-check-input').forEach(function(el) {
+    const inputId = el.id.substring(4);
+    el.addEventListener('change', function(event) {
+      yahrzeitReminderChecked = event.target.checked;
+      changeButtonTarget(inputId);
+    }, false);
+  });
+
 });
 </script>
