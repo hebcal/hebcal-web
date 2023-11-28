@@ -1,5 +1,6 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty,
+  makeGeoUrlArgs,
   cacheControl, getDefaultHebrewYear, queryDefaultCandleMins} from './common';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -46,12 +47,7 @@ function makeProperties(ctx) {
   });
   const items = makeContents(events, options);
   const itemsRows = formatItemsAsTable(items, options);
-  let url = '/shabbat/fridge.cgi?' + (query.zip ? `zip=${query.zip}` : `geonameid=${location.getGeoId()}`);
-  for (const opt of ['a', 'i', 'b', 'm', 'M', 'lg']) {
-    if (query[opt]) {
-      url += `&${opt}=${query[opt]}`;
-    }
-  }
+  const url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(query, location, options);
   const locale = Locale.getLocaleName();
   const lang = localeMap[locale] || 'en';
   return {
