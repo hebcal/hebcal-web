@@ -373,13 +373,13 @@ function makeLeftText(options) {
   if (locationName) {
     const location = options.location;
     const offset = locationDefaultCandleMins(location);
-    let str = locationName + ' · ' +
-    `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
+    let str = locationName;
     const elev = location.getElevation();
     if (options?.useElevation && elev > 0) {
       str += ` (elevation: ${elev} m)`;
     }
-    return str;
+    return str + ' · ' +
+      `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
   }
   return options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
 }
