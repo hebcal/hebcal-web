@@ -88,7 +88,7 @@
 <label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
 </div>
 </fieldset>
-<details>
+<details class="mb-3">
 <summary class="fw-bold mb-2">Daily Learning</summary>
 <div>
 <div class="form-check mb-2">
@@ -110,8 +110,8 @@
 </div>
 </div><!-- .collapse -->
 </details>
-<details <%= q['city-typeahead'] ? 'open' : ''%>>
-<summary class="fw-bold mb-2">Candle-lighting &amp; Fast times</summary>
+<details <%= q['city-typeahead'] ? 'open' : ''%> class="mb-2">
+<summary class="fw-bold mb-3">Candle-lighting &amp; Fast times</summary>
 <fieldset class="mt-2">
 <div class="mb-3">
 <input type="hidden" name="c" value="<%= q.c || 'off' %>" id="c">
@@ -153,11 +153,11 @@
 <fieldset class="mb-2">
   <div class="form-check mb-1">
     <input class="form-check-input" type="radio" name="ue" id="ue0" <%= q.ue !== 'on' ? 'checked' : '' -%> value="off">
-    <label class="form-check-label" for="ue0">Ignore elevation</label>
+    <label class="form-check-label" for="ue0">Sea-level (no elevation)</label>
   </div>
   <div class="form-check mb-1">
     <input class="form-check-input" type="radio" name="ue" id="ue1" <%= q.ue === 'on' ? 'checked' : '' -%> value="on">
-    <label class="form-check-label" for="ue1">Calculate sunset with elevation</label>
+    <label class="form-check-label" for="ue1">Include elevation in sunrise/sunset estimate</label>
   </div>
 </fieldset>
 </details>

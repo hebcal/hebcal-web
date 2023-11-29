@@ -50,7 +50,7 @@ export async function homepage(ctx) {
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   const yearInfo = getDefaultYear(dt, hd);
   Object.assign(ctx.state, yearInfo);
-  if ((gm === 12) || (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs)) {
+  if ((gm === 12 || (gm === 11 && gd >= 11)) || (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs)) {
     const start = pad4(gy) + '-' + pad2(gm) + '-01';
     const end = pad4(gy + 1) + '-12-31';
     ctx.state.yearArgs = `&start=${start}&end=${end}`;
