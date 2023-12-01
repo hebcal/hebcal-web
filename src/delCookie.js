@@ -17,6 +17,7 @@ export function delCookie(ctx) {
   });
   for (const cookieName of otherCookies) {
     ctx.cookies.set(cookieName, '0', {
+      domain: '.hebcal.com',
       expires: expiresPast,
       overwrite: true,
       httpOnly: false,
