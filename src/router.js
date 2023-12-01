@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {
   getLocationFromQuery,
@@ -35,6 +34,7 @@ import {sitemapZips} from './sitemapZips';
 import {getLeyning} from './leyning';
 import {sendGif} from './sendGif';
 import {dailyLearningApp} from './dailyLearning';
+import {delCookie} from './delCookie';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -115,20 +115,7 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/shabbat')) {
       return shabbatApp(ctx);
     } else if (rpath.startsWith('/hebcal/del_cookie')) {
-      ctx.set('Cache-Control', 'private');
-      const optout = (ctx.request.querystring === 'optout');
-      const cookieVal = optout ? 'opt_out' : '0';
-      // Either future or in the past (1970-01-01T00:00:01.000Z)
-      const expires = optout ? dayjs().add(2, 'year').toDate() : new Date(1000);
-      ctx.cookies.set('C', cookieVal, {
-        expires: expires,
-        overwrite: true,
-        httpOnly: false,
-      });
-      return ctx.render('optout', {
-        title: optout ? 'Opt-Out Complete' : 'Cookie Deleted',
-        optout,
-      });
+      return delCookie(ctx);
     } else if (rpath.startsWith('/hebcal')) {
       return hebcalApp(ctx);
     } else if (rpath === '/yahrzeit/email') {
@@ -141,6 +128,7 @@ export function wwwRouter() {
       return holidaysApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
+      return;
     } else if (rpath === '/email/verify.php') {
       return emailVerify(ctx);
     } else if (rpath === '/email/open') {
