@@ -5,7 +5,15 @@
 <fieldset class="mb-3">
 <div class="row align-items-center gx-3">
 <div class="form-floating col-auto mb-1">
-<input type="text" inputmode="numeric" name="year" value="<%= q.year || '' %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
+<% let year = q.year;
+if (typeof year !== 'string' || year.length === 0) {
+  if (typeof q.end === 'string' && q.end.length === 10) {
+    year = q.end.substring(0, 4);
+  } else {
+    year = q.yt === 'H' ? defaultYearInfo.hy : defaultYearInfo.gregYr1;
+  }
+} %>
+<input type="text" inputmode="numeric" name="year" value="<%= year %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year">
 <label for="year">Year</label>
 </div><!-- .form-floating -->
 <div class="col-auto">

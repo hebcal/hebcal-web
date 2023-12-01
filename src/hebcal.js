@@ -70,11 +70,11 @@ export async function hebcalApp(ctx) {
   if (options.location && options.location.geo !== 'pos') {
     q['city-typeahead'] = options.location.getName();
   }
+  const dt = new Date();
+  const hd = new HDate(dt);
+  const yearInfo = ctx.state.defaultYearInfo = getDefaultYear(dt, hd);
   const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
   if (empty(q.year) && !startEnd) {
-    const dt = new Date();
-    const hd = new HDate(dt);
-    const yearInfo = getDefaultYear(dt, hd);
     const ytStr = ctx.request.query.yt;
     if (empty(ytStr)) {
       const isHebrewYear = options.isHebrewYear = yearInfo.isHebrewYear;
