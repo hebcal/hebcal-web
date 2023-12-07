@@ -106,13 +106,15 @@ export function addLinksToLeyning(aliyot, showBook) {
   const book1 = aliyot['1']?.k;
   Object.keys(aliyot).forEach((num) => {
     const aliyah = aliyot[num];
-    aliyah.num = num == 'M' ? 'maf' : num;
+    const isMaftir = num === 'M';
+    aliyah.num = isMaftir ? 'maf' : num;
     const begin = aliyah.b.split(':');
     const end = aliyah.e.split(':');
     const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
     const verses = `${aliyah.b}-${endChapVerse}`;
     aliyah.verses = showBook || (book1 != aliyah.k) ? `${aliyah.k} ${verses}` : verses;
-    aliyah.href = sefariaAliyahHref(aliyah, !showBook);
+    const sefAliyot = !showBook && !isMaftir;
+    aliyah.href = sefariaAliyahHref(aliyah, sefAliyot);
     const bid = bookId[aliyah.k];
     if (typeof bid === 'number') {
       aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
