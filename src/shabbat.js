@@ -121,12 +121,13 @@ function geoIpRedirect(ctx) {
 
   const geoip = ctx.state.geoip = getLocationFromGeoIp(ctx);
   if (geoip.zip) {
-    const dest = `/shabbat?zip=${geoip.zip}&geoip=zip`;
+    const dest = `/shabbat?zip=${geoip.zip}&ue=off&b=18&M=on&lg=s&geoip=zip`;
     redir(ctx, dest);
     return true;
   } else if (geoip.geonameid) {
     const mode = geoip.nn ? 'nn' : 'geonameid';
-    const dest = `/shabbat?geonameid=${geoip.geonameid}&geoip=${mode}`;
+    const candleMins = queryDefaultCandleMins(geoip);
+    const dest = `/shabbat?geonameid=${geoip.geonameid}&ue=off&b=${candleMins}&M=on&lg=s&geoip=${mode}`;
     redir(ctx, dest);
     return true;
   }
