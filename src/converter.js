@@ -1,5 +1,5 @@
 import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
-  OmerEvent, gematriya, greg, flags} from '@hebcal/core';
+  OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   localeMap, getBeforeAfterSunsetForLocation, getStartAndEnd, makeHebDate,
@@ -7,7 +7,7 @@ import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   isoDateStringToDate,
   getDefaultYear, urlArgs,
 } from './common';
-import {getLeyningOnDate, getLeyningForHoliday} from '@hebcal/leyning';
+import {getLeyningOnDate} from '@hebcal/leyning';
 import createError from 'http-errors';
 import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales';
