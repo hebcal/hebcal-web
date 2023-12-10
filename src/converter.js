@@ -430,10 +430,18 @@ function getEvents(hdate, il) {
       const chagToday = events.find((ev) => ev.getFlags() & flags.CHAG);
       const cholHaMoed = events.find((ev) => ev.getFlags() & flags.CHOL_HAMOED);
       if (typeof chagToday === 'undefined' && typeof cholHaMoed === 'undefined') {
-        const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
-        for (const ev of satHolidays) {
-          const pe = new PseudoParshaEvent(ev);
+        const mm = hdate.getMonth();
+        const dd = hdate.getDate();
+        if (mm === months.TISHREI && (dd > 10 && dd < 15)) {
+          const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
+          const pe = new ParshaEvent(simchatTorah, ['Vezot Haberakhah'], il);
           events = events.concat(pe);
+        } else {
+          const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+          for (const ev of satHolidays) {
+            const pe = new PseudoParshaEvent(ev);
+            events = events.concat(pe);
+          }
         }
       }
     }
