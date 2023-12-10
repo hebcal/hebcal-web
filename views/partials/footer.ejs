@@ -44,17 +44,15 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <% if (typeof xtra_html !== 'undefined') { -%><%- xtra_html -%><% } -%>
 <script><%- await include('analytics.js') -%></script>
 <% if (typeof cookieBanner === 'boolean' && cookieBanner) { -%>
-<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom">
+<div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom mb-2">
  <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
-  <div class="toast-header bg-body-tertiary">
-   <strong class="me-auto">Cookie policy</strong>
-   <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-  </div>
   <div class="toast-body">
    We use cookies for personalization, analytics and advertising.
    By continuing to visit Hebcal you agree to our use of cookies
    in accordance with our <a href="/home/about/privacy-policy">privacy policy</a>.
-   <button type="button" class="ms-3 mt-1 btn btn-primary btn-sm" data-bs-dismiss="toast">OK</button>
+   <div class="d-grid ms-2 me-2 mt-2">
+    <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="toast">I Understand</button>
+  </div>
   </div>
  </div>
 </div>
