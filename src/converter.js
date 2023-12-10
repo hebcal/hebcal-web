@@ -7,6 +7,7 @@ import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   isoDateStringToDate,
   getDefaultYear, urlArgs,
 } from './common';
+import {getLeyningOnDate, getLeyningForHoliday} from '@hebcal/leyning';
 import createError from 'http-errors';
 import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales';
@@ -420,29 +421,32 @@ function getEvents(hdate, il) {
   let events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
-  if (hy >= 3762) {
-    const sedra = HebrewCalendar.getSedra(hy, il);
-    const parsha = sedra.lookup(saturday);
-    if (!parsha.chag) {
-      const pe = new ParshaEvent(saturday, parsha.parsha, il);
+  const sedra = HebrewCalendar.getSedra(hy, il);
+  const parsha = sedra.lookup(saturday);
+  let hasFullKriyah = false;
+  if (!parsha.chag) {
+    const pe = new ParshaEvent(saturday, parsha.parsha, il);
+    events = events.concat(pe);
+    hasFullKriyah = true;
+  }
+  const readings = getLeyningOnDate(hdate, il, true);
+  for (const reading of readings) {
+    if (reading.fullkriyah && !reading.parshaNum) {
+      hasFullKriyah = true;
+    }
+  }
+  const mm = hdate.getMonth();
+  const dd = hdate.getDate();
+  if (!hasFullKriyah) {
+    if (mm === months.TISHREI && (dd > 2 && dd < 15)) {
+      const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
+      const pe = new ParshaEvent(simchatTorah, ['Vezot Haberakhah'], il);
       events = events.concat(pe);
-    } else if (saturday.abs() != hdate.abs()) {
-      const chagToday = events.find((ev) => ev.getFlags() & flags.CHAG);
-      const cholHaMoed = events.find((ev) => ev.getFlags() & flags.CHOL_HAMOED);
-      if (typeof chagToday === 'undefined' && typeof cholHaMoed === 'undefined') {
-        const mm = hdate.getMonth();
-        const dd = hdate.getDate();
-        if (mm === months.TISHREI && (dd > 10 && dd < 15)) {
-          const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
-          const pe = new ParshaEvent(simchatTorah, ['Vezot Haberakhah'], il);
-          events = events.concat(pe);
-        } else {
-          const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
-          for (const ev of satHolidays) {
-            const pe = new PseudoParshaEvent(ev);
-            events = events.concat(pe);
-          }
-        }
+    } else {
+      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+      for (const ev of satHolidays) {
+        const pe = new PseudoParshaEvent(ev);
+        events = events.concat(pe);
       }
     }
   }
@@ -456,11 +460,20 @@ function getEvents(hdate, il) {
  * @return {Event[]}
  */
 function makeOmer(hdate) {
-  const beginOmer = HDate.hebrew2abs(hdate.getFullYear(), months.NISAN, 16);
-  const abs = hdate.abs();
-  if (abs >= beginOmer && abs < (beginOmer + 49)) {
-    const omer = abs - beginOmer + 1;
-    return [new OmerEvent(hdate, omer)];
+  const mm = hdate.getMonth();
+  switch (mm) {
+    case months.NISAN:
+    case months.IYYAR:
+    case months.SIVAN:
+      const beginOmer = HDate.hebrew2abs(hdate.getFullYear(), months.NISAN, 16);
+      const abs = hdate.abs();
+      if (abs >= beginOmer && abs < (beginOmer + 49)) {
+        const omer = abs - beginOmer + 1;
+        return [new OmerEvent(hdate, omer)];
+      }
+      break;
+    default:
+      break;
   }
   return [];
 }
