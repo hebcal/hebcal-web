@@ -648,16 +648,6 @@ export function makeHebcalOptions(db, query) {
   return options;
 }
 
-const tzidMap = {
-  'US/Eastern': 'America/New_York',
-  'US/Central': 'America/Chicago',
-  'US/Mountain': 'America/Denver',
-  'US/Pacific': 'America/Los_Angeles',
-  'US/Alaska': 'America/Anchorage',
-  'US/Hawaii': 'Pacific/Honolulu',
-  'US/Aleutian': 'Pacific/Honolulu',
-};
-
 /**
  * @param {any} db
  * @param {Object.<string,string>} query
@@ -725,7 +715,6 @@ export function getLocationFromQuery(db, query) {
         query.tzid = 'Etc/GMT' + dir + parseInt(m[2], 10);
       }
     }
-    query.tzid = tzidMap[query.tzid] || query.tzid;
     try {
       new Intl.DateTimeFormat('en-US', {timeZone: query.tzid});
     } catch (err) {
@@ -780,7 +769,6 @@ export function getLocationFromQuery(db, query) {
     if (tzid === 'Asia/Jerusalem') {
       il = true;
     }
-    tzid = tzidMap[tzid] || tzid;
     query.latitude = latitude;
     query.longitude = longitude;
     query.tzid = tzid;
