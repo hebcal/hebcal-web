@@ -30,8 +30,8 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.5",
-    "@babel/preset-env": "^7.23.5",
+    "@babel/core": "^7.23.6",
+    "@babel/preset-env": "^7.23.6",
     "@babel/register": "^7.22.15",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -41,13 +41,13 @@
     "eslint": "^8.55.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.7.0"
+    "rollup": "^4.9.0"
   },
   "dependencies": {
     "@hebcal/core": "^5.0.1",
     "@hebcal/geo-sqlite": "^5.0.1",
     "@hebcal/icalendar": "^5.0.1",
-    "@hebcal/learning": "^5.0.0",
+    "@hebcal/learning": "^5.0.1",
     "@hebcal/leyning": "^8.1.0",
     "@hebcal/locales": "^5.0.0",
     "@hebcal/rest-api": "^5.0.1",
@@ -80,7 +80,7 @@
     "nodemailer": "^6.9.7",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.14.0",
-    "pino": "^8.16.2",
+    "pino": "^8.17.1",
     "probe-image-size": "^7.2.3",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",

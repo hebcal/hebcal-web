@@ -34,6 +34,11 @@ async function makeQuery(ctx) {
   const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
   const query = Object.assign(defaults, reqBody, ctx.request.query);
   if (isPost) {
+    const id = query.ulid;
+    if (isValidUlid(id)) {
+      ctx.state.ulid = id;
+      ctx.state.isEditPage = true;
+    }
     return query;
   }
   const rpath = ctx.request.path;
