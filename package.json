@@ -38,7 +38,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "corejs-typeahead": "^1.3.3",
     "csv-parse": "^5.5.3",
-    "eslint": "^8.55.0",
+    "eslint": "^8.56.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
     "rollup": "^4.9.0"
@@ -51,7 +51,7 @@
     "@hebcal/leyning": "^8.1.0",
     "@hebcal/locales": "^5.0.0",
     "@hebcal/rest-api": "^5.0.1",
-    "@hebcal/triennial": "^5.0.1",
+    "@hebcal/triennial": "^5.0.2",
     "better-sqlite3": "^9.2.2",
     "dayjs": "^1.11.10",
     "ejs": "^3.1.9",
