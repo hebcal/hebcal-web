@@ -36,4 +36,49 @@ module.exports = [
       commonjs(),
     ],
   },
+  {
+    input: 'src/hdate-en.js',
+    output: [
+      {
+        file: 'dist/views/partials/hdate-en.min.js',
+        format: 'iife',
+        banner: '/*! hdate-en ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve(),
+      commonjs(),
+    ],
+  },
+  {
+    input: 'src/hdate-he-nikud.js',
+    output: [
+      {
+        file: 'dist/views/partials/hdate-he.min.js',
+        format: 'iife',
+        banner: '/*! hdate-he ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve(),
+      commonjs(),
+    ],
+  },
+  {
+    input: 'src/hdate-he-NoNikud.js',
+    output: [
+      {
+        file: 'dist/views/partials/hdate-he-x-NoNikud.min.js',
+        format: 'iife',
+        banner: '/*! hdate-he-NoNikud ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve(),
+      commonjs(),
+    ],
+  },
 ];
