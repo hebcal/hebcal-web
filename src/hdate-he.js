@@ -1,5 +1,12 @@
 /* eslint-disable require-jsdoc */
 import {greg, abs2hebrew, gematriya, months, isLeapYear} from '@hebcal/hdate';
+const TAMUZ = months.TAMUZ;
+const ELUL = months.ELUL;
+const TISHREI = months.TISHREI;
+const KISLEV = months.KISLEV;
+const SHVAT = months.SHVAT;
+const ADAR_I = months.ADAR_I;
+const ADAR_II =months.ADAR_II;
 const monthNames = [
   '',
   'נִיסָן',
@@ -18,25 +25,25 @@ const monthNames = [
 ];
 function monthName(yy, mm) {
   switch (mm) {
-    case months.TAMUZ:
+    case TAMUZ:
       return 'בְּתַמּוּז';
-    case months.ELUL:
+    case ELUL:
       return 'בֶּאֱלוּל';
-    case months.TISHREI:
+    case TISHREI:
       return 'בְּתִשְׁרֵי';
-    case months.KISLEV:
+    case KISLEV:
       return 'בְּכִסְלֵו';
-    case months.SHVAT:
+    case SHVAT:
       return 'בִּשְׁבָט';
-    case months.ADAR_I:
+    case ADAR_I:
       return isLeapYear(yy) ? 'בַּאֲדָר א׳' : 'בַּאֲדָר';
-    case months.ADAR_II:
+    case ADAR_II:
       return 'בַּאֲדָר ב׳';
     default:
       return 'בְּ' + monthNames[mm];
   }
 }
-export function hdateStr() {
+function hdateStr() {
   const dt = new Date();
   let abs = greg.greg2abs(dt);
   if (dt.getHours() > 19) {
@@ -45,3 +52,5 @@ export function hdateStr() {
   const hd = abs2hebrew(abs);
   return gematriya(hd.dd) + ' ' + monthName(hd.yy, hd.mm) + ' ' + gematriya(hd.yy);
 }
+const str = hdateStr();
+document.write(str);

@@ -52,7 +52,7 @@ module.exports = [
     ],
   },
   {
-    input: 'src/hdate-he-nikud.js',
+    input: 'src/hdate-he.js',
     output: [
       {
         file: 'dist/views/partials/hdate-he.min.js',
