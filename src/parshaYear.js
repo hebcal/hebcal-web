@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, flags} from '@hebcal/core';
+import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent} from '@hebcal/leyning';
 import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
@@ -19,19 +19,22 @@ export async function parshaYear(ctx) {
   const q = ctx.request.query;
   const il = q.i === 'on';
   const lang = lgToLocale[q.lg || 's'] || q.lg;
-  const events = HebrewCalendar.calendar({
-    sedrot: true,
-    year: hyear,
-    isHebrewYear: true,
-    il,
-    noHolidays: true,
-  });
   const locale = localeMap[lang] || 'en';
-  const items = [];
-  for (const ev of events) {
-    const item = makeItem(ev, locale, il, lang);
-    items.push(item);
+  const sedra = HebrewCalendar.getSedra(hyear, il);
+  const startAbs = sedra.getFirstSaturday();
+  const endAbs = HDate.hebrew2abs(hyear + 1, months.TISHREI, 1);
+  const events = [];
+  for (let abs = startAbs; abs < endAbs; abs += 7) {
+    const parsha = sedra.lookup(abs);
+    if (parsha.chag) {
+      const holidays = HebrewCalendar.getHolidaysOnDate(abs, il) || [];
+      events.push(...holidays);
+    } else {
+      const ev = new ParshaEvent(new HDate(abs), parsha.parsha, il);
+      events.push(ev);
+    }
   }
+  const items = events.map((ev) => makeItem(ev, locale, il, lang));
   const dlfilename = `hebcal_${hyear}h.ics`;
   const q0 = {
     v: '1',
@@ -58,40 +61,43 @@ export async function parshaYear(ctx) {
 function makeItem(ev, locale, il, lang) {
   const hd = ev.getDate();
   const d = dayjs(hd.greg()).locale(locale);
+  const mask = ev.getFlags();
+  const isParsha = Boolean(mask & flags.PARSHA_HASHAVUA);
   const title0 = ev.render('en');
-  const title = title0.substring(title0.indexOf(' ') + 1);
-  const hebrew0 = ev.render('he');
-  const hebrew = hebrew0.substring(hebrew0.indexOf(' ') + 1);
-  const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-  const holidays = holidays0.map((ev) => {
-    const mask = ev.getFlags();
-    const item = {
-      title: ev.render(lang),
-    };
-    const url = ev.url();
-    if (url) {
-      item.url = shortenUrl(url);
-    }
-    if (mask & flags.ROSH_CHODESH) {
-      return item;
-    } else if (mask & flags.SHABBAT_MEVARCHIM) {
-      item.title = item.title.substring(item.title.indexOf(' ') + 1);
-      return item;
-    }
-    const key = getLeyningKeyForEvent(ev, il);
-    if (key) {
-      item.title = key;
-    }
-    return item;
-  });
+  const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : title0;
   const item = {
     event: ev,
     title,
-    hebrew,
     d,
     hd,
     url: shortenUrl(ev.url()),
-    holidays,
+    holidays: [],
   };
+  if (isParsha) {
+    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    item.holidays = holidays0.map((ev) => holidayEvToItem(ev, il, lang));
+  }
+  return item;
+}
+
+function holidayEvToItem(ev, il, lang) {
+  const mask = ev.getFlags();
+  const item = {
+    title: ev.render(lang),
+  };
+  const url = ev.url();
+  if (url) {
+    item.url = shortenUrl(url);
+  }
+  if (mask & flags.ROSH_CHODESH) {
+    return item;
+  } else if (mask & flags.SHABBAT_MEVARCHIM) {
+    item.title = item.title.substring(item.title.indexOf(' ') + 1);
+    return item;
+  }
+  const key = getLeyningKeyForEvent(ev, il);
+  if (key) {
+    item.title = key;
+  }
   return item;
 }

@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs', {
-  title: `Torah Readings ${hyear} - Hebcal`,
+  title: `Shabbat Torah Readings ${hyear} - Hebcal`,
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%=hyear%>?i=<%=il?'on':'off'%>">
 <% if (hyear <= 5513 || hyear > todayHebYear + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
@@ -14,7 +14,7 @@
 <% if (hyear <= 5513) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h2>Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
+<h2>Shabbat Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
 <div class="btn-toolbar d-print-none mt-1 mb-2">
 <a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="<%-dlhref%>" download="<%=dlfilename%>">
 <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
@@ -29,17 +29,15 @@ Download Calendar .ics</a>
 <%   } %>
 </div>
 
-<div class="table-responsive">
 <table class="table table-striped">
 <colgroup>
-  <col><col><col><col>
+  <col style="width:172px"><col style="width:128px"><col>
 </colgroup>
 <thead>
 <tr>
   <th>Date</th>
   <th>Hebrew Date</th>
   <th>Parsha</th>
-  <th>Notes</th>
 </tr>
 </thead>
 <tbody class="table-group-divider">
@@ -48,14 +46,17 @@ for (const item of items) { %>
 <tr>
   <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== prev ? item.d.format(', YYYY') : '' %></time></td>
   <td class="text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></td>
-  <td><a href="<%=item.url%>"><%= item.title %></a></td>
-  <td><% for (const holiday of item.holidays) { %><div class="mb-2"><% if (holiday.url) { %><a class="link-success" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title%><% if (holiday.url) { %></a><% } else { %></span><% } %></div><% } %></td>
+  <td><ul class="list-unstyled mb-0">
+  <li><a href="<%=item.url%>"><%= item.title %></a></li>
+<% for (const holiday of item.holidays) { %>
+  <li class="mt-2"><% if (holiday.url) { %><a class="link-success" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
+<% } %>
+  </ul></td>
 </tr>
 <% prev = item.d.year();
 } %>
 </tbody>
 </table>
-</div>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <div>
