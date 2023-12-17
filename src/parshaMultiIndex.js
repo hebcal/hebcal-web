@@ -10,7 +10,8 @@ const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 export async function parshaMultiYearIndex(ctx) {
   const dt = new Date();
   const hd = new HDate(dt);
-  const hyear = getDefaultHebrewYear(hd);
+  const hyear0 = parseInt(ctx.request.query?.year, 10);
+  const hyear = hyear0 || getDefaultHebrewYear(hd);
   const q = ctx.request.query;
   const il = q.i === 'on';
   const byParsha = new Map();
@@ -52,5 +53,6 @@ export async function parshaMultiYearIndex(ctx) {
     parshaByBook,
     torahBookNames,
     byParsha,
+    yearOverride: Boolean(hyear0),
   });
 }

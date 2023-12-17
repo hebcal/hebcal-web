@@ -125,10 +125,18 @@ The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule<
 <h3 id="<%=category.id%>" class="pb-2"><%=category.name%> <span class="h4 text-body-secondary"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('minor-fasts' === category.id) { -%>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
+<% } else if ('modern-holidays' === category.id) { -%>
+<p>Modern Israeli holidays are national holidays officially recognized by the
+Knesset, Israel's parliament.</p>
 <% } else if ('rosh-chodesh' === category.id) { -%>
 <p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
   Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
   beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
+<p class="small">Note: the first day of Tishrei is <strong>not</strong>
+considered Rosh Chodesh. The holiday that occurs on the 1st day of Tishrei
+is called <a href="rosh-hashana">Rosh Hashana</a>, the Jewish New Year.
+For the month of Tishrei, the major holiday of Rosh Hashana takes
+precedence over what would be a minor holiday.</p>
 <% } -%>
 <div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
 <% for (let i = 0; i < items[catId].length; i++) { const item = items[catId][i]; %>

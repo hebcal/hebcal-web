@@ -291,6 +291,18 @@ export async function holidayMainIndex(ctx) {
       }
     }
   }
+  const canonical = new URL('https://www.hebcal.com/holidays/');
+  const inverse = new URL(canonical);
+  const yearOverride = Boolean(hyear0);
+  if (il) {
+    canonical.searchParams.set('i', 'on');
+  } else {
+    inverse.searchParams.set('i', 'on');
+  }
+  if (yearOverride) {
+    canonical.searchParams.set('year', hyear0);
+    inverse.searchParams.set('year', hyear0);
+  }
   const q = makeQueryAndDownloadProps(ctx, {
     year: hyear,
     isHebrewYear: true,
@@ -306,7 +318,9 @@ export async function holidayMainIndex(ctx) {
     il,
     q,
     amp: (q.amp === '1') ? true : undefined,
-    yearOverride: Boolean(hyear0),
+    yearOverride,
+    canonical,
+    inverse,
   });
 }
 

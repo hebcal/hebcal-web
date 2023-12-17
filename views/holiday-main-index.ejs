@@ -1,8 +1,9 @@
 <%- await include('partials/header2.ejs', {
   title: 'Jewish Holidays' + (yearOverride ? ` ${hyear - 1}-${hyear + 4}` : '') + ' - Hebcal',
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/holidays/<%=il?'?i=on':''%>">
-<meta name="description" content="Dates of major and minor Jewish holidays for years <%=today.year() - 1%>-<%=today.year()+6%>. Links to pages describing observance and customs, holiday Torah readings.">
+<link rel="canonical" href="<%=canonical.href%>">
+<% if (hyear <= 5513 || hyear > (today.year() + 3860)) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<meta name="description" content="Dates of major and minor Jewish holidays for years <%=hyear-3762%>-<%=hyear-3756%>. Links to pages describing observance and customs, holiday Torah readings.">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -10,6 +11,7 @@
 <div class="row">
 <div class="col-sm-8">
 <h2>Jewish Holidays <%= yearOverride ? `${hyear - 1}-${hyear + 4}` : '' %></h2>
+<% if (hyear <= 5513) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
 <p>Dates of major and minor Jewish holidays as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
@@ -21,7 +23,7 @@ Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYY
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+The <a href="<%=inverse.href%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none">
@@ -67,6 +69,19 @@ is forbidden.</p>
 <p>Minor fasts begin at dawn and end at nightfall.</p>
 <p>Tish'a B'Av begins at sundown on the first date specified and ends at
 nightfall on the second date specified.</p>
+<% } else if ('modern-holidays' === category.id) { -%>
+<p>Modern Israeli holidays are national holidays officially recognized by the
+Knesset, Israel's parliament.</p>
+<% } else if ('rosh-chodesh' === category.id) { -%>
+<p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
+Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
+beginning of every month in the Hebrew calendar. It is marked by the birth
+of a new moon.</p>
+<p class="small">Note: the first day of Tishrei is <strong>not</strong>
+considered Rosh Chodesh. The holiday that occurs on the 1st day of Tishrei
+is called <a href="rosh-hashana">Rosh Hashana</a>, the Jewish New Year.
+For the month of Tishrei, the major holiday of Rosh Hashana takes
+precedence over what would be a minor holiday.</p>
 <% } // major-holidays %>
 <div class="table-responsive">
 <table class="table table-sm table-striped-columns">
@@ -75,14 +90,14 @@ nightfall on the second date specified.</p>
 </colgroup>
 <thead class="table-group-divider">
 <tr><th>
-<div><a href="/holidays/?year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+<div><a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
 Holiday
 </th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
 <th>
 <% if (yr === hyear + 4) { %>
 <div class="float-end">
-<a href="/holidays/?year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
+<a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
 </div>
 <% } %>
 <a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
@@ -104,7 +119,7 @@ Holiday
 </div>
 </div><!-- #<%=category.id%> -->
 <% } // ... for %>
-      
+
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/download-modal.ejs') -%>
