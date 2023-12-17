@@ -75,7 +75,15 @@ function makeItem(ev, locale, il, lang) {
   };
   if (isParsha) {
     const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-    item.holidays = holidays0.map((ev) => holidayEvToItem(ev, il, lang));
+    const holidays1 = holidays0.filter((ev) => !(ev.getFlags() & flags.SHABBAT_MEVARCHIM));
+    item.holidays = holidays1.map((ev) => holidayEvToItem(ev, il, lang));
+    const roshChodeshToday = holidays1.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
+    if (!roshChodeshToday) {
+      const tommorow = hd.next().getDate();
+      if (tommorow === 30 || tommorow === 1) {
+        item.holidays.push({title: 'Machar Chodesh'});
+      }
+    }
   }
   return item;
 }
