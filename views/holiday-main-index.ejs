@@ -1,5 +1,5 @@
 <%- await include('partials/header2.ejs', {
-  title: 'Jewish Holidays - Hebcal',
+  title: 'Jewish Holidays' + (yearOverride ? ` ${hyear - 1}-${hyear + 4}` : '') + ' - Hebcal',
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%=il?'?i=on':''%>">
 <meta name="description" content="Dates of major and minor Jewish holidays for years <%=today.year() - 1%>-<%=today.year()+6%>. Links to pages describing observance and customs, holiday Torah readings.">
@@ -9,7 +9,7 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-8">
-<h2>Jewish Holidays</h2>
+<h2>Jewish Holidays <%= yearOverride ? `${hyear - 1}-${hyear + 4}` : '' %></h2>
 <p>Dates of major and minor Jewish holidays as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
@@ -74,9 +74,18 @@ nightfall on the second date specified.</p>
 <col style="width:200px"><col><col><col><col><col><col>
 </colgroup>
 <thead class="table-group-divider">
-<tr><th>Holiday</th>
+<tr><th>
+<div><a href="/holidays/?year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+Holiday
+</th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
-<th><a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
+<th>
+<% if (yr === hyear + 4) { %>
+<div class="float-end">
+<a href="/holidays/?year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
+</div>
+<% } %>
+<a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
 <br><small class="<%= yr === hyear ? 'text-burgundy' : 'text-body-secondary' %>"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
 <% } %>
 </tr>

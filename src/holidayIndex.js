@@ -256,7 +256,8 @@ const rchNames = [
 
 export async function holidayMainIndex(ctx) {
   const dt = new Date();
-  const hyear = getDefaultHebrewYear(new HDate(dt));
+  const hyear0 = parseInt(ctx.request.query?.year, 10);
+  const hyear = hyear0 || getDefaultHebrewYear(new HDate(dt));
   const tishrei1 = new HDate(1, 'Tishrei', hyear);
   const items = {};
   for (const catId of Object.keys(categories)) {
@@ -305,6 +306,7 @@ export async function holidayMainIndex(ctx) {
     il,
     q,
     amp: (q.amp === '1') ? true : undefined,
+    yearOverride: Boolean(hyear0),
   });
 }
 
