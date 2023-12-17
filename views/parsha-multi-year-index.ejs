@@ -1,7 +1,7 @@
 <%- await include('partials/header2.ejs', {
   title: 'Weekly Torah Readings - Parashat haShavua - Hebcal',
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/sedrot/grid<%=il?'?i=on':''%>">
+<link rel="canonical" href="<%=canonical.href%>">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -10,7 +10,7 @@
 <div class="col">
 <h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
+The <a href="<%=inverse.href%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
 by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <div class="table-responsive">
 <table class="table table-striped">

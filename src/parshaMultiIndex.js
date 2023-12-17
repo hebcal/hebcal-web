@@ -46,6 +46,18 @@ export async function parshaMultiYearIndex(ctx) {
       }
     }
   }
+  const canonical = new URL('https://www.hebcal.com/sedrot/grid');
+  const inverse = new URL(canonical);
+  const yearOverride = Boolean(hyear0);
+  if (il) {
+    canonical.searchParams.set('i', 'on');
+  } else {
+    inverse.searchParams.set('i', 'on');
+  }
+  if (yearOverride) {
+    canonical.searchParams.set('year', hyear0);
+    inverse.searchParams.set('year', hyear0);
+  }
   ctx.lastModified = dt;
   await ctx.render('parsha-multi-year-index', {
     il,
@@ -53,6 +65,8 @@ export async function parshaMultiYearIndex(ctx) {
     parshaByBook,
     torahBookNames,
     byParsha,
-    yearOverride: Boolean(hyear0),
+    yearOverride,
+    canonical,
+    inverse,
   });
 }

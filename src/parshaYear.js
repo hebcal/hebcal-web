@@ -1,12 +1,10 @@
 /* eslint-disable require-jsdoc */
-import {HebrewCalendar, HDate, flags, Locale} from '@hebcal/core';
-import {getLeyningKeyForEvent, getLeyningForHoliday,
-  getLeyningForParshaHaShavua} from '@hebcal/leyning';
+import {HebrewCalendar, HDate, flags} from '@hebcal/core';
+import {getLeyningKeyForEvent} from '@hebcal/leyning';
 import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {makeAnchor} from '@hebcal/rest-api';
-import {localeMap, shortenUrl} from './common';
+import {localeMap, shortenUrl, lgToLocale} from './common';
 import {downloadHref2} from './makeDownloadProps';
 import createError from 'http-errors';
 
@@ -20,55 +18,18 @@ export async function parshaYear(ctx) {
   }
   const q = ctx.request.query;
   const il = q.i === 'on';
-  const lang = q.lg || 's';
-  const events0 = HebrewCalendar.calendar({
+  const lang = lgToLocale[q.lg || 's'] || q.lg;
+  const events = HebrewCalendar.calendar({
     sedrot: true,
     year: hyear,
     isHebrewYear: true,
     il,
-    locale: lang,
+    noHolidays: true,
   });
-  const events = events0.filter((ev) => ev.getDesc() !== 'Rosh Chodesh Tevet');
-  const parshaEvents = events.filter((ev) => ev.getFlags() === flags.PARSHA_HASHAVUA);
-  const parshaDates = parshaEvents.reduce((set, ev) => {
-    set.add(ev.getDate().toString());
-    return set;
-  }, new Set());
-
-  const locale0 = Locale.getLocaleName();
-  const locale = localeMap[locale0] || 'en';
+  const locale = localeMap[lang] || 'en';
   const items = [];
   for (const ev of events) {
-    const isParsha = ev.getFlags() === flags.PARSHA_HASHAVUA;
-    const hd = ev.getDate();
-    if (!isParsha && parshaDates.has(hd.toString())) {
-      continue;
-    }
-    const reading = isParsha ?
-      getLeyningForParshaHaShavua(ev, il) :
-      getLeyningForHoliday(ev, il);
-    if (!reading) {
-      continue;
-    }
-    const key = getLeyningKeyForEvent(ev, il);
-    const desc = ev.basename();
-    const title0 = ev.render('en');
-    const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : Locale.gettext(key, lang);
-    const hebrew0 = Locale.lookupTranslation(key, 'he') || ev.render('he');
-    const hebrew = isParsha ? hebrew0.substring(hebrew0.indexOf(' ') + 1) : hebrew0;
-    const item = {
-      event: ev,
-      anchor: makeAnchor(desc),
-      title,
-      hebrew,
-      d: dayjs(hd.greg()).locale(locale),
-      hd,
-      reading,
-      url: shortenUrl(ev.url()),
-    };
-    if (!isParsha) {
-      item.url += '#r-' + item.d.format('YYYY-MM-DD');
-    }
+    const item = makeItem(ev, locale, il, lang);
     items.push(item);
   }
   const dlfilename = `hebcal_${hyear}h.ics`;
@@ -89,5 +50,48 @@ export async function parshaYear(ctx) {
     dlfilename,
     dlhref,
     triCycleStartYear: hyear >= 5744 ? Triennial.getCycleStartYear(hyear) : null,
+    lang,
+    locale,
   });
+}
+
+function makeItem(ev, locale, il, lang) {
+  const hd = ev.getDate();
+  const d = dayjs(hd.greg()).locale(locale);
+  const title0 = ev.render('en');
+  const title = title0.substring(title0.indexOf(' ') + 1);
+  const hebrew0 = ev.render('he');
+  const hebrew = hebrew0.substring(hebrew0.indexOf(' ') + 1);
+  const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  const holidays = holidays0.map((ev) => {
+    const mask = ev.getFlags();
+    const item = {
+      title: ev.render(lang),
+    };
+    const url = ev.url();
+    if (url) {
+      item.url = shortenUrl(url);
+    }
+    if (mask & flags.ROSH_CHODESH) {
+      return item;
+    } else if (mask & flags.SHABBAT_MEVARCHIM) {
+      item.title = item.title.substring(item.title.indexOf(' ') + 1);
+      return item;
+    }
+    const key = getLeyningKeyForEvent(ev, il);
+    if (key) {
+      item.title = key;
+    }
+    return item;
+  });
+  const item = {
+    event: ev,
+    title,
+    hebrew,
+    d,
+    hd,
+    url: shortenUrl(ev.url()),
+    holidays,
+  };
+  return item;
 }
