@@ -159,6 +159,7 @@ export async function holidayDetail(ctx) {
     title,
     year,
     holiday,
+    holidayQ: holiday.replace(/'/g, '’'),
     holidayAnchor,
     hebrew,
     descrShort: descrShort.replace(/'/g, '’'),

@@ -108,7 +108,7 @@ Holiday
 <tbody class="table-group-divider">
 <% for (const [holiday,arr] of Object.entries(items[catId])) { %>
 <% let first = arr.find((item) => typeof item !== 'undefined'); %>
-<tr><td><a href="<%=first.id%><%=il||first.ilOnly?'?i=on':''%>" title="<%=first.descrShort%>"><%=holiday%></a></td>
+<tr><td><a href="<%=first.id%><%=il||first.ilOnly?'?i=on':''%>" title="<%=first.descrShort%>"><%=holiday.replace(/'/g, '’')%></a></td>
 <% for (const item of arr) { %>
 <td><% if (typeof item !== 'undefined') { %><%-item.dates%><% } %></td>
 <% } %>

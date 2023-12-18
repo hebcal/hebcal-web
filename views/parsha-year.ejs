@@ -47,9 +47,9 @@ for (const item of items) { %>
   <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== prev ? item.d.format(', YYYY') : '' %></time></td>
   <td class="text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></td>
   <td><ul class="list-unstyled mb-0">
-  <li><a href="<%=item.url%>"><%= item.title %></a></li>
+  <li><a href="<%=item.url%>"><%= item.title.replace(/'/g, '’') %></a></li>
 <% for (const holiday of item.holidays) { %>
-  <li class="mt-2"><% if (holiday.url) { %><a class="link-success" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
+  <li class="mt-2"><% if (holiday.url) { %><a class="link-success" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title.replace(/'/g, '’')%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
 <% } %>
   </ul></td>
 </tr>

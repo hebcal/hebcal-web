@@ -6,7 +6,7 @@
 <% if (typeof prev !== 'undefined') { %><link rel="prev" href="<%=prev.href%>"><% } %>
 <% if (typeof next !== 'undefined') { %><link rel="next" href="<%=next.href%>"><% } %>
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
-<meta name="description" content="<%=descFirstTwo%> <%=holiday%> <%=nextObserved%>">
+<meta name="description" content="<%=descFirstTwo%> <%=holidayQ%> <%=nextObserved%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
@@ -23,12 +23,12 @@
 <div class="col-md-10">
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 
-<h2><%=holiday.replace(/'/g, '’')%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
+<h2><%=holidayQ%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
 <% if (year && year < 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h4 class="text-body-secondary"><%=descrShort%>&nbsp;<%=emoji%></h4>
-<p class="lead mt-3"><%=holiday%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
+<p class="lead mt-3"><%=holidayQ%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
 <% if (currentItem.parsha) { %>
  This corresponds to Parashat <%= currentItem.parsha.join('-') %>.
 <% } %>
@@ -104,7 +104,7 @@ Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <% for (let i = 0; i < pesachSukkotItems.length; i++) { const item = pesachSukkotItems[i]; %>
 <tr>
 <td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
-<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc%></td>
+<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc.replace(/'/g, '’')%></td>
 </tr>
 <% } %>
 </tbody>
@@ -143,7 +143,7 @@ data-ad-slot="5342180883"></ins>
 <% } -%>
 </div><!-- .d-print-none -->
 
-<h3 id="dates">Dates for <%=holiday.replace(/'/g, '’')%><% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></h3>
+<h3 id="dates">Dates for <%=holidayQ%><% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></h3>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup><col><col><col><col></colgroup>
@@ -153,7 +153,7 @@ data-ad-slot="5342180883"></ins>
 <tbody class="table-group-divider">
 <% occursOn.forEach((item) => { %>
 <tr>
-<td><a href="<%=item.href%>"><%=holiday%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+<td><a href="<%=item.href%>"><%=holidayQ%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
 <td><time class="<%=item.ppf === 'current' ? 'text-burgundy' : item.ppf%>" datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
@@ -252,7 +252,7 @@ The Holy Scriptures</a></em>
 <dd>Jewish Publication Society
 <% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-<dt><a class="outbound" href="<%=meta.wikipedia.href%>">"<%=meta.wikipedia.title%>" in <em>Wikipedia: The Free Encyclopedia</em></a>
+<dt><a class="outbound" href="<%=meta.wikipedia.href%>">“<%=meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>
@@ -308,8 +308,8 @@ Thank you for supporting Hebcal.</p>
 </div>
 <% if (typeof prev !== 'undefined' || typeof next !== 'undefined') { %>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name%></a></div><% } %>
-<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
+<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name.replace(/'/g, '’')%></a></div><% } %>
+<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name.replace(/'/g, '’')%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
 <%- await include('partials/footer.ejs') _%>
