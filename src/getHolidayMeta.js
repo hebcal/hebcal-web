@@ -1,8 +1,8 @@
 import createError from 'http-errors';
 import {basename} from 'path';
-import holidayMeta from './holidays.json';
 import probe from 'probe-image-size';
 import fs from 'fs';
+import {holidayMeta} from './holidayMeta.js';
 
 const primarySource = {
   'hebcal.com': 'Hebcal',

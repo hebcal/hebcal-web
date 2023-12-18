@@ -7,10 +7,9 @@ import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
   getBaseFromPath, empty, langNames} from './common.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
-  parshiot54,
+  parshiot54, drash,
   lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon.js';
 import dayjs from 'dayjs';
-import drash from './drash.json';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 

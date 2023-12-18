@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -16,8 +16,12 @@
     "clientapp": "hebcal-app-5.0.3.min.js",
     "typeaheadcss": "typeahead2.css"
   },
+  "type": "module",
+  "engines": {
+    "node": ">= 20.0.0"
+  },
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "exit 0",
     "deploy": "./deploy.sh",
     "start": "node dist/app-www.js",
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto",
@@ -29,10 +33,6 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.6",
-    "@babel/preset-env": "^7.23.6",
-    "@babel/register": "^7.22.15",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-terser": "^0.4.4",

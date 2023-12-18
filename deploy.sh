@@ -12,7 +12,7 @@ if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then
   node -e "import('geolite2-redist').then(geolite => geolite.downloadDbs())"
 fi
 
-mkdir -p ./dist && cp ./src/*.json ./dist
+mkdir -p ./dist && rsync -av ./src/ ./dist/
 
 npx rollup -c
 

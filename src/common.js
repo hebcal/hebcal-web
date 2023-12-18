@@ -1,19 +1,21 @@
 import {HDate, Location, months, HebrewCalendar, flags, greg, Zmanim} from '@hebcal/core';
 import '@hebcal/learning';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity.js';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 import {find as geoTzFind} from 'geo-tz';
-import pkg from '../package.json';
 import {basename} from 'path';
+import {readJSON} from './readJSON.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+const pkg = readJSON('../package.json');
 
 export const langNames = {
   's': ['Sephardic transliterations', null],

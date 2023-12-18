@@ -17,8 +17,9 @@ import {yahrzeitDownload} from './yahrzeit.js';
 import {MysqlDb} from './db.js';
 import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
-import redirectMap from './redirectDownload.json';
+import {readJSON} from './readJSON.js';
 
+const redirectMap = readJSON('./redirectDownload.json');
 const app = new Koa();
 
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
@@ -199,8 +200,8 @@ app.use(async function redirLegacy(ctx, next) {
   if (ctx.request.querystring.length === 0) {
     const rpath = ctx.request.path;
     const rpath0 = rpath.substring(0, rpath.length - 1);
-    if (typeof redirectMap[rpath] !== 'undefined' || typeof redirectMap[rpath0] !== 'undefined') {
-      const destination = redirectMap[rpath] || redirectMap[rpath0];
+    const destination = redirectMap[rpath] || redirectMap[rpath0];
+    if (typeof destination !== 'undefined') {
       ctx.status = 301;
       ctx.redirect(destination);
       return;

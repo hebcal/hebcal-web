@@ -2,9 +2,11 @@ import {Locale, parshiot} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {bookId, sefariaAliyahHref, langNames} from './common.js';
-import drash from './drash.json';
 import {transliterate} from 'transliteration';
 import {distance, closest} from 'fastest-levenshtein';
+import {readJSON} from './readJSON.js';
+
+export const drash = readJSON('./drash.json');
 
 export const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
 export const parshaByBook = new Map();

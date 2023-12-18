@@ -1,8 +1,10 @@
 import {Event, flags, HDate} from '@hebcal/core';
 import {IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import kindness from './areyvut-kindness-a-day.json';
 import fs from 'fs';
+import {readJSON} from './readJSON.js';
+
+const kindness = readJSON('./areyvut-kindness-a-day.json');
 
 const icalStream = fs.createWriteStream('kindness.ics');
 const csvStream = fs.createWriteStream('kindness.csv');

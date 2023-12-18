@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
-import holidayMeta from './holidays.json';
 import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
+import {holidayMeta} from './holidayMeta.js';
 
 export const holidays = new Map();
 export const israelOnly = new Set();

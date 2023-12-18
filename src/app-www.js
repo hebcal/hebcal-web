@@ -10,6 +10,7 @@ import xResponseTime from 'koa-better-response-time';
 import ini from 'ini';
 import maxmind from 'maxmind';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import os from 'os';
 import zlib from 'zlib';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
@@ -17,7 +18,12 @@ import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
 import {stopIfTimedOut} from './common.js';
-import pkg from '../package.json';
+import {readJSON} from './readJSON.js';
+
+const pkg = readJSON('../package.json');
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DOCUMENT_ROOT = '/var/www/html';
 

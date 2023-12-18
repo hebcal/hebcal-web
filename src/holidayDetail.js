@@ -11,7 +11,7 @@ import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath}
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon.js';
-import holidayMeta from './holidays.json';
+import {holidayMeta} from './holidayMeta.js';
 import {distance, closest} from 'fastest-levenshtein';
 import {getHolidayMeta} from './getHolidayMeta.js';
 

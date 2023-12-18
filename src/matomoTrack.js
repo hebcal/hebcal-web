@@ -1,5 +1,7 @@
 import http from 'node:http';
-import pkg from '../package.json';
+import {readJSON} from './readJSON.js';
+
+const pkg = readJSON('../package.json');
 
 const knownRobots = {
   'check_http': 1,

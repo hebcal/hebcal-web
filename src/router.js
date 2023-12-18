@@ -16,7 +16,6 @@ import {hebcalApp} from './hebcal.js';
 import {holidaysApp} from './holidayIndex.js';
 import {homepage} from './homepage.js';
 import {parshaCsv} from './parsha-csv.js';
-import redirectMap from './redirect.json';
 import {parshaIndex} from './parshaIndex.js';
 import {parshaYear} from './parshaYear.js';
 import {parshaMultiYearIndex} from './parshaMultiIndex.js';
@@ -35,6 +34,9 @@ import {getLeyning} from './leyning.js';
 import {sendGif} from './sendGif.js';
 import {dailyLearningApp} from './dailyLearning.js';
 import {delCookie} from './delCookie.js';
+import {readJSON} from './readJSON.js';
+
+const redirectMap = readJSON('./redirect.json');
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
