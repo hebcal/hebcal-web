@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import holidayMeta from './holidays.json';
+import holidayMeta from './holidays.json' assert {type: "json"};
 import {access} from 'node:fs/promises';
 import fs from 'node:fs';
 import {WritableStream} from 'node:stream/web';
