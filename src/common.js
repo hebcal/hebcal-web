@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
-import {nearestCity} from './nearestCity';
+import {nearestCity} from './nearestCity.js';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
 import {find as geoTzFind} from 'geo-tz';

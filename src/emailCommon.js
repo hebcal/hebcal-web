@@ -1,4 +1,4 @@
-import {getIpAddress} from './common';
+import {getIpAddress} from './common.js';
 import nodemailer from 'nodemailer';
 import {htmlToText} from 'nodemailer-html-to-text';
 

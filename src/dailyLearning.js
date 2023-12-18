@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import {isoDateStringToDate, localeMap, httpRedirect} from './common';
+import {isoDateStringToDate, localeMap, httpRedirect} from './common.js';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
-import {makeLeyningHtmlFromParts} from './parshaCommon';
+import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 
 const currentYear = new Date().getFullYear();
 

@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
-import {cacheControl, httpRedirect, getDefaultHebrewYear} from './common';
+import {cacheControl, httpRedirect, getDefaultHebrewYear} from './common.js';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
-import {getHolidayMeta} from './getHolidayMeta';
+import {getHolidayMeta} from './getHolidayMeta.js';
 
 const CACHE_CONTROL_30DAYS = cacheControl(30);
 const CACHE_CONTROL_1_YEAR = cacheControl(365);

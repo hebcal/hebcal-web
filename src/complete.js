@@ -1,4 +1,4 @@
-import {cacheControl} from './common';
+import {cacheControl} from './common.js';
 import flag from 'emoji-flag';
 
 const NOTFOUND = {error: 'Not Found'};

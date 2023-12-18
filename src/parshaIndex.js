@@ -1,10 +1,10 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
-import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common';
-import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon';
+import {setDefautLangTz, getSunsetAwareDate, langNames, expiresSaturdayNight} from './common.js';
+import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon.js';
 import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
-import {makeLeyningHtmlFromParts} from './parshaCommon';
+import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 
 const myLangNames = Object.assign({

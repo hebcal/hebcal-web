@@ -4,8 +4,8 @@ import {getLeyningKeyForEvent} from '@hebcal/leyning';
 import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {localeMap, shortenUrl, lgToLocale} from './common';
-import {downloadHref2} from './makeDownloadProps';
+import {localeMap, shortenUrl, lgToLocale} from './common.js';
+import {downloadHref2} from './makeDownloadProps.js';
 import createError from 'http-errors';
 
 export async function parshaYear(ctx) {

@@ -1,9 +1,9 @@
 /* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
-  validateEmail, queryDefaultCandleMins} from './common';
-import {mySendMail, getImgOpenHtml} from './emailCommon';
-import {matomoTrack} from './matomoTrack';
+  validateEmail, queryDefaultCandleMins} from './common.js';
+import {mySendMail, getImgOpenHtml} from './emailCommon.js';
+import {matomoTrack} from './matomoTrack.js';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';

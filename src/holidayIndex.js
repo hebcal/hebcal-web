@@ -5,12 +5,12 @@ import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {getDefaultHebrewYear, getNumYears} from './common';
-import {makeDownloadProps} from './makeDownloadProps';
-import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon';
-import {holidayDetail} from './holidayDetail';
-import {holidayPdf} from './holidayPdf';
-import {getHolidayMeta} from './getHolidayMeta';
+import {getDefaultHebrewYear, getNumYears} from './common.js';
+import {makeDownloadProps} from './makeDownloadProps.js';
+import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon.js';
+import {holidayDetail} from './holidayDetail.js';
+import {holidayPdf} from './holidayPdf.js';
+import {getHolidayMeta} from './getHolidayMeta.js';
 
 dayjs.extend(isSameOrAfter);
 

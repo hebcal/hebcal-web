@@ -2,8 +2,8 @@ import {HebrewCalendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {createPdfDoc, renderPdf} from './pdf';
-import {lgToLocale, localeMap, eTagFromOptions, cacheControl} from './common';
+import {createPdfDoc, renderPdf} from './pdf.js';
+import {lgToLocale, localeMap, eTagFromOptions, cacheControl} from './common.js';
 
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 

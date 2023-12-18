@@ -1,4 +1,4 @@
-import {empty, makeGregDate} from './common';
+import {empty, makeGregDate} from './common.js';
 import dayjs from 'dayjs';
 
 /**

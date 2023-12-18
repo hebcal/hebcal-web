@@ -2,18 +2,18 @@
 import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent, HolidayEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
-import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon';
+import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath} from './common';
+import {empty, httpRedirect, wrapHebrewInSpans, langNames, off, getBaseFromPath} from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
-  wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon';
+  wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon.js';
 import holidayMeta from './holidays.json';
 import {distance, closest} from 'fastest-levenshtein';
-import {getHolidayMeta} from './getHolidayMeta';
+import {getHolidayMeta} from './getHolidayMeta.js';
 
 const holidayYearRe = /^([^\d]+)-(\d+)$/;
 

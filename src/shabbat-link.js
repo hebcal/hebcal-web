@@ -1,5 +1,5 @@
 /* eslint-disable require-jsdoc */
-import {getLocationFromQuery, langNames, makeGeoUrlArgs2} from './common';
+import {getLocationFromQuery, langNames, makeGeoUrlArgs2} from './common.js';
 
 export async function shabbatJsLink(ctx) {
   const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};

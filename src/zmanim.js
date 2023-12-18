@@ -2,7 +2,7 @@ import {Zmanim, TimedEvent, HDate, flags,
   HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
 import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
   CACHE_CONTROL_7DAYS,
-  lgToLocale, eTagFromOptions} from './common';
+  lgToLocale, eTagFromOptions} from './common.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

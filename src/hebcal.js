@@ -9,8 +9,8 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
-  localeMap, eTagFromOptions, langNames} from './common';
-import {makeDownloadProps} from './makeDownloadProps';
+  localeMap, eTagFromOptions, langNames} from './common.js';
+import {makeDownloadProps} from './makeDownloadProps.js';
 import {greg, HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar,
   eventToClassicApiObject,
@@ -23,7 +23,7 @@ import {eventsToClassicApi, eventToFullCalendar,
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
-import './dayjs-locales';
+import './dayjs-locales.js';
 import '@hebcal/locales';
 
 dayjs.extend(localeData);

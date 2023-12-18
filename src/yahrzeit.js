@@ -5,12 +5,12 @@ import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts,
   hebcalFormDefaults,
-  doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common';
+  doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
-  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
-import {makeLogInfo} from './logger';
+  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
+import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 import util from 'util';
 import mmh3 from 'murmurhash3';

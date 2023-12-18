@@ -1,13 +1,13 @@
 /* eslint-disable require-jsdoc */
-import {getIpAddress, validateEmail, empty} from './common';
-import {mySendMail, getImgOpenHtml} from './emailCommon';
+import {getIpAddress, validateEmail, empty} from './common.js';
+import {mySendMail, getImgOpenHtml} from './emailCommon.js';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   getYahrzeitIds,
-  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon';
+  getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {ulid} from 'ulid';
 import {basename} from 'path';
-import {matomoTrack} from './matomoTrack';
-import {makeLogInfo} from './logger';
+import {matomoTrack} from './matomoTrack.js';
+import {makeLogInfo} from './logger.js';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';

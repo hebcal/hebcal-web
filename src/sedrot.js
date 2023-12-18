@@ -5,10 +5,10 @@ import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning'
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {httpRedirect, makeGregDate, sefariaAliyahHref,
-  getBaseFromPath, empty, langNames} from './common';
+  getBaseFromPath, empty, langNames} from './common.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   parshiot54,
-  lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon';
+  lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import drash from './drash.json';
 

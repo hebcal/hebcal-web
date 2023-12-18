@@ -6,12 +6,12 @@ import {empty, makeGregDate, setDefautLangTz, httpRedirect, lgToLocale,
   CACHE_CONTROL_7DAYS, cacheControl,
   isoDateStringToDate,
   getDefaultYear, urlArgs,
-} from './common';
+} from './common.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
 import createError from 'http-errors';
 import {pad4, pad2, makeAnchor} from '@hebcal/rest-api';
-import './dayjs-locales';
-import {gematriyaDate} from './gematriyaDate';
+import './dayjs-locales.js';
+import {gematriyaDate} from './gematriyaDate.js';
 
 const CACHE_CONTROL_ONE_YEAR = cacheControl(365);
 /**

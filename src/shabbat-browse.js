@@ -8,7 +8,7 @@ import {basename} from 'path';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import {langTzDefaults, CACHE_CONTROL_7DAYS, expiresSaturdayNight,
-  queryDefaultCandleMins} from './common';
+  queryDefaultCandleMins} from './common.js';
 import flag from 'emoji-flag';
 
 dayjs.extend(utc);

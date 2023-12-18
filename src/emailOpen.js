@@ -1,6 +1,6 @@
-import {matomoTrack} from './matomoTrack';
-import {getIpAddress, empty} from './common';
-import {sendGif} from './sendGif';
+import {matomoTrack} from './matomoTrack.js';
+import {getIpAddress, empty} from './common.js';
+import {sendGif} from './sendGif.js';
 import {transliterate} from 'transliteration';
 
 // eslint-disable-next-line require-jsdoc

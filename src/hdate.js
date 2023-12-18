@@ -1,12 +1,12 @@
 /* eslint-disable require-jsdoc */
 import {HDate, Locale, DailyLearning} from '@hebcal/core';
-import {gematriyaDate} from './gematriyaDate';
-import {CACHE_CONTROL_7DAYS, getTodayDate} from './common';
+import {gematriyaDate} from './gematriyaDate.js';
+import {CACHE_CONTROL_7DAYS, getTodayDate} from './common.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he';
 import send from 'koa-send';
-import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon';
+import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
 const hdateMinDir = '/var/www/dist/views/partials';
 

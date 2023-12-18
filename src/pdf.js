@@ -1,8 +1,8 @@
 import {greg, flags, HebrewCalendar} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
-import './dayjs-locales';
-import {localeMap, locationDefaultCandleMins} from './common';
+import './dayjs-locales.js';
+import {localeMap, locationDefaultCandleMins} from './common.js';
 import {pad4, pad2, appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 
 const PDF_WIDTH = 792;

@@ -4,37 +4,37 @@ import {
   httpRedirect,
   langNames,
   CACHE_CONTROL_IMMUTABLE,
-} from './common';
-import {geoAutoComplete} from './complete';
-import {hebrewDateConverter, dateConverterCsv} from './converter';
-import {emailForm, emailVerify} from './email';
-import {emailOpen} from './emailOpen';
-import {fridgeShabbat} from './fridge';
-import {hdateJavascript, hdateXml, dafYomiRss} from './hdate';
-import {parshaRss} from './parshaRss';
-import {hebcalApp} from './hebcal';
-import {holidaysApp} from './holidayIndex';
-import {homepage} from './homepage';
-import {parshaCsv} from './parsha-csv';
+} from './common.js';
+import {geoAutoComplete} from './complete.js';
+import {hebrewDateConverter, dateConverterCsv} from './converter.js';
+import {emailForm, emailVerify} from './email.js';
+import {emailOpen} from './emailOpen.js';
+import {fridgeShabbat} from './fridge.js';
+import {hdateJavascript, hdateXml, dafYomiRss} from './hdate.js';
+import {parshaRss} from './parshaRss.js';
+import {hebcalApp} from './hebcal.js';
+import {holidaysApp} from './holidayIndex.js';
+import {homepage} from './homepage.js';
+import {parshaCsv} from './parsha-csv.js';
 import redirectMap from './redirect.json';
-import {parshaIndex} from './parshaIndex';
-import {parshaYear} from './parshaYear';
-import {parshaMultiYearIndex} from './parshaMultiIndex';
-import {parshaDetail} from './sedrot';
-import {shabbatApp} from './shabbat';
-import {shabbatBrowse} from './shabbat-browse';
-import {shabbatJsLink} from './shabbat-link';
-import {shortUrlRedir} from './shortUrlRedir';
-import {yahrzeitApp} from './yahrzeit';
-import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email';
-import {getZmanim} from './zmanim';
-import {hebrewDateCalc} from './calc';
-import {omerApp} from './omerApp';
-import {sitemapZips} from './sitemapZips';
-import {getLeyning} from './leyning';
-import {sendGif} from './sendGif';
-import {dailyLearningApp} from './dailyLearning';
-import {delCookie} from './delCookie';
+import {parshaIndex} from './parshaIndex.js';
+import {parshaYear} from './parshaYear.js';
+import {parshaMultiYearIndex} from './parshaMultiIndex.js';
+import {parshaDetail} from './sedrot.js';
+import {shabbatApp} from './shabbat.js';
+import {shabbatBrowse} from './shabbat-browse.js';
+import {shabbatJsLink} from './shabbat-link.js';
+import {shortUrlRedir} from './shortUrlRedir.js';
+import {yahrzeitApp} from './yahrzeit.js';
+import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email.js';
+import {getZmanim} from './zmanim.js';
+import {hebrewDateCalc} from './calc.js';
+import {omerApp} from './omerApp.js';
+import {sitemapZips} from './sitemapZips.js';
+import {getLeyning} from './leyning.js';
+import {sendGif} from './sendGif.js';
+import {dailyLearningApp} from './dailyLearning.js';
+import {delCookie} from './delCookie.js';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,

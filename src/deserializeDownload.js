@@ -1,4 +1,4 @@
-import DownloadProtoBuf from './download_pb';
+import DownloadProtoBuf from './download_pb.js';
 
 /**
  * @param {string} data

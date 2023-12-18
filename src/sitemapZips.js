@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import {cacheControl} from './common';
+import {cacheControl} from './common.js';
 
 // eslint-disable-next-line require-jsdoc
 export async function sitemapZips(ctx) {

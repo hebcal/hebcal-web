@@ -5,12 +5,12 @@ import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   processCookieAndQuery, urlArgs,
   shortenUrl,
   makeGeoUrlArgs2,
-  getSunsetAwareDate} from './common';
+  getSunsetAwareDate} from './common.js';
 import {pad2, pad4} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import './dayjs-locales';
+import './dayjs-locales.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

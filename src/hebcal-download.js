@@ -2,11 +2,11 @@ import {flags} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
-import {createPdfDoc, renderPdf} from './pdf';
+import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
-  makeIcalOpts, getNumYears, localeMap} from './common';
-import {lookupParshaMeta} from './parshaCommon';
+  makeIcalOpts, getNumYears, localeMap} from './common.js';
+import {lookupParshaMeta} from './parshaCommon.js';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx

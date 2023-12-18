@@ -12,14 +12,14 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
-  localeMap, makeHebrewCalendar} from './common';
+  localeMap, makeHebrewCalendar} from './common.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss2, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import './dayjs-locales';
+import './dayjs-locales.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 
 dayjs.extend(utc);

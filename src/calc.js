@@ -1,5 +1,5 @@
 import {HDate} from '@hebcal/core';
-import {empty, makeHebDate} from './common';
+import {empty, makeHebDate} from './common.js';
 
 // eslint-disable-next-line require-jsdoc
 function makeHebDateOrToday(hyStr, hmStr, hdStr) {

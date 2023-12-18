@@ -12,11 +12,11 @@ import maxmind from 'maxmind';
 import path from 'path';
 import os from 'os';
 import zlib from 'zlib';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {wwwRouter} from './router';
-import {MysqlDb} from './db';
-import {stopIfTimedOut} from './common';
+import {wwwRouter} from './router.js';
+import {MysqlDb} from './db.js';
+import {stopIfTimedOut} from './common.js';
 import pkg from '../package.json';
 
 const DOCUMENT_ROOT = '/var/www/html';

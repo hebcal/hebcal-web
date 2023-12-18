@@ -1,7 +1,7 @@
 import pino from 'pino';
 import mmh3 from 'murmurhash3';
 import util from 'util';
-import {matomoTrack} from './matomoTrack';
+import {matomoTrack} from './matomoTrack.js';
 
 // return array that have 4 elements of 32bit integer
 const murmur128 = util.promisify(mmh3.murmur128);

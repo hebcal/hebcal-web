@@ -1,7 +1,7 @@
 import {Locale, parshiot} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
-import {bookId, sefariaAliyahHref, langNames} from './common';
+import {bookId, sefariaAliyahHref, langNames} from './common.js';
 import drash from './drash.json';
 import {transliterate} from 'transliteration';
 import {distance, closest} from 'fastest-levenshtein';

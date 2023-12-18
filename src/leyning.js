@@ -1,7 +1,7 @@
 import {ParshaEvent} from '@hebcal/core';
 import {getLeyningOnDate} from '@hebcal/leyning';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
-import {isoDateStringToDate, empty} from './common';
+import {isoDateStringToDate, empty} from './common.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';

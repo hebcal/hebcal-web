@@ -1,7 +1,7 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'path';
-import {urlArgsObj, empty, off, isoDateStringToDate} from './common';
-import DownloadProtoBuf from './download_pb';
+import {urlArgsObj, empty, off, isoDateStringToDate} from './common.js';
+import DownloadProtoBuf from './download_pb.js';
 
 const dlPrefix = process.env.NODE_ENV == 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
