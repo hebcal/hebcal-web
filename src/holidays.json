@@ -391,7 +391,7 @@
  },
  "Rosh Chodesh Adar": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/month-adar/"
+   "href": "https://www.ou.org/holidays/month-adar/"
   },
   "items": [
    "Rosh Chodesh Adar",
@@ -409,7 +409,7 @@
  },
  "Rosh Chodesh Adar I": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/month-adar/"
+   "href": "https://www.ou.org/holidays/month-adar/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -423,7 +423,7 @@
  },
  "Rosh Chodesh Adar II": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/month-adar/"
+   "href": "https://www.ou.org/holidays/month-adar/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -437,7 +437,7 @@
  },
  "Rosh Chodesh Av": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/the_month_of_av/"
+   "href": "https://www.ou.org/holidays/the_month_of_av/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -451,7 +451,7 @@
  },
  "Rosh Chodesh Cheshvan": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/cheshvan/"
+   "href": "https://www.ou.org/holidays/cheshvan/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -465,7 +465,7 @@
  },
  "Rosh Chodesh Elul": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/rosh_chodesh_elul1/"
+   "href": "https://www.ou.org/holidays/rosh_chodesh_elul1/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -479,7 +479,7 @@
  },
  "Rosh Chodesh Iyyar": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/rosh_chodesh_iyar/"
+   "href": "https://www.ou.org/holidays/rosh_chodesh_iyar/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -493,7 +493,7 @@
  },
  "Rosh Chodesh Kislev": {
   "about": {
-   "href": "https://www.ou.org/holidays/chanukah/the_month_of_kislev/"
+   "href": "https://www.ou.org/holidays/the_month_of_kislev/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -507,7 +507,7 @@
  },
  "Rosh Chodesh Nisan": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/rosh_chodesh_nisan/"
+   "href": "https://www.ou.org/holidays/rosh_chodesh_nisan/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -521,7 +521,7 @@
  },
  "Rosh Chodesh Sh'vat": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/month-shevat/"
+   "href": "https://www.ou.org/holidays/month-shevat/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -535,7 +535,7 @@
  },
  "Rosh Chodesh Sivan": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/rosh_chodesh_sivan/"
+   "href": "https://www.ou.org/holidays/rosh_chodesh_sivan/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -549,7 +549,7 @@
  },
  "Rosh Chodesh Tamuz": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/the_month_of_tammuz/"
+   "href": "https://www.ou.org/holidays/the_month_of_tammuz/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -563,7 +563,7 @@
  },
  "Rosh Chodesh Tevet": {
   "about": {
-   "href": "https://www.ou.org/holidays/months/rosh_chodesh_tevet/"
+   "href": "https://www.ou.org/holidays/rosh_chodesh_tevet/"
   },
   "books": [{
     "ASIN": "1683365852",
@@ -652,7 +652,7 @@
  },
  "Shabbat Chazon": {
   "about": {
-   "href": "https://www.ou.org/holidays/the-three-weeks/shabbat_chazon/"
+   "href": "https://www.ou.org/holidays/shabbat_chazon/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Chazon_–_of_Vision",
@@ -661,7 +661,7 @@
  },
  "Shabbat HaChodesh": {
   "about": {
-   "href": "https://www.ou.org/holidays/shabbat/four-shabbatot/"
+   "href": "https://www.ou.org/holidays/four-shabbatot/"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaChodesh",
