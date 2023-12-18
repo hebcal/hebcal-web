@@ -5,9 +5,9 @@ import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
   lgToLocale, eTagFromOptions} from './common.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import {eventsToIcalendar, IcalEvent} from '@hebcal/icalendar';
 import {locationToPlainObj} from '@hebcal/rest-api';
 

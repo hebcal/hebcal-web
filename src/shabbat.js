@@ -17,8 +17,8 @@ import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
   eventsToRss2, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import './dayjs-locales.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 

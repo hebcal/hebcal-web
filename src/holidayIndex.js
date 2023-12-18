@@ -2,7 +2,7 @@
 import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {getDefaultHebrewYear, getNumYears} from './common.js';

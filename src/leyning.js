@@ -4,7 +4,7 @@ import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {isoDateStringToDate, empty} from './common.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import {HDate} from '@hebcal/core';
 
 dayjs.extend(isSameOrBefore);

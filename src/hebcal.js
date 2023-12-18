@@ -22,7 +22,7 @@ import {eventsToClassicApi, eventToFullCalendar,
 } from '@hebcal/rest-api';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import dayjs from 'dayjs';
-import localeData from 'dayjs/plugin/localeData';
+import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
 import '@hebcal/locales';
 

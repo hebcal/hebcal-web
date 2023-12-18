@@ -5,8 +5,8 @@ import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults, CACHE_CONTROL_7DAYS, expiresSaturdayNight,
   queryDefaultCandleMins} from './common.js';
 import flag from 'emoji-flag';

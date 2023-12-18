@@ -8,8 +8,8 @@ import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
   getSunsetAwareDate} from './common.js';
 import {pad2, pad4} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import './dayjs-locales.js';
 
 dayjs.extend(utc);
