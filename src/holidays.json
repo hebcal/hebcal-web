@@ -396,67 +396,184 @@
   "items": [
    "Rosh Chodesh Adar",
    "Rosh Chodesh Adar I"
-  ]
+  ],
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Adar I": {
   "about": {
    "href": "https://www.ou.org/holidays/months/month-adar/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Adar II": {
   "about": {
    "href": "https://www.ou.org/holidays/months/month-adar/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Av": {
   "about": {
    "href": "https://www.ou.org/holidays/months/the_month_of_av/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Cheshvan": {
   "about": {
    "href": "https://www.ou.org/holidays/months/cheshvan/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Elul": {
   "about": {
    "href": "https://www.ou.org/holidays/months/rosh_chodesh_elul1/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Iyyar": {
   "about": {
    "href": "https://www.ou.org/holidays/months/rosh_chodesh_iyar/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Kislev": {
   "about": {
    "href": "https://www.ou.org/holidays/chanukah/the_month_of_kislev/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Nisan": {
   "about": {
    "href": "https://www.ou.org/holidays/months/rosh_chodesh_nisan/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Sh'vat": {
   "about": {
    "href": "https://www.ou.org/holidays/months/month-shevat/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Sivan": {
   "about": {
    "href": "https://www.ou.org/holidays/months/rosh_chodesh_sivan/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Tamuz": {
   "about": {
    "href": "https://www.ou.org/holidays/months/the_month_of_tammuz/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Chodesh Tevet": {
   "about": {
    "href": "https://www.ou.org/holidays/months/rosh_chodesh_tevet/"
-  }
+  },
+  "books": [{
+    "ASIN": "1683365852",
+    "author": "Leora Tanenbaum et al",
+    "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
+   },{
+    "ASIN": "1533040605",
+    "author": "Rabbi Yaakov Goldstein",
+    "text": "The Laws & Customs of Rosh Chodesh"
+   }]
  },
  "Rosh Hashana": {
   "about": {
