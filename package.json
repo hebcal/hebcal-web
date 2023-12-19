@@ -44,12 +44,12 @@
     "rollup": "^4.9.1"
   },
   "dependencies": {
-    "@hebcal/core": "^5.0.3",
+    "@hebcal/core": "^5.0.4",
     "@hebcal/geo-sqlite": "^5.0.2",
     "@hebcal/hdate": "^0.9.1",
     "@hebcal/icalendar": "^5.0.2",
     "@hebcal/learning": "^5.0.2",
-    "@hebcal/leyning": "^8.1.1",
+    "@hebcal/leyning": "^8.1.2",
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.0.2",
     "@hebcal/triennial": "^5.0.3",
@@ -75,6 +75,7 @@
     "koa-send": "^5.0.1",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
+    "lru-cache": "^10.1.0",
     "maxmind": "^4.3.18",
     "murmurhash3": "^0.5.0",
     "mysql2": "^3.6.5",

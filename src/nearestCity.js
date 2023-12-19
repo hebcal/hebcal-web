@@ -1,6 +1,7 @@
 import haversine from 'haversine';
+import {LRUCache} from 'lru-cache';
 
-const cityCache = new Map();
+const cityCache = new LRUCache({max: 1000});
 
 /**
  * @return {any}
