@@ -14,15 +14,15 @@ fi
 
 mkdir -p ./dist && rsync -av ./src/ ./dist/
 
+# for testing out of local
+rsync -av ./views/ ./dist/views/
+
 npx rollup -c
 
 compress_file ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_clientapp
 compress_file ./static/i/$npm_package_config_typeaheadcss
 compress_file ./static/i/$npm_package_config_csprite
-
-# for testing out of local
-rsync -av ./views/ ./dist/views/
 
 # deploy for prod
 rsync -av ./fonts/ /var/www/fonts/

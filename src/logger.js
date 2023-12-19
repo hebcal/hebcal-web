@@ -207,3 +207,28 @@ async function makeUuid(ipAddress, userAgent, acceptLanguage) {
   }
   return digest;
 }
+
+const units = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+
+/**
+ * @param {number} num
+ * @return {string}
+ */
+export function niceBytes(num) {
+  let l = 0;
+  let n = parseInt(num, 10) || 0;
+  while (n >= 1024 && ++l) {
+    n = n / 1024;
+  }
+  return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+}
+
+/**
+ * @param {pino.Logger} logger
+ */
+export function logMemoryUsage(logger) {
+  const memoryUsage = process.memoryUsage();
+  const heapTotal = niceBytes(memoryUsage.heapTotal);
+  const heapUsed = niceBytes(memoryUsage.heapUsed);
+  logger.info(`heap ${heapTotal} total, ${heapUsed} used`);
+}

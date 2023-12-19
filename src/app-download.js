@@ -10,7 +10,8 @@ import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {join} from 'path';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo,
+  logMemoryUsage} from './logger.js';
 import {httpRedirect, stopIfTimedOut, CACHE_CONTROL_IMMUTABLE} from './common.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeit.js';
@@ -25,6 +26,11 @@ const app = new Koa();
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
 const logger = makeLogger(logDir);
 logger.info('Koa server: starting up');
+logMemoryUsage(logger);
+setInterval(() => {
+  logMemoryUsage(logger);
+}, 30000);
+
 app.context.logger = logger;
 
 const zipsFilename = 'zips.sqlite3';
