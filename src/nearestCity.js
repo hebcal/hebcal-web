@@ -1,7 +1,7 @@
 import haversine from 'haversine';
-import {LRUCache} from 'lru-cache';
+import QuickLRU from 'quick-lru';
 
-const cityCache = new LRUCache({max: 1000});
+const cityCache = new QuickLRU({maxSize: 1000});
 
 /**
  * @return {any}
