@@ -11,7 +11,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   queryDefaultCandleMins,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
-import {greg, HDate} from '@hebcal/core';
+import {HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar,
   eventToClassicApiObject,
   locationToPlainObj,
@@ -351,6 +351,12 @@ function yearTitle(year) {
   return year > 0 ? '' + year : '' + (-(year-1)) + ' B.C.E.';
 }
 
+const gregMonthNames = [
+  '',
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
 /**
  * @private
  * @param {CalOptions} options
@@ -360,7 +366,7 @@ function yearTitle(year) {
 function pageTitle(options, events) {
   let shortTitle = '';
   if (options.month) {
-    shortTitle += greg.monthNames[options.month] + ' ';
+    shortTitle += gregMonthNames[options.month] + ' ';
   }
   if (typeof options.year === 'number') {
     return shortTitle + yearTitle(options.year);
