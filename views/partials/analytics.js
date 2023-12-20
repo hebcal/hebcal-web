@@ -34,8 +34,6 @@ Object.entries(utm_).forEach(function(arr) {
 });
 _paq.push(['setCustomUrl', url.href]);
 _paq.push(['disableCookies']);
-_paq.push(['trackPageView']);
-_paq.push(['enableLinkTracking']);
 /* Hebcal anonymous userid */
 const d0=document; const c0=d0.cookie;
 if(c0&&c0.length&&typeof URLSearchParams=='function'){
@@ -52,6 +50,8 @@ if(c0&&c0.length&&typeof URLSearchParams=='function'){
     }
   }
 }
+_paq.push(['trackPageView']);
+_paq.push(['enableLinkTracking']);
 (function() {
   const u='/ma/';
   _paq.push(['setTrackerUrl', u+'ma.php']);
