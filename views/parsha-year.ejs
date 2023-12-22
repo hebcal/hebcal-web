@@ -3,8 +3,8 @@
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%=hyear%>?i=<%=il?'on':'off'%>">
 <% if (hyear <= 5513 || hyear > todayHebYear + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<% if (hyear >= 5513) { %><link rel="prev" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><%}%>
-<% if (hyear < todayHebYear + 100) { %><link rel="next" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%}%>
+<% if (hyear >= 5513) { %><link rel="prev" href="<%=prev%>"><%}%>
+<% if (hyear < todayHebYear + 100) { %><link rel="next" href="<%=next%>"><%}%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -15,36 +15,32 @@
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h2>Shabbat Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
-<div class="btn-toolbar d-print-none mt-1 mb-2">
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="<%-dlhref%>" download="<%=dlfilename%>">
-<svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
-Download Calendar .ics</a>
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="fullkriyah-<%=il?'il-':''%><%=hyear%>.csv" download="fullkriyah-<%=il?'il-':''%><%=hyear%>.csv">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
-  Download Leyning (Full Kriyah)</a>
-<%   if (triCycleStartYear) { %>
-<a class="btn btn-secondary btn-sm me-2 mb-2" role="button" rel="nofollow" href="triennial-<%=il?'il-':''%><%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv" download="triennial-<%=il?'il-':''%><%=triCycleStartYear%>-<%=triCycleStartYear+2%>.csv">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
-  Download Leyning (Triennial)</a>
-<%   } %>
-</div>
+
+<p><a class="float-end btn btn-secondary ms-3 mt-1 mb-1" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
+The <a href="<%=hyear%>?i=<%=il?'off':'on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
+by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
 
 <table class="table table-striped">
 <colgroup>
-  <col style="width:172px"><col style="width:128px"><col>
+  <col style="width:128px"><col style="width:128px"><col>
 </colgroup>
 <thead>
 <tr>
-  <th>Date</th>
+  <th>
+    <div class="float-start"><a title="<%=hyear-1%>" href="<%=prev%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+    Date</th>
   <th>Hebrew Date</th>
-  <th>Parsha</th>
+  <th>Parsha
+    <div class="float-end"><a title="<%=hyear+1%>" href="<%=next%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a></div>
+  </th>
 </tr>
 </thead>
 <tbody class="table-group-divider">
-<% let prev = -1;
+<% let py = -1;
 for (const item of items) { %>
 <tr>
-  <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== prev ? item.d.format(', YYYY') : '' %></time></td>
+  <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== py ? item.d.format(', YYYY') : '' %></time></td>
   <td class="text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></td>
   <td><ul class="list-unstyled mb-0">
   <li><a href="<%=item.url%>"><%= item.title.replace(/'/g, '’') %></a></li>
@@ -53,20 +49,21 @@ for (const item of items) { %>
 <% } %>
   </ul></td>
 </tr>
-<% prev = item.d.year();
+<% py = item.d.year();
 } %>
 </tbody>
 </table>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <div>
-<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=hyear - 1%>?i=<%=il?'on':'off'%>"><span aria-hidden="true">←&nbsp;</span><%=hyear - 1%></a>
+<a class="btn btn-outline-secondary me-2" href="<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=hyear - 1%></a>
 </div>
 <div>
-<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=hyear + 1%>?i=<%=il?'on':'off'%>"><%=hyear + 1%><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="<%=next%>"><%=hyear + 1%><span aria-hidden="true">&nbsp;→</span></a>
 </div>
 </div>
 
 </div><!-- .col -->
 </div><!-- .row -->
-<%- await include('partials/footer.ejs') -%>
+<%- await include('partials/download-modal.ejs') -%>
+<%- await include('partials/footer.ejs', {footerScripts: {clipboard: true}}) _%>

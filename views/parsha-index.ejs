@@ -40,10 +40,18 @@
 </ul>
 <% } %>
 <h2 class="mt-3" id="all">Torah Readings</h2>
-<p>Weekly Torah readings (Parashat ha-Shavua) including
-verses for each aliyah and accompanying Haftarah. Includes
-traditional (full <em>kriyah</em>), <a
-href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a> and weekday readings.</p>
+<p>The Torah (Five Books of Moses) is divided into 54 sections, or <em>parshiyot</em>.
+Each section (called a <em>parsha</em>, also transliterated <em>parashah</em> or <em>parasha</em>)
+is read during a particular week (<em>parashat ha-shavua</em>).
+The full cycle is read over the course of one Jewish year.
+<a class="text-nowrap" href="<%=hyear%>?i=<%= il ? 'on' : 'off'%>">Readings for <%= hyear %></a>
+&middot; <a class="text-nowrap" href="grid<%= il ? '?i=on' : ''%>">6-year summary</a>
+</p>
+<p>Each page displays a summary of the parsha, the
+verses read for each aliyah (traditional full <em>kriyah</em>, <a
+href="/home/50/what-is-the-triennial-torah-reading-cycle">triennial</a>
+and weekday), the accompanying Haftarah, and
+English-language commentary from a range of Jewish traditions.</p>
 
 </div><!-- .col -->
 </div><!-- .row -->
@@ -229,7 +237,7 @@ Weekday <%=yr-%>
 <svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
 </div>
 <h4>RSS feeds</h4>
-<p>Torah reading of the week, a single item per RSS feed, updated on Sunday at midnight Eastern Standard Time.</p>
+<p>Torah reading of the week for Shabbat and holidays, updated on Sunday at midnight Eastern Standard Time.</p>
 <div class="btn-group me-2 mb-2">
 <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
   <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
@@ -252,32 +260,6 @@ Weekday <%=yr-%>
 <% } -%>
 </ul>
 </div><!-- .btn-group -->
-</div><!-- .col -->
-</div><!-- .row -->
-
-<div class="row mt-4">
-<div class="col">
-<h3 id="by-year">Parashat ha-Shavua by Hebrew year</h3>
-<h5>Diaspora</h5>
-<nav class="mb-3">
-<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
-<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Diaspora" href="<%=yr%>?i=off">
-<% if (yr === hyear) { %><mark><% } -%>
-<%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
-</a></div>
-<% } %>
-</nav>
-<h5>Israel 🇮🇱</h5>
-<nav class="mb-3">
-<% for (let yr = hyear - 2; yr < hyear + 18; yr++) { %>
-<div class="d-inline-flex p-2"><a title="Torah Readings <%=yr%> Israel" href="<%=yr%>?i=on">
-<% if (yr === hyear) { %><mark><% } -%>
-<%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
-</a></div>
-<% } %>
-</nav>
 </div><!-- .col -->
 </div><!-- .row -->
 

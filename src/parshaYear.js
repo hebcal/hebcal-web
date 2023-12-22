@@ -1,11 +1,10 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent} from '@hebcal/leyning';
-import {Triennial} from '@hebcal/triennial';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {localeMap, shortenUrl, lgToLocale} from './common.js';
-import {downloadHref2} from './makeDownloadProps.js';
+import {localeMap, shortenUrl, lgToLocale, getNumYears} from './common.js';
+import {makeDownloadProps} from './makeDownloadProps.js';
 import createError from 'http-errors';
 
 export async function parshaYear(ctx) {
@@ -44,17 +43,26 @@ export async function parshaYear(ctx) {
     yt: 'H',
     ny: 1,
   };
-  const dlhref = downloadHref2(q0, dlfilename);
+
+  const options = {year: hyear, isHebrewYear: true, noHolidays: true, sedrot: true};
+  makeDownloadProps(ctx, q0, options);
+  ctx.state.url.title = 'Shabbat Torah Readings';
+  ctx.state.downloadAltTitle = `${hyear} only`;
+  ctx.state.numYears = getNumYears(options);
+  ctx.state.currentYear = todayHebYear;
+  delete ctx.state.filename.pdf;
+
   await ctx.render('parsha-year', {
     hyear,
     il,
     items,
     todayHebYear,
     dlfilename,
-    dlhref,
-    triCycleStartYear: hyear >= 5744 ? Triennial.getCycleStartYear(hyear) : null,
     lang,
     locale,
+    q: q0,
+    prev: `/sedrot/${hyear - 1}?i=${il?'on':'off'}`,
+    next: `/sedrot/${hyear + 1}?i=${il?'on':'off'}`,
   });
 }
 

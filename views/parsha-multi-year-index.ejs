@@ -6,7 +6,7 @@
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
-<div class="row">
+<div class="row mt-2">
 <div class="col">
 <h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
@@ -20,7 +20,7 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <tbody class="table-group-divider">
 <% for (const book of torahBookNames.filter((book) => book !== 'DoubledParshiyot')) { %>
 <tr class="table-group-divider"><th><%=book%></th>
-<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %><th><%=yr%></th><% } %>
+<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %><th><a class="link-body-emphasis" href="<%=yr%>?i=<%=il?'on':'off'%>"><%=yr%></a></th><% } %>
 </tr>
 <%   for (const [anchor, parshaName] of parshaByBook.get(book)) {
   const years = byParsha.get(parshaName);
