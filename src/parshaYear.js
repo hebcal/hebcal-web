@@ -52,11 +52,14 @@ export async function parshaYear(ctx) {
   ctx.state.currentYear = todayHebYear;
   delete ctx.state.filename.pdf;
 
+  const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
+
   await ctx.render('parsha-year', {
     hyear,
     il,
     items,
     todayHebYear,
+    noIndex,
     dlfilename,
     lang,
     locale,

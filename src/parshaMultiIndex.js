@@ -10,6 +10,7 @@ const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 export async function parshaMultiYearIndex(ctx) {
   const dt = new Date();
   const hd = new HDate(dt);
+  const todayHebYear = hd.getFullYear();
   const hyear0 = parseInt(ctx.request.query?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(hd);
   const q = ctx.request.query;
@@ -58,6 +59,11 @@ export async function parshaMultiYearIndex(ctx) {
     canonical.searchParams.set('year', hyear0);
     inverse.searchParams.set('year', hyear0);
   }
+  const prev = new URL(canonical);
+  prev.searchParams.set('year', hyear - 5);
+  const next = new URL(canonical);
+  next.searchParams.set('year', hyear + 5);
+  const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
   ctx.lastModified = dt;
   await ctx.render('parsha-multi-year-index', {
     il,
@@ -68,5 +74,9 @@ export async function parshaMultiYearIndex(ctx) {
     yearOverride,
     canonical,
     inverse,
+    todayHebYear,
+    noIndex,
+    prev: prev.href,
+    next: next.href,
   });
 }

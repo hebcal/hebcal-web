@@ -2,12 +2,21 @@
   title: 'Weekly Torah Readings - Parashat haShavua - Hebcal',
 }) -%>
 <link rel="canonical" href="<%=canonical.href%>">
+<% if (noIndex) { -%>
+<meta name="robots" content="noindex, nofollow">
+<% } else { -%>
+<link rel="prev" href="<%=prev%>">
+<link rel="next" href="<%=next%>">
+<% } -%>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div class="row mt-2">
 <div class="col">
+<% if (hyear <= 5513) { -%>
+<%- await include('partials/warning-1752.ejs') -%>
+<% } -%>
 <h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
 <p class="small">This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
 The <a href="<%=inverse.href%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
@@ -50,6 +59,16 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 </tbody>
 </table>
 </div>
+
+<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
+<div>
+<a class="btn btn-outline-secondary me-2" href="<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=hyear-6%>-<%=hyear-1%></a>
+</div>
+<div>
+<a class="btn btn-outline-secondary ms-2" href="<%=next%>"><%=hyear+4%>-<%=hyear+9%><span aria-hidden="true">&nbsp;→</span></a>
+</div>
+</div>
+
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/footer.ejs') _%>
