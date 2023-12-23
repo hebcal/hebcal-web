@@ -75,9 +75,10 @@ English-language commentary from a range of Jewish traditions.</p>
   <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
 </div>
 <h3>Downloads</h3>
-<p>We offer two kinds of Torah and Haftarah downloads:</p>
+<p>We offer three kinds of Torah and Haftarah downloads:</p>
 <ol>
 <li><a href="#download-cal">Calendar feeds</a> for desktop, mobile and web calendars. Microsoft Outlook, iPhone, iPad, macOS Desktop Calendar, Android (via Google Calendar).</li>
+<li><a href="#rss">RSS feeds</a> for RSS readers and news aggregator tools</li>
 <li><a href="#download-leyning">Leyning spreadsheets</a> for aliyah-by-aliyah breakdown of Torah readings for Shabbat, holidays and weekdays.</li>
 </ol>
 </div><!-- .col -->
@@ -116,6 +117,38 @@ English-language commentary from a range of Jewish traditions.</p>
 <svg class="icon icon-sm mb-1"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/torah-readings-israel-he.ics&name=%D7%A4%D7%A8%D7%A9%D7%AA%20%D7%94%D7%A9%D7%91%D7%95%D7%A2%20-%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C&mkt=en-001">
 <svg class="icon"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+</div><!-- .col -->
+</div><!-- .row -->
+
+<div class="row mt-3">
+<div class="col">
+<div id="rss" class="float-start">
+<svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+</div>
+<h4>RSS feeds</h4>
+<p>Torah reading of the week for Shabbat and holidays, updated on Sunday at midnight Eastern Standard Time.</p>
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  Diaspora RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div><!-- .btn-group -->
+<div class="btn-group me-2 mb-2">
+<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  Israel RSS feeds <span class="caret"></span>
+</button>
+<ul class="dropdown-menu" role="menu">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<% } -%>
+</ul>
+</div><!-- .btn-group -->
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -229,38 +262,6 @@ Weekday <%=yr-%>
 <% } %>
 </ul>
 </div><!-- .col-md -->
-</div><!-- .row -->
-
-<div class="row mt-3">
-<div class="col">
-<div id="rss" class="float-start">
-<svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-</div>
-<h4>RSS feeds</h4>
-<p>Torah reading of the week for Shabbat and holidays, updated on Sunday at midnight Eastern Standard Time.</p>
-<div class="btn-group me-2 mb-2">
-<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-  Diaspora RSS feeds <span class="caret"></span>
-</button>
-<ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
-<% } -%>
-</ul>
-</div><!-- .btn-group -->
-<div class="btn-group me-2 mb-2">
-<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
-  Israel RSS feeds <span class="caret"></span>
-</button>
-<ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
-<% } -%>
-</ul>
-</div><!-- .btn-group -->
-</div><!-- .col -->
 </div><!-- .row -->
 
 <%- await include('partials/footer.ejs') -%>
