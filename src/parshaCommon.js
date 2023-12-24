@@ -1,5 +1,5 @@
 import {Locale, parshiot} from '@hebcal/core';
-import {formatAliyahShort, lookupParsha} from '@hebcal/leyning';
+import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {bookId, sefariaAliyahHref, langNames} from './common.js';
 import {transliterate} from 'transliteration';
@@ -158,6 +158,7 @@ export function lookupParshaMeta(parshaName) {
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
+  parsha.haftara = makeSummaryFromParts(parsha.haft);
   const chapVerse = parsha.fullkriyah['1'][0];
   const [chapter, verse] = chapVerse.split(':');
   const book = parsha.book;
