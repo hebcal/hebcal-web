@@ -263,9 +263,9 @@ function getMonthTitle(month, center, prevNext) {
   const mm = parseInt(monthStr, 10);
   const titleText = localeData.months[mm - 1] + ' ' + yearStr;
   const prev = prevNext && month.prev ?
-    `<a class="d-print-none text-body-secondary" href="#cal-${month.prev}">«</a> ` : '';
+    `<a class="d-print-none text-body-secondary text-decoration-none" href="#cal-${month.prev}">«</a> ` : '';
   const next = prevNext && month.next ?
-    ` <a class="d-print-none text-body-secondary" href="#cal-${month.next}">»</a>` : '';
+    ` <a class="d-print-none text-body-secondary text-decoration-none" href="#cal-${month.next}">»</a>` : '';
   const h3 = center ? '<h3 class="text-center">' : '<h3>';
   return h3 + prev + span0 + titleText + span1 + next + '</h3>';
 }

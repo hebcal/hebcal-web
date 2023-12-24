@@ -208,7 +208,7 @@ Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <p class="lead torah">Torah Portion:
 <% if (reading.parsha) { %>Parashat <%= reading.parsha.join('-') %> · <% } %>
 <% if (reading.torahHtml) { %><%- reading.torahHtml %><% } else { -%>
-<% if (reading.torahHref) { %><a class="outbound" title="English translation from JPS Tanakh"
+<% if (reading.torahHref) { %><a title="English translation from JPS Tanakh"
 href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ? '</a>' : '' %>
 <% } %></p>
 <% } // reading.summary %>
@@ -234,25 +234,25 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <h3 id="ref" class="mt-4">References</h3>
 <dl>
 <% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
-<dt><em><a class="outbound" rel="sponsored"
+<dt><em><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% } -%>
 <% if (typeof meta.reading !== 'undefined') { %>
-<dt><em><a class="outbound"
-href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
-<dd>Sefaria.org
-<dt><em><a class="outbound" rel="sponsored"
+<dt><em><a rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
-href="https://www.amazon.com/o/ASIN/0827602529/hebcal-20">Tanakh:
+href="https://www.amazon.com/o/ASIN/0827603665/hebcal-20">Tanakh:
 The Holy Scriptures</a></em>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Jewish Publication Society
+<dt><em><a
+href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
+<dd>Sefaria.org
 <% } // meta.reading %>
 <% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-<dt><a class="outbound" href="<%=meta.wikipedia.href%>">“<%=meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
+<dt><a href="<%=meta.wikipedia.href%>">“<%=meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>

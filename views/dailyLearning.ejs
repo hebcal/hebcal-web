@@ -34,7 +34,7 @@
 <% } -%>
 </div>
 <div class="fs-4 mt-n1"><% if (item.html) { %><%- item.html %><% } else { %>
-<%   if (item.url) { %><a class="outbound" href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
+<%   if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
 <%   } %>
 </div>
 <%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>

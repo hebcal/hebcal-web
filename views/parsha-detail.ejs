@@ -33,7 +33,7 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <% if (reading.torahHtml) { -%><%- reading.torahHtml -%>
 <% } else { -%>
-<a class="outbound" href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
+<a href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%></a>
 <% } -%>
 </h4>
@@ -265,41 +265,41 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <h4 id="ref">References</h4>
 <dl>
 <% if (typeof summary === 'object') { %>
-<dt><a class="outbound" href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
+<dt><a href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
 <% if (commentary['asin']) { %>
-<dt><a class="outbound" rel="sponsored"
+<dt><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><em><%=parsha.p1||parshaName%>
 (<%=parsha.bookName%> <%=parsha.verses%>) and Haftarah (<%=parsha.haftara%>):
 The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</a></em>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Jeffrey K. Salkin, Jewish Publication Society, 2017
 <% } %>
-<dt><a class="outbound" rel="sponsored"
+<dt><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
 Chumash: The Stone Edition (Artscroll Series)</em></a>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
 <% if (hasTriennial) { %>
-<dt><a class="outbound"
+<dt><a
 href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/eisenberg_triennial_updated-1.pdf"><em>A
 Complete Triennial System for Reading the Torah</em></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 1988
 <% if (parsha.combined || doubled.get(parsha.name) || parsha.name === 'Miketz') { %>
-<dt><a class="outbound"
+<dt><a
 href="https://www.rabbinicalassembly.org/story/modifications-triennial-cycle-torah-readings-combined-parshiyot-certain-years"><em>Modification
 of the Triennial Cycle Readings for Combined Parashot in Certain Years</em></a>
 <dd>Rabbi Miles B. Cohen, 2020
 <% } %>
 <% if (parsha.name === 'Vayakhel' || parsha.name === 'Pekudei') { %>
-<dt><a class="outbound"
+<dt><a
 href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/heller-triennial-emendation.pdf"><em>An
 Emendation to Richard Eisenberg’s Complete Triennial System for Reading Torah,
 to Address a Rare Situation</em></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 2012
 <% } %>
-<dt><a class="outbound"
+<dt><a
 href="http://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/triennial-haftarot.pdf
 "><em>Haftarot for a Triennial Cycle Torah Reading</em></a>
 <dd>Avram Israel Reisner, 2014</dd>
