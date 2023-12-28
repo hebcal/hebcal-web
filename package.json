@@ -44,7 +44,7 @@
     "rollup": "^4.9.1"
   },
   "dependencies": {
-    "@hebcal/core": "^5.0.5",
+    "@hebcal/core": "^5.0.6",
     "@hebcal/geo-sqlite": "^5.0.2",
     "@hebcal/hdate": "^0.9.1",
     "@hebcal/icalendar": "^5.0.2",
@@ -81,7 +81,7 @@
     "nodemailer": "^6.9.7",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.14.0",
-    "pino": "^8.17.1",
+    "pino": "^8.17.2",
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.0.0",
     "random-bigint": "0.0.1",

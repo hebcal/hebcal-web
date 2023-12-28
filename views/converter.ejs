@@ -213,6 +213,17 @@ Free annual email reminders &amp; calendar downloads.
 <br><a href="<%=calendarUrl + yearArgs %>"><%= gregRangeShort %> Calendar &raquo;</a></p>
 </div><!-- .col -->
 </div><!-- .row -->
+<% if (hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
+<div class="row">
+<div class="alert alert-warning alert-dismissible" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<strong>Attention!</strong>
+The table of dates below for <strong><%= hdate.render(locale, false) %></strong> uses a simple
+Hebrew date conversion and does not follow the more complicated rules for Yahrzeit anniversaries.
+<br><a href="/yahrzeit">Calculate Yahrzeit dates &raquo;</a>
+</div><!-- .alert -->
+</div>
+<% } %>
 <div id="future" class="row">
 <div class="col-md-6" id="future-heb">
 <div class="row">

@@ -636,7 +636,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
     return null;
   }
   const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-  const hebdate = hd.render('en');
+  const hebdate = hd.render('en').replace(/'/g, '’');
   const origHd = new HDate(origDt);
   const origHyear = origHd.getFullYear();
   const yearNumber = hyear - origHyear;
