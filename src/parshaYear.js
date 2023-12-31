@@ -83,6 +83,7 @@ function makeItem(ev, locale, il, lang) {
     hd,
     url: shortenUrl(ev.url()),
     holidays: [],
+    isParsha,
   };
   if (isParsha) {
     const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
