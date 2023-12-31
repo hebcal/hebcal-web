@@ -1,5 +1,6 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty,
+  cleanQuery,
   makeGeoUrlArgs,
   cacheControl, getDefaultHebrewYear, queryDefaultCandleMins} from './common.js';
 import '@hebcal/locales';
@@ -27,6 +28,7 @@ function makeProperties(ctx) {
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     query[k] = 'on';
   }
+  cleanQuery(query);
   if (empty(query.year)) {
     const today = new HDate();
     const hyear = getDefaultHebrewYear(today);

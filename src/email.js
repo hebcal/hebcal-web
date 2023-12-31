@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
 import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
+  cleanQuery,
   validateEmail, queryDefaultCandleMins} from './common.js';
 import {mySendMail, getImgOpenHtml} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';
@@ -11,6 +12,7 @@ const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=s
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
   const query = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  cleanQuery(query);
   const subscriptionId = ctx.state.subscriptionId = getSubscriptionId(ctx, query);
   if (!subscriptionId) {
     ctx.throw(400, 'No subscription confirmation key');
@@ -143,6 +145,7 @@ export async function emailForm(ctx) {
   } else {
     q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
   }
+  cleanQuery(q);
   const isJSON = q.cfg === 'json';
   if (isJSON) {
     ctx.response.type = ctx.request.header['accept'] = 'application/json';

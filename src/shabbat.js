@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
+  cleanQuery,
   empty,
   getDefaultHebrewYear,
   getDefaultYear,
@@ -216,6 +217,7 @@ function makeOptions(ctx) {
   const cfg = q0.cfg;
   const isApi = (cfg === 'json' || cfg === 'i' || cfg === 'r' || cfg === 'j' || cfg === 'i2');
   const q = isApi ? q0 : processCookieAndQuery(ctx.cookies.get('C'), {}, q0);
+  cleanQuery(q);
   delete q.d;
   delete q.D;
   let options = {};

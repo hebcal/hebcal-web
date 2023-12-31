@@ -2,6 +2,7 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DailyLearning} from '@hebcal/core';
 import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
+  cleanQuery,
   processCookieAndQuery, urlArgs,
   shortenUrl,
   makeGeoUrlArgs2,
@@ -29,6 +30,7 @@ export async function homepage(ctx) {
     i: il ? 'on' : 'off',
   };
   const q = ctx.state.q = processCookieAndQuery(cookie, defaults, q0);
+  cleanQuery(q);
   ctx.state.calendarUrl = '/hebcal?v=1&' + urlArgs(q, cookie ? {} : {set: 'off'});
   const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
   const geoUrlArgs = makeGeoUrlArgs2(q, location);

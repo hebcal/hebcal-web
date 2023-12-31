@@ -5,6 +5,7 @@ import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
+  cleanQuery,
   makeIcalOpts, getNumYears, localeMap} from './common.js';
 import {lookupParshaMeta} from './parshaCommon.js';
 
@@ -12,10 +13,15 @@ import {lookupParshaMeta} from './parshaCommon.js';
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebcalDownload(ctx) {
-  const query = ctx.request.query;
+  if (ctx.method === 'POST') {
+    ctx.set('Allow', 'GET');
+    ctx.throw(405, 'POST not allowed; try using GET instead');
+  }
+  const query = Object.assign({}, ctx.request.query);
   if (query.v !== '1') {
     return;
   }
+  cleanQuery(query);
   // only set Last-Modified is there's a numeric year
   if (query.year !== 'now') {
     ctx.lastModified = ctx.launchDate;

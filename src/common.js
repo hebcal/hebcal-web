@@ -404,6 +404,32 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   return Object.assign({}, defaults, ck, query);
 }
 
+const allKeys = new Set();
+for (const key of [].concat(allGeoKeys,
+    Object.keys(booleanOpts),
+    Object.keys(dailyLearningOpts),
+    Object.keys(hebcalFormDefaults),
+    Object.keys(negativeOpts),
+    Object.keys(numberOpts),
+)) {
+  allKeys.add(key);
+}
+
+/**
+ * @param {Object.<string,string>} query
+ */
+export function cleanQuery(query) {
+  for (const key of allKeys) {
+    const value = query[key];
+    if (!empty(value)) {
+      const cleanStr = value.replace(/[<>&"'`]/g, '');
+      if (value !== cleanStr) {
+        query[key] = cleanStr;
+      }
+    }
+  }
+}
+
 const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
 
 /**
@@ -1072,6 +1098,7 @@ export function setDefautLangTz(ctx) {
   ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
   const prevCookie = ctx.cookies.get('C');
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
+  cleanQuery(q);
   const location = getLocationFromQueryOrGeoIp(ctx, q);
   const geoip = ctx.state.geoip;
   let cc = geoip && geoip.cc;

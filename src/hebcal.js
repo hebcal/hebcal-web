@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
+  cleanQuery,
   empty, urlArgs, getNumYears,
   hebcalFormDefaults,
   makeIcalOpts,
@@ -38,6 +39,7 @@ export async function hebcalApp(ctx) {
     Object.assign({}, hebcalFormDefaults) :
     ctx.request.query.v === '1' ? Object.assign({}, ctx.request.query) :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
+  cleanQuery(q);
   ctx.status = 200;
   let error;
   let options = {};

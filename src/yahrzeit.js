@@ -4,6 +4,7 @@ import {eventsToCsv, eventsToClassicApi, pad4, pad2} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty, getIpAddress, eTagFromOptions, makeIcalOpts,
+  cleanQuery,
   hebcalFormDefaults,
   doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
 import {ulid} from 'ulid';
@@ -33,6 +34,7 @@ async function makeQuery(ctx) {
   const isPost = ctx.method === 'POST' && reqBody?.v === 'yahrzeit';
   const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
   const query = Object.assign(defaults, reqBody, ctx.request.query);
+  cleanQuery(query);
   if (isPost) {
     const id = query.ulid;
     if (isValidUlid(id)) {
