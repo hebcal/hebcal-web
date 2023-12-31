@@ -227,15 +227,19 @@ function makeFutureYearsHeb(orig, numYears, locale) {
   const hy = orig.getFullYear();
   const month = orig.getMonth();
   const day = orig.getDate();
-  const isAdar30 = month === months.ADAR_I && day === 30;
+  const isOrigAdar = month === months.ADAR_I;
+  const isOrigAdarNonLeap = isOrigAdar && !HDate.isLeapYear(hy);
+  const isAdar30 = isOrigAdar && day === 30;
   const arr = [];
   for (let i = -5; i <= numYears; i++) {
     const hyear = hy + i;
     if (hyear < 1) {
       continue;
     }
-    const isNonLeap = !HDate.isLeapYear(hyear);
-    const hm = isAdar30 && isNonLeap ? months.NISAN : month;
+    const isLeap = HDate.isLeapYear(hyear);
+    const isNonLeap = !isLeap;
+    const hm = isOrigAdarNonLeap && isLeap ? months.ADAR_II :
+      isAdar30 && isNonLeap ? months.NISAN : month;
     const hd = isAdar30 && isNonLeap ? 1 : day;
     const hdate = new HDate(hd, hm, hyear);
     const dt = hdate.greg();
