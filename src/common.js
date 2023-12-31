@@ -332,11 +332,9 @@ function setCookie(ctx, newCookie) {
   const prevCookie = ctx.cookies.get('C');
   const expires = dayjs().add(399, 'd').toDate();
   newCookie += '&exp=' + expires.toISOString().substring(0, 10);
-  ctx.cookies.set('C', newCookie, {
-    expires: expires,
-    overwrite: true,
-    httpOnly: false,
-  });
+  const headerStr = 'C=' + newCookie + '; path=/; expires=' +
+    expires.toUTCString();
+  ctx.append('Set-Cookie', headerStr);
   if (empty(prevCookie)) {
     ctx.state.cookieBanner = true;
   }
@@ -1220,6 +1218,9 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
     hm = HDate.monthFromName(hmStr);
   } catch (err) {
     throw createError(400, err.message);
+  }
+  if (hm === months.ADAR_II && !HDate.isLeapYear(hy)) {
+    hm = months.ADAR_I;
   }
   const maxDay = HDate.daysInMonth(hm, hy);
   if (hd < 1 || hd > maxDay) {

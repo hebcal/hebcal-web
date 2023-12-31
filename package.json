@@ -41,10 +41,10 @@
     "eslint": "^8.56.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.9.1"
+    "rollup": "^4.9.2"
   },
   "dependencies": {
-    "@hebcal/core": "^5.0.6",
+    "@hebcal/core": "^5.0.7",
     "@hebcal/geo-sqlite": "^5.0.2",
     "@hebcal/hdate": "^0.9.1",
     "@hebcal/icalendar": "^5.0.2",
@@ -65,7 +65,7 @@
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
     "ini": "^4.1.1",
-    "koa": "^2.14.2",
+    "koa": "^2.15.0",
     "koa-better-response-time": "^1.2.0",
     "koa-bodyparser": "^4.4.1",
     "koa-compress": "^5.1.1",
@@ -78,7 +78,7 @@
     "maxmind": "^4.3.18",
     "murmurhash3": "^0.5.0",
     "mysql2": "^3.6.5",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^6.9.8",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.14.0",
     "pino": "^8.17.2",
