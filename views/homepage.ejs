@@ -77,7 +77,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
 <br><a href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>"><%=hy%></a> ·
-<a href="/holidays/<%=gy%><%=il?'?i=on':''%>"><%=gy%></a> ·
+<a href="/holidays/<%= (gm === 12 && gd >= 10) ? gy + 1 : gy %><%=il?'?i=on':''%>"><%= (gm === 12 && gd >= 10) ? gy + 1 : gy %></a> ·
 <a class="text-nowrap" href="/holidays/<%=il?'?i=on':''%>">6-year summary</a> ·
 <a class="text-nowrap" href="/hebcal">Custom calendar &raquo;</a>
 </p>
