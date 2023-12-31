@@ -62,7 +62,7 @@ English-language commentary from a range of Jewish traditions.</p>
 <h4 id="<%=book%>"><%= book === 'DoubledParshiyot' ? 'Doubled Parshiyot' : book %></h4>
 <ol class="list-unstyled lh-lg">
 <%   for (const [anchor, parshaName] of parshaByBook.get(book)) { %>
-<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') -%></a></li>
+<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') %></a></li>
 <%   } %>
 </ol>
 </div><!-- .col -->

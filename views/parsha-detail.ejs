@@ -31,7 +31,7 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a hre
 <% } -%>
 </p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
-<% if (reading.torahHtml) { -%><%- reading.torahHtml -%>
+<% if (reading.torahHtml) { %><%- reading.torahHtml -%>
 <% } else { -%>
 <a href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
 title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%></a>
@@ -111,10 +111,10 @@ if (!date && spHaftItems.length !== 0) { -%>
 <%- triennial.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
 </p>
-<% } -%>  
+<% } -%>
 </div>
 <% } else { // date %>
-<% for (let yr = 1; yr <= 3; yr++) { 
+<% for (let yr = 1; yr <= 3; yr++) {
   const triReading = triennial.readings[yr - 1]; %>
 <div class="col-lg-3 col-sm-6">
 <h5><span class="text-nowrap">Triennial Year <%=yr%></span>

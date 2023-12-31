@@ -76,7 +76,7 @@ table.tbody-striped > thead > * > * {
 <span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
 <% } -%>
 </h2>
-<% if (greg1 <= 1752) { -%><%- await include('partials/warning-1752.ejs') -%><% } -%>
+<% if (greg1 <= 1752) { %><%- await include('partials/warning-1752.ejs') %><% } -%>
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row gx-3 mt-2 d-print-none">
@@ -187,7 +187,7 @@ class="rounded float-end ms-3 mb-3">
 <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small> -
 <% if (item.duration > 0) { -%>
  <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time>
-<% } -%> <small>nightfall</small>
+<% } %> <small>nightfall</small>
 <br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </div><!-- .card-footer -->
 </div><!-- .card #<%=item.id %> -->

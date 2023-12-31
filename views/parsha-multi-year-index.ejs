@@ -35,7 +35,7 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
   const years = byParsha.get(parshaName);
 %>
 <tr>
-  <td><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') -%></a></td>
+  <td><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') %></a></td>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) {
   const items = years.get(yr); %>
 <% if (items) { %>

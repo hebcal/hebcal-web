@@ -133,7 +133,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <% if (count === 1 && typeof q.t1 !== 'string') { -%>
 <!-- empty form -->
 <%- await include('partials/yahrzeit-row.ejs', {num: 1}) -%>
-<% } -%>  
+<% } -%>
 </div><!-- #rows -->
 <div class="clearfix">
 <p class="text-end float-sm-end">
@@ -142,22 +142,22 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   Add another name</button>
 </p>
 <div class="form-check mt-3 mb-2">
-<input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' -%> id="hebdate">
+<input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' %> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
 &nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1’s Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 <div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' -%> id="yizkor" >
+<input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' %> id="yizkor" >
 <label class="form-check-label" for="yizkor">Include Yizkor dates</label>
 </div>
 <div class="ms-3 mt-1">
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' -%> <%= q.yizkor !== 'on' ? ' disabled' : '' -%> value="off">
+    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="off">
     <label class="form-check-label" for="i0">Diaspora Yizkor schedule</label>
     &nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' -%> <%= q.yizkor !== 'on' ? ' disabled' : '' -%> value="on">
+    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="on">
     <label class="form-check-label" for="i1">Israel Yizkor schedule</label>
     &nbsp;<span title="Pesach 7th day, Shavuot, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
@@ -198,7 +198,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
   Successfully imported <span id="success-numrecords">?</span> records from <span id="success-filename">?</span>.
   <br>Please review the imported data.
-  <br>Click the <strong>Form</strong> tab above to continue.  
+  <br>Click the <strong>Form</strong> tab above to continue.
 </div><!-- .alert -->
 <h5>CSV file format</h5>
 <p>The CSV file may contain 1-4 columns. Column names and types are as follows:</p>

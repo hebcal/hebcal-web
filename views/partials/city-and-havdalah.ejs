@@ -12,14 +12,14 @@
 </div>
 <div class="mb-1">Havdalah</div>
 <div class="form-check mb-1">
-  <input class="form-check-input" type="radio" name="M" id="M1" <%- (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? '' : 'checked' %> value="on">
+  <input class="form-check-input" type="radio" name="M" id="M1" <%= (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? '' : 'checked' %> value="on">
   <label class="form-check-label" for="M1">nightfall (tzeit hakochavim)</label>
   &nbsp; <span id="M1t" title="the point when 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><!-- .form-check -->
 <div class="row gx-2 mb-2">
 <div class="col-auto">
 <div class="form-check">
-  <input class="form-check-input" style="margin-top: 0.75em" type="radio" name="M" id="M0" <%- (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? 'checked' : '' %> value="off">
+  <input class="form-check-input" style="margin-top: 0.75em" type="radio" name="M" id="M0" <%= (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? 'checked' : '' %> value="off">
   <label class="col-auto col-form-label" for="M0">minutes past sundown:</label>
 </div><!-- .form-check -->
 </div><!-- .col-auto -->
@@ -33,11 +33,11 @@
 <div class="mb-1">Elevation</div>
 <fieldset class="mb-2">
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="ue" id="ue0" <%= q.ue !== 'on' ? 'checked' : '' -%> value="off">
+    <input class="form-check-input" type="radio" name="ue" id="ue0" <%= q.ue !== 'on' ? 'checked' : '' %> value="off">
     <label class="form-check-label" for="ue0">Sea-level (no elevation)</label>
   </div>
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="ue" id="ue1" <%= q.ue === 'on' ? 'checked' : '' -%> value="on">
+    <input class="form-check-input" type="radio" name="ue" id="ue1" <%= q.ue === 'on' ? 'checked' : '' %> value="on">
     <label class="form-check-label" for="ue1">Include elevation in sunrise/sunset estimate</label>
   </div>
 </fieldset>
