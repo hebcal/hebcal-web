@@ -35,15 +35,18 @@ async function main() {
   const obj = {};
   const records = await processFile(filename);
   for (const r of records) {
-    const dateParts = r[0].split(/\s+/);
+    const gregDateStr = r[0];
+    const titleStr = r[3];
+    const verseStr = r[4];
+    const dateParts = gregDateStr.split(/\s+/);
     const month = monthNames[dateParts[1]];
     const day = parseInt(dateParts[2]);
     if (isNaN(day)) {
       continue;
     }
     const dt = pad2(month) + '-' + pad2(day);
-    const title = cleanStr(r[2]);
-    const quote = cleanStr(r[3]);
+    const title = cleanStr(titleStr);
+    const quote = cleanStr(verseStr);
     obj[dt] = [title, quote];
   }
   console.log(JSON.stringify(obj, null, 1));
@@ -71,5 +74,18 @@ async function processFile(filename) {
  * @param {string} s
  */
 function cleanStr(s) {
-  return s.trim().replace(/\.$/, '').replace(/\s+/g, ' ').replace(/“\(/, '” (').trim();
+  return s.trim()
+      .replace(/\.$/, '')
+      .replace(/^"(.+)"$/, '$1')
+      .replace(/^"(.+)”$/, '$1')
+      .replace(/^“(.+)”$/, '$1')
+      .replace(/^“(.+)"$/, '$1')
+      .replace(/\.$/, '')
+      .replace(/\s+/g, ' ')
+      .replace(/“\(/, '” (')
+      .trim()
+      .replace(/^"/, '')
+      .replace(/"$/, '')
+      .trim()
+  ;
 }
