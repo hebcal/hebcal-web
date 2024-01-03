@@ -18,7 +18,7 @@ const preamble = [
   `PRODID:-//hebcal.com/NONSGML Hebcal Calendar v1${version}//EN`,
   'CALSCALE:GREGORIAN',
   'METHOD:PUBLISH',
-  'X-PUBLISHED-TTL:PT30D',
+  'X-PUBLISHED-TTL:PT7D',
   `X-WR-CALNAME:${title}`,
   `X-WR-CALDESC:${caldesc}`,
 ].map(IcalEvent.fold).join('\r\n');
