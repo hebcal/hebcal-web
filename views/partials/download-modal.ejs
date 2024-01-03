@@ -26,12 +26,14 @@
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ios'}) -%>
+<% if (typeof emoiSwitchDisabled === 'undefined') { %>
 <div class="row g-2 mb-2">
   <div class="col-auto"><label for="cal-color>">Color</label></div>
   <div class="col-2">
   <input class="form-control" type="color" id="cal-color" value="#800002">
  </div>
 </div>
+<% } %>
 <div>
  <a class="btn btn-primary download mb-2" id="dl-ios"
   data-hebcal-attr="href" data-hebcal-src="webcal"

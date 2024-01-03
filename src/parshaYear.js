@@ -46,6 +46,11 @@ export async function parshaYear(ctx) {
 
   const options = {year: hyear, isHebrewYear: true, noHolidays: true, sedrot: true};
   makeDownloadProps(ctx, q0, options);
+  const feedLoc = il ? 'israel' : 'diaspora';
+  const feedUrl = `://download.hebcal.com/ical/torah-readings-${feedLoc}.ics`;
+  ctx.state.url.subical = 'https' + feedUrl;
+  ctx.state.url.webcal = 'webcal' + feedUrl;
+  ctx.state.url.gcal = 'http' + feedUrl;
   ctx.state.url.title = 'Shabbat Torah Readings';
   ctx.state.downloadAltTitle = `${hyear} only`;
   ctx.state.numYears = getNumYears(options);
@@ -66,6 +71,7 @@ export async function parshaYear(ctx) {
     q: q0,
     prev: `/sedrot/${hyear - 1}?i=${il?'on':'off'}`,
     next: `/sedrot/${hyear + 1}?i=${il?'on':'off'}`,
+    emoiSwitchDisabled: true,
   });
 }
 
