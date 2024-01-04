@@ -36,8 +36,6 @@ async function main() {
   const records = await processFile(filename);
   for (const r of records) {
     const gregDateStr = r[0];
-    const titleStr = r[3];
-    const verseStr = r[4];
     const dateParts = gregDateStr.split(/\s+/);
     const month = monthNames[dateParts[1]];
     const day = parseInt(dateParts[2]);
@@ -45,8 +43,13 @@ async function main() {
       continue;
     }
     const dt = pad2(month) + '-' + pad2(day);
-    const title = cleanStr(titleStr);
-    const quote = cleanStr(verseStr);
+    const title = cleanStr(r[3]);
+    const verseStr = cleanStr(r[4]);
+    const sourceStr = cleanStr(r[5]);
+    let quote = verseStr;
+    if (sourceStr) {
+      quote += '\\n\\n' + sourceStr;
+    }
     obj[dt] = [title, quote];
   }
   console.log(JSON.stringify(obj, null, 1));
