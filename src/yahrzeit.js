@@ -116,7 +116,7 @@ export async function yahrzeitApp(ctx) {
     }
   } else {
     ctx.state.tables = null;
-    if (seq > 0 && !ctx.state.isEditPage && isValidUlid(q.ulid)) {
+    if (seq > 0 && ctx.method === 'POST' && isValidUlid(q.ulid)) {
       ctx.state.ulid = q.ulid;
       await saveDataToDb(ctx);
     }
@@ -291,7 +291,7 @@ async function makeDownloadProps(ctx) {
   ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = type.toLowerCase();
   q.v = 'yahrzeit';
-  if (!ctx.state.isEditPage) {
+  if (ctx.method === 'POST') {
     await saveDataToDb(ctx);
   }
   const id = ctx.state.ulid;
