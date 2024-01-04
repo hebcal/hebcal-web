@@ -220,7 +220,7 @@ Free annual email reminders &amp; calendar downloads.
 <strong>Attention!</strong>
 The table of dates below for <strong><%= hdate.render(locale, false) %></strong> uses a simple
 Hebrew date conversion and does not follow the more complicated rules for Yahrzeit anniversaries.
-<br><a href="/yahrzeit">Calculate Yahrzeit dates &raquo;</a>
+<br><a href="/yahrzeit?y1=<%=gy%>&amp;m1=<%=gm%>&amp;d1=<%=gd%>&amp;s1=<%=gs?'on':'off'%>">Calculate Yahrzeit dates &raquo;</a>
 </div><!-- .alert -->
 </div>
 <% } %>

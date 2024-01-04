@@ -26,13 +26,16 @@ div.yahrzeit-row {
 <% } -%>
 <% if (tables !== null) { %>
 <div class="btn-toolbar d-print-none mt-2">
+<% if (showDownload) { %>
 <div class="me-2 mb-2">
   <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
     <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
   </a>
 </div>
 <div class="me-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+</div>
+<% } -%>
 <div class="me-2 mb-2">
 <a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
@@ -85,7 +88,7 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 </table>
 <% }); -%>
 <% } %>
-<% if (tables !== null) { %>
+<% if (tables !== null && showDownload) { %>
 <div class="btn-toolbar d-print-none mt-3 mb-4">
 <div class="me-2 mb-2">
 <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
@@ -228,7 +231,7 @@ and then come back to this page.</p>
 instructions</a>.</p>
 </div><!-- .row -->
 
-<% if (tables !== null) { -%>
+<% if (tables !== null && showDownload) { -%>
 <%- await include('partials/download-modal.ejs', {yahrtzeit: true}) -%>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
@@ -281,6 +284,6 @@ instructions</a>.</p>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
 <%- await include('partials/footer.ejs', {
-  footerScripts: {tooltip: true, clipboard: tables !== null},
+  footerScripts: {tooltip: true, clipboard: tables !== null && showDownload},
   xtra_html: await include('partials/script-yahrzeit-form.ejs'),
 }) _%>

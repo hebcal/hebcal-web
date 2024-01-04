@@ -49,6 +49,7 @@ async function makeQuery(ctx) {
     const id = qid || basename(rpath);
     const contents = await getYahrzeitDetailsFromDb(ctx, id);
     ctx.state.isEditPage = true;
+    ctx.state.showDownload = true;
     return contents;
   } else {
     return query;
@@ -73,6 +74,7 @@ export async function yahrzeitApp(ctx) {
       });
     }
   }
+  ctx.state.showDownload = false;
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (q.cfg === 'json') {
@@ -293,6 +295,7 @@ async function makeDownloadProps(ctx) {
   q.v = 'yahrzeit';
   if (ctx.method === 'POST') {
     await saveDataToDb(ctx);
+    ctx.state.showDownload = true;
   }
   const id = ctx.state.ulid;
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
