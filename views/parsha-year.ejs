@@ -18,8 +18,15 @@
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h2>Shabbat Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
-
-<p><a class="float-end btn btn-sm btn-secondary ms-3 mt-1 mb-1" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<p>The Torah (Five Books of Moses) is divided into 54 sections,
+or <em>parshiyot</em>. Each section (called a <em>parsha</em>, also
+transliterated <em>parashah</em> or <em>parasha</em>) is read during a
+particular week (<em>parashat ha-shavua</em>). The full cycle is read
+over the course of one Jewish year.</p>
+<p><a class="float-end btn btn-sm btn-secondary ms-3 mt-1 mb-1 d-print-none"
+href="#hcdl-modal" role="button" data-bs-toggle="modal"
+data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use
+xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 <small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
 The <a href="<%=hyear%>?i=<%=il?'off':'on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
 by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>

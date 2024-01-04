@@ -42,6 +42,7 @@ export async function parshaYear(ctx) {
     year: String(hyear),
     yt: 'H',
     ny: 1,
+    emoji: '0',
   };
 
   const options = {year: hyear, isHebrewYear: true, noHolidays: true, sedrot: true};

@@ -54,7 +54,9 @@ export function downloadHref2(query, filename, override={}) {
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
   const b = getInt(q.b);
   if (b !== null) msg.setCandlelightingmins(b);
-  if (q.emoji) msg.setEmoji(true);
+  if (q.emoji === 'on' || q.emoji === '1' || q.emoji === true) {
+    msg.setEmoji(true);
+  }
   if (q.euro) msg.setEuro(true);
   if (!empty(q.h12)) {
     msg.setHour12(off(query.h12) ? 2 : 1);
@@ -140,11 +142,11 @@ export function makeDownloadProps(ctx, q, options) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref2(q, dlFilename);
   const subFilename = getSubFilename(options.location);
-  const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji: '1'}) + '.ics';
+  const emoji = typeof q.emoji === 'string' ? q.emoji : '1';
+  const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji}) + '.ics';
   const url = ctx.state.url = {
     pdf: dlhref + '.pdf',
-    ics: downloadHref2(q, dlFilename, {emoji: '1'}) + '.ics',
-    ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji: '1'}) + '.ics',
+    ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji}) + '.ics',
     subical,
     webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
     gcal: subical.replace(/^https/, 'http'),
@@ -153,8 +155,8 @@ export function makeDownloadProps(ctx, q, options) {
     dlFilename,
   };
   ctx.state.filename = {
-    ics: basename(url.ics),
-    pdf: basename(url.pdf),
+    ics: dlFilename + '.ics',
+    pdf: dlFilename + '.pdf',
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
