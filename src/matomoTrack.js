@@ -93,7 +93,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   }
   const postData = args.toString();
   const postLen = Buffer.byteLength(postData);
-  let path = '/ma/ma.php';
+  let path = '/ma/matomo.php';
   let sendPostBody = true;
   if (postLen < 4000) {
     path += '?' + postData;
