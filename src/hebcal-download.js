@@ -22,10 +22,6 @@ export async function hebcalDownload(ctx) {
     return;
   }
   cleanQuery(query);
-  // only set Last-Modified is there's a numeric year
-  if (query.year !== 'now') {
-    ctx.lastModified = ctx.launchDate;
-  }
   const options = makeHebcalOptions(ctx.db, query);
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
@@ -34,22 +30,24 @@ export async function hebcalDownload(ctx) {
   if (ics || csv) {
     options.numYears = getNumYears(options);
   }
-  // etag includes actual year because options.year is never 'now'
-  let icalOpt;
-  if (ics) {
-    icalOpt = makeIcalOpts(options, query);
+  const events = makeHebrewCalendar(ctx, options);
+  if (!events.length) {
+    ctx.throw(400, 'Please select at least one event option');
   }
-  ctx.response.etag = eTagFromOptions(ics ? icalOpt : options, {outputType: extension});
+  // set Last-Modified date to the date of the first calendar
+  // event, unless that would be in the future
+  const firstEvDt = events[0].getDate().greg();
+  ctx.lastModified = firstEvDt > ctx.launchDate ? ctx.launchDate : firstEvDt;
+  // etag includes actual year because options.year is never 'now'
+  const opts = Object.assign({}, query, options);
+  ctx.response.etag = eTagFromOptions(opts, {extension});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
     return;
   }
-  const events = makeHebrewCalendar(ctx, options);
-  if (!events.length) {
-    ctx.throw(400, 'Please select at least one event option');
-  }
   if (ics) {
+    const icalOpt = makeIcalOpts(options, query);
     if (!icalOpt.calendarColor) {
       icalOpt.calendarColor = '#800002';
     }
