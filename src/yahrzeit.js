@@ -4,10 +4,11 @@ import {eventsToCsv, eventsToClassicApi, pad4, pad2} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty} from './empty.js';
-import {getIpAddress, eTagFromOptions, makeIcalOpts,
+import {eTagFromOptions, makeIcalOpts,
   cleanQuery,
   hebcalFormDefaults,
   doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
+import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,

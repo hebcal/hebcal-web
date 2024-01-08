@@ -1,9 +1,10 @@
 /* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
-import {getIpAddress, getLocationFromQuery, processCookieAndQuery,
+import {getLocationFromQuery, processCookieAndQuery,
   cleanQuery,
-  validateEmail, queryDefaultCandleMins} from './common.js';
-import {mySendMail, getImgOpenHtml} from './emailCommon.js';
+  queryDefaultCandleMins} from './common.js';
+import {getIpAddress} from './getIpAddress.js';
+import {mySendMail, getImgOpenHtml, validateEmail} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';
 
 const BLANK = '<div>&nbsp;</div>';

@@ -2,6 +2,7 @@ import pino from 'pino';
 import mmh3 from 'murmurhash3';
 import util from 'util';
 import {empty} from './empty.js';
+import {getIpAddress} from './getIpAddress.js';
 import {matomoTrack} from './matomoTrack.js';
 
 // return array that have 4 elements of 32bit integer
@@ -58,7 +59,7 @@ export function makeLogInfo(ctx) {
     status: ctx.response.status,
     length: ctx.response.length,
     duration: Date.now() - ctx.state.startTime,
-    ip: ctx.get('x-client-ip') || ctx.request.ip,
+    ip: getIpAddress(ctx),
     method: ctx.request.method,
     url: ctx.request.originalUrl,
     ua: ctx.get('user-agent'),

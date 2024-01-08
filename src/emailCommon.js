@@ -1,4 +1,4 @@
-import {getIpAddress} from './common.js';
+import {getIpAddress} from './getIpAddress.js';
 import nodemailer from 'nodemailer';
 import {htmlToText} from 'nodemailer-html-to-text';
 
@@ -72,3 +72,14 @@ export function getImgOpenHtml(msgid, loc, utmCampaign) {
   return `<img src="https://www.hebcal.com/email/open?msgid=${msgid}&amp;loc=${loc}&amp;utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=${utmCampaign}" alt="" width="1" height="1" border="0" style="height:1px!important;width:1px!important;border-width:0!important;margin-top:0!important;margin-bottom:0!important;margin-right:0!important;margin-left:0!important;padding-top:0!important;padding-bottom:0!important;padding-right:0!important;padding-left:0!important">`;
 }
 
+
+// eslint-disable-next-line max-len
+const validEmailRe = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+/**
+ * @param {string} email
+ * @return {boolean}
+ */
+export function validateEmail(email) {
+  return validEmailRe.test(String(email).toLowerCase());
+}

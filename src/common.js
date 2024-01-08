@@ -13,6 +13,7 @@ import {basename} from 'path';
 import {readJSON} from './readJSON.js';
 import {empty, off} from './empty.js';
 import {isoDateStringToDate, nowInTimezone} from './dateUtil.js';
+import {getIpAddress} from './getIpAddress.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -879,24 +880,6 @@ export function makeHebrewCalendar(ctx, options) {
   }
 
   return events;
-}
-
-/**
- * @param {any} ctx
- * @return {string}
- */
-export function getIpAddress(ctx) {
-  return ctx.get('x-client-ip') || ctx.request.ip;
-}
-
-/**
- * @param {string} email
- * @return {boolean}
- */
-export function validateEmail(email) {
-  // eslint-disable-next-line max-len
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
 }
 
 /**

@@ -1,5 +1,6 @@
 import http from 'node:http';
 import {readJSON} from './readJSON.js';
+import {getIpAddress} from './getIpAddress.js';
 
 const pkg = readJSON('../package.json');
 
@@ -99,7 +100,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     path += '?' + postData;
     sendPostBody = false;
   }
-  const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
+  const ipAddress = getIpAddress(ctx);
   const xfwd = ctx.get('x-forwarded-for') || ipAddress;
   const httpHost = 'www.hebcal.com';
   const headers = {
