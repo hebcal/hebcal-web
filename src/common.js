@@ -1132,37 +1132,6 @@ export function stopIfTimedOut() {
   };
 }
 
-export const bookId = {
-  Genesis: 1,
-  Exodus: 2,
-  Leviticus: 3,
-  Numbers: 4,
-  Deuteronomy: 5,
-};
-
-/**
- * @private
- * @param {Aliyah|Aliyah[]} aliyah
- * @param {boolean} sefAliyot
- * @return {string}
- */
-export function sefariaAliyahHref(aliyah, sefAliyot) {
-  if (Array.isArray(aliyah)) {
-    aliyah = aliyah[0];
-  }
-  const beginStr = aliyah.b.replace(':', '.');
-  const cv1 = beginStr.split('.');
-  const end = aliyah.e.replace(':', '.');
-  const cv2 = end.split('.');
-  const endStr = beginStr === end ? '' : cv1[0] === cv2[0] ? '-' + cv2[1] : '-' + end;
-  if (aliyah.reason) {
-    sefAliyot = false;
-  }
-  const suffix = bookId[aliyah.k] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
-  const book = aliyah.k.replace(/ /g, '_');
-  return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
-}
-
 const maxNumYear = {
   candlelighting: 4,
   omer: 4,
