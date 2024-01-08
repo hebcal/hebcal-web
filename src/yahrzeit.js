@@ -453,13 +453,6 @@ export async function yahrzeitDownload(ctx) {
   if (!vv || vv[0] !== 'y') {
     return;
   }
-  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
-  ctx.response.etag = eTagFromOptions(query, {startYear});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return;
-  }
   const maxId = getMaxYahrzeitId(query);
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
@@ -474,11 +467,15 @@ export async function yahrzeitDownload(ctx) {
   const firstEventDt = events[0].getDate().greg();
   const firstEventMs = firstEventDt.getTime();
   ctx.lastModified = lastModMs > firstEventMs ? lastModDt : firstEventDt;
+  query.lastModified = ctx.lastModified; // for eTag
+  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
+  const extension = rpath.substring(rpath.length - 4);
+  ctx.response.etag = eTagFromOptions(query, {startYear, extension});
+  ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
     return;
   }
-  const extension = rpath.substring(rpath.length - 4);
   if (query.dl == '1') {
     ctx.response.attachment(basename(rpath));
   }
