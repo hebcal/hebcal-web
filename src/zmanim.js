@@ -1,8 +1,10 @@
 import {Zmanim, TimedEvent, HDate, flags,
   HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
-import {empty, getLocationFromQuery, getStartAndEnd, nowInTimezone,
+import {empty} from './empty.js';
+import {getLocationFromQuery, getStartAndEnd,
   CACHE_CONTROL_7DAYS,
   lgToLocale, eTagFromOptions} from './common.js';
+import {nowInTimezone} from './dateUtil.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';

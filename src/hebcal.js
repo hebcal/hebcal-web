@@ -1,16 +1,17 @@
 /* eslint-disable require-jsdoc */
+import {empty} from './empty.js';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   cleanQuery,
-  empty, urlArgs, getNumYears,
+  urlArgs, getNumYears,
   hebcalFormDefaults,
   makeIcalOpts,
   CACHE_CONTROL_7DAYS,
-  getDefaultYear,
-  getDefaultHebrewYear, makeHebrewCalendar,
+  makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
   localeMap, eTagFromOptions, langNames} from './common.js';
+import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {HDate} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar,

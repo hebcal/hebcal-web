@@ -1,7 +1,7 @@
 import {HebrewCalendar, HDate, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshiot54, parshaByBook, torahBookNames} from './parshaCommon.js';
-import {getDefaultHebrewYear} from './common.js';
+import {getDefaultHebrewYear} from './dateUtil.js';
 import dayjs from 'dayjs';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';

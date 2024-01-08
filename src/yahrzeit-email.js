@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
-import {getIpAddress, validateEmail, empty} from './common.js';
+import {empty} from './empty.js';
+import {getIpAddress, validateEmail} from './common.js';
 import {mySendMail, getImgOpenHtml} from './emailCommon.js';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   getYahrzeitIds,

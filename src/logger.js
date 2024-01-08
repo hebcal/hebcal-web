@@ -1,6 +1,7 @@
 import pino from 'pino';
 import mmh3 from 'murmurhash3';
 import util from 'util';
+import {empty} from './empty.js';
 import {matomoTrack} from './matomoTrack.js';
 
 // return array that have 4 elements of 32bit integer
@@ -46,14 +47,6 @@ export function makeLogger(logDir) {
   process.on('SIGTERM', () => handler(null, 'SIGTERM'));
 
   return logger;
-}
-
-/**
- * @param {string} val
- * @return {boolean}
- */
-function empty(val) {
-  return typeof val !== 'string' || val.length === 0;
 }
 
 /**

@@ -1,12 +1,13 @@
 /* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DailyLearning} from '@hebcal/core';
-import {getDefaultYear, setDefautLangTz, localeMap, lgToLocale,
+import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
+import {setDefautLangTz, localeMap, lgToLocale,
   cleanQuery,
   processCookieAndQuery, urlArgs,
   shortenUrl,
   makeGeoUrlArgs2,
-  getSunsetAwareDate} from './common.js';
+} from './common.js';
 import {pad2, pad4} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';

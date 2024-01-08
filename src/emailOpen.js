@@ -1,5 +1,6 @@
 import {matomoTrack} from './matomoTrack.js';
-import {getIpAddress, empty} from './common.js';
+import {getIpAddress} from './common.js';
+import {empty} from './empty.js';
 import {sendGif} from './sendGif.js';
 import {transliterate} from 'transliteration';
 

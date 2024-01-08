@@ -1,8 +1,10 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
-import {makeHebcalOptions, makeHebrewCalendar, localeMap, empty,
+import {empty} from './empty.js';
+import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   cleanQuery,
   makeGeoUrlArgs,
-  cacheControl, getDefaultHebrewYear, queryDefaultCandleMins} from './common.js';
+  cacheControl, queryDefaultCandleMins} from './common.js';
+import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import createError from 'http-errors';

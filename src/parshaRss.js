@@ -1,7 +1,7 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
 import {getHolidayDescription, makeTorahMemoText, eventsToRss2} from '@hebcal/rest-api';
-import {getTodayDate} from './common.js';
+import {getTodayDate} from './dateUtil.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';

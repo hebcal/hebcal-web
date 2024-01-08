@@ -1,19 +1,17 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
+import {empty} from './empty.js';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   cleanQuery,
-  empty,
-  getDefaultHebrewYear,
-  getDefaultYear,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
-  getTodayDate,
   expiresSaturdayNight,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
   localeMap, makeHebrewCalendar} from './common.js';
+import {getTodayDate, getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,

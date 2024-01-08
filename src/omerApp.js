@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {cacheControl, httpRedirect, getDefaultHebrewYear} from './common.js';
+import {cacheControl, httpRedirect} from './common.js';
+import {getDefaultHebrewYear} from './dateUtil.js';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
 import {makeDownloadProps} from './makeDownloadProps.js';
