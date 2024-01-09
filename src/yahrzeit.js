@@ -462,12 +462,17 @@ export async function yahrzeitDownload(ctx) {
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
-  const lastModDt = details.lastModified;
-  const lastModMs = lastModDt ? lastModDt.getTime() : 0;
+  let lastModified = details.lastModified;
+  const now = new Date();
+  if (!lastModified) {
+    // An old /v2/y/ URL won't have a lastModified
+    lastModified = now;
+  }
   const firstEventDt = events[0].getDate().greg();
-  const firstEventMs = firstEventDt.getTime();
-  ctx.lastModified = lastModMs > firstEventMs ? lastModDt : firstEventDt;
-  query.lastModified = ctx.lastModified; // for eTag
+  if (firstEventDt > lastModified && firstEventDt < now) {
+    lastModified = firstEventDt;
+  }
+  query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
   ctx.response.etag = eTagFromOptions(query, {startYear, extension});
@@ -535,7 +540,7 @@ function getDefaultStartYear() {
   const today = new HDate();
   const hmonth = today.getMonth();
   const hyear = today.getFullYear();
-  const isFirst3months = hmonth >= months.TISHREI && hmonth <= months.KISLEV;
+  const isFirst3months = hmonth >= months.TISHREI && hmonth <= months.TEVET;
   return isFirst3months ? hyear - 1 : hyear;
 }
 
