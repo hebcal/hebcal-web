@@ -68,6 +68,14 @@ export function makeLogInfo(ctx) {
   if (typeof info.length !== 'number') {
     delete info.length;
   }
+  const ims = ctx.get('if-modified-since');
+  if (!empty(ims)) {
+    info.ims = ims;
+  }
+  const lastModified = ctx.lastModified;
+  if (lastModified) {
+    info.lm = lastModified.toUTCString();
+  }
   const ref = ctx.get('referer');
   if (!empty(ref)) info.ref = ref;
   const cookie = ctx.get('cookie');
