@@ -27,8 +27,10 @@ const TIMES = {
   seaLevelSunrise: 1,
   sofZmanShma: 1,
   sofZmanShmaMGA: 1,
+  sofZmanShmaMGA16Point1: 1,
   sofZmanTfilla: 1,
   sofZmanTfillaMGA: 1,
+  sofZmanTfillaMGA16Point1: 1,
   chatzot: 1,
   minchaGedola: 1,
   minchaKetana: 1,
@@ -75,13 +77,17 @@ export async function getZmanim(ctx) {
   }
   const locObj = locationToPlainObj(loc);
   const roundMinute = q.sec === '1' ? false : true;
+  const useElevation = q.ue === 'on' || q.ue === '1';
+  if (!useElevation) {
+    delete locObj.elevation;
+  }
   if (isRange) {
-    const times = getTimesForRange(ALL_TIMES, startD, endD, loc, true, roundMinute);
+    const times = getTimesForRange(ALL_TIMES, startD, endD, loc, true, roundMinute, useElevation);
     const start = startD.format('YYYY-MM-DD');
     const end = endD.format('YYYY-MM-DD');
     ctx.body = {date: {start, end}, location: locObj, times};
   } else {
-    const times = getTimes(ALL_TIMES, startD, loc, true, roundMinute);
+    const times = getTimes(ALL_TIMES, startD, loc, true, roundMinute, useElevation);
     const isoDate = startD.format('YYYY-MM-DD');
     ctx.body = {date: isoDate, location: locObj, times};
   }
@@ -110,15 +116,16 @@ function myGetStartAndEnd(ctx, q, tzid) {
  * @param {Location} loc
  * @param {boolean} formatAsString
  * @param {boolean} roundMinute
+ * @param {boolean} useElevation
  * @return {any}
  */
-function getTimesForRange(names, startD, endD, loc, formatAsString, roundMinute) {
+function getTimesForRange(names, startD, endD, loc, formatAsString, roundMinute, useElevation) {
   const times = {};
   for (const func of names) {
     times[func] = {};
   }
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-    const t = getTimes(names, d, loc, formatAsString, roundMinute);
+    const t = getTimes(names, d, loc, formatAsString, roundMinute, useElevation);
     const isoDate = d.format('YYYY-MM-DD');
     for (const [key, val] of Object.entries(t)) {
       times[key][isoDate] = val;
@@ -134,15 +141,16 @@ function getTimesForRange(names, startD, endD, loc, formatAsString, roundMinute)
  * @param {Location} location
  * @param {boolean} formatAsString
  * @param {boolean} roundMinute
+ * @param {boolean} useElevation
  * @return {Object<string,string>}
  */
-function getTimes(names, d, location, formatAsString, roundMinute) {
+function getTimes(names, d, location, formatAsString, roundMinute, useElevation) {
   const times = {};
-  const zman = new Zmanim(location, d.toDate());
+  const zman = new Zmanim(location, d.toDate(), useElevation);
   for (const name of names) {
     if (TIMES[name]) {
       if (name.startsWith('seaLevel')) {
-        if (location.getElevation() > 0) {
+        if (useElevation) {
           times[name] = zman[name]();
         }
       } else {
@@ -219,11 +227,27 @@ const ZMAN_NAMES = {
   ],
   sofZmanShmaMGA: [
     'Kriat Shema, sof zeman (MGA)',
-    'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham',
+    'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. ' +
+    'Based on the opinion of the MGA that the day is calculated from dawn being fixed ' +
+    '72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset',
+  ],
+  sofZmanShmaMGA16Point1: [
+    'Kriat Shema, sof zeman (MGA)',
+    'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. ' +
+    'Based on the opinion of the MGA that the day is calculated from ' +
+    'dawn to nightfall with both being 16.1° below the horizon',
   ],
   sofZmanTfillaMGA: [
     'Tefilah, sof zeman (MGA)',
-    'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham',
+    'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ' +
+    'Based on the opinion of the MGA that the day is calculated from dawn being fixed ' +
+    '72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset',
+  ],
+  sofZmanTfillaMGA16Point1: [
+    'Tefilah, sof zeman (MGA)',
+    'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ',
+    'Based on the opinion of the MGA that the day is calculated from ' +
+    'dawn to nightfall with both being 16.1° below the horizon',
   ],
   chatzot: [
     'Chatzot hayom',
