@@ -96,7 +96,8 @@ function mastheadParsha(ctx, hd, il) {
     ctx.state.parshaEvent = pe;
     const url = shortenUrl(pe.url());
     const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-    items.push(`<a href="${url}">${pe.render(lg)}</a>`);
+    const parshaStr = pe.render(lg).replace(/'/g, '’');
+    items.push(`<a href="${url}">${parshaStr}</a>`);
   }
 }
 
@@ -110,7 +111,7 @@ function mastheadHolidays(ctx, hd, il) {
         const desc = ev.chanukahDay ?
           Locale.gettext('Chanukah', lg) + ' ' +
           Locale.gettext('day', lg) + ' ' + ev.chanukahDay :
-          ev.render(lg);
+          ev.render(lg).replace(/'/g, '’');
         const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
@@ -400,7 +401,8 @@ function getChanukahGreeting(d, ev) {
 
 function getRoshChodeshGreeting(ctx, hd, ev) {
   const locale = ctx.state.locale;
-  const monthName = ev.getDesc().substring(13); // 'Rosh Chodesh '
+  const monthName0 = ev.getDesc().substring(13); // 'Rosh Chodesh '
+  const monthName = monthName0.replace(/'/g, '’');
   const url = shortenUrl(ev.url());
   const d = dayjs(ev.getDate().greg()).locale(locale);
   const today = dayjs(hd.greg()).isSame(d, 'day');
