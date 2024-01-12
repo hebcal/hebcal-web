@@ -202,8 +202,6 @@ export function getDefaultYear(dt, hdate) {
     gregRange,
     gregRangeShort,
     yearArgs,
-    gregYr1,
-    gregYr2,
     isHebrewYear,
     todayAbs: today,
     av15Abs: av15,
