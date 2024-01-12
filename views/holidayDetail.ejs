@@ -202,7 +202,7 @@ Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <h4 id="reading-<%=reading.id%>"><%=item.replace(/'/g, '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (reading.note) { %><br><span class="text-burgundy small"><%=reading.note%></span><% } -%>
-<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString()%></span></time><% } %>
+<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString().replace(/'/g, '’')%></span></time><% } %>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:

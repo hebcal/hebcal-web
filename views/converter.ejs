@@ -237,7 +237,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
 <% futureYearsHeb.forEach((item) => { -%>
-<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString() %></a></td></tr>
+<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString().replace(/'/g, '’') %></a></td></tr>
 <% }); -%>
 </tbody>
 </table>
@@ -248,7 +248,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
 <% futureYearsGreg.forEach((item) => { -%>
-<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString() %></a></td></tr>
+<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString().replace(/'/g, '’') %></a></td></tr>
 <% }); -%>
 </tbody>
 </table>

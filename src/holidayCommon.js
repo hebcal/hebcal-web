@@ -90,14 +90,14 @@ export function getHolidayDuration(il, mask, holiday) {
  * @return {string}
  */
 function hebrewDateRange(hd, duration, showYear=true) {
-  const startMonth = hd.getMonthName();
+  const startMonth = hd.getMonthName().replace(/'/g, '’');
   const startMday = hd.getDate();
   const yearSuffix = showYear ? ' ' + hd.getFullYear() : '';
   if (duration <= 1) {
     return `${startMday} ${startMonth}${yearSuffix}`;
   }
   const end = new HDate(hd.abs() + duration - 1);
-  const endMonth = end.getMonthName();
+  const endMonth = end.getMonthName().replace(/'/g, '’');
   const endMday = end.getDate();
   if (startMonth === endMonth) {
     return `${startMday}-${endMday} ${startMonth}${yearSuffix}`;

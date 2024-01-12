@@ -36,7 +36,7 @@
 <div id="today" class="mt-3">
 <ul class="list-unstyled">
 <li class="fs-2"><time datetime="<%= d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
-<li class="fs-2"><%= hd.toString() %></li>
+<li class="fs-2"><%= hd.toString().replace(/'/g, '’') %></li>
 <li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
 <li class="fs-2 lh-sm pt-1 pb-2" dir="rtl" lang="he"><%= ev.getTodayIs('he') %></li>
 <li class="fs-4 lh-sm"><%= ev.getTodayIs('en') %></li>

@@ -174,28 +174,19 @@ export function getDefaultYear(dt, hdate) {
   const hy = getDefaultHebrewYear(hdate);
   const gregYr1 = hy - 3761;
   const gregYr2 = gregYr1 + 1;
-  let gregRange;
-  let gregRangeShort;
-  let yearArgs;
-  let isHebrewYear;
-  const gy0 = dt.getFullYear();
+  let yearArgs = `&yt=H&year=${hy}`;
+  let isHebrewYear = true;
+  let gregRange = gregYr1 + '-' + gregYr2;
+  let gregRangeShort = gregYr1 + '-' + (gregYr2 % 100);
   const gm = dt.getMonth() + 1;
-  const gy = (gm === 12) ? gy0 + 1 : gy0;
-  if (hdate.getMonth() === months.TISHREI) {
-    yearArgs = `&yt=H&year=${hy}`;
-    isHebrewYear = true;
-    gregRange = gregYr1 + '-' + gregYr2;
-    gregRangeShort = gregYr1 + '-' + (gregYr2 % 100);
-  } else if (gm < 8 || (gm <= 9 && today <= av15) || gm === 12 && dt.getDate() >= 10) {
+  if ((hdate.getMonth() !== months.TISHREI) &&
+      (gm < 8 || (gm <= 9 && today <= av15) || gm === 12 && dt.getDate() >= 10)) {
+    const gy0 = dt.getFullYear();
+    const gy = (gm === 12) ? gy0 + 1 : gy0;
     yearArgs = `&yt=G&year=${gy}`;
     isHebrewYear = false;
     gregRange = gy;
     gregRangeShort = gy;
-  } else {
-    yearArgs = `&yt=H&year=${hy}`;
-    isHebrewYear = true;
-    gregRange = gregYr1 + '-' + gregYr2;
-    gregRangeShort = gregYr1 + '-' + (gregYr2 % 100);
   }
   return {
     hy,
