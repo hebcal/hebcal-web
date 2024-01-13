@@ -207,9 +207,11 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col -->
 <div class="col-sm-6 mb-3">
 <h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
- Holiday Calendar</h5>
-<p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
-<br><a href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>"><%=hy%> Calendar &raquo;</a></p>
+ Jewish Holidays</h5>
+<p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.</p>
+<div><a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <%=hy%> Calendar &raquo;</a></div>
 </div><!-- .col -->
 </div><!-- .row -->
 <% if (hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
