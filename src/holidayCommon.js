@@ -148,6 +148,10 @@ export function eventToHolidayItemBase(ev, il) {
   return item;
 }
 
+const staticSpecial = new Set([
+  'Shabbat Nachamu', 'Shabbat Shirah', 'Shabbat Chazon',
+]);
+
 /**
  * @param {Event} ev
  * @param {boolean} il
@@ -170,7 +174,7 @@ export function eventToHolidayItem(ev, il) {
     hdRangeNoYear: hebrewDateRange(hd, duration, false),
     categories: getEventCategories(ev),
   });
-  if (mask & flags.SPECIAL_SHABBAT) {
+  if ((mask & flags.SPECIAL_SHABBAT) && !staticSpecial.has(item.name)) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha0 = sedra.lookup(hd);
     if (!parsha0.chag) {
