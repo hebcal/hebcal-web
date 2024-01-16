@@ -101,7 +101,7 @@ app.use(async function redirV2(ctx, next) {
     const qs = buff.toString('ascii');
     const sp = new URLSearchParams(qs);
     const query = Object.fromEntries(sp.entries());
-    const f2 = query.year === 'now' ? filename.replace(/^hebcal_\d\d\d\dh?/, 'hebcal') : filename;
+    const f2 = query.year === 'now' ? filename.replace(/^hebcal_\d\d\d\d[Hh]?/, 'hebcal') : filename;
     const url = downloadHref2(query, f2);
     ctx.status = 301;
     ctx.redirect(url);
