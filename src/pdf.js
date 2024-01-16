@@ -175,10 +175,6 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   let fontSize = rtl ? 12 : 10;
   const heFontName = isChag ? 'hebrew-bold' : 'hebrew';
   const fontStyle = rtl ? heFontName : isChag ? 'bold' : 'plain';
-  if (mask & flags.SHABBAT_MEVARCHIM) {
-    const space = subj.indexOf(' ');
-    subj = subj.substring(space + 1);
-  }
   if (rtl) {
     subj = reverseHebrewWords(subj);
   }
