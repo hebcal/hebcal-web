@@ -21,6 +21,15 @@ function getInt(str) {
 }
 
 /**
+ * @private
+ * @param {string} str
+ * @return {boolean}
+ */
+function on(str) {
+  return str === 'on' || str === '1';
+}
+
+/**
  * @param {Object.<string,string>} query
  * @param {string} filename
  * @param {Object.<string,string>} override
@@ -29,15 +38,15 @@ function getInt(str) {
 export function downloadHref2(query, filename, override={}) {
   const q = urlArgsObj(query, override);
   const msg = new DownloadProtoBuf.Download();
-  if (q.maj === 'on') msg.setMajor(true);
-  if (q.min === 'on') msg.setMinor(true);
-  if (q.nx === 'on') msg.setRoshchodesh(true);
-  if (q.mod === 'on') msg.setModern(true);
-  if (q.mf === 'on') msg.setMinorfast(true);
-  if (q.ss === 'on') msg.setSpecialshabbat(true);
-  if (q.i === 'on') msg.setIsrael(true);
+  if (on(q.maj)) msg.setMajor(true);
+  if (on(q.min)) msg.setMinor(true);
+  if (on(q.nx)) msg.setRoshchodesh(true);
+  if (on(q.mod)) msg.setModern(true);
+  if (on(q.mf)) msg.setMinorfast(true);
+  if (on(q.ss)) msg.setSpecialshabbat(true);
+  if (on(q.i)) msg.setIsrael(true);
   if (q.yt === 'H') msg.setIshebrewyear(true);
-  if (q.c === 'on') msg.setCandlelighting(true);
+  if (on(q.c)) msg.setCandlelighting(true);
   const geonameid = getInt(q.geonameid);
   if (geonameid !== null) msg.setGeonameid(geonameid);
   const year = getInt(q.year);
@@ -56,7 +65,7 @@ export function downloadHref2(query, filename, override={}) {
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
   const b = getInt(q.b);
   if (b !== null) msg.setCandlelightingmins(b);
-  if (q.emoji === 'on' || q.emoji === '1' || q.emoji === true) {
+  if (on(q.emoji) || q.emoji === true) {
     msg.setEmoji(true);
   }
   if (q.euro) msg.setEuro(true);
@@ -68,22 +77,22 @@ export function downloadHref2(query, filename, override={}) {
   if (ny !== null) msg.setNumyears(ny);
   if (!empty(q.zip)) msg.setZip(q.zip);
 
-  if (q.s === 'on') msg.setSedrot(true);
-  if (q.o === 'on') msg.setOmer(true);
-  if (q.F === 'on') msg.setDafyomi(true);
-  if (q.myomi === 'on') msg.setMishnayomi(true);
-  if (q.nyomi === 'on') msg.setNachyomi(true);
-  if (q.ykk === 'on') msg.setYomkippurkatan(true);
-  if (q.yyomi === 'on') msg.setYerushalmiyomi(true);
-  if (q.dr1 === 'on') msg.setRambam1(true);
-  if (q.dcc === 'on') msg.setChofetzchaim(true);
-  if (q.dshl === 'on') msg.setShemirathalashon(true);
-  if (q.dps === 'on') msg.setPsalms(true);
-  if (q.dw === 'on') msg.setDafweekly(true);
-  if (q.ue === 'on') msg.setUseelevation(true);
+  if (on(q.s)) msg.setSedrot(true);
+  if (on(q.o)) msg.setOmer(true);
+  if (on(q.F)) msg.setDafyomi(true);
+  if (on(q.myomi)) msg.setMishnayomi(true);
+  if (on(q.nyomi)) msg.setNachyomi(true);
+  if (on(q.ykk)) msg.setYomkippurkatan(true);
+  if (on(q.yyomi)) msg.setYerushalmiyomi(true);
+  if (on(q.dr1)) msg.setRambam1(true);
+  if (on(q.dcc)) msg.setChofetzchaim(true);
+  if (on(q.dshl)) msg.setShemirathalashon(true);
+  if (on(q.dps)) msg.setPsalms(true);
+  if (on(q.dw)) msg.setDafweekly(true);
+  if (on(q.ue)) msg.setUseelevation(true);
 
-  if (q.d === 'on') msg.setAddhebrewdates(true);
-  if (q.D === 'on') msg.setAddhebrewdatesforevents(true);
+  if (on(q.d)) msg.setAddhebrewdates(true);
+  if (on(q.D)) msg.setAddhebrewdatesforevents(true);
 
   if (!empty(q.month) && q.month != 'x') {
     const month = getInt(q.month);

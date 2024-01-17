@@ -118,8 +118,6 @@ function holidayEvToItem(ev, il, lang) {
   }
   if (mask & flags.ROSH_CHODESH) {
     return item;
-  } else if (mask & flags.SHABBAT_MEVARCHIM) {
-    return item;
   }
   const key = getLeyningKeyForEvent(ev, il);
   if (key) {
