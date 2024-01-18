@@ -430,8 +430,10 @@ function removeEmptyArgs(q) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 async function getDetailsFromDb(ctx) {
+  ctx.state.trace.set('getDetailsFromDb-start', Date.now());
   const id = ctx.request.path.substring(4, 30);
   const obj = await getYahrzeitDetailsFromDb(ctx, id);
+  ctx.state.trace.set('getDetailsFromDb-end', Date.now());
   ctx.state.relcalid = id;
   return obj;
 }
@@ -458,7 +460,9 @@ export async function yahrzeitDownload(ctx) {
     query.ulid = ctx.state.ulid;
   }
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
+  ctx.state.trace.set('makeYahrzeitEvents-strat', Date.now());
   const events = await makeYahrzeitEvents(maxId, query, reminder);
+  ctx.state.trace.set('makeYahrzeitEvents-end', Date.now());
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
@@ -485,6 +489,7 @@ export async function yahrzeitDownload(ctx) {
     ctx.response.attachment(basename(rpath));
   }
   if (extension == '.ics') {
+    ctx.state.trace.set('eventsToIcalendar-start', Date.now());
     ctx.response.type = 'text/calendar; charset=utf-8';
     const opts = {
       yahrzeit: true,
@@ -496,11 +501,14 @@ export async function yahrzeitDownload(ctx) {
     };
     const icalOpt = makeIcalOpts(opts, query);
     ctx.body = await eventsToIcalendar(events, icalOpt);
+    ctx.state.trace.set('eventsToIcalendar-end', Date.now());
   } else if (extension == '.csv') {
+    ctx.state.trace.set('eventsToCsv-start', Date.now());
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = csv;
+    ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
 }
 

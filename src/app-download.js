@@ -50,6 +50,11 @@ app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
 app.context.launchDate = new Date();
 
+app.use(async function trace0(ctx, next) {
+  ctx.state.trace = new Map();
+  await next();
+});
+
 app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
@@ -69,6 +74,12 @@ app.use(timeout(6000, {
   callback: function(ctx) {
     const logInfo = makeLogInfo(ctx);
     logInfo.status = 503;
+    const start = ctx.state.startTime;
+    const trace = logInfo.trace = {};
+    for (const [name, msec] of ctx.state.trace.entries()) {
+      const delta = msec - start;
+      trace[name] = delta;
+    }
     ctx.logger.warn(logInfo);
   },
 }));
@@ -76,6 +87,7 @@ app.use(timeout(6000, {
 app.use(stopIfTimedOut());
 
 app.use(async function fixup0(ctx, next) {
+  ctx.state.trace.set('fixup0', Date.now());
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
@@ -162,6 +174,7 @@ const bingUA = 'compatible; bingbot/2.';
 
 // Fix up querystring so we can later use ctx.request.query
 app.use(async function fixup2(ctx, next) {
+  ctx.state.trace.set('fixup2', Date.now());
   const path = ctx.request.path;
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
@@ -239,6 +252,7 @@ app.use(async function redirLegacy(ctx, next) {
 });
 
 app.use(async function sendStatic(ctx, next) {
+  ctx.state.trace.set('sendStatic', Date.now());
   const rpath = ctx.request.path;
   if (rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', 'max-age=5184000');
@@ -255,6 +269,7 @@ app.use(async function sendStatic(ctx, next) {
 
 // request dispatcher
 app.use(async function router(ctx, next) {
+  ctx.state.trace.set('router', Date.now());
   const rpath = ctx.request.path;
   if (rpath.startsWith('/v3')) {
     return yahrzeitDownload(ctx);
