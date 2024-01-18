@@ -15,10 +15,10 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
-import util from 'util';
+// import util from 'util';
 import mmh3 from 'murmurhash3';
 
-const murmur32Hex = util.promisify(mmh3.murmur32Hex);
+// const murmur32Hex = util.promisify(mmh3.murmur32Hex);
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 const MIN_YEARS = 2;
@@ -460,7 +460,7 @@ export async function yahrzeitDownload(ctx) {
     query.ulid = ctx.state.ulid;
   }
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
-  ctx.state.trace.set('makeYahrzeitEvents-strat', Date.now());
+  ctx.state.trace.set('makeYahrzeitEvents-start', Date.now());
   const events = await makeYahrzeitEvents(maxId, query, reminder);
   ctx.state.trace.set('makeYahrzeitEvents-end', Date.now());
   if (events.length === 0) {
@@ -598,7 +598,8 @@ async function makeYahrzeitEvents(maxId, query, reminder) {
     const holidays = makeYizkorEvents(startYear, endYear, query.i === 'on');
     for (const ev of holidays) {
       const d = dayjs(ev.getDate().greg());
-      const hash = await murmur32Hex(ev.getDesc());
+      // const hash = await murmur32Hex(ev.getDesc());
+      const hash = mmh3.murmur32HexSync(ev.getDesc());
       ev.uid = 'yizkor-' + d.format('YYYYMMDD') + '-' + hash;
     }
     events = events.concat(holidays);
@@ -672,7 +673,8 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   }
   const observed = dayjs(hd.greg());
   ev.memo = makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId);
-  const hash = calendarId || await murmur32Hex(name);
+  // const hash = calendarId || await murmur32Hex(name);
+  const hash = calendarId || mmh3.murmur32HexSync(name);
   ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
   ev.name = name;
   ev.type = type;
