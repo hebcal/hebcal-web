@@ -243,8 +243,8 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
  */
 function reverseHebrewWords(subj) {
   subj = subj.replace('(', '\u0001').replace(')', '\u0002');
-  subj = subj.replace('\u0001', ')').replace('\u0002', '(');
-  subj = subj.split(' ').reverse().join('  ');
+  subj = subj.replace('\u0001', ') ').replace('\u0002', '(');
+  subj = subj.split(' ').reverse().join('  ').replace('   ', '  ');
   return subj;
 }
 
