@@ -1,12 +1,8 @@
 import pino from 'pino';
-import mmh3 from 'murmurhash3';
-import util from 'util';
+import {murmur128Sync} from 'murmurhash3';
 import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {matomoTrack} from './matomoTrack.js';
-
-// return array that have 4 elements of 32bit integer
-const murmur128 = util.promisify(mmh3.murmur128);
 
 const ignore404 = new Set([
   '/apple-touch-icon-precomposed.png',
@@ -128,7 +124,7 @@ export function makeLogInfo(ctx) {
 export function accessLogger(logger) {
   return async function accessLog(ctx, next) {
     ctx.state.startTime = Date.now();
-    ctx.state.visitorId = await getVisitorId(ctx);
+    ctx.state.visitorId = getVisitorId(ctx);
     await next();
     logger.info(makeLogInfo(ctx));
   };
@@ -164,7 +160,7 @@ export function errorLogger(logger) {
  * @param {any} ctx
  * @return {string}
  */
-async function getVisitorId(ctx) {
+function getVisitorId(ctx) {
   const str = ctx.cookies.get('C');
   if (str) {
     const cookie = new URLSearchParams(str);
@@ -176,7 +172,7 @@ async function getVisitorId(ctx) {
   }
   const userAgent = ctx.get('user-agent');
   const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
-  const vid = await makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
+  const vid = makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
   return vid;
 }
 
@@ -187,8 +183,8 @@ async function getVisitorId(ctx) {
  * @param {string} acceptLanguage
  * @return {string}
  */
-async function makeUuid(ipAddress, userAgent, acceptLanguage) {
-  const raw = await murmur128(ipAddress + userAgent + acceptLanguage);
+function makeUuid(ipAddress, userAgent, acceptLanguage) {
+  const raw = murmur128Sync(ipAddress + userAgent + acceptLanguage);
   const buf32 = new Uint32Array(raw);
   const bytes = new Uint8Array(buf32.buffer);
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
