@@ -176,6 +176,9 @@ export function urlArgsObj(query, override={}) {
   }
   if (q.M === 'on') {
     delete q.m;
+  } else if (q.M === 'off' && empty(q.m)) {
+    q.M = 'on';
+    delete q.m;
   }
   delete q['.s'];
   delete q.vis;
@@ -1273,6 +1276,9 @@ export function makeGeoUrlArgs(q, location, options) {
 export function makeGeoUrlArgs2(q, location) {
   const args = makeGeoUrlArgs0(q, location);
   if (q.M === 'on') {
+    delete q.m;
+  } else if (q.M === 'off' && empty(q.m)) {
+    q.M = 'on';
     delete q.m;
   }
   q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
