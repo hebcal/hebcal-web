@@ -170,6 +170,20 @@ app.use(async function fixup1(ctx, next) {
 
 app.use(stopIfTimedOut());
 
+app.use(async function redirLegacy(ctx, next) {
+  if (ctx.request.querystring.length === 0) {
+    const rpath = ctx.request.path;
+    const rpath0 = rpath.substring(0, rpath.length - 1);
+    const destination = redirectMap[rpath] || redirectMap[rpath0];
+    if (typeof destination !== 'undefined') {
+      ctx.status = 301;
+      ctx.redirect(destination);
+      return;
+    }
+  }
+  return next();
+});
+
 const bingUA = 'compatible; bingbot/2.';
 
 // Fix up querystring so we can later use ctx.request.query
@@ -233,20 +247,6 @@ app.use(async function fixup3(ctx, next) {
   const q = ctx.request.query;
   if (rpath.startsWith('/export/') && (typeof q.v === 'undefined' || !q.v.length) && q.y1 && q.m1 && q.d1) {
     ctx.request.query.v = 'yahrzeit';
-  }
-  return next();
-});
-
-app.use(async function redirLegacy(ctx, next) {
-  if (ctx.request.querystring.length === 0) {
-    const rpath = ctx.request.path;
-    const rpath0 = rpath.substring(0, rpath.length - 1);
-    const destination = redirectMap[rpath] || redirectMap[rpath0];
-    if (typeof destination !== 'undefined') {
-      ctx.status = 301;
-      ctx.redirect(destination);
-      return;
-    }
   }
   return next();
 });
