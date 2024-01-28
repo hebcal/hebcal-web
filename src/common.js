@@ -144,6 +144,7 @@ const dailyLearningOpts = {
   dshl: 'shemiratHaLashon',
   dps: 'psalms',
   dw: 'dafWeeklySunday',
+  dty: 'tanakhYomi',
 };
 
 const numberOpts = {

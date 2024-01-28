@@ -120,15 +120,17 @@ FILE="psalms"
 fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-48ac-bb29-076c77405361&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daily+Tehillim+%28Psalms%29&caldesc=Monthly+cycle+of+studying+the+Book+of+Psalms"
 compress_file $FILE
 
-FILE="chofetz-chaim"
-remove_file $FILE
-node dist/chofetzChaim.js
-mv "${FILE}.ics" "${FILE}.csv" ical
+FILE="tanakh-yomi"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Tanakh+Yomi&caldesc="
 compress_file $FILE
 
 FILE="rambam1"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&dr1=on&relcalid=13cb480b-a4a0-4667-8ec5-25819a2e37a1&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daily+Rambam&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
+compress_file $FILE
+
+FILE="chofetz-chaim"
 remove_file $FILE
-node dist/dailyRambamStatic.js
+node dist/chofetzChaim.js
 mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 

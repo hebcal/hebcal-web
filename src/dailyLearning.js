@@ -8,17 +8,23 @@ import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 
 const currentYear = new Date().getFullYear();
 
+// indexed by Event.getCategories()
+// [0] friendly name
+// [1] download/ical URL basename
+// [2] URL query parameter option
+// [3] dailyLearning boolean option name
 const config = {
-  dafyomi: ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F'],
-  dafWeekly: ['Daf-a-Week', 'daf-weekly', 'dw'],
-  mishnayomi: ['Mishna Yomi', 'mishna-yomi', 'myomi'],
-  nachyomi: ['Nach Yomi', 'nach-yomi', 'nyomi'],
-  dailyPsalms: ['Daily Tehillim (Psalms)', 'psalms', 'dps'],
-  chofetzChaim: ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc'],
-  shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl'],
-  dailyRambam1: ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1'],
-  yerushalmi: ['Yerushalmi Yomi (J’lem Talmud)', 'yerushalmi-vilna', 'yyomi'],
-  parashat: ['Torah portion', 'torah-readings-diaspora', 's'],
+  dafyomi: ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F', 'dafYomi'],
+  mishnayomi: ['Mishna Yomi', 'mishna-yomi', 'myomi', 'mishnaYomi'],
+  nachyomi: ['Nach Yomi', 'nach-yomi', 'nyomi', 'nachYomi'],
+  tanakhYomi: ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
+  dailyPsalms: ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
+  dailyRambam1: ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
+  yerushalmi: ['Yerushalmi Yomi (J’lem Talmud)', 'yerushalmi-vilna', 'yyomi', 'yerushalmi'],
+  chofetzChaim: ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
+  shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl', 'shemiratHaLashon'],
+  dafWeekly: ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
+  parashat: ['Torah portion', 'torah-readings-diaspora', 's', null],
 };
 
 // eslint-disable-next-line require-jsdoc
@@ -60,23 +66,20 @@ export function dailyLearningApp(ctx) {
   const q = ctx.request.query;
   const il = q.i === 'on';
   const lg = q.lg || 's';
+  const dailyLearningOpts = {};
+  for (const arr of Object.values(config)) {
+    const key = arr[3];
+    if (key) {
+      dailyLearningOpts[key] = true;
+    }
+  }
   const events = HebrewCalendar.calendar({
     start: dt,
     end: dt,
     il,
     locale: lg,
     noHolidays: true,
-    dailyLearning: {
-      dafYomi: true,
-      mishnaYomi: true,
-      nachYomi: true,
-      psalms: true,
-      rambam1: true,
-      yerushalmi: true,
-      chofetzChaim: true,
-      shemiratHaLashon: true,
-      dafWeekly: true,
-    },
+    dailyLearning: dailyLearningOpts,
   });
 
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];

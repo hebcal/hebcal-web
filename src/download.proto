@@ -69,4 +69,5 @@ message Download {
   bool dafWeekly = 51;
   int32 elev = 52;
   bool useElevation = 53;
+  bool tanakhYomi = 54;
 }

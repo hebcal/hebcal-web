@@ -203,7 +203,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false),
     dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false),
     elev: jspb.Message.getFieldWithDefault(msg, 52, 0),
-    useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false)
+    useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false),
+    tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false)
   };
 
   if (includeInstance) {
@@ -439,6 +440,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 53:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setUseelevation(value);
+      break;
+    case 54:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setTanakhyomi(value);
       break;
     default:
       reader.skipField();
@@ -816,6 +821,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       53,
+      f
+    );
+  }
+  f = message.getTanakhyomi();
+  if (f) {
+    writer.writeBool(
+      54,
       f
     );
   }
@@ -1872,6 +1884,24 @@ proto.Download.prototype.getUseelevation = function() {
  */
 proto.Download.prototype.setUseelevation = function(value) {
   return jspb.Message.setProto3BooleanField(this, 53, value);
+};
+
+
+/**
+ * optional bool tanakhYomi = 54;
+ * @return {boolean}
+ */
+proto.Download.prototype.getTanakhyomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 54, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTanakhyomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 54, value);
 };
 
 

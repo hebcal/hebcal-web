@@ -156,6 +156,16 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
   years: 5,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Tanakh Yomi', id: 'tanakh-yomi',
+  emoji: '📖',
+  summary: `<p>A daily learning cycle for completing Tanakh annually.
+    On Shabbat, each Torah portion is recited.
+    On weekdays, Prophets and Writings are recited according to the ancient Masoretic
+    division of sedarim.</p>`,
+  feedLength: 293,
+  years: 2,
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Tehillim (Psalms)', id: 'psalms',
   emoji: '📖',
   summary: `<p>Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim).
