@@ -134,17 +134,17 @@ const booleanOpts = {
   ue: 'useElevation',
 };
 
-const dailyLearningOpts = {
+export const dailyLearningOpts = {
   F: 'dafYomi',
   myomi: 'mishnaYomi',
   nyomi: 'nachYomi',
-  yyomi: 'yerushalmi',
+  dty: 'tanakhYomi',
   dr1: 'rambam1',
+  yyomi: 'yerushalmi',
   dcc: 'chofetzChaim',
   dshl: 'shemiratHaLashon',
   dps: 'psalms',
   dw: 'dafWeeklySunday',
-  dty: 'tanakhYomi',
 };
 
 const numberOpts = {

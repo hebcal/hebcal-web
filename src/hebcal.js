@@ -10,6 +10,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
+  dailyLearningOpts,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
@@ -192,6 +193,9 @@ async function renderForm(ctx, error) {
     defaultYear,
     defaultYearHeb,
     queryDefaultCandleMins,
+    dailyLearningOpts,
+    optToName,
+    optLongDescr,
   });
 }
 
@@ -211,6 +215,19 @@ const optToName = {
   yerushalmi: 'Yerushalmi Yomi',
   dafWeekly: 'Daf-a-Week',
   dafWeeklySunday: 'Daf-a-Week',
+};
+
+const optLongDescr = {
+  dafYomi: 'Daily regimen of learning the Babylonian Talmud',
+  mishnaYomi: 'Two Mishnayot each day',
+  nachYomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
+  tanakhYomi: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
+  psalms: 'Daily study of few chapters from the book of Psalms',
+  chofetzChaim: 'Jewish ethics and laws of speech',
+  shemiratHaLashon: '',
+  rambam1: 'Maimonides’ Mishneh Torah legal code',
+  yerushalmi: 'Jerusalem Talmud (Vilna Edition)',
+  dafWeeklySunday: 'One page of Babylonian Talmud per week',
 };
 
 function makeLocationName(ctx, options) {
@@ -343,6 +360,9 @@ function renderHtml(ctx) {
     defaultYear,
     defaultYearHeb,
     queryDefaultCandleMins,
+    dailyLearningOpts,
+    optToName,
+    optLongDescr,
   });
 }
 
