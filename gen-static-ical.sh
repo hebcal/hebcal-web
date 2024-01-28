@@ -57,15 +57,15 @@ fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=e
 compress_file $FILE
 
 FILE="hdate-en"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he-v2"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="omer"
@@ -121,7 +121,7 @@ fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-4
 compress_file $FILE
 
 FILE="tanakh-yomi"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Tanakh+Yomi&caldesc="
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Tanakh+Yomi&caldesc=A+daily+learning+cycle+for+completing+Tanakh+annually.+On+Shabbat%2C+each+Torah+portion+is+recited.+On+weekdays%2C+Prophets+and+Writings+are+recited+according+to+the+ancient+Masoretic+division+of+sedarim"
 compress_file $FILE
 
 FILE="rambam1"

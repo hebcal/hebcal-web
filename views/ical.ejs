@@ -103,20 +103,20 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   summary: `<p>Displays the Hebrew date (such as <strong class="text-nowrap text-burgundy">18th of Tevet</strong>) every day of the week. Sephardic transliteration.</p>
 <p>Hebrew year is included in event title on the 1st of each month (e.g. <strong class="text-nowrap text-burgundy">1st of Kislev, 5782</strong>)</p>`,
   feedLength: 365,
-  years: 2,
+  years: 3,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew)', id: 'hdate-he-v2',
   summary: `<p>Displays the Hebrew date without nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">י״ח טבת</span>) every day of the week.</p>
 <p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">א׳ כסלו תשפ״ב</span>)</p>`,
   feedLength: 365,
-  years: 2,
+  years: 3,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Hebrew calendar dates (Hebrew with nikud)', id: 'hdate-he',
   summary: `<p>Displays the Hebrew date with nikud (e.g. <span lang="he" dir="rtl" class="text-nowrap text-burgundy">י״ח טֵבֵת</span>) every day of the week</p>`,
   feedLength: 365,
-  years: 2,
+  years: 3,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Days of the Omer', id: 'omer',
@@ -162,7 +162,7 @@ each day in order to finish the entire Mishnah in ~6 years</p>`,
     On Shabbat, each Torah portion is recited.
     On weekdays, Prophets and Writings are recited according to the ancient Masoretic
     division of sedarim.</p>`,
-  feedLength: 293,
+  feedLength: '~293',
   years: 2,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
