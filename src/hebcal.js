@@ -203,6 +203,7 @@ const optToName = {
   dafYomi: 'Daf Yomi',
   mishnaYomi: 'Mishna Yomi',
   nachYomi: 'Nach Yomi',
+  tanakhYomi: 'Tanakh Yomi',
   psalms: 'Daily Tehillim',
   chofetzChaim: 'Sefer Chofetz Chaim',
   shemiratHaLashon: 'Shemirat HaLashon',
