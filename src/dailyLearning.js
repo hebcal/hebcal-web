@@ -138,6 +138,7 @@ export function dailyLearningApp(ctx) {
       flag: ids[2],
       title: ev.renderBrief(lg),
       url: ev.url(),
+      event: ev,
     };
   });
   items.unshift(...items0);

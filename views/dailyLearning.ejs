@@ -37,6 +37,7 @@
 <%   if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
 <%   } %>
 </div>
+<% if (item.event && item.event.memo) { %><div class="fst-italic"><%=item.event.memo%></div><% } %>
 <%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% if (item.basename) { -%>
 <div class="collapse" id="sub-<%= item.id %>">
