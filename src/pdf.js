@@ -1,4 +1,4 @@
-import {greg, flags, HebrewCalendar} from '@hebcal/core';
+import {greg, flags, HebrewCalendar, Locale, gematriya, HDate} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
@@ -110,16 +110,45 @@ function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
   }
 }
 
+/**
+ * @param {dayjs.Dayjs} d
+ * @param {boolean} rtl
+ * @param {CalOptions} options
+ * @return {string}
+ */
+function makeHebMonthStr(d, rtl, options) {
+  const start = new HDate(d.toDate());
+  const endD = d.add(1, 'month').subtract(1, 'day');
+  const end = new HDate(endD.toDate());
+  let str = Locale.gettext(start.getMonthName(), options?.locale);
+  const startYear = start.getFullYear();
+  const endYear = end.getFullYear();
+  if (endYear !== startYear) {
+    const yearStr = rtl ? gematriya(startYear) : startYear;
+    str += ' ' + yearStr;
+  }
+  if (end.getMonth() !== start.getMonth()) {
+    str += ' – ' + Locale.gettext(end.getMonthName(), options?.locale);
+  }
+  const endYearStr = rtl ? gematriya(endYear) : endYear;
+  str += ' ' + endYearStr;
+  return rtl ? reverseHebrewWords(str) : str.replace(/'/g, '’');
+}
+
 // eslint-disable-next-line require-jsdoc
-function renderPdfMonthTitle(doc, d, rtl) {
+function renderPdfMonthTitle(doc, d, rtl, options) {
   const yy = d.year();
   const titleYear = yy > 0 ? yy : -(yy-1) + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
   const monthTitle0 = d.format('MMMM') + ' ' + titleYear;
   const monthTitle = rtl ? reverseHebrewWords(monthTitle0) : monthTitle0;
   const monthFont = rtl ? 'hebrew' : 'semi';
-  doc.fontSize(36)
+  doc.fontSize(26)
       .font(monthFont)
       .text(monthTitle, 0, PDF_TMARGIN - 24, {align: 'center'});
+  const hebTitle = makeHebMonthStr(d, rtl, options);
+  doc.fontSize(14)
+      .font(rtl ? 'hebrew' : 'plain')
+      .text(hebTitle, 0, PDF_TMARGIN + 4, {align: 'center'});
 }
 
 // eslint-disable-next-line require-jsdoc
@@ -261,7 +290,7 @@ export function createPdfDoc(title, options) {
     margin: 0,
     pdfVersion: '1.5',
     displayTitle: true,
-    lang: (options && options.locale) || 'en-US',
+    lang: options?.locale || 'en-US',
   });
 
   doc.info['Title'] = title;
@@ -316,7 +345,7 @@ export function renderPdf(doc, events, options) {
     doc.addNamedDestination(pageName);
 
     const d = dayjs(firstDayOfMonth).locale(locale);
-    renderPdfMonthTitle(doc, d, rtl);
+    renderPdfMonthTitle(doc, d, rtl, options);
 
     renderPdfMonthGrid(doc, d, rtl, rows, rowheight);
 

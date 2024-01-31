@@ -1,5 +1,6 @@
 /* eslint-disable require-jsdoc */
 import dayjs from 'dayjs';
+import {greg, abs2hebrew, getMonthName} from '@hebcal/hdate';
 
 /**
  * @private
@@ -91,6 +92,29 @@ function getEventClassName(evt) {
   return className;
 }
 
+function getHebMonthName(d) {
+  const abs = greg.greg2abs(d.toDate());
+  const hdt = abs2hebrew(abs);
+  hdt.monthName = getMonthName(hdt.mm, hdt.yy).replace(/'/g, '’');
+  return hdt;
+}
+
+function addHebMonthName(month) {
+  const start = getHebMonthName(month.startDay);
+  const end = getHebMonthName(month.endDay);
+  let str = start.monthName;
+  if (end.yy !== start.yy) {
+    str += ' ' + start.yy;
+  }
+  if (end.mm !== start.mm) {
+    str += ' – ' + end.monthName;
+  }
+  str += ' ' + end.yy;
+  month.monthName = str;
+}
+
+const langNameWithHebrew = new Set(['ah', 'sh']);
+
 function splitByMonth(events) {
   const startDate = makeDayjs(dateOnly(events[0].date));
   const endDate = makeDayjs(dateOnly(events[events.length - 1].date));
@@ -102,7 +126,12 @@ function splitByMonth(events) {
   for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
     const yearMonth = formatYearMonth(d);
     if (!months[yearMonth]) {
-      out[i++] = months[yearMonth] = {month: yearMonth, events: []};
+      out[i++] = months[yearMonth] = {
+        month: yearMonth,
+        events: [],
+        startDay: d,
+        endDay: d.add(1, 'month').subtract(1, 'day'),
+      };
     }
   }
   events.forEach(function(evt) {
@@ -117,6 +146,10 @@ function splitByMonth(events) {
   }
   for (let i = 0; i < out.length - 1; i++) {
     out[i].next = out[i + 1].month;
+  }
+  const lang = window['hebcal'].lang || 's';
+  if (lang === 's' || lang === 'a' || langNameWithHebrew.has(lang)) {
+    Object.values(months).map(addHebMonthName);
   }
   return out;
 }
@@ -165,7 +198,7 @@ function tableRow(evt) {
   const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
   if (isHebrew) {
     subj = `<span lang="he" dir="rtl">${subj}</span>`;
-  } else if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
+  } else if (langNameWithHebrew.has(lang) && evt.hebrew) {
     subj += ` / <span lang="he" dir="rtl">${evt.hebrew}</span>`;
   }
   if (evt.link) {
@@ -237,7 +270,7 @@ function renderEventHtml(evt) {
   }
   const className = getEventClassName(evt);
   const lang = window['hebcal'].lang || 's';
-  if ((lang === 'sh' || lang === 'ah') && evt.hebrew) {
+  if (langNameWithHebrew.has(lang) && evt.hebrew) {
     subj += `<br><span lang="he" dir="rtl">${evt.hebrew}</span>`;
   }
   const basename = evt.bn || evt.title;
@@ -267,7 +300,9 @@ function getMonthTitle(month, center, prevNext) {
   const next = prevNext && month.next ?
     ` <a class="d-print-none text-body-secondary text-decoration-none" href="#cal-${month.next}">»</a>` : '';
   const h3 = center ? '<h3 class="text-center">' : '<h3>';
-  return h3 + prev + span0 + titleText + span1 + next + '</h3>';
+  const hebMonthClass = center ? 'text-center text-burgundy' : 'text-burgundy';
+  const hebMonthName = month.monthName ? `\n<h5 class="${hebMonthClass}">${month.monthName}</h5>` : '';
+  return h3 + prev + span0 + titleText + span1 + next + '</h3>' + hebMonthName;
 }
 
 function makeMonthHtml(month) {
