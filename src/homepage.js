@@ -368,7 +368,7 @@ function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
-    const holidays = HebrewCalendar.getHolidaysOnDate(hd, il);
+    const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
     const ev2 = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
     if (ev2) {
       return getChanukahGreeting(d, ev2);

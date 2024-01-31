@@ -421,7 +421,7 @@ function getEvents(hdate, il) {
       const pe = new ParshaEvent(simchatTorah, ['Vezot Haberakhah'], il);
       events = events.concat(pe);
     } else {
-      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il);
+      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il) || [];
       for (const ev of satHolidays) {
         const pe = new PseudoParshaEvent(ev);
         events = events.concat(pe);
