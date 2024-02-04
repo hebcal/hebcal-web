@@ -38,6 +38,7 @@ const TIMES = {
   seaLevelSunset: 1,
   sunset: 1,
   dusk: 1,
+  beinHaShmashos: 1,
 };
 
 const TZEIT_TIMES = {
@@ -276,6 +277,10 @@ const ZMAN_NAMES = {
   dusk: [
     'Dusk',
     'Civil dusk. Sun is 6° below the horizon in the evening',
+  ],
+  beinHaShmashos: [
+    'Bein Hashemashot',
+    'Twilight. 13.5 minutes prior to tziet (nightfall) when the sun is 7.083° below horizon',
   ],
   tzeit7083deg: [
     'Tzeit 7.083 deg',
