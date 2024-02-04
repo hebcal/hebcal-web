@@ -105,6 +105,12 @@ if (!date && spHaftItems.length !== 0) { -%>
 <p><%=parshaName%> is read in its entirety in <%=triennial.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
+<% if (parshaName === 'Yitro') { %>
+<div class="small mb-2 text-muted">Note: in the abbreviated reading above (“Option B”),
+the congregation experiences <span lang="he" dir="rtl">עֲשֶׂרֶת הַדִבְּרוֹת</span>
+only in years 2 and 3 of the cycle.
+Some congregations read the entire parsha every year (“Option A”).</div>
+<% } %>
 <% } %>
 <% if (triennial.haftara) { -%>
 <p class="haftara">Alternate Haftarah:
