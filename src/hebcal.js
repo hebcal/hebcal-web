@@ -11,6 +11,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   shortenUrl,
   queryDefaultCandleMins,
   dailyLearningOpts,
+  makeCalendarSubtitleFromOpts, optToName, optLongDescr,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
@@ -199,62 +200,6 @@ async function renderForm(ctx, error) {
   });
 }
 
-const optToName = {
-  sedrot: 'Torah Readings',
-  omer: 'Days of the Omer',
-  addHebrewDates: 'Hebrew Dates',
-  yomKippurKatan: 'Yom Kippur Katan',
-  dafYomi: 'Daf Yomi',
-  mishnaYomi: 'Mishna Yomi',
-  nachYomi: 'Nach Yomi',
-  tanakhYomi: 'Tanakh Yomi',
-  psalms: 'Daily Tehillim',
-  chofetzChaim: 'Sefer Chofetz Chaim',
-  shemiratHaLashon: 'Shemirat HaLashon',
-  rambam1: 'Daily Rambam',
-  yerushalmi: 'Yerushalmi Yomi',
-  dafWeekly: 'Daf-a-Week',
-  dafWeeklySunday: 'Daf-a-Week',
-};
-
-const optLongDescr = {
-  dafYomi: 'Daily regimen of learning the Babylonian Talmud',
-  mishnaYomi: 'Two Mishnayot each day',
-  nachYomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
-  tanakhYomi: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
-  psalms: 'Daily study of few chapters from the book of Psalms',
-  chofetzChaim: 'Jewish ethics and laws of speech',
-  shemiratHaLashon: '',
-  rambam1: 'Maimonides’ Mishneh Torah legal code',
-  yerushalmi: 'Jerusalem Talmud (Vilna Edition)',
-  dafWeeklySunday: 'One page of Babylonian Talmud per week',
-};
-
-function makeLocationName(ctx, options) {
-  const loc = ctx.state.location;
-  if (loc) {
-    return loc.getName();
-  }
-  // If all default holidays are suppressed try to come up with a better name
-  const ilOrDiaspora = options.il ? 'Israel' : 'Diaspora';
-  if (options.noMajor && options.noMinorHolidays &&
-     options.noRoshChodesh && options.noModern &&
-     options.noMinorFast && options.noSpecialShabbat) {
-    const strs = [];
-    const dailyLearning = options.dailyLearning || {};
-    for (const [k, v] of Object.entries(optToName)) {
-      if (options[k] || dailyLearning[k]) {
-        strs.push(v);
-      }
-    }
-    if (strs.length) {
-      const name = strs.join(', ');
-      return options.sedrot ? ilOrDiaspora + ' ' + name : name;
-    }
-  }
-  return ilOrDiaspora;
-}
-
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
@@ -267,7 +212,8 @@ function renderHtml(ctx) {
     }
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
-  const locationName = makeLocationName(ctx, options);
+  const location = ctx.state.location;
+  const locationName = location ? location.getName() : makeCalendarSubtitleFromOpts(options);
   const shortTitle = pageTitle(options, events);
   const locale = localeMap[options.locale] || 'en';
   const memos = {};
@@ -315,7 +261,6 @@ function renderHtml(ctx) {
   optsTmp.subscribe = '1';
   url.title = getCalendarTitle(events, optsTmp);
   if (options.candlelighting) {
-    const location = ctx.state.location;
     const geoUrlArgs = makeGeoUrlArgs(q, location, options);
     const idx = Math.floor(events.length / 2);
     const hyear = options.isHebrewYear ? options.year : events[idx].getDate().getFullYear();
@@ -334,7 +279,7 @@ function renderHtml(ctx) {
     ctx.state.hebrewYear = options.year;
     ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
   }
-  const cconfig = locationToPlainObj(ctx.state.location);
+  const cconfig = locationToPlainObj(location);
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   const opts = Object.assign({}, options);

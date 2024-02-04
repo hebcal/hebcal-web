@@ -1197,6 +1197,12 @@ export function makeIcalOpts(options, query) {
   if (typeof color === 'string' && color.length) {
     icalOpts.calendarColor = color.toUpperCase();
   }
+  if (!icalOpts.title && !icalOpts.yahrzeit && !icalOpts.location && query.subscribe === '1') {
+    icalOpts.title = 'Hebcal ' + makeCalendarSubtitleFromOpts(icalOpts);
+    if (!icalOpts.caldesc && allDefaultSuppressed(options)) {
+      icalOpts.caldesc = dailyLearningDescription(options, optLongDescr);
+    }
+  }
   return icalOpts;
 }
 
@@ -1318,4 +1324,82 @@ export function getBaseFromPath(ctx) {
   } catch (err) {
     ctx.throw(400, err.message, err);
   }
+}
+
+export const optToName = {
+  sedrot: 'Torah Readings',
+  omer: 'Days of the Omer',
+  addHebrewDates: 'Hebrew Dates',
+  yomKippurKatan: 'Yom Kippur Katan',
+  dafYomi: 'Daf Yomi',
+  mishnaYomi: 'Mishna Yomi',
+  nachYomi: 'Nach Yomi',
+  tanakhYomi: 'Tanakh Yomi',
+  psalms: 'Daily Tehillim',
+  chofetzChaim: 'Sefer Chofetz Chaim',
+  shemiratHaLashon: 'Shemirat HaLashon',
+  rambam1: 'Daily Rambam',
+  yerushalmi: 'Yerushalmi Yomi',
+  dafWeekly: 'Daf-a-Week',
+  dafWeeklySunday: 'Daf-a-Week',
+};
+
+export const optLongDescr = {
+  sedrot: 'Parashat ha-Shavua - Weekly Torah Portion',
+  omer: '7 weeks from the second night of Pesach to the day before Shavuot',
+  addHebrewDates: 'Daily Hebrew Dates',
+  yomKippurKatan: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
+  dafYomi: 'Daily regimen of learning the Babylonian Talmud',
+  mishnaYomi: 'Two Mishnayot each day',
+  nachYomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
+  tanakhYomi: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
+  psalms: 'Daily study of few chapters from the book of Psalms',
+  chofetzChaim: 'Jewish ethics and laws of speech',
+  shemiratHaLashon: '',
+  rambam1: 'Maimonides’ Mishneh Torah legal code',
+  yerushalmi: 'Jerusalem Talmud (Vilna Edition)',
+  dafWeeklySunday: 'One page of Babylonian Talmud per week',
+};
+
+/**
+ * @param {CalOptions} options
+ * @param {Object.<string,string>} map
+ * @return {string}
+ */
+function dailyLearningDescription(options, map) {
+  const strs = [];
+  const dailyLearning = options.dailyLearning || {};
+  for (const [k, v] of Object.entries(map)) {
+    if (options[k] || dailyLearning[k]) {
+      strs.push(v);
+    }
+  }
+  return strs.join(', ');
+}
+
+/**
+ * @param {CalOptions} options
+ * @return {boolean}
+ */
+function allDefaultSuppressed(options) {
+  return options.noHolidays ||
+    (options.noMajor && options.noMinorHolidays &&
+     options.noRoshChodesh && options.noModern &&
+     options.noMinorFast && options.noSpecialShabbat);
+}
+
+/**
+ * If all default holidays are suppressed try to come up with a better name
+ * @param {CalOptions} options
+ * @return {string}
+ */
+export function makeCalendarSubtitleFromOpts(options) {
+  const ilOrDiaspora = options.il ? 'Israel' : 'Diaspora';
+  if (allDefaultSuppressed(options)) {
+    const name = dailyLearningDescription(options, optToName);
+    if (name) {
+      return options.sedrot ? ilOrDiaspora + ' ' + name : name;
+    }
+  }
+  return ilOrDiaspora;
 }
