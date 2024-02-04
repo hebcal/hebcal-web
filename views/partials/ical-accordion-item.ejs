@@ -5,7 +5,7 @@
 <% if (typeof emoji === 'string') { %>&nbsp; <span class="text-nowrap"><%=emoji%></span><% } %>
 </button>
 </h2>
-<div id="body-<%=id%>" class="accordion-collapse collapse" aria-labelledby="heading-<%=id%>" data-bs-parent="#ical-accordion">
+<div id="body-<%=id%>" class="accordion-collapse collapse" aria-labelledby="heading-<%=id%>" data-bs-parent="#<%=parent%>">
 <div class="accordion-body">
 <%-summary%>
 <% if (typeof feedLength !== 'undefined') { %><p class="text-body-secondary"><%=feedLength%> events per year · <span class="text-nowrap"><%=years%>-year perpetual feed</span></p><% } %>

@@ -53,7 +53,7 @@ class ChofetzChaimShemiratHaLashonEvent extends Event {
   const dt = new Date();
   const year = dt.getFullYear();
   const start = new HDate(new Date(year - 1, 11, 1));
-  const end = new HDate(new Date(year + 1, 11, 31));
+  const end = new HDate(new Date(year + 2, 11, 31));
   const startAbs = start.abs();
   const endAbs = end.abs();
   for (let abs = startAbs; abs <= endAbs; abs++) {
