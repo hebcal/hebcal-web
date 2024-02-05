@@ -15,7 +15,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
-import {HDate} from '@hebcal/core';
+import {HDate, Locale} from '@hebcal/core';
 import {eventsToClassicApi, eventToFullCalendar,
   eventToClassicApiObject,
   locationToPlainObj,
@@ -200,6 +200,22 @@ async function renderForm(ctx, error) {
   });
 }
 
+function getHebMonthNames(events, lang) {
+  const startDate = dayjs(events[0].getDate().greg());
+  const endDate = dayjs(events[events.length - 1].getDate().greg());
+  const start = startDate.set('date', 1);
+  const end = endDate.add(1, 'day');
+  const months = Array(14);
+  for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
+    const endDay = d.add(1, 'month').subtract(1, 'day');
+    const hd1 = new HDate(d.toDate());
+    const hd2 = new HDate(endDay.toDate());
+    months[hd1.getMonth()] = Locale.gettext(hd1.getMonthName(), lang);
+    months[hd2.getMonth()] = Locale.gettext(hd2.getMonthName(), lang);
+  }
+  return months;
+}
+
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
@@ -270,6 +286,7 @@ function renderHtml(ctx) {
     weekdaysShort: localeData.weekdaysShort(),
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
+    hebMonths: getHebMonthNames(events, options.locale || 's'),
   };
   const gy = events[0].getDate().greg().getFullYear();
   if (gy >= 3762 && q.yt === 'G') {

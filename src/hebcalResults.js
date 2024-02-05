@@ -95,7 +95,9 @@ function getEventClassName(evt) {
 function getHebMonthName(d) {
   const abs = greg.greg2abs(d.toDate());
   const hdt = abs2hebrew(abs);
-  hdt.monthName = getMonthName(hdt.mm, hdt.yy).replace(/'/g, '’');
+  const localeData = window['hebcal'].localeConfig;
+  const str = localeData.hebMonths[hdt.mm] || getMonthName(hdt.mm, hdt.yy);
+  hdt.monthName = str.replace(/'/g, '’');
   return hdt;
 }
 
@@ -147,10 +149,7 @@ function splitByMonth(events) {
   for (let i = 0; i < out.length - 1; i++) {
     out[i].next = out[i + 1].month;
   }
-  const lang = window['hebcal'].lang || 's';
-  if (lang === 's' || lang === 'a' || langNameWithHebrew.has(lang)) {
-    Object.values(months).map(addHebMonthName);
-  }
+  Object.values(months).map(addHebMonthName);
   return out;
 }
 
