@@ -11,7 +11,7 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import {eventsToIcalendar, IcalEvent} from '@hebcal/icalendar';
-import {locationToPlainObj} from '@hebcal/rest-api';
+import {locationToPlainObj, makeAnchor} from '@hebcal/rest-api';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -25,20 +25,20 @@ const TIMES = {
   dawn: 1,
   sunrise: 1,
   seaLevelSunrise: 1,
-  sofZmanShma: 1,
-  sofZmanShmaMGA: 1,
   sofZmanShmaMGA16Point1: 1,
-  sofZmanTfilla: 1,
-  sofZmanTfillaMGA: 1,
+  sofZmanShmaMGA: 1,
+  sofZmanShma: 1,
   sofZmanTfillaMGA16Point1: 1,
+  sofZmanTfillaMGA: 1,
+  sofZmanTfilla: 1,
   chatzot: 1,
   minchaGedola: 1,
   minchaKetana: 1,
   plagHaMincha: 1,
   seaLevelSunset: 1,
   sunset: 1,
-  dusk: 1,
   beinHaShmashos: 1,
+  dusk: 1,
 };
 
 const TZEIT_TIMES = {
@@ -219,33 +219,33 @@ const ZMAN_NAMES = {
     'Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)',
   ],
   sofZmanShma: [
-    'Kriat Shema, sof zeman',
+    'Kriat Shema, sof zeman (Gra)',
     'Latest Shema (Gra). Sunrise plus 3 halachic hours, according to the Gra',
   ],
   sofZmanTfilla: [
-    'Tefilah, sof zeman',
+    'Tefilah, sof zeman (Gra)',
     'Latest Shacharit (Gra). Sunrise plus 4 halachic hours, according to the Gra',
   ],
   sofZmanShmaMGA: [
-    'Kriat Shema, sof zeman (MGA)',
+    'Kriat Shema, sof zeman (MGA) 72 min',
     'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. ' +
     'Based on the opinion of the MGA that the day is calculated from dawn being fixed ' +
     '72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset',
   ],
   sofZmanShmaMGA16Point1: [
-    'Kriat Shema, sof zeman (MGA)',
+    'Kriat Shema, sof zeman (MGA) 16.1°',
     'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. ' +
     'Based on the opinion of the MGA that the day is calculated from ' +
     'dawn to nightfall with both being 16.1° below the horizon',
   ],
   sofZmanTfillaMGA: [
-    'Tefilah, sof zeman (MGA)',
+    'Tefilah, sof zeman (MGA) 72 min',
     'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ' +
     'Based on the opinion of the MGA that the day is calculated from dawn being fixed ' +
     '72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset',
   ],
   sofZmanTfillaMGA16Point1: [
-    'Tefilah, sof zeman (MGA)',
+    'Tefilah, sof zeman (MGA) 16.1°',
     'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ',
     'Based on the opinion of the MGA that the day is calculated from ' +
     'dawn to nightfall with both being 16.1° below the horizon',
@@ -280,14 +280,14 @@ const ZMAN_NAMES = {
   ],
   beinHaShmashos: [
     'Bein Hashemashot',
-    'Twilight. 13.5 minutes prior to tziet (nightfall) when the sun is 7.083° below horizon',
+    'Twilight. 13.5 minutes prior to tzeit (nightfall) when the sun is 7.083° below horizon',
   ],
   tzeit7083deg: [
-    'Tzeit 7.083 deg',
+    'Tzeit 7.083°',
     'Nightfall. When 3 medium stars are observable in the night sky with the naked eye (sun 7.083° below the horizon)',
   ],
   tzeit85deg: [
-    'Tzeit 8.5 deg',
+    'Tzeit 8.5°',
     'Nightfall. When 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)',
   ],
   tzeit42min: [
@@ -366,7 +366,8 @@ function makeAllDayEvents(times, location, locale) {
   const events = [];
   const timeFormat = location.getTimeFormatter();
   const locationName = location.getShortName();
-  const geoid = location.getGeoId();
+  const locationNameLong = location.getName();
+  const geoid = location.getGeoId() || makeAnchor(locationNameLong);
   const options = {location, locale};
   for (const [isoDate, arr] of Object.entries(byDate)) {
     const date = new Date(isoDate);
@@ -381,7 +382,7 @@ function makeAllDayEvents(times, location, locale) {
       const prefix = hourMin[0].length === 2 ? '' : ' ';
       lines.push(prefix + str + ' ' + Locale.gettext(desc, locale));
     }
-    ev.memo = lines.join('\n');
+    ev.memo = lines.join('\n') + '\n\n' + locationNameLong;
     ev.alarm = false;
     ev.location = location;
     ev.locationName = locationName;
