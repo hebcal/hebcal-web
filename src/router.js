@@ -60,6 +60,18 @@ mstile-150x150.png
 safari-pinned-tab.svg
 site.webmanifest`.split('\n').map((s) => '/' + s));
 
+/**
+ * Bail early if there's an extra slash in what should
+ * be a basename only
+ * @param {string} rpath
+ * @param {number} position
+ */
+function checkSlash(rpath, position) {
+  if (rpath.indexOf('/', position) !== -1) {
+    throw createError(404, 'Unexpected extra / in path');
+  }
+}
+
 // eslint-disable-next-line require-jsdoc
 export function wwwRouter() {
   return async function router(ctx, next) {
@@ -128,6 +140,7 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/yahrzeit')) {
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {
+      checkSlash(rpath, 10);
       return holidaysApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
@@ -152,6 +165,7 @@ export function wwwRouter() {
     } else if ((rpath.startsWith('/etc/dafyomi-') || rpath.startsWith('/etc/myomi-')) && rpath.endsWith('.xml')) {
       return dafYomiRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
+      checkSlash(rpath, 8);
       if (rpath === '/sedrot/') {
         return parshaIndex(ctx);
       } else if (rpath === '/sedrot/grid') {

@@ -41,7 +41,7 @@
     "eslint": "^8.56.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.9.6"
+    "rollup": "^4.12.0"
   },
   "dependencies": {
     "@hebcal/core": "^5.2.2",
@@ -53,7 +53,7 @@
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.0.3",
     "@hebcal/triennial": "^5.0.5",
-    "better-sqlite3": "^9.4.0",
+    "better-sqlite3": "^9.4.1",
     "dayjs": "^1.11.10",
     "ejs": "^3.1.9",
     "emoji-flag": "^1.1.0",
@@ -81,7 +81,7 @@
     "nodemailer": "^6.9.9",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.14.0",
-    "pino": "^8.18.0",
+    "pino": "^8.19.0",
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.0.0",
     "random-bigint": "0.0.1",
