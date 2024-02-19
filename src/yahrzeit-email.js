@@ -298,7 +298,8 @@ async function sendConfirmEmail(ctx, contents, subscriptionId) {
 <div>Hello,</div>
 ${BLANK}
 <div>Your subscription request for ${anniversaryType} annual reminders from Hebcal.com is complete.
-Reminders are sent 7 days before each anniversary.</div>
+Reminders are sent 7 days before each anniversary.
+Except for Shabbat, a second reminder will be sent the day before the anniversary.</div>
 ${BLANK}
 <div>Please save this message. If you'd like to edit your personal calendar
 or add additional names, you may visit the following URL at any time:</div>
