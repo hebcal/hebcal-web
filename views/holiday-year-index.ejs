@@ -60,6 +60,14 @@ table.tbody-striped > thead > * > * {
 .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
   padding: 2px 6px 2px 2px;
 }
+.fc-hdate {
+  font-size: 0.75em;
+  white-space: nowrap;
+  margin-left: 0.25rem;
+  margin-right: 1rem;
+  --bs-text-opacity: 1;
+  color: rgba(var(--bs-secondary-rgb),1);
+}
 </style>
 <% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=iSuffix%>"><%}%>
 <% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=iSuffix%>"><%}%>

@@ -37,6 +37,21 @@ module.exports = [
     ],
   },
   {
+    input: 'src/hdate.bundle.js',
+    output: [
+      {
+        file: 'dist/views/partials/hdate.bundle.min.js',
+        format: 'iife',
+        name: 'hdate',
+        banner: '/*! hdate.bundle ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve(),
+    ],
+  },
+  {
     input: 'src/hdate-en.js',
     output: [
       {

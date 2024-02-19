@@ -1,4 +1,5 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js" integrity="sha384-wv6yRjQC0TqzEnAjFQVXM2V0JrF6Nk0dh6QAGf1RwzTqPArdwU3luBZjVCi2YSVH" crossorigin="anonymous"></script>
+<script><%- await include('hdate.bundle.min.js') %></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
  let calendar = null;
@@ -30,6 +31,18 @@ document.addEventListener('DOMContentLoaded', function() {
     initialDate: '<%=isoDateStart%>',
     timeZone: 'local',
     eventDisplay: 'block',
+    dayCellContent: function(info, create) {
+      const abs = hdate.greg.greg2abs(info.date);
+      const hdt = hdate.abs2hebrew(abs);
+      const monthName0 = hdate.getMonthName(hdt.mm, hdt.yy);
+      const monthName = monthName0.replace(/'/g, '’');
+      let dayNumberText = `${hdt.dd} ${monthName}`;
+      if (hdt.dd === 1) {
+        dayNumberText += ` ${hdt.yy}`;
+      }
+      const el0 = create('span', {class: 'fc-hdate'}, dayNumberText);
+      return create('span', null, el0, info.dayNumberText);
+    },
     events: function(info, successCallback, failureCallback) {
       const url = new URL(document.location.href);
       url.pathname = '/hebcal';
@@ -45,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function() {
       sp.set('mf', 'on'); // Minor fasts
       sp.set('ss', 'on'); // Special Shabbatot
       sp.set('mod', 'on'); // Modern holidays
-      sp.set('D', 'on'); // Show Hebrew date for dates with some event
       sp.set('lg', 's'); // Sephardic transliterations
       const fetchOptions = {
         method: 'GET',
