@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (hdt.dd === 1) {
         dayNumberText += ` ${hdt.yy}`;
       }
-      const el0 = create('span', {class: 'fc-hdate'}, dayNumberText);
+      const el0 = create('span', {class: 'fc-hdate d-none d-md-inline'}, dayNumberText);
       return create('span', null, el0, info.dayNumberText);
     },
     events: function(info, successCallback, failureCallback) {
