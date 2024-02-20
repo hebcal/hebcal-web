@@ -95,6 +95,13 @@ href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 <h6 class="pt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.125);">
   Google Calendar
 </h6>
+<div id="android-warn" class="mt-2 alert alert-warning" style="display:none" role="alert">
+  <small>
+   Note: the “Add to Google Calendar” button works best on a computer and is not reliable on a mobile phone or tablet.
+   If you get a “Calendar no longer exists” error, or the calendar will not show up on your device, please
+   try again from a computer.
+ </small>
+ </div>
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-gcal'}) -%>
@@ -213,5 +220,12 @@ document.addEventListener('DOMContentLoaded', function() {
     var _paq = window._paq = window._paq || [];
     _paq.push(['trackEvent', 'Interaction', 'download-modal', '<%=url.title%>']);
   });
+  const ua = window.navigator.userAgent;
+  if (typeof ua === 'string' && ua.startsWith('Mozilla/5.0 (Linux; Android ')) {
+    const el = document.getElementById('android-warn');
+    if (el) {
+      el.style.display = 'block';
+    }
+  }
 });
 </script>
