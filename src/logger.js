@@ -4,12 +4,6 @@ import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {matomoTrack} from './matomoTrack.js';
 
-const ignore404 = new Set([
-  '/apple-touch-icon-precomposed.png',
-  '/apple-touch-icon-120x120-precomposed.png',
-  '/apple-touch-icon-152x152-precomposed.png',
-]);
-
 /**
  * @private
  * @param {string} logDir
@@ -137,18 +131,18 @@ export function accessLogger(logger) {
  */
 export function errorLogger(logger) {
   return function errorLog(err, ctx) {
-    if (ctx && ctx.status != 404 && ctx.status != 200) {
-      const obj = Object.assign(err, makeLogInfo(ctx));
-      if (ctx.status < 500) {
-        logger.warn(obj);
-      } else {
-        logger.error(obj);
-      }
+    const status = typeof err?.status === 'number' ? err.status : ctx?.status;
+    if (status === 200 || status === 404 || !ctx) {
+      return;
     }
-    if (ctx && ctx.status && ctx.status != 200 &&
-        ctx.request.query?.cfg !== 'json' &&
-        (ctx.status !== 404 || !ignore404.has(ctx.request.path))) {
-      matomoTrack(ctx, 'Error', ctx.status, err?.message, {
+    const obj = Object.assign(err, makeLogInfo(ctx));
+    if (status < 500) {
+      logger.warn(obj);
+    } else {
+      logger.error(obj);
+    }
+    if (ctx.request.query?.cfg !== 'json') {
+      matomoTrack(ctx, 'Error', status, err?.message, {
         url: ctx.request.href,
       });
     }
