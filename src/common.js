@@ -243,6 +243,14 @@ function makeCookie(ctx, query, uid) {
       ck[key] = query[key];
     }
   }
+  // don't persist candle lighting minutes if it's default val.
+  // use double-equals instead of triple-equals deliberately
+  // so strings will match numbers
+  if (ck.b &&
+      ((ck.zip && ck.b == DEFAULT_CANDLE_MINS) ||
+       (ck.geonameid && ck.b == queryDefaultCandleMins(ck)))) {
+    delete ck.b;
+  }
   if (Object.keys(ck).length === 0) {
     return false;
   }
