@@ -9,7 +9,6 @@ import {httpRedirect, getBaseFromPath, langNames} from './common.js';
 import {makeGregDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   parshiot54, drash,
-  sefariaAliyahHref,
   lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon.js';
 import dayjs from 'dayjs';
 
@@ -167,7 +166,7 @@ export async function parshaDetail(ctx) {
   addLinksToLeyning(reading.fullkriyah, false);
   reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
   if (reading.seph) {
-    reading.sephardicHref = sefariaAliyahHref(reading.seph, false);
+    reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
   }
   if (reading.weekday) {
     addLinksToLeyning(reading.weekday, false);
@@ -179,6 +178,9 @@ export async function parshaDetail(ctx) {
     reading.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
   }
   parsha.haftaraHtml = makeLeyningHtmlFromParts(parsha.haft);
+  if (parsha.seph) {
+    parsha.sephardicHtml = makeLeyningHtmlFromParts(parsha.seph);
+  }
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
