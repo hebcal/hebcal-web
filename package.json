@@ -41,7 +41,7 @@
     "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.12.0"
+    "rollup": "^4.12.1"
   },
   "dependencies": {
     "@hebcal/core": "^5.2.2",
@@ -49,7 +49,7 @@
     "@hebcal/hdate": "^0.9.1",
     "@hebcal/icalendar": "^5.0.6",
     "@hebcal/learning": "^5.0.7",
-    "@hebcal/leyning": "^8.1.5",
+    "@hebcal/leyning": "^8.1.6",
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.0.3",
     "@hebcal/triennial": "^5.0.5",
@@ -64,7 +64,7 @@
     "google-protobuf": "^3.21.2",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
-    "ini": "^4.1.1",
+    "ini": "^4.1.2",
     "koa": "^2.15.0",
     "koa-better-response-time": "^1.2.0",
     "koa-bodyparser": "^4.4.1",

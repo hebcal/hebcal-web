@@ -214,15 +214,17 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } // reading.summary %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
 <% if (reading.haftaraHtml) { %>
-<p class="lead haftara">Haftarah<%=reading.sephardicHtml ? ' for Ashkenazim' : ''%>:
+<p class="lead haftara">Haftarah<%=reading.sephardicHtml ? ' for Ashkenazim' : ''%><% if (reading?.reason?.haftara) { %><span class="text-success">*</span><% } %>:
 <%- reading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
+<% if (reading?.reason?.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %></span><% } %>
 </p>
 <% } // reading.haftara %>
 <% if (reading.sephardicHtml) { %>
-<p class="lead haftara">Haftarah for Sephardim:
+<p class="lead haftara">Haftarah for Sephardim<% if (reading?.reason?.sephardic) { %><span class="text-success">*</span><% } %>:
 <%- reading.sephardicHtml %>
 <%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
+<% if (reading?.reason?.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %></span><% } %>
 </p>
 <% } // reading.haftara %>
 <% if (reading.megillah) { -%>
