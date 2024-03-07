@@ -2,9 +2,8 @@
 <a title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('numverses.ejs', {v: aliyah.v}) -%>
 <% if (typeof aliyah.tikkun === 'string') { -%>
-<span class="text-body-secondary d-print-none">·</span>
 <span class="text-nowrap">
-<a class="d-print-none" title="Tikkun.io - <%=aliyah.verses%>" href="<%-aliyah.tikkun%>">
+<a class="d-print-none ms-2" title="Tikkun.io - <%=aliyah.verses%>" href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <a class="d-none d-sm-inline ms-2 d-print-none" target="<%=(typeof amp === 'boolean' && amp) ? '_blank' : 'pocketTorah'%>" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>  

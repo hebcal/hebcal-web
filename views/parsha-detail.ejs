@@ -49,9 +49,8 @@ title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.ver
 <%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
 <li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
 <%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-body-secondary d-print-none">·</span>
 <span class="text-nowrap">
-<a class="d-print-none" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
+<a class="d-print-none ms-2" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
 href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
 <a class="d-none d-sm-inline ms-2 d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
