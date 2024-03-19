@@ -506,6 +506,9 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   }
 }
 
+const SAT_OVERLAY_FLAGS = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH |
+  flags.CHANUKAH_CANDLES;
+
 /**
  * @param {Event} ev
  * @param {boolean} il
@@ -513,13 +516,10 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
  */
 function getReadingForHoliday(ev, il) {
   const hd = ev.getDate();
-  const dow = hd.abs() % 7;
   const desc = ev.getDesc();
   if (desc === 'Chanukah: 1 Candle') {
     return undefined;
-  }
-  const reading = getLeyningForHoliday(ev, il);
-  if (reading && dow === 6) {
+  } else if (hd.getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
@@ -527,7 +527,7 @@ function getReadingForHoliday(ev, il) {
       return getLeyningForParshaHaShavua(pe, il);
     }
   }
-  return reading;
+  return getLeyningForHoliday(ev, il);
 }
 
 /**
