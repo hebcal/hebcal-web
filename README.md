@@ -14,7 +14,14 @@ npm install
 You can get it by cloning following cloning and following the instructions at:
 https://github.com/hebcal/hebcal-geo-sqlite
 
-Then, make sure to copy the geonames.sqlite3 and zips.sqlite3 into path.
+or just:
+
+```bash
+npm install @hebcal/geo-sqlite
+./node_modules/.bin/download-and-make-dbs
+```
+
+Then, make sure to have the geonames.sqlite3 and zips.sqlite3 in path.
 
 
 3. Make sure you have hebcal-dot-com.ini in path as well. You can just create an empty file
