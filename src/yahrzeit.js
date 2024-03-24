@@ -250,7 +250,7 @@ async function makeFormResults(ctx) {
       year: hd.getFullYear(),
     };
   });
-  if (q.yizkor !== 'on' && q.yizkor !== '1') {
+  if (items.length < 50 && (q.yizkor !== 'on' && q.yizkor !== '1')) {
     return new Map([['', items]]);
   }
   return items.reduce((m, val) => {
