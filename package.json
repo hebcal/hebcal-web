@@ -21,6 +21,7 @@
     "node": ">= 20.0.0"
   },
   "scripts": {
+    "dev": "node src/app-www.js",
     "build": "exit 0",
     "deploy": "./deploy.sh",
     "start": "node dist/app-www.js",
