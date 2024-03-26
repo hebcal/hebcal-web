@@ -12,6 +12,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   queryDefaultCandleMins,
   localeMap, makeHebrewCalendar} from './common.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
+import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
@@ -99,6 +100,11 @@ export async function shabbatApp(ctx) {
       p.amp = true;
     }
     p.queryDefaultCandleMins = queryDefaultCandleMins;
+    makeDownloadProps(ctx, q, options);
+    ctx.state.numYears = 4;
+    const year = ctx.state.currentYear = new Date().getFullYear();
+    ctx.state.downloadAltTitle = `${year} only`;
+    delete ctx.state.filename.pdf;
     return ctx.render('shabbat', p);
   }
 }
