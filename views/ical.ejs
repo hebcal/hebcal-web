@@ -76,16 +76,6 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   parent: 'holidays',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
-  name: 'Customize event language', id: 'lang',
-  emoji: '🌐',
-  summary: `<p>Create a custom calendar with event titles in different languages, candle-lighting times for Shabbat and holidays, Israeli holiday schedule, etc</p>
-<ul>` + Object.entries(langNames).map(([langName, desc]) => {
-  return `<li><a href="/hebcal?lg=${langName}">${desc[0].replace('transliterations','translit')}</a> <span class="text-body-secondary">- ${desc[1]||desc[0]}</span></li>`;
-}).join('\n') + `</ul>`,
-  noToolbar: true,
-  parent: 'holidays',
-}) -%>
-<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Torah Readings (Diaspora)', id: 'torah-readings-diaspora',
   emoji: '🕍',
   summary: '<p>Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha.</p><p>Diaspora schedule</p>',
@@ -158,13 +148,12 @@ Thursday.&nbsp;<sup><a class="outbound" href="https://en.wikipedia.org/wiki/Yom_
 </div><!-- .row -->
 <div class="row mt-4" id="learning">
 <div class="col">
-<h3>Daily Learning</h3>
+<h3>Daily Learning 📖</h3>
 <p>From ancient biblical times, the Torah has been divided into portions which are read each week on a yearly calendar.
 In line with this tradition, various calendars have emerged to facilitate groups of learners in collectively studying designated texts.</p>
 <div class="accordion" id="learning2">
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daf Yomi', id: 'daf-yomi',
-  emoji: '📖',
   summary: `<p>Daily regimen of learning the Babylonian Talmud. This cycle takes approximately
 7½ years to complete.</p>`,
   feedLength: 365,
@@ -173,7 +162,6 @@ In line with this tradition, various calendars have emerged to facilitate groups
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Mishna Yomi', id: 'mishna-yomi',
-  emoji: '📖',
   summary: `<p>A program of daily learning in which participants study two Mishnayot
 each day in order to finish the entire Mishnah in ~6 years.</p>`,
   feedLength: 365,
@@ -182,7 +170,6 @@ each day in order to finish the entire Mishnah in ~6 years.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Nach Yomi', id: 'nach-yomi',
-  emoji: '📖',
   summary: `<p>A daily regimen of learning the books of Nevi'im
 (Prophets) and Ketuvim (Writings). This cycle takes ~2 years to complete.</p>`,
   feedLength: 365,
@@ -191,7 +178,6 @@ each day in order to finish the entire Mishnah in ~6 years.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Tanakh Yomi', id: 'tanakh-yomi',
-  emoji: '📖',
   summary: `<p>A daily learning cycle for completing Tanakh annually.
     On Shabbat, each Torah portion is recited.
     On weekdays, Prophets and Writings are recited according to the ancient Masoretic
@@ -202,7 +188,6 @@ division of sedarim. This cycle is completed each year.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Tehillim (Psalms)', id: 'psalms',
-  emoji: '📖',
   summary: `<p>Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim).
 The entire book is completed on the final day of each Hebrew month.
 On months with 29 days, the 30th portion is combined with the 29th portion.</p>`,
@@ -212,7 +197,6 @@ On months with 29 days, the 30th portion is combined with the 29th portion.</p>`
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yerushalmi Yomi (Vilna)', id: 'yerushalmi-vilna',
-  emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Vilna Edition).
 Using the Vilna edition, the Yerushalmi Daf Yomi program takes 4¼ years to complete.
 Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and Tisha B'Av.</p>`,
@@ -222,7 +206,6 @@ Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yerushalmi Yomi (Schottenstein)', id: 'yerushalmi-schottenstein',
-  emoji: '📖',
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Schottenstein Edition).
 The Schottenstein edition of Yerushalmi Daf Yomi uses different page numbers
 than the Vilna and takes 5¾ years to complete.</p>`,
@@ -232,7 +215,6 @@ than the Vilna and takes 5¾ years to complete.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Rambam', id: 'rambam1',
-  emoji: '📖',
   summary: `<p>A learning program that divides Maimonides’ Mishneh Torah legal code
     into daily units, to complete the whole work in three years.</p>`,
   feedLength: 365,
@@ -241,7 +223,6 @@ than the Vilna and takes 5¾ years to complete.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Chofetz Chaim', id: 'chofetz-chaim',
-  emoji: '📖',
   summary: `<p>Daily study of the Sefer Chofetz Chaim, which deals with the
 Jewish ethics and laws of speech. The book is divided into 119 parts in a regular
 year and 129 parts in a leap year.</p>`,
@@ -251,7 +232,6 @@ year and 129 parts in a leap year.</p>`,
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daf-a-Week', id: 'daf-weekly',
-  emoji: '📖',
   summary: `<p>A learning program that covers a page of Talmud a week.
 By going at a slower pace, it facilitates greater mastery and retention.</p>`,
   feedLength: 52,
@@ -268,6 +248,20 @@ By going at a slower pace, it facilitates greater mastery and retention.</p>`,
   parent: 'learning2',
 }) -%>
 </div><!-- .accordion -->
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row mt-4" id="lang">
+<div class="col">
+<h3>Customize and download 🌐 🕯️✨ 🇮🇱</h3>
+<p>Create and download a custom calendar with event titles in different languages,
+<strong>candle-lighting times</strong> for Shabbat and holidays,
+<strong>Israeli holiday schedule</strong>, etc</p>
+Select an event language:
+<ul>
+<% for (const [langName, desc] of Object.entries(langNames)) { %>
+<li><a href="/hebcal?lg=<%=langName%>"><%=desc[0].replace('transliterations','translit')%></a> <span class="text-body-secondary">- <%=desc[1]||desc[0]%></span></li>
+<% } %>
+</ul>
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, clipboard: true}}) _%>
