@@ -153,7 +153,6 @@ const chagSameach = {
   'Tu BiShvat': true,
   'Tu B\'Av': true,
   'Purim': true,
-  'Shushan Purim': true,
   'Yom HaAtzma\'ut': true,
   'Lag B\'Omer': true,
   'Lag BaOmer': true,
@@ -309,6 +308,10 @@ ${when} on ${htmlDate}`];
   }
 
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
+  if (il && mm === purimMonth && dd === 15 && holidays.length > 0) {
+    // Shushan Purim
+    return getHolidayGreeting(ctx, holidays[0], il, true, dateOverride);
+  }
   if (mm == purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg()).locale(locale);
