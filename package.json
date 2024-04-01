@@ -42,7 +42,7 @@
     "eslint": "^8.57.0",
     "eslint-config-google": "^0.14.0",
     "jquery": "^3.7.1",
-    "rollup": "^4.13.0"
+    "rollup": "^4.13.2"
   },
   "dependencies": {
     "@hebcal/core": "^5.2.2",

@@ -1,7 +1,12 @@
 import {HDate, months, greg, Zmanim} from '@hebcal/core';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import {empty} from './empty.js';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const reIsoDate = /^\d\d\d\d-\d\d-\d\d/;
 
@@ -206,4 +211,65 @@ export function getDefaultYear(dt, hdate) {
 export function nowInTimezone(tzid) {
   const isoDate = Zmanim.formatISOWithTimeZone(tzid, new Date());
   return dayjs(isoDate.substring(0, 10));
+}
+
+const MAX_DAYS = 180;
+
+/**
+ * @param {string} str
+ * @return {dayjs.Dayjs}
+ */
+function isoToDayjs(str) {
+  return dayjs(isoDateStringToDate(str));
+}
+
+/**
+ * @typedef {Object} StartAndEnd
+ * @property {dayjs.Dayjs} startD
+ * @property {dayjs.Dayjs} endD
+ * @property {boolean} isRange
+ */
+
+/**
+ * @param {Object.<string,string>} q
+ * @param {string} tzid
+ * @return {StartAndEnd}
+ */
+export function getStartAndEnd(q, tzid) {
+  if (!empty(q.start) && empty(q.end)) {
+    q.end = q.start;
+  } else if (empty(q.start) && !empty(q.end)) {
+    q.start = q.end;
+  }
+  if (!empty(q.start) && !empty(q.end) && q.start === q.end) {
+    q.date = q.start;
+    delete q.start;
+    delete q.end;
+  }
+  let isRange = !empty(q.start) && !empty(q.end);
+  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
+  const startD = isRange ? isoToDayjs(q.start) : singleD;
+  let endD = isRange ? isoToDayjs(q.end) : singleD;
+  if (isRange) {
+    if (endD.isBefore(startD, 'd')) {
+      isRange = false;
+      endD = startD;
+    } else if (endD.diff(startD, 'd') > MAX_DAYS) {
+      endD = startD.add(MAX_DAYS, 'd');
+    }
+  }
+  return {isRange, startD, endD};
+}
+
+/**
+ * @param {any} ctx
+ * @param {Date} now
+ * @param {string} tzid
+ */
+export function expiresSaturdayNight(ctx, now, tzid) {
+  ctx.lastModified = now;
+  const today = dayjs.tz(now, tzid);
+  const sunday = today.day(7);
+  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
+  ctx.set('Expires', exp.toUTCString());
 }

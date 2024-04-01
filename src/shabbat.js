@@ -6,12 +6,12 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   httpRedirect,
   getLocationFromGeoIp,
   eTagFromOptions,
-  expiresSaturdayNight,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
   localeMap, makeHebrewCalendar} from './common.js';
-import {getTodayDate, getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
+import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
+  expiresSaturdayNight} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';

@@ -11,7 +11,9 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   shortenUrl,
   queryDefaultCandleMins,
   dailyLearningOpts,
-  makeCalendarSubtitleFromOpts, optToName, optLongDescr,
+  makeCalendarSubtitleFromOpts,
+  queryLongDescr,
+  queryToName,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
@@ -195,8 +197,8 @@ async function renderForm(ctx, error) {
     defaultYearHeb,
     queryDefaultCandleMins,
     dailyLearningOpts,
-    optToName,
-    optLongDescr,
+    queryToName,
+    queryLongDescr,
   });
 }
 
@@ -229,7 +231,8 @@ function renderHtml(ctx) {
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
   const location = ctx.state.location;
-  const locationName = location ? location.getName() : makeCalendarSubtitleFromOpts(options);
+  const q = ctx.state.q;
+  const locationName = location ? location.getName() : makeCalendarSubtitleFromOpts(options, q);
   const shortTitle = pageTitle(options, events);
   const locale = localeMap[options.locale] || 'en';
   const memos = {};
@@ -259,7 +262,6 @@ function renderHtml(ctx) {
     }
     return item;
   });
-  const q = ctx.state.q;
   if (q.set !== 'off') {
     possiblySetCookie(ctx, q);
   }
@@ -323,8 +325,8 @@ function renderHtml(ctx) {
     defaultYearHeb,
     queryDefaultCandleMins,
     dailyLearningOpts,
-    optToName,
-    optLongDescr,
+    queryToName,
+    queryLongDescr,
   });
 }
 

@@ -1,8 +1,8 @@
 /* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
-import {getSunsetAwareDate} from './dateUtil.js';
-import {setDefautLangTz, langNames, expiresSaturdayNight} from './common.js';
+import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
+import {setDefautLangTz, langNames, shortenUrl} from './common.js';
 import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon.js';
 import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
@@ -77,7 +77,7 @@ function getTodayHolidayEvent(hd, il) {
   const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
   for (const ev of events) {
     const reading = getLeyningForHoliday(ev, il);
-    const url = ev.url();
+    const url = shortenUrl(ev.url());
     if (reading && reading.fullkriyah && url) {
       const parts = makeLeyningParts(reading.fullkriyah);
       const torahHtml = makeLeyningHtmlFromParts(parts);
@@ -95,14 +95,15 @@ function getParsha(hd, il) {
     const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
     if (events.length > 0) {
       const ev = events[0];
-      return [ev.basename(), ev.url(), undefined];
+      const href = shortenUrl(ev.url());
+      return [ev.basename(), href, undefined];
     } else {
       // is this possible?
       return [parsha, null, undefined];
     }
   } else {
     const pe = new ParshaEvent(hd, parsha0.parsha, il);
-    const parshaHref = pe.url();
+    const parshaHref = shortenUrl(pe.url());
     const meta = lookupParshaMeta(parsha);
     return [parsha, parshaHref, meta];
   }

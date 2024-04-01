@@ -53,10 +53,9 @@ export async function homepage(ctx) {
   ctx.state.title = 'Jewish Calendar, Hebrew Date Converter, Holidays - hebcal.com';
   const yearInfo = getDefaultYear(dt, hd);
   Object.assign(ctx.state, yearInfo);
-  if ((gm === 12 || (gm === 11 && gd >= 11)) || (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs)) {
-    const start = pad4(gy) + '-' + pad2(gm) + '-01';
-    const end = pad4(gy + 1) + '-12-31';
-    ctx.state.yearArgs = `&start=${start}&end=${end}`;
+  const yearArgsOverride = makeRangeYearArgs(yearInfo, gy, gm, gd);
+  if (yearArgsOverride) {
+    ctx.state.yearArgs = yearArgsOverride;
   }
   ctx.state.items = [];
   mastheadDates(ctx, dt, afterSunset, hd);
@@ -72,6 +71,19 @@ export async function homepage(ctx) {
     ctx.state.holidayBlurb = false;
   }
   return ctx.render('homepage');
+}
+
+function makeRangeYearArgs(yearInfo, gy, gm, gd) {
+  const start = pad4(gy) + '-' + pad2(gm) + '-01';
+  if (!yearInfo.isHebrewYear && (gm >= 4 && gm <= 8)) {
+    const end = pad4(gy) + '-12-31';
+    return `&start=${start}&end=${end}`;
+  }
+  if ((gm === 12 || (gm === 11 && gd >= 11)) || (yearInfo.isHebrewYear && yearInfo.todayAbs >= yearInfo.av15Abs)) {
+    const end = pad4(gy + 1) + '-12-31';
+    return `&start=${start}&end=${end}`;
+  }
+  return undefined;
 }
 
 function mastheadDates(ctx, dt, afterSunset, hd) {

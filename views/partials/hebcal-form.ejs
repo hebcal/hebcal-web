@@ -99,11 +99,11 @@ if (typeof year !== 'string' || year.length === 0) {
 <details <%= Object.keys(q).filter((key) => q[key] === 'on' && dailyLearningOpts[key]).length > 0 ? 'open' : ''%> class="mb-3">
 <summary class="fw-bold mb-2">Daily Learning</summary>
 <div>
-<% for (const [key, opt] of Object.entries(dailyLearningOpts)) { %>
+<% for (const key of Object.keys(dailyLearningOpts)) { %>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="<%=key%>" value="on" <%= q[key] === 'on' ? 'checked' : '' %> id="<%=key%>">
-<label class="form-check-label" for="<%=key%>"><%= optToName[opt] %></label>
-<% if (optLongDescr[opt]) { %> &nbsp;<span title="<%= optLongDescr[opt] %>" data-bs-toggle="tooltip" data-bs-animation="false"
+<label class="form-check-label" for="<%=key%>"><%= queryToName[key] %></label>
+<% if (queryLongDescr[key]) { %> &nbsp;<span title="<%= queryLongDescr[key] %>" data-bs-toggle="tooltip" data-bs-animation="false"
  data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span><% } %>
 </div>
 <% } %>

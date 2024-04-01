@@ -1,8 +1,5 @@
 import {HDate, Location, HebrewCalendar, flags} from '@hebcal/core';
 import '@hebcal/learning';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc.js';
-import timezone from 'dayjs/plugin/timezone.js';
 import createError from 'http-errors';
 import uuid from 'uuid-random';
 import {nearestCity} from './nearestCity.js';
@@ -12,11 +9,8 @@ import {find as geoTzFind} from 'geo-tz';
 import {basename} from 'path';
 import {readJSON} from './readJSON.js';
 import {empty, off} from './empty.js';
-import {isoDateStringToDate, nowInTimezone} from './dateUtil.js';
+import {isoDateStringToDate} from './dateUtil.js';
 import {getIpAddress} from './getIpAddress.js';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 const pkg = readJSON('../package.json');
 
@@ -232,15 +226,17 @@ function makeCookie(ctx, query, uid) {
     if (key === 'euro' || key === 'yto') {
       continue;
     }
-    ck[key] = (query[key] === 'on' || query[key] == '1') ? 'on' : 'off';
+    const value = query[key];
+    ck[key] = (value === 'on' || value == '1') ? 'on' : 'off';
   }
   if (!empty(query.h12)) {
     ck.h12 = off(query.h12) ? '0' : '1';
   }
   for (const key of cookieOpts) {
-    if (typeof query[key] === 'number' ||
-       (typeof query[key] === 'string' && query[key].length > 0)) {
-      ck[key] = query[key];
+    const value = query[key];
+    if (typeof value === 'number' ||
+       (typeof value === 'string' && value.length > 0)) {
+      ck[key] = value;
     }
   }
   // don't persist candle lighting minutes if it's default val.
@@ -329,7 +325,8 @@ export function setHebcalCookie(ctx, query) {
  */
 function setCookie(ctx, newCookie) {
   const prevCookie = ctx.cookies.get('C');
-  const expires = dayjs().add(399, 'd').toDate();
+  const expires = new Date();
+  expires.setDate(expires.getDate() + 399);
   newCookie += '&exp=' + expires.toISOString().substring(0, 10);
   const headerStr = 'C=' + newCookie + '; path=/; expires=' +
     expires.toUTCString();
@@ -474,7 +471,8 @@ export function queryDefaultCandleMins(query) {
 function getMaskFromQuery(query) {
   let mask = 0;
   for (const [key, val] of Object.entries(optsToMask)) {
-    if (query[key] === 'on' || query[key] === '1') {
+    const value = query[key];
+    if (value === 'on' || value === '1') {
       mask |= val;
     }
   }
@@ -552,8 +550,9 @@ export function makeHebcalOptions(db, query) {
     delete query.m;
   }
   for (const [key, val] of Object.entries(numberOpts)) {
-    if (typeof query[key] === 'string' && query[key].length) {
-      const num = parseInt(query[key], 10);
+    const value = query[key];
+    if (typeof value === 'string' && value.length) {
+      const num = parseInt(value, 10);
       if (isNaN(num)) {
         delete query[key];
       } else {
@@ -715,8 +714,9 @@ export function getLocationFromQuery(db, query) {
     return loc;
   } else if (hasLatLongLegacy(query)) {
     for (const [key, max] of Object.entries(geoposLegacy)) {
-      if (empty(query[key]) || parseInt(query[key], 10) > max) {
-        throw createError(400, `Sorry, ${key}=${query[key]} out of valid range 0-${max}`);
+      const value = query[key];
+      if (empty(value) || parseInt(value, 10) > max) {
+        throw createError(400, `Sorry, ${key}=${value} out of valid range 0-${max}`);
       }
     }
     let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
@@ -1077,54 +1077,6 @@ export function eTagFromOptions(options, attrs) {
   return etag(JSON.stringify(etagObj), {weak: true});
 }
 
-const MAX_DAYS = 180;
-
-/**
- * @typedef {Object} StartAndEnd
- * @property {dayjs.Dayjs} startD
- * @property {dayjs.Dayjs} endD
- * @property {boolean} isRange
- */
-
-/**
- * @param {Object.<string,string>} q
- * @param {string} tzid
- * @return {StartAndEnd}
- */
-export function getStartAndEnd(q, tzid) {
-  if (!empty(q.start) && empty(q.end)) {
-    q.end = q.start;
-  } else if (empty(q.start) && !empty(q.end)) {
-    q.start = q.end;
-  }
-  if (!empty(q.start) && !empty(q.end) && q.start === q.end) {
-    q.date = q.start;
-    delete q.start;
-    delete q.end;
-  }
-  let isRange = !empty(q.start) && !empty(q.end);
-  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
-  const startD = isRange ? isoToDayjs(q.start) : singleD;
-  let endD = isRange ? isoToDayjs(q.end) : singleD;
-  if (isRange) {
-    if (endD.isBefore(startD, 'd')) {
-      isRange = false;
-      endD = startD;
-    } else if (endD.diff(startD, 'd') > MAX_DAYS) {
-      endD = startD.add(MAX_DAYS, 'd');
-    }
-  }
-  return {isRange, startD, endD};
-}
-
-/**
- * @param {string} str
- * @return {dayjs.Dayjs}
- */
-function isoToDayjs(str) {
-  return dayjs(isoDateStringToDate(str));
-}
-
 const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
 
 /**
@@ -1197,8 +1149,9 @@ export function makeIcalOpts(options, query) {
     icalOpts.emoji = false;
   }
   for (const key of ['title', 'caldesc', 'publishedTTL', 'subscribe', 'relcalid']) {
-    if (!empty(query[key])) {
-      icalOpts[key] = query[key];
+    const value = query[key];
+    if (!empty(value)) {
+      icalOpts[key] = value;
     }
   }
   const color = query.color;
@@ -1206,25 +1159,12 @@ export function makeIcalOpts(options, query) {
     icalOpts.calendarColor = color.toUpperCase();
   }
   if (!icalOpts.title && !icalOpts.yahrzeit && !icalOpts.location && query.subscribe === '1') {
-    icalOpts.title = 'Hebcal ' + makeCalendarSubtitleFromOpts(icalOpts);
-    if (!icalOpts.caldesc && allDefaultSuppressed(options)) {
-      icalOpts.caldesc = dailyLearningDescription(options, optLongDescr);
+    icalOpts.title = 'Hebcal ' + makeCalendarSubtitleFromOpts(icalOpts, query);
+    if (!icalOpts.caldesc && (icalOpts.noHolidays || icalOpts.noMajor)) {
+      icalOpts.caldesc = queryDescription(query, queryLongDescr);
     }
   }
   return icalOpts;
-}
-
-/**
- * @param {any} ctx
- * @param {Date} now
- * @param {string} tzid
- */
-export function expiresSaturdayNight(ctx, now, tzid) {
-  ctx.lastModified = now;
-  const today = dayjs.tz(now, tzid);
-  const sunday = today.day(7);
-  const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
-  ctx.set('Expires', exp.toUTCString());
 }
 
 /**
@@ -1334,51 +1274,56 @@ export function getBaseFromPath(ctx) {
   }
 }
 
-export const optToName = {
-  sedrot: 'Torah Readings',
-  omer: 'Days of the Omer',
-  addHebrewDates: 'Hebrew Dates',
-  yomKippurKatan: 'Yom Kippur Katan',
-  dafYomi: 'Daf Yomi',
-  mishnaYomi: 'Mishna Yomi',
-  nachYomi: 'Nach Yomi',
-  tanakhYomi: 'Tanakh Yomi',
-  psalms: 'Daily Tehillim',
-  chofetzChaim: 'Sefer Chofetz Chaim',
-  shemiratHaLashon: 'Shemirat HaLashon',
-  rambam1: 'Daily Rambam',
-  yerushalmi: 'Yerushalmi Yomi',
-  dafWeekly: 'Daf-a-Week',
-  dafWeeklySunday: 'Daf-a-Week',
+export const queryToName = {
+  maj: 'Major Holidays',
+  min: 'Minor Holidays',
+  nx: 'Rosh Chodesh',
+  mod: 'Modern Holidays',
+  mf: 'Minor Fasts',
+  ss: 'Special Shabbatot',
+  o: 'Days of the Omer',
+  ykk: 'Yom Kippur Katan',
+  s: 'Torah Readings', // Weekly Torah portion on Saturdays
+  d: 'Hebrew Dates', // Show Hebrew date every day of the year
+  D: 'Hebrew Dates', // Show Hebrew date for dates with some event
+  F: 'Daf Yomi',
+  myomi: 'Mishna Yomi',
+  nyomi: 'Nach Yomi',
+  dty: 'Tanakh Yomi',
+  dps: 'Daily Tehillim',
+  dcc: 'Sefer Chofetz Chaim',
+  dshl: 'Shemirat HaLashon',
+  dr1: 'Daily Rambam',
+  yyomi: 'Yerushalmi Yomi',
+  dw: 'Daf-a-Week',
 };
 
-export const optLongDescr = {
-  sedrot: 'Parashat ha-Shavua - Weekly Torah Portion',
-  omer: '7 weeks from the second night of Pesach to the day before Shavuot',
-  addHebrewDates: 'Daily Hebrew Dates',
-  yomKippurKatan: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
-  dafYomi: 'Daily regimen of learning the Babylonian Talmud',
-  mishnaYomi: 'Two Mishnayot each day',
-  nachYomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
-  tanakhYomi: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
-  psalms: 'Daily study of few chapters from the book of Psalms',
-  chofetzChaim: 'Jewish ethics and laws of speech',
-  shemiratHaLashon: '',
-  rambam1: 'Maimonides’ Mishneh Torah legal code',
-  yerushalmi: 'Jerusalem Talmud (Vilna Edition)',
-  dafWeeklySunday: 'One page of Babylonian Talmud per week',
-};
+export const queryLongDescr = Object.assign({}, queryToName, {
+  s: 'Parashat ha-Shavua - Weekly Torah Portion',
+  o: '7 weeks from the second night of Pesach to the day before Shavuot',
+  d: 'Daily Hebrew Dates',
+  ykk: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
+  F: 'Daily regimen of learning the Babylonian Talmud',
+  myomi: 'Two Mishnayot each day',
+  nyomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
+  dty: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
+  dps: 'Daily study of few chapters from the book of Psalms',
+  dcc: 'Jewish ethics and laws of speech',
+  dshl: '',
+  dr1: 'Maimonides’ Mishneh Torah legal code',
+  yyomi: 'Jerusalem Talmud (Vilna Edition)',
+  dw: 'One page of Babylonian Talmud per week',
+});
 
 /**
- * @param {CalOptions} options
+ * @param {Object.<string,string>} query
  * @param {Object.<string,string>} map
  * @return {string}
  */
-function dailyLearningDescription(options, map) {
+function queryDescription(query, map) {
   const strs = [];
-  const dailyLearning = options.dailyLearning || {};
   for (const [k, v] of Object.entries(map)) {
-    if (options[k] || dailyLearning[k]) {
+    if (!off(query[k])) {
       strs.push(v);
     }
   }
@@ -1386,27 +1331,18 @@ function dailyLearningDescription(options, map) {
 }
 
 /**
- * @param {CalOptions} options
- * @return {boolean}
- */
-function allDefaultSuppressed(options) {
-  return options.noHolidays ||
-    (options.noMajor && options.noMinorHolidays &&
-     options.noRoshChodesh && options.noModern &&
-     options.noMinorFast && options.noSpecialShabbat);
-}
-
-/**
  * If all default holidays are suppressed try to come up with a better name
  * @param {CalOptions} options
+ * @param {Object.<string,string>} query
  * @return {string}
  */
-export function makeCalendarSubtitleFromOpts(options) {
+export function makeCalendarSubtitleFromOpts(options, query) {
   const ilOrDiaspora = options.il ? 'Israel' : 'Diaspora';
-  if (allDefaultSuppressed(options)) {
-    const name = dailyLearningDescription(options, optToName);
+  if (options.noHolidays || options.noMajor) {
+    const name = queryDescription(query, queryToName);
     if (name) {
-      return options.sedrot ? ilOrDiaspora + ' ' + name : name;
+      return (options.sedrot || !options.noModern) ?
+        `${ilOrDiaspora} - ${name}` : name;
     }
   }
   return ilOrDiaspora;
