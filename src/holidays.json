@@ -45,6 +45,16 @@
   },
   "israelOnly": true
  },
+ "Hebrew Language Day": {
+  "about": {
+    "href": "https://embassies.gov.il/MFA/IsraelExperience/history/Pages/Hebrew-Language-Day-The-revival-of-the-language-of-the-Bible.aspx"
+  },
+  "wikipedia": {
+    "href": "https://he.wikipedia.org/wiki/%D7%99%D7%95%D7%9D_%D7%94%D7%9C%D7%A9%D7%95%D7%9F_%D7%94%D7%A2%D7%91%D7%A8%D7%99%D7%AA",
+    "text": "Hebrew Language Day (Hebrew: יום השפה העברית‎, or יום הלשון העברית‎) is an Israeli national holiday celebrated annually on the 21st of the Hebrew month of Tevet, the birthday of Eliezer Ben-Yehuda, the “reviver” of the Hebrew language. If the 21st of Tevet occurs on Friday or Saturday (Shabbat), the day is instead observed on the preceding Thursday"
+  },
+  "israelOnly": true
+ },
  "Family Day": {
   "about": {
     "href": "https://en.wikipedia.org/wiki/Family_Day#Israel"
