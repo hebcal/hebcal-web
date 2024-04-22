@@ -39,6 +39,7 @@ export function getTodayDate(query) {
     try {
       const dt = isoDateStringToDate(query.dt);
       return {dt, now: false};
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       return {dt: new Date(), now: true};
     }

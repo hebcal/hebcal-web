@@ -38,14 +38,14 @@ const hebcalClient = {
     hebcalCities.initialize();
 
     let readyToSubmit = false;
-        function clearGeo() {
+    function clearGeo() {
       readyToSubmit = false;
       $('#geo').val('none');
       $('#c').val('off');
       $('#geonameid').val('');
       $('#zip').val('');
     }
-        function selectSuggestion(suggestion) {
+    function selectSuggestion(suggestion) {
       const geo = suggestion.geo;
       const id = suggestion.id;
       if (geo === 'zip') {
@@ -82,7 +82,7 @@ const hebcalClient = {
       limit: 10,
       templates: {
         empty: function({query}) {
-          const encodedStr = query.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+          const encodedStr = query.replace(/[\u00A0-\u9999<>&]/gim, function(i) {
             return `&#${i.charCodeAt(0)};`;
           });
           return `<div class="tt-suggestion">Sorry, no city names match <b>${encodedStr}</b>.</div>`;
@@ -120,7 +120,7 @@ const hebcalClient = {
         $('#shabbat-form').submit();
       }
     }).bind('keyup keypress', function(e) {
-      if (!autoSubmit && !$(this).val()) {
+      if (!autoSubmit && !$('#city-typeahead').val()) {
         clearGeo();
       }
 
@@ -143,7 +143,7 @@ const hebcalClient = {
         return false;
       }
     }).bind('focus', function(e) {
-      $(this).typeahead('val', '');
+      $('#city-typeahead').typeahead('val', '');
       clearGeo();
     });
   },

@@ -158,13 +158,14 @@ function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
       case 'Shmini Atzeret':
       case 'Shavuot':
         return b0 + formatDatePlusDelta(d, dur, isHebrewYear) + b1 + shortDayOfWeek(d, dur) + asterisk;
-      case 'Sukkot':
+      case 'Sukkot': {
         const d2 = d.add(il ? 2 : 3, 'd');
         const sukkotChmDays = il ? 5 : 4;
         return b0 + formatDatePlusDelta(d, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d, yomTovDays) +
         asterisk +
         '<br>' + formatDatePlusDelta(d2, sukkotChmDays, isHebrewYear) + shortDayOfWeek(d2, sukkotChmDays);
-      case 'Pesach':
+      }
+      case 'Pesach': {
         const d3 = d.add(il ? 2 : 3, 'd');
         const d6 = d.add(6, 'd');
         const pesachChmDays = il ? 4 : 3;
@@ -172,6 +173,7 @@ function tableCellObserved(item, il, isHebrewYear, addIsraelAsterisk) {
         asterisk +
         '<br>' + formatDatePlusDelta(d3, pesachChmDays, isHebrewYear) + shortDayOfWeek(d3, pesachChmDays) +
         '<br>' + b0 + formatDatePlusDelta(d6, yomTovDays, isHebrewYear) + b1 + shortDayOfWeek(d6, yomTovDays);
+      }
       default:
         throw createError(500, `Unknown holiday: ${f}`);
     }

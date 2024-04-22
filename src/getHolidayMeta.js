@@ -66,6 +66,7 @@ export async function getHolidayMeta(holiday) {
         const path = path0 + '.jpg';
         const rs = fs.createReadStream(path);
         book.dimensions = await probe(rs);
+      // eslint-disable-next-line no-unused-vars
       } catch (err) {
         // ignore file not found
       }
@@ -73,6 +74,7 @@ export async function getHolidayMeta(holiday) {
         const path = path0 + '.webp';
         const rs = fs.createReadStream(path);
         book.webp = await probe(rs);
+      // eslint-disable-next-line no-unused-vars
       } catch (err) {
         // ignore file not found
       }

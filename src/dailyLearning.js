@@ -82,19 +82,14 @@ export function dailyLearningApp(ctx) {
   });
 
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-  switch (hd.getMonth()) {
-    case months.NISAN:
-    case months.IYYAR:
-    case months.SIVAN:
-      const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
-      const abs = hd.abs();
-      if (abs >= beginOmer && abs < (beginOmer + 49)) {
-        const omer = abs - beginOmer + 1;
-        holidays.push(new OmerEvent(hd, omer));
-      }
-      break;
-    default:
-      break;
+  const mm = hd.getMonth();
+  if (mm === months.NISAN || mm === months.IYYAR || mm === months.SIVAN) {
+    const beginOmer = HDate.hebrew2abs(hd.getFullYear(), months.NISAN, 16);
+    const abs = hd.abs();
+    if (abs >= beginOmer && abs < (beginOmer + 49)) {
+      const omer = abs - beginOmer + 1;
+      holidays.push(new OmerEvent(hd, omer));
+    }
   }
 
   const items0 = [];

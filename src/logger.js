@@ -17,7 +17,7 @@ export function makeLogger(logDir) {
   });
   const logger = pino(transport);
 
-    function handler(err, evt) {
+  function handler(err, evt) {
     const msg = `Koa server caught ${evt}; exiting...`;
     console.log(msg);
     logger.info(msg);
@@ -25,6 +25,7 @@ export function makeLogger(logDir) {
       console.log(err);
       logger.fatal(err, 'error caused exit');
     }
+    // eslint-disable-next-line n/no-process-exit
     process.exit(err ? 1 : 0);
   }
 

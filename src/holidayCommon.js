@@ -114,7 +114,7 @@ export function eventToHolidayItemBase(ev, il) {
   const {hd, d, duration, endD, beginsWhen} = holidayStartAndEnd(ev, il);
   const holiday = ev.basename();
   const mask = ev.getFlags();
-  const emoji = Boolean(mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) ? '' :
+  const emoji = mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST) ? '' :
     holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
   const anchor = makeAnchor(holiday);
   const anchorDate = (typeof ev.urlDateSuffix === 'function') ? ev.urlDateSuffix() : d.year();

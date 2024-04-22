@@ -3,6 +3,12 @@ import nodePlugin from 'eslint-plugin-n';
 import globals from 'globals';
 
 export default [
+  {
+    ignores: [
+      'unused/*.js',
+      'static/i/hebcal-app-*.min.js',
+    ],
+  },
   js.configs.recommended,
   nodePlugin.configs['flat/recommended-script'],
   {
