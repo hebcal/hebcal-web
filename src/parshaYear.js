@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent} from '@hebcal/leyning';
 import dayjs from 'dayjs';

@@ -4,7 +4,6 @@ import {empty} from './empty.js';
 import {sendGif} from './sendGif.js';
 import {transliterate} from 'transliteration';
 
-// eslint-disable-next-line require-jsdoc
 export async function emailOpen(ctx) {
   const q = ctx.request.query;
   if (empty(q.msgid)) {
@@ -25,7 +24,6 @@ export async function emailOpen(ctx) {
   return sendGif(ctx);
 }
 
-// eslint-disable-next-line require-jsdoc
 async function saveEmailOpenToDb(ctx, loc) {
   const q = ctx.request.query;
   const msgid = q.msgid;

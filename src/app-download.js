@@ -312,7 +312,6 @@ app.listen(port, () => {
   console.log(msg);
 });
 
-// eslint-disable-next-line require-jsdoc
 function redirEncQuery(path, encQuery, ctx) {
   const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
   httpRedirect(ctx, `/export/export.ics?redir=1&${qs}`, 301);

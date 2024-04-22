@@ -1,7 +1,6 @@
 import Database from 'better-sqlite3';
 import {cacheControl} from './common.js';
 
-// eslint-disable-next-line require-jsdoc
 export async function sitemapZips(ctx) {
   const db = new Database('zips.sqlite3', {fileMustExist: true});
   const stmt = db.prepare('SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0)');

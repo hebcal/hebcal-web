@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';

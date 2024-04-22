@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,

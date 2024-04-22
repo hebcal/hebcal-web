@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {empty} from './empty.js';
 import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   cleanQuery,

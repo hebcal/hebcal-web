@@ -2,7 +2,6 @@ import {HDate} from '@hebcal/core';
 import {makeHebDate} from './dateUtil.js';
 import {empty} from './empty.js';
 
-// eslint-disable-next-line require-jsdoc
 function makeHebDateOrToday(hyStr, hmStr, hdStr) {
   if (!empty(hyStr) && !empty(hmStr) && !empty(hdStr)) {
     return makeHebDate(hyStr, hmStr, hdStr);
@@ -10,7 +9,6 @@ function makeHebDateOrToday(hyStr, hmStr, hdStr) {
   return new HDate();
 }
 
-// eslint-disable-next-line require-jsdoc
 export async function hebrewDateCalc(ctx) {
   ctx.state.title = 'Hebrew Date Calculator';
   const q = ctx.state.q = ctx.request.query;

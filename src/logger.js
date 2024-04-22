@@ -17,8 +17,7 @@ export function makeLogger(logDir) {
   });
   const logger = pino(transport);
 
-  // eslint-disable-next-line require-jsdoc
-  function handler(err, evt) {
+    function handler(err, evt) {
     const msg = `Koa server caught ${evt}; exiting...`;
     console.log(msg);
     logger.info(msg);

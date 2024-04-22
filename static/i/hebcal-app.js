@@ -38,16 +38,14 @@ const hebcalClient = {
     hebcalCities.initialize();
 
     let readyToSubmit = false;
-    // eslint-disable-next-line require-jsdoc
-    function clearGeo() {
+        function clearGeo() {
       readyToSubmit = false;
       $('#geo').val('none');
       $('#c').val('off');
       $('#geonameid').val('');
       $('#zip').val('');
     }
-    // eslint-disable-next-line require-jsdoc
-    function selectSuggestion(suggestion) {
+        function selectSuggestion(suggestion) {
       const geo = suggestion.geo;
       const id = suggestion.id;
       if (geo === 'zip') {

@@ -66,7 +66,6 @@ function getWeekdays(d) {
   return weekdays;
 }
 
-// eslint-disable-next-line require-jsdoc
 function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
   // rectangle of calendar grid
   doc.lineWidth(1)
@@ -135,7 +134,6 @@ function makeHebMonthStr(d, rtl, options) {
   return rtl ? reverseHebrewWords(str) : str.replace(/'/g, '’');
 }
 
-// eslint-disable-next-line require-jsdoc
 function renderPdfMonthTitle(doc, d, rtl, options) {
   const yy = d.year();
   const titleYear = yy > 0 ? yy : -(yy-1) + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
@@ -151,7 +149,6 @@ function renderPdfMonthTitle(doc, d, rtl, options) {
       .text(hebTitle, 0, PDF_TMARGIN + 4, {align: 'center'});
 }
 
-// eslint-disable-next-line require-jsdoc
 function eventColor(evt) {
   const f = evt.getFlags();
   if (f & (flags.DAF_YOMI | flags.OMER_COUNT | flags.HEBREW_DATE |

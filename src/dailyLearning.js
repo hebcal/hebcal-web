@@ -27,7 +27,6 @@ const config = {
   parashat: ['Torah portion', 'torah-readings-diaspora', 's', null],
 };
 
-// eslint-disable-next-line require-jsdoc
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
   if (rpath === '/learning/' || rpath === '/learning') {

@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
 import {getHolidayDescription, makeTorahMemoText, eventsToRss2} from '@hebcal/rest-api';
 import {getTodayDate} from './dateUtil.js';

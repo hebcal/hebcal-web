@@ -3,7 +3,6 @@ import flag from 'emoji-flag';
 
 const NOTFOUND = {error: 'Not Found'};
 
-// eslint-disable-next-line require-jsdoc
 export async function geoAutoComplete(ctx) {
   ctx.lastModified = ctx.launchDate;
   ctx.status = 200;

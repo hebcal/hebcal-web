@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent, HolidayEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';

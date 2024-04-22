@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {basename} from 'path';
 import {PassThrough} from 'stream';
 import {writeFullKriyahCsv, getLeyningOnDate,

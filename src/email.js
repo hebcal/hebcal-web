@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import randomBigInt from 'random-bigint';
 import {getLocationFromQuery, processCookieAndQuery,
   cleanQuery,

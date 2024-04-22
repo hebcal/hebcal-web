@@ -72,7 +72,6 @@ function checkSlash(rpath, position) {
   }
 }
 
-// eslint-disable-next-line require-jsdoc
 export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;

@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
-// eslint-disable-next-line require-jsdoc
 export async function parshaMultiYearIndex(ctx) {
   const dt = new Date();
   const hd = new HDate(dt);

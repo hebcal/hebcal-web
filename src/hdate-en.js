@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {greg, abs2hebrew, getMonthName} from '@hebcal/hdate';
 function ordinal(n) {
   const s = ['th', 'st', 'nd', 'rd'];

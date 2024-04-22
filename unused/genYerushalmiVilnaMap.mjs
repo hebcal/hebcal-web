@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {vilna} from '@hebcal/core';
 
 const allRefs = {};

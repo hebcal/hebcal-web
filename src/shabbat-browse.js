@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, Location, Zmanim} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import Database from 'better-sqlite3';

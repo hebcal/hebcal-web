@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {validateEmail, mySendMail, getImgOpenHtml} from './emailCommon.js';

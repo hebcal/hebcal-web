@@ -4,7 +4,6 @@ const shortToLong = {
   o: 'omer',
 };
 
-// eslint-disable-next-line require-jsdoc
 export function shortUrlRedir(ctx) {
   const qs = new URLSearchParams(ctx.request.query);
   let utmSource = qs.get('utm_source') || qs.get('us');

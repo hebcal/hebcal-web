@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HDate, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';

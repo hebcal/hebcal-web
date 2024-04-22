@@ -9,13 +9,11 @@ const MENU_ITEMS = [
     ['/home/help', 'Help', 'Help'],
 ];
 
-// eslint-disable-next-line require-jsdoc
 function menuItem(path, title, tooltip, selected) {
   const active = (path != '/' && path == selected) ? ' active" aria-current="page' : '';
   return `<li class="nav-item"><a class="nav-link${active}" href="${path}" title="${tooltip}">${title}</a>`;
 }
 
-// eslint-disable-next-line require-jsdoc
 function htmlMenu(selected) {
   let str = '<ul class="navbar-nav me-auto mb-2 mb-lg-0 d-print-none">';
   for (const item of MENU_ITEMS) {

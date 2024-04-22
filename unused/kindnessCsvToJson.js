@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import fs from 'fs';
 import {parse} from 'csv-parse';
 import {pad2} from '@hebcal/rest-api';

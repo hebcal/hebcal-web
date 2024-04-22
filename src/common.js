@@ -1053,6 +1053,7 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
     try {
       const location2 = getLocationFromQuery(ctx.db, geoip);
       return location2;
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // ignore
     }
@@ -1087,7 +1088,6 @@ export function wrapHebrewInSpans(str) {
   return str.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
 }
 
-// eslint-disable-next-line require-jsdoc
 export function stopIfTimedOut() {
   return async function stopIfTimedOut0(ctx, next) {
     if (!ctx.state.timeout) {

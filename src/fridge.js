@@ -11,7 +11,6 @@ import createError from 'http-errors';
 
 const CACHE_CONTROL_3DAYS = cacheControl(3);
 
-// eslint-disable-next-line require-jsdoc
 export async function fridgeShabbat(ctx) {
   const p = makeProperties(ctx);
   ctx.lastModified = ctx.launchDate;

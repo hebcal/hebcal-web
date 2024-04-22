@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import dayjs from 'dayjs';
 import {greg, abs2hebrew, getMonthName} from '@hebcal/hdate';
 

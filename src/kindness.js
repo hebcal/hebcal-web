@@ -59,7 +59,6 @@ for (const [monthDay, arr] of Object.entries(kindness)) {
 csvStream.write(eventsToCsv(events, {}));
 csvStream.close();
 
-// eslint-disable-next-line require-jsdoc
 function makeEvent(gyear, monthDay, arr) {
   const [monthStr, mday] = monthDay.split('-');
   const month = parseInt(monthStr, 10);

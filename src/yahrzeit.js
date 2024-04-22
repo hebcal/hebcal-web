@@ -143,7 +143,6 @@ function isValidUlid(str) {
   return typeof str === 'string' && str.length === 26 && /^\w+$/.test(str);
 }
 
-// eslint-disable-next-line require-jsdoc
 function getOrMakeUlid(ctx) {
   const q = ctx.state.q;
   const existing = q.ulid || ctx.state.ulid;
@@ -163,7 +162,6 @@ function getOrMakeUlid(ctx) {
   return id;
 }
 
-// eslint-disable-next-line require-jsdoc
 async function getCalPickerIds(ctx, ids) {
   const db = ctx.mysql;
   const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
@@ -178,7 +176,6 @@ async function getCalPickerIds(ctx, ids) {
   return calendars;
 }
 
-// eslint-disable-next-line require-jsdoc
 function setYahrzeitCookie(ctx) {
   const cCookie = ctx.cookies.get('C');
   if (ctx.state.yahrzeitCookieSet) {
@@ -202,7 +199,6 @@ function setYahrzeitCookie(ctx) {
   return true;
 }
 
-// eslint-disable-next-line require-jsdoc
 async function renderJson(maxId, q) {
   delete q.ulid;
   const events = await makeYahrzeitEvents(maxId, q, false);
@@ -232,7 +228,6 @@ async function renderJson(maxId, q) {
   return results;
 }
 
-// eslint-disable-next-line require-jsdoc
 async function makeFormResults(ctx) {
   const q = ctx.state.q;
   const events = await makeYahrzeitEvents(ctx.state.maxId, q, false);
@@ -281,7 +276,6 @@ function getNumYears(str) {
   }
 }
 
-// eslint-disable-next-line require-jsdoc
 async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
   removeEmptyArgs(q);
@@ -320,7 +314,6 @@ async function makeDownloadProps(ctx) {
 
 const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'seq'];
 
-// eslint-disable-next-line require-jsdoc
 async function saveDataToDb(ctx) {
   const toSave = Object.assign({}, ctx.state.q);
   const seq = +(toSave.seq) || 1;
@@ -365,7 +358,6 @@ async function saveDataToDb(ctx) {
   }
 }
 
-// eslint-disable-next-line require-jsdoc
 function compactJsonToSave(obj) {
   const maxId = getMaxYahrzeitId(obj);
   for (let i = 1; i <= maxId; i++) {
@@ -395,7 +387,6 @@ function compactJsonToSave(obj) {
   }
 }
 
-// eslint-disable-next-line require-jsdoc
 function removeEmptyArgs(q) {
   const maxId = getMaxYahrzeitId(q);
   const keyPrefixes = 'mdytns'.split('');
@@ -681,7 +672,6 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   return ev;
 }
 
-// eslint-disable-next-line require-jsdoc
 function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId) {
   const type = info.type;
   const isYahrzeit = (type === 'Yahrzeit');

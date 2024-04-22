@@ -1,4 +1,4 @@
-/* eslint-disable keyword-spacing, comma-spacing, brace-style, space-before-blocks, require-jsdoc */
+/* eslint-disable keyword-spacing, comma-spacing, brace-style, space-before-blocks, no-var */
 var _paq = window._paq = window._paq || [];
 const canonicalMeta=document.querySelector('link[rel="canonical"]');
 const urlHref=canonicalMeta?canonicalMeta.href:window.location.href;

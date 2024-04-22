@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning';

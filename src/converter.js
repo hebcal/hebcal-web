@@ -159,7 +159,6 @@ function h2gURL(hdate, il) {
   };
 }
 
-// eslint-disable-next-line require-jsdoc
 function makePrevNext(p) {
   const isEpoch = p.hy === 1 && p.hd === 1 && p.hm === months.TISHREI;
   if (!isEpoch) {
@@ -168,7 +167,6 @@ function makePrevNext(p) {
   p.next = h2gURL(p.hdate.next(), p.il);
 }
 
-// eslint-disable-next-line require-jsdoc
 function makeFutureYears(ctx, p) {
   const locale = ctx.state.locale;
   const arr = makeFutureYearsHeb(p.hdate, 25, locale);
@@ -250,7 +248,6 @@ function makeFutureYearsHeb(orig, numYears, locale) {
   return arr;
 }
 
-// eslint-disable-next-line require-jsdoc
 function renameChanukah(locale) {
   return (ev) => {
     if (ev.chanukahDay) {
@@ -335,7 +332,6 @@ function makeProperties(ctx, props) {
   };
 }
 
-// eslint-disable-next-line require-jsdoc
 function eventToItem(ctx, ev) {
   const lg = ctx.state.lg;
   const desc = renameChanukah(lg)(ev);

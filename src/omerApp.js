@@ -9,7 +9,6 @@ import {getHolidayMeta} from './getHolidayMeta.js';
 const CACHE_CONTROL_30DAYS = cacheControl(30);
 const CACHE_CONTROL_1_YEAR = cacheControl(365);
 
-// eslint-disable-next-line require-jsdoc
 export async function omerApp(rpath, ctx) {
   if (rpath === '/omer/sitemap.txt') {
     const prefix = 'https://www.hebcal.com/omer';
@@ -103,7 +102,6 @@ export async function omerApp(rpath, ctx) {
   });
 }
 
-// eslint-disable-next-line require-jsdoc
 function redirCurrentYear(ctx) {
   const hd = new HDate();
   const hyear = getDefaultHebrewYear(hd);

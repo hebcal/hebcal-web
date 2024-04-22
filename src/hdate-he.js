@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {greg, abs2hebrew} from '@hebcal/hdate';
 import {gematriyaDate0} from './gematriyaDate';
 function hdateStr() {

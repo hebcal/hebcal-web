@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 const otherCookies = ['hebcal', '_ga', '__gpi', '__gads', 'FCNEC'];
 const expiresPast = new Date(1000);
 
-// eslint-disable-next-line require-jsdoc
 export function delCookie(ctx) {
   ctx.set('Cache-Control', 'private');
   const optout = (ctx.request.querystring === 'optout');

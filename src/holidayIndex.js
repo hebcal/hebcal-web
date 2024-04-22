@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';

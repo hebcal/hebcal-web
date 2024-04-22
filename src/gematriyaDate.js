@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {gematriya, months, isLeapYear} from '@hebcal/hdate';
 const ADAR_I = months.ADAR_I;
 const monthNames = [

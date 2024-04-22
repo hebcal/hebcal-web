@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
   DailyLearning} from '@hebcal/core';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
