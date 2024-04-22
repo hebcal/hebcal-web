@@ -208,6 +208,7 @@ function makeFutureYearsGreg(d, locale) {
       const hdate = new HDate(dt);
       const d = dayjs(dt).locale(locale);
       arr2.push({hd: hdate, d: d, isoDate: dateToISOString(dt)});
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // ignore error from makeGregDate
     }
@@ -436,19 +437,13 @@ function getEvents(hdate, il) {
  */
 function makeOmer(hdate) {
   const mm = hdate.getMonth();
-  switch (mm) {
-    case months.NISAN:
-    case months.IYYAR:
-    case months.SIVAN:
-      const beginOmer = HDate.hebrew2abs(hdate.getFullYear(), months.NISAN, 16);
-      const abs = hdate.abs();
-      if (abs >= beginOmer && abs < (beginOmer + 49)) {
-        const omer = abs - beginOmer + 1;
-        return [new OmerEvent(hdate, omer)];
-      }
-      break;
-    default:
-      break;
+  if (mm === months.NISAN || mm === months.IYYAR || mm === months.SIVAN) {
+    const beginOmer = HDate.hebrew2abs(hdate.getFullYear(), months.NISAN, 16);
+    const abs = hdate.abs();
+    if (abs >= beginOmer && abs < (beginOmer + 49)) {
+      const omer = abs - beginOmer + 1;
+      return [new OmerEvent(hdate, omer)];
+    }
   }
   return [];
 }

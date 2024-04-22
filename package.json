@@ -43,6 +43,7 @@
     "csv-parse": "^5.5.5",
     "eslint": "^9.1.0",
     "eslint-plugin-n": "^17.2.1",
+    "globals": "^15.0.0",
     "jquery": "^3.7.1",
     "rollup": "^4.16.2"
   },
