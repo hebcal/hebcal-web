@@ -5,7 +5,6 @@
 <% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
 #today {text-align: center}
-.jumbo {font-size: calc(2rem + 1.5vw) !important}
 </style>
 <script type="application/ld+json">
 {
@@ -38,11 +37,11 @@
 <li class="fs-2"><time datetime="<%= d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
 <li class="fs-2"><%= hd.toString().replace(/'/g, '’') %></li>
 <li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
-<li class="fs-2 lh-sm pt-1 pb-2" dir="rtl" lang="he"><%= ev.getTodayIs('he') %></li>
+<li class="fs-1 lh-sm pt-1 pb-2" dir="rtl" lang="he"><%= ev.getTodayIs('he') %></li>
 <li class="fs-4 lh-sm"><%= ev.getTodayIs('en') %></li>
-<li dir="rtl" lang="he" class="jumbo"><%= sefHebrew %></li>
-<li class="fs-4"><em><%= sefTranslit %></em></li>
-<li class="fs-3"><%= sefEnglish %></li>
+<li dir="rtl" lang="he" class="fs-1"><%= sefHebrew %></li>
+<li class="fs-4 lh-sm"><em><%= sefTranslit %></em></li>
+<li class="fs-4 lh-sm"><%= sefEnglish %></li>
 <% for (const ev of holidays) { %>
 <li class="fs-4 mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render('en') %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
