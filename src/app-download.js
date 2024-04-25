@@ -13,7 +13,8 @@ import {downloadHref2} from './makeDownloadProps.js';
 import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo,
   logMemoryUsage} from './logger.js';
-import {httpRedirect, stopIfTimedOut, CACHE_CONTROL_IMMUTABLE} from './common.js';
+import {httpRedirect, stopIfTimedOut, cacheControl,
+  CACHE_CONTROL_IMMUTABLE} from './common.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeit.js';
 import {MysqlDb} from './db.js';
@@ -254,11 +255,13 @@ app.use(async function fixup3(ctx, next) {
   return next();
 });
 
+const CACHE_CONTROL_14DAYS = cacheControl(14);
+
 app.use(async function sendStatic(ctx, next) {
   ctx.state.trace.set('sendStatic', Date.now());
   const rpath = ctx.request.path;
   if (rpath.startsWith('/ical')) {
-    ctx.set('Cache-Control', 'max-age=5184000');
+    ctx.set('Cache-Control', CACHE_CONTROL_14DAYS);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath === '/favicon.ico') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);

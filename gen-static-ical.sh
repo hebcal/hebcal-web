@@ -41,91 +41,91 @@ compress_file() {
 mkdir -p ical
 
 FILE="jewish-holidays-v2"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays-all-v2"
-fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=1&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Jewish+Holidays+%E2%9C%A1%EF%B8%8F&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=on&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Jewish+Holidays&caldesc=Major+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="jewish-holidays-all"
-fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Jewish+Holidays&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
+fetch_urls $FILE "start=${START}&end=${END8}&v=1&maj=on&min=on&mod=on&i=off&lg=en&c=off&geo=none&nx=on&mf=on&ss=on&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Jewish+Holidays&caldesc=All+Jewish+holidays+for+the+Diaspora+from+Hebcal.com"
 compress_file $FILE
 
 FILE="hdate-en"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=en&d=on&c=off&geo=none&publishedTTL=PT14D&title=Hebrew+calendar+dates+%28en%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+English+transliteration&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=h&d=on&c=off&geo=none&publishedTTL=PT14D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="hdate-he-v2"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT30D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&i=off&lg=he-x-NoNikud&d=on&c=off&geo=none&publishedTTL=PT14D&title=Hebrew+calendar+dates+%28he%29&caldesc=Displays+the+Hebrew+date+every+day+of+the+week+in+Hebrew&color=%23AC8E68"
 compress_file $FILE
 
 FILE="omer"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&o=on&i=off&lg=en&c=off&geo=none&emoji=0&publishedTTL=PT30D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot&color=%23FF9F0A"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&o=on&i=off&lg=en&c=off&geo=none&emoji=0&publishedTTL=PT14D&title=Days+of+the+Omer&caldesc=7+weeks+from+the+second+night+of+Pesach+to+the+day+before+Shavuot&color=%23FF9F0A"
 compress_file $FILE
 
 FILE="torah-readings-diaspora"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=off&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=off&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Torah+Readings+%28Diaspora%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="torah-readings-israel"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=en&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Torah+Readings+%28Israel+English%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="torah-readings-israel-he"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
 FILE="daf-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Babylonian+Talmud&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Babylonian+Talmud&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="mishna-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
 compress_file $FILE
 
 FILE="nach-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Nach+Yomi&caldesc=Daily+study+of+books+of+Nevi%27im+%28Prophets%29+and+Ketuvim+%28Writings%29&color=%23003399"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Nach+Yomi&caldesc=Daily+study+of+books+of+Nevi%27im+%28Prophets%29+and+Ketuvim+%28Writings%29&color=%23003399"
 compress_file $FILE
 
 FILE="yerushalmi-vilna"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Vilna%29&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Vilna%29&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="yerushalmi-schottenstein"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="daf-weekly"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
 compress_file $FILE
 
 FILE="yom-kippur-katan"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&ykk=on&relcalid=457ce561-311f-4eeb-9033-65561b7f7503&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Yom+Kippur+Katan&caldesc=%D7%99%D7%95%D6%B9%D7%9D+%D7%9B%D6%BC%D6%B4%D7%A4%D6%BC%D7%95%D6%BC%D7%A8+%D7%A7%D6%B8%D7%98%D6%B8%D7%9F%2C+minor+day+of+atonement+on+the+day+preceeding+each+Rosh+Chodesh"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&ykk=on&relcalid=457ce561-311f-4eeb-9033-65561b7f7503&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yom+Kippur+Katan&caldesc=%D7%99%D7%95%D6%B9%D7%9D+%D7%9B%D6%BC%D6%B4%D7%A4%D6%BC%D7%95%D6%BC%D7%A8+%D7%A7%D6%B8%D7%98%D6%B8%D7%9F%2C+minor+day+of+atonement+on+the+day+preceeding+each+Rosh+Chodesh"
 compress_file $FILE
 
 FILE="rosh-chodesh"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=off&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=on&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Rosh+Chodesh&caldesc=Rosh+Chodesh+is+a+minor+holiday+observed+at+the+beginning+of+every+month+in+the+Hebrew+calendar&color=%236F42C1"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&maj=off&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=on&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Rosh+Chodesh&caldesc=Rosh+Chodesh+is+a+minor+holiday+observed+at+the+beginning+of+every+month+in+the+Hebrew+calendar&color=%236F42C1"
 compress_file $FILE
 
 FILE="psalms"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-48ac-bb29-076c77405361&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daily+Tehillim+%28Psalms%29&caldesc=Monthly+cycle+of+studying+the+Book+of+Psalms"
+fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-48ac-bb29-076c77405361&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Tehillim+%28Psalms%29&caldesc=Monthly+cycle+of+studying+the+Book+of+Psalms"
 compress_file $FILE
 
 FILE="tanakh-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Tanakh+Yomi&caldesc=A+daily+learning+cycle+for+completing+Tanakh+annually.+On+Shabbat%2C+each+Torah+portion+is+recited.+On+weekdays%2C+Prophets+and+Writings+are+recited+according+to+the+ancient+Masoretic+division+of+sedarim"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Tanakh+Yomi&caldesc=A+daily+learning+cycle+for+completing+Tanakh+annually.+On+Shabbat%2C+each+Torah+portion+is+recited.+On+weekdays%2C+Prophets+and+Writings+are+recited+according+to+the+ancient+Masoretic+division+of+sedarim"
 compress_file $FILE
 
 FILE="rambam1"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr1=on&relcalid=13cb480b-a4a0-4667-8ec5-25819a2e37a1&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT30D&title=Daily+Rambam&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr1=on&relcalid=13cb480b-a4a0-4667-8ec5-25819a2e37a1&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Rambam&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
 compress_file $FILE
 
 FILE="chofetz-chaim"
