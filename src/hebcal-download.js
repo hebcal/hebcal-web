@@ -101,7 +101,7 @@ function addLocationOmerAlarms(options, events) {
     const dow = hd.getDay();
     const zman = new Zmanim(location, hd, options.useElevation);
     const alarm = dow === 5 ? zman.sunsetOffset(-30) :
-        dow === 6 ? zman.tzeit(8.5) : zman.tzeit(7.083);
+        dow === 6 ? zman.tzeit(8.5) : zman.dusk();
     ev.alarm = alarm;
     ev.locationName = locationName;
     if (geoid) {
