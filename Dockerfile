@@ -3,6 +3,9 @@ FROM node:lts-bullseye as base
 # Create a non-root user
 RUN useradd -ms /bin/bash appuser
 
+# Install sqlite3
+RUN apt-get update && apt-get install -y sqlite3
+
 # Set working directory
 WORKDIR /app
 
