@@ -189,7 +189,7 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
 <% } %>
 <% if (typeof commentary['reformjudaism.org'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from Reform Judaisn" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
+<li><a title="Parashat <%=parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
 <% } %>
 <% if (typeof commentary['ajr.edu'] === 'object') { %>
 <li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=commentary['ajr.edu'].target%>">Academy for Jewish Religion</a>
@@ -199,6 +199,9 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <% } %>
 <% if (typeof commentary['aju.edu'] === 'number') { %>
 <li><a title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a>
+<% } %>
+<% if (typeof commentary['ej'] === 'string') { %>
+<li><a title="Parashat <%=parshaName%> commentary from Exploring Judaism" href="https://www.exploringjudaism.org/learning/torah/<%=commentary['ej']%>/">Exploring Judaism</a>
 <% } %>
 <% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
 <li><a title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>

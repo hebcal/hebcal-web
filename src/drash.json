@@ -1,6 +1,7 @@
 {
 "Bereshit":{
  "asin":"0827613571",
+ "ej":"bereshit/bereshit",
  "rabbisacks.org":"bereishit",
  "ajr.edu":{"target":"bereisheet"},
  "aju.edu":153,
@@ -16,6 +17,7 @@
 },
 "Noach":{
  "asin":"0827613598",
+ "ej":"bereshit/noach",
  "rabbisacks.org":"noach",
  "ajr.edu":{"target":"noah"},
  "aju.edu":126,
@@ -31,6 +33,7 @@
 },
 "Lech-Lecha":{
  "asin":"0827613601",
+ "ej":"bereshit/lech-lecha",
  "rabbisacks.org":"lech-lecha",
  "ajr.edu":{"target":"lekh-lekha"},
  "aju.edu":121,
@@ -46,6 +49,7 @@
 },
 "Vayera":{
  "asin":"0827613628",
+ "ej":"bereshit/vayera",
  "rabbisacks.org":"vayera",
  "ajr.edu":{"target":"vayeira-sefer-bereisheet"},
  "aju.edu":142,
@@ -61,6 +65,7 @@
 },
 "Chayei Sara":{
  "asin":"0827613636",
+ "ej":"bereshit/chayei-sarah",
  "rabbisacks.org":"chayei-sarah",
  "ajr.edu":{"target":"hayei-sarah"},
  "aju.edu":113,
@@ -76,6 +81,7 @@
 },
 "Toldot":{
  "asin":"0827613644",
+ "ej":"bereshit/toldot",
  "rabbisacks.org":"toldot",
  "ajr.edu":{"target":"toledot"},
  "aju.edu":135,
@@ -91,6 +97,7 @@
 },
 "Vayetzei":{
  "asin":"0827613652",
+ "ej":"bereshit/vayetzei",
  "rabbisacks.org":"vayetse",
  "ajr.edu":{"target":"vayeitzei"},
  "aju.edu":144,
@@ -106,6 +113,7 @@
 },
 "Vayishlach":{
  "asin":"0827613660",
+ "ej":"bereshit/vayishlach",
  "rabbisacks.org":"vayishlach",
  "ajr.edu":{"target":"vayishlah"},
  "aju.edu":147,
@@ -121,6 +129,7 @@
 },
 "Vayeshev":{
  "asin":"0827613679",
+ "ej":"bereshit/vayeshev",
  "rabbisacks.org":"vayeshev",
  "ajr.edu":{"target":"vayeishev-sefer-bereisheet"},
  "aju.edu":143,
@@ -136,6 +145,7 @@
 },
 "Miketz":{
  "asin":"0827613687",
+ "ej":"bereshit/miketz",
  "rabbisacks.org":"mikketz",
  "ajr.edu":{"target":"mikeitz"},
  "aju.edu":123,
@@ -151,6 +161,7 @@
 },
 "Vayigash":{
  "asin":"0827613695",
+ "ej":"bereshit/vayigash",
  "rabbisacks.org":"vayigash",
  "ajr.edu":{"target":"vayigash"},
  "aju.edu":145,
@@ -166,6 +177,7 @@
 },
 "Vayechi":{
  "asin":"0827613709",
+ "ej":"bereshit/vayechi",
  "rabbisacks.org":"vayechi",
  "ajr.edu":{"target":"vayehi"},
  "aju.edu":141,
@@ -181,6 +193,7 @@
 },
 "Shemot":{
  "asin":"0827613717",
+ "ej":"shemot/shemot",
  "rabbisacks.org":"shemot",
  "ajr.edu":{"target":"shemot"},
  "aju.edu":167,
@@ -196,6 +209,7 @@
 },
 "Vaera":{
  "asin":"0827613725",
+ "ej":"shemot/vaera",
  "rabbisacks.org":"vaera",
  "ajr.edu":{"target":"vaeira"},
  "aju.edu":138,
@@ -211,6 +225,7 @@
 },
 "Bo":{
  "asin":"0827613733",
+ "ej":"shemot/bo",
  "rabbisacks.org":"bo",
  "ajr.edu":{"target":"bo"},
  "aju.edu":155,
@@ -226,6 +241,7 @@
 },
 "Beshalach":{
  "asin":"0827613741",
+ "ej":"shemot/beshalach",
  "rabbisacks.org":"beshallach",
  "ajr.edu":{"target":"beshalah"},
  "aju.edu":154,
@@ -241,6 +257,7 @@
 },
 "Yitro":{
  "asin":"0827614004",
+ "ej":"shemot/yitro",
  "rabbisacks.org":"yitro",
  "ajr.edu":{"target":"yitro"},
  "aju.edu":148,
@@ -256,6 +273,7 @@
 },
 "Mishpatim":{
  "asin":"0827614012",
+ "ej":"shemot/mishpatim",
  "rabbisacks.org":"mishpatim",
  "ajr.edu":{"target":"mishpatim"},
  "aju.edu":160,
@@ -271,6 +289,7 @@
 },
 "Terumah":{
  "asin":"0827614020",
+ "ej":"shemot/terumah",
  "rabbisacks.org":"terumah",
  "ajr.edu":{"target":"terumah"},
  "aju.edu":136,
@@ -286,6 +305,7 @@
 },
 "Tetzaveh":{
  "asin":"0827614047",
+ "ej":"shemot/tetzaveh",
  "rabbisacks.org":"tetzaveh",
  "ajr.edu":{"target":"tetzaveh"},
  "aju.edu":134,
@@ -301,6 +321,7 @@
 },
 "Ki Tisa":{
  "asin":"0827614055",
+ "ej":"shemot/ki-tisa",
  "rabbisacks.org":"ki-tissa",
  "ajr.edu":{"target":"ki-tissa"},
  "aju.edu":159,
@@ -316,6 +337,7 @@
 },
 "Vayakhel":{
  "asin":"0827614071",
+ "ej":"shemot/vayakhel",
  "rabbisacks.org":"vayakhel",
  "ajr.edu":{"target":"vayakhel"},
  "aju.edu":140,
@@ -331,6 +353,7 @@
 },
 "Pekudei":{
  "asin":"082761408X",
+ "ej":"shemot/pekudei",
  "rabbisacks.org":"pekudei",
  "ajr.edu":{"target":"pekudei"},
  "aju.edu":140,
@@ -346,6 +369,7 @@
 },
 "Vayikra":{
  "asin":"0827614098",
+ "ej":"vayikra/vayikra",
  "rabbisacks.org":"vayikra",
  "ajr.edu":{"target":"vayikra"},
  "aju.edu":171,
@@ -361,6 +385,7 @@
 },
 "Tzav":{
  "asin":"0827614101",
+ "ej":"vayikra/tzav",
  "rabbisacks.org":"tzav",
  "ajr.edu":{"target":"tzav"},
  "aju.edu":170,
@@ -376,6 +401,7 @@
 },
 "Shmini":{
  "asin":"082761411X",
+ "ej":"vayikra/shemini",
  "rabbisacks.org":"shemini",
  "ajr.edu":{"target":"shemini"},
  "aju.edu":165,
@@ -391,6 +417,7 @@
 },
 "Tazria":{
  "asin":"0827614128",
+ "ej":"vayikra/tazria",
  "rabbisacks.org":"tazria",
  "ajr.edu":{"target":"tazria"},
  "aju.edu":169,
@@ -406,6 +433,7 @@
 },
 "Metzora":{
  "asin":"0827614136",
+ "ej":"vayikra/metzora",
  "rabbisacks.org":"metzora",
  "aju.edu":169,
  "jtsa.edu":"metzora",
@@ -420,6 +448,7 @@
 },
 "Achrei Mot":{
  "asin":"0827614144",
+ "ej":"vayikra/parashat-acharei-mot",
  "rabbisacks.org":"acharei-mot",
  "ajr.edu":{"target":"aharei-mot"},
  "aju.edu":150,
@@ -435,6 +464,7 @@
 },
 "Kedoshim":{
  "asin":"0827614152",
+ "ej":"vayikra/parashat-kedoshim",
  "rabbisacks.org":"kedoshim",
  "ajr.edu":{"target":"kedoshim"},
  "aju.edu":150,
@@ -450,6 +480,7 @@
 },
 "Emor":{
  "asin":"0827614160",
+ "ej":"vayikra/parashat-emor",
  "rabbisacks.org":"emor",
  "ajr.edu":{"target":"emor"},
  "aju.edu":158,
@@ -465,6 +496,7 @@
 },
 "Behar":{
  "asin":"0827614179",
+ "ej":"vayikra/parashat-behar",
  "rabbisacks.org":"behar",
  "ajr.edu":{"target":"bahar"},
  "aju.edu":152,
@@ -480,6 +512,7 @@
 },
 "Bechukotai":{
  "asin":"0827614187",
+ "ej":"vayikra/parashat-bechukotai",
  "rabbisacks.org":"bechukotai",
  "ajr.edu":{"target":"behukotai"},
  "aju.edu":152,
@@ -495,6 +528,7 @@
 },
 "Bamidbar":{
  "asin":"0827614195",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-bamidbar",
  "rabbisacks.org":"bamidbar",
  "ajr.edu":{"target":"bemidbar"},
  "aju.edu":151,
@@ -510,6 +544,7 @@
 },
 "Nasso":{
  "asin":"0827614209",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-naso",
  "rabbisacks.org":"naso",
  "ajr.edu":{"target":"nasso"},
  "aju.edu":124,
@@ -525,6 +560,7 @@
 },
 "Beha'alotcha":{
  "asin":"0827614217",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-behaalotcha",
  "rabbisacks.org":"behaalotcha",
  "ajr.edu":{"target":"behaalotekha"},
  "aju.edu":111,
@@ -540,6 +576,7 @@
 },
 "Sh'lach":{
  "asin":"0827614225",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-shlach",
  "rabbisacks.org":"shelach-lecha",
  "ajr.edu":{"target":"shelah"},
  "aju.edu":130,
@@ -555,6 +592,7 @@
 },
 "Korach":{
  "asin":"0827614233",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-korach",
  "rabbisacks.org":"korach",
  "ajr.edu":{"target":"korah"},
  "aju.edu":120,
@@ -570,6 +608,7 @@
 },
 "Chukat":{
  "asin":"0827614241",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-chukat",
  "rabbisacks.org":"chukat",
  "ajr.edu":{"target":"hukkat"},
  "aju.edu":114,
@@ -585,6 +624,7 @@
 },
 "Balak":{
  "asin":"0827614500",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-balak",
  "rabbisacks.org":"balak",
  "ajr.edu":{"target":"balak"},
  "aju.edu":114,
@@ -600,6 +640,7 @@
 },
 "Pinchas":{
  "asin":"0827614519",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-pinchas",
  "rabbisacks.org":"pinchas",
  "ajr.edu":{"target":"pinhas"},
  "aju.edu":127,
@@ -615,6 +656,7 @@
 },
 "Matot":{
  "asin":"0827614527",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-matot",
  "rabbisacks.org":"matot",
  "ajr.edu":{"target":"mattot"},
  "aju.edu":122,
@@ -630,6 +672,7 @@
 },
 "Masei":{
  "asin":"0827614535",
+ "ej":"sefer-bamidbar-book-of-numbers/parashat-masei",
  "rabbisacks.org":"masei",
  "ajr.edu":{"target":"massei"},
  "aju.edu":122,
@@ -645,6 +688,7 @@
 },
 "Devarim":{
  "asin":"0827614543",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-devarim",
  "rabbisacks.org":"devarim",
  "ajr.edu":{"target":"devarim"},
  "aju.edu":157,
@@ -660,6 +704,7 @@
 },
 "Vaetchanan":{
  "asin":"0827614551",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-vaetchanan",
  "rabbisacks.org":"vaetchanan",
  "ajr.edu":{"target":"vaethanan-sefer-devarim"},
  "aju.edu":139,
@@ -675,6 +720,7 @@
 },
 "Eikev":{
  "asin":"082761456X",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-eikev",
  "rabbisacks.org":"eikev",
  "ajr.edu":{"target":"eikev"},
  "aju.edu":116,
@@ -690,6 +736,7 @@
 },
 "Re'eh":{
  "asin":"0827614578",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-reeh",
  "rabbisacks.org":"reeh",
  "ajr.edu":{"target":"reeh"},
  "aju.edu":128,
@@ -705,6 +752,7 @@
 },
 "Shoftim":{
  "asin":"0827614586",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-shoftim",
  "rabbisacks.org":"shoftim",
  "ajr.edu":{"target":"shoftim"},
  "aju.edu":131,
@@ -720,6 +768,7 @@
 },
 "Ki Teitzei":{
  "asin":"0827614594",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-ki-teitzei",
  "rabbisacks.org":"ki-teitse",
  "ajr.edu":{"target":"ki-teitzei"},
  "aju.edu":119,
@@ -735,6 +784,7 @@
 },
 "Ki Tavo":{
  "asin":"0827614608",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-ki-tavo",
  "rabbisacks.org":"ki-tavo",
  "ajr.edu":{"target":"ki-tavo"},
  "aju.edu":118,
@@ -750,6 +800,7 @@
 },
 "Nitzavim":{
  "asin":"0827614616",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-nitzavim",
  "rabbisacks.org":"nitzavim",
  "ajr.edu":{"target":"nitzavim"},
  "aju.edu":125,
@@ -765,6 +816,7 @@
 },
 "Vayeilech":{
  "asin":"0827614624",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-vayelech",
  "rabbisacks.org":"vayelech",
  "ajr.edu":{"target":"vayeilekh"},
  "aju.edu":125,
@@ -780,6 +832,7 @@
 },
 "Ha'azinu":{
  "asin":"0827614632",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-haazinu",
  "rabbisacks.org":"haazinu",
  "ajr.edu":{"target":"haazinu"},
  "aju.edu":117,
@@ -795,6 +848,7 @@
 },
 "Vezot Haberakhah":{
  "asin":"0827614640",
+ "ej":"sefer-devarim-book-of-deuteronomy/parashat-vzot-haberachah",
  "rabbisacks.org":"vezot-habracha",
  "aju.edu":null,
  "jtsa.edu":"vezot-haberakhah",
