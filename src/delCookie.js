@@ -1,14 +1,19 @@
-import dayjs from 'dayjs';
-
-const otherCookies = ['hebcal', '_ga', '__gpi', '__gads', 'FCNEC'];
+const otherCookies = ['hebcal', '_ga', '__gpi', '__gads', '__eoi',
+  'FCNEC', 'FCCDCF'];
 const expiresPast = new Date(1000);
+
+function todayPlus(ndays) {
+  const dt = new Date();
+  dt.setDate(dt.getDate() + ndays);
+  return dt;
+}
 
 export function delCookie(ctx) {
   ctx.set('Cache-Control', 'private');
   const optout = (ctx.request.querystring === 'optout');
   const cookieVal = optout ? 'opt_out' : '0';
   // Either future or in the past (1970-01-01T00:00:01.000Z)
-  const expires = optout ? dayjs().add(399, 'd').toDate() : expiresPast;
+  const expires = optout ? todayPlus(399) : expiresPast;
   ctx.cookies.set('C', cookieVal, {
     expires: expires,
     overwrite: true,
