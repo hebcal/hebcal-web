@@ -26,9 +26,11 @@ const TIMES = {
   sunrise: 1,
   seaLevelSunrise: 1,
   sofZmanShmaMGA16Point1: 1,
+  sofZmanShmaMGA19Point8: 1,
   sofZmanShmaMGA: 1,
   sofZmanShma: 1,
   sofZmanTfillaMGA16Point1: 1,
+  sofZmanTfillaMGA19Point8: 1,
   sofZmanTfillaMGA: 1,
   sofZmanTfilla: 1,
   chatzot: 1,
@@ -150,6 +152,9 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   const zman = new Zmanim(location, d.toDate(), useElevation);
   for (const name of names) {
     if (TIMES[name]) {
+      if (typeof zman[name] !== 'function') {
+        throw createError(500, `Internal error: Zmanim.${name} is not a function`);
+      }
       if (name.startsWith('seaLevel')) {
         if (useElevation) {
           times[name] = zman[name]();
@@ -238,6 +243,12 @@ const ZMAN_NAMES = {
     'Based on the opinion of the MGA that the day is calculated from ' +
     'dawn to nightfall with both being 16.1° below the horizon',
   ],
+  sofZmanShmaMGA19Point8: [
+    'Kriat Shema, sof zeman (MGA) 19.8°',
+    'Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. ' +
+    'Based on the opinion of the MGA that the day is calculated from ' +
+    'dawn to nightfall with both being 19.8° below the horizon',
+  ],
   sofZmanTfillaMGA: [
     'Tefilah, sof zeman (MGA) 72 min',
     'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ' +
@@ -249,6 +260,12 @@ const ZMAN_NAMES = {
     'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ',
     'Based on the opinion of the MGA that the day is calculated from ' +
     'dawn to nightfall with both being 16.1° below the horizon',
+  ],
+  sofZmanTfillaMGA19Point8: [
+    'Tefilah, sof zeman (MGA) 19.8°',
+    'Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. ',
+    'Based on the opinion of the MGA that the day is calculated from ' +
+    'dawn to nightfall with both being 19.8° below the horizon',
   ],
   chatzot: [
     'Chatzot hayom',
