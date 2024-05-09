@@ -5,7 +5,7 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {getDefaultHebrewYear} from './dateUtil.js';
-import {getNumYears} from './common.js';
+import {getNumYears, httpRedirect} from './common.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon.js';
 import {holidayDetail} from './holidayDetail.js';
@@ -260,6 +260,9 @@ export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear0 = parseInt(ctx.request.query?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(new HDate(dt));
+  if (hyear < 3762) {
+    return httpRedirect(ctx, `/holidays/?redir=year`);
+  }
   const tishrei1 = new HDate(1, 'Tishrei', hyear);
   const items = {};
   for (const catId of Object.keys(categories)) {

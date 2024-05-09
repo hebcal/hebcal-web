@@ -90,7 +90,9 @@ precedence over what would be a minor holiday.</p>
 </colgroup>
 <thead class="table-group-divider">
 <tr><th>
+<% if (hyear > 3762) { -%>
 <div><a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+<% } -%>
 Holiday
 </th>
 <% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
