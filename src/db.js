@@ -10,18 +10,26 @@ export class MysqlDb {
    */
   constructor(logger, iniConfig) {
     const host = iniConfig['hebcal.mysql.host'];
+    const port = +(iniConfig['hebcal.mysql.port']) || 3306;
     const user = iniConfig['hebcal.mysql.user'];
     const password = iniConfig['hebcal.mysql.password'];
     const database = iniConfig['hebcal.mysql.dbname'];
-    logger.info(`Connecting to mysql://${user}@${host}/${database}`);
+    const connURL = `mysql://${user}@${host}:${port}/${database}`;
+    logger.info(`Connecting to ${connURL}`);
     const pool = mysql.createPool({
       host,
+      port,
       user,
       password,
       database,
       connectionLimit: 10,
       waitForConnections: true,
       queueLimit: 0,
+    });
+    pool.getConnection(function(err, connection) {
+      if (err) {
+        logger.error(err, `Cannot connect to ${connURL}`);
+      }
     });
     this.pool = pool.promise();
   }
