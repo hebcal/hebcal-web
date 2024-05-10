@@ -391,6 +391,7 @@ function makeAllDayEvents(times, location, locale) {
     const hd = new HDate(date);
     const ev = new HebrewDateEvent(hd, locale);
     const lines = [];
+    arr.sort((a, b) => a[0].getTime() - b[0].getTime());
     for (const [dt, zman] of arr) {
       const desc = ZMAN_NAMES[zman][0];
       const time = Zmanim.formatTime(dt, timeFormat);
