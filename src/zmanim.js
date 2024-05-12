@@ -377,7 +377,9 @@ function makeAllDayEvents(times, location, locale) {
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
       byDate[isoDate] = byDate[isoDate] || [];
-      byDate[isoDate].push([dt, zman]);
+      if (!isNaN(dt.getTime())) {
+        byDate[isoDate].push([dt, zman]);
+      }
     }
   }
   const events = [];
@@ -415,22 +417,37 @@ function makeAllDayEvents(times, location, locale) {
  * @private
  * @param {any} times
  * @param {Location} location
- * @return {Event[]}
+ * @return {TimedEvent[]}
  */
 function makeEvents(times, location) {
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
-      const hd = new HDate(new Date(isoDate));
-      const desc0 = ZMAN_NAMES[zman];
-      const desc = Array.isArray(desc0) && desc0.length === 2 ? desc0 : [zman, ''];
-      const ev = new TimedEvent(hd, desc[0], flags.USER_EVENT, dt, location);
-      ev.category = zman;
-      ev.memo = desc[1];
-      ev.alarm = false;
-      events.push(ev);
+      if (!isNaN(dt.getTime())) {
+        const ev = makeTimedEvent(isoDate, zman, dt, location);
+        events.push(ev);
+      }
     }
   }
   events.sort((a, b) => a.eventTime - b.eventTime);
   return events;
+}
+
+/**
+ * @private
+ * @param {string} isoDate
+ * @param {string} zman
+ * @param {Date} dt
+ * @param {Location} location
+ * @return {TimedEvent}
+ */
+function makeTimedEvent(isoDate, zman, dt, location) {
+  const hd = new HDate(new Date(isoDate));
+  const desc0 = ZMAN_NAMES[zman];
+  const desc = Array.isArray(desc0) && desc0.length === 2 ? desc0 : [zman, ''];
+  const ev = new TimedEvent(hd, desc[0], flags.USER_EVENT, dt, location);
+  ev.category = zman;
+  ev.memo = desc[1];
+  ev.alarm = false;
+  return ev;
 }

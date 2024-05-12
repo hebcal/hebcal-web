@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^5.3.8",
-    "@hebcal/geo-sqlite": "^5.0.4",
+    "@hebcal/geo-sqlite": "^5.0.5",
     "@hebcal/hdate": "^0.9.3",
     "@hebcal/icalendar": "^5.0.6",
     "@hebcal/learning": "^5.0.7",
@@ -57,7 +57,7 @@
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.0.4",
     "@hebcal/triennial": "^5.0.5",
-    "better-sqlite3": "^9.6.0",
+    "better-sqlite3": "^10.0.0",
     "dayjs": "^1.11.11",
     "ejs": "^3.1.10",
     "emoji-flag": "^1.1.0",
