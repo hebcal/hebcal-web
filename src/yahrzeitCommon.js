@@ -196,3 +196,32 @@ function getDateForId(query, id) {
   const dd = query['d' + id];
   return {yy, mm, dd};
 }
+
+/**
+ * @param {any} query
+ * @return {string[]}
+ */
+export function getCalendarNames(query) {
+  return Object.entries(query)
+      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
+      .map((x) => x[1])
+      .filter((str) => str.length > 0);
+}
+
+/**
+ * @param {any} query
+ * @param {number} maxlen
+ * @return {string}
+ */
+export function makeCalendarTitle(query, maxlen) {
+  const names = getCalendarNames(query);
+  const calendarType = summarizeAnniversaryTypes(query, true);
+  let title = calendarType;
+  if (names.length > 0) {
+    title += ': ' + names.join(', ');
+  }
+  if (title.length > maxlen) {
+    title = title.substring(0, maxlen - 3) + '...';
+  }
+  return title;
+}

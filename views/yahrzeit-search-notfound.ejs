@@ -1,0 +1,26 @@
+<%- await include('partials/header-and-navbar.ejs', {
+  title: 'Yahrzeit + Anniversary Calendar Subscription Search - Hebcal',
+}) -%>
+<div class="row mt-2">
+<div class="col">
+<div class="float-start">
+  <svg width="64" height="64" class="me-3 mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+</div>
+<p class="clearfix lead">Search for an existing Yahrzeit + Anniversary Calendar by email address.</p>
+<div class="alert alert-warning" role="alert">
+Sorry, the email address <strong><%= q.em %></strong> is not
+subscribed to Yahrzeit + Anniversary Calendar annual email reminders.
+</div><!-- .alert -->
+<p class="mt-3">Try searching again for a different email address</p>
+<form action="/yahrzeit/search" method="post" class="row row-cols-lg-auto g-3 align-items-center mb-3">
+  <div class="col">
+    <label class="visually-hidden" for="em">Email address</label>
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="" required>
+  </div>
+  <div class="col">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+</div><!-- .col -->
+</div><!-- .row -->
+<%- await include('partials/footer.ejs') -%>

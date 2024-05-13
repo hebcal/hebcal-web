@@ -1,0 +1,18 @@
+<%- await include('partials/header-and-navbar.ejs', {
+  title: 'Yahrzeit + Anniversary Calendar Subscription Search - Hebcal',
+}) -%>
+<div class="row mt-2">
+<div class="col">
+<div class="float-start">
+  <svg width="64" height="64" class="me-3 mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+</div>
+<p class="clearfix lead">Search for an existing Yahrzeit + Anniversary Calendar by email address.</p>
+<div class="alert alert-success" role="alert">
+<svg class="icon me-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+<strong>Success!</strong> An email message has been sent to
+<strong><%= q.em %></strong> containing <%= results.length %> personal calendar link(s).
+<br>Click the link(s) within that message to view your personal calendars.
+</div><!-- .alert -->
+</div><!-- .col -->
+</div><!-- .row -->
+<%- await include('partials/footer.ejs') -%>

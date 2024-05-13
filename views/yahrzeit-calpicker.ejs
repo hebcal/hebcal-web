@@ -24,6 +24,17 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 <li><a href="/yahrzeit/edit/<%=cal.id%>"><%=cal.title%></a>
 <% }); -%>
 </ol>
+<p class="lead">Or, search for an existing calendar by email address</p>
+<form action="/yahrzeit/search" method="post" class="row row-cols-lg-auto g-3 align-items-center mb-3">
+  <div class="col">
+    <label class="visually-hidden" for="em">Email address</label>
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="" required>
+  </div>
+  <div class="col">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>
+
 <p class="lead">Or, create a new personal calendar</p>
 <p><a class="btn btn-primary" href="/yahrzeit/new">New calendar &raquo;</a></p>
 <p>Yahrzeit refers to the anniversary, according to the Hebrew calendar, of the

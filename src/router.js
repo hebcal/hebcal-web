@@ -26,7 +26,7 @@ import {shabbatBrowse} from './shabbat-browse.js';
 import {shabbatJsLink} from './shabbat-link.js';
 import {shortUrlRedir} from './shortUrlRedir.js';
 import {yahrzeitApp} from './yahrzeit.js';
-import {yahrzeitEmailSub, yahrzeitEmailVerify} from './yahrzeit-email.js';
+import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch} from './yahrzeit-email.js';
 import {getZmanim} from './zmanim.js';
 import {hebrewDateCalc} from './calc.js';
 import {omerApp} from './omerApp.js';
@@ -136,6 +136,8 @@ export function wwwRouter() {
       return yahrzeitEmailSub(ctx);
     } else if (rpath.startsWith('/yahrzeit/verify')) {
       return yahrzeitEmailVerify(ctx);
+    } else if (rpath.startsWith('/yahrzeit/search')) {
+      return yahrzeitEmailSearch(ctx);
     } else if (rpath.startsWith('/yahrzeit')) {
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {

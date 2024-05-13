@@ -3,6 +3,7 @@ import {getIpAddress} from './getIpAddress.js';
 import {validateEmail, mySendMail, getImgOpenHtml} from './emailCommon.js';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   getYahrzeitIds,
+  makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {ulid} from 'ulid';
 import {basename} from 'path';
@@ -101,6 +102,61 @@ function makeUlid(ctx) {
   logInfo.msg = `yahrzeit-email: created subscriptionId=${id}`;
   ctx.logger.info(logInfo);
   return id;
+}
+
+export async function yahrzeitEmailSearch(ctx) {
+  ctx.set('Cache-Control', 'private, max-age=0');
+  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  if (!validateEmail(q.em)) {
+    ctx.throw(400, `Invalid email address ${q.em}`);
+  }
+  q.em = q.em.toLowerCase();
+  const sql = `SELECT e.id, e.calendar_id, y.contents
+FROM yahrzeit_email e, yahrzeit y
+WHERE e.email_addr = ? AND e.sub_status = 'active'
+AND e.calendar_id = y.id`;
+  const results = await dbQuery(ctx, sql, [q.em]);
+  if (!results || !results[0]) {
+    ctx.status = 404;
+    return ctx.render('yahrzeit-search-notfound', {q});
+  }
+  const nonEmpty = results.filter((row) => getMaxYahrzeitId(row.contents) !== 0);
+  if (!nonEmpty.length) {
+    ctx.status = 404;
+    return ctx.render('yahrzeit-search-notfound', {q});
+  }
+  const ip = getIpAddress(ctx);
+  let html = `
+<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Here are your current Yahrzeit + Anniversary Calendar email subscriptions
+from Hebcal.com.</div>
+<ul>
+`;
+  for (const row of nonEmpty) {
+    const title = makeCalendarTitle(row.contents, 100);
+    const url = `https://www.hebcal.com/yahrzeit/edit/${row.calendar_id}?${UTM_PARAM}`;
+    html += `<li><a href="${url}">${title}</a>\n`;
+  }
+  html += `</ul>
+${BLANK}
+<div style="font-size:16px">Kol Tuv,
+<br>Hebcal.com</div>
+${BLANK}
+<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
+<div>[${ip}]</div>
+</div>
+</div>
+`;
+  const message = {
+    to: q.em,
+    subject: `View your Yahrzeit + Anniversary Calendar subscriptions`,
+    html: html,
+  };
+  await mySendMail(ctx, message);
+  return ctx.render('yahrzeit-search-found', {q, results: nonEmpty});
 }
 
 export async function yahrzeitEmailSub(ctx) {

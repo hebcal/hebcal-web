@@ -12,6 +12,7 @@ import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
+  getCalendarNames, makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
@@ -501,35 +502,6 @@ export async function yahrzeitDownload(ctx) {
     ctx.body = csv;
     ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
-}
-
-/**
- * @param {any} query
- * @param {number} maxlen
- * @return {string}
- */
-function makeCalendarTitle(query, maxlen) {
-  const names = getCalendarNames(query);
-  const calendarType = summarizeAnniversaryTypes(query, true);
-  let title = calendarType;
-  if (names.length > 0) {
-    title += ': ' + names.join(', ');
-  }
-  if (title.length > maxlen) {
-    title = title.substring(0, maxlen - 3) + '...';
-  }
-  return title;
-}
-
-/**
- * @param {any} query
- * @return {string[]}
- */
-function getCalendarNames(query) {
-  return Object.entries(query)
-      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
-      .map((x) => x[1])
-      .filter((str) => str.length > 0);
 }
 
 /**
