@@ -12,6 +12,13 @@ import {makeLogInfo} from './logger.js';
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
+async function dbQuery(ctx, sql, params) {
+  ctx.state.mysqlQuery = sql;
+  const res = await ctx.mysql.query(sql, params);
+  delete ctx.state.mysqlQuery;
+  return res;
+}
+
 export async function yahrzeitEmailVerify(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
@@ -26,8 +33,7 @@ export async function yahrzeitEmailVerify(ctx) {
   if (confirmed) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
-    const db = ctx.mysql;
-    await db.query(sqlUpdate, [ip, subscriptionId]);
+    await dbQuery(ctx, sqlUpdate, [ip, subscriptionId]);
     matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
       url: ctx.request.href,
     });
@@ -60,9 +66,8 @@ export async function yahrzeitEmailVerify(ctx) {
 }
 
 async function lookupSubscription(ctx, subscriptionId) {
-  const db = ctx.mysql;
   const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
-  const results = await db.query(sql, [subscriptionId]);
+  const results = await dbQuery(ctx, sql, [subscriptionId]);
   if (!results || !results[0]) {
     ctx.throw(404, `Anniversary subscription key '${subscriptionId}' not found`);
   }
@@ -74,13 +79,17 @@ async function lookupSubscription(ctx, subscriptionId) {
 }
 
 async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
-  const db = ctx.mysql;
   const sql = `SELECT id, sub_status FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
-  const results = await db.query(sql, [emailAddress, calendarId]);
+  const results = await dbQuery(ctx, sql, [emailAddress, calendarId]);
   if (!results || !results[0]) {
     return {id: false, status: null};
   }
-  return {id: results[0].id, status: results[0].sub_status};
+  let row = results[0];
+  const active = results.find((row) => row.sub_status === 'active');
+  if (active) {
+    row = active;
+  }
+  return {id: row.id, status: row.sub_status};
 }
 
 function makeUlid(ctx) {
@@ -120,10 +129,10 @@ export async function yahrzeitEmailSub(ctx) {
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }
+  q.em = q.em.toLowerCase();
   const calendarId = q.ulid;
   // will throw if not found. sets downloaded=1 if found.
   await getYahrzeitDetailsFromDb(ctx, calendarId);
-  const db = ctx.mysql;
   let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   const ip = getIpAddress(ctx);
   if (id === false) {
@@ -131,15 +140,15 @@ export async function yahrzeitEmailSub(ctx) {
     const sql = `INSERT INTO yahrzeit_email
     (id, email_addr, calendar_id, sub_status, created, ip_addr)
     VALUES (?, ?, ?, 'pending', NOW(), ?)`;
-    await db.query(sql, [id, q.em, calendarId, ip]);
+    await dbQuery(ctx, sql, [id, q.em, calendarId, ip]);
   } else if (status === 'active') {
     const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
-    await db.query(sqlUpdate, [id]);
+    await dbQuery(ctx, sqlUpdate, [id]);
     ctx.body = {ok: true, alreadySubscribed: true};
     return;
   } else {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
-    await db.query(sqlUpdate, [ip, id]);
+    await dbQuery(ctx, sqlUpdate, [ip, id]);
   }
   matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
     url: ctx.request.href,
@@ -179,16 +188,15 @@ ${imgOpen}</div>
 `,
   };
   await mySendMail(ctx, message);
-  ctx.body = {ok: true};
+  ctx.body = {ok: true, status: status};
 }
 
 async function lookupSubContents(ctx, id) {
-  const db = ctx.mysql;
   const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents, y.updated, y.downloaded
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
-  const results = await db.query(sql2, [id]);
+  const results = await dbQuery(ctx, sql2, [id]);
   if (!results || !results[0]) {
     ctx.throw(404, `Subscription key '${id}' not found`);
   }
@@ -225,16 +233,15 @@ async function lookupSubNum(ctx, q) {
 }
 
 async function unsub(ctx, q) {
-  const db = ctx.mysql;
   if (q.num === 'all') {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'unsub', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
-    await db.query(sqlUpdate, [ip, q.id]);
+    await dbQuery(ctx, sqlUpdate, [ip, q.id]);
   } else {
     const sql = 'INSERT INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
     const num = q.num === 'all' ? 0 : parseInt(q.num, 10);
     const nameHash = num == 0 ? null : (q.hash || null);
-    await db.query(sql, [q.id, nameHash, num]);
+    await dbQuery(ctx, sql, [q.id, nameHash, num]);
   }
   matomoTrack(ctx, 'Email', 'unsubscribe', 'yahrzeit-reminder', {
     url: ctx.request.href,
