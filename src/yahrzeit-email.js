@@ -105,8 +105,11 @@ function makeUlid(ctx) {
 }
 
 export async function yahrzeitEmailSearch(ctx) {
-  ctx.set('Cache-Control', 'private, max-age=0');
   const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  if (empty(q.em)) {
+    return ctx.render('yahrzeit-search-notfound', {q});
+  }
+  ctx.set('Cache-Control', 'private, max-age=0');
   if (!validateEmail(q.em)) {
     ctx.throw(400, `Invalid email address ${q.em}`);
   }

@@ -6,12 +6,15 @@
 <div class="float-start">
   <svg width="64" height="64" class="me-3 mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
 </div>
-<p class="clearfix lead">Search for an existing Yahrzeit + Anniversary Calendar by email address.</p>
+<p class="clearfix lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
+  and Hebrew Anniversaries.</p>
+<% if (typeof q.em === 'string') { %>
 <div class="alert alert-warning" role="alert">
 Sorry, the email address <strong><%= q.em %></strong> is not
 subscribed to Yahrzeit + Anniversary Calendar annual email reminders.
 </div><!-- .alert -->
-<p class="mt-3">Try searching again for a different email address</p>
+<% } %>
+<p class="mt-3">Search for an existing Yahrzeit + Anniversary Calendar by email address</p>
 <form action="/yahrzeit/search" method="post" class="row row-cols-lg-auto g-3 align-items-center mb-3">
   <div class="col">
     <label class="visually-hidden" for="em">Email address</label>
