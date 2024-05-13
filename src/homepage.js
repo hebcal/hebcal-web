@@ -91,7 +91,8 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   const d = ctx.state.d = dayjs(dt).locale(locale);
   const isoDt = d.format('YYYY-MM-DD');
   ctx.state.isoDt = afterSunset ? d.add(1, 'day').format('YYYY-MM-DD') : isoDt;
-  const afterSunsetStr = afterSunset ? ' ' + Locale.gettext('after sunset', locale) : '';
+  const afterSunsetStr = afterSunset ?
+    ' <small>' + Locale.gettext('after sunset', locale) + '</small>' : '';
   const fmtDt = d.format('ddd, D MMMM YYYY') + afterSunsetStr;
   items.push(`<time datetime="${isoDt}">${fmtDt}</time>`);
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
