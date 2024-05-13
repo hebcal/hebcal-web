@@ -169,7 +169,8 @@ async function getCalPickerIds(ctx, ids) {
   ctx.state.mysqlQuery = sql;
   const results = await db.query({sql, values: ids, timeout: 5000});
   delete ctx.state.mysqlQuery;
-  const calendars = results.map((row) => {
+  const nonEmpty = results.filter((row) => getMaxYahrzeitId(row.contents) !== 0);
+  const calendars = nonEmpty.map((row) => {
     const names = getCalendarNames(row.contents);
     const title = makeCalendarTitle(row.contents, 100);
     return {id: row.id, title, names};
