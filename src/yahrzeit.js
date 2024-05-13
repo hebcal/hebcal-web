@@ -385,6 +385,9 @@ function compactJsonToSave(obj) {
       obj['s' + i] = (sunset === 'on' || sunset == 1) ? 1 : 0;
     }
   }
+  if (typeof obj.years === 'string') {
+    obj.years = getNumYears(obj.years);
+  }
 }
 
 function removeEmptyArgs(q) {
