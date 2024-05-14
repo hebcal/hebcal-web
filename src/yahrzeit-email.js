@@ -111,7 +111,11 @@ export async function yahrzeitEmailSearch(ctx) {
   }
   ctx.set('Cache-Control', 'private, max-age=0');
   if (!validateEmail(q.em)) {
-    ctx.throw(400, `Invalid email address ${q.em}`);
+    ctx.status = 400;
+    return ctx.render('yahrzeit-search-notfound', {
+      q,
+      message: `Invalid email address ${q.em}`,
+    });
   }
   q.em = q.em.toLowerCase();
   const sql = `SELECT e.id, e.calendar_id, y.contents
