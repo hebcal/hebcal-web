@@ -139,10 +139,17 @@ AND e.calendar_id = y.id`;
 from Hebcal.com.</div>
 <ul>
 `;
+  const seen = new Set();
+  const utmParam = UTM_PARAM.replace('yahrzeit-txn', 'yahrzeit-search');
   for (const row of nonEmpty) {
+    const calendarId = row.calendar_id;
+    if (seen.has(calendarId)) {
+      continue;
+    }
     const title = makeCalendarTitle(row.contents, 100);
-    const url = `https://www.hebcal.com/yahrzeit/edit/${row.calendar_id}?${UTM_PARAM}`;
+    const url = `https://www.hebcal.com/yahrzeit/edit/${calendarId}?${utmParam}`;
     html += `<li><a href="${url}">${title}</a>\n`;
+    seen.add(calendarId);
   }
   html += `</ul>
 ${BLANK}
@@ -150,7 +157,7 @@ ${BLANK}
 <br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${utmParam}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div>[${ip}]</div>
