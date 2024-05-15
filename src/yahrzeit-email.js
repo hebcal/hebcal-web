@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {validateEmail, mySendMail, getImgOpenHtml} from './emailCommon.js';
@@ -118,10 +119,11 @@ export async function yahrzeitEmailSearch(ctx) {
     });
   }
   q.em = q.em.toLowerCase();
-  const sql = `SELECT e.id, e.calendar_id, y.contents
+  const sql = `SELECT e.id, e.calendar_id, y.contents, y.updated
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.email_addr = ? AND e.sub_status = 'active'
-AND e.calendar_id = y.id`;
+AND e.calendar_id = y.id
+ORDER BY y.updated ASC`;
   const results = await dbQuery(ctx, sql, [q.em]);
   if (!results || !results[0]) {
     ctx.status = 404;
@@ -148,10 +150,14 @@ from Hebcal.com.</div>
     }
     const title = makeCalendarTitle(row.contents, 100);
     const url = `https://www.hebcal.com/yahrzeit/edit/${calendarId}?${utmParam}`;
-    html += `<li><a href="${url}">${title}</a>\n`;
+    const dateStr = dayjs(row.updated).format('D MMMM YYYY');
+    html += `<li><a href="${url}">${title}</a> (modified ${dateStr})</li>\n`;
     seen.add(calendarId);
   }
   html += `</ul>
+${BLANK}
+<div>Or, to create a new Yahrzeit + Anniversary Calendar, visit
+<a href="https://www.hebcal.com/yahrzeit/new">https://www.hebcal.com/yahrzeit/new</a></div>
 ${BLANK}
 <div style="font-size:16px">Kol Tuv,
 <br>Hebcal.com</div>
@@ -170,7 +176,7 @@ ${BLANK}
     html: html,
   };
   await mySendMail(ctx, message);
-  return ctx.render('yahrzeit-search-found', {q, results: nonEmpty});
+  return ctx.render('yahrzeit-search-found', {q, count: seen.size});
 }
 
 export async function yahrzeitEmailSub(ctx) {
