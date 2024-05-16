@@ -15,10 +15,7 @@ const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
 async function dbQuery(ctx, sql, params) {
-  ctx.state.mysqlQuery = sql;
-  const res = await ctx.mysql.query(sql, params);
-  delete ctx.state.mysqlQuery;
-  return res;
+  return ctx.mysql.query2(ctx, {sql: sql, values: params});
 }
 
 export async function yahrzeitEmailVerify(ctx) {
@@ -119,7 +116,7 @@ export async function yahrzeitEmailSearch(ctx) {
     });
   }
   q.em = q.em.toLowerCase();
-  const sql = `SELECT e.id, e.calendar_id, y.contents, y.updated
+  const sql = `SELECT e.id, e.calendar_id, y.contents, y.created, y.updated
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.email_addr = ? AND e.sub_status = 'active'
 AND e.calendar_id = y.id
@@ -139,7 +136,7 @@ ORDER BY y.updated ASC`;
 <div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
 <div>Here are your current Yahrzeit + Anniversary Calendar email subscriptions
 from Hebcal.com.</div>
-<ul>
+${BLANK}
 `;
   const seen = new Set();
   const utmParam = UTM_PARAM.replace('yahrzeit-txn', 'yahrzeit-search');
@@ -148,15 +145,20 @@ from Hebcal.com.</div>
     if (seen.has(calendarId)) {
       continue;
     }
-    const title = makeCalendarTitle(row.contents, 100);
+    const title = makeCalendarTitle(row.contents, 72);
     const url = `https://www.hebcal.com/yahrzeit/edit/${calendarId}?${utmParam}`;
-    const dateStr = dayjs(row.updated).format('D MMMM YYYY');
-    html += `<li><a href="${url}">${title}</a> (modified ${dateStr})</li>\n`;
+    const created = dayjs(row.created).format('MMMM YYYY');
+    const updated = dayjs(row.updated).format('MMMM YYYY');
+    const dateStr = created === updated ? `created ${created}` : `modified ${updated}`;
+    html += `<div><a href="${url}">${title}</a>\n`;
+    // eslint-disable-next-line max-len
+    const unsubUrl = `https://www.hebcal.com/yahrzeit/email?id=${row.id}&amp;num=all&amp;unsubscribe=1&amp;cfg=html&amp;${utmParam}`;
+    html += `<br><span style="font-size:14px;color:#999;font-family:arial,helvetica,sans-serif">
+${dateStr} · <a href="${unsubUrl}">unsubscribe</a></span></div>\n${BLANK}\n`;
     seen.add(calendarId);
   }
-  html += `</ul>
-${BLANK}
-<div>Or, to create a new Yahrzeit + Anniversary Calendar, visit
+  html += `
+<div>Or, to create a new personal calendar, visit
 <a href="https://www.hebcal.com/yahrzeit/new">https://www.hebcal.com/yahrzeit/new</a></div>
 ${BLANK}
 <div style="font-size:16px">Kol Tuv,
