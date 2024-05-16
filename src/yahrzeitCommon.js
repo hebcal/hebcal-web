@@ -10,9 +10,7 @@ import dayjs from 'dayjs';
 export async function getYahrzeitDetailsFromDb(ctx, id) {
   const db = ctx.mysql;
   const sql = 'SELECT contents, updated, downloaded FROM yahrzeit WHERE id = ?';
-  ctx.state.mysqlQuery = sql;
-  const results = await db.query({sql, values: [id], timeout: 5000});
-  delete ctx.state.mysqlQuery;
+  const results = await db.query2(ctx, {sql, values: [id], timeout: 5000});
   if (!results || !results[0]) {
     ctx.throw(404, `Yahrzeit/Anniversary id not found: ${id}`);
   }
@@ -20,9 +18,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
   const obj = row.contents;
   if (!row.downloaded) {
     const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
-    ctx.state.mysqlQuery = sqlUpdate;
-    await db.execute({sql: sqlUpdate, values: [id], timeout: 5000});
-    delete ctx.state.mysqlQuery;
+    await db.execute2(ctx, {sql: sqlUpdate, values: [id], timeout: 5000});
   }
   // convert from 'x' fields back into ymd fields
   const maxId = getMaxYahrzeitId(obj);

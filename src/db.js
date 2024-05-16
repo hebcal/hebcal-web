@@ -42,6 +42,15 @@ export class MysqlDb {
       throw createError(503, err, {expose: true});
     }
   }
+  async query2(ctx, options) {
+    if (typeof options?.sql !== 'string') {
+      throw new TypeError('Invalid options to query2');
+    }
+    ctx.state.mysqlQuery = options.sql;
+    const rows = await this.query(options);
+    delete ctx.state.mysqlQuery;
+    return rows;
+  }
   /** */
   async execute(...params) {
     try {
@@ -50,6 +59,15 @@ export class MysqlDb {
     } catch (err) {
       throw createError(503, err, {expose: true});
     }
+  }
+  async execute2(ctx, options) {
+    if (typeof options?.sql !== 'string') {
+      throw new TypeError('Invalid options to query2');
+    }
+    ctx.state.mysqlQuery = options.sql;
+    const rows = await this.execute(options);
+    delete ctx.state.mysqlQuery;
+    return rows;
   }
   /** */
   async close() {
