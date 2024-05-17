@@ -90,6 +90,8 @@ export function downloadHref2(query, filename, override={}) {
   if (on(q.dps)) msg.setPsalms(true);
   if (on(q.dw)) msg.setDafweekly(true);
   if (on(q.dty)) msg.setTanakhyomi(true);
+  if (on(q.dpa)) msg.setPirkeiavotsummer(true);
+
   if (on(q.ue)) msg.setUseelevation(true);
 
   if (on(q.d)) msg.setAddhebrewdates(true);

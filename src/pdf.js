@@ -152,7 +152,8 @@ function renderPdfMonthTitle(doc, d, rtl, options) {
 function eventColor(evt) {
   const f = evt.getFlags();
   if (f & (flags.DAF_YOMI | flags.OMER_COUNT | flags.HEBREW_DATE |
-    flags.MISHNA_YOMI | flags.YERUSHALMI_YOMI | flags.NACH_YOMI)) {
+    flags.MISHNA_YOMI | flags.YERUSHALMI_YOMI | flags.NACH_YOMI |
+    flags.DAILY_LEARNING)) {
     return '#666666';
   }
   if (f & flags.ROSH_CHODESH) {

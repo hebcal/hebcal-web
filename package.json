@@ -48,11 +48,11 @@
     "rollup": "^4.17.2"
   },
   "dependencies": {
-    "@hebcal/core": "^5.3.9",
+    "@hebcal/core": "^5.3.10",
     "@hebcal/geo-sqlite": "^5.0.5",
     "@hebcal/hdate": "^0.9.3",
     "@hebcal/icalendar": "^5.0.6",
-    "@hebcal/learning": "^5.0.7",
+    "@hebcal/learning": "^5.0.8",
     "@hebcal/leyning": "^8.1.9",
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.0.4",

@@ -139,6 +139,7 @@ export const dailyLearningOpts = {
   dshl: 'shemiratHaLashon',
   dps: 'psalms',
   dw: 'dafWeeklySunday',
+  dpa: 'pirkeiAvotSummer',
 };
 
 const numberOpts = {
@@ -1296,6 +1297,7 @@ export const queryToName = {
   dr1: 'Daily Rambam',
   yyomi: 'Yerushalmi Yomi',
   dw: 'Daf-a-Week',
+  dpa: 'Pirkei Avot',
 };
 
 export const queryLongDescr = Object.assign({}, queryToName, {
@@ -1313,6 +1315,7 @@ export const queryLongDescr = Object.assign({}, queryToName, {
   dr1: 'Maimonides’ Mishneh Torah legal code',
   yyomi: 'Jerusalem Talmud (Vilna Edition)',
   dw: 'One page of Babylonian Talmud per week',
+  dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
 });
 
 /**

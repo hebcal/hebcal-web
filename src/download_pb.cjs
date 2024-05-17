@@ -204,7 +204,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false),
     elev: jspb.Message.getFieldWithDefault(msg, 52, 0),
     useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false),
-    tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false)
+    tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false),
+    pirkeiavotsummer: jspb.Message.getBooleanFieldWithDefault(msg, 55, false)
   };
 
   if (includeInstance) {
@@ -444,6 +445,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 54:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setTanakhyomi(value);
+      break;
+    case 55:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPirkeiavotsummer(value);
       break;
     default:
       reader.skipField();
@@ -828,6 +833,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       54,
+      f
+    );
+  }
+  f = message.getPirkeiavotsummer();
+  if (f) {
+    writer.writeBool(
+      55,
       f
     );
   }
@@ -1902,6 +1914,24 @@ proto.Download.prototype.getTanakhyomi = function() {
  */
 proto.Download.prototype.setTanakhyomi = function(value) {
   return jspb.Message.setProto3BooleanField(this, 54, value);
+};
+
+
+/**
+ * optional bool pirkeiAvotSummer = 55;
+ * @return {boolean}
+ */
+proto.Download.prototype.getPirkeiavotsummer = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 55, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setPirkeiavotsummer = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 55, value);
 };
 
 

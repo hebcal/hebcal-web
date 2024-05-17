@@ -70,4 +70,5 @@ message Download {
   int32 elev = 52;
   bool useElevation = 53;
   bool tanakhYomi = 54;
+  bool pirkeiAvotSummer = 55;
 }

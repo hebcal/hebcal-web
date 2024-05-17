@@ -61,6 +61,7 @@ export function deserializeDownload(data) {
   if (msg.getDafweekly()) q.dw = 'on';
   if (msg.getPsalms()) q.dps = 'on';
   if (msg.getTanakhyomi()) q.dty = 'on';
+  if (msg.getPirkeiavotsummer()) q.dpa = 'on';
   if (msg.getUseelevation()) q.ue = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
