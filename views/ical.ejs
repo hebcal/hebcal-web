@@ -239,6 +239,16 @@ By going at a slower pace, it facilitates greater mastery and retention.</p>`,
   parent: 'learning2',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Pirkei Avot', id: 'pirkei-avot',
+  summary: `<p>Pirkei Avot (“Ethics of the Fathers”), studied one chapter
+on each Shabbat of the summer between Passover and Rosh Hashanah,
+the entire cycle repeating a few times with doubling of chapters
+at the end if there are not a perfect multiple of six weeks.</p>`,
+  feedLength: 22,
+  years: 10,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Kindness A Day', id: 'kindness',
   summary: `<p><a href="https://www.areyvut.org/">Areyvut</a>’s daily act of kindness and related quotation from Tanach or Rabbinic text.</p>
 <p class="small">Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>
