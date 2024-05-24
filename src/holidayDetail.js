@@ -134,12 +134,12 @@ export async function holidayDetail(ctx) {
   makeHolidayReadings(meta, holiday, year, il, next);
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
-  const descrMedium0 = getHolidayDescription(next.event, false);
+  const descrMedium0 = getHolidayDescription(next.event, false) || next.event.memo || '';
   const descrMedium = appendPeriod(descrMedium0);
   const sentences = descrMedium0.split(/\.\s+/).slice(0, 2);
   const descFirstTwo = appendPeriod(sentences.join('. '));
   const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
-  const hebrew = Locale.gettext(holiday, 'he');
+  const hebrew = Locale.lookupTranslation(holiday, 'he') || next.event.render('he');
   const title = makePageTitle(holiday, year, il, descrShort);
   const now = new Date();
   const today = dayjs(now);
@@ -235,7 +235,7 @@ function getHolidayBegin(holiday, year, il) {
     isHebrewYear: false,
     numYears,
     yomKippurKatan: false,
-    shabbatMevarchim: false,
+    shabbatMevarchim: true,
     il,
   });
   const events = events0.filter((ev) => ev.basename() === holiday);

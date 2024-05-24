@@ -32,6 +32,7 @@ export async function holidayYearIndex(ctx) {
     year: calendarYear,
     isHebrewYear,
     il,
+    // shabbatMevarchim: true,
   };
   let events0 = HebrewCalendar.calendar(options);
   if (!il) {
@@ -102,7 +103,7 @@ async function makeItems(events, il, showYear, addIsraelAsterisk) {
     const category = item.categories.length === 1 ? item.categories[0] : item.categories[1];
     item.dates = tableCellObserved(item, il, showYear, addIsraelAsterisk);
     item.descrShort = getHolidayDescription(ev, true);
-    const descrMedium = getHolidayDescription(ev, false);
+    const descrMedium = getHolidayDescription(ev, false) || ev.memo || '';
     const sentences = descrMedium.split(/\.\s+/).slice(0, 2);
     const firstTwo = sentences.join('. ');
     item.descrMedium = sentences.length == 2 ? firstTwo + '.' : firstTwo;

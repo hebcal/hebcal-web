@@ -20,6 +20,7 @@ export const categories = {
   modern: {id: 'modern-holidays', name: 'Modern holidays', emoji: '🇮🇱'},
   shabbat: {id: 'special-shabbatot', name: 'Special Shabbatot', emoji: '🕍'},
   roshchodesh: {id: 'rosh-chodesh', name: 'Rosh Chodesh', emoji: '🌒'},
+  // mevarchim: {id: 'mevarchim', name: 'Shabbat Mevarchim', emoji: ''},
 };
 
 /**
@@ -73,6 +74,7 @@ const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8,
  */
 export function getHolidayDuration(il, mask, holiday) {
   if (mask & flags.MINOR_FAST ||
+      mask & flags.SHABBAT_MEVARCHIM ||
       holiday === 'Leil Selichot' ||
       holiday === 'Birkat Hachamah' ||
       holiday === 'Yom HaAliyah School Observance') {
@@ -194,6 +196,7 @@ function holidayStartAndEnd(ev, il) {
   const mask = ev.getFlags();
   const duration0 = getHolidayDuration(il, mask, holiday);
   const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
+    mask & flags.SHABBAT_MEVARCHIM ? '' :
     duration0 === 0 ? 'at dawn' : 'at sundown';
   const hd = ev.getDate();
   const d0 = dayjs(hd.greg());
