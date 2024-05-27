@@ -1,4 +1,5 @@
-import {greg, abs2hebrew, getMonthName} from '@hebcal/hdate';
+import {greg} from '@hebcal/hdate/dist/esm/greg';
+import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdate-base';
 function ordinal(n) {
   const s = ['th', 'st', 'nd', 'rd'];
   const v = n % 100;
