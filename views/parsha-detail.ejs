@@ -170,42 +170,42 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <div class="col">
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
-<% if (typeof commentary['sefaria'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a>
-<% } %>
-<% if (typeof commentary['wikipedia'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a>
-<% } %>
-<% if (typeof commentary['ou.org'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a>
-<% } %>
-<% if (typeof commentary['torah.org'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a>
-<% } %>
-<% if (typeof commentary['chabad.org'] === 'number') { %>
-<li><a title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a>
-<% } %>
-<% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { %>
-<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a>
-<% } %>
-<% if (typeof commentary['reformjudaism.org'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a>
-<% } %>
-<% if (typeof commentary['ajr.edu'] === 'object') { %>
-<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=commentary['ajr.edu'].target%>">Academy for Jewish Religion</a>
-<% } %>
-<% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { %>
-<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a>
-<% } %>
-<% if (typeof commentary['aju.edu'] === 'number') { %>
-<li><a title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a>
-<% } %>
-<% if (typeof commentary['ej'] === 'string') { %>
-<li><a title="Parashat <%=parshaName%> commentary from Exploring Judaism" href="https://www.exploringjudaism.org/learning/torah/<%=commentary['ej']%>/">Exploring Judaism</a>
-<% } %>
-<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { %>
-<li><a title="Parashat <%=parshaName%> commentary from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a>
-<% } %>
+<% if (typeof commentary['sefaria'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a></li>
+<% } -%>
+<% if (typeof commentary['wikipedia'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a></li>
+<% } -%>
+<% if (typeof commentary['ou.org'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a></li>
+<% } -%>
+<% if (typeof commentary['torah.org'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a></li>
+<% } -%>
+<% if (typeof commentary['chabad.org'] === 'number') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a></li>
+<% } -%>
+<% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length != 0) { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a></li>
+<% } -%>
+<% if (typeof commentary['reformjudaism.org'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a></li>
+<% } -%>
+<% if (typeof commentary['ajr.edu'] === 'object') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=commentary['ajr.edu'].target%>">Academy for Jewish Religion</a></li>
+<% } -%>
+<% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length != 0) { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a></li>
+<% } -%>
+<% if (typeof commentary['aju.edu'] === 'number') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from American Jewish University" href="https://www.aju.edu/ziegler-school-rabbinic-studies/our-torah/back-issues/<%=commentary['aju.edu']%>">American Jewish University</a></li>
+<% } -%>
+<% if (typeof commentary['ej'] === 'string') { -%>
+<li><a title="Parashat <%=parshaName%> commentary from Exploring Judaism" href="https://www.exploringjudaism.org/learning/torah/<%=commentary['ej']%>/">Exploring Judaism</a></li>
+<% } -%>
+<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length != 0) { -%>
+<li><a title="Parashat <%=parshaName%> tikkun from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a></li>
+<% } -%>
 </ul>
 </div><!-- .col -->
 <% if (commentary['asin']) {
@@ -280,7 +280,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <dt><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><em><%=parsha.p1||parshaName%>
 (<%=parsha.bookName%> <%=parsha.verses%>) and Haftarah (<%=parsha.haftara%>):
-The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</a></em>
+The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</em></a>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Jeffrey K. Salkin, Jewish Publication Society, 2017
 <% } %>

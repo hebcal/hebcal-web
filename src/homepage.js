@@ -254,7 +254,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const holiday = isTishrei ? 'Sukkot' : 'Pesach';
     const emoji = isTishrei ? '🌿🍋' : '🫓';
     const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מוֹעֲדִים לְשִׂמְחָה</span>&nbsp;${emoji}`;
-    return [blurb, `<strong>Moadim L\'Simcha!</strong> We wish you a very happy ${holiday}`];
+    return [blurb, `<strong>Moadim L'Simcha!</strong> We wish you a very happy ${holiday}`];
   } else if (mm === months.KISLEV && dd <= 24 && dd >= 2) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
@@ -338,7 +338,7 @@ ${when} on ${htmlDate}`];
     const htmlDate = myDateFormat(erevPesach);
     const blurb = '🫓&nbsp;🍷&nbsp;<span lang="he" dir="rtl">חַג כָּשֵׁר וְשָׂמֵחַ</span>&nbsp;🍷&nbsp;🫓';
     const suffix = il ? '?i=on' : '';
-    return [blurb, `<strong>Chag Kasher v\'Sameach!</strong>
+    return [blurb, `<strong>Chag Kasher v'Sameach!</strong>
  <a class="text-green1 text-nowrap" href="/holidays/pesach-${gy}${suffix}">Passover</a>
  begins at sundown on ${htmlDate}`];
   }
