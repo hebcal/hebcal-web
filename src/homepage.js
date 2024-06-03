@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, OmerEvent, Locale,
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
   DailyLearning} from '@hebcal/core';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz, localeMap, lgToLocale,
@@ -60,7 +60,6 @@ export async function homepage(ctx) {
   mastheadDates(ctx, dt, afterSunset, hd);
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
-  mastheadOmer(ctx, hd);
   mastheadDafYomi(ctx, hd);
   const [blub, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
   if (blub) {
@@ -115,7 +114,14 @@ function mastheadParsha(ctx, hd, il) {
 
 function mastheadHolidays(ctx, hd, il) {
   const items = ctx.state.items;
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  const holidays = HebrewCalendar.calendar({
+    start: hd,
+    end: hd,
+    il,
+    yomKippurKatan: false,
+    shabbatMevarchim: true,
+    omer: true,
+  });
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   holidays
       .map((ev) => {
@@ -127,21 +133,6 @@ function mastheadHolidays(ctx, hd, il) {
         const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
-}
-
-function mastheadOmer(ctx, hd) {
-  const items = ctx.state.items;
-  const hyear = hd.getFullYear();
-  const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
-  const abs = hd.abs();
-  if (abs >= beginOmer && abs < (beginOmer + 49)) {
-    const omer = abs - beginOmer + 1;
-    const ev = new OmerEvent(hd, omer);
-    const url = shortenUrl(ev.url());
-    const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-    const desc = ev.render(lg);
-    items.push(`<a href="${url}">${desc}</a>`);
-  }
 }
 
 function mastheadDafYomi(ctx, hd) {

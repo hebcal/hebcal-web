@@ -394,7 +394,13 @@ class PseudoParshaEvent extends Event {
  * @return {Event[]}
  */
 function getEvents(hdate, il) {
-  let events = HebrewCalendar.getHolidaysOnDate(hdate, il) || [];
+  let events = HebrewCalendar.calendar({
+    start: hdate,
+    end: hdate,
+    il,
+    yomKippurKatan: false,
+    shabbatMevarchim: true,
+  });
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   const sedra = HebrewCalendar.getSedra(hy, il);
