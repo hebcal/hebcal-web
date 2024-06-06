@@ -62,17 +62,12 @@ async function makeQuery(ctx) {
 export async function yahrzeitApp(ctx) {
   ctx.set('Cache-Control', 'private');
   const rpath = ctx.request.path;
-  const yahrzeitCookie = ctx.cookies.get('Y');
   if (ctx.method === 'GET' && !ctx.request.querystring &&
-    yahrzeitCookie && yahrzeitCookie.length &&
     !rpath.startsWith('/yahrzeit/edit/') && !rpath.startsWith('/yahrzeit/new')) {
+    const yahrzeitCookie = ctx.cookies.get('Y') || '';
     const ids = yahrzeitCookie.split('|');
-    const calendars = await getCalPickerIds(ctx, ids);
-    if (calendars.length) {
-      return ctx.render('yahrzeit-calpicker', {
-        calendars,
-      });
-    }
+    const calendars = ids.length ? await getCalPickerIds(ctx, ids) : [];
+    return ctx.render('yahrzeit-calpicker', {calendars});
   }
   ctx.state.showDownload = false;
   const q = ctx.state.q = await makeQuery(ctx);

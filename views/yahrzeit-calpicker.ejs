@@ -17,6 +17,7 @@
 and Hebrew Anniversaries.</p>
 <p>Print, subscribe to annual email reminders, and download a multi-year
 calendar feed to Apple, Google, Outlook, and more.</p>
+<% if (calendars.length) { -%>
 <p>Welcome back!</p>
 <p class="lead">View or edit an existing personal calendar</p>
 <ol>
@@ -24,7 +25,8 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 <li><a href="/yahrzeit/edit/<%=cal.id%>"><%=cal.title%></a>
 <% }); -%>
 </ol>
-<p class="lead">Or, search for an existing calendar by email address</p>
+<% } -%>
+<p class="lead">Search for an existing calendar by email address</p>
 <form action="/yahrzeit/search" method="post" class="row row-cols-lg-auto g-3 align-items-center mb-3">
   <div class="col">
     <label class="visually-hidden" for="em">Email address</label>
