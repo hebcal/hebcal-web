@@ -233,7 +233,7 @@ export async function yahrzeitEmailSub(ctx) {
   });
   const anniversaryType = q.type === 'Yahrzeit' ? 'yahrzeit' : 'Hebrew anniversary';
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
-  const msgid = `${calendarId}.${id}.${Date.now()}`;
+  const msgid = `${id}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, q.type, 'yahrzeit-verify');
   const message = {
     to: q.em,
@@ -362,7 +362,7 @@ ${BLANK}
 async function sendConfirmEmail(ctx, contents, subscriptionId) {
   const anniversaryType = contents.anniversaryType === 'Yahrzeit' ? 'yahrzeit' : 'Hebrew anniversary';
   const calendarId = contents.calendarId;
-  const msgid = `${calendarId}.${subscriptionId}.${Date.now()}`;
+  const msgid = `${subscriptionId}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-complete');
   const urlBase = 'https://www.hebcal.com/yahrzeit';
   const editUrl = `${urlBase}/edit/${calendarId}`;
