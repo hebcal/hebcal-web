@@ -25,12 +25,12 @@ const TIMES = {
   dawn: 1,
   sunrise: 1,
   seaLevelSunrise: 1,
-  sofZmanShmaMGA16Point1: 1,
   sofZmanShmaMGA19Point8: 1,
+  sofZmanShmaMGA16Point1: 1,
   sofZmanShmaMGA: 1,
   sofZmanShma: 1,
-  sofZmanTfillaMGA16Point1: 1,
   sofZmanTfillaMGA19Point8: 1,
+  sofZmanTfillaMGA16Point1: 1,
   sofZmanTfillaMGA: 1,
   sofZmanTfilla: 1,
   chatzot: 1,
@@ -274,7 +274,7 @@ const ZMAN_NAMES = {
     'Midday. Sunrise plus 6 halachic hours',
   ],
   minchaGedola: [
-    'Mincha Gedolah (GRA)',
+    'Mincha Gedolah (Gra)',
     'Earliest Mincha. Sunrise plus 6.5 halachic hours',
   ],
   minchaGedolaMGA: [
@@ -282,7 +282,7 @@ const ZMAN_NAMES = {
     'Earliest Mincha. Sunrise plus 6.5 halachic hours, according to Magen Avraham',
   ],
   minchaKetana: [
-    'Mincha Ketanah (GRA)',
+    'Mincha Ketanah (Gra)',
     'Preferable earliest time to recite Minchah. Sunrise plus 9.5 halachic hours',
   ],
   minchaKetanaMGA: [
