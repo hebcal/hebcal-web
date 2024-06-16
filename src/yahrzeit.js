@@ -1,4 +1,5 @@
-import {HebrewCalendar, HDate, Event, flags, months, Locale} from '@hebcal/core';
+import {Event, HDate, HebrewCalendar, Locale,
+  flags, gematriya, months} from '@hebcal/core';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi, pad4, pad2} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -583,6 +584,46 @@ async function getEventsForId(query, id, startYear, numYears) {
   return events;
 }
 
+const hebrewRe = /[\u05d0-\u05ea]/;
+
+const en2he = {
+  Yahrzeit: 'נחלה',
+  Birthday: 'יום הולדת',
+  Anniversary: 'יום השנה',
+  Other: 'יום השנה',
+};
+
+function hebdateNoYear(hd, isHebrewName) {
+  if (isHebrewName) {
+    const dd = hd.getDate();
+    const mm = Locale.gettext(hd.getMonthName(), 'he-x-NoNikud');
+    return gematriya(dd) + ' ' + mm;
+  } else {
+    return hd.render('en', false).replace(/'/g, '’');
+  }
+}
+
+function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
+  const name = info.name;
+  let subj = name;
+  const isHebrewName = hebrewRe.test(name);
+  const type = info.type;
+  if (type !== 'Other') {
+    if (isHebrewName) {
+      subj = `${en2he[type]} ה-${yearNumber} של ${name}`;
+    } else {
+      const nth = Locale.ordinal(yearNumber, 'en');
+      const typeStr = type === 'Yahrzeit' ? type : `Hebrew ${type}`;
+      subj = `${name}’s ${nth} ${typeStr}`;
+    }
+  }
+  if (appendHebDate) {
+    const hebdate = hebdateNoYear(hd, isHebrewName);
+    subj += ' (' + hebdate + ')';
+  }
+  return subj;
+}
+
 /**
  * @param {number} id
  * @param {any} info
@@ -610,11 +651,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const yearNumber = hyear - origHyear;
   const nth = Locale.ordinal(yearNumber, 'en');
   const name = info.name;
-  let subj = type === 'Other' ? name : `${name}’s ${nth} ${typeStr}`;
-  if (appendHebDate) {
-    const comma = hebdate.indexOf(',');
-    subj += ' (' + hebdate.substring(0, comma) + ')';
-  }
+  const subj = makeYahrzeitSubject(info, hd, yearNumber, appendHebDate);
   const ev = new Event(hd, subj, flags.USER_EVENT);
   if (isYahrzeit) {
     ev.emoji = '🕯️';
