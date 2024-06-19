@@ -610,7 +610,9 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const type = info.type;
   if (type !== 'Other') {
     if (isHebrewName) {
-      subj = `${en2he[type]} ה-${yearNumber} של ${name}`;
+      subj = info.type === 'Birthday' ?
+        `${en2he[type]} ${yearNumber} ל${name}` :
+        `${en2he[type]} ה-${yearNumber} של ${name}`;
     } else {
       const nth = Locale.ordinal(yearNumber, 'en');
       const typeStr = type === 'Yahrzeit' ? type : `Hebrew ${type}`;
