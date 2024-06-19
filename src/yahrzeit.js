@@ -488,7 +488,7 @@ export async function yahrzeitDownload(ctx) {
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
-    ctx.body = csv;
+    ctx.body = '\uFEFF' + csv;
     ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
 }
@@ -587,7 +587,7 @@ async function getEventsForId(query, id, startYear, numYears) {
 const hebrewRe = /[\u05d0-\u05ea]/;
 
 const en2he = {
-  Yahrzeit: 'נחלה',
+  Yahrzeit: 'יאָרצײַט',
   Birthday: 'יום הולדת',
   Anniversary: 'יום השנה',
   Other: 'יום השנה',
