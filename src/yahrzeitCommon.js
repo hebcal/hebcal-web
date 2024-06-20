@@ -60,13 +60,13 @@ export function isNumKey(k) {
 export function summarizeAnniversaryTypes(query, long=false) {
   const typesSet = getAnniversaryTypes(query);
   const types = Array.from(typesSet);
-  const anniversaryType = types.length === 0 ? 'Yahrzeit' :
-    types.length === 1 ? types[0] : 'Anniversary';
+  const anniversaryType = types.length === 0 ? YAHRZEIT :
+    types.length === 1 ? types[0] : ANNIVERSARY;
   if (long) {
     switch (anniversaryType) {
-      case 'Anniversary':
+      case ANNIVERSARY:
         return types.length === 1 ? 'Hebrew Anniversary' : 'Hebrew Anniversaries';
-      case 'Birthday':
+      case BIRTHDAY:
         return types.length === 1 ? 'Hebrew Birthday' : 'Hebrew Birthdays';
       default: break;
     }
@@ -82,7 +82,7 @@ export function getAnniversaryTypes(query) {
   const types0 = Object.entries(query)
       .filter(([k, val]) => k[0] == 't' && isNumKey(k))
       .map((x) => getAnniversaryType(x[1]))
-      .map((x) => x === 'Other' ? 'Anniversary' : x);
+      .map((x) => x === OTHER ? ANNIVERSARY : x);
   return new Set(types0);
 }
 
@@ -116,6 +116,11 @@ export function getMaxYahrzeitId(query) {
   return Math.max(...ids);
 }
 
+export const YAHRZEIT = 'Yahrzeit';
+export const BIRTHDAY = 'Birthday';
+export const ANNIVERSARY = 'Anniversary';
+export const OTHER = 'Other';
+
 /**
  * @private
  * @param {string} str
@@ -125,13 +130,13 @@ function getAnniversaryType(str) {
   if (typeof str === 'string') {
     const s = str.toLowerCase();
     switch (s[0]) {
-      case 'y': return 'Yahrzeit';
-      case 'b': return 'Birthday';
-      case 'a': return 'Anniversary';
-      case 'o': return 'Other';
+      case 'y': return YAHRZEIT;
+      case 'b': return BIRTHDAY;
+      case 'a': return ANNIVERSARY;
+      case 'o': return OTHER;
     }
   }
-  return 'Yahrzeit';
+  return YAHRZEIT;
 }
 
 /**
@@ -167,7 +172,7 @@ function getAnniversaryName(query, id, type) {
   if (name0) {
     return name0;
   }
-  const prefix = type === 'Other' ? 'Untitled' : 'Person';
+  const prefix = type === OTHER ? 'Untitled' : 'Person';
   return prefix + id;
 }
 

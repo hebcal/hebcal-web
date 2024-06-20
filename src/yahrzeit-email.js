@@ -3,6 +3,7 @@ import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {validateEmail, mySendMail, getImgOpenHtml} from './emailCommon.js';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
+  YAHRZEIT, ANNIVERSARY, OTHER,
   getYahrzeitIds,
   makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
@@ -231,7 +232,7 @@ export async function yahrzeitEmailSub(ctx) {
   matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
     url: ctx.request.href,
   });
-  const anniversaryType = q.type === 'Yahrzeit' ? 'yahrzeit' : 'Hebrew anniversary';
+  const anniversaryType = q.type === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${id}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, q.type, 'yahrzeit-verify');
@@ -285,7 +286,7 @@ AND e.calendar_id = y.id`;
   contents.maxId = getMaxYahrzeitId(contents);
   contents.numIds = getYahrzeitIds(contents).length;
   const type = contents.type = contents.anniversaryType = summarizeAnniversaryTypes(contents, false);
-  contents.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+  contents.typeStr = type === YAHRZEIT ? type : `Hebrew ${type}`;
   contents.lastModified = row.updated;
   contents.downloaded = row.downloaded;
   return contents;
@@ -301,8 +302,8 @@ async function lookupSubNum(ctx, q) {
     ctx.throw(404, `Id number '${q.num}' in subscription '${q.id}' not found`);
   }
   const type0 = info.type;
-  const type = type0 === 'Other' ? 'Anniversary' : type0;
-  info.typeStr = (type == 'Yahrzeit') ? type : `Hebrew ${type}`;
+  const type = type0 === OTHER ? ANNIVERSARY : type0;
+  info.typeStr = type === YAHRZEIT ? type : `Hebrew ${type}`;
   info.calendarId = contents.calendarId;
   info.maxId = contents.maxId;
   info.numIds = contents.numIds;
@@ -360,7 +361,7 @@ ${BLANK}
 }
 
 async function sendConfirmEmail(ctx, contents, subscriptionId) {
-  const anniversaryType = contents.anniversaryType === 'Yahrzeit' ? 'yahrzeit' : 'Hebrew anniversary';
+  const anniversaryType = contents.anniversaryType === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const calendarId = contents.calendarId;
   const msgid = `${subscriptionId}.${Date.now()}`;
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-complete');
