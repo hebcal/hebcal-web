@@ -608,14 +608,15 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const isHebrewName = hebrewRe.test(name);
   const type = info.type;
   if (type !== 'Other') {
+    const isYahrzeit = type === 'Yahrzeit';
     if (isHebrewName) {
       const prefix = en2he[type];
-      subj = info.type === 'Birthday' ?
-        `${prefix} ${yearNumber} ל${name}` :
-        `${prefix} ה-${yearNumber} של ${name}`;
+      subj = isYahrzeit ?
+        `${prefix} ה-${yearNumber} של ${name}` :
+        `${prefix} ${yearNumber} ל${name}`;
     } else {
       const nth = Locale.ordinal(yearNumber, 'en');
-      const typeStr = type === 'Yahrzeit' ? type : `Hebrew ${type}`;
+      const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
       subj = `${name}’s ${nth} ${typeStr}`;
     }
   }
