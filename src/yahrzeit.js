@@ -110,7 +110,9 @@ export async function yahrzeitApp(ctx) {
         }
       }
       ctx.status = 200;
-      setYahrzeitCookie(ctx);
+      if (ctx.state.showDownload) {
+        setYahrzeitCookie(ctx);
+      }
       await makeDownloadProps(ctx);
     }
   } else {
@@ -174,10 +176,11 @@ async function getCalPickerIds(ctx, ids) {
 }
 
 function setYahrzeitCookie(ctx) {
-  const cCookie = ctx.cookies.get('C');
   if (ctx.state.yahrzeitCookieSet) {
     return false;
-  } else if (cCookie === 'opt_out') {
+  }
+  const cCookie = ctx.cookies.get('C');
+  if (cCookie === 'opt_out') {
     return false;
   }
   const yahrzeitCookie = ctx.cookies.get('Y');
