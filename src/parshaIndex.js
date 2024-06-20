@@ -2,9 +2,9 @@ import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
 import {setDefautLangTz, langNames, shortenUrl} from './common.js';
-import {parshaByBook, torahBookNames, lookupParshaMeta} from './parshaCommon.js';
+import {parshaByBook, torahBookNames, lookupParshaMeta,
+  makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
-import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 
 const myLangNames = {
@@ -78,7 +78,7 @@ function getTodayHolidayEvent(hd, il) {
   for (const ev of events) {
     const reading = getLeyningForHoliday(ev, il);
     const url = shortenUrl(ev.url());
-    if (reading && reading.fullkriyah && url) {
+    if (reading?.fullkriyah && url) {
       const parts = makeLeyningParts(reading.fullkriyah);
       const torahHtml = makeLeyningHtmlFromParts(parts);
       return {ev, url, torahHtml};
