@@ -587,10 +587,9 @@ async function getEventsForId(query, id, startYear, numYears) {
 const hebrewRe = /[\u05d0-\u05ea]/;
 
 const en2he = {
-  Yahrzeit: 'יאָרצײַט',
+  Yahrzeit: 'יארצייט',
   Birthday: 'יום הולדת',
-  Anniversary: 'יום השנה',
-  Other: 'יום השנה',
+  Anniversary: 'יום נישואין',
 };
 
 function hebdateNoYear(hd, isHebrewName) {
@@ -610,9 +609,10 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const type = info.type;
   if (type !== 'Other') {
     if (isHebrewName) {
+      const prefix = en2he[type];
       subj = info.type === 'Birthday' ?
-        `${en2he[type]} ${yearNumber} ל${name}` :
-        `${en2he[type]} ה-${yearNumber} של ${name}`;
+        `${prefix} ${yearNumber} ל${name}` :
+        `${prefix} ה-${yearNumber} של ${name}`;
     } else {
       const nth = Locale.ordinal(yearNumber, 'en');
       const typeStr = type === 'Yahrzeit' ? type : `Hebrew ${type}`;
