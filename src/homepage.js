@@ -297,7 +297,7 @@ ${when} on ${htmlDate}`];
     // for the last week of Av
     const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevRHLaBehemot);
-    return ['🐑&nbsp;🐓&nbsp;<span lang="he" dir="rtl">רֹאשׁ הַשָּׁנָה לבְּהֵמוֹת שָׂמֵחַ</span>&nbsp;🐓&nbsp;🐑',
+    return ['🐑&nbsp;🐓&nbsp;<span lang="he" dir="rtl">רֹאשׁ הַשָּׁנָה לבְּהֵמוֹת שָׂמֵחַ</span>&nbsp;🐓&nbsp;🐑',
       `<a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a>
  (New Year for Tithing Animals)
  begins at sundown on ${htmlDate}`];
