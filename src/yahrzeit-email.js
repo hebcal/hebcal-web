@@ -20,7 +20,7 @@ async function dbQuery(ctx, sql, params) {
 
 export async function yahrzeitEmailVerify(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
-  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const q = {...ctx.request.body, ...ctx.request.query};
   const subscriptionId = basename(ctx.request.path);
   if (subscriptionId.length !== 26) {
     ctx.throw(400, `Invalid anniversary subscription key '${subscriptionId}'`);
@@ -103,7 +103,7 @@ function makeUlid(ctx) {
 }
 
 export async function yahrzeitEmailSearch(ctx) {
-  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const q = {...ctx.request.body, ...ctx.request.query};
   if (empty(q.em)) {
     return ctx.render('yahrzeit-search-notfound', {q});
   }
@@ -183,7 +183,7 @@ ${BLANK}
 
 export async function yahrzeitEmailSub(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
-  const q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const q = {...ctx.request.body, ...ctx.request.query};
   if (q.cfg !== 'html') {
     ctx.response.type = ctx.request.header['accept'] = 'application/json';
   }

@@ -32,13 +32,13 @@ const cache = new Map();
 export async function getHolidayMeta(holiday) {
   const prev = cache.get(holiday);
   if (prev) {
-    return Object.assign({}, prev);
+    return {...prev};
   }
   const meta0 = holidayMeta[holiday];
   if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
-  const meta = Object.assign({}, meta0);
+  const meta = {...meta0};
   meta.about.name = sourceName(meta.about.href);
   if (meta.photo?.fn) {
     meta.photo.webp = meta.photo.fn.replace(/.jpg$/, '.webp');
@@ -99,5 +99,5 @@ export async function getHolidayMeta(holiday) {
   }
   */
   cache.set(holiday, meta);
-  return Object.assign({}, meta);
+  return {...meta};
 }

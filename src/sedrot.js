@@ -19,8 +19,8 @@ const options15yr = {
   noHolidays: true,
   sedrot: true,
 };
-const allEvts15yrIsrael = HebrewCalendar.calendar(Object.assign({il: true}, options15yr));
-const allEvts15yrDiaspora = HebrewCalendar.calendar(Object.assign({il: false}, options15yr));
+const allEvts15yrIsrael = HebrewCalendar.calendar({il: true, ...options15yr});
+const allEvts15yrDiaspora = HebrewCalendar.calendar({il: false, ...options15yr});
 const items15yrIsrael = new Map();
 const items15yrDiaspora = new Map();
 const allParshiot = [].concat(parshiot54, doubledParshiyot);

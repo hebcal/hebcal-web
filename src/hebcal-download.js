@@ -17,7 +17,7 @@ export async function hebcalDownload(ctx) {
     ctx.set('Allow', 'GET');
     ctx.throw(405, 'POST not allowed; try using GET instead');
   }
-  const query = Object.assign({}, ctx.request.query);
+  const query = {...ctx.request.query};
   if (query.v !== '1') {
     return;
   }
@@ -39,7 +39,7 @@ export async function hebcalDownload(ctx) {
   const firstEvDt = events[0].getDate().greg();
   ctx.lastModified = firstEvDt > ctx.launchDate ? ctx.launchDate : firstEvDt;
   // etag includes actual year because options.year is never 'now'
-  const opts = Object.assign({}, query, options);
+  const opts = {...query, ...options};
   ctx.response.etag = eTagFromOptions(opts, {extension});
   ctx.status = 200;
   if (ctx.fresh) {

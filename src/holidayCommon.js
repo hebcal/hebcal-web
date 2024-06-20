@@ -64,7 +64,7 @@ const holidayDurationIL = {
 export const OMER_TITLE = 'Days of the Omer';
 holidayDurationIL[OMER_TITLE] = 49;
 
-const holidayDurationDiaspora = Object.assign({}, holidayDurationIL, {Pesach: 8, Shavuot: 2});
+const holidayDurationDiaspora = {...holidayDurationIL, Pesach: 8, Shavuot: 2};
 
 /**
  * @param {boolean} il

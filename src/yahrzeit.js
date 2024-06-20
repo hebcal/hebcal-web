@@ -34,7 +34,7 @@ async function makeQuery(ctx) {
   const reqBody = ctx.request.body;
   const isPost = ctx.method === 'POST' && reqBody?.v === 'yahrzeit';
   const defaults = isPost ? {} : {hebdate: 'on', yizkor: 'off', years: DEFAULT_YEARS};
-  const query = Object.assign(defaults, reqBody, ctx.request.query);
+  const query = {...defaults, ...reqBody, ...ctx.request.query};
   cleanQuery(query);
   if (isPost) {
     const id = query.ulid;
@@ -311,7 +311,7 @@ async function makeDownloadProps(ctx) {
 const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'seq'];
 
 async function saveDataToDb(ctx) {
-  const toSave = Object.assign({}, ctx.state.q);
+  const toSave = {...ctx.state.q};
   const seq = +(toSave.seq) || 1;
   noSaveFields.forEach((key) => delete toSave[key]);
   compactJsonToSave(toSave);
@@ -425,7 +425,7 @@ async function getDetailsFromDb(ctx) {
 export async function yahrzeitDownload(ctx) {
   const rpath = ctx.request.path;
   const details = rpath.startsWith('/v3') ? await getDetailsFromDb(ctx) : {};
-  const query = Object.assign({}, details, ctx.request.query);
+  const query = {...details, ...ctx.request.query};
   // Fix for legacy duplicated key/value pairs
   for (const [key, value] of Object.entries(query)) {
     if (Array.isArray(value) && value.length === 2) {

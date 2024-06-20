@@ -74,7 +74,7 @@ export async function holidayYearIndex(ctx) {
 }
 
 function makeQueryAndDownloadProps(ctx, options) {
-  const q = Object.assign({v: '1', ny: 5}, ctx.request.query);
+  const q = {v: '1', ny: 5, ...ctx.request.query};
   for (const k of ['maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q[k] = 'on';
   }

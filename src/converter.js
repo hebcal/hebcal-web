@@ -45,7 +45,8 @@ export async function hebrewDateConverter(ctx) {
       const status = err.status || 400;
       ctx.throw(status, err);
     }
-    props = Object.assign(g2h(new Date(), false, true), {message: err.message});
+    props = g2h(new Date(), false, true);
+    props.message = err.message;
   }
   if (ctx.method === 'GET' && props.noCache && !props.message) {
     const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');

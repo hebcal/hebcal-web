@@ -40,8 +40,8 @@ export async function hebcalApp(ctx) {
   }
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ?
-    Object.assign({}, hebcalFormDefaults) :
-    ctx.request.query.v === '1' ? Object.assign({}, ctx.request.query) :
+    {...hebcalFormDefaults} :
+    ctx.request.query.v === '1' ? {...ctx.request.query} :
     processCookieAndQuery(cookie, hebcalFormDefaults, ctx.request.query);
   cleanQuery(q);
   ctx.status = 200;
@@ -153,7 +153,7 @@ function renderRss(ctx) {
   }
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
-  const q = Object.assign({}, ctx.state.q);
+  const q = {...ctx.state.q};
   delete q.cfg;
   options.mainUrl = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
   options.selfUrl = 'https://www.hebcal.com/hebcal?' + urlArgs(ctx.state.q);
@@ -274,7 +274,7 @@ function renderHtml(ctx) {
   const next = makePrevNextUrl(q, options, events, true);
   url.prev = prev.href;
   url.next = next.href;
-  const optsTmp = Object.assign({}, options);
+  const optsTmp = {...options};
   optsTmp.subscribe = '1';
   url.title = getCalendarTitle(events, optsTmp);
   if (options.candlelighting) {
@@ -300,12 +300,12 @@ function renderHtml(ctx) {
   const cconfig = locationToPlainObj(location);
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
-  const opts = Object.assign({}, options);
+  const opts = {...options};
   delete opts.location;
   return ctx.render('hebcal-results', {
     items,
     memos,
-    cconfig: Object.assign({geo: q.geo || 'none'}, cconfig),
+    cconfig: {geo: q.geo || 'none', ...cconfig},
     opts,
     today,
     gy,
@@ -376,7 +376,7 @@ function makePrevNextUrl(q, options, events, isNext) {
   }
   const idx = isNext ? events.length - 1 : 0;
   const gy = events[idx].getDate().greg().getFullYear();
-  const q2 = Object.assign({}, q);
+  const q2 = {...q};
   delete q2.start;
   delete q2.end;
   return {

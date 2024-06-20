@@ -87,8 +87,8 @@ function makeReadingItem(d, hd, reading) {
   const item = {
     date: d.format('YYYY-MM-DD'),
     hdate: hd.toString(),
+    ...reading,
   };
-  Object.assign(item, reading);
   delete item.parsha;
   delete item.haftaraNumV;
   return item;

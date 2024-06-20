@@ -11,7 +11,7 @@ const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=s
 
 export async function emailVerify(ctx) {
   ctx.set('Cache-Control', 'private');
-  const query = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  const query = {...ctx.request.body, ...ctx.request.query};
   cleanQuery(query);
   const subscriptionId = ctx.state.subscriptionId = getSubscriptionId(ctx, query);
   if (!subscriptionId) {
@@ -131,7 +131,7 @@ function getSubscriptionId(ctx, q) {
 
 export async function emailForm(ctx) {
   ctx.set('Cache-Control', 'private');
-  let q = Object.assign({}, ctx.request.body || {}, ctx.request.query);
+  let q = {...ctx.request.body, ...ctx.request.query};
   let defaultUnsubscribe = false;
   if (typeof q.e === 'string') {
     const buff = Buffer.from(q.e, 'base64');
@@ -139,7 +139,7 @@ export async function emailForm(ctx) {
     const db = ctx.mysql;
     const subInfo = await getSubInfo(db, q.em);
     if (subInfo && subInfo.status === 'active') {
-      Object.assign(q, subInfo);
+      q = {...subInfo, ...q};
     }
     defaultUnsubscribe = q.unsubscribe === '1';
   } else {
@@ -321,7 +321,8 @@ async function getSubInfo(db, emailAddress) {
   }
   const r = results[0];
   const m = r.email_candles_havdalah === null ? null : String(r.email_candles_havdalah);
-  return Object.assign({
+  const geo = getGeoFromRow(r);
+  return {
     k: r.email_id,
     em: r.email_address,
     status: r.email_status,
@@ -330,7 +331,8 @@ async function getSubInfo(db, emailAddress) {
     t: r.email_created,
     b: r.email_sundown_candles,
     ue: r.email_use_elevation == 1 ? 'on' : 'off',
-  }, getGeoFromRow(r));
+    ...geo,
+  };
 }
 
 async function writeSubInfo(ctx, db, q) {

@@ -7,11 +7,12 @@ import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 
-const myLangNames = Object.assign({
+const myLangNames = {
   en: langNames.s,
   ashkenazi: langNames.a,
   he: ['עברית', 'Hebrew'],
-}, langNames);
+  ...langNames,
+};
 delete myLangNames.s;
 delete myLangNames.h;
 delete myLangNames.a;

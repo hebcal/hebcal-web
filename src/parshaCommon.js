@@ -146,12 +146,13 @@ export function lookupParshaMeta(parshaName) {
     return meta;
   }
   const parsha0 = lookupParsha(parshaName);
-  const parsha = Object.assign({
+  const parsha = {
     name: parshaName,
     bookName: torahBookNames[parsha0.book - 1],
     anchor: makeAnchor(parshaName),
     verses: parsha0.fullkriyah['1'][0] + '-' + parsha0.fullkriyah['7'][1],
-  }, parsha0);
+    ...parsha0,
+  };
   if (parsha.combined) {
     const [p1, p2] = parshaName.split('-');
     parsha.hebrew = Locale.gettext(p1, 'he') + '־' + Locale.gettext(p2, 'he');

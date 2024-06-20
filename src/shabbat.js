@@ -210,7 +210,7 @@ function makeItems(ctx, options, q) {
 }
 
 function makeOptions(ctx) {
-  const q0 = Object.assign({tgt: '_top'}, ctx.request.query);
+  const q0 = {tgt: '_top', ...ctx.request.query};
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q0[k] = 'on';
   }
@@ -285,12 +285,13 @@ function makePropsForFullHtml(ctx, dt) {
   const geoUrlArgs = ctx.state.geoUrlArgs;
   const yearInfo = getDefaultYear(dt, new HDate(dt));
   const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
-  return Object.assign({
+  return {
     summary: briefText.join('. '),
     jsonLD,
     locationName: location.getName(),
     fridgeURL,
-  }, yearInfo);
+    ...yearInfo,
+  };
 }
 
 function getJsonLD(ctx, candles, havdalah, torahPortion) {

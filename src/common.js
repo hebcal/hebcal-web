@@ -166,7 +166,7 @@ const cookieOpts = geoKeys.concat(['geo', 'lg'], Object.keys(numberOpts));
  * @return {Object.<string,string>}
  */
 export function urlArgsObj(query, override={}) {
-  const q = Object.assign({}, query, override);
+  const q = {...query, ...override};
   for (const key of getGeoKeysToRemove(q.geo)) {
     delete q[key];
   }
@@ -364,7 +364,7 @@ function is5DigitZip(str) {
  * @return {any}
  */
 export function processCookieAndQuery(cookieString, defaults, query0) {
-  const query = Object.assign({}, query0);
+  const query = {...query0};
   const ck0 = new URLSearchParams(cookieString || '');
   const ck = {};
   for (const [key, value] of ck0.entries()) {
@@ -398,7 +398,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
       delete query[key];
     }
   }
-  return Object.assign({}, defaults, ck, query);
+  return {...defaults, ...ck, ...query};
 }
 
 const allKeys = new Set();
@@ -1075,7 +1075,7 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
  */
 export function eTagFromOptions(options, attrs) {
   const vers = {core: HebrewCalendar.version(), web: pkg.version};
-  const etagObj = Object.assign(vers, options, attrs);
+  const etagObj = {...vers, ...options, ...attrs};
   return etag(JSON.stringify(etagObj), {weak: true});
 }
 
@@ -1142,7 +1142,7 @@ export function getNumYears(options) {
  * @return {Object.<string,string>}
  */
 export function makeIcalOpts(options, query) {
-  const icalOpts = Object.assign({}, options);
+  const icalOpts = {...options};
   const emoji = query.emoji;
   if (emoji === '1' || emoji === 'on') {
     icalOpts.emoji = true;
@@ -1300,7 +1300,8 @@ export const queryToName = {
   dpa: 'Pirkei Avot',
 };
 
-export const queryLongDescr = Object.assign({}, queryToName, {
+export const queryLongDescr = {
+  ...queryToName,
   s: 'Parashat ha-Shavua - Weekly Torah Portion',
   o: '7 weeks from the second night of Pesach to the day before Shavuot',
   d: 'Daily Hebrew Dates',
@@ -1316,7 +1317,7 @@ export const queryLongDescr = Object.assign({}, queryToName, {
   yyomi: 'Jerusalem Talmud (Vilna Edition)',
   dw: 'One page of Babylonian Talmud per week',
   dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
-});
+};
 
 /**
  * @param {Object.<string,string>} query

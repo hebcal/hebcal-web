@@ -25,7 +25,7 @@ export async function fridgeShabbat(ctx) {
  * @return {Object}
  */
 function makeProperties(ctx) {
-  const query = Object.assign({}, ctx.request.query);
+  const query = {...ctx.request.query};
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     query[k] = 'on';
   }

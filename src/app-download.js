@@ -225,7 +225,7 @@ app.use(async function fixup2(ctx, next) {
     const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
     try {
       const q = deserializeDownload(data);
-      ctx.request.query = Object.assign(q, ctx.request.query);
+      ctx.request.query = {...q, ...ctx.request.query};
       ctx.request.path = '/export/' + filename;
     } catch (err) {
       const userAgent = ctx.get('user-agent');
