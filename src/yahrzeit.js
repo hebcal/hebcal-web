@@ -13,6 +13,7 @@ import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
+  YAHRZEIT, BIRTHDAY,
   getCalendarNames, makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {makeLogInfo} from './logger.js';
@@ -519,29 +520,7 @@ async function makeYahrzeitEvents(maxId, query, reminder) {
     const events0 = await getEventsForId(query, id, startYear, years);
     events = events.concat(events0);
     if (reminder) {
-      const reminders = events0
-          .filter((ev) => ev.type === 'Yahrzeit')
-          .map((ev) => {
-            const hd = ev.getDate().prev();
-            const dt = hd.greg();
-            const dow = hd.getDay();
-            const eventTimeStr = dow === 6 ? '20:00' : dow === 5 ? '14:30' : '16:30';
-            const uid = 'reminder-' + dayjs(dt).format('YYYYMMDD') + '-' + ev.hash + '-' + id;
-            return new Event(
-                hd,
-                `${ev.name} Yahrzeit reminder`,
-                flags.USER_EVENT,
-                {
-                  eventTime: dt,
-                  eventTimeStr,
-                  memo: ev.memo,
-                  emoji: ev.emoji,
-                  alarm: 'P0DT0H0M0S',
-                  uid,
-                  category: 'Personal',
-                },
-            );
-          });
+      const reminders = makeReminderEvents(events0, id);
       events = events.concat(reminders);
     }
   }
@@ -557,6 +536,36 @@ async function makeYahrzeitEvents(maxId, query, reminder) {
   }
   events.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   return events;
+}
+
+function getAlarmTime(hd) {
+  switch (hd.getDay()) {
+    case 6: return '20:00';
+    case 5: return '14:30';
+    default: return '16:30';
+  }
+}
+
+function makeReminderEvents(events, id) {
+  const yahrzeitEvents = events.filter((ev) => ev.type === YAHRZEIT);
+  return yahrzeitEvents.map((ev) => {
+    const hd = ev.getDate().prev();
+    const dt = hd.greg();
+    const uid = 'reminder-' + dayjs(dt).format('YYYYMMDD') + '-' + ev.hash + '-' + id;
+    const name = ev.name;
+    const subj = hebrewRe.test(name) ?
+      `${name} ${YAHRZEIT_HE} תזכורת` :
+      `${name} Yahrzeit reminder`;
+    return new Event(hd, subj, flags.USER_EVENT, {
+      eventTime: dt,
+      eventTimeStr: getAlarmTime(hd),
+      memo: ev.memo,
+      emoji: ev.emoji,
+      alarm: 'P0DT0H0M0S',
+      uid,
+      category: 'Personal',
+    });
+  });
 }
 
 /**
@@ -586,8 +595,10 @@ async function getEventsForId(query, id, startYear, numYears) {
 
 const hebrewRe = /[\u05d0-\u05ea]/;
 
+const YAHRZEIT_HE = 'יארצייט';
+
 const en2he = {
-  Yahrzeit: 'יארצייט',
+  Yahrzeit: YAHRZEIT_HE,
   Birthday: 'יום הולדת',
   Anniversary: 'יום נישואין',
 };
@@ -608,7 +619,7 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const isHebrewName = hebrewRe.test(name);
   const type = info.type;
   if (type !== 'Other') {
-    const isYahrzeit = type === 'Yahrzeit';
+    const isYahrzeit = type === YAHRZEIT;
     if (isHebrewName) {
       const prefix = en2he[type];
       subj = isYahrzeit ?
@@ -638,8 +649,8 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
  */
 async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl) {
   const type = info.type;
-  const isYahrzeit = (type === 'Yahrzeit');
-  const isBirthday = (type === 'Birthday');
+  const isYahrzeit = type === YAHRZEIT;
+  const isBirthday = type === BIRTHDAY;
   const origDt = info.day.toDate();
   const hd = isYahrzeit ?
     HebrewCalendar.getYahrzeit(hyear, origDt) :
@@ -677,8 +688,8 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
 
 function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId) {
   const type = info.type;
-  const isYahrzeit = (type === 'Yahrzeit');
-  const isBirthday = (type === 'Birthday');
+  const isYahrzeit = type === YAHRZEIT;
+  const isBirthday = type === BIRTHDAY;
   const isOther = (type === 'Other');
   const name = info.name;
   const nameAndType = isOther ? name : `${name}’s ${typeStr}`;
