@@ -57,15 +57,8 @@ export async function hebcalDownload(ctx) {
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
     }
-    for (const ev of events) {
-      if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-        const parshaName = ev.getDesc().substring(9);
-        const meta = lookupParshaMeta(parshaName);
-        const memo = meta.summaryHtml?.html;
-        if (memo) {
-          ev.memo = memo;
-        }
-      }
+    if (options.sedrot) {
+      addParshaMemos(events);
     }
     if (options.omer && options.location) {
       addLocationOmerAlarms(options, events);
@@ -89,6 +82,17 @@ export async function hebcalDownload(ctx) {
     options.utmCampaign = query.utm_campaign || 'pdf-' + campaignName(events, options);
     renderPdf(doc, events, options);
     doc.end();
+  }
+}
+
+function addParshaMemos(events) {
+  for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
+    const parshaName = ev.getDesc().substring(9);
+    const meta = lookupParshaMeta(parshaName);
+    const memo = meta.summaryHtml?.html;
+    if (memo) {
+      ev.memo = memo;
+    }
   }
 }
 
