@@ -21,6 +21,7 @@ const hebcalClient = {
       showAllSuggestions: true,
       preventBrowserAutocomplete: true,
       noEmptyQuery: true,
+      fixed: true,
       onBeforeFetch: (inst) => {
         inst._config.notFoundMessage = undefined;
         const query = cityTypeaheadEl.value;

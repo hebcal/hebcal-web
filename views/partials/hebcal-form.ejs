@@ -117,8 +117,8 @@ if (typeof year !== 'string' || year.length === 0) {
 <input type="hidden" name="geo" value="<%= q.geo || 'none' %>" id="geo">
 <input type="hidden" name="zip" value="<%= q.zip || '' %>" id="zip">
 <input type="hidden" name="geonameid" value="<%= q.geonameid || '' %>" id="geonameid">
-  <div class="city-typeahead" style="margin-bottom:12px">
-    <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control typeahead" id="city-typeahead" autocomplete="off" placeholder="Search for city or ZIP code">
+  <div>
+    <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control" id="city-typeahead" autocomplete="off" placeholder="Search for city or ZIP code">
   </div>
 </div>
 <div class="row gx-2 mb-3">
