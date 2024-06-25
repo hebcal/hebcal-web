@@ -97,7 +97,6 @@ app.use(async function fixup0(ctx, next) {
   ctx.state.lang = 'en'; // used by some ejs templates
   ctx.state.spriteHref = '/i/' + pkg.config.sprite;
   ctx.state.cspriteHref = '/i/' + pkg.config.csprite;
-  ctx.state.tacssHref = '/i/' + pkg.config.typeaheadcss;
   ctx.state.clientAppHref = '/i/' + pkg.config.clientapp;
   ctx.state.hostname = os.hostname(); // used by some ejs templates
   // don't allow compress middleware to assume that a missing

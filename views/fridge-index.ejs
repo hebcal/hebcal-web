@@ -1,0 +1,34 @@
+<%- await include('partials/header-and-navbar.ejs', {
+  title: 'Candle-lighting Times Year at a Glance - Hebcal',
+}) -%>
+<div class="row mt-2">
+<div class="col">
+<h1>Candle-lighting Times Year at a Glance</h1>
+<p>Fill out the form below to get Shabbat and holiday candle lighting times and
+<em>Parashat haShavuah</em> (weekly Torah Portion) for the entire year on a
+single page. You can print it out and post it on your refrigerator.</p>
+
+<form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
+<input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
+<input type="hidden" name="zip" value="<%= q.zip %>" id="zip">
+<input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
+<%- await include('partials/city-and-havdalah.ejs') -%>
+<div class="mt-2">
+<label class="mb-1" for="lg">Event titles</label>
+<select name="lg" class="form-select" id="lg">
+<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<option <%= (q.lg === langName) ? 'selected' : '' %> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% } -%>
+</select>
+</div>
+<div class="mt-3">
+<button type="submit" class="btn btn-primary">
+  <svg class="icon mb-1"><use xlink:href="<%=spriteHref%>#gi-candle"></use></svg>
+  Get Shabbat Times</button>
+</div>
+</form>
+</div><!-- .col -->
+</div><!-- .row -->
+<%- await include('partials/footer.ejs', {
+  footerScripts: {tooltip: true, typeahead: true}
+}) -%>

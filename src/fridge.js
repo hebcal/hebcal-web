@@ -3,6 +3,7 @@ import {empty} from './empty.js';
 import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   cleanQuery,
   makeGeoUrlArgs,
+  langNames,
   cacheControl, queryDefaultCandleMins} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
@@ -12,6 +13,12 @@ import createError from 'http-errors';
 const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function fridgeShabbat(ctx) {
+  if (ctx.request.path.startsWith('/fridge')) {
+    return ctx.render('fridge-index', {
+      q: ctx.request.query,
+      langNames,
+    });
+  }
   const p = makeProperties(ctx);
   ctx.lastModified = ctx.launchDate;
   if (!empty(ctx.request.query.year)) {
