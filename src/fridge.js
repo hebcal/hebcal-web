@@ -4,6 +4,8 @@ import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   cleanQuery,
   makeGeoUrlArgs,
   langNames,
+  processCookieAndQuery,
+  getLocationFromQuery,
   cacheControl, queryDefaultCandleMins} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
@@ -14,8 +16,11 @@ const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function fridgeShabbat(ctx) {
   if (ctx.request.path.startsWith('/fridge')) {
+    const q = processCookieAndQuery(ctx.cookies.get('C'), {}, ctx.request.query);
+    const location = getLocationFromQuery(ctx.db, q);
+    q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
     return ctx.render('fridge-index', {
-      q: ctx.request.query,
+      q,
       langNames,
     });
   }
