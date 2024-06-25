@@ -108,7 +108,8 @@ const hebcalClient = {
       readyToSubmit = true;
     }
 
-    function keyupOrKeypress(event) {
+    let backspaceClearsEverything = false;
+    cityTypeaheadEl.addEventListener('keydown', function(event) {
       if (!autoSubmit && !cityTypeaheadEl.value.length) {
         clearGeo();
       }
@@ -123,8 +124,7 @@ const hebcalClient = {
         const zip5 = val.substring(0, 5);
         selectSuggestion({geo: 'zip', id: zip5});
       }
-      const code = event.keyCode || event.which;
-      if (code === 13) {
+      if (event.key === 'Enter') {
         const selection = autocomplete.getSelection();
         if (!selection) {
           autocomplete._moveSelection('next');
@@ -134,15 +134,19 @@ const hebcalClient = {
         }
         event.preventDefault();
         return false;
+      } else if (event.key === 'Backspace') {
+        if (backspaceClearsEverything) {
+          clearGeo();
+          autocomplete.hideSuggestions();
+          autocomplete.clear();
+        }
       }
-    }
-    cityTypeaheadEl.addEventListener('keyup', keyupOrKeypress);
-    cityTypeaheadEl.addEventListener('keypress', keyupOrKeypress);
+      backspaceClearsEverything = false;
+      return true;
+    });
 
-    cityTypeaheadEl.addEventListener('focus', function(e) {
-      clearGeo();
-      autocomplete.hideSuggestions();
-      autocomplete.clear();
+    cityTypeaheadEl.addEventListener('focus', function() {
+      backspaceClearsEverything = true;
     });
   },
 };
