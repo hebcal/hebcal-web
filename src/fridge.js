@@ -16,13 +16,7 @@ const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function fridgeShabbat(ctx) {
   if (ctx.request.path.startsWith('/fridge')) {
-    const q = processCookieAndQuery(ctx.cookies.get('C'), {}, ctx.request.query);
-    const location = getLocationFromQuery(ctx.db, q);
-    q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
-    return ctx.render('fridge-index', {
-      q,
-      langNames,
-    });
+    return fridgeIndex(ctx);
   }
   const p = makeProperties(ctx);
   ctx.lastModified = ctx.launchDate;
@@ -30,6 +24,21 @@ export async function fridgeShabbat(ctx) {
     ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   }
   return ctx.render('fridge', p);
+}
+
+function fridgeIndex(ctx) {
+  const cookieStr = ctx.cookies.get('C');
+  let q = ctx.request.query;
+  if (cookieStr) {
+    ctx.set('Cache-Control', 'private');
+    q = processCookieAndQuery(cookieStr, {}, ctx.request.query);
+    const location = getLocationFromQuery(ctx.db, q);
+    q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
+  }
+  return ctx.render('fridge-index', {
+    q,
+    langNames,
+  });
 }
 
 /**
