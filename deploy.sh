@@ -21,7 +21,6 @@ npx rollup -c
 
 compress_file ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_clientapp
-compress_file ./static/i/$npm_package_config_typeaheadcss
 compress_file ./static/i/$npm_package_config_csprite
 
 # deploy for prod
