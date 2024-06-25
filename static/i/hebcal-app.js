@@ -1,7 +1,7 @@
 import Autocomplete from './autocomplete.js';
 
 const hebcalClient = {
-  createCityTypeahead: function(autoSubmit) {
+  createCityTypeahead: function(autoSubmit, fixedPosition) {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const doFlags = navigator.userAgent.indexOf('Win') === -1;
     const cityTypeaheadEl = document.getElementById('city-typeahead');
@@ -21,7 +21,7 @@ const hebcalClient = {
       showAllSuggestions: true,
       preventBrowserAutocomplete: true,
       noEmptyQuery: true,
-      fixed: true,
+      fixed: Boolean(fixedPosition),
       onBeforeFetch: (inst) => {
         inst._config.notFoundMessage = undefined;
         const query = cityTypeaheadEl.value;

@@ -250,7 +250,10 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<% const typeaheadScript = await include('partials/script-typeahead.ejs'); -%>
+<% const hebcalFormScript = await include('partials/script-hebcal-form.ejs'); -%>
 <%- await include('partials/footer.ejs', {
-  footerScripts: {clipboard: true, tooltip: true, typeahead: true},
-  xtra_html: await include('partials/script-hebcal-form.ejs'),
+  footerScripts: {clipboard: true, tooltip: true},
+  xtra_html: typeaheadScript.replace('createCityTypeahead(false)',
+    'createCityTypeahead(true, true)') + hebcalFormScript,
 }) _%>
