@@ -479,19 +479,7 @@ export async function yahrzeitDownload(ctx) {
   ctx.state.trace.set('makeYahrzeitEvents-start', Date.now());
   const events = await makeYahrzeitEvents(maxId, query, reminder);
   ctx.state.trace.set('makeYahrzeitEvents-end', Date.now());
-  if (events.length === 0) {
-    ctx.throw(400, 'No events');
-  }
-  let lastModified = details.lastModified;
-  const now = new Date();
-  if (!lastModified) {
-    // An old /v2/y/ URL won't have a lastModified
-    lastModified = now;
-  }
-  const firstEventDt = events[0].getDate().greg();
-  if (firstEventDt > lastModified && firstEventDt < now) {
-    lastModified = firstEventDt;
-  }
+  const lastModified = makeLastModified(details, events);
   query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
@@ -526,6 +514,23 @@ export async function yahrzeitDownload(ctx) {
     ctx.body = '\uFEFF' + csv;
     ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
+}
+
+function makeLastModified(details, events) {
+  let lastModified = details.lastModified;
+  const now = new Date();
+  if (!lastModified) {
+    // An old /v2/y/ URL won't have a lastModified
+    lastModified = now;
+  }
+  if (events.length === 0) {
+    return lastModified;
+  }
+  const firstEventDt = events[0].getDate().greg();
+  if (firstEventDt > lastModified && firstEventDt < now) {
+    lastModified = firstEventDt;
+  }
+  return lastModified;
 }
 
 /**
