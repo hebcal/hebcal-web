@@ -1,4 +1,4 @@
-import Autocomplete from './autocomplete.js';
+import Autocomplete from 'bootstrap5-autocomplete';
 
 const hebcalClient = {
   createCityTypeahead: function(autoSubmit, fixedPosition) {
@@ -20,7 +20,6 @@ const hebcalClient = {
       maximumItems: 10,
       showAllSuggestions: true,
       preventBrowserAutocomplete: true,
-      noEmptyQuery: true,
       fixed: Boolean(fixedPosition),
       onBeforeFetch: (inst) => {
         inst._config.notFoundMessage = undefined;
