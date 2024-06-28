@@ -1,6 +1,6 @@
 import {Event, HDate, HebrewCalendar, Locale,
   flags, gematriya, months} from '@hebcal/core';
-import {eventsToIcalendar} from '@hebcal/icalendar';
+import {IcalEvent, eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi, eventToFullCalendar,
   pad4, pad2} from '@hebcal/rest-api';
 import {isoDateStringToDate} from './dateUtil.js';
@@ -20,7 +20,7 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
-import {murmur32HexSync} from 'murmurhash3';
+import {murmur128HexSync, murmur32HexSync} from 'murmurhash3';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 const MIN_YEARS = 2;
@@ -504,7 +504,8 @@ export async function yahrzeitDownload(ctx) {
       sequence: +(query.seq) || 1,
     };
     const icalOpt = makeIcalOpts(opts, query);
-    ctx.body = await eventsToIcalendar(events, icalOpt);
+    const events2 = events.length > 0 ? events : makeDummyEvent(ctx);
+    ctx.body = await eventsToIcalendar(events2, icalOpt);
     ctx.state.trace.set('eventsToIcalendar-end', Date.now());
   } else if (extension == '.csv') {
     ctx.state.trace.set('eventsToCsv-start', Date.now());
@@ -514,6 +515,22 @@ export async function yahrzeitDownload(ctx) {
     ctx.body = '\uFEFF' + csv;
     ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
+}
+
+function makeDummyEvent(ctx) {
+  const dt = new Date();
+  const ev = new Event(new HDate(dt), 'Calendar contains no events', flags.USER_EVENT);
+  const url = ctx.request.url;
+  const id = ctx.state.relcalid || murmur128HexSync(url);
+  ev.uid = 'yahrzeit-' + IcalEvent.formatYYYYMMDD(dt) + '-' + id + '-dummy';
+  ev.alarm = false;
+  if (ctx.state.relcalid) {
+    const id = ctx.state.relcalid;
+    ev.memo = `To edit this Hebcal Yahrzeit + Anniversary Calendar, visit https://www.hebcal.com/yahrzeit/edit/${id}`;
+  } else {
+    ev.memo = 'To create a new Hebcal Yahrzeit + Anniversary Calendar, visit https://www.hebcal.com/yahrzeit';
+  }
+  return [ev];
 }
 
 function makeLastModified(details, events) {
