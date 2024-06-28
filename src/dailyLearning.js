@@ -97,7 +97,7 @@ export function dailyLearningApp(ctx) {
   const readings = getLeyningOnDate(hd, il, true);
   for (const reading of readings) {
     const isWeekday = Boolean(reading.weekday);
-    const isShabbatParsha = reading.fullkriyah && typeof reading.parshaNum === 'number';
+    const isShabbatParsha = reading.fullkriyah && typeof reading.parshaNum !== 'undefined';
     const prefix = isWeekday ? 'Weekday Torah reading' :
       isShabbatParsha ? 'Shabbat Torah reading' :
       reading.fullkriyah ? 'Holiday Torah reading' :
