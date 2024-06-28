@@ -282,12 +282,12 @@ app.use(async function router(ctx, next) {
   } else if (rpath.startsWith('/export') ||
              rpath.startsWith('/yahrzeit/yahrzeit.cgi/') ||
              rpath.startsWith('/hebcal/index.cgi/')) {
-    ctx.set('Cache-Control', 'max-age=2592000');
     ctx.state.logQuery = true;
     const vv = ctx.request.query.v;
     if (typeof vv === 'string' && vv[0] === 'y') {
       return yahrzeitDownload(ctx);
     } else if (vv === '1' || vv === 'now') {
+      ctx.set('Cache-Control', 'max-age=2592000');
       return hebcalDownload(ctx);
     } else {
       const status = typeof vv === 'undefined' ? 404 : 400;
