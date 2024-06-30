@@ -1,5 +1,5 @@
-import {Zmanim, flags} from '@hebcal/core';
-import {eventsToIcalendar} from '@hebcal/icalendar';
+import {HDate, Event, Zmanim, flags} from '@hebcal/core';
+import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
@@ -8,6 +8,7 @@ import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
   cleanQuery,
   makeIcalOpts, getNumYears, localeMap} from './common.js';
 import {lookupParshaMeta} from './parshaCommon.js';
+import {murmur128HexSync} from 'murmurhash3';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -31,12 +32,9 @@ export async function hebcalDownload(ctx) {
     options.numYears = getNumYears(options);
   }
   const events = makeHebrewCalendar(ctx, options);
-  if (!events.length) {
-    ctx.throw(400, 'Please select at least one event option');
-  }
   // set Last-Modified date to the date of the first calendar
   // event, unless that would be in the future
-  const firstEvDt = events[0].getDate().greg();
+  const firstEvDt = events.length > 0 ? events[0].getDate().greg() : new Date();
   ctx.lastModified = firstEvDt > ctx.launchDate ? ctx.launchDate : firstEvDt;
   // etag includes actual year because options.year is never 'now'
   const opts = {...query, ...options};
@@ -64,7 +62,10 @@ export async function hebcalDownload(ctx) {
       addLocationOmerAlarms(options, events);
     }
     ctx.response.type = 'text/calendar; charset=utf-8';
-    ctx.body = await eventsToIcalendar(events, icalOpt);
+    icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
+    const events2 = events.length > 0 ? events : makeDummyEvent(ctx);
+    const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
+    ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (csv) {
     const csv = eventsToCsv(events, options);
     ctx.response.attachment(basename(path));
@@ -73,6 +74,11 @@ export async function hebcalDownload(ctx) {
     const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
     ctx.body = byteOrderMark + csv;
   } else if (extension == '.pdf') {
+    if (!events.length) {
+      ctx.remove('Cache-Control');
+      ctx.remove('ETag');
+      ctx.throw(400, 'Please select at least one event option');
+    }
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
@@ -83,6 +89,19 @@ export async function hebcalDownload(ctx) {
     renderPdf(doc, events, options);
     doc.end();
   }
+}
+
+function makeDummyEvent(ctx) {
+  const dt = new Date();
+  const ev = new Event(new HDate(dt), 'Calendar contains no events', flags.USER_EVENT);
+  const id = murmur128HexSync(ctx.request.url);
+  const isoDateStr = IcalEvent.formatYYYYMMDD(dt);
+  ev.uid = `hebcal-${isoDateStr}-${id}-dummy`;
+  ev.alarm = false;
+  ev.memo = 'To create a new Hebcal holiday calendar, visit https://www.hebcal.com/hebcal';
+  ctx.set('Cache-Control', 'max-age=86400');
+  ctx.remove('ETag');
+  return [ev];
 }
 
 function addParshaMemos(events) {

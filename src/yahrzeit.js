@@ -540,7 +540,7 @@ function makeDummyEvent(ctx) {
     ev.memo = 'To create a new Hebcal Yahrzeit + Anniversary Calendar, visit https://www.hebcal.com/yahrzeit';
   }
   ctx.set('Cache-Control', 'max-age=86400');
-  ctx.response.etag = eTagFromOptions({id, dt: isoDateStr}, {});
+  ctx.remove('ETag');
   return [ev];
 }
 
