@@ -506,7 +506,11 @@ export async function yahrzeitDownload(ctx) {
     };
     const icalOpt = makeIcalOpts(opts, query);
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
-    const events2 = events.length > 0 ? events : makeDummyEvent(ctx);
+    const zeroEvents = events.length === 0;
+    const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
+    if (zeroEvents) {
+      icalOpt.publishedTTL = false;
+    }
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
     ctx.body = await icalEventsToString(icals, icalOpt);
     ctx.state.trace.set('eventsToIcalendar-end', Date.now());

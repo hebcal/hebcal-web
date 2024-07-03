@@ -1139,7 +1139,7 @@ export function getNumYears(options) {
  * @private
  * @param {CalOptions} options
  * @param {Object.<string,string>} query
- * @return {Object.<string,string>}
+ * @return {Object.<string,any>}
  */
 export function makeIcalOpts(options, query) {
   const icalOpts = {...options};

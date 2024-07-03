@@ -63,7 +63,11 @@ export async function hebcalDownload(ctx) {
     }
     ctx.response.type = 'text/calendar; charset=utf-8';
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
-    const events2 = events.length > 0 ? events : makeDummyEvent(ctx);
+    const zeroEvents = events.length === 0;
+    const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
+    if (zeroEvents) {
+      icalOpt.publishedTTL = false;
+    }
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (csv) {
