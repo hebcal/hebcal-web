@@ -549,14 +549,14 @@ function makeDummyEvent(ctx) {
 }
 
 function makeLastModified(details, events) {
-  let lastModified = details.lastModified;
   const now = new Date();
+  if (events.length === 0) {
+    return now;
+  }
+  let lastModified = details.lastModified;
   if (!lastModified) {
     // An old /v2/y/ URL won't have a lastModified
     lastModified = now;
-  }
-  if (events.length === 0) {
-    return lastModified;
   }
   const firstEventDt = events[0].getDate().greg();
   if (firstEventDt > lastModified && firstEventDt < now) {
