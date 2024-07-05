@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {greg, abs2hebrew, getMonthName} from '@hebcal/hdate';
+import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
+import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdate-base';
 
 /**
  * @private
@@ -92,7 +93,7 @@ function getEventClassName(evt) {
 }
 
 function getHebMonthName(d) {
-  const abs = greg.greg2abs(d.toDate());
+  const abs = greg2abs(d.toDate());
   const hdt = abs2hebrew(abs);
   const localeData = window['hebcal'].localeConfig;
   const str = localeData.hebMonths[hdt.mm] || getMonthName(hdt.mm, hdt.yy);

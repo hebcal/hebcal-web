@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     timeZone: 'local',
     eventDisplay: 'block',
     dayCellContent: function(info, create) {
-      const abs = hdate.greg.greg2abs(info.date);
+      const abs = hdate.greg2abs(info.date);
       const hdt = hdate.abs2hebrew(abs);
       const monthName0 = hdate.getMonthName(hdt.mm, hdt.yy);
       const monthName = monthName0.replace(/'/g, '’');

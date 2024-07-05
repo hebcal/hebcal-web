@@ -1,4 +1,7 @@
-import {greg, abs2hebrew, gematriya, months, isLeapYear} from '@hebcal/hdate';
+import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
+import {gematriya} from '@hebcal/hdate/dist/esm/gematriya';
+import {abs2hebrew, months, isLeapYear} from '@hebcal/hdate/dist/esm/hdate-base';
+
 const ADAR_I = months.ADAR_I;
 const monthNames = [
   '',
@@ -17,7 +20,7 @@ const monthNames = [
   'אדר ב׳',
 ];
 const dt = new Date();
-let abs = greg.greg2abs(dt);
+let abs = greg2abs(dt);
 if (dt.getHours() > 19) {
   abs++;
 }

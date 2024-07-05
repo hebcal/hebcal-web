@@ -1,9 +1,9 @@
-import {greg} from '@hebcal/hdate/dist/esm/greg';
+import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {abs2hebrew} from '@hebcal/hdate/dist/esm/hdate-base';
 import {gematriyaDate0} from './gematriyaDate';
 function hdateStr() {
   const dt = new Date();
-  let abs = greg.greg2abs(dt);
+  let abs = greg2abs(dt);
   if (dt.getHours() > 19) {
     abs++;
   }

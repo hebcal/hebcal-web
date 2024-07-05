@@ -1,4 +1,4 @@
-import {greg} from '@hebcal/hdate/dist/esm/greg';
+import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdate-base';
 function ordinal(n) {
   const s = ['th', 'st', 'nd', 'rd'];
@@ -6,7 +6,7 @@ function ordinal(n) {
   return n + (s[(v - 20) % 10] || s[v] || s[0]);
 }
 const dt = new Date();
-let abs = greg.greg2abs(dt);
+let abs = greg2abs(dt);
 if (dt.getHours() > 19) {
   abs++;
 }
