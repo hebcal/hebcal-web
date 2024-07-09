@@ -2,6 +2,35 @@
 <script><%- await include('hdate.bundle.min.js') %></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+function getHebMonthName(dt) {
+  const abs = hdate.greg2abs(dt);
+  const hdt = hdate.abs2hebrew(abs);
+  const str = hdate.getMonthName(hdt.mm, hdt.yy);
+  hdt.monthName = str.replace(/'/g, '’');
+  return hdt;
+}
+function makeHebMonthRangeStr(startDt, endDt) {
+  const start = getHebMonthName(startDt);
+  const end = getHebMonthName(endDt);
+  let str = start.monthName;
+  if (end.yy !== start.yy) {
+    str += ' ' + start.yy;
+  }
+  if (end.mm !== start.mm) {
+    str += ' – ' + end.monthName;
+  }
+  str += ' ' + end.yy;
+  return str;
+}
+let hebmonthEl = null;
+function monthSubtitle(view) {
+  const end = new Date(view.currentEnd.getTime());
+  end.setDate(end.getDate() - 1);
+  const s = makeHebMonthRangeStr(view.currentStart, end);
+  if (hebmonthEl) {
+    hebmonthEl.innerText = s;
+  }
+}
  let calendar = null;
  const calendarEl = document.getElementById('calendar');
  calendarEl.style.display = 'none';
@@ -14,6 +43,14 @@ document.addEventListener('DOMContentLoaded', function() {
   if (fc) {
    makeFullCalendar();
    calendar.render();
+   const toolbarEl = document.querySelector('.fc-header-toolbar .fc-toolbar-chunk:nth-child(2)');
+   if (toolbarEl && !hebmonthEl) {
+      hebmonthEl = document.createElement('h5');
+      hebmonthEl.id = 'hebmonth';
+      hebmonthEl.className = 'text-burgundy ms-0 mt-1';
+      toolbarEl.appendChild(hebmonthEl);
+      monthSubtitle(calendar.view);
+    }
   }
   toggleMonth.blur();
  });
@@ -93,6 +130,9 @@ document.addEventListener('DOMContentLoaded', function() {
     },
   };
   calendar = new FullCalendar.Calendar(calendarEl, opts);
+  calendar.on('datesSet', function(dateInfo) {
+    monthSubtitle(dateInfo.view);
+  });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'ArrowLeft' && !e.metaKey) {
       calendar.prev();
