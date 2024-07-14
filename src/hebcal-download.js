@@ -147,6 +147,7 @@ function addLocationOmerAlarms(options, events) {
  * @return {string}
  */
 function campaignName(events, options) {
-  const title = getCalendarTitle(events, options);
+  const opts = {...options, preferAsciiName: true};
+  const title = getCalendarTitle(events, opts);
   return makeAnchor(title.substring(title.indexOf(' ') + 1));
 }
