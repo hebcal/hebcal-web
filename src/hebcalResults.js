@@ -18,7 +18,7 @@ function dateOnly(s) {
  * @return {dayjs.Dayjs}
  */
 function makeDayjs(s) {
-  const isBCE = s[0] === '-';
+  const isBCE = s.startsWith('-');
   if (isBCE) {
     s = s.substring(1);
   }
@@ -85,8 +85,8 @@ function getEventClassName(evt) {
   }
   const link = evt.link;
   if (typeof link === 'string' &&
-    link.substring(0, 4) === 'http' &&
-    link.substring(0, 23) !== 'https://www.hebcal.com/') {
+    link.startsWith('http') &&
+    !link.startsWith('https://www.hebcal.com/')) {
     className += ' outbound';
   }
   return className;
