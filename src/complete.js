@@ -2,6 +2,7 @@ import {cacheControl} from './common.js';
 import flag from 'emoji-flag';
 
 const NOTFOUND = {error: 'Not Found'};
+const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function geoAutoComplete(ctx) {
   ctx.lastModified = ctx.launchDate;
@@ -32,7 +33,7 @@ export async function geoAutoComplete(ctx) {
         item.flag = flag(cc.toUpperCase());
       }
     }
-    ctx.set('Cache-Control', cacheControl(1));
+    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
     ctx.body = items;
   } else {
     ctx.status = 404;

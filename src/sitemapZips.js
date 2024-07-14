@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import {cacheControl} from './common.js';
+import {CACHE_CONTROL_30DAYS} from './common.js';
 
 export async function sitemapZips(ctx) {
   const db = new Database('zips.sqlite3', {fileMustExist: true});
@@ -9,8 +9,8 @@ export async function sitemapZips(ctx) {
       .map((r) => `https://www.hebcal.com/shabbat?zip=${r.ZipCode}&b=18&M=on&lg=s\n`)
       .join('');
   db.close();
-  ctx.lastModified = ctx.launchDate;
-  ctx.set('Cache-Control', cacheControl(30));
+  ctx.lastModified = new Date();
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   ctx.type = 'text/plain';
   ctx.body = body;
 }

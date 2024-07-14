@@ -1,13 +1,10 @@
 import dayjs from 'dayjs';
-import {cacheControl, httpRedirect} from './common.js';
+import {httpRedirect, CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
-
-const CACHE_CONTROL_30DAYS = cacheControl(30);
-const CACHE_CONTROL_1_YEAR = cacheControl(365);
 
 export async function omerApp(rpath, ctx) {
   if (rpath === '/omer/sitemap.txt') {

@@ -7,6 +7,7 @@ import {basename} from 'path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults, CACHE_CONTROL_7DAYS,
+  CACHE_CONTROL_30DAYS,
   queryDefaultCandleMins} from './common.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import flag from 'emoji-flag';
@@ -132,7 +133,7 @@ export async function shabbatBrowse(ctx) {
   const base = base0.endsWith('.xml') ? base0.substring(0, base0.length - 4) : base0;
   if (rpath === '/shabbat/browse/') {
     ctx.lastModified = ctx.launchDate;
-    ctx.set('Cache-Control', 'max-age=2592000');
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return ctx.render('shabbat-browse', {
       title: 'Shabbat candle-lighting times for world cities - Hebcal',
       continents: Object.values(continents),
@@ -140,6 +141,7 @@ export async function shabbatBrowse(ctx) {
   }
   if (rpath === '/shabbat/browse/sitemap.xml') {
     ctx.type = 'text/xml';
+    ctx.lastModified = new Date();
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
@@ -196,7 +198,7 @@ async function countryPage(ctx, countryCode) {
     const countryUrlToken = makeAnchor(countryName);
     listItems.forEach((a1) => a1.href = countryUrlToken + '-' + a1.id);
     ctx.lastModified = ctx.launchDate;
-    ctx.set('Cache-Control', 'max-age=2592000');
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return render(ctx, 'shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,

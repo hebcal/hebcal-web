@@ -823,7 +823,9 @@ export const localeMap = {
   'uk': 'uk',
 };
 
-export const CACHE_CONTROL_IMMUTABLE = cacheControl(365) + ', immutable';
+export const CACHE_CONTROL_1_YEAR = cacheControl(365);
+export const CACHE_CONTROL_IMMUTABLE = CACHE_CONTROL_1_YEAR + ', immutable';
+export const CACHE_CONTROL_30DAYS = cacheControl(30);
 export const CACHE_CONTROL_7DAYS = cacheControl(7);
 
 /**

@@ -14,6 +14,7 @@ import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo,
   logMemoryUsage} from './logger.js';
 import {httpRedirect, stopIfTimedOut, cacheControl,
+  CACHE_CONTROL_30DAYS,
   CACHE_CONTROL_IMMUTABLE} from './common.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeit.js';
@@ -287,7 +288,7 @@ app.use(async function router(ctx, next) {
     if (typeof vv === 'string' && vv[0] === 'y') {
       return yahrzeitDownload(ctx);
     } else if (vv === '1' || vv === 'now') {
-      ctx.set('Cache-Control', 'max-age=2592000');
+      ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
       return hebcalDownload(ctx);
     } else {
       const status = typeof vv === 'undefined' ? 404 : 400;

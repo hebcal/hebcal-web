@@ -3,7 +3,7 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
 import dayjs from 'dayjs';
 import {setDefautLangTz, httpRedirect, lgToLocale,
   localeMap,
-  CACHE_CONTROL_7DAYS, cacheControl,
+  CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR,
 } from './common.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
   getStartAndEnd,
@@ -15,7 +15,6 @@ import {pad4, makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
 import {gematriyaDate} from './gematriyaDate.js';
 
-const CACHE_CONTROL_ONE_YEAR = cacheControl(365);
 /**
  * @param {string} val
  * @return {boolean}
@@ -75,7 +74,7 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = {error: p.message};
     } else if (typeof p.hdates === 'object') {
       ctx.lastModified = ctx.launchDate;
-      ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
+      ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       let result = p;
       const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
       if (cb) {
@@ -85,7 +84,7 @@ export async function hebrewDateConverter(ctx) {
     } else {
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
-        ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
+        ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       }
       let result = {
         gy: p.gy,
@@ -123,7 +122,7 @@ export async function hebrewDateConverter(ctx) {
       p.writeResp = false;
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
-        ctx.set('Cache-Control', CACHE_CONTROL_ONE_YEAR);
+        ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       }
       ctx.body = await ctx.render('converter-xml', p);
     }

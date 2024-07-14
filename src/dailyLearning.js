@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {localeMap, httpRedirect} from './common.js';
+import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR} from './common.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
@@ -39,19 +39,7 @@ export function dailyLearningApp(ctx) {
     httpRedirect(ctx, `/learning/${d.format('YYYY-MM-DD')}`, 302);
     return;
   } else if (rpath === '/learning/sitemap.txt') {
-    const prefix = 'https://www.hebcal.com/learning';
-    let body = '';
-    for (let i = -1; i < 4; i++) {
-      const year = currentYear + i;
-      const startD = dayjs(new Date(year, 0, 1));
-      const endD = dayjs(new Date(year + 1, 0, 1));
-      for (let d = startD; d.isBefore(endD); d = d.add(1, 'day')) {
-        body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
-      }
-    }
-    ctx.lastModified = ctx.launchDate;
-    ctx.type = 'text/plain';
-    ctx.body = body;
+    dailyLearningSitemap(ctx);
     return;
   }
   const dt = isoDateStringToDate(basename(rpath));
@@ -150,4 +138,21 @@ export function dailyLearningApp(ctx) {
     currentYear,
     il,
   });
+}
+
+function dailyLearningSitemap(ctx) {
+  const prefix = 'https://www.hebcal.com/learning';
+  let body = '';
+  for (let i = -1; i < 4; i++) {
+    const year = currentYear + i;
+    const startD = dayjs(new Date(year, 0, 1));
+    const endD = dayjs(new Date(year + 1, 0, 1));
+    for (let d = startD; d.isBefore(endD); d = d.add(1, 'day')) {
+      body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
+    }
+  }
+  ctx.lastModified = ctx.launchDate;
+  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
+  ctx.type = 'text/plain';
+  ctx.body = body;
 }

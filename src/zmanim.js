@@ -2,7 +2,7 @@ import {Zmanim, TimedEvent, HDate, flags,
   HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
 import {empty} from './empty.js';
 import {getLocationFromQuery,
-  CACHE_CONTROL_7DAYS,
+  CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS,
   lgToLocale, eTagFromOptions} from './common.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';
@@ -75,7 +75,7 @@ export async function getZmanim(ctx) {
   }
   const {isRange, startD, endD} = myGetStartAndEnd(ctx, q, loc.getTzid());
   if (isRange || !empty(q.date)) {
-    ctx.set('Cache-Control', 'max-age=2592000');
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     ctx.lastModified = new Date();
   } else {
     expires(ctx);
