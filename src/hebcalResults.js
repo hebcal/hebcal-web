@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {pad2, pad4} from '@hebcal/hdate/dist/esm/pad';
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdate-base';
 
@@ -32,34 +33,6 @@ function makeDayjs(s) {
     dt.setFullYear(yy);
   }
   return dayjs(dt);
-}
-
-/**
- * @param {number} number
- * @return {string}
- */
-function pad4(number) {
-  if (number < 0) {
-    return '-00' + pad4(-number);
-  } else if (number < 10) {
-    return '000' + number;
-  } else if (number < 100) {
-    return '00' + number;
-  } else if (number < 1000) {
-    return '0' + number;
-  }
-  return '' + number;
-}
-
-/**
- * @param {number} number
- * @return {string}
- */
-function pad2(number) {
-  if (number < 10) {
-    return '0' + number;
-  }
-  return '' + number;
 }
 
 /**

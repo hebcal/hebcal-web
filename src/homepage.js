@@ -7,7 +7,7 @@ import {setDefautLangTz, localeMap, lgToLocale,
   shortenUrl,
   makeGeoUrlArgs2,
 } from './common.js';
-import {pad2, pad4} from '@hebcal/rest-api';
+import {pad2, pad4} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';

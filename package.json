@@ -46,9 +46,9 @@
     "rollup": "^4.18.1"
   },
   "dependencies": {
-    "@hebcal/core": "^5.4.9",
+    "@hebcal/core": "^5.4.10",
     "@hebcal/geo-sqlite": "^5.0.5",
-    "@hebcal/hdate": "^0.11.1",
+    "@hebcal/hdate": "^0.11.2",
     "@hebcal/icalendar": "^5.1.1",
     "@hebcal/learning": "^5.1.1",
     "@hebcal/leyning": "^8.2.2",
@@ -83,7 +83,7 @@
     "nodemailer": "^6.9.14",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.15.0",
-    "pino": "^9.2.0",
+    "pino": "^9.3.1",
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.0.0",
     "random-bigint": "0.0.1",

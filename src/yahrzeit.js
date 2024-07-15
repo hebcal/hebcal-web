@@ -1,8 +1,8 @@
 import {Event, HDate, HebrewCalendar, Locale,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
-import {eventsToCsv, eventsToClassicApi, eventToFullCalendar,
-  pad4, pad2} from '@hebcal/rest-api';
+import {eventsToCsv, eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
+import {pad2, pad4} from '@hebcal/hdate';
 import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';

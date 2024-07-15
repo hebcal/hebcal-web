@@ -11,7 +11,8 @@ import {makeGregDate, getBeforeAfterSunsetForLocation,
 import {empty} from './empty.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
 import createError from 'http-errors';
-import {pad4, makeAnchor} from '@hebcal/rest-api';
+import {pad4} from '@hebcal/hdate';
+import {makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
 import {gematriyaDate} from './gematriyaDate.js';
 
