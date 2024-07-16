@@ -6,23 +6,28 @@ import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';
 import send from 'koa-send';
+import {stat} from 'node:fs/promises';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
 const hdateMinDir = '/var/www/dist/views/partials';
 
+function getLocale(rpath) {
+  if (rpath.startsWith('/etc/hdate-he.js')) return 'he';
+  if (rpath.startsWith('/etc/hdate-en.js')) return 'en';
+  if (rpath.startsWith('/etc/hdate-he-v2.js')) return 'he-x-NoNikud';
+  return 'en';
+}
+
 export async function hdateJavascript(ctx) {
-  ctx.lastModified = ctx.launchDate;
+  const locale = getLocale(ctx.request.path);
+  const fileName = `hdate-${locale}.min.js`;
+  const stats = await stat(`${hdateMinDir}/${fileName}`);
+  ctx.lastModified = stats.mtime;
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
     return;
   }
-  const rpath = ctx.request.path;
-  const locale = rpath.startsWith('/etc/hdate-he.js') ? 'he' :
-    rpath.startsWith('/etc/hdate-en.js') ? 'en' :
-    rpath.startsWith('/etc/hdate-he-v2.js') ? 'he-x-NoNikud' :
-    'en';
-  const fileName = `hdate-${locale}.min.js`;
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.type = 'text/javascript';
   return send(ctx, fileName, {root: hdateMinDir});
