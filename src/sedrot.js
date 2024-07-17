@@ -29,13 +29,18 @@ for (const parshaName of allParshiot) {
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
 }
 
+function simchatTorahDate(hyear, il) {
+  const mday = il ? 22 : 23;
+  return new HDate(mday, months.TISHREI, hyear);
+}
+
 function makeVezotEvents(il) {
   const startYear = new HDate().getFullYear() - 2;
-  const mday = il ? 22 : 23;
   const events = [];
   for (let i = 0; i < 18; i++) {
     const hyear = startYear + i;
-    const pe = new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [VEZOT_HABERAKHAH], il);
+    const hd = simchatTorahDate(hyear, il);
+    const pe = new ParshaEvent(hd, [VEZOT_HABERAKHAH], il);
     events.push(pe);
   }
   return events;
@@ -271,10 +276,7 @@ function doTriennialDiffer(a, b) {
   if (a.readSeparately && b.readSeparately) {
     return false;
   }
-  if (!a.date.isSameDate(b)) {
-    return true;
-  }
-  return false;
+  return !a.date.isSameDate(b);
 }
 
 /**
@@ -287,7 +289,15 @@ function doTriennialDiffer(a, b) {
 function doIsraelDiasporaDiffer(parsha, il, hd, triennial) {
   const parshaName = parsha.name;
   const hyear = hd.getFullYear();
+  if (parshaName === VEZOT_HABERAKHAH) {
+    const otherHD = simchatTorahDate(hyear, !il);
+    const anchor = parshaDateAnchor(parshaName, dayjs(otherHD.greg()), !il);
+    return [true, anchor, parshaName];
+  }
   if (triennial.readings) {
+    if (hyear < 5744) {
+      return [false, '', ''];
+    }
     // compare each  3-year index page
     const otherReadings = make3yearTriennial(hyear, parshaName, !il);
     for (let yr = 0; yr <= 2; yr++) {
@@ -320,12 +330,15 @@ function doIsraelDiasporaDiffer(parsha, il, hd, triennial) {
       return [true, anchor, pair];
     }
   }
+  if (hyear < 5744) {
+    return [false, '', ''];
+  }
   const otherTriennial = getRawTriennial(parshaName, hd, !il);
   if (doTriennialDiffer(otherTriennial, triennial)) {
     const anchor = parshaDateAnchor(parshaName, dayjs(hd.greg()), !il);
     return [true, anchor, parshaName];
   }
-  return [false, '', parshaName];
+  return [false, '', ''];
 }
 
 function makePrevNext(parsha, date, hd, il) {
@@ -529,8 +542,8 @@ function findParshaEvent(events, parshaName, il) {
   if (parshaName === VEZOT_HABERAKHAH) {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
-    const mday = il ? 22 : 23;
-    return new ParshaEvent(new HDate(mday, months.TISHREI, hyear), [parshaName], il);
+    const hd = simchatTorahDate(hyear, il);
+    return new ParshaEvent(hd, [parshaName], il);
   }
   const desc = 'Parashat ' + parshaName;
   const event = events.find((ev) => ev.getDesc() === desc);
