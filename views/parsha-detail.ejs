@@ -26,6 +26,11 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
+<% if (date && israelDiasporaDiffer) { -%>
+<p><small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading for <%=parshaName%> <%=hd.getFullYear()%>.
+The <a href="<%=otherLocationAnchor%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
+by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
+<% } -%>
 <% if (!date) { -%>
 Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a href="<%=parshaDateAnchor%>"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap"><%= hd.toString().replace(/'/g, '’') %></span></a>.
 <% } -%>
@@ -71,20 +76,7 @@ if (!date && spMaftirItems.length !== 0) { -%>
 <% } -%>
 </p>
 <% } -%>
-<% if (reading.haftara) { %>
-<p class="haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading?.reason?.haftara) { %><span class="text-success">*</span><% } %>:
-<%- reading.haftaraHtml %>
-<%- await include('partials/numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading?.reason?.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
-</p>
-<% } // reading.haftara %>
-<% if (reading.sephardic) { %>
-<p class="haftara">Haftarah for Sephardim<% if (reading?.reason?.sephardic) { %><span class="text-success">*</span><% } %>:
-<%- reading.sephardicHtml %>
-<%- await include('partials/numverses.ejs', {v: reading.sephardicNumV}) -%>
-<% if (reading?.reason?.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
-</p>
-<% } // reading.sephardic %>
+<%- await include('partials/haftara.ejs') -%>
 <%
 const spHaftItems = items.filter((item) => typeof item.haftara === 'string');
 if (!date && spHaftItems.length !== 0) { -%>
@@ -100,6 +92,11 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% if (date) { %>
 <div class="col-sm-6">
 <h5>Triennial <small class="text-body-secondary">year <%=triennial.yearNum%></small></h5>
+<% if (date && israelDiasporaDiffer) { -%>
+<p class="small">N.B. the following is read in
+<strong><%=locationName%></strong> for <%=hd.getFullYear()%>.
+<br>See also <a href="<%=otherLocationAnchor%>"><%=otherLocationParsha%> <%=hd.getFullYear()%> <%=il?'Diaspora':'Israel'%></a></p>
+<% } -%>
 <% if (triennial.fullParsha) { %>
 <p><%=parshaName%> is read in its entirety in <%=triennial.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
 <% } else { %>
@@ -112,6 +109,7 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <% } %>
 <% } %>
 <% if (triennial.haftara) { -%>
+<%- await include('partials/haftara.ejs') -%>
 <p class="haftara">Alternate Haftarah:
 <%- triennial.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
@@ -125,7 +123,7 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <h5><span class="text-nowrap">Triennial Year <%=yr%></span>
 <% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-body-secondary"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
-<p>Read separately in <%=triReading.hyear%></p>
+<p>Read separately <%= israelDiasporaDiffer ? 'in ' + locationName : '' %> in <%=triReading.hyear%></p>
 <ul class="list-unstyled">
 <li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
 <li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>

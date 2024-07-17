@@ -1,6 +1,6 @@
 import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {getLeyningForParshaHaShavua, getLeyningForParsha} from '@hebcal/leyning';
+import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {empty} from './empty.js';
@@ -153,29 +153,7 @@ export async function parshaDetail(ctx) {
   const parsha = lookupParshaMeta(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items = items15map.get(parshaName);
-  const reading = date ?
-    getLeyningForParshaHaShavua(parshaEv, il) :
-    getLeyningForParsha(parshaName);
-  if (date && parshaName === VEZOT_HABERAKHAH) {
-    for (let i = 1; i <= 6; i++) {
-      delete reading.reason[i];
-    }
-    delete reading.reason.haftara;
-  }
-  addLinksToLeyning(reading.fullkriyah, false);
-  reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
-  if (reading.seph) {
-    reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
-  }
-  if (reading.weekday) {
-    addLinksToLeyning(reading.weekday, false);
-    for (const aliyah of Object.values(reading.weekday)) {
-      aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
-    }
-  }
-  if (reading.summaryParts) {
-    reading.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
-  }
+  const reading = makeReading(date, parshaEv, il, parshaName);
   parsha.haftaraHtml = makeLeyningHtmlFromParts(parsha.haft);
   if (parsha.seph) {
     parsha.sephardicHtml = makeLeyningHtmlFromParts(parsha.seph);
@@ -184,11 +162,10 @@ export async function parshaDetail(ctx) {
   const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
   const hasTriennial = hyear >= 5744;
-  const triennial = hasTriennial ? makeTriennial(date, parshaEv, hyear, parshaName, il) : {};
+  const triennial = hasTriennial ? makeTriennial(parsha, date, parshaEv, hyear, il) : {};
   const titleYear = date ? ' ' + hyear : '';
-  const otherLocationSedra = HebrewCalendar.getSedra(hyear, !il);
-  const otherLocationParshaName = otherLocationSedra.getString(hd).substring(9);
-  const israelDiasporaDiffer = (parshaName !== otherLocationParshaName);
+  const [israelDiasporaDiffer, otherLocationAnchor, otherLocationParsha] =
+    doIsraelDiasporaDiffer(parsha, il, hd, triennial.variation);
   const translations0 = Object.keys(langNames)
       .map((lang) => {
         const str = Locale.lookupTranslation(parsha.name, lang);
@@ -222,6 +199,8 @@ export async function parshaDetail(ctx) {
     hasTriennial,
     triennial,
     israelDiasporaDiffer,
+    otherLocationAnchor,
+    otherLocationParsha,
     locationName: il ? 'Israel' : 'the Diaspora',
     items,
     commentary,
@@ -229,6 +208,89 @@ export async function parshaDetail(ctx) {
     translations,
     doubled,
   });
+}
+
+function makeReading(date, parshaEv, il, parshaName) {
+  const reading = date ?
+    getLeyningForParshaHaShavua(parshaEv, il) :
+    getLeyningForParsha(parshaName);
+  if (date && parshaName === VEZOT_HABERAKHAH) {
+    for (let i = 1; i <= 6; i++) {
+      delete reading.reason[i];
+    }
+    delete reading.reason.haftara;
+  }
+  addLinksToLeyning(reading.fullkriyah, false);
+  reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
+  if (reading.seph) {
+    reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
+  }
+  if (reading.weekday) {
+    addLinksToLeyning(reading.weekday, false);
+    for (const aliyah of Object.values(reading.weekday)) {
+      aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
+    }
+  }
+  if (reading.summaryParts) {
+    reading.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
+  }
+  return reading;
+}
+
+/**
+ * @param {string} parshaName
+ * @param {HDate} hd
+ * @param {boolean} il
+ * @return {import('@hebcal/triennial').TriennialAliyot}
+ */
+function getRawTriennial(parshaName, hd, il) {
+  const hyear = hd.getFullYear();
+  const tri = getTriennial(hyear, il);
+  const startYear = tri.getStartYear();
+  const yearNum = hyear - startYear;
+  const reading = tri.getReading(parshaName, yearNum);
+  return reading;
+}
+
+/**
+ * @param {any} parsha
+ * @param {boolean} il
+ * @param {HDate} hd
+ * @param {string} variation
+ * @return {[boolean, string, string]}
+ */
+function doIsraelDiasporaDiffer(parsha, il, hd, variation) {
+  const parshaName = parsha.name;
+  const hyear = hd.getFullYear();
+  const otherSedra = HebrewCalendar.getSedra(hyear, !il);
+  const otherParsha = otherSedra.lookup(hd);
+  const otherParshaName = parshaToString(otherParsha.parsha);
+  if (parshaName !== otherParshaName) {
+    const otherHD = otherSedra.find(parshaName);
+    if (otherHD !== null) {
+      const anchor = parshaDateAnchor(parshaName, dayjs(otherHD.greg()), !il);
+      return [true, anchor, parshaName];
+    }
+    if (parsha.combined) {
+      // it's combined here, but separate in other location
+      const [p1] = parshaName.split('-');
+      const p1hd = otherSedra.find(p1);
+      const anchor = parshaDateAnchor(p1, dayjs(p1hd.greg()), !il);
+      return [true, anchor, p1];
+    } else {
+      // it's separate in this location but combined in the other location
+      const pair = doubled.get(parshaName);
+      const pairHD = otherSedra.find(pair);
+      const anchor = parshaDateAnchor(pair, dayjs(pairHD.greg()), !il);
+      return [true, anchor, pair];
+    }
+  }
+  const otherTriennial = getRawTriennial(parshaName, hd, !il);
+  if (variation !== otherTriennial.variation) {
+    const anchor = parshaDateAnchor(parshaName, dayjs(hd.greg()), !il);
+    return [true, anchor, parshaName];
+  }
+  return [false, '', parshaName];
 }
 
 function makePrevNext(parsha, date, hd, il) {
@@ -267,44 +329,60 @@ function findParshaDate(events, name, il) {
 }
 
 /**
+ * @param {string} name
+ * @param {dayjs.Dayjs} d
+ * @param {boolean} il
+ * @return {string}
+ */
+function parshaDateAnchor(name, d, il) {
+  const dateStr = d.format('YYYYMMDD');
+  const desc = makeAnchor(name);
+  const iSuffix = il ? '?i=on' : '';
+  return desc + '-' + dateStr + iSuffix;
+}
+
+/**
  * @private
  * @param {Event} ev
  * @return {Object}
  */
 function getParshaDateAnchor(ev) {
   const d = dayjs(ev.getDate().greg());
-  const dateStr = d.format('YYYYMMDD');
   const name = ev.getDesc().substring(9);
-  const desc = makeAnchor(name);
-  const iSuffix = ev.il ? '?i=on' : '';
-  return {anchor: desc + '-' + dateStr + iSuffix, d, ev, name};
+  const anchor = parshaDateAnchor(name, d, ev.il);
+  return {anchor: anchor, d, ev, name};
 }
 
-function makeTriennial(date, parshaEv, hyear, parshaName, il) {
-  if (date) {
-    const reading = getTriennialForParshaHaShavua(parshaEv, il);
-    if (parshaName === VEZOT_HABERAKHAH) {
-      for (let i = 1; i <= 6; i++) {
-        delete reading.aliyot[i].reason;
-      }
-    }
-    const triennial = {
-      reading: reading.aliyot,
-      yearNum: reading.yearNum + 1,
-      fullParsha: reading.fullParsha,
-      hyear: hyear,
-    };
-    if (reading.haft) {
-      triennial.haftara = reading.haftara;
-      triennial.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
-      triennial.haftaraNumV = reading.haftaraNumV;
-    }
-    addLinksToLeyning(triennial.reading, false);
-    for (const aliyah of Object.values(triennial.reading)) {
-      aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
-    }
-    return triennial;
+function makeTriennial(parsha, date, parshaEv, hyear, il) {
+  if (!date) {
+    return make3yearTriennial(hyear, parsha.name, il);
   }
+  const reading = getTriennialForParshaHaShavua(parshaEv, il);
+  if (parsha.name === VEZOT_HABERAKHAH) {
+    for (let i = 1; i <= 6; i++) {
+      delete reading.aliyot[i].reason;
+    }
+  }
+  const triennial = {
+    reading: reading.aliyot,
+    yearNum: reading.yearNum + 1,
+    fullParsha: reading.fullParsha,
+    hyear: hyear,
+    variation: reading.variation,
+  };
+  if (reading.haft) {
+    triennial.haftara = reading.haftara;
+    triennial.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
+    triennial.haftaraNumV = reading.haftaraNumV;
+  }
+  addLinksToLeyning(triennial.reading, false);
+  for (const aliyah of Object.values(triennial.reading)) {
+    aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
+  }
+  return triennial;
+}
+
+function make3yearTriennial(hyear, parshaName, il) {
   const triennial = {};
   const startYear = Triennial.getCycleStartYear(hyear);
   const tri = getTriennial(startYear, il);
