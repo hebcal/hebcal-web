@@ -276,7 +276,7 @@ function doTriennialDiffer(a, b) {
   if (a.readSeparately && b.readSeparately) {
     return false;
   }
-  return !a.date.isSameDate(b);
+  return !a.date.isSameDate(b.date);
 }
 
 /**
