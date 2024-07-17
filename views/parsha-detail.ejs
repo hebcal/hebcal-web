@@ -26,15 +26,15 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
-<% if (date && israelDiasporaDiffer) { -%>
-<p><small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading for <%=parshaName%> <%=hd.getFullYear()%>.
-The <a href="<%=otherLocationAnchor%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
-by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
-<% } -%>
 <% if (!date) { -%>
 Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on <a href="<%=parshaDateAnchor%>"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap"><%= hd.toString().replace(/'/g, '’') %></span></a>.
 <% } -%>
 </p>
+<% if (israelDiasporaDiffer) { -%>
+<p><small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading for <%=parshaName%><%= date ? ' ' + hd.getFullYear() : '' %>.
+The <a href="<%=date ? otherLocationAnchor : parshaAnchor + (il?'':'?i=on')%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
+by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
+<% } -%>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <% if (reading.torahHtml) { %><%- reading.torahHtml -%>
 <% } else { -%>

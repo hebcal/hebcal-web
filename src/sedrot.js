@@ -163,9 +163,9 @@ export async function parshaDetail(ctx) {
   makePrevNext(parsha, date, hd, il);
   const hasTriennial = hyear >= 5744;
   const triennial = hasTriennial ? makeTriennial(parsha, date, parshaEv, hyear, il) : {};
-  const titleYear = date ? ' ' + hyear : '';
   const [israelDiasporaDiffer, otherLocationAnchor, otherLocationParsha] =
-    doIsraelDiasporaDiffer(parsha, il, hd, triennial.variation);
+    doIsraelDiasporaDiffer(parsha, il, hd, triennial);
+  const title = makeTitle(parsha, date ? hyear : 0, israelDiasporaDiffer, il);
   const translations0 = Object.keys(langNames)
       .map((lang) => {
         const str = Locale.lookupTranslation(parsha.name, lang);
@@ -185,11 +185,11 @@ export async function parshaDetail(ctx) {
   // doubled parsha overwrites first half
   Object.assign(commentary, drash[parsha.name]);
   await ctx.render('parsha-detail', {
-    title: `${parsha.name}${titleYear} - Torah Portion - Hebcal`,
+    title,
     parsha,
     parshaName: parsha.name.replace(/'/g, '’'),
     parshaAnchor,
-    parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor + iSuffix,
+    parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor,
     reading,
     il,
     iSuffix,
@@ -208,6 +208,18 @@ export async function parshaDetail(ctx) {
     translations,
     doubled,
   });
+}
+
+function makeTitle(parsha, hyear, israelDiasporaDiffer, il) {
+  let title = parsha.name;
+  if (hyear) {
+    title += ' ' + hyear;
+  }
+  if (israelDiasporaDiffer) {
+    title += ' - ' + (il ? 'Israel' : 'Diaspora');
+  }
+  title += ' - Torah Portion - Hebcal';
+  return title;
 }
 
 function makeReading(date, parshaEv, il, parshaName) {
@@ -252,16 +264,39 @@ function getRawTriennial(parshaName, hd, il) {
   return reading;
 }
 
+function doTriennialDiffer(a, b) {
+  if (a.variation !== b.variation) {
+    return true;
+  }
+  if (a.readSeparately && b.readSeparately) {
+    return false;
+  }
+  if (!a.date.isSameDate(b)) {
+    return true;
+  }
+  return false;
+}
+
 /**
  * @param {any} parsha
  * @param {boolean} il
  * @param {HDate} hd
- * @param {string} variation
+ * @param {any} triennial
  * @return {[boolean, string, string]}
  */
-function doIsraelDiasporaDiffer(parsha, il, hd, variation) {
+function doIsraelDiasporaDiffer(parsha, il, hd, triennial) {
   const parshaName = parsha.name;
   const hyear = hd.getFullYear();
+  if (triennial.readings) {
+    // compare each  3-year index page
+    const otherReadings = make3yearTriennial(hyear, parshaName, !il);
+    for (let yr = 0; yr <= 2; yr++) {
+      if (doTriennialDiffer(otherReadings[yr], triennial.readings[yr])) {
+        return [true, '', ''];
+      }
+    }
+    return [false, '', ''];
+  }
   const otherSedra = HebrewCalendar.getSedra(hyear, !il);
   const otherParsha = otherSedra.lookup(hd);
   const otherParshaName = parshaToString(otherParsha.parsha);
@@ -286,7 +321,7 @@ function doIsraelDiasporaDiffer(parsha, il, hd, variation) {
     }
   }
   const otherTriennial = getRawTriennial(parshaName, hd, !il);
-  if (variation !== otherTriennial.variation) {
+  if (doTriennialDiffer(otherTriennial, triennial)) {
     const anchor = parshaDateAnchor(parshaName, dayjs(hd.greg()), !il);
     return [true, anchor, parshaName];
   }
@@ -355,7 +390,8 @@ function getParshaDateAnchor(ev) {
 
 function makeTriennial(parsha, date, parshaEv, hyear, il) {
   if (!date) {
-    return make3yearTriennial(hyear, parsha.name, il);
+    const readings = make3yearTriennial(hyear, parsha.name, il);
+    return {readings};
   }
   const reading = getTriennialForParshaHaShavua(parshaEv, il);
   if (parsha.name === VEZOT_HABERAKHAH) {
@@ -369,6 +405,9 @@ function makeTriennial(parsha, date, parshaEv, hyear, il) {
     fullParsha: reading.fullParsha,
     hyear: hyear,
     variation: reading.variation,
+    date: reading.date,
+    readSeparately: reading.readSeparately,
+    readTogether: reading.readTogether,
   };
   if (reading.haft) {
     triennial.haftara = reading.haftara;
@@ -382,17 +421,22 @@ function makeTriennial(parsha, date, parshaEv, hyear, il) {
   return triennial;
 }
 
+/**
+ * @param {number} hyear
+ * @param {string} parshaName
+ * @param {boolean} il
+ * @return {any[]}
+ */
 function make3yearTriennial(hyear, parshaName, il) {
-  const triennial = {};
   const startYear = Triennial.getCycleStartYear(hyear);
   const tri = getTriennial(startYear, il);
-  triennial.readings = Array(3);
+  const readings = Array(3);
   for (let yr = 0; yr < 3; yr++) {
     const reading = makeTriReading(tri, yr, parshaName, il);
     reading.hyear = startYear + yr;
-    triennial.readings[yr] = reading;
+    readings[yr] = reading;
   }
-  return triennial;
+  return readings;
 }
 
 function makeTriReading(tri, yr, parshaName, il) {
