@@ -26,6 +26,9 @@ export async function getLeyning(ctx) {
   if (q.cfg !== 'json') {
     throw createError(400, 'Parameter cfg=json is required');
   }
+  if (!empty(q.date) && empty(q.start) && empty(q.end)) {
+    q.start = q.end = q.date;
+  }
   for (const param of ['start', 'end']) {
     if (empty(q[param])) {
       throw createError(400, `Parameter '${param}' is required`);
