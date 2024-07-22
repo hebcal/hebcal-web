@@ -43,7 +43,7 @@
     "eslint": "^9.7.0",
     "eslint-plugin-n": "^17.9.0",
     "globals": "^15.8.0",
-    "rollup": "^4.18.1"
+    "rollup": "^4.19.0"
   },
   "dependencies": {
     "@hebcal/core": "^5.4.11",

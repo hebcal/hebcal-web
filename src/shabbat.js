@@ -8,6 +8,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeGeoUrlArgs,
   shortenUrl,
   queryDefaultCandleMins,
+  CACHE_CONTROL_7DAYS,
   localeMap, makeHebrewCalendar} from './common.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
   expiresSaturdayNight} from './dateUtil.js';
@@ -46,6 +47,7 @@ export async function shabbatApp(ctx) {
     }
     if (dateOverride) {
       ctx.lastModified = new Date();
+      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     } else {
       expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
     }

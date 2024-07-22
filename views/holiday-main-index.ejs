@@ -12,7 +12,8 @@
 <div class="col-sm-8">
 <h2>Jewish Holidays <%= yearOverride ? `${hyear - 1}-${hyear + 4}` : '' %></h2>
 <% if (hyear <= 5513) { %><%- await include('partials/warning-1752.ejs') %><% } -%>
-<p>Dates of major and minor Jewish holidays as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
+<p>Dates of major and minor Jewish holidays for years <%=hyear-3762%>-<%=hyear-3756%>,
+ as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</span></p>
