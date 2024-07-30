@@ -312,10 +312,10 @@ async function makeDownloadProps(ctx) {
   removeEmptyArgs(q);
   const type = summarizeAnniversaryTypes(q);
   ctx.state.anniversaryType = type;
-  ctx.state.downloadAltTitle = `${type}.ics`;
   ctx.state.numYears = getNumYears(q.years);
   ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
-  const filename = type.toLowerCase();
+  const filename = 'personal';
+  ctx.state.downloadAltTitle = `${filename}.ics`;
   q.v = 'yahrzeit';
   if (ctx.method === 'POST') {
     await saveDataToDb(ctx);
