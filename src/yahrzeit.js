@@ -690,7 +690,7 @@ function hebdateNoYear(hd, isHebrewName) {
 function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const name = info.name;
   let subj = name;
-  const isHebrewName = hebrewRe.test(name);
+  const isHebrewName = hebrewRe.test(name) && !/[A-Za-z]/.test(name);
   const type = info.type;
   if (type !== 'Other') {
     const isYahrzeit = type === YAHRZEIT;
