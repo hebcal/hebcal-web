@@ -4,6 +4,7 @@ import {
   getLocationFromQuery,
   httpRedirect,
   langNames,
+  CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE,
 } from './common.js';
 import {geoAutoComplete} from './complete.js';
@@ -174,7 +175,7 @@ export function wwwRouter() {
       } else if (rpath.endsWith('.xml')) {
         return parshaRss(ctx);
       } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
-        ctx.set('Cache-Control', 'public, max-age=604800');
+        ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
         return parshaCsv(ctx);
       } else {
         const charCode = rpath.charCodeAt(8);

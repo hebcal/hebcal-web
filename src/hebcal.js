@@ -4,6 +4,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   urlArgs, getNumYears,
   hebcalFormDefaults,
   makeIcalOpts,
+  cacheControl,
   CACHE_CONTROL_7DAYS,
   makeHebrewCalendar,
   makeGeoUrlArgs,
@@ -442,9 +443,9 @@ function renderJson(ctx) {
   const orig = ctx.request.query;
   const yearNow = typeof orig.year === 'undefined' || orig.year === 'now' || orig.month === 'now';
   const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
-  const cacheControl = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
-    'public, max-age=10800, s-maxage=10800';
-  ctx.set('Cache-Control', cacheControl);
+  const cacheCtrlStr = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
+    cacheControl(0.125);
+  ctx.set('Cache-Control', cacheCtrlStr);
   ctx.lastModified = new Date();
   ctx.body = obj;
 }

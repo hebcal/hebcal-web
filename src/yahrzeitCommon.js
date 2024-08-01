@@ -12,6 +12,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
   const sql = 'SELECT contents, updated, downloaded FROM yahrzeit WHERE id = ?';
   const results = await db.query2(ctx, {sql, values: [id], timeout: 5000});
   if (!results || !results[0]) {
+    ctx.remove('Cache-Control');
     ctx.throw(404, `Yahrzeit/Anniversary id not found: ${id}`);
   }
   const row = results[0];

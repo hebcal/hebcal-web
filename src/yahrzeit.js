@@ -154,6 +154,7 @@ function getOrMakeUlid(ctx) {
   const existing = q.ulid || ctx.state.ulid;
   if (existing) {
     if (!isValidUlid(existing)) {
+      ctx.remove('Cache-Control');
       ctx.throw(400, 'Invalid calendar id: ' + existing);
     }
     return existing;
@@ -237,8 +238,10 @@ async function renderJson(maxId, q) {
 async function renderFullCalendar(ctx, maxId, q) {
   for (const param of ['start', 'end']) {
     if (typeof q[param] === 'undefined') {
+      ctx.remove('Cache-Control');
       ctx.throw(400, `Please specify required parameter '${param}'`);
     } else if (Array.isArray(q[param])) {
+      ctx.remove('Cache-Control');
       ctx.throw(400, `Invalid duplicate parameter '${param}'`);
     }
   }

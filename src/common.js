@@ -833,7 +833,7 @@ export const CACHE_CONTROL_7DAYS = cacheControl(7);
  * @return {string}
  */
 export function cacheControl(days) {
-  const seconds = days * 24 * 60 * 60;
+  const seconds = Math.trunc(days * 24 * 60 * 60);
   return `public, max-age=${seconds}, s-maxage=${seconds}`;
 }
 
