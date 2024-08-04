@@ -985,8 +985,8 @@ export function setDefautLangTz(ctx) {
   cleanQuery(q);
   const location = getLocationFromQueryOrGeoIp(ctx, q);
   const geoip = ctx.state.geoip;
-  let cc = geoip && geoip.cc;
-  let tzid = geoip && geoip.tzid || null;
+  let cc = geoip?.cc;
+  let tzid = geoip?.tzid;
   if (location !== null) {
     tzid = location.getTzid();
     cc = location.getCountryCode();

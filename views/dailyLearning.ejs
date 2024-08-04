@@ -21,7 +21,8 @@
 <li class="text-nowrap fs-5"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render(lg) %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
 </ul>
-
+<p>From ancient biblical times, the Torah has been divided into portions which are read each week on a yearly calendar.
+In line with this tradition, various calendars have emerged to facilitate groups of learners in collectively studying designated texts.</p>
 <% for (const item of items) { %>
 <div class="lead mt-3" id="<%= item.id %>"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
 <% if (item.flag) { -%>
