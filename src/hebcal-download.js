@@ -46,6 +46,9 @@ export async function hebcalDownload(ctx) {
   }
   if (ics) {
     const icalOpt = makeIcalOpts(options, query);
+    if (!icalOpt.title) {
+      icalOpt.title = getCalendarTitle(events, icalOpt);
+    }
     if (!icalOpt.calendarColor) {
       icalOpt.calendarColor = '#800002';
     }
