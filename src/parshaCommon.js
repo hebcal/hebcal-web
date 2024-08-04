@@ -150,7 +150,7 @@ export function lookupParshaMeta(parshaName) {
     name: parshaName,
     bookName: torahBookNames[parsha0.book - 1],
     anchor: makeAnchor(parshaName),
-    verses: parsha0.fullkriyah['1'][0] + '-' + parsha0.fullkriyah['7'][1],
+    verses: parshaVerses(parsha0),
     ...parsha0,
   };
   if (parsha.combined) {
@@ -164,6 +164,8 @@ export function lookupParshaMeta(parshaName) {
     parsha.p2anchor = makeAnchor(p2);
     const haftKey = p1 === 'Nitzavim' ? p1 : p2;
     parsha.haft = lookupParsha(haftKey).haft;
+    const p1meta = lookupParsha(p1);
+    parsha.p1verses = parshaVerses(p1meta);
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
@@ -176,6 +178,11 @@ export function lookupParshaMeta(parshaName) {
   parsha.summaryHtml = makeSummaryHtml(parsha);
   parshaMetaCache.set(parshaName, parsha);
   return parsha;
+}
+
+function parshaVerses(parshaMeta) {
+  const fk = parshaMeta.fullkriyah;
+  return fk['1'][0] + '-' + fk['7'][1];
 }
 
 /**

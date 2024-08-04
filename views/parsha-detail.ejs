@@ -207,7 +207,7 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 </ul>
 </div><!-- .col -->
 <% if (commentary['asin']) {
-  const altText = parsha.p1||parshaName + ': The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)';
+  const altText = (parsha.p1||parshaName) + ': The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)';
 %><div class="col-lg-4 mb-3">
 <div class="card">
 <div class="row">
@@ -277,7 +277,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <% if (commentary['asin']) { %>
 <dt><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><em><%=parsha.p1||parshaName%>
-(<%=parsha.bookName%> <%=parsha.verses%>) and Haftarah (<%=parsha.haftara%>):
+(<%=parsha.bookName%> <%=parsha.combined ? parsha.p1verses : parsha.verses%>) and Haftarah (<%=parsha.haftara%>):
 The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</em></a>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Jeffrey K. Salkin, Jewish Publication Society, 2017

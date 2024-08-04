@@ -341,9 +341,25 @@ function doIsraelDiasporaDiffer(parsha, il, hd, triennial) {
   return [false, '', ''];
 }
 
+/** @return {number} */
+function nextParshaNum(parsha) {
+  if (parsha.num === 54) {
+    return 0;
+  }
+  return parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
+}
+
+/** @return {number} */
+function prevParshaNum(parsha) {
+  if (parsha.num === 1) {
+    return 53;
+  }
+  return parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
+}
+
 function makePrevNext(parsha, date, hd, il) {
-  const prevNum = parsha.num === 1 ? 53 : parsha.combined ? parshaNum.get(parsha.p1) - 2 : parsha.num - 2;
-  const nextNum = parsha.num === 54 ? 0 : parsha.combined ? parshaNum.get(parsha.p2) : parsha.num;
+  const prevNum = prevParshaNum(parsha);
+  const nextNum = nextParshaNum(parsha);
   const prevName = parshiot54[prevNum];
   const nextName = parshiot54[nextNum];
   if (date) {
