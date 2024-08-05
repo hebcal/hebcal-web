@@ -14,6 +14,9 @@ import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayIte
 import {holidayMeta} from './holidayMeta.js';
 import {distance, closest} from 'fastest-levenshtein';
 import {getHolidayMeta} from './getHolidayMeta.js';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
+
+dayjs.extend(isSameOrAfter);
 
 const holidayYearRe = /^([^\d]+)-(\d+)$/;
 

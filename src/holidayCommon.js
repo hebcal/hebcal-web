@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
 import {holidayMeta} from './holidayMeta.js';
+import {getNumYears} from './common.js';
+import {makeDownloadProps} from './makeDownloadProps.js';
 
 export const holidays = new Map();
 export const israelOnly = new Set();
@@ -264,4 +266,23 @@ export function makeEventJsonLD(ev, meta, il) {
     jsonLD.image = ['1x1', '4x3', '16x9'].map((size) => `https://www.hebcal.com/i/is/${size}/${meta.photo.fn}`);
   }
   return jsonLD;
+}
+
+export function makeQueryAndDownloadProps(ctx, options) {
+  const q = {v: '1', ny: 5, ...ctx.request.query};
+  for (const k of ['maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
+    q[k] = 'on';
+  }
+  q.i = ctx.state.il ? 'on' : 'off';
+  const year = options.year;
+  q.year = String(year);
+  const isHebYr = options.isHebrewYear;
+  q.yt = isHebYr ? 'H' : 'G';
+  makeDownloadProps(ctx, q, options);
+  ctx.state.downloadAltTitle = `${year} only`;
+  ctx.state.numYears = getNumYears(options);
+  const today = isHebYr ? new HDate() : new Date();
+  ctx.state.currentYear = today.getFullYear();
+  delete ctx.state.filename.pdf;
+  return q;
 }

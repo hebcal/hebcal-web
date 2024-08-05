@@ -15,7 +15,7 @@ import {fridgeShabbat} from './fridge.js';
 import {hdateJavascript, hdateXml, dafYomiRss} from './hdate.js';
 import {parshaRss} from './parshaRss.js';
 import {hebcalApp} from './hebcal.js';
-import {holidaysApp} from './holidayIndex.js';
+import {holidayApp} from './holidayApp.js';
 import {homepage} from './homepage.js';
 import {parshaCsv} from './parsha-csv.js';
 import {parshaIndex} from './parshaIndex.js';
@@ -143,7 +143,7 @@ export function wwwRouter() {
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {
       checkSlash(rpath, 10);
-      return holidaysApp(ctx);
+      return holidayApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
       return;

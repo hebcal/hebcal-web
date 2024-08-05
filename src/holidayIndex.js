@@ -1,96 +1,14 @@
 import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
 import createError from 'http-errors';
-import {basename} from 'path';
 import {getDefaultHebrewYear} from './dateUtil.js';
-import {getNumYears, httpRedirect} from './common.js';
-import {makeDownloadProps} from './makeDownloadProps.js';
-import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD, OMER_TITLE} from './holidayCommon.js';
-import {holidayDetail} from './holidayDetail.js';
-import {holidayPdf} from './holidayPdf.js';
+import {httpRedirect} from './common.js';
+import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD,
+  OMER_TITLE, makeQueryAndDownloadProps} from './holidayCommon.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
 
-dayjs.extend(isSameOrAfter);
-
 const DoWtiny = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
-
-export async function holidayYearIndex(ctx) {
-  const rpath = ctx.request.path;
-  const year = basename(rpath);
-  const yearNum = parseInt(year, 10);
-  if (isNaN(yearNum)) {
-    throw createError(404, `Sorry, year ${year} is not numeric`);
-  } else if (yearNum < 1 || yearNum > 9999) {
-    throw createError(400, `Sorry, can't display holidays for year ${year}`);
-  }
-  const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
-  const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
-  const il = ctx.state.il;
-  const options = {
-    year: calendarYear,
-    isHebrewYear,
-    il,
-    // shabbatMevarchim: true,
-  };
-  let events0 = HebrewCalendar.calendar(options);
-  if (!il) {
-    const eventsIlModern = HebrewCalendar.calendar({
-      il: true,
-      year: calendarYear,
-      isHebrewYear,
-    }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
-    events0 = eventsIlModern.concat(events0);
-    events0.sort((a, b) => a.getDate().abs() - b.getDate().abs());
-  }
-  const events = getFirstOcccurences(events0);
-  const items = await makeItems(events, il, isHebrewYear, true);
-  const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
-  const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
-  const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
-  const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
-  await ctx.render('holiday-year-index', {
-    today: dayjs(),
-    year: year.padStart(4, '0'),
-    greg1,
-    greg2,
-    prev: isHebrewYear ? `${greg1 - 1}-${greg1}` : yearNum - 1,
-    next: isHebrewYear ? `${greg2}-${greg2 + 1}` : yearNum + 1,
-    isHebrewYear,
-    calendarYear,
-    categories,
-    items,
-    RH: dayjs(roshHashana.getDate().greg()),
-    il,
-    locationName: il ? 'Israel' : 'the Diaspora',
-    iSuffix: il ? '?i=on' : '',
-    DoWtiny,
-    q,
-    isoDateStart: dayjs(events0[0].getDate().greg()).format('YYYY-MM') + '-01',
-    options,
-    amp: (q.amp === '1') ? true : undefined,
-  });
-}
-
-function makeQueryAndDownloadProps(ctx, options) {
-  const q = {v: '1', ny: 5, ...ctx.request.query};
-  for (const k of ['maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
-    q[k] = 'on';
-  }
-  q.i = ctx.state.il ? 'on' : 'off';
-  const year = options.year;
-  q.year = String(year);
-  const isHebYr = options.isHebrewYear;
-  q.yt = isHebYr ? 'H' : 'G';
-  makeDownloadProps(ctx, q, options);
-  ctx.state.downloadAltTitle = `${year} only`;
-  ctx.state.numYears = getNumYears(options);
-  const today = isHebYr ? new HDate() : new Date();
-  ctx.state.currentYear = today.getFullYear();
-  delete ctx.state.filename.pdf;
-  return q;
-}
 
 async function makeItems(events, il, showYear, addIsraelAsterisk) {
   const items = {};
@@ -328,27 +246,4 @@ export async function holidayMainIndex(ctx) {
     canonical,
     inverse,
   });
-}
-
-export async function holidaysApp(ctx) {
-  ctx.lastModified = ctx.launchDate;
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return;
-  }
-  const rpath = ctx.request.path;
-  ctx.state.il = ctx.request.query.i === 'on';
-  if (rpath === '/holidays/') {
-    await holidayMainIndex(ctx);
-  } else if (rpath.endsWith('.pdf')) {
-    await holidayPdf(ctx);
-  } else {
-    const charCode = rpath.charCodeAt(10);
-    if (charCode >= 48 && charCode <= 57) {
-      await holidayYearIndex(ctx);
-    } else {
-      await holidayDetail(ctx);
-    }
-  }
 }
