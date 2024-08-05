@@ -41,13 +41,13 @@
     "bootstrap5-autocomplete": "^1.1.28",
     "csv-parse": "^5.5.6",
     "eslint": "^9.8.0",
-    "eslint-plugin-n": "^17.10.1",
+    "eslint-plugin-n": "^17.10.2",
     "globals": "^15.9.0",
     "rollup": "^4.20.0"
   },
   "dependencies": {
     "@hebcal/core": "^5.4.11",
-    "@hebcal/geo-sqlite": "^5.0.5",
+    "@hebcal/geo-sqlite": "^5.0.6",
     "@hebcal/hdate": "^0.11.4",
     "@hebcal/icalendar": "^5.1.1",
     "@hebcal/learning": "^5.1.1",
