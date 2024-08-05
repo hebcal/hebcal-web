@@ -95,32 +95,31 @@
 <div id="calendar"></div>
 <div id="list-view">
 <% for (const item of items) { %>
-<div class="card mb-4" id="<%=item.id%>" style="max-width: 720px;">
+<div class="card mb-4" id="<%=item.id%>">
 <div class="row g-0">
 <% if (typeof item?.meta?.photo === 'object') { -%>
 <div class="col-md-4">
 <a href="<%=item.href%>"><picture>
 <source type="image/webp"
- srcset="/i/is/4x3/<%=item.meta.photo.webp%>"
+ srcset="/i/is/16x9/<%=item.meta.photo.webp%>"
  width="240">
 <img alt="<%=item.meta.photo.caption||holiday%>"
-src="/i/is/4x3/<%=item.meta.photo.fn%>"
+src="/i/is/16x9/<%=item.meta.photo.fn%>"
 width="240"
-class="img-fluid rounded-start">
+class="card-img img-fluid">
 </picture></a>
 </div><!-- .col-md-4 -->
-<% } -%>
 <div class="col-md-8">
+<% } -%>
 <div class="card-body">
-<h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
-<% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
+<h4 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
+<% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h4>
 <p><%- await include('partials/holiday-index-dates.ejs', {item}) -%>
 <br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </p>
-<% if (item.jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script><% } -%>
 <div class="card-text"><%=item.descrMedium%></div>
 <% if (item.related) { %>
-<ul class="mt-2">
+<ul class="list-unstyled mt-2">
 <% for (const related of item.related) { %>
   <li><a href="<%=related.href%>"><%=related.name%></a>:
   <%- await include('partials/holiday-index-dates.ejs', {item: related}) -%></li>
@@ -128,42 +127,15 @@ class="img-fluid rounded-start">
 </ul>
 <% } %>
 </div><!-- .card-body -->
-</div><!-- .col-md-4 -->
+<% if (typeof item?.meta?.photo === 'object') { -%>
+</div><!-- .col-md-8 -->
+<% } -%>
 </div><!-- .row -->
 </div><!-- .card #<%=item.id %> -->
 <% } -%>
 
-<h3 class="mt-3">Rosh Chodesh 🌒</h3>
-<p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
-  Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
-  beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
-<p class="small">Note: the first day of Tishrei is <strong>not</strong>
-considered Rosh Chodesh. The holiday that occurs on the 1st day of Tishrei
-is called <a href="rosh-hashana">Rosh Hashana</a>, the Jewish New Year.
-For the month of Tishrei, the major holiday of Rosh Hashana takes
-precedence over what would be a minor holiday.</p>
-<div class="table-responsive">
-<table class="table table-striped">
-<colgroup><col><col><col></colgroup>
-<thead>
-<tr><th>Rosh Chodesh</th><th>Starts</th><th>Ends</th></tr>
-</thead>
-<tbody class="table-group-divider">
-<% for (const item of roshChodesh) { %>
-<tr>
-<td><a href="<%=item.href%>"><%=item.name.substring(13)%> <% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
-</td>
-<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
-<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
-</tr>
-<% } %>
-</tbody>
-</table>
-</div><!-- .table-responsive -->
-
-<h3 class="mt-3">Modern holidays 🇮🇱</h3>
+<h4 class="mt-4">Modern holidays 🇮🇱</h4>
 <p>Modern Israeli holidays are national holidays officially recognized by the Knesset, Israel's parliament.</p>
-<div class="table-responsive">
 <table class="table table-striped">
 <colgroup><col><col><col><col></colgroup>
 <thead>
@@ -181,9 +153,32 @@ precedence over what would be a minor holiday.</p>
 <% } %>
 </tbody>
 </table>
-</div><!-- .table-responsive -->
 
-
+<h4 class="mt-4">Rosh Chodesh 🌒</h4>
+<p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
+  Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
+  beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
+<p class="small">Note: the first day of Tishrei is <strong>not</strong>
+considered Rosh Chodesh. The holiday that occurs on the 1st day of Tishrei
+is called <a href="rosh-hashana">Rosh Hashana</a>, the Jewish New Year.
+For the month of Tishrei, the major holiday of Rosh Hashana takes
+precedence over what would be a minor holiday.</p>
+<table class="table table-striped">
+<colgroup><col><col><col></colgroup>
+<thead>
+<tr><th>Rosh Chodesh</th><th>Starts</th><th>Ends</th></tr>
+</thead>
+<tbody class="table-group-divider">
+<% for (const item of roshChodesh) { %>
+<tr>
+<td><a href="<%=item.href%>"><%=item.name.substring(13)%> <% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+</td>
+<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
+</tr>
+<% } %>
+</tbody>
+</table>
 
 </div><!-- #list-view -->
 </div><!-- .col-md-9 -->
@@ -200,19 +195,18 @@ precedence over what would be a minor holiday.</p>
 </div>
 <% } -%>
 <div class="mb-4">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
-PDF one page per month, in landscape
-</div>
-<div class="mb-4">
 <a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
-<p>Perpetual calendar feed for Apple, Google, Microsoft Outlook,
+<p class="small">Perpetual calendar feed for Apple, Google, Microsoft Outlook,
   or to any desktop program that supports iCalendar (.ics) files</p>
 </div>
 <div class="mb-4">
 <a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%><%=il?'&i=on':''%>"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
-<p>Create and download a custom calendar with event titles in different languages,
-<strong>candle-lighting times</strong> for Shabbat and holidays,
-<strong>Israeli holiday schedule</strong>, etc</p>
+<p class="small">Create and download a custom calendar with event titles in different languages,
+candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p>
+</div>
+<div class="mb-4">
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<p class="small">Printable PDF, one page per month, in landscape</p>
 </div>
 </div><!-- .col-md-3 -->
 </div><!-- .row -->

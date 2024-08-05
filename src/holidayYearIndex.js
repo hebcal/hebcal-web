@@ -60,7 +60,7 @@ async function makeHolidayItem(holiday, ev, il) {
   const descrMedium = getHolidayDescription(ev, false) || ev.memo || '';
   const sentences = descrMedium.split(/\.\s+/).slice(0, 3);
   const firstTwo = sentences.join('. ');
-  item.descrMedium = sentences.length == 3 ? firstTwo + '.' : firstTwo;
+  item.descrMedium = firstTwo + '.';
   item.meta = await getHolidayMeta(name);
   return item;
 }
@@ -134,7 +134,6 @@ export async function holidayYearIndex(ctx) {
   const modernHolidays = events
       .filter((ev) => ev.getFlags() & flags.MODERN_HOLIDAY)
       .map((ev) => eventToHolidayItem(ev, il));
-
 
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
