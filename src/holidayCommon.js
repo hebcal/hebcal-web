@@ -66,7 +66,12 @@ const holidayDurationIL = {
 export const OMER_TITLE = 'Days of the Omer';
 holidayDurationIL[OMER_TITLE] = 49;
 
-const holidayDurationDiaspora = {...holidayDurationIL, Pesach: 8, Shavuot: 2};
+const holidayDurationDiaspora = {
+  ...holidayDurationIL,
+  'Pesach': 8,
+  'Shavuot': 2,
+  'Shmini Atzeret & Simchat Torah': 2,
+};
 
 /**
  * @param {boolean} il

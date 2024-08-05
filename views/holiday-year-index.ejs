@@ -38,25 +38,6 @@
   color: inherit;
   text-decoration: none;
 }
-table.tbody-striped > thead > * > * {
-  border-bottom: 2px solid currentColor;
-}
-.tbody-striped > tbody {
-  border-bottom-color: #dee2e6;
-  border-bottom-width: 1px;
-}
-.tbody-striped > tbody > :first-child > * {
-  padding-left: 0.5rem;
-  padding-top: 0.6rem;
-}
-.tbody-striped > tbody > :last-child > * {
-  padding-left: 0.5rem;
-  padding-bottom: 0.75rem;
-}
-.tbody-striped > tbody:nth-of-type(odd) {
-  --bs-table-accent-bg: var(--bs-table-striped-bg);
-  color: var(--bs-table-striped-color);
-}
 .fc-daygrid-block-event .fc-event-time, .fc-daygrid-block-event .fc-event-title {
   padding: 2px 6px 2px 2px;
 }
@@ -78,69 +59,81 @@ table.tbody-striped > thead > * > * {
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div class="row">
-<div class="col">
+<div class="col-md-9 mt-2">
 <h2>Jewish Holidays <%=year%>
 <% if (isHebrewYear && year.indexOf('-') !== -1) { -%>
 <span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
 <% } -%>
 </h2>
 <% if (greg1 <= 1752) { %><%- await include('partials/warning-1752.ejs') %><% } -%>
+<p class="small">Dates of major and minor Jewish holidays, observances and customs, holiday Torah readings.</p>
+<div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
+  <div>
+    <div class="d-none d-sm-inline small">Calendar year</div>
+    <nav>
+      <ul class="pagination pagination-sm">
+      <% for (let i = greg1-1; i <= greg1+2; i++) { %>
+      <li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+      <% } %>
+      </ul>
+    </nav>
+  </div>
+  <div>
+    <div class="d-none d-sm-inline small">Show dates for</div>
+    <nav>
+      <ul class="pagination pagination-sm">
+      <li class="page-item<%= il ? '' : ' active' %>"><a class="page-link" href="<%=rpath%>">Diaspora</a>
+      <li class="page-item<%= il ? ' active' : '' %>"><a class="page-link" href="<%=rpath%>?i=on">Israel</a>
+      </ul>
+    </nav>
+  </div>
+</div>
 </div><!-- .col -->
 </div><!-- .row -->
-<div class="row gx-3 mt-2 d-print-none">
-<div class="col-auto">
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
-</div>
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
-</div>
-<div class="btn-group me-1 mb-2" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%><%=il?'&i=on':''%>"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
-</div>
-</div><!-- .col-auto -->
-<% if (greg1 > 1752) { %>
-<div class="col-auto">
-<div class="card p-1">
-<div class="form-check form-switch">
-<input class="form-check-input" type="checkbox" role="switch" id="toggle-month">
-<label class="form-check-label" for="toggle-month">
-  Month view
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
-</label>
-</div><!-- .form-switch -->
-</div><!-- .card -->
-</div><!-- .col-auto -->
-<% } -%>
-<div class="col-auto mb-3"><label for="nav-year1" class="col-form-label">Year</label></div>
-<div class="col-auto gx-1">
-<select class="form-select nav-year" id="nav-year1" aria-label="Year selector">
-<% if (isHebrewYear) { %>
-<%   for (let i = calendarYear - 2; i <= calendarYear + 10; i++) { %>
-<%     if (i < 3762) { continue; } -%>
-<option <%= i === calendarYear ? ' selected' : ''%>><%=i-3761%>-<%=i-3760%></option>
-<%   } %>
-<% } else { %>
-<%   for (let i = greg1 - 2; i <= greg1+6; i++) { %>
-<%     if (i < 1) { continue; } -%>
-<option <%= i == greg1 ? ' selected' : ''%>><%=i%></option>
-<%   } %>
-<% } %>
-</select>
-</div><!-- .col-auto -->
-</div><!-- .row -->
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>  
+<div class="row">
+<div class="col-md-9">
 <div id="calendar"></div>
 <div id="list-view">
-<% for (const [catId, category] of Object.entries(categories)) { -%>
-<h3 id="<%=category.id%>" class="pb-2"><%=category.name%> <span class="h4 text-body-secondary"><%=isHebrewYear?calendarYear:year%></span>&nbsp;&nbsp;<%=category.emoji%></h3>
-<% if ('minor-fasts' === category.id) { -%>
-<p>Minor fasts begin at dawn and end at nightfall.</p>
-<% } else if ('modern-holidays' === category.id) { -%>
-<p>Modern Israeli holidays are national holidays officially recognized by the
-Knesset, Israel's parliament.</p>
-<% } else if ('rosh-chodesh' === category.id) { -%>
+<% for (const item of items) { %>
+<div class="card mb-4" id="<%=item.id%>" style="max-width: 720px;">
+<div class="row g-0">
+<% if (typeof item?.meta?.photo === 'object') { -%>
+<div class="col-md-4">
+<a href="<%=item.href%>"><picture>
+<source type="image/webp"
+ srcset="/i/is/4x3/<%=item.meta.photo.webp%>"
+ width="240">
+<img alt="<%=item.meta.photo.caption||holiday%>"
+src="/i/is/4x3/<%=item.meta.photo.fn%>"
+width="240"
+class="img-fluid rounded-start">
+</picture></a>
+</div><!-- .col-md-4 -->
+<% } -%>
+<div class="col-md-8">
+<div class="card-body">
+<h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
+<% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
+<p><%- await include('partials/holiday-index-dates.ejs', {item}) -%>
+<br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
+</p>
+<% if (item.jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script><% } -%>
+<div class="card-text"><%=item.descrMedium%></div>
+<% if (item.related) { %>
+<ul class="mt-2">
+<% for (const related of item.related) { %>
+  <li><a href="<%=related.href%>"><%=related.name%></a>:
+  <%- await include('partials/holiday-index-dates.ejs', {item: related}) -%></li>
+<% } %>
+</ul>
+<% } %>
+</div><!-- .card-body -->
+</div><!-- .col-md-4 -->
+</div><!-- .row -->
+</div><!-- .card #<%=item.id %> -->
+<% } -%>
+
+<h3 class="mt-3">Rosh Chodesh 🌒</h3>
 <p><span dir="rtl" lang="he">רֹאשׁ חוֹדֶשׁ</span>, transliterated
   Rosh Chodesh or Rosh Hodesh, is a minor holiday that occurs at the
   beginning of every month in the Hebrew calendar. It is marked by the birth of a new moon.</p>
@@ -149,83 +142,80 @@ considered Rosh Chodesh. The holiday that occurs on the 1st day of Tishrei
 is called <a href="rosh-hashana">Rosh Hashana</a>, the Jewish New Year.
 For the month of Tishrei, the major holiday of Rosh Hashana takes
 precedence over what would be a minor holiday.</p>
-<% } -%>
-<div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
-<% for (let i = 0; i < items[catId].length; i++) { const item = items[catId][i]; %>
-<% if (i === 4 && 'major-holidays' === category.id) { -%>
-</div>
-<div class="d-flex justify-content-center d-print-none">
-<h6 class="text-body-secondary mb-1">Advertisement</h6>
-</div><!-- .d-flex -->
-<div class="d-print-none mb-5">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
-crossorigin="anonymous"></script>
-<ins class="adsbygoogle"
-style="display:block; text-align:center;"
-data-ad-layout="in-article"
-data-ad-format="fluid"
-data-ad-client="ca-pub-7687563417622459"
-data-ad-slot="5342180883"></ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</div><!-- .d-print-none -->
-<div class="row row-cols-1 row-cols-lg-2 g-3 mb-5">
-<% } // advertisement -%>
-<div class="col">
-<div class="card" id="<%=item.id%>">
-<div class="card-body">
-<% if (typeof item?.meta?.photo === 'object') { -%>
-<a href="<%=item.href%>"><picture>
-<source type="image/webp"
- srcset="/i/is/1x1-200/<%=item.meta.photo.webp%>"
- width="150" height="150">
-<img alt="<%=item.meta.photo.caption||holiday%>"
-src="/i/is/1x1-200/<%=item.meta.photo.fn%>"
-width="150" height="150"
-class="rounded float-end ms-3 mb-3">
-</picture></a>
-<% } -%>
-<h5 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
-<% if (item.emoji && typeof item?.meta?.photo !== 'object') { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h5>
-<% if (item.jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(item.jsonLD) %></script><% } -%>
-<div class="card-text"><%=item.descrMedium%><% if (item.emoji && typeof item?.meta?.photo === 'object') { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></div>
-</div><!-- .card-body -->
-<div class="card-footer">
-<time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small> -
-<% if (item.duration > 0) { -%>
- <time class="fw-bolder text-nowrap" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time>
-<% } %> <small>nightfall</small>
-<br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
-</div><!-- .card-footer -->
-</div><!-- .card #<%=item.id %> -->
-</div><!-- .col -->
-<% } -%>
-</div><!-- .row #<%=category.id %> -->
-<% } // categories -%>
-</div><!-- #list-view -->
-<div class="row d-print-none mt-3">
-<div class="col">
-<nav>
-<ul class="pagination pagination-sm">
-<li class="page-item"><a class="page-link" href="<%=greg1 - 2%><%=iSuffix%>"<%- (greg1 - 2 < 1752) ? ' rel="nofollow"' : '' %>>&laquo;&nbsp;<%=greg1 - 2%></a></li>
-<% for (let i = greg1 - 1; i < greg1+3; i++) { %>
-<li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+<div class="table-responsive">
+<table class="table table-striped">
+<colgroup><col><col><col></colgroup>
+<thead>
+<tr><th>Rosh Chodesh</th><th>Starts</th><th>Ends</th></tr>
+</thead>
+<tbody class="table-group-divider">
+<% for (const item of roshChodesh) { %>
+<tr>
+<td><a href="<%=item.href%>"><%=item.name.substring(13)%> <% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+</td>
+<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
+</tr>
 <% } %>
-<li class="page-item"><a class="page-link" href="<%=greg1+3%><%=iSuffix%>"<%- (greg1+3 > today.year()+100) ? ' rel="nofollow"' : '' %>><%=greg1+3%>&nbsp;&raquo;</a></li>
-</ul>
-</nav>
-</div><!-- .col -->
+</tbody>
+</table>
+</div><!-- .table-responsive -->
+
+<h3 class="mt-3">Modern holidays 🇮🇱</h3>
+<p>Modern Israeli holidays are national holidays officially recognized by the Knesset, Israel's parliament.</p>
+<div class="table-responsive">
+<table class="table table-striped">
+<colgroup><col><col><col><col></colgroup>
+<thead>
+<tr><th>Holiday</th><th>Starts</th><th>Ends</th><th>Hebrew Date</th></tr>
+</thead>
+<tbody class="table-group-divider">
+<% for (const item of modernHolidays) { %>
+<tr>
+<td><a href="<%=item.href%>"><%=item.name%></a>
+</td>
+<td><time datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
+<td><time datetime="<%=item.endIsoDate%>"><%- item.endDowHtml %>, <%- item.endMonDayHtml %></time></td>
+<td class="small"><%=item.hdRangeNoYear%></td>
+</tr>
+<% } %>
+</tbody>
+</table>
+</div><!-- .table-responsive -->
+
+
+
+</div><!-- #list-view -->
+</div><!-- .col-md-9 -->
+<div class="col-md-3 d-print-none">
+<% if (greg1 > 1752) { %>
+<div class="mb-4">
+<div class="form-check form-switch">
+<input class="form-check-input" type="checkbox" role="switch" id="toggle-month">
+<label class="form-check-label" for="toggle-month">
+  Month view
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+</label>
+</div><!-- .form-switch -->
+</div>
+<% } -%>
+<div class="mb-4">
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+PDF one page per month, in landscape
+</div>
+<div class="mb-4">
+<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<p>Perpetual calendar feed for Apple, Google, Microsoft Outlook,
+  or to any desktop program that supports iCalendar (.ics) files</p>
+</div>
+<div class="mb-4">
+<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%><%=il?'&i=on':''%>"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
+<p>Create and download a custom calendar with event titles in different languages,
+<strong>candle-lighting times</strong> for Shabbat and holidays,
+<strong>Israeli holiday schedule</strong>, etc</p>
+</div>
+</div><!-- .col-md-3 -->
 </div><!-- .row -->
-<script>
-const navYears = [].slice.call(document.querySelectorAll('.nav-year'));
-for (let i = 0; i < navYears.length; i++) {
-  navYears[i].addEventListener('change', function(event) {
-    const url = event.target.value + location.search;
-    location = url;
-  });
-}
-</script>
 <%- await include('partials/download-modal.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% if (greg1 > 1752) { %><%- await include('partials/script-fullcalendar.ejs') %><% } -%>

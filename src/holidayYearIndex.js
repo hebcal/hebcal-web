@@ -1,4 +1,4 @@
-import {flags, HebrewCalendar} from '@hebcal/core';
+import {Event, flags, HDate, HebrewCalendar, months} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -9,29 +9,84 @@ import {
   eventToHolidayItem,
   getFirstOcccurences,
   makeQueryAndDownloadProps,
-  makeEventJsonLD,
+  OMER_TITLE,
 } from './holidayCommon.js';
 
-async function makeItems(events, il, showYear, addIsraelAsterisk) {
-  const items = {};
-  for (const key of Object.keys(categories)) {
-    items[key] = [];
+const SHMINI_ATZERET = 'Shmini Atzeret';
+const SIMCHAT_TORAH = 'Simchat Torah';
+const SHMINI_SIMCHAT = `${SHMINI_ATZERET} & ${SIMCHAT_TORAH}`;
+
+const groupings = {
+  'Asara B\'Tevet': null,
+  'Tu BiShvat': null,
+  'Purim': [
+    'Ta\'anit Esther',
+    'Shushan Purim',
+  ],
+  'Pesach': [
+    'Pesach Sheni',
+  ],
+  'Lag BaOmer': [
+    OMER_TITLE,
+  ],
+  'Shavuot': null,
+  'Tish\'a B\'Av': [
+    'Tzom Tammuz',
+  ],
+  'Tu B\'Av': null,
+  'Rosh Hashana': [
+    'Tzom Gedaliah',
+  ],
+  'Yom Kippur': null,
+  'Sukkot': null,
+  'Chanukah': null,
+};
+
+groupings[SHMINI_SIMCHAT] = [
+  SHMINI_ATZERET,
+  SIMCHAT_TORAH,
+];
+
+async function makeHolidayItem(holiday, ev, il) {
+  let item = eventToHolidayItem(ev, il);
+  let name = ev.basename();
+  if (holiday === SHMINI_SIMCHAT) {
+    const origHref = item.href;
+    const tmp = new Event(ev.getDate(), holiday, ev.getFlags());
+    item = eventToHolidayItem(tmp, il);
+    item.href = origHref;
+    name = il ? SHMINI_ATZERET : SIMCHAT_TORAH;
   }
-  const today = dayjs();
-  for (const ev of events) {
-    const item = eventToHolidayItem(ev, il);
-    const category = item.categories.length === 1 ? item.categories[0] : item.categories[1];
-    item.descrShort = getHolidayDescription(ev, true);
-    const descrMedium = getHolidayDescription(ev, false) || ev.memo || '';
-    const sentences = descrMedium.split(/\.\s+/).slice(0, 2);
-    const firstTwo = sentences.join('. ');
-    item.descrMedium = sentences.length == 2 ? firstTwo + '.' : firstTwo;
-    const meta = item.meta = await getHolidayMeta(item.name);
-    items[category].push(item);
-    if (today.isBefore(item.d) && ev.url()) {
-      item.jsonLD = makeEventJsonLD(ev, meta, il);
+  const descrMedium = getHolidayDescription(ev, false) || ev.memo || '';
+  const sentences = descrMedium.split(/\.\s+/).slice(0, 3);
+  const firstTwo = sentences.join('. ');
+  item.descrMedium = sentences.length == 3 ? firstTwo + '.' : firstTwo;
+  item.meta = await getHolidayMeta(name);
+  return item;
+}
+
+async function makeItems(events, il) {
+  const items = [];
+  for (const [holiday, related] of Object.entries(groupings)) {
+    const name = holiday === SHMINI_SIMCHAT ? SHMINI_ATZERET : holiday;
+    const evts = events.filter((ev) => ev.basename() === name);
+    for (const ev of evts) {
+      const item = await makeHolidayItem(holiday, ev, il);
+      item.name = holiday;
+      if (related) {
+        const r = [];
+        for (const relatedName of related) {
+          const relatedEv = events.find((ev) => ev.basename() === relatedName);
+          if (relatedEv) {
+            r.push(eventToHolidayItem(relatedEv, il));
+          }
+        }
+        item.related = r;
+      }
+      items.push(item);
     }
   }
+  items.sort((a, b) => a.hd.abs() - b.hd.abs());
   return items;
 }
 
@@ -63,8 +118,24 @@ export async function holidayYearIndex(ctx) {
     events0 = eventsIlModern.concat(events0);
     events0.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   }
+
+  const hyear = events0[0].getDate().getFullYear();
+  const omerEv = new Event(new HDate(16, months.NISAN, hyear),
+      OMER_TITLE, flags.OMER_COUNT, {emoji: '㊾'});
+  events0 = events0.concat(omerEv);
+
   const events = getFirstOcccurences(events0);
-  const items = await makeItems(events, il, isHebrewYear, true);
+  const items = await makeItems(events, il);
+
+  const roshChodesh = events
+      .filter((ev) => ev.getFlags() & flags.ROSH_CHODESH)
+      .map((ev) => eventToHolidayItem(ev, il));
+
+  const modernHolidays = events
+      .filter((ev) => ev.getFlags() & flags.MODERN_HOLIDAY)
+      .map((ev) => eventToHolidayItem(ev, il));
+
+
   const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
@@ -88,5 +159,7 @@ export async function holidayYearIndex(ctx) {
     isoDateStart: dayjs(events0[0].getDate().greg()).format('YYYY-MM') + '-01',
     options,
     amp: (q.amp === '1') ? true : undefined,
+    roshChodesh,
+    modernHolidays,
   });
 }
