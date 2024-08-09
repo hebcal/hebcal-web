@@ -401,7 +401,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   return {...defaults, ...ck, ...query};
 }
 
-const allKeys = new Set();
+const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em']);
 for (const key of [].concat(allGeoKeys,
     Object.keys(booleanOpts),
     Object.keys(dailyLearningOpts),
