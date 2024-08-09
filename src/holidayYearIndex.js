@@ -76,7 +76,7 @@ async function makeItems(events, il) {
     for (const ev of evts) {
       const item = await makeHolidayItem(holiday, ev, il);
       item.name = holiday;
-      if (related) {
+      if (related && (!il || holiday !== SHMINI_SIMCHAT)) {
         const r = [];
         for (const relatedName of related) {
           const relatedEv = events.find((ev) => ev.basename() === relatedName);
