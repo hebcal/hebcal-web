@@ -691,12 +691,14 @@ export function getLocationFromQuery(db, query) {
       throw createError(400, 'Timezone required');
     }
     let il = query.i === 'on';
-    if (query.tzid === 'Asia/Jerusalem') {
+    const tzid = query.tzid;
+    const tz0 = tzid[0];
+    if (tzid === 'Asia/Jerusalem') {
       il = true;
-    } else if (query.tzid[0] === ' ' || query.tzid[0] === '-' || query.tzid[0] === '+') {
+    } else if (tz0 === ' ' || tz0 === '-' || tz0 === '+') {
       // hack for client who passes +03:00 or -02:00 ("+" url-decodes to " ")
-      const m = query.tzid.match(/^([ +-])(\d\d):00$/);
-      if (m && m[2]) {
+      const m = /^([ +-])(\d\d):00$/.exec(tzid);
+      if (m?.[2]) {
         const dir = m[1] === '-' ? '-' : '+';
         query.tzid = 'Etc/GMT' + dir + parseInt(m[2], 10);
       }

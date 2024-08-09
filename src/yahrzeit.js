@@ -361,7 +361,7 @@ async function saveDataToDb(ctx) {
   const db = ctx.mysql;
   const sqlExists = 'SELECT contents FROM yahrzeit WHERE id = ?';
   const results = await db.query2(ctx, {sql: sqlExists, values: [id], timeout: 5000});
-  if (results && results[0]) {
+  if (results?.[0]) {
     const prev = results[0].contents;
     noSaveFields.forEach((key) => delete prev[key]);
     if (isDeepStrictEqual(toSave, prev)) {
@@ -373,7 +373,7 @@ async function saveDataToDb(ctx) {
   toSave.seq = seq;
   const contents = JSON.stringify(toSave);
   const ip = getIpAddress(ctx);
-  if (!results || !results[0]) {
+  if (!results?.[0]) {
     const sql = 'REPLACE INTO yahrzeit (id, created, updated, ip, contents) VALUES (?, NOW(), NOW(), ?, ?)';
     await db.execute2(ctx, {sql, values: [id, ip, contents], timeout: 5000});
     logInfo.msg = `yahrzeit-db: created calendarId=${id}`;

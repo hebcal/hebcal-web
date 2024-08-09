@@ -68,10 +68,10 @@ export async function yahrzeitEmailVerify(ctx) {
 async function lookupSubscription(ctx, subscriptionId) {
   const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
   const results = await dbQuery(ctx, sql, [subscriptionId]);
-  if (!results || !results[0]) {
+  const row = results?.[0];
+  if (!row) {
     ctx.throw(404, `Anniversary subscription key '${subscriptionId}' not found`);
   }
-  const row = results[0];
   return {
     emailAddress: row.email_addr,
     calendarId: row.calendar_id,
@@ -81,15 +81,15 @@ async function lookupSubscription(ctx, subscriptionId) {
 async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
   const sql = `SELECT id, sub_status FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
   const results = await dbQuery(ctx, sql, [emailAddress, calendarId]);
-  if (!results || !results[0]) {
+  let found = results?.[0];
+  if (!found) {
     return {id: false, status: null};
   }
-  let row = results[0];
   const active = results.find((row) => row.sub_status === 'active');
   if (active) {
-    row = active;
+    found = active;
   }
-  return {id: row.id, status: row.sub_status};
+  return {id: found.id, status: found.sub_status};
 }
 
 function makeUlid(ctx) {
@@ -123,7 +123,7 @@ WHERE e.email_addr = ? AND e.sub_status = 'active'
 AND e.calendar_id = y.id
 ORDER BY y.updated ASC`;
   const results = await dbQuery(ctx, sql, [q.em]);
-  if (!results || !results[0]) {
+  if (!results?.[0]) {
     ctx.status = 404;
     return ctx.render('yahrzeit-search-notfound', {q});
   }
@@ -276,10 +276,10 @@ FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
   const results = await dbQuery(ctx, sql2, [id]);
-  if (!results || !results[0]) {
+  const row = results?.[0];
+  if (!row) {
     ctx.throw(404, `Subscription key '${id}' not found`);
   }
-  const row = results[0];
   const contents = row.contents;
   contents.emailAddress = row.email_addr;
   contents.calendarId = row.calendar_id;

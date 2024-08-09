@@ -96,14 +96,14 @@ const parshaDateRe = /^([^\d]+)-(\d+)$/;
 export async function parshaDetail(ctx) {
   const base0 = getBaseFromPath(ctx);
   const base = base0.toLowerCase();
-  const matches = base.match(parshaDateRe);
+  const matches = parshaDateRe.exec(base);
   const date = matches?.[2];
   const parshaAnchor = matches === null ? base : matches[1];
   const parshaName0 = sedrot.get(parshaAnchor);
   if (typeof parshaName0 !== 'string') {
     const candidate = lookupParshaAlias(parshaAnchor);
     if (candidate) {
-      if (date && date.length === 8) {
+      if (date?.length === 8) {
         httpRedirect(ctx, `/sedrot/${candidate}-${date}?redir=spelling`);
       } else {
         httpRedirect(ctx, `/sedrot/${candidate}?redir=spelling`);

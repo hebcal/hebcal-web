@@ -106,7 +106,7 @@ app.use(async function fixup0(ctx, next) {
   }
   // Fix up querystring so we can later use ctx.request.query
   const qs = ctx.request.querystring;
-  if (qs && qs.length) {
+  if (qs?.length) {
     const semi = qs.indexOf(';');
     if (semi !== -1) {
       ctx.request.querystring = qs.replace(/;/g, '&');

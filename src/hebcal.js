@@ -183,7 +183,7 @@ function renderCsv(ctx) {
 async function renderForm(ctx, error) {
   const message = error ? error.message : undefined;
   const cookie = ctx.cookies.get('C');
-  if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
+  if (ctx.request.querystring.length === 0 && cookie?.length) {
     // private cache only if we're tailoring results by cookie
     ctx.set('Cache-Control', 'private');
   }

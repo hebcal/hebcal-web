@@ -76,11 +76,11 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   }
   args.set('ua', userAgent);
   const lang = ctx.get('accept-language');
-  if (lang && lang.length) {
+  if (lang?.length) {
     args.set('lang', lang);
   }
   const ref = ctx.get('referer');
-  if (ref && ref.length) {
+  if (ref?.length) {
     args.set('urlref', ref);
   }
   if (ctx.state.userId) {
@@ -112,7 +112,7 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Content-Length': sendPostBody ? postLen : 0,
   };
-  if (ref && ref.length) {
+  if (ref?.length) {
     headers.Referer = ref;
   }
   const hostname = isProduction ? 'matomo-internal.hebcal.com' : httpHost;

@@ -21,7 +21,7 @@ export function shortUrlRedir(ctx) {
     qs.delete('uc');
   }
   const ref = ctx.get('referer');
-  if (!utmSource && ref && ref.length) {
+  if (!utmSource && ref?.length) {
     const refUrl = new URL(ref);
     const hostname = refUrl.hostname;
     if (hostname !== 'hebcal.com' && !hostname.endsWith('.hebcal.com')) {

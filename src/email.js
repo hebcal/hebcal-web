@@ -23,10 +23,10 @@ SELECT email_address, email_candles_zipcode, email_candles_city, email_candles_g
 FROM hebcal_shabbat_email
 WHERE email_id = ?`;
   const results = await db.query(sql, subscriptionId);
-  if (!results || !results[0]) {
+  const row = results?.[0];
+  if (!row) {
     ctx.throw(404, `Subscription confirmation key ${subscriptionId} not found`);
   }
-  const row = results[0];
   ctx.state.emailAddress = row.email_address;
   const location = getLocationFromQuery(ctx.db, getGeoFromRow(row));
   ctx.state.locationName = location.getName();
@@ -116,13 +116,13 @@ function getSubscriptionId(ctx, q) {
   const subscriptionRe = /^[0-9a-z]{24}$/;
   const k = q.k;
   if (typeof k === 'string') {
-    if (!k.match(subscriptionRe)) {
+    if (!subscriptionRe.exec(k)) {
       ctx.throw(400, 'Invalid subscription confirmation key');
     }
     return k;
   } else {
     const qs = ctx.request.querystring;
-    if (qs.length > 0 && qs.match(subscriptionRe)) {
+    if (qs.length > 0 && subscriptionRe.exec(qs)) {
       return qs;
     }
   }
@@ -316,10 +316,10 @@ async function getSubInfo(db, emailAddress) {
   FROM hebcal_shabbat_email
   WHERE email_address = ?`;
   const results = await db.query(sql, emailAddress);
-  if (!results || !results[0]) {
+  const r = results?.[0];
+  if (!r) {
     return null;
   }
-  const r = results[0];
   const m = r.email_candles_havdalah === null ? null : String(r.email_candles_havdalah);
   const geo = getGeoFromRow(r);
   return {

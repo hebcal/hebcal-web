@@ -63,7 +63,7 @@ export async function holidayDetail(ctx) {
   const base0 = getBaseFromPath(ctx);
   const baseLc = base0.toLowerCase();
   const base = baseLc.endsWith('.html') ? baseLc.substring(0, baseLc.length - 5) : baseLc;
-  const matches = base.match(holidayYearRe);
+  const matches = holidayYearRe.exec(base);
   const dateSuffix = matches?.[2];
   const year = dateSuffix ? (dateSuffix.length === 8 ? +dateSuffix.substring(0, 4) : +dateSuffix) : null;
   const base1 = matches === null ? base : matches[1];
@@ -469,7 +469,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   if (itemReading.summaryParts) {
     itemReading.torahHtml = makeLeyningHtmlFromParts(itemReading.summaryParts);
   } else if (itemReading.summary) {
-    const matches = itemReading.summary.match(/^([^\d]+)(\d.+)$/);
+    const matches = /^([^\d]+)(\d.+)$/.exec(itemReading.summary);
     const book = matches[1].trim();
     const verses = matches[2].replace(/:/g, '.').replace(/\s/g, '');
     itemReading.torahHref = `https://www.sefaria.org/${book}.${verses}?lang=bi`;

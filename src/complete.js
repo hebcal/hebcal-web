@@ -29,7 +29,7 @@ export async function geoAutoComplete(ctx) {
     }
     for (const item of items) {
       const cc = item.cc;
-      if (cc && cc.length === 2) {
+      if (cc?.length === 2) {
         item.flag = flag(cc.toUpperCase());
       }
     }
