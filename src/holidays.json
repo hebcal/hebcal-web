@@ -227,6 +227,36 @@
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Lag_BaOmer",
    "text": "Lag BaOmer (Hebrew: ל״ג בעומר), also Lag B’Omer, is a Jewish holiday celebrated on the 33rd day of the Counting of the Omer, which occurs on the 18th day of the Hebrew month of Iyar. One reason given for the holiday is as the day of passing of Rabbi Shimon bar Yochai. Modern Jewish tradition links the holiday to the Bar Kokhba Revolt against the Roman Empire (132-135 CE). In Israel, it is celebrated as a symbol for the fighting Jewish spirit."
+  },
+  "photo": {
+    "fn": "myazv2ldos.jpg",
+    "caption": "Crackling bonfire on a dark background, CC0, photo by Matheus Bertelli",
+    "dimensions": {
+      "640": {
+       "width": 640,
+       "height": 400
+      },
+      "800": {
+       "width": 800,
+       "height": 500
+      },
+      "1024": {
+       "width": 1024,
+       "height": 640
+      },
+      "1x1": {
+       "width": 3334,
+       "height": 3334
+      },
+      "4x3": {
+       "width": 4445,
+       "height": 3334
+      },
+      "16x9": {
+       "width": 5334,
+       "height": 3000
+      }
+    }
   }
  },
  "Leil Selichot": {

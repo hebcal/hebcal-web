@@ -5,7 +5,6 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {getHolidayMeta} from './getHolidayMeta.js';
 import {
-  categories,
   eventToHolidayItem,
   getFirstOcccurences,
   makeQueryAndDownloadProps,
@@ -62,6 +61,10 @@ async function makeHolidayItem(holiday, ev, il) {
   const firstTwo = sentences.join('. ');
   item.descrMedium = firstTwo + '.';
   item.meta = await getHolidayMeta(name);
+  if (il && holiday === SHMINI_SIMCHAT) {
+    const simchat = await getHolidayMeta(SIMCHAT_TORAH);
+    item.meta.photo = simchat.photo;
+  }
   return item;
 }
 
@@ -135,7 +138,6 @@ export async function holidayYearIndex(ctx) {
       .filter((ev) => ev.getFlags() & flags.MODERN_HOLIDAY)
       .map((ev) => eventToHolidayItem(ev, il));
 
-  const roshHashana = events.find((ev) => ev.basename() === 'Rosh Hashana');
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
@@ -148,9 +150,7 @@ export async function holidayYearIndex(ctx) {
     next: isHebrewYear ? `${greg2}-${greg2 + 1}` : yearNum + 1,
     isHebrewYear,
     calendarYear,
-    categories,
     items,
-    RH: dayjs(roshHashana.getDate().greg()),
     il,
     locationName: il ? 'Israel' : 'the Diaspora',
     iSuffix: il ? '?i=on' : '',
