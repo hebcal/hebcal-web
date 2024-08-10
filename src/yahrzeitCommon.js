@@ -21,6 +21,12 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
     const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
     await db.execute2(ctx, {sql: sqlUpdate, values: [id], timeout: 5000});
   }
+  const sql2 = 'REPLACE INTO yahrzeit_atime (id, ts) VALUES (?, NOW())';
+  try {
+    await db.execute2(ctx, {sql: sql2, values: [id], timeout: 1000});
+  } catch (err) {
+    ctx.logger.warn(err);
+  }
   // convert from 'x' fields back into ymd fields
   const maxId = getMaxYahrzeitId(obj);
   for (let i = 1; i <= maxId; i++) {
