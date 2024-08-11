@@ -10,8 +10,12 @@ of <strong><%= info.name %>’s <%= info.typeStr %></strong>
 <% } -%>
 will no longer be sent to <strong><%= emailAddress %></strong>.
 </div><!-- .alert -->
-<p><a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>">View Calendar &raquo;</a>
-<a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">Edit Calendar &raquo;</a></p>
+<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>">
+  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+  View calendar</a>
+<a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%= info.calendarId %>#form">
+  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  Edit calendar</a></p>
 <p>To generate a new list of Yahrzeit (memorial) and Yizkor dates, Hebrew Birthdays,
 or Anniversaries for the next 20 years, visit our
 <a href="/yahrzeit">Yahrzeit + Anniversary Calendar</a>.</p>
