@@ -29,7 +29,11 @@ div.yahrzeit-row {
 <% if (showDownload) { %>
 <div class="me-2 mb-2">
   <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
+  <% if (!q.em) { -%>
+    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+  <% } else { -%>
     <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+  <% } -%>
   </a>
 </div>
 <div class="me-2 mb-2">
@@ -92,8 +96,12 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 <div class="btn-toolbar d-print-none mt-3 mb-4">
 <div class="me-2 mb-2">
 <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
-  Email reminders</a>
+  <% if (!q.em) { -%>
+    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+  <% } else { -%>
+    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+  <% } -%>
+</a>
 </div>
 <div class="me-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
@@ -175,6 +183,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <input type="hidden" name="v" value="yahrzeit">
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <input type="hidden" name="seq" value="<%=seq%>">
+<input type="hidden" name="em" value="<%=q.em || ''%>">
 <button type="submit" class="btn btn-primary"><%=isEditPage?'Update':'Create'%> Calendar</button>
 </form>
 </div><!-- #home -->
@@ -232,7 +241,7 @@ instructions</a>.</p>
 </div><!-- .row -->
 
 <% if (tables !== null && showDownload) { -%>
-<%- await include('partials/download-modal.ejs', {yahrtzeit: true}) -%>
+<%- await include('partials/download-modal.ejs') -%>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -242,7 +251,7 @@ instructions</a>.</p>
 <input type="hidden" name="type" value="<%=anniversaryType%>">
 <input type="hidden" name="ulid" value="<%=ulid%>">
 <div class="modal-header">
-<h5 class="modal-title">Email reminders</h5>
+<h5 class="modal-title"><%= q.em ? "Email reminders" : "Save personal calendar" %></h5>
 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
@@ -258,9 +267,10 @@ instructions</a>.</p>
   for this personal calendar are already active. No further action is required.
 </div><!-- .alert -->
 <div id="email-modal-entry">
-  <p>Receive annual reminder emails one week before and one day before each anniversary.</p>
+  <p><% if (!q.em) { %>Enter your email address to save your personal calendar.<% } %>
+    Receive annual reminder emails one week before and one day before each anniversary.</p>
   <div class="form-floating mb-3">
-    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
+    <input class="form-control" type="email" name="em" id="em" value="<%=q.em || ''%>" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
@@ -271,7 +281,7 @@ instructions</a>.</p>
 </div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-primary" id="email-subscribe">Subscribe</button>
+  <button type="button" class="btn btn-primary" id="email-subscribe"><%= q.em ? 'Subscribe' : 'Save' %></button>
 </div>
 </form>
 </div><!-- .modal-content -->
@@ -280,6 +290,7 @@ instructions</a>.</p>
 <%- await include('partials/email-modal-script.ejs', {
   resource: '/yahrzeit/email',
   action: 'yahrzeit-reminder',
+  emailSubscribeLabel: q.em ? 'Subscribe' : 'Save',
 }) -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>

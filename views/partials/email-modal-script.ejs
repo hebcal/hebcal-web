@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function show(el) { if (el) { el.style.display = 'block' } }
 function hide(el) { if (el) { el.style.display = 'none' } }
 const resource = '<%=resource%>';
+const emailSubscribeLabel = '<%=emailSubscribeLabel%>';
 const emailModalSuccess = document.getElementById('email-modal-success');
 const emailModalFailure = document.getElementById('email-modal-failure');
 const emailModalAlready = document.getElementById('email-modal-already');
@@ -16,7 +17,7 @@ emailModal.addEventListener('show.bs.modal', function () {
   hide(emailModalFailure);
   show(emailModalEntry);
   show(emailSubscribeBtn);
-  emailSubscribeBtn.textContent = 'Subscribe';
+  emailSubscribeBtn.textContent = emailSubscribeLabel;
   emailSubscribeBtn.disabled = false;
   emailForm.classList.remove('was-validated');
   emailForm.classList.remove('is-invalid');
@@ -30,7 +31,7 @@ function validateEmail(email) {
 }
 function myFail(name) {
   show(emailModalFailure);
-  emailSubscribeBtn.textContent = 'Subscribe';
+  emailSubscribeBtn.textContent = emailSubscribeLabel;
   emailSubscribeBtn.disabled = false;
   var _paq = window._paq = window._paq || [];
   _paq.push(['trackEvent', 'Error', '500', '<%=action%>: ' + name]);
@@ -61,7 +62,7 @@ function doSubscribe(event) {
   var _paq = window._paq = window._paq || [];
   _paq.push(['trackEvent', 'Email', 'signup', '<%=action%>']);
 
-  emailSubscribeBtn.textContent = 'Subscribing...';
+  emailSubscribeBtn.textContent = 'Processing...';
   emailSubscribeBtn.disabled = true;
   const params = new URLSearchParams();
   const formData = new FormData(emailForm);

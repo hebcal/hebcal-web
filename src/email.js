@@ -103,7 +103,9 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
 }
 
 function getUnsubUrl(emailAddress) {
@@ -278,7 +280,9 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
 }
 
 async function unsubscribe(ctx, emailAddress, subInfo) {
@@ -442,5 +446,7 @@ ${BLANK}
 ${imgOpen}</div>
 `,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
 }

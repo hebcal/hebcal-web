@@ -179,7 +179,9 @@ ${BLANK}
     subject: `View your Yahrzeit + Anniversary Calendar subscriptions`,
     html: html,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
   return ctx.render('yahrzeit-search-found', {q, count: seen.size});
 }
 
@@ -219,7 +221,9 @@ export async function yahrzeitEmailSub(ctx) {
     compactJsonToSave(details);
     const contents = JSON.stringify(details);
     const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
-    await dbQuery(ctx, sql, [contents, ip, calendarId]);
+    dbQuery(ctx, sql, [contents, ip, calendarId]).catch((err) => {
+      ctx.logger.error(err);
+    });
   }
   let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   if (id === false) {
@@ -230,7 +234,9 @@ export async function yahrzeitEmailSub(ctx) {
     await dbQuery(ctx, sql, [id, q.em, calendarId, ip]);
   } else if (status === 'active') {
     const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
-    await dbQuery(ctx, sqlUpdate, [id]);
+    dbQuery(ctx, sqlUpdate, [id]).catch((err) => {
+      ctx.logger.error(err);
+    });
     ctx.body = {ok: true, alreadySubscribed: true};
     return;
   } else {
@@ -274,7 +280,9 @@ ${BLANK}
 ${imgOpen}</div>
 `,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
   ctx.body = {ok: true, status: status};
 }
 
@@ -406,5 +414,7 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  await mySendMail(ctx, message);
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
 }
