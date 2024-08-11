@@ -115,7 +115,7 @@ export async function yahrzeitApp(ctx) {
         }
       }
       ctx.status = 200;
-      if (ctx.method === 'POST') {
+      if (ctx.method === 'POST' || ctx.state.showDownload) {
         setYahrzeitCookie(ctx);
       }
       await makeDownloadProps(ctx);
