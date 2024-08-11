@@ -2,7 +2,6 @@ import {Event, HDate, HebrewCalendar, Locale,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
-import {pad2, pad4} from '@hebcal/hdate';
 import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
@@ -16,6 +15,9 @@ import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
   YAHRZEIT, BIRTHDAY,
+  DEFAULT_YEARS,
+  getNumYears,
+  compactJsonToSave,
   getCalendarNames, makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {makeLogInfo} from './logger.js';
@@ -23,9 +25,6 @@ import {isDeepStrictEqual} from 'node:util';
 import {murmur128HexSync, murmur32HexSync} from 'murmurhash3';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
-const MIN_YEARS = 2;
-const MAX_YEARS = 50;
-const DEFAULT_YEARS = 20;
 
 /**
  * @param {*} ctx
@@ -293,23 +292,6 @@ async function makeFormResults(ctx) {
   }, new Map());
 }
 
-/**
- * @param {string|number} str
- * @return {number}
- */
-function getNumYears(str) {
-  const y = parseInt(str, 10);
-  if (isNaN(y)) {
-    return DEFAULT_YEARS;
-  } else if (y < MIN_YEARS) {
-    return MIN_YEARS;
-  } else if (y > MAX_YEARS) {
-    return MAX_YEARS;
-  } else {
-    return y;
-  }
-}
-
 async function makeDownloadProps(ctx) {
   const q = ctx.state.q;
   removeEmptyArgs(q);
@@ -346,12 +328,9 @@ async function makeDownloadProps(ctx) {
   };
 }
 
-const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'seq'];
-
 async function saveDataToDb(ctx) {
   const toSave = {...ctx.state.q};
   const seq = +(toSave.seq) || 1;
-  noSaveFields.forEach((key) => delete toSave[key]);
   compactJsonToSave(toSave);
   const id = ctx.state.ulid;
   const logInfo = makeLogInfo(ctx);
@@ -363,7 +342,8 @@ async function saveDataToDb(ctx) {
   const results = await db.query2(ctx, {sql: sqlExists, values: [id], timeout: 5000});
   if (results?.[0]) {
     const prev = results[0].contents;
-    noSaveFields.forEach((key) => delete prev[key]);
+    compactJsonToSave(prev);
+    toSave.seq = prev.seq = -1; // ignore sequence number during comparison
     if (isDeepStrictEqual(toSave, prev)) {
       logInfo.msg = `yahrzeit-db: no change to calendarId=${id}`;
       ctx.logger.info(logInfo);
@@ -383,38 +363,6 @@ async function saveDataToDb(ctx) {
     await db.execute2(ctx, {sql, values: [contents, ip, id], timeout: 5000});
     logInfo.msg = `yahrzeit-db: updated calendarId=${id}`;
     ctx.logger.info(logInfo);
-  }
-}
-
-function compactJsonToSave(obj) {
-  const maxId = getMaxYahrzeitId(obj);
-  for (let i = 1; i <= maxId; i++) {
-    const yk = 'y' + i;
-    const mk = 'm' + i;
-    const dk = 'd' + i;
-    const yy = obj[yk];
-    const mm = obj[mk];
-    const dd = obj[dk];
-    if (!empty(dd) && !empty(mm) && !empty(yy)) {
-      const yy4 = yy.length === 4 ? yy : pad4(+yy);
-      const mm2 = mm.length === 2 ? mm : pad2(+mm);
-      const dd2 = dd.length === 2 ? dd : pad2(+dd);
-      obj['x' + i] = yy4 + '-' + mm2 + '-' + dd2;
-      delete obj[yk];
-      delete obj[mk];
-      delete obj[dk];
-    }
-    const anniversaryType = obj['t' + i];
-    if (anniversaryType) {
-      obj['t' + i] = anniversaryType[0].toLowerCase();
-    }
-    const sunset = obj['s' + i];
-    if (typeof sunset !== 'undefined') {
-      obj['s' + i] = (sunset === 'on' || sunset == 1) ? 1 : 0;
-    }
-  }
-  if (typeof obj.years === 'string') {
-    obj.years = getNumYears(obj.years);
   }
 }
 

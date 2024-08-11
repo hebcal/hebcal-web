@@ -6,6 +6,7 @@ import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   YAHRZEIT, ANNIVERSARY, OTHER,
   getYahrzeitIds,
   makeCalendarTitle,
+  compactJsonToSave,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {ulid} from 'ulid';
 import {basename} from 'path';
@@ -210,10 +211,17 @@ export async function yahrzeitEmailSub(ctx) {
   }
   q.em = q.em.toLowerCase();
   const calendarId = q.ulid;
-  // will throw if not found. sets downloaded=1 if found.
-  await getYahrzeitDetailsFromDb(ctx, calendarId);
-  let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   const ip = getIpAddress(ctx);
+  // will throw if not found. sets downloaded=1 if found.
+  const details = await getYahrzeitDetailsFromDb(ctx, calendarId);
+  if (!details.em) {
+    details.em = q.em;
+    compactJsonToSave(details);
+    const contents = JSON.stringify(details);
+    const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
+    await dbQuery(ctx, sql, [contents, ip, calendarId]);
+  }
+  let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   if (id === false) {
     id = makeUlid(ctx);
     const sql = `INSERT INTO yahrzeit_email

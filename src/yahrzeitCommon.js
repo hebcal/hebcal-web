@@ -1,6 +1,72 @@
 import {empty} from './empty.js';
 import {makeGregDate} from './dateUtil.js';
+import {pad4, pad2} from '@hebcal/hdate';
 import dayjs from 'dayjs';
+
+const MIN_YEARS = 2;
+const MAX_YEARS = 50;
+export const DEFAULT_YEARS = 20;
+
+/**
+ * @param {string|number} str
+ * @return {number}
+ */
+export function getNumYears(str) {
+  const y = parseInt(str, 10);
+  if (isNaN(y)) {
+    return DEFAULT_YEARS;
+  } else if (y < MIN_YEARS) {
+    return MIN_YEARS;
+  } else if (y > MAX_YEARS) {
+    return MAX_YEARS;
+  } else {
+    return y;
+  }
+}
+
+const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'lastModified'];
+
+function compactJsonItem(obj, num) {
+  const yk = 'y' + num;
+  const mk = 'm' + num;
+  const dk = 'd' + num;
+  const yy = obj[yk];
+  const mm = obj[mk];
+  const dd = obj[dk];
+  if (!empty(dd) && !empty(mm) && !empty(yy)) {
+    const yy4 = yy.length === 4 ? yy : pad4(+yy);
+    const mm2 = mm.length === 2 ? mm : pad2(+mm);
+    const dd2 = dd.length === 2 ? dd : pad2(+dd);
+    obj['x' + num] = yy4 + '-' + mm2 + '-' + dd2;
+    delete obj[yk];
+    delete obj[mk];
+    delete obj[dk];
+  }
+  const typeKey = 't' + num;
+  const anniversaryType = obj[typeKey];
+  if (anniversaryType) {
+    obj[typeKey] = anniversaryType[0].toLowerCase();
+  }
+  const sunsetKey = 's' + num;
+  const sunset = obj[sunsetKey];
+  if (typeof sunset !== 'undefined') {
+    obj[sunsetKey] = (sunset === 'on' || sunset == 1) ? 1 : 0;
+  }
+}
+
+export function compactJsonToSave(obj) {
+  const maxId = getMaxYahrzeitId(obj);
+  for (let i = 1; i <= maxId; i++) {
+    compactJsonItem(obj, i);
+  }
+  if (typeof obj.years === 'string') {
+    obj.years = getNumYears(obj.years);
+  }
+  noSaveFields.forEach((key) => delete obj[key]);
+  if (empty(obj.em)) {
+    delete obj.em;
+  }
+}
 
 /**
  * @param {*} ctx
