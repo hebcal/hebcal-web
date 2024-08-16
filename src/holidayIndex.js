@@ -179,7 +179,7 @@ export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear0 = parseInt(ctx.request.query?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(new HDate(dt));
-  if (hyear < 3762) {
+  if (hyear < 3762 || hyear > 9995) {
     return httpRedirect(ctx, `/holidays/?redir=year`);
   }
   const tishrei1 = new HDate(1, 'Tishrei', hyear);
