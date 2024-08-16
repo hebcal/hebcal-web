@@ -289,7 +289,7 @@ instructions</a>.</p>
 </div><!-- .modal -->
 <%- await include('partials/email-modal-script.ejs', {
   resource: '/yahrzeit/email',
-  action: 'yahrzeit-reminder',
+  action: q.em ? 'yahrzeit-reminder' : 'yahrzeit-save',
   emailSubscribeLabel: q.em ? 'Subscribe' : 'Save',
 }) -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>

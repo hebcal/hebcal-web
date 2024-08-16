@@ -410,7 +410,7 @@ async function writeStagingInfo(ctx, db, q) {
     ip,
   ]);
   const locationName = ctx.state.locationName;
-  matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly', {
+  matomoTrack(ctx, 'Email', 'signup-backend', 'shabbat-weekly', {
     url: ctx.request.href,
   });
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;

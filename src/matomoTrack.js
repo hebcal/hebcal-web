@@ -63,6 +63,18 @@ export function matomoTrack(ctx, category, action, name=null, params={}) {
   if (isRobot(userAgent)) {
     return;
   }
+  const urlParam = params.url;
+  if (urlParam) {
+    const url = new URL(urlParam);
+    url.search = ''; // always remove search params
+    const pn = url.pathname;
+    if (pn.startsWith('/yahrzeit/edit/')) {
+      url.pathname = '/yahrzeit/edit/_ID_';
+    } else if (pn.startsWith('/yahrzeit/verify/')) {
+      url.pathname = '/yahrzeit/verify/_ID_';
+    }
+    params.url = url.href;
+  }
   const args = new URLSearchParams(params);
   args.set('rec', '1');
   args.set('apiv', '1');

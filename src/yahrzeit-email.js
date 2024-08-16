@@ -35,7 +35,7 @@ export async function yahrzeitEmailVerify(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
     await dbQuery(ctx, sqlUpdate, [ip, subscriptionId]);
-    matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
+    matomoTrack(ctx, 'Email', 'signup-confirmed', 'yahrzeit-reminder', {
       url: ctx.request.href,
     });
     await sendConfirmEmail(ctx, contents, subscriptionId);
@@ -243,7 +243,7 @@ export async function yahrzeitEmailSub(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
     await dbQuery(ctx, sqlUpdate, [ip, id]);
   }
-  matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder', {
+  matomoTrack(ctx, 'Email', 'signup-backend', 'yahrzeit-reminder', {
     url: ctx.request.href,
   });
   const anniversaryType = q.type === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
