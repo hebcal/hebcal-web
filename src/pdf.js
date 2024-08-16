@@ -113,7 +113,7 @@ function renderPdfMonthGrid(doc, d, rtl, rows, rowheight) {
 /**
  * @param {dayjs.Dayjs} d
  * @param {boolean} rtl
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {string}
  */
 function makeHebMonthStr(d, rtl, options) {
@@ -181,7 +181,7 @@ function eventColor(evt) {
  * @param {number} x
  * @param {number} y
  * @param {boolean} rtl
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {number}
  */
 function renderPdfEvent(doc, evt, x, y, rtl, options) {
@@ -279,7 +279,7 @@ function reverseHebrewWords(subj) {
 /**
  * Creates an empty PDF doc so we can start streaming
  * @param {string} title
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {PDFDocument}
  */
 export function createPdfDoc(title, options) {
@@ -389,7 +389,7 @@ export function renderPdf(doc, events, options) {
 }
 
 /**
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {string}
  */
 function makeLeftText(options) {

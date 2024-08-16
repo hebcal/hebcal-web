@@ -484,7 +484,7 @@ function getMaskFromQuery(query) {
  * Read Koa request parameters and create HebcalOptions
  * @param {any} db
  * @param {Object.<string,string>} query
- * @return {CalOptions}
+ * @return {import('@hebcal/core').CalOptions}
  */
 export function makeHebcalOptions(db, query) {
   const options = {};
@@ -649,9 +649,14 @@ export function makeHebcalOptions(db, query) {
  * @return {Location}
  */
 export function getLocationFromQuery(db, query) {
-  const cityTypeahead = query['city-typeahead'];
+  let cityTypeahead = query['city-typeahead'];
+  if (typeof cityTypeahead === 'string') {
+    cityTypeahead = cityTypeahead.trim();
+  }
   if (is5DigitZip(cityTypeahead)) {
-    query.zip = cityTypeahead.trim();
+    query.zip = cityTypeahead;
+  } else if (!empty(cityTypeahead) && empty(query.zip) && / \d\d\d\d\d$/.test(cityTypeahead)) {
+    query.zip = cityTypeahead.substring(cityTypeahead.length - 5);
   }
   if (!empty(query.geonameid)) {
     const location = db.lookupGeoname(parseInt(query.geonameid, 10));
@@ -866,7 +871,7 @@ export function httpRedirect(ctx, rpath, status=302) {
 
 /**
  * @param {any} ctx
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {Event[]}
  */
 export function makeHebrewCalendar(ctx, options) {
@@ -1120,7 +1125,7 @@ const maxNumYear = {
 
 /**
  * Parse HebcalOptions to determine ideal numYears
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {number}
  */
 export function getNumYears(options) {
@@ -1150,7 +1155,7 @@ export function getNumYears(options) {
 
 /**
  * @private
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @param {Object.<string,string>} query
  * @return {Object.<string,any>}
  */
@@ -1217,7 +1222,7 @@ function makeGeoUrlArgs0(q, location) {
 /**
  * @param {Object.<string,string>} q
  * @param {Location} location
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {string}
  */
 export function makeGeoUrlArgs(q, location, options) {
@@ -1349,7 +1354,7 @@ function queryDescription(query, map) {
 
 /**
  * If all default holidays are suppressed try to come up with a better name
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @param {Object.<string,string>} query
  * @return {string}
  */

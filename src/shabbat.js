@@ -381,7 +381,7 @@ function makeJsonLDevent(item, location, subj, url) {
 
 /**
  * @param {Event} ev
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @param {string} locale
  * @param {string} cfg
  * @return {Object}

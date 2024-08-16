@@ -347,7 +347,7 @@ const gregMonthNames = [
 
 /**
  * @private
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @param {Event[]} events
  * @return {string}
  */

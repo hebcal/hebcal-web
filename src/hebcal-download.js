@@ -146,7 +146,7 @@ function addLocationOmerAlarms(options, events) {
 /**
  * @private
  * @param {Event[]} events
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {string}
  */
 function campaignName(events, options) {

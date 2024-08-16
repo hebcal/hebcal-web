@@ -150,7 +150,7 @@ function getSubFilename(location) {
 /**
  * @param {any} ctx
  * @param {any} q
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  */
 export function makeDownloadProps(ctx, q, options) {
   const dlFilename = getDownloadFilename(options);

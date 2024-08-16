@@ -110,7 +110,7 @@ function getStartAndEnd(query) {
 
 /**
  * @param {Event[]} events
- * @param {CalOptions} options
+ * @param {import('@hebcal/core').CalOptions} options
  * @return {any[]}
  */
 function makeContents(events, options) {
