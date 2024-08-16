@@ -561,6 +561,20 @@ export function makeHebcalOptions(db, query) {
       }
     }
   }
+  if (!empty(query.start)) {
+    options.start = isoDateStringToDate(query.start);
+  }
+  if (!empty(query.end)) {
+    options.end = isoDateStringToDate(query.end);
+  }
+  if ((options.start && !options.end) || (options.end && !options.start)) {
+    throw createError(400, `If one of 'start' or 'end' is specified, both are required`);
+  }
+  if (options.start && options.end) {
+    delete query.year;
+    delete query.month;
+    delete query.yt;
+  }
   if (!empty(query.yt)) {
     options.isHebrewYear = Boolean(query.yt === 'H');
   }
@@ -591,11 +605,6 @@ export function makeHebcalOptions(db, query) {
       options.month = month;
     } else {
       delete query.month; // month=x is default, implies entire year
-    }
-  }
-  for (const param of ['start', 'end']) {
-    if (!empty(query[param])) {
-      options[param] = isoDateStringToDate(query[param]);
     }
   }
   if (options.ashkenazi && empty(query.lg)) {
