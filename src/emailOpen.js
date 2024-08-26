@@ -17,9 +17,7 @@ export async function emailOpen(ctx) {
     }
   }
   const loc = transliterate(q.loc);
-  matomoTrack(ctx, 'Email', 'open', q['utm_campaign'], {
-    url: ctx.request.href,
-  });
+  matomoTrack(ctx, 'Email', 'open', q['utm_campaign']);
   await saveEmailOpenToDb(ctx, loc);
   return sendGif(ctx);
 }

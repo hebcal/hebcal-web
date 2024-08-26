@@ -1,8 +1,4 @@
-<%- await include('partials/header2.ejs', {
-  title: isHebrewYear ?
-    `Jewish Holidays ${calendarYear} (${calendarYear-3761}-${calendarYear-3760}) for ${locationName} - Hebcal` :
-    `Jewish Holidays ${year} for ${locationName} - Hebcal`,
-}) -%>
+<%- await include('partials/header2.ejs') -%>
 <% if (isHebrewYear) { %>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>">
 <% } else { %>
@@ -115,6 +111,9 @@ class="card-img img-fluid">
 <h4 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
 <% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h4>
 <p><%- await include('partials/holiday-index-dates.ejs', {item}) -%>
+<% if (item.name === 'Pesach' || item.name === 'Shmini Atzeret & Simchat Torah' || item.name === 'Shavuot') { -%>
+<br><small>Dates listed are for <%= il ? 'Israel 🇮🇱' : 'Diaspora (outside of Israel)' %></small>
+<% } -%>
 <br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </p>
 <div class="card-text"><%=item.descrMedium%></div>

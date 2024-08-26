@@ -35,9 +35,7 @@ export async function yahrzeitEmailVerify(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
     await dbQuery(ctx, sqlUpdate, [ip, subscriptionId]);
-    matomoTrack(ctx, 'Email', 'signup-confirmed', 'yahrzeit-reminder', {
-      url: ctx.request.href,
-    });
+    matomoTrack(ctx, 'Email', 'signup-confirmed', 'yahrzeit-reminder');
     await sendConfirmEmail(ctx, contents, subscriptionId);
   } else {
     const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, calendarId);
@@ -243,9 +241,7 @@ export async function yahrzeitEmailSub(ctx) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
     await dbQuery(ctx, sqlUpdate, [ip, id]);
   }
-  matomoTrack(ctx, 'Email', 'signup-backend', 'yahrzeit-reminder', {
-    url: ctx.request.href,
-  });
+  matomoTrack(ctx, 'Email', 'signup-backend', 'yahrzeit-reminder');
   const anniversaryType = q.type === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
   const msgid = `${id}.${Date.now()}`;
@@ -338,9 +334,7 @@ async function unsub(ctx, q) {
     const nameHash = num == 0 ? null : (q.hash || null);
     await dbQuery(ctx, sql, [q.id, nameHash, num]);
   }
-  matomoTrack(ctx, 'Email', 'unsubscribe', 'yahrzeit-reminder', {
-    url: ctx.request.href,
-  });
+  matomoTrack(ctx, 'Email', 'unsubscribe', 'yahrzeit-reminder');
   if (q.cfg === 'json') {
     ctx.body = {ok: true};
     return;

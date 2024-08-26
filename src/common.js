@@ -216,7 +216,7 @@ function getGeoKeysToRemove(geo) {
  * @param {any} ctx
  * @param {Object.<string,string>} query
  * @param {string} uid
- * @return {string}
+ * @return {string | boolean}
  */
 function makeCookie(ctx, query, uid) {
   const ck = {};
@@ -297,11 +297,11 @@ export function possiblySetCookie(ctx, query) {
  * @return {boolean}
  */
 export function setHebcalCookie(ctx, query) {
-  const prevCookie = ctx.cookies.get('C');
+  const prevCookie = ctx.cookies.get('C') || '';
   if (prevCookie === 'opt_out') {
     return false;
   }
-  const uid = prevCookie && prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
+  const uid = prevCookie.startsWith('uid=') && prevCookie.substring(4, 40);
   const newCookie = makeCookie(ctx, query, uid);
   if (newCookie === false) {
     return false;

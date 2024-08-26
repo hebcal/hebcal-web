@@ -64,7 +64,7 @@ function makeProperties(ctx) {
     return !ev.getDesc().startsWith('Chanukah');
   });
   const items = makeContents(events, options);
-  const itemsRows = formatItemsAsTable(items, options);
+  const itemsRows = formatItemsAsTable(items);
   const url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(query, location, options);
   const locale = Locale.getLocaleName();
   const lang = localeMap[locale] || 'en';
@@ -159,7 +159,7 @@ function makeContents(events, options) {
         continue;
       }
     }
-    if (ev.linkedEvent && ev.linkedEvent.getDesc().startsWith('Chanukah')) {
+    if (ev.linkedEvent?.getDesc().startsWith('Chanukah')) {
       continue;
     }
     const nextEv = events[i + 1];

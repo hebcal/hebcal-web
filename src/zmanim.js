@@ -81,7 +81,7 @@ export async function getZmanim(ctx) {
     expires(ctx);
   }
   const locObj = locationToPlainObj(loc);
-  const roundMinute = q.sec === '1' ? false : true;
+  const roundMinute = q.sec !== '1';
   const useElevation = q.ue === 'on' || q.ue === '1';
   if (!useElevation) {
     delete locObj.elevation;

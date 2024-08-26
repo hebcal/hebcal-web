@@ -116,6 +116,20 @@ function hebrewDateRange(hd, duration, showYear=true) {
 
 /**
  * @param {Event} ev
+ * @return {string}
+ */
+function holidayEmoji(ev) {
+  if (ev.getFlags() & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) {
+    return '';
+  }
+  if (ev.basename() === 'Chanukah') {
+    return '🕎';
+  }
+  return ev.getEmoji() || '';
+}
+
+/**
+ * @param {Event} ev
  * @param {boolean} il
  * @return {any}
  */
@@ -123,8 +137,7 @@ export function eventToHolidayItemBase(ev, il) {
   const {hd, d, duration, endD, beginsWhen} = holidayStartAndEnd(ev, il);
   const holiday = ev.basename();
   const mask = ev.getFlags();
-  const emoji = mask & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST) ? '' :
-    holiday === 'Chanukah' ? '🕎' : (ev.getEmoji() || '');
+  const emoji = holidayEmoji(ev);
   const anchor = makeAnchor(holiday);
   const anchorDate = (typeof ev.urlDateSuffix === 'function') ? ev.urlDateSuffix() : d.year();
   if (!il && israelOnly.has(holiday)) {
@@ -195,6 +208,22 @@ export function eventToHolidayItem(ev, il) {
 
 /**
  * @param {Event} ev
+ * @param {number} duration
+ * @return {string}
+ */
+function makeBeginsWhen(ev, duration) {
+  const holiday = ev.basename();
+  if (holiday === 'Leil Selichot') {
+    return 'after nightfall';
+  }
+  if (ev.getFlags() & flags.SHABBAT_MEVARCHIM) {
+    return '';
+  }
+  return duration === 0 ? 'at dawn' : 'at sundown';
+}
+
+/**
+ * @param {Event} ev
  * @param {boolean} il
  * @return {any}
  */
@@ -202,9 +231,7 @@ function holidayStartAndEnd(ev, il) {
   const holiday = ev.basename();
   const mask = ev.getFlags();
   const duration0 = getHolidayDuration(il, mask, holiday);
-  const beginsWhen = holiday === 'Leil Selichot' ? 'after nightfall' :
-    mask & flags.SHABBAT_MEVARCHIM ? '' :
-    duration0 === 0 ? 'at dawn' : 'at sundown';
+  const beginsWhen = makeBeginsWhen(ev, duration0);
   const hd = ev.getDate();
   const d0 = dayjs(hd.greg());
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
@@ -233,10 +260,10 @@ export function appendPeriod(str) {
   if (!str) {
     return str;
   }
-  if (str.charAt(str.length - 1) !== '.') {
-    return str + '.';
+  if (str.endsWith('.')) {
+    return str;
   }
-  return str;
+  return str + '.';
 }
 
 /**

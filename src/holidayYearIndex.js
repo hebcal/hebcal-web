@@ -93,6 +93,30 @@ async function makeItems(events, il) {
   return items;
 }
 
+/**
+ * @param {boolean} il
+ * @param {boolean} isHebrewYear
+ * @param {number} calendarYear
+ * @param {string} year
+ * @return {string}
+ */
+function makePageTitle(il, isHebrewYear, calendarYear, year) {
+  let str = isHebrewYear ?
+    `${calendarYear} (${calendarYear - 3761}-${calendarYear - 3760})` :
+    year;
+  if (il) {
+    str += ' for Israel';
+  }
+  return str;
+}
+
+function makeCalendarYear(isHebrewYear, yearNum) {
+  if (isHebrewYear) {
+    return yearNum >= 3761 ? yearNum : yearNum + 3761;
+  }
+  return yearNum;
+}
+
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
@@ -103,7 +127,7 @@ export async function holidayYearIndex(ctx) {
     throw createError(400, `Sorry, can't display holidays for year ${year}`);
   }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
-  const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761): yearNum;
+  const calendarYear = makeCalendarYear(isHebrewYear, yearNum);
   const il = ctx.state.il;
   const options = {
     year: calendarYear,
@@ -141,6 +165,7 @@ export async function holidayYearIndex(ctx) {
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
+  const title = 'Jewish Holidays ' + makePageTitle(il, isHebrewYear, calendarYear, year) + ' - Hebcal';
   await ctx.render('holiday-year-index', {
     today: dayjs(),
     year: year.padStart(4, '0'),
@@ -160,5 +185,6 @@ export async function holidayYearIndex(ctx) {
     amp: (q.amp === '1') ? true : undefined,
     roshChodesh,
     modernHolidays,
+    title,
   });
 }

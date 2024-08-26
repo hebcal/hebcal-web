@@ -56,14 +56,14 @@ function isRobot(userAgent) {
  * @param {string} category
  * @param {string} action
  * @param {string} [name]
- * @param {*} [params={}]
  */
-export function matomoTrack(ctx, category, action, name=null, params={}) {
+export function matomoTrack(ctx, category, action, name=null) {
   const userAgent = ctx.get('user-agent');
   if (isRobot(userAgent)) {
     return;
   }
-  const urlParam = params.url;
+  const params = {};
+  const urlParam = ctx.request.href;
   if (urlParam) {
     const url = new URL(urlParam);
     url.search = ''; // always remove search params

@@ -142,9 +142,7 @@ export function errorLogger(logger) {
       logger.error(obj);
     }
     if (ctx.request.query?.cfg !== 'json') {
-      matomoTrack(ctx, 'Error', status, err?.message, {
-        url: ctx.request.href,
-      });
+      matomoTrack(ctx, 'Error', status, err?.message);
     }
   };
 }
