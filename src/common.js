@@ -853,6 +853,18 @@ export function cacheControl(days) {
   return `public, max-age=${seconds}, s-maxage=${seconds}`;
 }
 
+const HEBCAL_HOSTNAME = 'www.hebcal.com';
+
+function getHostname(ctx) {
+  const hostStr = ctx.get('host') || HEBCAL_HOSTNAME;
+  const [host] = hostStr.split(':');
+  if (host === 'hebcal.com' || host.endsWith('.hebcal.com') ||
+      host === '127.0.0.1' || host === 'localhost') {
+    return hostStr;
+  }
+  return HEBCAL_HOSTNAME;
+}
+
 /**
  * Perform a 302 redirect to `rpath`.
  * @param {any} ctx
@@ -861,7 +873,7 @@ export function cacheControl(days) {
  */
 export function httpRedirect(ctx, rpath, status=302) {
   const proto = ctx.get('x-forwarded-proto') || 'http';
-  const host = ctx.get('host') || 'www.hebcal.com';
+  const host = getHostname(ctx);
   ctx.status = status;
   if (status === 301) {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
@@ -1264,7 +1276,7 @@ export function makeGeoUrlArgs2(q, location) {
   return args.toString();
 }
 
-const hebcalPrefix = 'https://www.hebcal.com/';
+const hebcalPrefix = `https://${HEBCAL_HOSTNAME}/`;
 
 /**
  * @param {string} url
