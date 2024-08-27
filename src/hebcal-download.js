@@ -1,4 +1,4 @@
-import {HDate, Event, Zmanim, flags} from '@hebcal/core';
+import {HebrewCalendar, HDate, Event, Zmanim, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
@@ -74,6 +74,9 @@ export async function hebcalDownload(ctx) {
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (csv) {
+    if (options.sedrot) {
+      addCsvParshaMemos(events, options);
+    }
     const csv = eventsToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
@@ -109,6 +112,26 @@ function makeDummyEvent(ctx) {
   ctx.set('Cache-Control', 'max-age=86400');
   ctx.remove('ETag');
   return [ev];
+}
+
+const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
+
+function addCsvParshaMemos(events, options) {
+  const il = options.il;
+  const locale = options.locale;
+  for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
+    const hd = ev.getDate();
+    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const holidays1 = holidays0.filter((ev) => Boolean(ev.getFlags() & PARSHA_SPECIAL_MASK));
+    if (holidays1.length) {
+      ev.memo = holidays1.map((ev) => ev.render(locale)).join(' + ');
+    } else {
+      const tommorow = hd.next().getDate();
+      if (tommorow === 30 || tommorow === 1) {
+        ev.memo = 'Machar Chodesh';
+      }
+    }
+  }
 }
 
 function addParshaMemos(events) {
