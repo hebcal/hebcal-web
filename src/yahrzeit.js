@@ -1,4 +1,5 @@
 import {Event, HDate, HebrewCalendar, Locale,
+  Location,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
@@ -457,6 +458,10 @@ export async function yahrzeitDownload(ctx) {
     };
     const icalOpt = makeIcalOpts(opts, query);
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
+    // Hack for Google Calendar which doesn't understand iCalendar floating times
+    if (query.i === 'on') {
+      icalOpt.location = Location.lookup('Jerusalem');
+    }
     const zeroEvents = events.length === 0;
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
     if (zeroEvents) {
