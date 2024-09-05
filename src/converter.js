@@ -69,7 +69,6 @@ export async function hebrewDateConverter(ctx) {
     p.message = RANGE_REQUIRES_CFG_JSON;
   }
   if (q.cfg === 'json') {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'json';
     if (p.message) {
       ctx.body = {error: p.message};
@@ -115,7 +114,6 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = result;
     }
   } else if (q.cfg === 'xml') {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'text/xml';
     if (p.message) {
       ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;

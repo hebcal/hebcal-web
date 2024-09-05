@@ -65,7 +65,6 @@ export async function shabbatApp(ctx) {
     return ctx.render('shabbat-js');
   } else if (q.cfg === 'j') {
     const html = await ctx.render('shabbat-js', {writeResp: false});
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.type = 'text/javascript';
     ctx.body = html.split('\n').map((line) => {
       return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';

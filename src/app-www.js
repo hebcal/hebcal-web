@@ -20,6 +20,7 @@ import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
 import {stopIfTimedOut} from './common.js';
 import {readJSON} from './readJSON.js';
+import {empty} from './empty.js';
 
 const pkg = readJSON('../package.json');
 
@@ -168,6 +169,19 @@ app.use(error({
   template: path.join(__dirname, 'views', 'error.ejs'),
 }));
 
+app.use(async function checkHttpMethod(ctx, next) {
+  const method = ctx.method;
+  switch (method) {
+    case 'GET':
+    case 'POST':
+    case 'HEAD':
+      break; // all good!
+    default:
+      ctx.throw(405, `Method ${method} not allowed`);
+  }
+  await next();
+});
+
 app.use(stopIfTimedOut());
 
 app.use(bodyParser({
@@ -188,6 +202,17 @@ app.use(bodyParser({
 }));
 
 app.use(stopIfTimedOut());
+
+app.use(async function setCorsHeader(ctx, next) {
+  const rpath = ctx.request.path;
+  if (!empty(ctx.request.query.cfg) ||
+      (rpath.startsWith('/etc/') &&
+       (rpath.endsWith('.js') || rpath.endsWith('.xml')))) {
+    ctx.set('Access-Control-Allow-Origin', '*');
+    ctx.set('Cross-Origin-Resource-Policy', 'cross-origin');
+  }
+  await next();
+});
 
 // request dispatcher
 app.use(wwwRouter());
