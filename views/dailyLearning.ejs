@@ -87,7 +87,7 @@ In line with this tradition, various calendars have emerged to facilitate groups
 <div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.format('YYYY-MM-DD')%><%=il?'?i=on':''%>"><%=hd.next().render(lg, false)%><span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
-<script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const d = document;
   d.addEventListener('keydown', function(e) {

@@ -1,6 +1,6 @@
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js" integrity="sha384-wv6yRjQC0TqzEnAjFQVXM2V0JrF6Nk0dh6QAGf1RwzTqPArdwU3luBZjVCi2YSVH" crossorigin="anonymous"></script>
-<script><%- await include('hdate.bundle.min.js') %></script>
-<script>
+<script nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js" integrity="sha384-wv6yRjQC0TqzEnAjFQVXM2V0JrF6Nk0dh6QAGf1RwzTqPArdwU3luBZjVCi2YSVH" crossorigin="anonymous"></script>
+<script nonce="<%=nonce%>"><%- await include('hdate.bundle.min.js') %></script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
 function getHebMonthName(dt) {
   const abs = hdate.greg2abs(dt);

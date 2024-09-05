@@ -57,5 +57,6 @@ _paq.push(['enableLinkTracking']);
   _paq.push(['setTrackerUrl', u+'ma.php']);
   _paq.push(['setSiteId', '1']);
   const d=document; const g=d.createElement('script'); const s=d.getElementsByTagName('script')[0];
+  g.nonce='<%=nonce%>';
   g.async=true; g.src=u+'ma.js'; s.parentNode.insertBefore(g,s);
 })();

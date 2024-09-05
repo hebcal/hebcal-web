@@ -134,7 +134,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
 <div overflow=""></div>
 </amp-ad>
 <% } else { -%>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
      crossorigin="anonymous"></script>
 <!-- responsive textonly -->
 <ins class="adsbygoogle"
@@ -143,7 +143,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
      data-ad-slot="5981467974"
      data-ad-format="auto"
      data-full-width-responsive="true"></ins>
-<script>
+<script nonce="<%=nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .col-md-4 -->
@@ -151,7 +151,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
 </div><!-- .row -->
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <%- await include('partials/email-candles-modal.ejs') _%>
-<script>
+<script nonce="<%=nonce%>">
 document.addEventListener("DOMContentLoaded", function() {
 const d=document;
 d.getElementById("m").addEventListener("focus",function(){

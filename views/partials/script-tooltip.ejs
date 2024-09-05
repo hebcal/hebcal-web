@@ -1,4 +1,4 @@
-<script>
+<script nonce="<%=nonce%>">
 const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
 const tooltipList = tooltipTriggerList.map(function (el) {
   return new bootstrap.Tooltip(el);

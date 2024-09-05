@@ -1,4 +1,4 @@
-<script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
 let count=<%=count%>;
 function getCurrentCount() {
@@ -144,8 +144,8 @@ mainFormEl.addEventListener('submit', function(event) {
 
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.0/papaparse.min.js"></script>
-<script>
+<script nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/papaparse@5.4.0/papaparse.min.js"></script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   function processRow(row) {
   const parts = row[0].trim().split('/');

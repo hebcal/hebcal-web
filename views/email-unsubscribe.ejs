@@ -58,7 +58,7 @@ body { background-color: #eee;}
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- .container -->
-<script><%- await include('partials/analytics.js') %></script>
+<script nonce="<%=nonce%>"><%- await include('partials/analytics.js') %></script>
 </body>
 </html>
 <!-- <%= hostname %> <%= new Date().toISOString() %> -->

@@ -40,7 +40,7 @@ fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top'
 <div class="card">
 <div class="card-body">
 <div id="hebcal-shabbat"></div>
-<script>
+<script nonce="<%=nonce%>">
 fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>&tgt=_top')
   .then(response => response.text())
   .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
@@ -104,8 +104,8 @@ href="https://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
-<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
-<script>
+<script nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('pre code').forEach(function(el) {
     hljs.highlightElement(el);

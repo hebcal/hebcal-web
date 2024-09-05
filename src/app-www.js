@@ -1,3 +1,4 @@
+import {randomBytes} from 'node:crypto';
 import fs from 'fs';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
@@ -93,13 +94,18 @@ app.use(timeout(6000, {
 
 app.use(stopIfTimedOut());
 
+const HOSTNAME = os.hostname();
+const spriteHref = '/i/' + pkg.config.sprite;
+const cspriteHref = '/i/' + pkg.config.csprite;
+const clientAppHref = '/i/' + pkg.config.clientapp;
+
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
-  ctx.state.spriteHref = '/i/' + pkg.config.sprite;
-  ctx.state.cspriteHref = '/i/' + pkg.config.csprite;
-  ctx.state.clientAppHref = '/i/' + pkg.config.clientapp;
-  ctx.state.hostname = os.hostname(); // used by some ejs templates
+  ctx.state.spriteHref = spriteHref;
+  ctx.state.cspriteHref = cspriteHref;
+  ctx.state.clientAppHref = clientAppHref;
+  ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
   if (typeof ctx.get('accept-encoding') === 'undefined') {
@@ -212,6 +218,16 @@ app.use(async function setCorsHeader(ctx, next) {
     ctx.set('Cross-Origin-Resource-Policy', 'cross-origin');
   }
   await next();
+});
+
+app.use(async function makeNonce(ctx, next) {
+  const buf = randomBytes(6);
+  const nonce = ctx.state.nonce = buf.toString('base64url');
+  await next();
+  const contentType = ctx.type;
+  if (contentType === 'text/html' || contentType === 'html') {
+    ctx.set('Content-Security-Policy', `script-src 'nonce-${nonce}'`);
+  }
 });
 
 // request dispatcher

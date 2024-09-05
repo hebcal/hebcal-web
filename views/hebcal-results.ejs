@@ -143,14 +143,14 @@ accurate.
 <h6 class="text-body-secondary mb-2">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-flex justify-content-center d-print-none mb-2">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <!-- banner-320x100 -->
 <ins class="adsbygoogle"
 style="display:inline-block;width:320px;height:100px"
 data-ad-client="ca-pub-7687563417622459"
 data-ad-slot="1867606375"></ins>
-<script>
+<script nonce="<%=nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-flex -->
@@ -179,8 +179,8 @@ data-ad-slot="1867606375"></ins>
 <% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <%- await include('partials/print-iframe.ejs') -%>
-<script><%- await include('partials/hebcalResults.min.js') %></script>
-<script>
+<script nonce="<%=nonce%>"><%- await include('partials/hebcalResults.min.js') %></script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   window['hebcal']=window['hebcal']||{};
   window['hebcal'].lang='<%= q.lg || "s" %>';

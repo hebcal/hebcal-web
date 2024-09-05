@@ -108,7 +108,7 @@ for 3 small stars (sun 8.5° below the horizon)
 </table>
 </div>
 </div><!-- .container -->
-<script>
+<script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const checked = false;
   const havdalahTd = [].slice.call(document.querySelectorAll('td.havdalah'));
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-<script><%- await include('partials/analytics.js') %></script>
+<script nonce="<%=nonce%>"><%- await include('partials/analytics.js') %></script>
 </body>
 </html>
 <!-- <%= hostname %> <%= new Date().toISOString() %> -->
