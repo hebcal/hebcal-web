@@ -77,15 +77,12 @@ export async function yahrzeitApp(ctx) {
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (q.cfg === 'json') {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.body = await renderJson(maxId, q);
     return;
   } else if (q.cfg === 'fc') {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.body = await renderFullCalendar(ctx, maxId, q);
     return;
   } else if (q.cfg === 'xml') {
-    ctx.set('Access-Control-Allow-Origin', '*');
     ctx.status = 400;
     ctx.type = 'text/xml';
     ctx.body = `<?xml version="1.0" ?>\n<error message="This API does not support cfg=xml" />\n`;
@@ -398,10 +395,8 @@ function removeEmptyArgs(q) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 async function getDetailsFromDb(ctx) {
-  ctx.state.trace.set('getDetailsFromDb-start', Date.now());
   const id = ctx.request.path.substring(4, 30);
   const obj = await getYahrzeitDetailsFromDb(ctx, id);
-  ctx.state.trace.set('getDetailsFromDb-end', Date.now());
   ctx.state.relcalid = id;
   return obj;
 }
@@ -428,9 +423,7 @@ export async function yahrzeitDownload(ctx) {
     query.ulid = ctx.state.ulid;
   }
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
-  ctx.state.trace.set('makeYahrzeitEvents-start', Date.now());
   const events = await makeYahrzeitEvents(maxId, query, reminder);
-  ctx.state.trace.set('makeYahrzeitEvents-end', Date.now());
   const lastModified = makeLastModified(details, events);
   query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
@@ -445,7 +438,6 @@ export async function yahrzeitDownload(ctx) {
     ctx.response.attachment(basename(rpath));
   }
   if (extension == '.ics') {
-    ctx.state.trace.set('eventsToIcalendar-start', Date.now());
     ctx.response.type = 'text/calendar; charset=utf-8';
     const opts = {
       yahrzeit: true,
@@ -461,6 +453,8 @@ export async function yahrzeitDownload(ctx) {
     // Hack for Google Calendar which doesn't understand iCalendar floating times
     if (query.i === 'on') {
       icalOpt.location = Location.lookup('Jerusalem');
+    } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
+      icalOpt.location = Location.lookup('New York');
     }
     const zeroEvents = events.length === 0;
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
@@ -469,14 +463,11 @@ export async function yahrzeitDownload(ctx) {
     }
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
     ctx.body = await icalEventsToString(icals, icalOpt);
-    ctx.state.trace.set('eventsToIcalendar-end', Date.now());
   } else if (extension == '.csv') {
-    ctx.state.trace.set('eventsToCsv-start', Date.now());
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = '\uFEFF' + csv;
-    ctx.state.trace.set('eventsToCsv-end', Date.now());
   }
 }
 
