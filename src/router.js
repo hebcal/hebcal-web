@@ -33,7 +33,7 @@ import {hebrewDateCalc} from './calc.js';
 import {omerApp} from './omerApp.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
-import {sendGif} from './sendGif.js';
+import {sendGif, sendMatomoJs} from './sendGif.js';
 import {dailyLearningApp} from './dailyLearning.js';
 import {delCookie} from './delCookie.js';
 import {readJSON} from './readJSON.js';
@@ -193,10 +193,7 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/ma/') || rpath.startsWith('/matomo/')) {
       const bn = basename(rpath);
       if (bn === 'ma.js' || bn === 'matomo.js') {
-        ctx.set('Cache-Control', 'private, max-age=0');
-        ctx.type = 'application/javascript';
-        ctx.body = '/* Nothing to see here */\n';
-        return;
+        return sendMatomoJs(ctx);
       } else if (bn === 'ma.php' || bn === 'matomo.php') {
         if (ctx.request.query.send_image == '0') {
           ctx.status = 204;
