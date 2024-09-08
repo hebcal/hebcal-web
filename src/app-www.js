@@ -226,13 +226,16 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
   await next();
   const contentType = ctx.type;
   if (contentType === 'text/html' || contentType === 'html') {
-    const csp = `default-src 'self' 'nonce-${nonce}';` +
-      ` script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
-      ` img-src https: data:;` +
+    const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
+      ` style-src 'self' https: data: 'unsafe-inline';` +
+      ` frame-ancestors https: data:;` +
+      ` frame-src https: data:;` +
+      ` img-src 'self' https: data:;` +
       ` font-src 'self' https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
       ` base-uri 'none'`;
     ctx.set('Content-Security-Policy', csp);
+    ctx.set('X-XSS-Protection', '0');
   }
 });
 
