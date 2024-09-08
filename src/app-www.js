@@ -220,13 +220,19 @@ app.use(async function setCorsHeader(ctx, next) {
   await next();
 });
 
-app.use(async function makeNonce(ctx, next) {
+app.use(async function strictContentSecurityPolicy(ctx, next) {
   const buf = randomBytes(6);
   const nonce = ctx.state.nonce = buf.toString('base64url');
   await next();
   const contentType = ctx.type;
   if (contentType === 'text/html' || contentType === 'html') {
-    ctx.set('Content-Security-Policy', `script-src 'nonce-${nonce}'`);
+    const csp = `default-src 'self' 'nonce-${nonce}';` +
+      ` script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
+      ` img-src https: data:;` +
+      ` font-src 'self' https://fonts.gstatic.com/;` +
+      ` object-src 'none';` +
+      ` base-uri 'none'`;
+    ctx.set('Content-Security-Policy', csp);
   }
 });
 

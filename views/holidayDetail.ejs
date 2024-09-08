@@ -11,7 +11,7 @@
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on&amp=1' : '?amp=1' %>">
-<style>
+<style nonce="<%=nonce%>">
 .past {color: var(--bs-secondary-color) !important}
 </style>
 <% } -%>

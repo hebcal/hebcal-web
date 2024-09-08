@@ -3,7 +3,7 @@
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>">
 <% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<style>
+<style nonce="<%=nonce%>">
 #today {text-align: center}
 </style>
 <script type="application/ld+json">

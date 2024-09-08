@@ -4,7 +4,7 @@
 <link rel="dns-prefetch" href="https://download.hebcal.com/">
 <% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <link rel="canonical" href="<%= url.canonical %>">
-<style>
+<style nonce="<%=nonce%>">
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
 @media print{
