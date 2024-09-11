@@ -231,7 +231,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
       ` frame-ancestors https: data:;` +
       ` frame-src https: data:;` +
       ` img-src 'self' https: data:;` +
-      ` font-src 'self' https://fonts.gstatic.com/;` +
+      ` font-src 'self' data: https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
       ` base-uri 'none'`;
     ctx.set('Content-Security-Policy', csp);
