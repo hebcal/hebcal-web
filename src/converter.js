@@ -119,6 +119,11 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
     } else {
       p.writeResp = false;
+      p.heDateParts = {
+        y: gematriya(p.hy),
+        m: Locale.gettext(p.hmStr, 'he-x-NoNikud'),
+        d: gematriya(p.hd),
+      };
       if (!p.noCache) {
         ctx.lastModified = ctx.launchDate;
         ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
