@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hebcal>
-<gregorian year="<%= gy %>" month="<%= gm %>" day="<%= gd %>" />
+<gregorian year="<%= gy %>" month="<%= gm %>" day="<%= gd %>" <% if (gs) { %>sunset="1" <% } %>/>
 <hebrew year="<%= hy %>" month="<%= hmStr %>" day="<%= hd %>" str="<%= hebrew %>" />
 <hebdate year="<%= heDateParts.y %>" month="<%= heDateParts.m %>" day="<%= heDateParts.d %>" />
 <% if (events.length) { -%>
