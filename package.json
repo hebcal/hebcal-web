@@ -43,7 +43,7 @@
     "eslint": "^9.11.1",
     "eslint-plugin-n": "^17.10.3",
     "globals": "^15.9.0",
-    "rollup": "^4.22.4"
+    "rollup": "^4.22.5"
   },
   "dependencies": {
     "@hebcal/core": "^5.5.0",
@@ -51,10 +51,10 @@
     "@hebcal/hdate": "^0.11.4",
     "@hebcal/icalendar": "^5.1.1",
     "@hebcal/learning": "^5.1.1",
-    "@hebcal/leyning": "^8.2.3",
+    "@hebcal/leyning": "^8.2.4",
     "@hebcal/locales": "^5.0.1",
     "@hebcal/rest-api": "^5.1.2",
-    "@hebcal/triennial": "^5.1.2",
+    "@hebcal/triennial": "^5.1.3",
     "better-sqlite3": "^11.3.0",
     "dayjs": "^1.11.13",
     "ejs": "^3.1.10",
