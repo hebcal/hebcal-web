@@ -85,14 +85,18 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
   const obj = row.contents;
   if (!row.downloaded) {
     const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
-    db.execute2(ctx, {sql: sqlUpdate, values: [id], timeout: 1000}).catch((err) => {
-      ctx.logger.error(err);
-    });
+    db.execute2(ctx, {sql: sqlUpdate, values: [id], timeout: 1000})
+        .then(() => {})
+        .catch((err) => {
+          ctx.logger.error(err);
+        });
   }
   const sql2 = 'REPLACE INTO yahrzeit_atime (id, ts) VALUES (?, NOW())';
-  db.execute2(ctx, {sql: sql2, values: [id], timeout: 1000}).catch((err) => {
-    ctx.logger.error(err);
-  });
+  db.execute2(ctx, {sql: sql2, values: [id], timeout: 1000})
+      .then(() => {})
+      .catch((err) => {
+        ctx.logger.error(err);
+      });
   // convert from 'x' fields back into ymd fields
   const maxId = getMaxYahrzeitId(obj);
   for (let i = 1; i <= maxId; i++) {

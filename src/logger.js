@@ -45,8 +45,9 @@ export function makeLogger(logDir) {
  * @return {Object}
  */
 export function makeLogInfo(ctx) {
+  const status = ctx.response.status;
   const info = {
-    status: ctx.response.status,
+    status: status,
     length: ctx.response.length,
     duration: Date.now() - ctx.state.startTime,
     ip: getIpAddress(ctx),
@@ -104,7 +105,7 @@ export function makeLogInfo(ctx) {
       }
     }
   }
-  if (ctx.state.mysqlQuery) {
+  if (ctx.state.mysqlQuery && status !== 200) {
     info.sql = ctx.state.mysqlQuery;
   }
   return info;
