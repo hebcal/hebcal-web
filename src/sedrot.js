@@ -158,7 +158,7 @@ export async function parshaDetail(ctx) {
   const parsha = lookupParshaMeta(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
   const items = items15map.get(parshaName);
-  const reading = makeReading(date, parshaEv, il, parshaName);
+  const reading = makeReading(date, parshaEv, il, parsha);
   parsha.haftaraHtml = makeLeyningHtmlFromParts(parsha.haft);
   if (parsha.seph) {
     parsha.sephardicHtml = makeLeyningHtmlFromParts(parsha.seph);
@@ -227,7 +227,8 @@ function makeTitle(parsha, hyear, israelDiasporaDiffer, il) {
   return title;
 }
 
-function makeReading(date, parshaEv, il, parshaName) {
+function makeReading(date, parshaEv, il, parsha) {
+  const parshaName = parsha.name;
   const reading = date ?
     getLeyningForParshaHaShavua(parshaEv, il) :
     getLeyningForParsha(parshaName);
@@ -238,6 +239,11 @@ function makeReading(date, parshaEv, il, parshaName) {
     delete reading.reason.haftara;
   }
   addLinksToLeyning(reading.fullkriyah, false);
+  if (parsha.combined) {
+    for (const aliyah of Object.values(reading.fullkriyah)) {
+      aliyah.href = aliyah.href.replace('&aliyot=1', '&aliyot=0');
+    }
+  }
   reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
   if (reading.seph) {
     reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
