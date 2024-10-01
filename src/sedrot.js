@@ -187,6 +187,17 @@ export async function parshaDetail(ctx) {
     const [p1] = parsha.name.split('-');
     Object.assign(commentary, drash[p1]);
   }
+  let nextRead;
+  if (!date) {
+    const today = dayjs();
+    for (const item of items) {
+      if (item.d.isAfter(today)) {
+        break;
+      } else {
+        nextRead = item;
+      }
+    }
+  }
   // doubled parsha overwrites first half
   Object.assign(commentary, drash[parsha.name]);
   await ctx.render('parsha-detail', {
@@ -194,7 +205,7 @@ export async function parshaDetail(ctx) {
     parsha,
     parshaName: parsha.name.replace(/'/g, '’'),
     parshaAnchor,
-    parshaDateAnchor: getParshaDateAnchor(parshaEv).anchor,
+    nextRead,
     reading,
     il,
     iSuffix,
