@@ -26,7 +26,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
-<% if (!date) { -%>
+<% if (!date && nextRead) { -%>
 Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on 
 <a href="<%=nextRead.anchor%>-<%=nextRead.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=nextRead.d.format('YYYY-MM-DD')%>"><%=nextRead.d.format('D MMM YYYY')%></time>
  / <span class="text-nowrap"><%= nextRead.event.getDate().toString().replace(/'/g, '’') %></span></a>.
