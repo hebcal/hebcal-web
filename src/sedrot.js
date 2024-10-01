@@ -191,10 +191,10 @@ export async function parshaDetail(ctx) {
   if (!date) {
     const today = dayjs();
     for (const item of items) {
-      if (item.d.isAfter(today)) {
-        break;
-      } else {
+      const d = item.d;
+      if (d.isSame(today, 'd') || d.isAfter(today)) {
         nextRead = item;
+        break;
       }
     }
   }
