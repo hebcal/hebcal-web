@@ -13,9 +13,13 @@ import dayjs from 'dayjs';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
+const YEARS_PRE = 3;
+const YEARS_TOTAL = 24;
+
 const options15yr = {
-  year: new Date().getFullYear() - 2,
-  numYears: 18,
+  year: new HDate().getFullYear() - YEARS_PRE,
+  isHebrewYear: true,
+  numYears: YEARS_TOTAL,
   noHolidays: true,
   sedrot: true,
 };
@@ -35,9 +39,9 @@ function simchatTorahDate(hyear, il) {
 }
 
 function makeVezotEvents(il) {
-  const startYear = new HDate().getFullYear() - 2;
+  const startYear = new HDate().getFullYear() - YEARS_PRE;
   const events = [];
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < YEARS_TOTAL; i++) {
     const hyear = startYear + i;
     const hd = simchatTorahDate(hyear, il);
     const pe = new ParshaEvent(hd, [VEZOT_HABERAKHAH], il);

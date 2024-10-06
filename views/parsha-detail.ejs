@@ -232,6 +232,7 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <% } // books %>
 </div><!-- .d-print-none -->
 
+<% if (items.length) { -%>
 <div class="row mb-2">
 <div class="col">
 <h4 id="dates">List of Dates</h4>
@@ -239,11 +240,11 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row mb-3">
-<% for (let i = 0; i < 3; i++) { -%>
-<div class="col-md">
-<ul class="list-unstyled mb-0">
+<% for (let i = 0; i < items.length; i += 6) { -%>
+<div class="col">
+<ul class="list-unstyled">
 <% for (let j = 0; j < 6; j++) { -%>
-<% const item = items[(i * 6) + j]; if (item) { -%>
+<% const item = items[i + j]; if (item) { -%>
 <li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-body-secondary">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
 <% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
 <% } -%>
@@ -252,6 +253,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 </div><!-- .col -->
 <% } -%>
 </div><!-- .row -->
+<% } // items.length -%>
 <div class="row d-print-none">
 <div class="col">
 <form method="GET" action="/sedrot/<%=parsha.anchor%>">
@@ -273,7 +275,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <h4 id="ref">References</h4>
 <dl>
 <% if (typeof summary === 'object') { %>
-<dt><a href="<%- summary.link %>">Parashat <%=parshaName%> from Sefaria.org</a>
+<dt><a href="<%- summary.link %>">Parashat <%=parsha.p1||parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
 <% if (commentary['asin']) { %>
