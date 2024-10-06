@@ -170,6 +170,15 @@ app.use(async function fixup1(ctx, next) {
   await next();
 });
 
+const CSP_HEADER_NAME = 'Content-Security-Policy';
+
+app.use(async function errorCsp(ctx, next) {
+  await next();
+  if (ctx.status !== 200 && ctx.type === 'text/html' && !ctx.response.has(CSP_HEADER_NAME)) {
+    ctx.set(CSP_HEADER_NAME, 'default-src \'self\'; style-src \'unsafe-inline\'');
+  }
+});
+
 app.use(error({
   engine: 'ejs',
   template: path.join(__dirname, 'views', 'error.ejs'),
@@ -224,8 +233,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
   const buf = randomBytes(6);
   const nonce = ctx.state.nonce = buf.toString('base64url');
   await next();
-  const contentType = ctx.type;
-  if (contentType === 'text/html' || contentType === 'html') {
+  if (ctx.status === 200 && ctx.type === 'text/html') {
     const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
       ` style-src 'self' https: data: 'unsafe-inline';` +
       ` frame-ancestors https: data:;` +
@@ -234,7 +242,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
       ` font-src 'self' data: https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
       ` base-uri 'none'`;
-    ctx.set('Content-Security-Policy', csp);
+    ctx.set(CSP_HEADER_NAME, csp);
     ctx.set('X-XSS-Protection', '0');
   }
 });
