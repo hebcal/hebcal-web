@@ -111,8 +111,9 @@ export const bookId = {
  * CAUTION: Modifies the `aliyot` parameter instead of making a copy.
  * @param {Object<string,Aliyah>} aliyot aliyah map to decorate
  * @param {boolean} showBook display the book name in the `verses` field (e.g. for special Maftir)
+ * @param {boolean} pocketTorahAudio add a link to pocket torah audio
  */
-export function addLinksToLeyning(aliyot, showBook) {
+export function addLinksToLeyning(aliyot, showBook, pocketTorahAudio=true) {
   const book1 = aliyot['1']?.k;
   Object.keys(aliyot).forEach((num) => {
     const aliyah = aliyot[num];
@@ -128,8 +129,10 @@ export function addLinksToLeyning(aliyot, showBook) {
     const bid = bookId[aliyah.k];
     if (typeof bid === 'number') {
       aliyah.tikkun = `https://tikkun.io/#/r/${bid}-${begin[0]}-${begin[1]}`;
-      const startCV = `${aliyah.k}.${begin[0]}.${begin[1]}`;
-      aliyah.pocketTorahAudio = `https://www.sefaria.org/${startCV}?lang=bi&with=Torah%20Readings&lang2=en`;
+      if (pocketTorahAudio) {
+        const startCV = `${aliyah.k}.${begin[0]}.${begin[1]}`;
+        aliyah.pocketTorahAudio = `https://www.sefaria.org/${startCV}?lang=bi&with=Torah%20Readings&lang2=en`;
+      }
     }
   });
 }

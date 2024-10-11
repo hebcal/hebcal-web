@@ -5,8 +5,10 @@
 <span class="text-nowrap">
 <a class="d-print-none ms-2" title="Tikkun.io - <%=aliyah.verses%>" href="<%-aliyah.tikkun%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
+<% if (typeof aliyah.pocketTorahAudio === 'string') { -%>
 <a class="d-none d-sm-inline ms-2 d-print-none" target="<%=(typeof amp === 'boolean' && amp) ? '_blank' : 'pocketTorah'%>" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>  
+<% } -%>
 </span>
 <% } -%>
 <% if (aliyah.reason) { -%>
