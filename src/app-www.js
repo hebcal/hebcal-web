@@ -221,6 +221,7 @@ app.use(stopIfTimedOut());
 app.use(async function setCorsHeader(ctx, next) {
   const rpath = ctx.request.path;
   if (!empty(ctx.request.query.cfg) ||
+      (typeof ctx.request.body === 'object' && !empty(ctx.request.body.cfg)) ||
       (rpath.startsWith('/etc/') &&
        (rpath.endsWith('.js') || rpath.endsWith('.xml')))) {
     ctx.set('Access-Control-Allow-Origin', '*');
