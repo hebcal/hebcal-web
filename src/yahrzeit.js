@@ -462,6 +462,9 @@ export async function yahrzeitDownload(ctx) {
       icalOpt.publishedTTL = false;
     }
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
+    for (const icalEv of icals) {
+      icalEv.locationName = undefined;
+    }
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
