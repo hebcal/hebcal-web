@@ -454,6 +454,7 @@ export async function yahrzeitDownload(ctx) {
     if (query.i === 'on') {
       icalOpt.location = Location.lookup('Jerusalem');
     } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
+      ctx.set('Vary', 'User-Agent');
       icalOpt.location = Location.lookup('New York');
     }
     const zeroEvents = events.length === 0;
