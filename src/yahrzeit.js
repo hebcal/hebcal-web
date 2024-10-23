@@ -454,7 +454,6 @@ export async function yahrzeitDownload(ctx) {
     if (query.i === 'on') {
       icalOpt.location = Location.lookup('Jerusalem');
     } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
-      ctx.set('Vary', 'User-Agent');
       icalOpt.location = Location.lookup('New York');
     }
     const zeroEvents = events.length === 0;
@@ -466,6 +465,7 @@ export async function yahrzeitDownload(ctx) {
     for (const icalEv of icals) {
       icalEv.locationName = undefined;
     }
+    ctx.set('Vary', 'User-Agent');
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
