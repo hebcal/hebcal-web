@@ -276,7 +276,7 @@ export function doesCookieNeedRefresh(ctx) {
   const expMillis = expDt.getTime();
   const now = Date.now();
   const diff = (expMillis - now) / (24 * 60 * 60 * 1000);
-  return diff < 90;
+  return diff < 180;
 }
 
 /**
