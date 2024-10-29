@@ -93,7 +93,8 @@ export async function shabbatApp(ctx) {
     if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
       // private cache only if we're tailoring results by cookie
       ctx.set('Cache-Control', 'private');
-    } else {
+    }
+    if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
     if (q.amp === '1') {

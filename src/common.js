@@ -285,7 +285,7 @@ export function doesCookieNeedRefresh(ctx) {
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
-  if (ctx.status >= 400 || (ctx.method === 'GET' && ctx.request.querystring.length === 0)) {
+  if (ctx.status >= 301) {
     return false;
   }
   return setHebcalCookie(ctx, query);
