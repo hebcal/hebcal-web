@@ -24,8 +24,11 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 import {murmur128HexSync, murmur32HexSync} from 'murmurhash3';
+import {readJSON} from './readJSON.js';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
+
+const pkg = readJSON('../package.json');
 
 /**
  * @param {*} ctx
@@ -211,6 +214,9 @@ async function renderJson(maxId, q) {
     options.heDateParts = true;
   }
   const results = eventsToClassicApi(events, options, false);
+  if (typeof results.version === 'string') {
+    results.version += '-' + pkg.version;
+  }
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;

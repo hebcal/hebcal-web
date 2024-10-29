@@ -21,9 +21,12 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import './dayjs-locales.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
+import {readJSON} from './readJSON.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+const pkg = readJSON('../package.json');
 
 const BASE_URL = 'https://www.hebcal.com/shabbat';
 
@@ -82,6 +85,9 @@ export async function shabbatApp(ctx) {
       ctx.state.options.heDateParts = true;
     }
     let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
+    if (typeof obj.version === 'string') {
+      obj.version += '-' + pkg.version;
+    }
     const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
     if (cb) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';

@@ -31,8 +31,11 @@ import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
 import '@hebcal/locales';
+import {readJSON} from './readJSON.js';
 
 dayjs.extend(localeData);
+
+const pkg = readJSON('../package.json');
 
 export async function hebcalApp(ctx) {
   if (ctx.method === 'POST') {
@@ -436,6 +439,9 @@ function renderJson(ctx) {
     options.heDateParts = true;
   }
   let obj = eventsToClassicApi(events, options, !leyningOff);
+  if (typeof obj.version === 'string') {
+    obj.version += '-' + pkg.version;
+  }
   const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
   if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
