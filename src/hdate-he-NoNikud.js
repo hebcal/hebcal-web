@@ -1,6 +1,6 @@
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {gematriya} from '@hebcal/hdate/dist/esm/gematriya';
-import {abs2hebrew, months, isLeapYear} from '@hebcal/hdate/dist/esm/hdate-base';
+import {abs2hebrew, months, isLeapYear} from '@hebcal/hdate/dist/esm/hdateBase';
 
 const ADAR_I = months.ADAR_I;
 const monthNames = [

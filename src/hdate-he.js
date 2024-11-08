@@ -1,5 +1,5 @@
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
-import {abs2hebrew} from '@hebcal/hdate/dist/esm/hdate-base';
+import {abs2hebrew} from '@hebcal/hdate/dist/esm/hdateBase';
 import {gematriyaDate0} from './gematriyaDate';
 function hdateStr() {
   const dt = new Date();

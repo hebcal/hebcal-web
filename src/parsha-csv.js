@@ -1,7 +1,7 @@
 import {basename} from 'path';
 import {PassThrough} from 'stream';
-import {writeFullKriyahCsv, getLeyningOnDate,
-  formatAliyahWithBook} from '@hebcal/leyning';
+import {getLeyningOnDate, formatAliyahWithBook} from '@hebcal/leyning';
+import {writeFullKriyahCsv} from '@hebcal/leyning/dist/esm/csv';
 import {writeTriennialCsv} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {HDate, months} from '@hebcal/core';

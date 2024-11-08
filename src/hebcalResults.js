@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {pad2, pad4} from '@hebcal/hdate/dist/esm/pad';
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
-import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdate-base';
+import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdateBase';
 
 /**
  * @private
