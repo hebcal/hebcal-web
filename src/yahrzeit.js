@@ -2,7 +2,8 @@ import {Event, HDate, HebrewCalendar, Locale,
   Location,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
-import {eventsToCsv, eventsToClassicApi, eventToFullCalendar} from '@hebcal/rest-api';
+import {eventsToCsv, eventToFullCalendar} from '@hebcal/rest-api';
+import {myEventsToClassicApi} from './myEventsToClassicApi.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
@@ -24,11 +25,8 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 import {murmur128HexSync, murmur32HexSync} from 'murmurhash3';
-import {readJSON} from './readJSON.js';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
-
-const pkg = readJSON('../package.json');
 
 /**
  * @param {*} ctx
@@ -213,10 +211,7 @@ async function renderJson(maxId, q) {
   if (q.hdp === '1') {
     options.heDateParts = true;
   }
-  const results = eventsToClassicApi(events, options, false);
-  if (typeof results.version === 'string') {
-    results.version += '-' + pkg.version;
-  }
+  const results = myEventsToClassicApi(events, options, false);
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;

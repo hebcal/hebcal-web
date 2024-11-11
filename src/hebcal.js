@@ -18,7 +18,8 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {HDate, Locale} from '@hebcal/core';
-import {eventsToClassicApi, eventToFullCalendar,
+import {
+  eventToFullCalendar,
   eventToClassicApiObject,
   locationToPlainObj,
   getCalendarTitle,
@@ -31,11 +32,9 @@ import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
 import '@hebcal/locales';
-import {readJSON} from './readJSON.js';
+import {myEventsToClassicApi} from './myEventsToClassicApi.js';
 
 dayjs.extend(localeData);
-
-const pkg = readJSON('../package.json');
 
 export async function hebcalApp(ctx) {
   if (ctx.method === 'POST') {
@@ -438,10 +437,7 @@ function renderJson(ctx) {
   if (q.hdp === '1') {
     options.heDateParts = true;
   }
-  let obj = eventsToClassicApi(events, options, !leyningOff);
-  if (typeof obj.version === 'string') {
-    obj.version += '-' + pkg.version;
-  }
+  let obj = myEventsToClassicApi(events, options, leyningOff);
   const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
   if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';

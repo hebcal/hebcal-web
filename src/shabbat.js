@@ -16,17 +16,15 @@ import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
-  eventsToRss2, eventsToClassicApi, appendIsraelAndTracking} from '@hebcal/rest-api';
+  eventsToRss2, appendIsraelAndTracking} from '@hebcal/rest-api';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import './dayjs-locales.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {readJSON} from './readJSON.js';
+import {myEventsToClassicApi} from './myEventsToClassicApi.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-const pkg = readJSON('../package.json');
 
 const BASE_URL = 'https://www.hebcal.com/shabbat';
 
@@ -84,10 +82,7 @@ export async function shabbatApp(ctx) {
     if (q.hdp === '1') {
       ctx.state.options.heDateParts = true;
     }
-    let obj = eventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    if (typeof obj.version === 'string') {
-      obj.version += '-' + pkg.version;
-    }
+    let obj = myEventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
     const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
     if (cb) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
