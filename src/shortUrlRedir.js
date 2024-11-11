@@ -27,10 +27,15 @@ export function shortUrlRedir(ctx) {
   }
   const ref = ctx.get('referer');
   if (!utmSource && ref?.length) {
-    const refUrl = new URL(ref);
-    const hostname = refUrl.hostname;
-    if (hostname !== 'hebcal.com' && !hostname.endsWith('.hebcal.com')) {
-      utmSource = hostname;
+    try {
+      const refUrl = new URL(ref);
+      const hostname = refUrl.hostname;
+      if (hostname !== 'hebcal.com' && !hostname.endsWith('.hebcal.com')) {
+        utmSource = hostname;
+      }
+    } catch (err) {
+      // ignore errors in invalid referrer URL
+      ctx.logger.warn(err, `invalid referrer ${ref}`);
     }
   }
   utmSource = utmSource || 'redir';
@@ -71,7 +76,12 @@ function isValidDouble(id) {
   return false;
 }
 
+const sedrotBaseUrl = 'https://www.hebcal.com/sedrot/';
+
 function shortParshaRedir(ctx, str, qs) {
+  if (!str) {
+    return sedrotBaseUrl;
+  }
   const code = str.charCodeAt(0);
   if (code < 48 || code > 57) {
     return false; // not a number, let old redirect logic happen
@@ -103,5 +113,5 @@ function shortParshaRedir(ctx, str, qs) {
   if (il) {
     qs.set('i', 'on');
   }
-  return `https://www.hebcal.com/sedrot/${name}-${fmtDt}?` + qs.toString();
+  return `${sedrotBaseUrl}${name}-${fmtDt}?` + qs.toString();
 }
