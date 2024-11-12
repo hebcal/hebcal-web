@@ -71,4 +71,5 @@ message Download {
   bool useElevation = 53;
   bool tanakhYomi = 54;
   bool pirkeiAvotSummer = 55;
+  bool yizkor = 56;
 }

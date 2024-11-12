@@ -110,6 +110,7 @@ const optsToMask = {
   ykk: flags.YOM_KIPPUR_KATAN,
   molad: flags.MOLAD,
   min: flags.MINOR_HOLIDAY,
+  yzkr: flags.YIZKOR,
 };
 
 const booleanOpts = {
@@ -126,6 +127,7 @@ const booleanOpts = {
   molad: 'molad',
   yto: 'yomTovOnly',
   ue: 'useElevation',
+  yzkr: 'yizkor',
 };
 
 export const dailyLearningOpts = {
@@ -1328,6 +1330,7 @@ export const queryToName = {
   yyomi: 'Yerushalmi Yomi',
   dw: 'Daf-a-Week',
   dpa: 'Pirkei Avot',
+  yzkr: 'Yizkor',
 };
 
 export const queryLongDescr = {
@@ -1347,6 +1350,7 @@ export const queryLongDescr = {
   yyomi: 'Jerusalem Talmud (Vilna Edition)',
   dw: 'One page of Babylonian Talmud per week',
   dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
+  yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
 };
 
 /**

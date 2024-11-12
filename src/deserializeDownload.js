@@ -63,6 +63,7 @@ export function deserializeDownload(data) {
   if (msg.getTanakhyomi()) q.dty = 'on';
   if (msg.getPirkeiavotsummer()) q.dpa = 'on';
   if (msg.getUseelevation()) q.ue = 'on';
+  if (msg.getYizkor()) q.yzkr = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();

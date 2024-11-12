@@ -46,7 +46,7 @@
     "rollup": "^4.25.0"
   },
   "dependencies": {
-    "@hebcal/core": "^5.8.0",
+    "@hebcal/core": "^5.8.2",
     "@hebcal/geo-sqlite": "^5.0.6",
     "@hebcal/hdate": "^0.12.0",
     "@hebcal/icalendar": "^6.0.2",

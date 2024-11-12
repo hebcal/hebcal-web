@@ -65,6 +65,11 @@ if (typeof year !== 'string' || year.length === 0) {
 <label class="form-check-label" for="ykk">Yom Kippur Katan</label>
  &nbsp;<span title="Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div><div class="form-check mb-2">
+<input class="form-check-input" type="checkbox" name="yzkr" value="on" <%= q.yzkr === 'on' ? 'checked' : '' %> id="yzkr">
+<label class="form-check-label" for="yzkr">Yizkor</label>
+ &nbsp;<span title="Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly"
+ data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div><div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' %> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
