@@ -234,7 +234,8 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
   const buf = randomBytes(6);
   const nonce = ctx.state.nonce = buf.toString('base64url');
   await next();
-  if (ctx.status === 200 && ctx.type === 'text/html') {
+  const status = ctx.status;
+  if ((status === 200 || status === 404) && ctx.type === 'text/html') {
     const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
       ` style-src 'self' https: data: 'unsafe-inline';` +
       ` frame-ancestors https: data:;` +
