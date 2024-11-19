@@ -8,14 +8,14 @@ import {readJSON} from './readJSON.js';
 
 export const pkg = readJSON('../package.json');
 
-export function myEventsToClassicApi(events, options, leyningOff) {
+export function myEventsToClassicApi(events, options, leyning) {
   const obj = eventsToClassicApiHeader(events, options);
   if (typeof obj.version === 'string') {
     obj.version += '-' + pkg.version;
   }
   obj.items = events.map((ev) => {
-    const apiObj = eventToClassicApiObject(ev, options, !leyningOff);
-    if (!leyningOff &&
+    const apiObj = eventToClassicApiObject(ev, options, leyning);
+    if (leyning &&
       (ev.getFlags() & flags.PARSHA_HASHAVUA) &&
       ev.getDate().getFullYear() >= 5745) {
       const triReading = getTriennialForParshaHaShavua(ev, options.il);

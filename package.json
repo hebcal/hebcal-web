@@ -34,16 +34,16 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@eslint/js": "^9.14.0",
+    "@eslint/js": "^9.15.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "bootstrap5-autocomplete": "^1.1.33",
     "csv-parse": "^5.5.6",
-    "eslint": "^9.14.0",
-    "eslint-plugin-n": "^17.13.1",
+    "eslint": "^9.15.0",
+    "eslint-plugin-n": "^17.13.2",
     "globals": "^15.12.0",
-    "rollup": "^4.25.0"
+    "rollup": "^4.27.3"
   },
   "dependencies": {
     "@hebcal/core": "^5.8.2",

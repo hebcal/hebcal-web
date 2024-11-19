@@ -437,7 +437,7 @@ function renderJson(ctx) {
   if (q.hdp === '1') {
     options.heDateParts = true;
   }
-  let obj = myEventsToClassicApi(events, options, leyningOff);
+  let obj = myEventsToClassicApi(events, options, !leyningOff);
   const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
   if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
