@@ -1,5 +1,5 @@
 import {basename, dirname} from 'node:path';
-import {HebrewCalendar, parshiot} from '@hebcal/core';
+import {getSedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 
@@ -97,8 +97,11 @@ function shortParshaRedir(ctx, str, qs) {
   }
   const yearStr = dirname(str);
   const year = parseInt(yearStr, 10);
+  if (!year) {
+    ctx.throw(400, `invalid short redirect parsha: ${str}`);
+  }
   const il = yearStr.endsWith('i');
-  const sedra = HebrewCalendar.getSedra(year, il);
+  const sedra = getSedra(year, il);
   const hd = sedra.find(doubled ? -parshaId : parshaId);
   if (hd === null) {
     ctx.throw(404, `short redirect not found: ${str}`);
