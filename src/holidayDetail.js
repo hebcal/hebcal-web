@@ -124,6 +124,12 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const idx = year ? multiYearBegin.findIndex((ev) => ev === next.event) : -1;
   const prevNext = {};
   if (idx !== -1) {

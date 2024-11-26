@@ -126,6 +126,12 @@ export async function holidayYearIndex(ctx) {
   } else if (yearNum < 1 || yearNum > 9999) {
     throw createError(400, `Sorry, can't display holidays for year ${year}`);
   }
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
   const calendarYear = makeCalendarYear(isHebrewYear, yearNum);
   const il = ctx.state.il;

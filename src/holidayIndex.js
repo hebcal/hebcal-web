@@ -182,6 +182,12 @@ export async function holidayMainIndex(ctx) {
   if (hyear < 3762 || hyear > 9995) {
     return httpRedirect(ctx, `/holidays/?redir=year`);
   }
+  ctx.lastModified = ctx.launchDate;
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const tishrei1 = new HDate(1, 'Tishrei', hyear);
   const items = {};
   for (const catId of Object.keys(categories)) {
