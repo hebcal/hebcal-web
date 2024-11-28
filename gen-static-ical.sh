@@ -132,6 +132,14 @@ FILE="rambam1"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr1=on&relcalid=13cb480b-a4a0-4667-8ec5-25819a2e37a1&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Rambam&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
 compress_file $FILE
 
+FILE="yizkor-diaspora"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&relcalid=64acac8c-a02f-4433-b7ef-f3a5e02d26cc&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yizkor+%28Diaspora%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
+compress_file $FILE
+
+FILE="yizkor-il"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&i=on&lg=h&relcalid=21eadc10-9fa6-402c-ac6f-c94d1ee7537e&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yizkor+%28Israel%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
+compress_file $FILE
+
 FILE="chofetz-chaim"
 remove_file $FILE
 node dist/chofetzChaim.js

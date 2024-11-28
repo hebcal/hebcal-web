@@ -133,6 +133,21 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   parent: 'holidays',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Yizkor', id: 'yikzor-diaspora',
+  emoji: '🕯️',
+  summary: `<p>Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly.
+Diaspora schedule.</p>
+<ul>
+<li>Yom Kippur</li>
+<li>Shmini Atzeret</li>
+<li>Pesach: 8th day</li>
+<li>Shavuot: 2nd day</li>
+</ul>`,
+  feedLength: 4,
+  years: 10,
+  parent: 'holidays',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yom Kippur Katan', id: 'yom-kippur-katan',
   summary: `<p><span lang="he" dir="rtl">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceding each Rosh Chodesh.</p>
 <p class="small">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),
