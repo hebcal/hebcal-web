@@ -137,7 +137,7 @@ fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&relcalid=64acac8c-a02f
 compress_file $FILE
 
 FILE="yizkor-il"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&i=on&lg=h&relcalid=21eadc10-9fa6-402c-ac6f-c94d1ee7537e&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yizkor+%28Israel%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
+fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&i=on&relcalid=21eadc10-9fa6-402c-ac6f-c94d1ee7537e&lg=he-x-NoNikud&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yizkor+%28Israel%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
 compress_file $FILE
 
 FILE="chofetz-chaim"
