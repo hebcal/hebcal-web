@@ -235,7 +235,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const textOptions = {};
   const url = evt.url();
   if (url) {
-    const utmSource = options.utmSource || 'pdf';
+    let utmSource = options.utmSource;
+    if (!utmSource) {
+      const u = new URL(url);
+      if (u.host === 'www.hebcal.com') {
+        utmSource = 'pdf';
+      }
+    }
     const utmMedium = options.utmMedium || 'document';
     const utmCampaign = options.utmCampaign || 'pdf-' + evt.getDate().getFullYear();
     textOptions.link = appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);

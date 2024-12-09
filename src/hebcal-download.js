@@ -52,8 +52,8 @@ export async function hebcalDownload(ctx) {
     if (!icalOpt.calendarColor) {
       icalOpt.calendarColor = '#800002';
     }
-    icalOpt.utmSource = query.utm_source || 'ical';
-    icalOpt.utmMedium = query.utm_medium || 'icalendar';
+    icalOpt.utmSource = query.utm_source;
+    icalOpt.utmMedium = query.utm_medium;
     icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
     if (!query.subscribe) {
       ctx.response.attachment(basename(path));
@@ -93,8 +93,8 @@ export async function hebcalDownload(ctx) {
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);
     const doc = ctx.body = createPdfDoc(title, options);
-    options.utmSource = query.utm_source || 'pdf';
-    options.utmMedium = query.utm_medium || 'document';
+    options.utmSource = query.utm_source; // OK if undefined
+    options.utmMedium = query.utm_medium; // OK if undefined
     options.utmCampaign = query.utm_campaign || 'pdf-' + campaignName(events, options);
     renderPdf(doc, events, options);
     doc.end();

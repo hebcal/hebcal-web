@@ -104,6 +104,10 @@ export function matomoTrack(ctx, category, action, name=null) {
       args.set('cid', vid);
     }
   }
+  const utmSource = ctx.request?.query?.utm_source;
+  if (utmSource) {
+    args.set('_rcn', utmSource);
+  }
   const postData = args.toString();
   const postLen = Buffer.byteLength(postData);
   let path = '/ma/matomo.php';
