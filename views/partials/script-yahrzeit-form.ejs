@@ -86,7 +86,12 @@ function clickToDelete(el) {
 const delBtns = [].slice.call(document.querySelectorAll('button.del'));
 delBtns.forEach(clickToDelete);
 
-const maxYear = new Date().getFullYear() + 100;
+const now = new Date();
+const maxYear = now.getFullYear() + 100;
+const tzoEl = document.getElementById('tzo');
+if (tzoEl) {
+  tzoEl.value = now.getTimezoneOffset();
+}
 const mainFormEl = document.getElementById('f3');
 mainFormEl.addEventListener('submit', function(event) {
   mainFormEl.classList.remove('was-validated');
