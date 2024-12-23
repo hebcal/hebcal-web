@@ -5,6 +5,10 @@ const d1=d.getElementById('d1');
 const d2=d.getElementById('d2');
 d1.addEventListener("click", function(){if(this.checked){d2.checked=false}});
 d2.addEventListener("click", function(){if(this.checked){d1.checked=false}});
+const mf=d.getElementById('mf');
+const ykk=d.getElementById('ykk');
+mf.addEventListener("click", function(){if(!this.checked){ykk.checked=false}});
+ykk.addEventListener("click", function(){if(this.checked){mf.checked=true}});
 d.getElementById("ytH").addEventListener("click", function(){d.f1.year.value="<%=defaultYearHeb%>"});
 d.getElementById("ytG").addEventListener("click", function(){d.f1.year.value="<%=defaultYear%>"});
 d.getElementById("m").addEventListener("focus",function(){
