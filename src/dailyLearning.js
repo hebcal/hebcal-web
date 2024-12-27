@@ -25,6 +25,7 @@ const config = {
   shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl', 'shemiratHaLashon'],
   dafWeekly: ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
   pirkeiAvotSummer: ['Pirkei Avot', 'pirkei-avot', 'dpa', 'pirkeiAvotSummer'],
+  arukhHaShulchanYomi: ['Arukh HaShulchan Yomi', 'ahs-yomi', 'ahsy', 'arukhHaShulchanYomi'],
   parashat: ['Torah portion', 'torah-readings-diaspora', 's', null],
 };
 

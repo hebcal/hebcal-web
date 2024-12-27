@@ -62,6 +62,7 @@ export function deserializeDownload(data) {
   if (msg.getPsalms()) q.dps = 'on';
   if (msg.getTanakhyomi()) q.dty = 'on';
   if (msg.getPirkeiavotsummer()) q.dpa = 'on';
+  if (msg.getArukhhashulchanyomi()) q.ahsy = 'on';
   if (msg.getUseelevation()) q.ue = 'on';
   if (msg.getYizkor()) q.yzkr = 'on';
   q.month = msg.getMonth() || undefined;

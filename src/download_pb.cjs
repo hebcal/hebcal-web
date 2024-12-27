@@ -206,7 +206,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false),
     tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false),
     pirkeiavotsummer: jspb.Message.getBooleanFieldWithDefault(msg, 55, false),
-    yizkor: jspb.Message.getBooleanFieldWithDefault(msg, 56, false)
+    yizkor: jspb.Message.getBooleanFieldWithDefault(msg, 56, false),
+    arukhhashulchanyomi: jspb.Message.getBooleanFieldWithDefault(msg, 57, false)
   };
 
   if (includeInstance) {
@@ -454,6 +455,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 56:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setYizkor(value);
+      break;
+    case 57:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setArukhhashulchanyomi(value);
       break;
     default:
       reader.skipField();
@@ -852,6 +857,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       56,
+      f
+    );
+  }
+  f = message.getArukhhashulchanyomi();
+  if (f) {
+    writer.writeBool(
+      57,
       f
     );
   }
@@ -1962,6 +1974,24 @@ proto.Download.prototype.getYizkor = function() {
  */
 proto.Download.prototype.setYizkor = function(value) {
   return jspb.Message.setProto3BooleanField(this, 56, value);
+};
+
+
+/**
+ * optional bool arukhHaShulchanYomi = 57;
+ * @return {boolean}
+ */
+proto.Download.prototype.getArukhhashulchanyomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 57, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setArukhhashulchanyomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 57, value);
 };
 
 

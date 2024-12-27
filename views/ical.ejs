@@ -264,6 +264,17 @@ at the end if there are not a perfect multiple of six weeks.</p>`,
   parent: 'learning2',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Arukh HaShulchan Yomi', id: 'ahs-yomi',
+  summary: `<p>Daily study of the Arukh HaShulchan Yomi, a work
+of halacha written by Yechiel Michel Epstein. The work attempts
+to be a clear, organized summary of the sources for each chapter
+of the Shulchan Arukh and its commentaries, with special emphasis
+on the positions of the Jerusalem Talmud and Maimonides</p>`,
+  feedLength: 365,
+  years: 3,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Kindness A Day', id: 'kindness',
   summary: `<p><a href="https://www.areyvut.org/">Areyvut</a>’s daily act of kindness and related quotation from Tanach or Rabbinic text.</p>
 <p class="small">Example (February 11): <strong>Visit residents of nursing homes who have no family to visit them.</strong>

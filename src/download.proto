@@ -72,4 +72,5 @@ message Download {
   bool tanakhYomi = 54;
   bool pirkeiAvotSummer = 55;
   bool yizkor = 56;
+  bool arukhHaShulchanYomi = 57;
 }

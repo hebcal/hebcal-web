@@ -140,6 +140,10 @@ FILE="yizkor-il"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&i=on&relcalid=21eadc10-9fa6-402c-ac6f-c94d1ee7537e&lg=he-x-NoNikud&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yizkor+%28Israel%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
 compress_file $FILE
 
+FILE="ahs-yomi"
+fetch_urls $FILE "start=${START}&end=${END3}&v=1&ahsy=on&relcalid=b87406d8-e243-49f5-a072-934b06b10e5f&lg=en&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Arukh+HaShulchan+Yomi&caldesc=Daily+study+of+summary+of+the+sources+for+each+chapter+of+the+Shulchan+Arukh+and+its+commentaries"
+compress_file $FILE
+
 FILE="chofetz-chaim"
 remove_file $FILE
 node dist/chofetzChaim.js

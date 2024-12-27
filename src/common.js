@@ -142,6 +142,7 @@ export const dailyLearningOpts = {
   dps: 'psalms',
   dw: 'dafWeeklySunday',
   dpa: 'pirkeiAvotSummer',
+  ahsy: 'arukhHaShulchanYomi',
 };
 
 const numberOpts = {
@@ -1330,6 +1331,7 @@ export const queryToName = {
   yyomi: 'Yerushalmi Yomi',
   dw: 'Daf-a-Week',
   dpa: 'Pirkei Avot',
+  ahsy: 'Arukh HaShulchan Yomi',
   yzkr: 'Yizkor',
 };
 
@@ -1350,6 +1352,7 @@ export const queryLongDescr = {
   yyomi: 'Jerusalem Talmud (Vilna Edition)',
   dw: 'One page of Babylonian Talmud per week',
   dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
+  ahsy: 'Summary of the sources for each chapter of the Shulchan Arukh and its commentaries',
   yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
 };
 
