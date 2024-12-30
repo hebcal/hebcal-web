@@ -264,6 +264,9 @@ function makeCookie(ctx, query, uid) {
  * @return {boolean}
  */
 export function doesCookieNeedRefresh(ctx) {
+  if (!empty(ctx.request.query.cfg)) {
+    return false;
+  }
   const prevCookie = ctx.cookies.get('C');
   if (!prevCookie) {
     return true;
@@ -300,6 +303,9 @@ export function possiblySetCookie(ctx, query) {
  * @return {boolean}
  */
 export function setHebcalCookie(ctx, query) {
+  if (!empty(ctx.request.query.cfg)) {
+    return false;
+  }
   const prevCookie = ctx.cookies.get('C') || '';
   if (prevCookie === 'opt_out') {
     return false;
@@ -368,13 +374,15 @@ function is5DigitZip(str) {
  */
 export function processCookieAndQuery(cookieString, defaults, query0) {
   const query = {...query0};
-  const ck0 = new URLSearchParams(cookieString || '');
   const ck = {};
-  for (const [key, value] of ck0.entries()) {
-    ck[key] = value;
+  if (empty(query.cfg)) {
+    const ck0 = new URLSearchParams(cookieString || '');
+    for (const [key, value] of ck0.entries()) {
+      ck[key] = value;
+    }
+    delete ck.t;
+    delete ck.uid;
   }
-  delete ck.t;
-  delete ck.uid;
   let found = false;
   const cityTypeahead = query['city-typeahead'];
   if (is5DigitZip(cityTypeahead)) {
