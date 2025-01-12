@@ -8,25 +8,28 @@ import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 
 const currentYear = new Date().getFullYear();
 
+const yyv = 'yerushalmi-vilna';
+const yys = 'yerushalmi-schottenstein';
 // indexed by Event.getCategories()
 // [0] friendly name
 // [1] download/ical URL basename
 // [2] URL query parameter option
 // [3] dailyLearning boolean option name
 const config = {
-  dafyomi: ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F', 'dafYomi'],
-  mishnayomi: ['Mishna Yomi', 'mishna-yomi', 'myomi', 'mishnaYomi'],
-  nachyomi: ['Nach Yomi', 'nach-yomi', 'nyomi', 'nachYomi'],
-  tanakhYomi: ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
-  dailyPsalms: ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
-  dailyRambam1: ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
-  yerushalmi: ['Yerushalmi Yomi (J’lem Talmud)', 'yerushalmi-vilna', 'yyomi', 'yerushalmi'],
-  chofetzChaim: ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
-  shemiratHaLashon: ['Shemirat HaLashon', null, 'dshl', 'shemiratHaLashon'],
-  dafWeekly: ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
-  pirkeiAvotSummer: ['Pirkei Avot', 'pirkei-avot', 'dpa', 'pirkeiAvotSummer'],
-  arukhHaShulchanYomi: ['Arukh HaShulchan Yomi', 'ahs-yomi', 'ahsy', 'arukhHaShulchanYomi'],
-  parashat: ['Torah portion', 'torah-readings-diaspora', 's', null],
+  'dafyomi': ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F', 'dafYomi'],
+  'mishnayomi': ['Mishna Yomi', 'mishna-yomi', 'myomi', 'mishnaYomi'],
+  'nachyomi': ['Nach Yomi', 'nach-yomi', 'nyomi', 'nachYomi'],
+  'tanakhYomi': ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
+  'dailyPsalms': ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
+  'dailyRambam1': ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
+  'yerushalmi-vilna': ['Yerushalmi Yomi (J’lem Talmud)', yyv, 'yyomi', yyv],
+  'yerushalmi-schottenstein': ['Yerushalmi Yomi (Schottenstein)', yys, 'yys', yys],
+  'chofetzChaim': ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
+  'shemiratHaLashon': ['Shemirat HaLashon', null, 'dshl', 'shemiratHaLashon'],
+  'dafWeekly': ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
+  'pirkeiAvotSummer': ['Pirkei Avot', 'pirkei-avot', 'dpa', 'pirkeiAvotSummer'],
+  'arukhHaShulchanYomi': ['Arukh HaShulchan Yomi', 'ahs-yomi', 'ahsy', 'arukhHaShulchanYomi'],
+  'parashat': ['Torah portion', 'torah-readings-diaspora', 's', null],
 };
 
 export function dailyLearningApp(ctx) {

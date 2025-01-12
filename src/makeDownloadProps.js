@@ -84,6 +84,7 @@ export function downloadHref2(query, filename, override={}) {
   if (on(q.nyomi)) msg.setNachyomi(true);
   if (on(q.ykk)) msg.setYomkippurkatan(true);
   if (on(q.yyomi)) msg.setYerushalmiyomi(true);
+  if (on(q.yys)) msg.setYyschottenstein(true);
   if (on(q.dr1)) msg.setRambam1(true);
   if (on(q.dcc)) msg.setChofetzchaim(true);
   if (on(q.dshl)) msg.setShemirathalashon(true);

@@ -55,6 +55,7 @@ export function deserializeDownload(data) {
   if (msg.getAddhebrewdatesforevents()) q.D = 'on';
   if (msg.getYomkippurkatan()) q.ykk = 'on';
   if (msg.getYerushalmiyomi()) q.yyomi = 'on';
+  if (msg.getYyschottenstein()) q.yys = 'on';
   if (msg.getRambam1()) q.dr1 = 'on';
   if (msg.getChofetzchaim()) q.dcc = 'on';
   if (msg.getShemirathalashon()) q.dshl = 'on';

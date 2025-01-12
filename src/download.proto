@@ -73,4 +73,5 @@ message Download {
   bool pirkeiAvotSummer = 55;
   bool yizkor = 56;
   bool arukhHaShulchanYomi = 57;
+  bool yySchottenstein = 58;
 }

@@ -101,7 +101,7 @@ fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=
 compress_file $FILE
 
 FILE="yerushalmi-schottenstein"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&yye=s&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&yys=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
 compress_file $FILE
 
 FILE="daf-weekly"
