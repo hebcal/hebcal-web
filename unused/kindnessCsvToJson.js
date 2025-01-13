@@ -19,6 +19,11 @@ const monthNames = {
 
 const argv = process.argv.slice(2);
 
+if (argv.length !== 1) {
+  console.error(`Usage: node app.js file.csv > src/areyvut-kindness-a-day.json`);
+  process.exit(1);
+}
+
 main()
     .then(() => {
       console.error('Success!');
