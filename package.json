@@ -85,7 +85,7 @@
     "pdfkit": "^0.16.0",
     "pino": "^9.6.0",
     "probe-image-size": "^7.2.3",
-    "quick-lru": "^7.0.0",
+    "quick-lru": "^6.1.2",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",
     "ulid": "^2.3.0",
