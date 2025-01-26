@@ -117,9 +117,10 @@ export function dailyLearningApp(ctx) {
   const items = events.map((ev) => {
     const cats = ev.getCategories();
     const cat0 = cats[0];
-    const ids = config[cat0];
+    const categoryName = cat0 === 'yerushalmi' ? cats.join('-') : cat0;
+    const ids = config[categoryName];
     return {
-      id: cat0,
+      id: categoryName,
       category: ids[0],
       basename: ids[1],
       flag: ids[2],
