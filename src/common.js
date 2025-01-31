@@ -553,7 +553,7 @@ export function makeHebcalOptions(db, query) {
       options[val] = true;
     }
   }
-  if ((options.mask & flags.ROSH_CHODESH) && (options.mask & flags.SPECIAL_SHABBAT)) {
+  if ((options.mask & flags.ROSH_CHODESH) && (options.mask & flags.SPECIAL_SHABBAT) && (options.mask & flags.PARSHA_HASHAVUA)) {
     options.mask |= flags.SHABBAT_MEVARCHIM;
   }
   // Before we parse numberOpts, check for tzeit preference
