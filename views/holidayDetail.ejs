@@ -24,7 +24,7 @@
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 
 <h2><%=holidayQ%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
-<% if (year && year < 1752) { -%>
+<% if (year && year <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h4 class="text-body-secondary"><%=descrShort%>&nbsp;<%=emoji%></h4>

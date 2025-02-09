@@ -22,7 +22,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <% if (date) { -%>
 <p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString().replace(/'/g, '’') %></span><% if (israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
 <% } -%>
-<% if (date && d.year() < 1752) { -%>
+<% if (date && d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.

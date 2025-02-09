@@ -84,7 +84,7 @@ Hebrew date conversion before year 1752 C.E. may be inaccurate.<br>
 Perhaps you intended to view the calendar for
 <a href="<%-sameUrlGregYear%>">Gregorian year <%=hebrewYear%></a>?
 </div><!-- .alert -->
-<% } else if (gy < 1752) { -%>
+<% } else if (gy <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } else if (gy >= 3762 && q.yt === 'G') { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
