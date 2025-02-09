@@ -181,6 +181,7 @@ In line with this tradition, various calendars have emerged to facilitate groups
 each day in order to finish the entire Mishnah in ~6 years.</p>`,
   feedLength: 365,
   years: 5,
+  moreInfo: `<p>One chapter per day:</p>` + await include('partials/ical-toolbar.ejs', {name: 'Perek Yomi', basename: 'perek-yomi'}),
   parent: 'learning2',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {

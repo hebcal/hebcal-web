@@ -81,6 +81,7 @@ export function downloadHref2(query, filename, override={}) {
   if (on(q.o)) msg.setOmer(true);
   if (on(q.F)) msg.setDafyomi(true);
   if (on(q.myomi)) msg.setMishnayomi(true);
+  if (on(q.dpy)) msg.setPerekyomi(true);
   if (on(q.nyomi)) msg.setNachyomi(true);
   if (on(q.ykk)) msg.setYomkippurkatan(true);
   if (on(q.yyomi)) msg.setYerushalmiyomi(true);

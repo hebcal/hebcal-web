@@ -74,4 +74,5 @@ message Download {
   bool yizkor = 56;
   bool arukhHaShulchanYomi = 57;
   bool yySchottenstein = 58;
+  bool perekYomi = 59;
 }

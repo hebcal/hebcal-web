@@ -18,6 +18,7 @@ const yys = 'yerushalmi-schottenstein';
 const config = {
   'dafyomi': ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F', 'dafYomi'],
   'mishnayomi': ['Mishna Yomi', 'mishna-yomi', 'myomi', 'mishnaYomi'],
+  'perekYomi': ['Perek Yomi', 'perek-yomi', 'dpy', 'perekYomi'],
   'nachyomi': ['Nach Yomi', 'nach-yomi', 'nyomi', 'nachYomi'],
   'tanakhYomi': ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
   'dailyPsalms': ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],

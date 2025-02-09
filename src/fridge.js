@@ -92,8 +92,8 @@ function makeProperties(ctx) {
 function getStartAndEnd(query) {
   if (query.yt === 'G') {
     const year = parseInt(query.year, 10) || new Date().getFullYear();
-    if (year < 1752) {
-      throw createError(400, 'Gregorian year must be 1752 or later');
+    if (year <= 1752) {
+      throw createError(400, 'Gregorian year must be 1753 or later');
     }
     const start = greg.greg2abs(new Date(year, 0, 1));
     const end = greg.greg2abs(new Date(year, 11, 31));

@@ -133,6 +133,7 @@ const booleanOpts = {
 export const dailyLearningOpts = {
   F: 'dafYomi',
   myomi: 'mishnaYomi',
+  dpy: 'perekYomi',
   nyomi: 'nachYomi',
   dty: 'tanakhYomi',
   dr1: 'rambam1',
@@ -1331,6 +1332,7 @@ export const queryToName = {
   D: 'Hebrew Dates', // Show Hebrew date for dates with some event
   F: 'Daf Yomi',
   myomi: 'Mishna Yomi',
+  dpy: 'Perek Yomi',
   nyomi: 'Nach Yomi',
   dty: 'Tanakh Yomi',
   dps: 'Daily Tehillim',
@@ -1353,6 +1355,7 @@ export const queryLongDescr = {
   ykk: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
   F: 'Daily regimen of learning the Babylonian Talmud',
   myomi: 'Two Mishnayot each day',
+  dpy: 'One chapter (perek) of Mishnah each day',
   nyomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
   dty: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
   dps: 'Daily study of few chapters from the book of Psalms',

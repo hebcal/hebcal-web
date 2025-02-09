@@ -92,6 +92,10 @@ FILE="mishna-yomi"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
 compress_file $FILE
 
+FILE="perek-yomi"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dpy=on&relcalid=839ede7d-4e1e-4e1c-acb9-7646d9146768&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Perek+Yomi&caldesc=One+chapter+of+the+Mishna+daily&color=%23003399"
+compress_file $FILE
+
 FILE="nach-yomi"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Nach+Yomi&caldesc=Daily+study+of+books+of+Nevi%27im+%28Prophets%29+and+Ketuvim+%28Writings%29&color=%23003399"
 compress_file $FILE
