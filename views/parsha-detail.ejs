@@ -53,19 +53,7 @@ title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.ver
 <% if (reading.fullkriyah) { -%>
 <h5>Full Kriyah</h5>
 <ol class="list-unstyled">
-<%    for (const [num, aliyah] of Object.entries(reading.fullkriyah)) { -%>
-<li><%=aliyah.num%><% if (reading.reason && reading.reason[num]) { %><span class="text-success">*</span><% } %>: <a title="Hebrew-English text and commentary from Sefaria.org" href="<%=aliyah.href%>"><%=aliyah.verses%></a>
-<%- await include('partials/numverses.ejs', {v: aliyah.v}) -%>
-<span class="text-nowrap">
-<a class="d-print-none ms-2" title="Tikkun.io - <%=parshaName%> aliyah <%=aliyah.num%>"
-href="<%-aliyah.tikkun%>">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-book"></use></svg></a>
-<a class="d-none d-sm-inline ms-2 d-print-none" target="pocketTorah" title="Audio from PocketTorah" href="<%-aliyah.pocketTorahAudio%>">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-volume-up-fill"></use></svg></a>
-</span>
-<% if (reading.reason && reading.reason[num]) { %><br><span class="text-success ps-1 small">*<%= reading.reason[num] %></span><% } %>
-</li>
-<%    } // ... for -%>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
 </ol>
 <% } // reading.fullkriyah %>
 <%
