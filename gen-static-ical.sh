@@ -160,4 +160,12 @@ node dist/kindness.js
 mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 
+FILE="chabad-special-dates"
+remove_file $FILE
+chabad_url_prefix="https://download.hebcal.com/v3/01jmt1hef19p1hw6qn48k8p4z9/personal"
+chabad_url_args="emoji=0&yrem=0&dl=1&title=Special+Dates+on+the+Chabad+Chassidic+Calendar"
+curl -o "ical/${FILE}.ics" "${chabad_url_prefix}.ics?${chabad_url_args}"
+curl -o "ical/${FILE}.csv" "${chabad_url_prefix}.csv?${chabad_url_args}"
+compress_file $FILE
+
 rm -f $TMPFILE

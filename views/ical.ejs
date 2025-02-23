@@ -158,6 +158,16 @@ Thursday.&nbsp;<sup><a class="outbound" href="https://en.wikipedia.org/wiki/Yom_
   years: 10,
   parent: 'holidays',
 }) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Special Dates on the Chabad Chassidic Calendar', id: 'chabad-special-dates',
+  summary: `<p>A perpetual feed of
+<a href="https://www.chabad.org/library/article_cdo/aid/357752/jewish/Special-Dates-on-the-Chabad-Chassidic-Calendar.htm">special
+dates on the Chabad Chassidic Calendar</a>, including birthdays
+and yahrzeits.</p>`,
+  feedLength: 23,
+  years: 20,
+  parent: 'holidays',
+}) -%>
 </div><!-- .accordion -->
 </div><!-- .col -->
 </div><!-- .row -->
