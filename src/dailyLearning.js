@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR} from './common.js';
+import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR, queryLongDescr} from './common.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
@@ -112,6 +112,11 @@ export function dailyLearningApp(ctx) {
     if (isWeekday || isShabbatParsha) {
       item.flag = 's';
     }
+    if (isWeekday) {
+      item.desc = 'Three aliyot read in synagogue on Monday and Thursday morning';
+    } else if (isShabbatParsha) {
+      item.desc = 'Full Torah portion read in synagogue on Saturday morning';
+    }
     items0.push(item);
   }
 
@@ -120,11 +125,14 @@ export function dailyLearningApp(ctx) {
     const cat0 = cats[0];
     const categoryName = cat0 === 'yerushalmi' ? cats.join('-') : cat0;
     const ids = config[categoryName];
+    const flag = ids[2];
+    const desc = queryLongDescr[flag];
     return {
       id: categoryName,
       category: ids[0],
       basename: ids[1],
-      flag: ids[2],
+      flag,
+      desc,
       title: ev.renderBrief(lg),
       url: ev.url(),
       event: ev,
