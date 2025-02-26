@@ -452,10 +452,14 @@ export async function yahrzeitDownload(ctx) {
     const icalOpt = makeIcalOpts(opts, query);
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
     // Hack for Google Calendar which doesn't understand iCalendar floating times
-    if (query.i === 'on') {
-      icalOpt.location = Location.lookup('Jerusalem');
-    } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
-      icalOpt.location = makeLocation(query);
+    const typesSet = getAnniversaryTypes(query);
+    const doLocation = reminder && typesSet.has(YAHRZEIT);
+    if (doLocation) {
+      if (query.i === 'on') {
+        icalOpt.location = Location.lookup('Jerusalem');
+      } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
+        icalOpt.location = makeLocation(query);
+      }
     }
     const zeroEvents = events.length === 0;
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
@@ -463,8 +467,10 @@ export async function yahrzeitDownload(ctx) {
       icalOpt.publishedTTL = false;
     }
     const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
-    for (const icalEv of icals) {
-      icalEv.locationName = undefined;
+    if (doLocation) {
+      for (const icalEv of icals) {
+        icalEv.locationName = undefined;
+      }
     }
     ctx.set('Vary', 'User-Agent');
     ctx.body = await icalEventsToString(icals, icalOpt);
