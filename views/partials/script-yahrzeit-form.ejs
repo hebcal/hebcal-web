@@ -90,7 +90,10 @@ const now = new Date();
 const maxYear = now.getFullYear() + 100;
 const tzoEl = document.getElementById('tzo');
 if (tzoEl) {
-  tzoEl.value = now.getTimezoneOffset();
+  const feb15 = new Date();
+  feb15.setDate(15);
+  feb15.setMonth(1);
+  tzoEl.value = feb15.getTimezoneOffset();
 }
 const mainFormEl = document.getElementById('f3');
 mainFormEl.addEventListener('submit', function(event) {

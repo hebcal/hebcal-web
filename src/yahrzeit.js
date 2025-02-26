@@ -455,7 +455,7 @@ export async function yahrzeitDownload(ctx) {
     if (query.i === 'on') {
       icalOpt.location = Location.lookup('Jerusalem');
     } else if (ctx.get('user-agent') === 'Google-Calendar-Importer') {
-      icalOpt.location = Location.lookup('New York');
+      icalOpt.location = makeLocation(query);
     }
     const zeroEvents = events.length === 0;
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
@@ -474,6 +474,23 @@ export async function yahrzeitDownload(ctx) {
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = '\uFEFF' + csv;
   }
+}
+
+function makeLocation(query) {
+  const tzo = parseInt(query.tzo, 10);
+  if (isNaN(tzo)) {
+    return Location.lookup('New York');
+  }
+  const tz = tzo / -60;
+  let tzid;
+  if (tz <= -4 && tz >= -10) {
+    tzid = Location.legacyTzToTzid(tz, 'usa');
+  } else if (tz <= 2 && tz >= -2) {
+    tzid = Location.legacyTzToTzid(tz, 'eu');
+  } else {
+    tzid = Location.legacyTzToTzid(tz, 'none');
+  }
+  return new Location(0, 0, false, tzid, '');
 }
 
 function makeEditMemo(calendarId) {
