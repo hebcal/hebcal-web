@@ -1,4 +1,6 @@
-import {getHolidaysOnDate, HDate} from '@hebcal/core';
+import {getHolidaysOnDate, HDate, Sedra, ParshaEvent} from '@hebcal/core';
+
+const writeUrls = false;
 
 // Shabbat Shekalim on Rosh Chodesh
 const shekalim = new Set();
@@ -7,8 +9,8 @@ const haChodesh = new Set();
 // Shabbat Rosh Chodesh Chanukah
 const shRchChanukah = new Set();
 
-const numYears = 3000;
-const startYear = 4000;
+const numYears = 1000;
+const startYear = 5200;
 const endYear = startYear + numYears;
 
 const doubles = new Set();
@@ -16,7 +18,8 @@ const doubles = new Set();
 for (let year = startYear; year < endYear; year++) {
     let count = 0;
     const thisYear = [];
-    const adarMonthName = HDate.isLeapYear(year) ? 'Adar' : 'Adar II';
+    const isLeapYear = HDate.isLeapYear(year);
+    const adarMonthName = isLeapYear ? 'Adar' : 'Adar II';
     const adar1 = new HDate(1, adarMonthName, year);
     if (adar1.getDay() === 6) {
         const adar1ev = getHolidaysOnDate(adar1);
@@ -24,6 +27,12 @@ for (let year = startYear; year < endYear; year++) {
             shekalim.add(adar1);
             count++;
             thisYear.push('shekalim');
+            const sedra = new Sedra(year, false);
+            const p = sedra.lookup(adar1);
+            const pe = new ParshaEvent(adar1, p.parsha, false, p.num);
+            if (writeUrls) {
+                console.log(`${p.parsha[0]} ${year} ${adar1.greg().toISOString().substring(0, 10)} ${pe.url()}`);
+            }
         }
     }
 
@@ -55,3 +64,10 @@ console.log(haChodesh.size / numYears);
 console.log(shRchChanukah.size / numYears);
 
 console.log(doubles.size / numYears);
+
+const shekalimYears = new Set(shekalim.values().map((x) => x.getFullYear()));
+const haChodeshYears = new Set(haChodesh.values().map((x) => x.getFullYear()));
+const shRchChanukahYears = new Set(shRchChanukah.values().map((x) => x.getFullYear()));
+
+const any = shekalimYears.union(haChodeshYears).union(shRchChanukahYears);
+console.log(any.size / numYears);
