@@ -15,15 +15,16 @@ const doubles = new Set();
 
 for (let year = startYear; year < endYear; year++) {
     let count = 0;
-    const adar1 = new HDate(1, 'Adar', year);
     const thisYear = [];
+    const adarMonthName = HDate.isLeapYear(year) ? 'Adar' : 'Adar II';
+    const adar1 = new HDate(1, adarMonthName, year);
     if (adar1.getDay() === 6) {
         const adar1ev = getHolidaysOnDate(adar1);
         if (adar1ev.find((ev) => ev.getDesc() === 'Shabbat Shekalim')) {
             shekalim.add(adar1);
             count++;
             thisYear.push('shekalim');
-        }    
+        }
     }
 
     const nisan1 = new HDate(1, 'Nisan', year);
