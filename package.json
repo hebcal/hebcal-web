@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -36,26 +36,26 @@
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@rollup/plugin-commonjs": "^28.0.3",
-    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
-    "bootstrap5-autocomplete": "^1.1.37",
+    "bootstrap5-autocomplete": "^1.1.38",
     "csv-parse": "^5.6.0",
     "eslint": "^9.22.0",
     "eslint-plugin-n": "^17.16.2",
     "globals": "^16.0.0",
-    "rollup": "^4.35.0"
+    "rollup": "^4.36.0"
   },
   "dependencies": {
     "@hebcal/core": "^5.9.1",
     "@hebcal/geo-sqlite": "^5.1.0",
-    "@hebcal/hdate": "^0.13.5",
+    "@hebcal/hdate": "^0.13.6",
     "@hebcal/icalendar": "^6.1.2",
     "@hebcal/learning": "^6.2.1",
     "@hebcal/leyning": "^9.0.6",
     "@hebcal/locales": "^6.0.1",
     "@hebcal/rest-api": "^6.1.1",
     "@hebcal/triennial": "^6.0.1",
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "^11.9.1",
     "dayjs": "^1.11.13",
     "ejs": "^3.1.10",
     "emoji-flag": "^1.1.0",
@@ -88,7 +88,7 @@
     "quick-lru": "^6.1.2",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",
-    "ulid": "^2.3.0",
+    "ulid": "^2.4.0",
     "uuid-random": "^1.3.2"
   }
 }
