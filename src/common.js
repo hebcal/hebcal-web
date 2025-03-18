@@ -1,7 +1,7 @@
 import {HDate, Location, HebrewCalendar, flags} from '@hebcal/core';
 import '@hebcal/learning';
 import createError from 'http-errors';
-import uuid from 'uuid-random';
+import {randomUUID} from 'node:crypto';
 import {nearestCity} from './nearestCity.js';
 import {getEventCategories} from '@hebcal/rest-api';
 import etag from 'etag';
@@ -256,7 +256,7 @@ function makeCookie(ctx, query, uid) {
   if (Object.keys(ck).length === 0) {
     return false;
   }
-  uid = uid || uuid();
+  uid = uid || randomUUID();
   ctx.state.visitorId = ctx.state.userId = uid;
   return 'uid=' + uid + '&' + new URLSearchParams(ck).toString();
 }
