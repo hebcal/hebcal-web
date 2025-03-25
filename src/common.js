@@ -111,6 +111,7 @@ const optsToMask = {
   molad: flags.MOLAD,
   min: flags.MINOR_HOLIDAY,
   yzkr: flags.YIZKOR,
+  mvch: flags.SHABBAT_MEVARCHIM,
 };
 
 const booleanOpts = {
@@ -128,6 +129,7 @@ const booleanOpts = {
   yto: 'yomTovOnly',
   ue: 'useElevation',
   yzkr: 'yizkor',
+  mvch: 'shabbatMevarchim',
 };
 
 export const dailyLearningOpts = {
@@ -1345,6 +1347,7 @@ export const queryToName = {
   dpa: 'Pirkei Avot',
   ahsy: 'Arukh HaShulchan Yomi',
   yzkr: 'Yizkor',
+  mvch: 'Shabbat Mevarchim',
 };
 
 export const queryLongDescr = {
@@ -1368,6 +1371,7 @@ export const queryLongDescr = {
   dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
   ahsy: 'Summary of the sources for each chapter of the Shulchan Arukh and its commentaries',
   yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
+  mvch: 'Shabbat before the start of Rosh Chodesh',
 };
 
 /**

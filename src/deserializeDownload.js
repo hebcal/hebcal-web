@@ -67,6 +67,7 @@ export function deserializeDownload(data) {
   if (msg.getArukhhashulchanyomi()) q.ahsy = 'on';
   if (msg.getUseelevation()) q.ue = 'on';
   if (msg.getYizkor()) q.yzkr = 'on';
+  if (msg.getShabbatmevarchim()) q.mvch = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();
