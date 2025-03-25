@@ -133,6 +133,15 @@ application. Subscribers to these feeds receive perpetual updates.</p>
   parent: 'holidays',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Shabbat Mevarchim', id: 'mevarchim',
+  emoji: '',
+  summary: `<p>Shabbat before Rosh Chodesh is known as Shabbat Mevarchim, “the Shabbat when we bless.”
+Each event in the feed also includes details on the molad, the moment the new moon is born.</p>`,
+  feedLength: 12,
+  years: 10,
+  parent: 'holidays',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Yizkor', id: 'yizkor-diaspora',
   emoji: '🕯️',
   summary: `<p>Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly.
