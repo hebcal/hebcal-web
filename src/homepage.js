@@ -326,12 +326,14 @@ ${when} on ${htmlDate}`];
   if ((mm == purimMonth && dd >= 17) || (isNisan && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg()).locale(locale);
+    const deltaDays0 = erevPesach.diff(dayjs(hd.greg()), 'd');
+    const deltaDays = deltaDays0 > 1 ? `in ${deltaDays0} days` : 'tomorrow';
     const htmlDate = myDateFormat(erevPesach);
     const blurb = '🫓&nbsp;🍷&nbsp;<span lang="he" dir="rtl">חַג כָּשֵׁר וְשָׂמֵחַ</span>&nbsp;🍷&nbsp;🫓';
     const suffix = il ? '?i=on' : '';
     return [blurb, `<strong>Chag Kasher v'Sameach!</strong>
  <a class="text-green1 text-nowrap" href="/holidays/pesach-${gy}${suffix}">Passover</a>
- begins at sundown on ${htmlDate}`];
+ begins ${deltaDays} at sundown on ${htmlDate}`];
   }
 
   const fastTomorrow = tomorrow.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
