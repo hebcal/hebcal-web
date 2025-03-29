@@ -34,25 +34,25 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@eslint/js": "^9.22.0",
+    "@eslint/js": "^9.23.0",
     "@rollup/plugin-commonjs": "^28.0.3",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-terser": "^0.4.4",
     "bootstrap5-autocomplete": "^1.1.38",
     "csv-parse": "^5.6.0",
-    "eslint": "^9.22.0",
-    "eslint-plugin-n": "^17.16.2",
+    "eslint": "^9.23.0",
+    "eslint-plugin-n": "^17.17.0",
     "globals": "^16.0.0",
-    "rollup": "^4.36.0"
+    "rollup": "^4.37.0"
   },
   "dependencies": {
-    "@hebcal/core": "^5.9.1",
+    "@hebcal/core": "^5.9.2",
     "@hebcal/geo-sqlite": "^5.1.0",
     "@hebcal/hdate": "^0.13.6",
     "@hebcal/icalendar": "^6.1.2",
     "@hebcal/learning": "^6.2.1",
     "@hebcal/leyning": "^9.0.6",
-    "@hebcal/locales": "^6.0.1",
+    "@hebcal/locales": "^6.0.2",
     "@hebcal/rest-api": "^6.1.1",
     "@hebcal/triennial": "^6.0.1",
     "better-sqlite3": "^11.9.1",
@@ -61,7 +61,7 @@
     "emoji-flag": "^1.1.0",
     "etag": "^1.8.1",
     "fastest-levenshtein": "^1.0.16",
-    "geo-tz": "^8.1.3",
+    "geo-tz": "^8.1.4",
     "geolite2-redist": "^3.1.1",
     "google-protobuf": "^3.21.4",
     "haversine": "^1.1.1",
@@ -79,7 +79,7 @@
     "koa-timeout-v2": "^1.0.0",
     "maxmind": "^4.3.24",
     "murmurhash3": "^0.5.0",
-    "mysql2": "^3.13.0",
+    "mysql2": "^3.14.0",
     "nodemailer": "^6.10.0",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.16.0",
@@ -88,6 +88,6 @@
     "quick-lru": "^6.1.2",
     "random-bigint": "0.0.1",
     "transliteration": "^2.3.5",
-    "ulid": "^2.4.0"
+    "ulid": "^3.0.0"
   }
 }
