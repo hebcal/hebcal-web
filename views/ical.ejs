@@ -118,7 +118,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
   name: 'Days of the Omer', id: 'omer',
-  emoji: '㊾',
+  emoji: '🌾 ㊾',
   summary: '<p>7 weeks from the second night of Pesach to the day before Shavuot</p>',
   feedLength: 49,
   years: 3,
@@ -222,6 +222,22 @@ division of sedarim. This cycle is completed each year.</p>`,
   parent: 'learning2',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Daily Rambam', id: 'rambam1',
+  summary: `<p>A learning program that divides Maimonides’ Mishneh Torah legal code
+    into daily units, to complete the whole work in three years.</p>`,
+  feedLength: 365,
+  years: 5,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Daily Rambam (3 Chapters)', id: 'rambam3',
+  summary: `<p>A learning program that divides Maimonides’ Mishneh Torah legal code
+    into 3 chapters per day, to complete the whole work in one year.</p>`,
+  feedLength: 365,
+  years: 5,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Tehillim (Psalms)', id: 'psalms',
   summary: `<p>Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim).
 The entire book is completed on the final day of each Hebrew month.
@@ -244,14 +260,6 @@ Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and
   summary: `<p>Daily regimen of learning the Jerusalem Talmud (Schottenstein Edition).
 The Schottenstein edition of Yerushalmi Daf Yomi uses different page numbers
 than the Vilna and takes 5¾ years to complete.</p>`,
-  feedLength: 365,
-  years: 5,
-  parent: 'learning2',
-}) -%>
-<%- await include('partials/ical-accordion-item.ejs', {
-  name: 'Daily Rambam', id: 'rambam1',
-  summary: `<p>A learning program that divides Maimonides’ Mishneh Torah legal code
-    into daily units, to complete the whole work in three years.</p>`,
   feedLength: 365,
   years: 5,
   parent: 'learning2',

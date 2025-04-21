@@ -76,4 +76,5 @@ message Download {
   bool yySchottenstein = 58;
   bool perekYomi = 59;
   bool shabbatMevarchim = 60;
+  bool rambam3 = 61;
 }

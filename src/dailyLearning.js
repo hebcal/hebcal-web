@@ -23,6 +23,7 @@ const config = {
   'tanakhYomi': ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
   'dailyPsalms': ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
   'dailyRambam1': ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
+  'dailyRambam3': ['Daily Rambam (3 Chapters)', 'rambam3', 'dr3', 'rambam3'],
   'yerushalmi-vilna': ['Yerushalmi Yomi (J’lem Talmud)', yyv, 'yyomi', yyv],
   'yerushalmi-schottenstein': ['Yerushalmi Yomi (Schottenstein)', yys, 'yys', yys],
   'chofetzChaim': ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
