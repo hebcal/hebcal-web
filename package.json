@@ -49,7 +49,7 @@
     "@hebcal/core": "^5.9.3",
     "@hebcal/geo-sqlite": "^5.1.0",
     "@hebcal/hdate": "^0.14.0",
-    "@hebcal/icalendar": "^6.1.2",
+    "@hebcal/icalendar": "^6.1.3",
     "@hebcal/learning": "^6.3.0",
     "@hebcal/leyning": "^9.1.0",
     "@hebcal/locales": "^6.0.3",
