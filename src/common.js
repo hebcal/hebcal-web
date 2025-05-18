@@ -24,6 +24,7 @@ export const langNames = {
   'de': ['Deutsch', 'German'],
   'hu': ['Magyar nyelv', 'Hungarian'],
   'pl': ['język polski', 'Polish'],
+  'pt': ['Português', 'Portuguese'],
   'ro': ['Română', 'Romanian'],
   'ashkenazi_romanian': ['Română (Ashk.)', 'Romanian (Ashk.)'],
   'ru': ['ру́сский язы́к', 'Russian'],
