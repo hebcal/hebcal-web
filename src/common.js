@@ -389,6 +389,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
     }
     delete ck.t;
     delete ck.uid;
+    delete ck.exp;
   }
   let found = false;
   const cityTypeahead = query['city-typeahead'];
