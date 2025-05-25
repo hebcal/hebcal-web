@@ -60,7 +60,7 @@ app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {
     ctx.set('Allow', 'GET');
-    ctx.throw(405, `Method ${method} not allowed; try using GET`);
+    ctx.throw(405, `${method} not allowed; use GET instead`);
   }
   await next();
 });

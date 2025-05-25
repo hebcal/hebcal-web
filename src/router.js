@@ -73,6 +73,14 @@ function checkSlash(rpath, position) {
   }
 }
 
+function onlyGetAndHead(ctx) {
+  const method = ctx.method;
+  if (method !== 'GET' && method !== 'HEAD') {
+    ctx.set('Allow', 'GET');
+    throw createError(405, `${method} not allowed; use GET instead`);
+  }
+}
+
 export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
@@ -84,6 +92,7 @@ export function wwwRouter() {
       ctx.type = 'text/plain';
       // let serve() handle this file
     } else if (rpath === '/') {
+      onlyGetAndHead(ctx);
       return homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
       ctx.lastModified = ctx.launchDate;
@@ -109,8 +118,10 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/complete')) {
       return geoAutoComplete(ctx);
     } else if (rpath.startsWith('/zmanim')) {
+      onlyGetAndHead(ctx);
       return getZmanim(ctx);
     } else if (rpath.startsWith('/leyning')) {
+      onlyGetAndHead(ctx);
       return getLeyning(ctx);
     } else if (rpath.startsWith('/learning')) {
       return dailyLearningApp(ctx);
@@ -122,16 +133,21 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
       return fridgeShabbat(ctx);
     } else if (rpath.startsWith('/converter/csv')) {
+      onlyGetAndHead(ctx);
       return dateConverterCsv(ctx);
     } else if (rpath.startsWith('/converter')) {
       return hebrewDateConverter(ctx);
     } else if (rpath.startsWith('/shabbat/browse')) {
+      onlyGetAndHead(ctx);
       return shabbatBrowse(ctx);
     } else if (rpath.startsWith('/shabbat')) {
+      onlyGetAndHead(ctx);
       return shabbatApp(ctx);
     } else if (rpath.startsWith('/hebcal/del_cookie')) {
+      onlyGetAndHead(ctx);
       return delCookie(ctx);
     } else if (rpath.startsWith('/hebcal')) {
+      onlyGetAndHead(ctx);
       return hebcalApp(ctx);
     } else if (rpath === '/yahrzeit/email') {
       return yahrzeitEmailSub(ctx);
@@ -143,6 +159,7 @@ export function wwwRouter() {
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {
       checkSlash(rpath, 10);
+      onlyGetAndHead(ctx);
       return holidayApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
@@ -161,10 +178,13 @@ export function wwwRouter() {
         langNames,
       });
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.js')) {
+      onlyGetAndHead(ctx);
       return hdateJavascript(ctx);
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.xml')) {
+      onlyGetAndHead(ctx);
       return hdateXml(ctx);
     } else if ((rpath.startsWith('/etc/dafyomi-') || rpath.startsWith('/etc/myomi-')) && rpath.endsWith('.xml')) {
+      onlyGetAndHead(ctx);
       return dafYomiRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
       checkSlash(rpath, 8);
@@ -187,8 +207,10 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/calc')) {
       return hebrewDateCalc(ctx);
     } else if (rpath.startsWith('/omer')) {
+      onlyGetAndHead(ctx);
       return omerApp(rpath, ctx);
     } else if (rpath === '/sitemap_zips.txt') {
+      onlyGetAndHead(ctx);
       return sitemapZips(ctx);
     } else if (rpath.startsWith('/ma/') || rpath.startsWith('/matomo/')) {
       const bn = basename(rpath);

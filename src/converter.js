@@ -584,10 +584,6 @@ function g2h(dt, gs, noCache) {
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function dateConverterCsv(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const p = parseConverterQuery(ctx);
   const hdate = p.hdate;
   const arr = makeFutureYearsHeb(hdate, 75, 'en');

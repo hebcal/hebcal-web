@@ -37,10 +37,6 @@ import {myEventsToClassicApi} from './myEventsToClassicApi.js';
 dayjs.extend(localeData);
 
 export async function hebcalApp(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ?
     {...hebcalFormDefaults} :

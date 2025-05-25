@@ -6,21 +6,25 @@ import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
 
+function omerSitemap(ctx) {
+  const prefix = 'https://www.hebcal.com/omer';
+  let body = '';
+  const hyear = new HDate().getFullYear();
+  for (let year = hyear - 1; year < hyear + 4; year++) {
+    body += `${prefix}/${year}\n`;
+    for (let day = 1; day <= 49; day++) {
+      body += `${prefix}/${year}/${day}\n`;
+    }
+  }
+  ctx.lastModified = ctx.launchDate;
+  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
+  ctx.type = 'text/plain';
+  ctx.body = body;
+}
+
 export async function omerApp(rpath, ctx) {
   if (rpath === '/omer/sitemap.txt') {
-    const prefix = 'https://www.hebcal.com/omer';
-    let body = '';
-    const hyear = new HDate().getFullYear();
-    for (let year = hyear - 1; year < hyear + 4; year++) {
-      body += `${prefix}/${year}\n`;
-      for (let day = 1; day <=49; day++) {
-        body += `${prefix}/${year}/${day}\n`;
-      }
-    }
-    ctx.lastModified = ctx.launchDate;
-    ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-    ctx.type = 'text/plain';
-    ctx.body = body;
+    omerSitemap(ctx);
     return;
   }
   const yearStr = basename(dirname(rpath));

@@ -92,10 +92,10 @@ if (!date && spHaftItems.length !== 0) { -%>
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
 <% if (parshaName === 'Yitro') { %>
-<div class="small mb-2 text-muted">Note: in the abbreviated reading above (“Option B”),
+<div class="small mb-3 text-body-secondary">Note: in the abbreviated triennal reading above,
 the congregation experiences <span lang="he" dir="rtl">עֲשֶׂרֶת הַדִבְּרוֹת</span>
 only in years 2 and 3 of the cycle.
-Some congregations read the entire parsha every year (“Option A”).</div>
+Some congregations read the entire parsha every year.</div>
 <% } %>
 <% } %>
 <% if (triennial.haftara) { -%>
@@ -141,6 +141,12 @@ Some congregations read the entire parsha every year (“Option A”).</div>
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
+<% if (parshaName === 'Yitro') { %>
+<div class="small mb-3 text-body-secondary">Note: in the abbreviated triennal readings above,
+the congregation experiences <span lang="he" dir="rtl">עֲשֶׂרֶת הַדִבְּרוֹת</span>
+only in years 2 and 3 of the cycle.
+Some congregations read the entire parsha every year.</div>
+<% } %>
 <% } // !date %>
 <% } // !hasTriennial %>
 </div><!-- .row -->

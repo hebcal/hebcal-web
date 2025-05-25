@@ -60,10 +60,6 @@ const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
  * @param {any} ctx
  */
 export async function getZmanim(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
   const q = ctx.request.query;
   if (q.cfg !== 'json') {

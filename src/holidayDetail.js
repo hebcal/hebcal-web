@@ -458,11 +458,10 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
  * @param {boolean} il
  */
 function makeHolidayReading(holiday, item, meta, reading, ev, il) {
-  if (reading.fullkriyah) {
-    addLinksToLeyning(reading.fullkriyah, true, false);
-  }
-  if (reading.megillah) {
-    addLinksToLeyning(reading.megillah, true, false);
+  for (const flavor of ['fullkriyah', 'megillah', 'alt']) {
+    if (reading[flavor]) {
+      addLinksToLeyning(reading[flavor], true, false);
+    }
   }
   const itemReading = meta.reading[item] = reading;
   const hebrew = Locale.lookupTranslation(item, 'he');

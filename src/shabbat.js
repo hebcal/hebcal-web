@@ -29,10 +29,6 @@ dayjs.extend(timezone);
 const BASE_URL = 'https://www.hebcal.com/shabbat';
 
 export async function shabbatApp(ctx) {
-  if (ctx.method === 'POST') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, 'POST not allowed; try using GET instead');
-  }
   const isRedir = geoIpRedirect(ctx);
   if (isRedir) {
     return;

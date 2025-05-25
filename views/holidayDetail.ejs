@@ -227,6 +227,10 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% if (reading?.reason?.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %></span><% } %>
 </p>
 <% } // reading.haftara %>
+<% if (reading.alt) { -%>
+<p class="text-body-secondary">Some sources use these aliyot instead:</p>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.alt}) -%>
+<% } // reading.alt -%>
 <% if (reading.megillah) { -%>
 <h5 class="megillah">Megillah</h5>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: reading.megillah}) -%>
