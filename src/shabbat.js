@@ -393,7 +393,7 @@ function eventToItem(ev, options, locale, cfg) {
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
   const id = d.format('YYYYMMDD') + '-' + makeAnchor(desc);
-  const subj = renderTitleWithoutTime(ev);
+  const subj = renderTitleWithoutTime(ev, locale);
   const obj = {
     id,
     desc: subj,
