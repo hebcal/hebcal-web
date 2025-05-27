@@ -1,6 +1,6 @@
 import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '@hebcal/leyning';
+import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {empty} from './empty.js';
@@ -450,7 +450,7 @@ function makeTriennial(parsha, date, parshaEv, hyear, il) {
     }
   }
   const triennial = {
-    reading: reading.aliyot,
+    reading: clone(reading.aliyot),
     yearNum: reading.yearNum + 1,
     fullParsha: reading.fullParsha,
     hyear: hyear,
@@ -503,6 +503,7 @@ function makeTriReading(tri, yr, parshaName, il) {
   const hd = triReading.date;
   const ev = new ParshaEvent(hd, [parshaName], il);
   const triReading2 = getTriennialForParshaHaShavua(ev, il);
+  triReading2.aliyot = clone(triReading2.aliyot);
   addLinksToLeyning(triReading2.aliyot, false);
   for (const aliyah of Object.values(triReading2.aliyot)) {
     aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');
