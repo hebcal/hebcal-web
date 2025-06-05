@@ -238,6 +238,13 @@ division of sedarim. This cycle is completed each year.</p>`,
   parent: 'learning2',
 }) -%>
 <%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Maimonides’ Sefer HaMitzvot', id: 'sefer-hamitzvot',
+  summary: `<p>Sefer Hamitzvos - Daily Mitzvah (Rambam)</p>`,
+  feedLength: 365,
+  years: 3,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
   name: 'Daily Tehillim (Psalms)', id: 'psalms',
   summary: `<p>Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim).
 The entire book is completed on the final day of each Hebrew month.
@@ -298,6 +305,13 @@ of halacha written by Yechiel Michel Epstein. The work attempts
 to be a clear, organized summary of the sources for each chapter
 of the Shulchan Arukh and its commentaries, with special emphasis
 on the positions of the Jerusalem Talmud and Maimonides</p>`,
+  feedLength: 365,
+  years: 3,
+  parent: 'learning2',
+}) -%>
+<%- await include('partials/ical-accordion-item.ejs', {
+  name: 'Kitzur Shulchan Arukh Yomi', id: 'ksa-yomi',
+  summary: `<p>Summary of the Shulchan Aruch of Rabbi Yosef Karo, authored by Rabbi Shlomo Ganzfried in 1864</p>`,
   feedLength: 365,
   years: 3,
   parent: 'learning2',

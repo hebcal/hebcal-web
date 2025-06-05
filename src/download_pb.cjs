@@ -211,7 +211,9 @@ proto.Download.toObject = function(includeInstance, msg) {
     yyschottenstein: jspb.Message.getBooleanFieldWithDefault(msg, 58, false),
     perekyomi: jspb.Message.getBooleanFieldWithDefault(msg, 59, false),
     shabbatmevarchim: jspb.Message.getBooleanFieldWithDefault(msg, 60, false),
-    rambam3: jspb.Message.getBooleanFieldWithDefault(msg, 61, false)
+    rambam3: jspb.Message.getBooleanFieldWithDefault(msg, 61, false),
+    seferhamitzvot: jspb.Message.getBooleanFieldWithDefault(msg, 62, false),
+    kitzurshulchanaruch: jspb.Message.getBooleanFieldWithDefault(msg, 63, false)
   };
 
   if (includeInstance) {
@@ -479,6 +481,14 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 61:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setRambam3(value);
+      break;
+    case 62:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setSeferhamitzvot(value);
+      break;
+    case 63:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setKitzurshulchanaruch(value);
       break;
     default:
       reader.skipField();
@@ -912,6 +922,20 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       61,
+      f
+    );
+  }
+  f = message.getSeferhamitzvot();
+  if (f) {
+    writer.writeBool(
+      62,
+      f
+    );
+  }
+  f = message.getKitzurshulchanaruch();
+  if (f) {
+    writer.writeBool(
+      63,
       f
     );
   }
@@ -2112,6 +2136,42 @@ proto.Download.prototype.getRambam3 = function() {
  */
 proto.Download.prototype.setRambam3 = function(value) {
   return jspb.Message.setProto3BooleanField(this, 61, value);
+};
+
+
+/**
+ * optional bool seferHaMitzvot = 62;
+ * @return {boolean}
+ */
+proto.Download.prototype.getSeferhamitzvot = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 62, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setSeferhamitzvot = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 62, value);
+};
+
+
+/**
+ * optional bool kitzurShulchanAruch = 63;
+ * @return {boolean}
+ */
+proto.Download.prototype.getKitzurshulchanaruch = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 63, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setKitzurshulchanaruch = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 63, value);
 };
 
 

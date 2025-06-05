@@ -77,4 +77,6 @@ message Download {
   bool perekYomi = 59;
   bool shabbatMevarchim = 60;
   bool rambam3 = 61;
+  bool seferHaMitzvot = 62;
+  bool kitzurShulchanAruch = 63;
 }

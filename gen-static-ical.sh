@@ -144,6 +144,10 @@ FILE="rambam3"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr3=on&relcalid=404804af-b0ff-4873-8265-ce8694e46171&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Rambam+3+Chapters&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
 compress_file $FILE
 
+FILE="sefer-hamitzvot"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dsm=on&relcalid=edf00df1-a68e-4389-be93-3bfff03d7bce&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=&caldesc="
+compress_file $FILE
+
 FILE="yizkor-diaspora"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&relcalid=64acac8c-a02f-4433-b7ef-f3a5e02d26cc&lg=en&publishedTTL=PT14D&title=Yizkor+%28Diaspora%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
 compress_file $FILE
@@ -154,6 +158,10 @@ compress_file $FILE
 
 FILE="ahs-yomi"
 fetch_urls $FILE "start=${START}&end=${END3}&v=1&ahsy=on&relcalid=b87406d8-e243-49f5-a072-934b06b10e5f&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Arukh+HaShulchan+Yomi&caldesc=Daily+study+of+summary+of+the+sources+for+each+chapter+of+the+Shulchan+Arukh+and+its+commentaries"
+compress_file $FILE
+
+FILE="ksa-yomi"
+fetch_urls $FILE "start=${START}&end=${END5}&v=1&dksa=on&relcalid=0c021b70-c96d-4dc4-9dde-fcfbbf84357b&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=&caldesc="
 compress_file $FILE
 
 FILE="chofetz-chaim"

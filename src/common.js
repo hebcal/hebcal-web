@@ -142,6 +142,7 @@ export const dailyLearningOpts = {
   dty: 'tanakhYomi',
   dr1: 'rambam1',
   dr3: 'rambam3',
+  dsm: 'seferHaMitzvot',
   yyomi: 'yerushalmi-vilna',
   yys: 'yerushalmi-schottenstein',
   dcc: 'chofetzChaim',
@@ -150,6 +151,7 @@ export const dailyLearningOpts = {
   dw: 'dafWeeklySunday',
   dpa: 'pirkeiAvotSummer',
   ahsy: 'arukhHaShulchanYomi',
+  dksa: 'kitzurShulchanAruch',
 };
 
 const numberOpts = {
@@ -1349,11 +1351,13 @@ export const queryToName = {
   dshl: 'Shemirat HaLashon',
   dr1: 'Daily Rambam',
   dr3: 'Daily Rambam (3 Chapters)',
+  dsm: 'Sefer HaMitzvot',
   yyomi: 'Yerushalmi Yomi (Vilna)',
   yys: 'Yerushalmi Yomi (Schottenstein)',
   dw: 'Daf-a-Week',
   dpa: 'Pirkei Avot',
   ahsy: 'Arukh HaShulchan Yomi',
+  dksa: 'Kitzur Shulchan Arukh Yomi',
   yzkr: 'Yizkor',
   mvch: 'Shabbat Mevarchim',
 };
@@ -1374,11 +1378,13 @@ export const queryLongDescr = {
   dshl: '',
   dr1: 'Maimonides’ Mishneh Torah legal code',
   dr3: 'Maimonides’ Mishneh Torah legal code',
+  dsm: 'Maimonides’ Sefer HaMitzvot',
   yyomi: 'Jerusalem Talmud (Vilna edition)',
   yys: 'Jerusalem Talmud (Schottenstein edition)',
   dw: 'One page of Babylonian Talmud per week',
   dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
   ahsy: 'Summary of the sources for each chapter of the Shulchan Arukh and its commentaries',
+  dksa: 'Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De\'ah',
   yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
   mvch: 'Shabbat before the start of Rosh Chodesh',
 };

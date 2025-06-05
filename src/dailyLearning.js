@@ -24,6 +24,7 @@ const config = {
   'dailyPsalms': ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
   'dailyRambam1': ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
   'dailyRambam3': ['Daily Rambam (3 Chapters)', 'rambam3', 'dr3', 'rambam3'],
+  'seferHaMitzvot': ['Maimonides’ Sefer HaMitzvot', 'sefer-hamitzvot', 'dsm', 'seferHaMitzvot'],
   'yerushalmi-vilna': ['Yerushalmi Yomi (J’lem Talmud)', yyv, 'yyomi', yyv],
   'yerushalmi-schottenstein': ['Yerushalmi Yomi (Schottenstein)', yys, 'yys', yys],
   'chofetzChaim': ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
@@ -31,6 +32,7 @@ const config = {
   'dafWeekly': ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
   'pirkeiAvotSummer': ['Pirkei Avot', 'pirkei-avot', 'dpa', 'pirkeiAvotSummer'],
   'arukhHaShulchanYomi': ['Arukh HaShulchan Yomi', 'ahs-yomi', 'ahsy', 'arukhHaShulchanYomi'],
+  'kitzurShulchanAruch': ['Kitzur Shulchan Arukh Yomi', 'ksa-yomi', 'dksa', 'kitzurShulchanAruch'],
   'parashat': ['Torah portion', 'torah-readings-diaspora', 's', null],
 };
 
