@@ -13,7 +13,7 @@ import {isoDateStringToDate} from './dateUtil.js';
 import {getIpAddress} from './getIpAddress.js';
 
 const pkg = readJSON('../package.json');
-const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
+export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
 export const langNames = {
   's': ['Sephardic transliterations', null],
@@ -168,7 +168,7 @@ for (const cfg of Object.values(dailyLearningConfig)) {
     const k = cfg.queryParam;
     dailyLearningOpts[k] = optName;
     queryToName[k] = cfg.settingsName;
-    queryLongDescr[k] = cfg.longDesc;
+    queryLongDescr[k] = cfg.descMedium;
   }
 }
 

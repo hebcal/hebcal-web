@@ -6,6 +6,7 @@ import {
   langNames,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE,
+  dailyLearningConfig,
 } from './common.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
@@ -176,6 +177,7 @@ export function wwwRouter() {
       return ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars - Hebcal',
         langNames,
+        dailyLearningConfig,
       });
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.js')) {
       onlyGetAndHead(ctx);

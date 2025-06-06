@@ -1,14 +1,13 @@
 import dayjs from 'dayjs';
-import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR, queryLongDescr} from './common.js';
+import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR, queryLongDescr,
+  dailyLearningConfig} from './common.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
-import {readJSON} from './readJSON.js';
 
 const currentYear = new Date().getFullYear();
-const config = readJSON('./dailyLearningConfig.json');
 
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
@@ -36,11 +35,11 @@ export function dailyLearningApp(ctx) {
   const q = ctx.request.query;
   const il = q.i === 'on';
   const lg = q.lg || 's';
-  const dailyLearningOpts = {};
-  for (const cfg of Object.values(config)) {
+  const dlOpts = {};
+  for (const cfg of Object.values(dailyLearningConfig)) {
     const key = cfg.dailyLearningOptName;
     if (key) {
-      dailyLearningOpts[key] = true;
+      dlOpts[key] = true;
     }
   }
   const events = HebrewCalendar.calendar({
@@ -49,7 +48,7 @@ export function dailyLearningApp(ctx) {
     il,
     locale: lg,
     noHolidays: true,
-    dailyLearning: dailyLearningOpts,
+    dailyLearning: dlOpts,
   });
 
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
@@ -101,7 +100,7 @@ export function dailyLearningApp(ctx) {
     const cats = ev.getCategories();
     const cat0 = cats[0];
     const categoryName = cat0 === 'yerushalmi' ? cats.join('-') : cat0;
-    const cfg = config[categoryName];
+    const cfg = dailyLearningConfig[categoryName];
     const flag = cfg.queryParam;
     const desc = queryLongDescr[flag];
     return {

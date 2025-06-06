@@ -3,97 +3,132 @@
     "queryParam": "F",
     "dailyLearningOptName": "dafYomi",
     "downloadSlug": "daf-yomi",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Daf Yomi",
     "shortName": "Daf Yomi (Babylonian Talmud)",
-    "longDesc": "Daily regimen of learning the Babylonian Talmud"
+    "descLong": "Daily regimen of learning the Babylonian Talmud. This cycle takes approximately 7½ years to complete.",
+    "descMedium": "Daily regimen of learning the Babylonian Talmud"
   },
   "mishnayomi": {
     "queryParam": "myomi",
     "dailyLearningOptName": "mishnaYomi",
     "downloadSlug": "mishna-yomi",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Mishna Yomi",
     "shortName": "Mishna Yomi",
-    "longDesc": "Two Mishnayot each day"
+    "descLong": "A program of daily learning in which participants study two Mishnayot each day in order to finish the entire Mishnah in ~6 years.",
+    "descMedium": "Two Mishnayot each day"
   },
   "perekYomi": {
     "queryParam": "dpy",
     "dailyLearningOptName": "perekYomi",
     "downloadSlug": "perek-yomi",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Perek Yomi",
     "shortName": "Perek Yomi",
-    "longDesc": "One chapter (perek) of Mishnah each day"
+    "descMedium": "One chapter (perek) of Mishnah each day"
   },
   "nachyomi": {
     "queryParam": "nyomi",
     "dailyLearningOptName": "nachYomi",
     "downloadSlug": "nach-yomi",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Nach Yomi",
     "shortName": "Nach Yomi",
-    "longDesc": "Nevi’im (Prophets) and Ketuvim (Writings)"
+    "descLong": "A daily regimen of learning the books of Nevi'im (Prophets) and Ketuvim (Writings). This cycle takes ~2 years to complete.",
+    "descMedium": "Nevi’im (Prophets) and Ketuvim (Writings)"
   },
   "tanakhYomi": {
     "queryParam": "dty",
     "dailyLearningOptName": "tanakhYomi",
     "downloadSlug": "tanakh-yomi",
+    "feedLength": "~293",
+    "years": 5,
     "settingsName": "Tanakh Yomi",
     "shortName": "Tanakh Yomi",
-    "longDesc": "Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim"
+    "descLong": "A daily learning cycle for completing Tanakh annually. On Shabbat, each Torah portion is recited. On weekdays, Prophets and Writings are recited according to the ancient Masoretic division of sedarim. This cycle is completed each year.",
+    "descMedium": "Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim"
   },
   "dailyPsalms": {
     "queryParam": "dps",
     "dailyLearningOptName": "psalms",
     "downloadSlug": "psalms",
+    "feedLength": 365,
+    "years": 2,
     "settingsName": "Daily Tehillim",
     "shortName": "Daily Tehillim (Psalms)",
-    "longDesc": "Daily study of few chapters from the book of Psalms"
+    "descLong": "Daily study of a few chapters from the 150-chapter book of Psalms (Tehillim). The entire book is completed on the final day of each Hebrew month. On months with 29 days, the 30th portion is combined with the 29th portion.",
+    "descMedium": "Daily study of few chapters from the book of Psalms"
   },
   "dailyRambam1": {
     "queryParam": "dr1",
     "dailyLearningOptName": "rambam1",
     "downloadSlug": "rambam1",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Daily Rambam",
     "shortName": "Daily Rambam (Mishneh Torah)",
-    "longDesc": "Maimonides’ Mishneh Torah legal code"
+    "descLong": "A learning program that divides Maimonides’ Mishneh Torah legal code into daily units, to complete the whole work in three years.",
+    "descMedium": "Maimonides’ Mishneh Torah legal code"
   },
   "dailyRambam3": {
     "queryParam": "dr3",
     "dailyLearningOptName": "rambam3",
     "downloadSlug": "rambam3",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Daily Rambam (3 Chapters)",
     "shortName": "Daily Rambam (3 Chapters)",
-    "longDesc": "Maimonides’ Mishneh Torah legal code"
+    "descLong": "A learning program that divides Maimonides’ Mishneh Torah legal code into 3 chapters per day, to complete the whole work in one year.",
+    "descMedium": "Maimonides’ Mishneh Torah legal code"
   },
   "seferHaMitzvot": {
     "queryParam": "dsm",
     "dailyLearningOptName": "seferHaMitzvot",
     "downloadSlug": "sefer-hamitzvot",
+    "feedLength": 365,
+    "years": 3,
     "settingsName": "Sefer HaMitzvot",
     "shortName": "Maimonides’ Sefer HaMitzvot",
-    "longDesc": "Maimonides’ Sefer HaMitzvot"
+    "descLong": "Daily study of Rambam’s Sefer Hamitzvos (“Book of Commandments”). Lists of all the commandments of the Torah, with a brief description for each. The cycle takes just under one year to complete.",
+    "descMedium": "Maimonides’ Sefer HaMitzvot"
   },
   "yerushalmi-vilna": {
     "queryParam": "yyomi",
     "dailyLearningOptName": "yerushalmi-vilna",
     "downloadSlug": "yerushalmi-vilna",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Yerushalmi Yomi (Vilna)",
-    "shortName": "Yerushalmi Yomi (J’lem Talmud)",
-    "longDesc": "Jerusalem Talmud (Vilna edition)"
+    "shortName": "Yerushalmi Yomi (Vilna)",
+    "descLong": "Daily regimen of learning the Jerusalem Talmud (Vilna Edition). Using the Vilna edition, the Yerushalmi Daf Yomi program takes 4¼ years to complete. Unlike the Daf Yomi Bavli cycle, this Yerushalmi cycle skips both Yom Kippur and Tisha B'Av.",
+    "descMedium": "Jerusalem Talmud (Vilna edition)"
   },
   "yerushalmi-schottenstein": {
     "queryParam": "yys",
     "dailyLearningOptName": "yerushalmi-schottenstein",
     "downloadSlug": "yerushalmi-schottenstein",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Yerushalmi Yomi (Schottenstein)",
     "shortName": "Yerushalmi Yomi (Schottenstein)",
-    "longDesc": "Jerusalem Talmud (Schottenstein edition)"
+    "descLong": "Daily regimen of learning the Jerusalem Talmud (Schottenstein Edition). The Schottenstein edition of Yerushalmi Daf Yomi uses different page numbers than the Vilna and takes 5¾ years to complete.",
+    "descMedium": "Jerusalem Talmud (Schottenstein edition)"
   },
   "chofetzChaim": {
     "queryParam": "dcc",
     "dailyLearningOptName": "chofetzChaim",
     "downloadSlug": "chofetz-chaim",
+    "feedLength": 365,
+    "years": 2,
     "settingsName": "Sefer Chofetz Chaim",
-    "shortName": "Sefer Chofetz Chaim",
-    "longDesc": "Jewish ethics and laws of speech"
+    "shortName": "Daily Chofetz Chaim",
+    "descLong": "Daily study of the Sefer Chofetz Chaim, which deals with the Jewish ethics and laws of speech. The book is divided into 119 parts in a regular year and 129 parts in a leap year.",
+    "descMedium": "Jewish ethics and laws of speech"
   },
   "shemiratHaLashon": {
     "queryParam": "dshl",
@@ -101,46 +136,60 @@
     "downloadSlug": null,
     "settingsName": "Shemirat HaLashon",
     "shortName": "Shemirat HaLashon",
-    "longDesc": ""
+    "descMedium": ""
   },
   "dafWeekly": {
     "queryParam": "dw",
     "dailyLearningOptName": "dafWeekly",
     "downloadSlug": "daf-weekly",
+    "feedLength": 52,
+    "years": 10,
     "settingsName": "Daf-a-Week",
     "shortName": "Daf-a-Week",
-    "longDesc": "One page of Babylonian Talmud per week"
+    "descLong": "A learning program that covers a page of Talmud a week. By going at a slower pace, it facilitates greater mastery and retention.",
+    "descMedium": "One page of Babylonian Talmud per week"
   },
   "pirkeiAvotSummer": {
     "queryParam": "dpa",
     "dailyLearningOptName": "pirkeiAvotSummer",
     "downloadSlug": "pirkei-avot",
+    "feedLength": 22,
+    "years": 10,
     "settingsName": "Pirkei Avot",
     "shortName": "Pirkei Avot",
-    "longDesc": "Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana"
+    "descLong": "Pirkei Avot (“Ethics of the Fathers”), studied one chapter on each Shabbat of the summer between Passover and Rosh Hashanah, the entire cycle repeating a few times with doubling of chapters at the end if there are not a perfect multiple of six weeks,",
+    "descMedium": "Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana"
   },
   "arukhHaShulchanYomi": {
     "queryParam": "ahsy",
     "dailyLearningOptName": "arukhHaShulchanYomi",
     "downloadSlug": "ahs-yomi",
+    "feedLength": 365,
+    "years": 3,
     "settingsName": "Arukh HaShulchan Yomi",
     "shortName": "Arukh HaShulchan Yomi",
-    "longDesc": "Summary of the sources for each chapter of the Shulchan Arukh and its commentaries"
+    "descLong": "Daily study of the Arukh HaShulchan Yomi, a work of halacha written by Yechiel Michel Epstein. The work attempts to be a clear, organized summary of the sources for each chapter of the Shulchan Arukh and its commentaries, with special emphasis on the positions of the Jerusalem Talmud and Maimonides.",
+    "descMedium": "Summary of the sources for each chapter of the Shulchan Arukh and its commentaries"
   },
   "kitzurShulchanAruch": {
     "queryParam": "dksa",
     "dailyLearningOptName": "kitzurShulchanAruch",
     "downloadSlug": "ksa-yomi",
+    "feedLength": 365,
+    "years": 3,
     "settingsName": "Kitzur Shulchan Arukh Yomi",
     "shortName": "Kitzur Shulchan Arukh Yomi",
-    "longDesc": "Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De'ah"
+    "descLong": "Summary of the Shulchan Aruch of Rabbi Yosef Karo, authored by Rabbi Shlomo Ganzfried in 1864. The cycle takes one Hebrew calendar year to complete. On leap years, two options are offered during the month of Adar II.",
+    "descMedium": "Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De'ah"
   },
   "parashat": {
     "queryParam": "s",
     "dailyLearningOptName": null,
     "downloadSlug": "torah-readings-diaspora",
+    "feedLength": 365,
+    "years": 5,
     "settingsName": "Torah Readings",
     "shortName": "Torah portion",
-    "longDesc": "Parashat ha-Shavua - Weekly Torah Portion"
+    "descMedium": "Parashat ha-Shavua - Weekly Torah Portion"
   }
 }
