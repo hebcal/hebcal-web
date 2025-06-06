@@ -13,6 +13,7 @@ import {isoDateStringToDate} from './dateUtil.js';
 import {getIpAddress} from './getIpAddress.js';
 
 const pkg = readJSON('../package.json');
+const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
 export const langNames = {
   's': ['Sephardic transliterations', null],
@@ -134,25 +135,42 @@ const booleanOpts = {
   mvch: 'shabbatMevarchim',
 };
 
-export const dailyLearningOpts = {
-  F: 'dafYomi',
-  myomi: 'mishnaYomi',
-  dpy: 'perekYomi',
-  nyomi: 'nachYomi',
-  dty: 'tanakhYomi',
-  dr1: 'rambam1',
-  dr3: 'rambam3',
-  dsm: 'seferHaMitzvot',
-  yyomi: 'yerushalmi-vilna',
-  yys: 'yerushalmi-schottenstein',
-  dcc: 'chofetzChaim',
-  dshl: 'shemiratHaLashon',
-  dps: 'psalms',
-  dw: 'dafWeeklySunday',
-  dpa: 'pirkeiAvotSummer',
-  ahsy: 'arukhHaShulchanYomi',
-  dksa: 'kitzurShulchanAruch',
+export const queryToName = {
+  maj: 'Major Holidays',
+  min: 'Minor Holidays',
+  nx: 'Rosh Chodesh',
+  mod: 'Modern Holidays',
+  mf: 'Minor Fasts',
+  ss: 'Special Shabbatot',
+  o: 'Days of the Omer',
+  ykk: 'Yom Kippur Katan',
+  s: 'Torah Readings', // Weekly Torah portion on Saturdays
+  d: 'Hebrew Dates', // Show Hebrew date every day of the year
+  D: 'Hebrew Dates', // Show Hebrew date for dates with some event
+  yzkr: 'Yizkor',
+  mvch: 'Shabbat Mevarchim',
 };
+
+export const queryLongDescr = {
+  ...queryToName,
+  s: 'Parashat ha-Shavua - Weekly Torah Portion',
+  o: '7 weeks from the second night of Pesach to the day before Shavuot',
+  d: 'Daily Hebrew Dates',
+  ykk: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
+  yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
+  mvch: 'Shabbat before the start of Rosh Chodesh',
+};
+
+export const dailyLearningOpts = {};
+for (const cfg of Object.values(dailyLearningConfig)) {
+  const optName = cfg.dailyLearningOptName;
+  if (optName) {
+    const k = cfg.queryParam;
+    dailyLearningOpts[k] = optName;
+    queryToName[k] = cfg.settingsName;
+    queryLongDescr[k] = cfg.longDesc;
+  }
+}
 
 const numberOpts = {
   m: 'havdalahMins',
@@ -1328,66 +1346,6 @@ export function getBaseFromPath(ctx) {
     ctx.throw(400, err.message, err);
   }
 }
-
-export const queryToName = {
-  maj: 'Major Holidays',
-  min: 'Minor Holidays',
-  nx: 'Rosh Chodesh',
-  mod: 'Modern Holidays',
-  mf: 'Minor Fasts',
-  ss: 'Special Shabbatot',
-  o: 'Days of the Omer',
-  ykk: 'Yom Kippur Katan',
-  s: 'Torah Readings', // Weekly Torah portion on Saturdays
-  d: 'Hebrew Dates', // Show Hebrew date every day of the year
-  D: 'Hebrew Dates', // Show Hebrew date for dates with some event
-  F: 'Daf Yomi',
-  myomi: 'Mishna Yomi',
-  dpy: 'Perek Yomi',
-  nyomi: 'Nach Yomi',
-  dty: 'Tanakh Yomi',
-  dps: 'Daily Tehillim',
-  dcc: 'Sefer Chofetz Chaim',
-  dshl: 'Shemirat HaLashon',
-  dr1: 'Daily Rambam',
-  dr3: 'Daily Rambam (3 Chapters)',
-  dsm: 'Sefer HaMitzvot',
-  yyomi: 'Yerushalmi Yomi (Vilna)',
-  yys: 'Yerushalmi Yomi (Schottenstein)',
-  dw: 'Daf-a-Week',
-  dpa: 'Pirkei Avot',
-  ahsy: 'Arukh HaShulchan Yomi',
-  dksa: 'Kitzur Shulchan Arukh Yomi',
-  yzkr: 'Yizkor',
-  mvch: 'Shabbat Mevarchim',
-};
-
-export const queryLongDescr = {
-  ...queryToName,
-  s: 'Parashat ha-Shavua - Weekly Torah Portion',
-  o: '7 weeks from the second night of Pesach to the day before Shavuot',
-  d: 'Daily Hebrew Dates',
-  ykk: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
-  F: 'Daily regimen of learning the Babylonian Talmud',
-  myomi: 'Two Mishnayot each day',
-  dpy: 'One chapter (perek) of Mishnah each day',
-  nyomi: 'Nevi’im (Prophets) and Ketuvim (Writings)',
-  dty: 'Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim',
-  dps: 'Daily study of few chapters from the book of Psalms',
-  dcc: 'Jewish ethics and laws of speech',
-  dshl: '',
-  dr1: 'Maimonides’ Mishneh Torah legal code',
-  dr3: 'Maimonides’ Mishneh Torah legal code',
-  dsm: 'Maimonides’ Sefer HaMitzvot',
-  yyomi: 'Jerusalem Talmud (Vilna edition)',
-  yys: 'Jerusalem Talmud (Schottenstein edition)',
-  dw: 'One page of Babylonian Talmud per week',
-  dpa: 'Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana',
-  ahsy: 'Summary of the sources for each chapter of the Shulchan Arukh and its commentaries',
-  dksa: 'Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De\'ah',
-  yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
-  mvch: 'Shabbat before the start of Rosh Chodesh',
-};
 
 /**
  * @param {Object.<string,string>} query
