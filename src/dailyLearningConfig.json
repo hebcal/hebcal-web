@@ -1,0 +1,146 @@
+{
+  "dafyomi": {
+    "queryParam": "F",
+    "dailyLearningOptName": "dafYomi",
+    "downloadSlug": "daf-yomi",
+    "settingsName": "Daf Yomi",
+    "shortName": "Daf Yomi (Babylonian Talmud)",
+    "longDesc": "Daily regimen of learning the Babylonian Talmud"
+  },
+  "mishnayomi": {
+    "queryParam": "myomi",
+    "dailyLearningOptName": "mishnaYomi",
+    "downloadSlug": "mishna-yomi",
+    "settingsName": "Mishna Yomi",
+    "shortName": "Mishna Yomi",
+    "longDesc": "Two Mishnayot each day"
+  },
+  "perekYomi": {
+    "queryParam": "dpy",
+    "dailyLearningOptName": "perekYomi",
+    "downloadSlug": "perek-yomi",
+    "settingsName": "Perek Yomi",
+    "shortName": "Perek Yomi",
+    "longDesc": "One chapter (perek) of Mishnah each day"
+  },
+  "nachyomi": {
+    "queryParam": "nyomi",
+    "dailyLearningOptName": "nachYomi",
+    "downloadSlug": "nach-yomi",
+    "settingsName": "Nach Yomi",
+    "shortName": "Nach Yomi",
+    "longDesc": "Nevi’im (Prophets) and Ketuvim (Writings)"
+  },
+  "tanakhYomi": {
+    "queryParam": "dty",
+    "dailyLearningOptName": "tanakhYomi",
+    "downloadSlug": "tanakh-yomi",
+    "settingsName": "Tanakh Yomi",
+    "shortName": "Tanakh Yomi",
+    "longDesc": "Prophets and Writings on weekdays according to the ancient Masoretic division of sedarim"
+  },
+  "dailyPsalms": {
+    "queryParam": "dps",
+    "dailyLearningOptName": "psalms",
+    "downloadSlug": "psalms",
+    "settingsName": "Daily Tehillim",
+    "shortName": "Daily Tehillim (Psalms)",
+    "longDesc": "Daily study of few chapters from the book of Psalms"
+  },
+  "dailyRambam1": {
+    "queryParam": "dr1",
+    "dailyLearningOptName": "rambam1",
+    "downloadSlug": "rambam1",
+    "settingsName": "Daily Rambam",
+    "shortName": "Daily Rambam (Mishneh Torah)",
+    "longDesc": "Maimonides’ Mishneh Torah legal code"
+  },
+  "dailyRambam3": {
+    "queryParam": "dr3",
+    "dailyLearningOptName": "rambam3",
+    "downloadSlug": "rambam3",
+    "settingsName": "Daily Rambam (3 Chapters)",
+    "shortName": "Daily Rambam (3 Chapters)",
+    "longDesc": "Maimonides’ Mishneh Torah legal code"
+  },
+  "seferHaMitzvot": {
+    "queryParam": "dsm",
+    "dailyLearningOptName": "seferHaMitzvot",
+    "downloadSlug": "sefer-hamitzvot",
+    "settingsName": "Sefer HaMitzvot",
+    "shortName": "Maimonides’ Sefer HaMitzvot",
+    "longDesc": "Maimonides’ Sefer HaMitzvot"
+  },
+  "yerushalmi-vilna": {
+    "queryParam": "yyomi",
+    "dailyLearningOptName": "yerushalmi-vilna",
+    "downloadSlug": "yerushalmi-vilna",
+    "settingsName": "Yerushalmi Yomi (Vilna)",
+    "shortName": "Yerushalmi Yomi (J’lem Talmud)",
+    "longDesc": "Jerusalem Talmud (Vilna edition)"
+  },
+  "yerushalmi-schottenstein": {
+    "queryParam": "yys",
+    "dailyLearningOptName": "yerushalmi-schottenstein",
+    "downloadSlug": "yerushalmi-schottenstein",
+    "settingsName": "Yerushalmi Yomi (Schottenstein)",
+    "shortName": "Yerushalmi Yomi (Schottenstein)",
+    "longDesc": "Jerusalem Talmud (Schottenstein edition)"
+  },
+  "chofetzChaim": {
+    "queryParam": "dcc",
+    "dailyLearningOptName": "chofetzChaim",
+    "downloadSlug": "chofetz-chaim",
+    "settingsName": "Sefer Chofetz Chaim",
+    "shortName": "Sefer Chofetz Chaim",
+    "longDesc": "Jewish ethics and laws of speech"
+  },
+  "shemiratHaLashon": {
+    "queryParam": "dshl",
+    "dailyLearningOptName": "shemiratHaLashon",
+    "downloadSlug": null,
+    "settingsName": "Shemirat HaLashon",
+    "shortName": "Shemirat HaLashon",
+    "longDesc": ""
+  },
+  "dafWeekly": {
+    "queryParam": "dw",
+    "dailyLearningOptName": "dafWeekly",
+    "downloadSlug": "daf-weekly",
+    "settingsName": "Daf-a-Week",
+    "shortName": "Daf-a-Week",
+    "longDesc": "One page of Babylonian Talmud per week"
+  },
+  "pirkeiAvotSummer": {
+    "queryParam": "dpa",
+    "dailyLearningOptName": "pirkeiAvotSummer",
+    "downloadSlug": "pirkei-avot",
+    "settingsName": "Pirkei Avot",
+    "shortName": "Pirkei Avot",
+    "longDesc": "Ethics of our Fathers, studied on Shabbat between Pesach and Rosh Hashana"
+  },
+  "arukhHaShulchanYomi": {
+    "queryParam": "ahsy",
+    "dailyLearningOptName": "arukhHaShulchanYomi",
+    "downloadSlug": "ahs-yomi",
+    "settingsName": "Arukh HaShulchan Yomi",
+    "shortName": "Arukh HaShulchan Yomi",
+    "longDesc": "Summary of the sources for each chapter of the Shulchan Arukh and its commentaries"
+  },
+  "kitzurShulchanAruch": {
+    "queryParam": "dksa",
+    "dailyLearningOptName": "kitzurShulchanAruch",
+    "downloadSlug": "ksa-yomi",
+    "settingsName": "Kitzur Shulchan Arukh Yomi",
+    "shortName": "Kitzur Shulchan Arukh Yomi",
+    "longDesc": "Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De'ah"
+  },
+  "parashat": {
+    "queryParam": "s",
+    "dailyLearningOptName": null,
+    "downloadSlug": "torah-readings-diaspora",
+    "settingsName": "Torah Readings",
+    "shortName": "Torah portion",
+    "longDesc": "Parashat ha-Shavua - Weekly Torah Portion"
+  }
+}

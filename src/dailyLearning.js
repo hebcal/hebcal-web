@@ -5,36 +5,10 @@ import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
+import {readJSON} from './readJSON.js';
 
 const currentYear = new Date().getFullYear();
-
-const yyv = 'yerushalmi-vilna';
-const yys = 'yerushalmi-schottenstein';
-// indexed by Event.getCategories()
-// [0] friendly name
-// [1] download/ical URL basename
-// [2] URL query parameter option
-// [3] dailyLearning boolean option name
-const config = {
-  'dafyomi': ['Daf Yomi (Babylonian Talmud)', 'daf-yomi', 'F', 'dafYomi'],
-  'mishnayomi': ['Mishna Yomi', 'mishna-yomi', 'myomi', 'mishnaYomi'],
-  'perekYomi': ['Perek Yomi', 'perek-yomi', 'dpy', 'perekYomi'],
-  'nachyomi': ['Nach Yomi', 'nach-yomi', 'nyomi', 'nachYomi'],
-  'tanakhYomi': ['Tanakh Yomi', 'tanakh-yomi', 'dty', 'tanakhYomi'],
-  'dailyPsalms': ['Daily Tehillim (Psalms)', 'psalms', 'dps', 'psalms'],
-  'dailyRambam1': ['Daily Rambam (Mishneh Torah)', 'rambam1', 'dr1', 'rambam1'],
-  'dailyRambam3': ['Daily Rambam (3 Chapters)', 'rambam3', 'dr3', 'rambam3'],
-  'seferHaMitzvot': ['Maimonides’ Sefer HaMitzvot', 'sefer-hamitzvot', 'dsm', 'seferHaMitzvot'],
-  'yerushalmi-vilna': ['Yerushalmi Yomi (J’lem Talmud)', yyv, 'yyomi', yyv],
-  'yerushalmi-schottenstein': ['Yerushalmi Yomi (Schottenstein)', yys, 'yys', yys],
-  'chofetzChaim': ['Sefer Chofetz Chaim', 'chofetz-chaim', 'dcc', 'chofetzChaim'],
-  'shemiratHaLashon': ['Shemirat HaLashon', null, 'dshl', 'shemiratHaLashon'],
-  'dafWeekly': ['Daf-a-Week', 'daf-weekly', 'dw', 'dafWeekly'],
-  'pirkeiAvotSummer': ['Pirkei Avot', 'pirkei-avot', 'dpa', 'pirkeiAvotSummer'],
-  'arukhHaShulchanYomi': ['Arukh HaShulchan Yomi', 'ahs-yomi', 'ahsy', 'arukhHaShulchanYomi'],
-  'kitzurShulchanAruch': ['Kitzur Shulchan Arukh Yomi', 'ksa-yomi', 'dksa', 'kitzurShulchanAruch'],
-  'parashat': ['Torah portion', 'torah-readings-diaspora', 's', null],
-};
+const config = readJSON('./dailyLearningConfig.json');
 
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
@@ -63,8 +37,8 @@ export function dailyLearningApp(ctx) {
   const il = q.i === 'on';
   const lg = q.lg || 's';
   const dailyLearningOpts = {};
-  for (const arr of Object.values(config)) {
-    const key = arr[3];
+  for (const cfg of Object.values(config)) {
+    const key = cfg.dailyLearningOptName;
     if (key) {
       dailyLearningOpts[key] = true;
     }
@@ -127,13 +101,13 @@ export function dailyLearningApp(ctx) {
     const cats = ev.getCategories();
     const cat0 = cats[0];
     const categoryName = cat0 === 'yerushalmi' ? cats.join('-') : cat0;
-    const ids = config[categoryName];
-    const flag = ids[2];
+    const cfg = config[categoryName];
+    const flag = cfg.queryParam;
     const desc = queryLongDescr[flag];
     return {
       id: categoryName,
-      category: ids[0],
-      basename: ids[1],
+      category: cfg.shortName,
+      basename: cfg.downloadSlug,
       flag,
       desc,
       title: ev.renderBrief(lg),
