@@ -84,38 +84,6 @@ FILE="torah-readings-israel-he"
 fetch_urls $FILE "start=${START}&end=${END5}&v=1&s=on&i=on&lg=h&c=off&geo=none&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Torah+Readings+%28Israel+Hebrew%29&caldesc=Parashat+ha-Shavua+-+Weekly+Torah+Portion+from+Hebcal.com&color=%23257E4A"
 compress_file $FILE
 
-FILE="daf-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&F=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daf+Yomi&caldesc=Daily+regimen+of+learning+the+Babylonian+Talmud&color=%23BF5AF2"
-compress_file $FILE
-
-FILE="mishna-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&myomi=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Mishna+Yomi&caldesc=Daily+study+of+the+Mishna&color=%23003399"
-compress_file $FILE
-
-FILE="perek-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dpy=on&relcalid=839ede7d-4e1e-4e1c-acb9-7646d9146768&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Perek+Yomi&caldesc=One+chapter+of+the+Mishna+daily&color=%23003399"
-compress_file $FILE
-
-FILE="nach-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&nyomi=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Nach+Yomi&caldesc=Daily+study+of+books+of+Nevi%27im+%28Prophets%29+and+Ketuvim+%28Writings%29&color=%23003399"
-compress_file $FILE
-
-FILE="yerushalmi-vilna"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yyomi=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Vilna%29&color=%23BF5AF2"
-compress_file $FILE
-
-FILE="yerushalmi-schottenstein"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&yys=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Yerushalmi+Yomi+Schottenstein&caldesc=Daily+regimen+of+learning+the+Jerusalem+Talmud+%28Schottenstein%29&color=%23BF5AF2"
-compress_file $FILE
-
-FILE="daf-weekly"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&dw=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daf+a+Week&caldesc=A+learning+program+that+covers+a+page+of+Talmud+a+week.+By+going+at+a+slower+pace,+it+facilitates+greater+mastery+and+retention&color=%23003399"
-compress_file $FILE
-
-FILE="pirkei-avot"
-fetch_urls $FILE "start=${START}&end=${END10}&v=1&dpa=on&i=off&lg=en&c=off&geo=none&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Pirkei+Avot&caldesc=Ethics+of+our+Fathers%2c+studied+on+Shabbat+between+Pesach+and+Rosh+Hashana&color=%23003399"
-compress_file $FILE
-
 FILE="yom-kippur-katan"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&ykk=on&relcalid=457ce561-311f-4eeb-9033-65561b7f7503&lg=en&publishedTTL=PT14D&title=Yom+Kippur+Katan&caldesc=%D7%99%D7%95%D6%B9%D7%9D+%D7%9B%D6%BC%D6%B4%D7%A4%D6%BC%D7%95%D6%BC%D7%A8+%D7%A7%D6%B8%D7%98%D6%B8%D7%9F%2C+minor+day+of+atonement+on+the+day+preceeding+each+Rosh+Chodesh"
 compress_file $FILE
@@ -128,26 +96,6 @@ FILE="mevarchim"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&mvch=on&maj=off&min=off&mod=off&i=off&lg=en&c=off&geo=none&nx=off&mf=off&ss=off&emoji=0&utm_source=ical&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Shabbat+Mevarchim&caldesc=Shabbat+announcing+new+month%2CPrior+to+Rosh+Chodesh"
 compress_file $FILE
 
-FILE="psalms"
-fetch_urls $FILE "start=${START}&end=${END2}&v=1&dps=on&relcalid=b41ffb3e-0950-48ac-bb29-076c77405361&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Tehillim+%28Psalms%29&caldesc=Monthly+cycle+of+studying+the+Book+of+Psalms"
-compress_file $FILE
-
-FILE="tanakh-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dty=on&relcalid=2b9fa0d4-8d96-4645-b22d-a5ca232c2276&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Tanakh+Yomi&caldesc=A+daily+learning+cycle+for+completing+Tanakh+annually.+On+Shabbat%2C+each+Torah+portion+is+recited.+On+weekdays%2C+Prophets+and+Writings+are+recited+according+to+the+ancient+Masoretic+division+of+sedarim"
-compress_file $FILE
-
-FILE="rambam1"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr1=on&relcalid=13cb480b-a4a0-4667-8ec5-25819a2e37a1&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Rambam&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
-compress_file $FILE
-
-FILE="rambam3"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dr3=on&relcalid=404804af-b0ff-4873-8265-ce8694e46171&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Daily+Rambam+3+Chapters&caldesc=Daily+study+of+Maimonides+Mishneh+Torah+legal+code"
-compress_file $FILE
-
-FILE="sefer-hamitzvot"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dsm=on&relcalid=edf00df1-a68e-4389-be93-3bfff03d7bce&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=&caldesc="
-compress_file $FILE
-
 FILE="yizkor-diaspora"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&relcalid=64acac8c-a02f-4433-b7ef-f3a5e02d26cc&lg=en&publishedTTL=PT14D&title=Yizkor+%28Diaspora%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
 compress_file $FILE
@@ -156,13 +104,8 @@ FILE="yizkor-il"
 fetch_urls $FILE "start=${START}&end=${END10}&v=1&yzkr=on&i=on&relcalid=21eadc10-9fa6-402c-ac6f-c94d1ee7537e&lg=he-x-NoNikud&publishedTTL=PT14D&title=Yizkor+%28Israel%29&caldesc=Ashkenazi+Jewish+memorial+prayer+service+for+the+dead+recited+in+synagogue+during+four+holidays+yearly"
 compress_file $FILE
 
-FILE="ahs-yomi"
-fetch_urls $FILE "start=${START}&end=${END3}&v=1&ahsy=on&relcalid=b87406d8-e243-49f5-a072-934b06b10e5f&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=Arukh+HaShulchan+Yomi&caldesc=Daily+study+of+summary+of+the+sources+for+each+chapter+of+the+Shulchan+Arukh+and+its+commentaries"
-compress_file $FILE
+node dist/staticDailyLearning.js
 
-FILE="ksa-yomi"
-fetch_urls $FILE "start=${START}&end=${END5}&v=1&dksa=on&relcalid=0c021b70-c96d-4dc4-9dde-fcfbbf84357b&lg=en&utm_source=hebcal.com&utm_medium=icalendar&utm_campaign=ical-${FILE}&publishedTTL=PT14D&title=&caldesc="
-compress_file $FILE
 
 FILE="chofetz-chaim"
 remove_file $FILE

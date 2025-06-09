@@ -37,7 +37,7 @@ export function dailyLearningApp(ctx) {
   const lg = q.lg || 's';
   const dlOpts = {};
   for (const cfg of Object.values(dailyLearningConfig)) {
-    const key = cfg.dailyLearningOptName;
+    const key = cfg.dailyLearningOptOverride || cfg.dailyLearningOptName;
     if (key) {
       dlOpts[key] = true;
     }
