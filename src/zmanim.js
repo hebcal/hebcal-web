@@ -173,7 +173,7 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   if (formatAsString) {
     const tzid = location.getTzid();
     for (const [name, dt] of Object.entries(times)) {
-      times[name] = Zmanim.formatISOWithTimeZone(tzid, dt);
+      times[name] = isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, dt);
     }
   }
   return times;
