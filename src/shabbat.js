@@ -57,11 +57,11 @@ export async function shabbatApp(ctx) {
   ctx.state.poweredByUrl = appendIsraelAndTracking(selfUrl,
       options.il, 'shabbat1c', 'js-' + q.cfg, 's1c-' + campaign);
   if (q.cfg === 'i') {
-    return ctx.render('shabbat-iframe');
+    return ctx.render('shabbat-iframe', {Locale});
   } else if (q.cfg === 'i2') {
-    return ctx.render('shabbat-js');
+    return ctx.render('shabbat-js', {Locale});
   } else if (q.cfg === 'j') {
-    const html = await ctx.render('shabbat-js', {writeResp: false});
+    const html = await ctx.render('shabbat-js', {Locale, writeResp: false});
     ctx.type = 'text/javascript';
     ctx.body = html.split('\n').map((line) => {
       return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';
@@ -103,6 +103,7 @@ export async function shabbatApp(ctx) {
     const year = ctx.state.currentYear = new Date().getFullYear();
     ctx.state.downloadAltTitle = `${year} only`;
     delete ctx.state.filename.pdf;
+    p.Locale = Locale;
     return ctx.render('shabbat', p);
   }
 }
@@ -186,7 +187,7 @@ function makeItems(ctx, options, q) {
   const location = options.location;
   const locale = localeMap[Locale.getLocaleName()] || 'en';
   const items = events.map((ev) => eventToItem(ev, options, locale, q.cfg));
-  const titlePrefix = Locale.gettext('Shabbat') + ' Times for ' + compactLocationName(location);
+  const titlePrefix = Locale.gettext('Shabbat Times for') + ' ' + compactLocationName(location);
   const title = titlePrefix + ' - Hebcal';
   Object.assign(ctx.state, {
     events,
@@ -198,7 +199,6 @@ function makeItems(ctx, options, q) {
     items,
     h3title: titlePrefix,
     title,
-    Shabbat: Locale.gettext('Shabbat'),
   });
 
   const geoUrlArgs = makeGeoUrlArgs(q, location, options);

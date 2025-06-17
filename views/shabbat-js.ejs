@@ -2,6 +2,6 @@
 <div class="hebcal-<%= location.getGeoId() %>">
 <h3><%= h3title %></h3>
 <%- await include('partials/shabbat-items.ejs') -%>
-<div class="copyright"><small>Powered by <a target="<%= q.tgt %>" href="<%= poweredByUrl %>">Hebcal <%= Shabbat %> Times</a></small></div>
+<div class="copyright"><small>Powered by <a target="<%= q.tgt %>" href="<%= poweredByUrl %>">Hebcal <%= Locale.gettext("Shabbat", locale) %> Times</a></small></div>
 </div>
 </div>

@@ -7,6 +7,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+msgid "Shabbat Times for"
+msgstr "זמני שבת"
+
+msgid "This week’s Torah portion is"
+msgstr "פרשת השבוע היא"
+
 # midnight (sunset + six halachic hours)
 msgid "Chatzot HaLailah"
 msgstr "חֲצוֹת הַלַיְלָה"

@@ -1,0 +1,20 @@
+#
+msgid ""
+msgstr ""
+"Language: pt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Shabbat Times for"
+msgstr "Horários de Shabat para"
+
+msgid "This week’s Torah portion is"
+msgstr "A porção da Torá desta semana é"
+
+msgid "on"
+msgstr "de"
+
+msgid "occurs on"
+msgstr "será"

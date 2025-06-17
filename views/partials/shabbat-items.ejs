@@ -1,9 +1,9 @@
 <ul class="hebcal-results list-unstyled">
 <% items.forEach((i) => { -%>
 <% if (i.isoDateTime) { -%>
-<li class="<%= i.cat %>" id="<%= i.id %>"><% if (i.url) { %><a target="<%= q.tgt %>" href="<%= i.url %>"><% } %><%= i.desc %><% if (i.url) { %></a><% } %>: <time datetime="<%= i.isoDateTime %>"><strong><%= i.fmtTime %></strong> on <span class="text-nowrap"><%= i.fmtDate %></span></time></li>
+<li class="<%= i.cat %>" id="<%= i.id %>"><% if (i.url) { %><a target="<%= q.tgt %>" href="<%= i.url %>"><% } %><%= i.desc %><% if (i.url) { %></a><% } %>: <time datetime="<%= i.isoDateTime %>"><strong><%= i.fmtTime %></strong> <%= Locale.gettext("on", locale) %> <span class="text-nowrap"><%= i.fmtDate %></span></time></li>
 <% } else if (i.cat === 'parashat') { -%>
-<li class="<%= i.cat %>" id="<%= i.id %>">This week’s Torah portion is <a target="<%= q.tgt %>" href="<%= i.url %>" class="text-nowrap"><%= i.desc %></a></li>
+<li class="<%= i.cat %>" id="<%= i.id %>"><%= Locale.gettext("This week’s Torah portion is", locale) %> <a target="<%= q.tgt %>" href="<%= i.url %>" class="text-nowrap"><%= i.desc %></a></li>
 <% } else { -%>
 <li class="<%= i.cat %>" id="<%= i.id %>"><% if (i.url) {%><a target="<%= q.tgt %>" href="<%= i.url %>"><% } %><%= i.desc %><% if (i.url) {%></a><% } %>: <time datetime="<%= i.isoDate %>" class="text-nowrap"><%= i.fmtDate %></time></li>
 <% } -%>
