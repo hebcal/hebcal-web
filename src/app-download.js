@@ -22,6 +22,7 @@ import {MysqlDb} from './db.js';
 import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
+import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
 const app = new Koa();

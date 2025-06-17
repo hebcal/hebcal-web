@@ -1,0 +1,133 @@
+#
+msgid ""
+msgstr ""
+"Language: he_IL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# midnight (sunset + six halachic hours)
+msgid "Chatzot HaLailah"
+msgstr "חֲצוֹת הַלַיְלָה"
+
+# Dawn
+msgid "Alot haShachar"
+msgstr "עֲלוֹת הַשַּׁחַר"
+
+# Earliest talis & tefillin 11.5 degrees
+msgid "Misheyakir"
+msgstr "מִשֶּׁיַּכִּיר"
+
+# Earliest talis & tefillin 10.2 degrees
+msgid "Misheyakir Machmir"
+msgstr "מִשֶּׁיַּכִּיר מַחמִיר"
+
+# sunrise
+msgid "Dawn"
+msgstr "דִּימְדּוּמֵי בּוֹקֵר"
+
+# sunrise
+msgid "Sunrise"
+msgstr "הַנֵץ הַחַמָּה"
+
+# Latest shema Gra
+msgid "Kriat Shema, sof zeman"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע גר״א"
+
+# Latest shachris Gra
+msgid "Tefilah, sof zeman (Gra)"
+msgstr "סוֹף זְמַן תְּפִלָּה גר״א"
+
+msgid "Tefilah, sof zeman (MGA) 72 min"
+msgstr "סוֹף זְמַן תְּפִלָּה מג״א"
+
+msgid "Tefilah, sof zeman (MGA) 16.1°"
+msgstr "סוֹף זְמַן תְּפִלָּה מג״א 16.1°"
+
+msgid "Tefilah, sof zeman (MGA) 19.8°"
+msgstr "סוֹף זְמַן תְּפִלָּה  מג״א 19.8°"
+
+# Latest shema Gra
+msgid "Kriat Shema, sof zeman (Gra)"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע גר״א"
+
+# Latest shema MGA
+msgid "Kriat Shema, sof zeman (MGA)"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע מג״א"
+
+msgid "Kriat Shema, sof zeman (MGA) 72 min"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע מג״א 72 דַּקּוֹת"
+
+msgid "Kriat Shema, sof zeman (MGA) 16.1°"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע מג״א 16.1°"
+
+msgid "Kriat Shema, sof zeman (MGA) 19.8°"
+msgstr "סוֹף זְמַן קְרִיאַת שְׁמַע מג״א 19.8°"
+
+# Latest shachris MGA
+msgid "Tefilah, sof zeman (MGA)"
+msgstr "סוֹף זְמַן תְּפִלָּה מג״א"
+
+# Midday (sunrise + six halachic hours)
+msgid "Chatzot hayom"
+msgstr "חֲצוֹת הַיּוֹם"
+
+# Earliest mincha
+msgid "Mincha Gedolah"
+msgstr "מִנְחָה גְּדוֹלָה"
+
+msgid "Mincha Gedolah (Gra)"
+msgstr "מִנְחָה גְּדוֹלָה גר״א"
+
+msgid "Mincha Gedolah (MGA)"
+msgstr "מִנְחָה גְּדוֹלָה מג״א"
+
+# Preferable earliest time to recite Minchah
+msgid "Mincha Ketanah"
+msgstr "מִנְחָה קְטַנָּה"
+
+msgid "Mincha Ketanah (Gra)"
+msgstr "מִנְחָה קְטַנָּה גר״א"
+
+msgid "Mincha Ketanah (MGA)"
+msgstr "מִנְחָה קְטַנָּה מג״א"
+
+msgid "Plag HaMincha"
+msgstr "פְּלַג הַמִּנְחָה"
+
+msgid "Dusk"
+msgstr "דִּימְדּוּמֵי עֶרֶב"
+
+# sunset
+msgid "Sunset"
+msgstr "שְׁקִיעָה"
+
+# Nightfall - End of ordained fasts
+msgid "Nightfall - End of ordained fasts"
+msgstr "לַיְלָה - גמר תעניות דרבנן"
+
+# Nightfall - 3 stars emerge
+msgid "Tzeit HaKochavim"
+msgstr "צֵאת הַכּוֹכָבִים"
+
+msgid "Tzeit 7.083°"
+msgstr "צֵאת 7.083°"
+
+msgid "Tzeit 8.5°"
+msgstr "צֵאת 8.5°"
+
+msgid "Tzeit 42 min"
+msgstr "צֵאת 42 דַּקּוֹת"
+
+msgid "Tzeit 50 min"
+msgstr "צֵאת 50 דַּקּוֹת"
+
+msgid "Tzeit 72 min (Rabbeinu Tam)"
+msgstr "צֵאת 72 דַּקּוֹת (רבינו תמ)"
+
+msgid "after sunset"
+msgstr "לְאַחַר הַשְׁקִיעָה"
+
+msgid "Bein Hashemashot"
+msgstr "בין השמשות"

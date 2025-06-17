@@ -22,6 +22,7 @@ import {MysqlDb} from './db.js';
 import {stopIfTimedOut} from './common.js';
 import {readJSON} from './readJSON.js';
 import {empty} from './empty.js';
+import './locale.js';
 
 const pkg = readJSON('../package.json');
 
