@@ -12,7 +12,7 @@ import {empty, off} from './empty.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {getIpAddress} from './getIpAddress.js';
 
-const pkg = readJSON('../package.json');
+export const pkg = readJSON('../package.json');
 export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
 export const langNames = {

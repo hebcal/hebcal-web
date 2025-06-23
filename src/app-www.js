@@ -19,12 +19,9 @@ import {makeLogger, errorLogger, accessLogger, makeLogInfo,
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
-import {stopIfTimedOut} from './common.js';
-import {readJSON} from './readJSON.js';
+import {stopIfTimedOut, pkg} from './common.js';
 import {empty} from './empty.js';
 import './locale.js';
-
-const pkg = readJSON('../package.json');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
