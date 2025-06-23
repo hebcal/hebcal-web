@@ -1,8 +1,11 @@
 import {Zmanim, TimedEvent, HDate, flags,
+  isAssurBemlacha,
   HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
+import {version} from '@hebcal/core/dist/esm/pkgVersion';
 import {empty} from './empty.js';
 import {getLocationFromQuery,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS,
+  pkg,
   lgToLocale, eTagFromOptions} from './common.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';
@@ -16,6 +19,8 @@ import {locationToPlainObj, makeAnchor} from '@hebcal/rest-api';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(isSameOrBefore);
+
+const VERSION = version + '-' + pkg.version;
 
 const TIMES = {
   chatzotNight: 1,
@@ -69,6 +74,15 @@ export async function getZmanim(ctx) {
   if (loc === null) {
     throw createError(400, 'Location is required');
   }
+  const locObj = locationToPlainObj(loc);
+  const useElevation = q.ue === 'on' || q.ue === '1';
+  if (!useElevation) {
+    delete locObj.elevation;
+  }
+  if (q.im === 'on' || q.im === '1') {
+    ctx.body = checkMelacha(ctx, q, loc, locObj, useElevation);
+    return;
+  }
   const {isRange, startD, endD} = myGetStartAndEnd(ctx, q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
@@ -76,22 +90,62 @@ export async function getZmanim(ctx) {
   } else {
     expires(ctx);
   }
-  const locObj = locationToPlainObj(loc);
   const roundMinute = q.sec !== '1';
-  const useElevation = q.ue === 'on' || q.ue === '1';
-  if (!useElevation) {
-    delete locObj.elevation;
-  }
   if (isRange) {
     const times = getTimesForRange(ALL_TIMES, startD, endD, loc, true, roundMinute, useElevation);
     const start = startD.format('YYYY-MM-DD');
     const end = endD.format('YYYY-MM-DD');
-    ctx.body = {date: {start, end}, location: locObj, times};
+    ctx.body = {
+      date: {start, end},
+      version: VERSION,
+      location: locObj,
+      times,
+    };
   } else {
     const times = getTimes(ALL_TIMES, startD, loc, true, roundMinute, useElevation);
     const isoDate = startD.format('YYYY-MM-DD');
-    ctx.body = {date: isoDate, location: locObj, times};
+    ctx.body = {
+      date: isoDate,
+      version: VERSION,
+      location: locObj,
+      times,
+    };
   }
+}
+
+function checkMelacha(ctx, q, loc, locObj, useElevation) {
+  const now = new Date();
+  ctx.lastModified = now;
+  let dt;
+  const tzid = loc.getTzid();
+  let dateStr = q.dt;
+  if (!empty(dateStr) && /^\d\d\d\d-\d\d-\d\d/.test(dateStr)) {
+    dateStr = dateStr.trim();
+    dt = new Date(dateStr);
+    if (isNaN(dt.getTime())) {
+      throw createError(400, `Invalid Date: ${dateStr}`);
+    }
+    if (!dateStr.endsWith('Z')) {
+      const ch = dateStr.charAt(dateStr.length - 6);
+      if (ch !== '-' && ch !== '+') {
+        const offset = Zmanim.timeZoneOffset(tzid, dt);
+        dt = new Date(dateStr + offset);
+      }
+    }
+  } else {
+    dt = now;
+    ctx.set('Cache-Control', 'public, max-age=60, s-maxage=60');
+  }
+  const ok = isAssurBemlacha(dt, loc, useElevation);
+  return {
+    date: now.toISOString(),
+    version: VERSION,
+    location: locObj,
+    status: {
+      localTime: Zmanim.formatISOWithTimeZone(tzid, dt),
+      isAssurBemlacha: ok,
+    },
+  };
 }
 
 /**
