@@ -58,7 +58,6 @@ export function shortUrlRedir(ctx) {
   if (!destUrl) {
     destUrl = `https://www.hebcal.com/${dest}/${base}?` + qs.toString();
   }
-  ctx.set('Cache-Control', 'private');
   ctx.redirect(destUrl);
 }
 
