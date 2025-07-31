@@ -162,7 +162,7 @@ export const queryLongDescr = {
 };
 
 export const dailyLearningOpts = {};
-for (const cfg of Object.values(dailyLearningConfig)) {
+for (const cfg of dailyLearningConfig) {
   const optName = cfg.dailyLearningOptName;
   if (optName) {
     const k = cfg.queryParam;

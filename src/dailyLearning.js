@@ -36,7 +36,9 @@ export function dailyLearningApp(ctx) {
   const il = q.i === 'on';
   const lg = q.lg || 's';
   const dlOpts = {};
-  for (const cfg of Object.values(dailyLearningConfig)) {
+  const cat2cfg = {};
+  for (const cfg of dailyLearningConfig) {
+    cat2cfg[cfg.eventCategory] = cfg;
     const key = cfg.dailyLearningOptOverride || cfg.dailyLearningOptName;
     if (key) {
       dlOpts[key] = true;
@@ -100,7 +102,7 @@ export function dailyLearningApp(ctx) {
     const cats = ev.getCategories();
     const cat0 = cats[0];
     const categoryName = cat0 === 'yerushalmi' ? cats.join('-') : cat0;
-    const cfg = dailyLearningConfig[categoryName];
+    const cfg = cat2cfg[categoryName];
     const flag = cfg.queryParam;
     const desc = queryLongDescr[flag];
     return {
