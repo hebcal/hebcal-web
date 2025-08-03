@@ -24,9 +24,16 @@
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row">
-<% for (const group of ["Tanakh", "Talmud and Mishna", "Halacha", "Ethics"]) { -%>
+<%
+const groups = {
+ "Tanakh": "🕍",
+ "Talmud and Mishna": "📖",
+ "Halacha": "📚",
+ "Ethics": "⚖️",
+};
+for (const [group, emoji] of Object.entries(groups)) { -%>
 <div class="col-lg-6 mt-2 mb-4">
-<h4><%= group %></h4>
+<h4><%= emoji %> <%= group %></h4>
 <% for (const item of items.filter((item) => item.group === group)) { %>
 <div class="mt-2 mb-3" id="<%= item.id %>">
 <div class="lead"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
