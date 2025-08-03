@@ -503,7 +503,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else {
     itemReading.shortName = item;
   }
-  if (ev && ev.getDate().getDay() === 6) {
+  if (ev && ev.getDate().getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
     const hd = ev.getDate();
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
