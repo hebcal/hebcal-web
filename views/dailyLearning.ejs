@@ -21,8 +21,15 @@
 <li class="text-nowrap fs-5"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render(lg) %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
 </ul>
-<% for (const item of items) { %>
-<div class="lead mt-4" id="<%= item.id %>"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
+</div><!-- .col -->
+</div><!-- .row -->
+<div class="row">
+<% for (const group of ["Tanakh", "Talmud and Mishna", "Halacha", "Ethics"]) { -%>
+<div class="col-lg-6 mt-2 mb-4">
+<h4><%= group %></h4>
+<% for (const item of items.filter((item) => item.group === group)) { %>
+<div class="mt-2 mb-3" id="<%= item.id %>">
+<div class="lead"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
 <% if (item.flag) { -%>
 <a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;start=<%= d.format('YYYY-MM')%>-01&amp;end=<%= d.month() > 5 ? d.year() + 1 : d.year() %>-12-31<%= il ? '&i=on' : ''%>&amp;set=off">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
@@ -37,7 +44,7 @@
 <%   if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
 <%   } %>
 </div>
-<% if (item.event && item.event.memo) { %><div class="fst-italic"><%=item.event.memo%></div><% } %>
+<% if (item.event && item.event.memo && item.event.memo.indexOf('https://') === -1) { %><div class="fst-italic"><%=item.event.memo%></div><% } %>
 <%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% if (item.basename) { -%>
 <div class="collapse" id="sub-<%= item.id %>">
@@ -74,9 +81,11 @@
  </div>
 </div>
 <% } -%>
-<% } %>
+</div><!-- #<%= item.id %> -->
+<% } // item -%>
+</div><!-- <%= group %> -->
+<% } // group -%>
 
-</div><!-- .col -->
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-5 justify-content-between d-print-none">
 <% if (d.year() > currentYear-10) { -%>

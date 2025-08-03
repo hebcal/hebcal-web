@@ -6,6 +6,7 @@ import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
+import {makeAnchor} from '@hebcal/rest-api';
 
 const currentYear = new Date().getFullYear();
 
@@ -76,7 +77,11 @@ export function dailyLearningApp(ctx) {
     const category = reading.name.en.startsWith('Rosh Chodesh ') ?
       'Rosh Chodesh Torah reading' :
       prefix + ': ' + Locale.gettext(reading.name.en, lg);
-    const item = {category};
+    const item = {
+      id: makeAnchor(prefix),
+      category,
+      group: 'Tanakh',
+    };
     const aliyot = reading.fullkriyah || reading.weekday || reading.megillah;
     if (reading.summaryParts) {
       item.html = makeLeyningHtmlFromParts(reading.summaryParts);
@@ -109,6 +114,7 @@ export function dailyLearningApp(ctx) {
       id: categoryName,
       category: cfg.shortName,
       basename: cfg.downloadSlug,
+      group: cfg.group,
       flag,
       desc,
       title: ev.renderBrief(lg),
