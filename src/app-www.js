@@ -229,7 +229,7 @@ app.use(async function setCorsHeader(ctx, next) {
 });
 
 app.use(async function strictContentSecurityPolicy(ctx, next) {
-  const buf = randomBytes(6);
+  const buf = randomBytes(8);
   const nonce = ctx.state.nonce = buf.toString('base64url');
   await next();
   const status = ctx.status;
