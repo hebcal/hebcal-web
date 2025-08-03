@@ -11,13 +11,14 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   shortenUrl,
   queryDefaultCandleMins,
   dailyLearningOpts,
+  dailyLearningConfig,
   makeCalendarSubtitleFromOpts,
   queryLongDescr,
   queryToName,
   localeMap, eTagFromOptions, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
-import {HDate, Locale} from '@hebcal/core';
+import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
 import {
   eventToFullCalendar,
   eventToClassicApiObject,
@@ -216,15 +217,28 @@ function getHebMonthNames(events, lang) {
   return months;
 }
 
+const LEARNING_MASK =
+  flags.DAILY_LEARNING |
+  flags.DAF_YOMI |
+  flags.NACH_YOMI |
+  flags.MISHNA_YOMI |
+  flags.YERUSHALMI_YOMI;
+
 function renderHtml(ctx) {
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     ctx.status = 400;
-    if (options.dailyLearning?.dafYomi) {
-      return renderForm(ctx, {message: 'Daf Yomi cycle began in 5684 (September 1923)'});
-    } else if (options.dailyLearning?.mishnaYomi) {
-      return renderForm(ctx, {message: 'Mishna Yomi cycle began in 5707 (May 1947)'});
+    if (options.dailyLearning) {
+      for (const dlOpt of Object.keys(options.dailyLearning)) {
+        const startDate = DailyLearning.getStartDate(dlOpt);
+        if (startDate) {
+          const cfg = dailyLearningConfig.find((cfg) => cfg.dailyLearningOptName === dlOpt);
+          const d = dayjs(startDate.greg());
+          const fmtDt = d.format('MMM YYYY');
+          return renderForm(ctx, {message: `${cfg.settingsName} cycle began in ${startDate.getFullYear()} (${fmtDt})`});
+        }
+      }
     }
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
@@ -237,22 +251,27 @@ function renderHtml(ctx) {
   const items = events.map((ev) => {
     const item0 = eventToClassicApiObject(ev, options, false);
     const item = {
-      title: item0.title,
-      date: item0.date,
-      category: item0.category,
+      t0: item0.title,
+      dt: item0.date,
+      cat: item0.category,
     };
+    if (ev.getFlags() & LEARNING_MASK) {
+      item.cat += ' learning';
+    } else if (item0.subcat) {
+      item.cat += ' ' + item0.subcat;
+    }
     const bn = ev.basename();
     if (bn !== item0.title) {
       item.bn = bn;
     }
     if (locale === 'he' || options.appendHebrewToSubject) {
-      item.hebrew = item0.hebrew;
+      item.h0 = item0.hebrew;
     }
     if (item0.link) {
-      item.link = shortenUrl(ev.url());
+      item.u0 = shortenUrl(ev.url());
     }
     if (item0.yomtov) {
-      item.yomtov = true;
+      item.yt = true;
     }
     if (item0.memo && typeof memos[bn] === 'undefined' && item0.date.indexOf('T') === -1) {
       const fullStop = item0.memo.indexOf('. ');

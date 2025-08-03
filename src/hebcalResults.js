@@ -49,14 +49,14 @@ const hour12cc = {
 };
 
 function getEventClassName(evt) {
-  let className = evt.category;
-  if (evt.yomtov) {
+  let className = evt.cat;
+  if (evt.yt) {
     className += ' yomtov';
   }
-  if (evt.date.indexOf('T') !== -1) {
+  if (evt.dt.indexOf('T') !== -1) {
     className += ' timed';
   }
-  const link = evt.link;
+  const link = evt.u0;
   if (typeof link === 'string' &&
     link.startsWith('http') &&
     !link.startsWith('https://www.hebcal.com/')) {
@@ -91,8 +91,8 @@ function addHebMonthName(month) {
 const langNameWithHebrew = new Set(['ah', 'sh']);
 
 function splitByMonth(events) {
-  const startDate = makeDayjs(dateOnly(events[0].date));
-  const endDate = makeDayjs(dateOnly(events[events.length - 1].date));
+  const startDate = makeDayjs(dateOnly(events[0].dt));
+  const endDate = makeDayjs(dateOnly(events[events.length - 1].dt));
   const start = startDate.set('date', 1);
   const end = endDate.add(1, 'day');
   const months = {};
@@ -110,7 +110,7 @@ function splitByMonth(events) {
     }
   }
   events.forEach(function(evt) {
-    const isoDate = dateOnly(evt.date);
+    const isoDate = dateOnly(evt.dt);
     const d = makeDayjs(isoDate);
     const yearMonth = formatYearMonth(d);
     const monthEvents = months[yearMonth].events;
@@ -150,16 +150,16 @@ function getTimeStr(dt) {
 }
 
 function tableRow(evt) {
-  const isoDate = dateOnly(evt.date);
+  const isoDate = dateOnly(evt.dt);
   const m = makeDayjs(isoDate);
-  const cat = evt.category;
+  const cat = evt.cat;
   const localeData = window['hebcal'].localeConfig;
   const lang = window['hebcal'].lang || 's';
   const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
   const dateStr0 = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
   const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr0}</span>` : dateStr0;
-  let subj = evt.title;
-  const timeStr = getTimeStr(evt.date);
+  let subj = evt.t0;
+  const timeStr = getTimeStr(evt.dt);
   const className = getEventClassName(evt);
   if (cat === 'dafyomi') {
     subj = subj.substring(subj.indexOf(':') + 1);
@@ -170,13 +170,13 @@ function tableRow(evt) {
   const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
   if (isHebrew) {
     subj = `<span lang="he" dir="rtl">${subj}</span>`;
-  } else if (langNameWithHebrew.has(lang) && evt.hebrew) {
-    subj += ` / <span lang="he" dir="rtl">${evt.hebrew}</span>`;
+  } else if (langNameWithHebrew.has(lang) && evt.h0) {
+    subj += ` / <span lang="he" dir="rtl">${evt.h0}</span>`;
   }
-  if (evt.link) {
-    subj = `<a href="${evt.link}">${subj}</a>`;
+  if (evt.u0) {
+    subj = `<a href="${evt.u0}">${subj}</a>`;
   }
-  const basename = evt.bn || evt.title;
+  const basename = evt.bn || evt.t0;
   const memo0 = basename && window['hebcal'].memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
   return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}"${memo}>${subj}</span></td></tr>`;
@@ -223,15 +223,15 @@ function subjectSpan(str) {
 }
 
 function renderEventHtml(evt) {
-  let subj = evt.title;
-  const cat = evt.category;
+  let subj = evt.t0;
+  const cat = evt.cat;
   if (cat === 'dafyomi') {
     subj = subj.substring(subj.indexOf(':') + 1);
   } else if (cat === 'candles' || cat === 'havdalah') {
     // "Candle lighting: foo" or "Havdalah (42 min): foo"
     subj = subj.substring(0, subj.indexOf(':'));
   }
-  const time = getTimeStr(evt.date);
+  const time = getTimeStr(evt.dt);
   if (time) {
     const timeHtml = evt.bn === 'Chanukah' ?
     '<small>' + time + '</small>' :
@@ -242,13 +242,13 @@ function renderEventHtml(evt) {
   }
   const className = getEventClassName(evt);
   const lang = window['hebcal'].lang || 's';
-  if (langNameWithHebrew.has(lang) && evt.hebrew) {
-    subj += `<br><span lang="he" dir="rtl">${evt.hebrew}</span>`;
+  if (langNameWithHebrew.has(lang) && evt.h0) {
+    subj += `<br><span lang="he" dir="rtl">${evt.h0}</span>`;
   }
-  const basename = evt.bn || evt.title;
+  const basename = evt.bn || evt.t0;
   const memo0 = basename && window['hebcal'].memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
-  const url = evt.link;
+  const url = evt.u0;
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   return `<div class="fc-event ${className}"${memo}>${ahref}${subj}${aclose}</div>\n`;
@@ -302,7 +302,7 @@ function makeMonthTableBody(month) {
   const dayMap = [];
   const events = month.events;
   events.forEach(function(evt) {
-    const isoDate = dateOnly(evt.date);
+    const isoDate = dateOnly(evt.dt);
     const d = makeDayjs(isoDate);
     const date = d.date();
     dayMap[date] = dayMap[date] || [];
