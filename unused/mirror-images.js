@@ -1,4 +1,4 @@
-import holidayMeta from './holidays.json' assert {type: "json"};
+import holidayMeta from '../src/holidays.json' with {type: "json"};
 import {access} from 'node:fs/promises';
 import fs from 'node:fs';
 import {WritableStream} from 'node:stream/web';
@@ -31,15 +31,20 @@ async function main() {
       toFetch.add(asin);
     }
   }
-  const promises = [];
+  const need = new Set();
   for (const asin of toFetch) {
     for (const size of ['M', 'L']) {
       const fn = `${asin}.01.${size}ZZZZZZZ.jpg`;
       logger.info(`need ${fn}`);
-      const promise = await fetchFromAmzn(fn);
-      promises.push(promise);
+      need.add(fn);
     }
   }
+  const promises = [];
+  for (const fn of need) {
+    const promise = await fetchFromAmzn(fn);
+    promises.push(promise);
+  }
+  logger.info(`waiting for ${promises.length} to complete`);
   await Promise.all(promises);
   logger.info(`done3`);
 }
@@ -78,8 +83,8 @@ async function fetchFromAmzn(fn) {
     logger.info(`done1 ${fn}`);
     return new Promise((resolve, reject) => {
       logger.info(`writing ${path}`);
-      fileStream.on('finish', resolve);
-      body.pipeTo(stream);
+      // fileStream.on('finish', resolve);
+      body.pipeTo(stream).then(resolve).catch(reject);
       logger.info(`done2 ${fn}`);
     });
   } else {
