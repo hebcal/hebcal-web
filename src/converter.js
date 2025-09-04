@@ -310,7 +310,7 @@ function makeProperties(ctx, props) {
   return {
     message: props.message,
     noCache: Boolean(props.noCache),
-    events: events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle'),
+    events,
     dateItems: makeDiasporaIsraelItems(ctx, hdate),
     hdateStr,
     gdateStr: d.format('MMMM D, ') + gyStr,
@@ -351,10 +351,8 @@ function eventToItem(ctx, ev) {
  * @return {any}
  */
 function makeDiasporaIsraelItems(ctx, hdate) {
-  const diaspora = getEvents(hdate, false)
-      .filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
-  const israel = getEvents(hdate, true)
-      .filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
+  const diaspora = getEvents(hdate, false);
+  const israel = getEvents(hdate, true);
   const both = diaspora.filter((a) => israel.find((b) => a.getDesc() === b.getDesc()));
   const diasporaOnly = diaspora.filter((ev) => !both.includes(ev));
   const bothIL = israel.filter((a) => diaspora.find((b) => a.getDesc() === b.getDesc()));
@@ -405,6 +403,7 @@ function getEvents(hdate, il) {
     yomKippurKatan: false,
     shabbatMevarchim: true,
   });
+  events = events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   const sedra = HebrewCalendar.getSedra(hy, il);
@@ -530,7 +529,7 @@ function parseConverterQuery(ctx) {
 function convertDateRange(ctx, startD, endD) {
   const query = ctx.request.query;
   const il = Boolean(query.i === 'on');
-  const locale = ctx.state.locale;
+  const lg = ctx.state.lg;
   const hdates = {};
   for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
     const dt = d.toDate();
@@ -550,7 +549,7 @@ function convertDateRange(ctx, startD, endD) {
     };
     const events = getEvents(hdate, il);
     if (events.length) {
-      result.events = events.map(renameChanukah(locale));
+      result.events = events.map(renameChanukah(lg));
       if (typeof query.i !== 'undefined') {
         result.il = il;
       }
@@ -560,7 +559,6 @@ function convertDateRange(ctx, startD, endD) {
   return {
     start: dateToISOString(startD.toDate()),
     end: dateToISOString(endD.toDate()),
-    locale,
     hdates,
   };
 }
