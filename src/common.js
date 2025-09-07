@@ -1171,8 +1171,9 @@ export function stopIfTimedOut() {
 
 const maxNumYear = {
   candlelighting: 4,
-  omer: 4,
-  addHebrewDatesForEvents: 3,
+  sedrot: 5,
+  omer: 5,
+  addHebrewDatesForEvents: 4,
   addHebrewDates: 2,
   dailyLearning: 2,
 };
@@ -1186,17 +1187,21 @@ export function getNumYears(options) {
   if (options.numYears) {
     return options.numYears;
   }
-
-  let numYears = 5;
-  for (const [key, ny] of Object.entries(maxNumYear)) {
-    if (options[key] && ny < numYears) {
-      numYears = ny;
-    }
+  let numYears = 7;
+  // omer + sedrot adds 101 events
+  if (options.omer && options.sedrot) {
+    numYears = 4;
   }
   // Shabbat plus Hebrew Event every day can get very big
   const hebrewDates = options.addHebrewDates || options.addHebrewDatesForEvents;
   if (options.candlelighting && hebrewDates) {
     numYears = 2;
+  }
+  // possibly reduce further
+  for (const [key, ny] of Object.entries(maxNumYear)) {
+    if (options[key] && ny < numYears) {
+      numYears = ny;
+    }
   }
   // reduce duration if 2+ daily options are specified
   const daily = (options.addHebrewDates ? 1 : 0) +
