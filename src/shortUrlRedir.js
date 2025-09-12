@@ -1,6 +1,7 @@
 import {basename, dirname} from 'node:path';
 import {getSedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
+import {utmSourceFromRef} from './common.js';
 import dayjs from 'dayjs';
 
 const shortToLong = {
@@ -25,18 +26,8 @@ export function shortUrlRedir(ctx) {
     qs.set('utm_campaign', campaign);
     qs.delete('uc');
   }
-  const ref = ctx.get('referer');
-  if (!utmSource && ref?.length) {
-    try {
-      const refUrl = new URL(ref);
-      const hostname = refUrl.hostname;
-      if (hostname !== 'hebcal.com' && !hostname.endsWith('.hebcal.com')) {
-        utmSource = hostname;
-      }
-    } catch (err) {
-      // ignore errors in invalid referrer URL
-      ctx.logger.warn(err, `invalid referrer ${ref}`);
-    }
+  if (!utmSource) {
+    utmSource = utmSourceFromRef(ctx);
   }
   utmSource = utmSource || 'redir';
   utmMedium = utmMedium || 'redir';

@@ -920,7 +920,18 @@ export function httpRedirect(ctx, rpath, status=302) {
   if (status === 301) {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
   }
-  ctx.redirect(`${proto}://${host}${rpath}`);
+  let url = `${proto}://${host}${rpath}`;
+  const u = new URL(url);
+  const qs = u.searchParams;
+  let utmSource = qs.get('utm_source') || qs.get('us');
+  if (!utmSource) {
+    utmSource = utmSourceFromRef(ctx);
+    if (utmSource) {
+      const sep = rpath.indexOf('?') === -1 ? '?' : '&';
+      url += `${sep}utm_source=${utmSource}`;
+    }
+  }
+  ctx.redirect(url);
 }
 
 /**
@@ -1338,6 +1349,25 @@ export function shortenUrl(url) {
     }
   }
   return url;
+}
+
+export function utmSourceFromRef(ctx) {
+  const ref = ctx.get('referer');
+  if (ref?.length) {
+    try {
+      const refUrl = new URL(ref);
+      const hostname = refUrl.hostname;
+      if (hostname === 'hebcal.com' || hostname.endsWith('.hebcal.com') ||
+          hostname === '127.0.0.1') {
+        return undefined;
+      }
+      return hostname;
+    } catch (err) {
+      // ignore errors in invalid referrer URL
+      ctx.logger.warn(err, `invalid referrer ${ref}`);
+    }
+  }
+  return undefined;
 }
 
 /**
