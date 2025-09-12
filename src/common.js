@@ -929,6 +929,7 @@ export function httpRedirect(ctx, rpath, status=302) {
     if (utmSource) {
       const sep = rpath.indexOf('?') === -1 ? '?' : '&';
       url += `${sep}utm_source=${utmSource}`;
+      ctx.append('Vary', 'Referer');
     }
   }
   ctx.redirect(url);

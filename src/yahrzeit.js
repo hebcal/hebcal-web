@@ -472,7 +472,7 @@ export async function yahrzeitDownload(ctx) {
         icalEv.locationName = undefined;
       }
     }
-    ctx.set('Vary', 'User-Agent');
+    ctx.append('Vary', 'User-Agent');
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (extension == '.csv') {
     const euro = Boolean(query.euro);
