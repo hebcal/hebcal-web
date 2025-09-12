@@ -5,15 +5,15 @@ const urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
 /* save utm */
 const utm_ = {};
 new URL(window.location.href).searchParams.forEach(function(v, k) {
-  if (k[0]=='u'&&k[1]=='t'&&k[2]=='m'&&k[3]=='_') {utm_[k] = v;}
+  if (k.startsWith('utm_')) {utm_[k] = v;}
 });
 /* redact identifier from URL */
 const url = new URL(urlHref);
 const sp = url.searchParams;
 const pn = url.pathname;
-if (pn.substring(0, 15)=='/yahrzeit/edit/') {
+if (pn.startsWith('/yahrzeit/edit/')) {
   url.pathname='/yahrzeit/edit/_ID_';
-} else if (pn.substring(0, 17)=='/yahrzeit/verify/') {
+} else if (pn.startsWith('/yahrzeit/verify/')) {
   url.pathname='/yahrzeit/verify/_ID_';
 } else if (pn=='/yahrzeit/') {
   url.pathname='/yahrzeit';

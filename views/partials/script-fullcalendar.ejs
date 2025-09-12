@@ -111,7 +111,7 @@ function monthSubtitle(view) {
               if (typeof ev.url == 'string') {
                 const u = new URL(ev.url);
                 const p = u.pathname;
-                if (p.substring(0, 3) == '/h/') {
+                if (p.startsWith('/h/')) {
                   ev.url = '/holidays/' + p.substring(3);
                 }
               }
