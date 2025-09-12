@@ -1357,10 +1357,13 @@ export function utmSourceFromRef(ctx) {
   if (ref?.length) {
     try {
       const refUrl = new URL(ref);
-      const hostname = refUrl.hostname;
+      const hostname = refUrl.hostname.toLowerCase();
       if (hostname === 'hebcal.com' || hostname.endsWith('.hebcal.com') ||
           hostname === '127.0.0.1') {
         return undefined;
+      }
+      if (hostname.startsWith('www.')) {
+        return hostname.substring(4);
       }
       return hostname;
     } catch (err) {
