@@ -288,7 +288,7 @@ function getRawTriennial(parshaName, hd, il) {
   const yearNum = hyear - startYear;
   const reading = tri.getReading(parshaName, yearNum);
   const triennial = {
-    reading: clone(reading.aliyot),
+    reading: reading.aliyot,
     yearNum: reading.yearNum + 1,
     fullParsha: reading.fullParsha,
     hyear: hyear,
