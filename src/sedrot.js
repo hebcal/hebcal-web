@@ -287,7 +287,17 @@ function getRawTriennial(parshaName, hd, il) {
   const startYear = tri.getStartYear();
   const yearNum = hyear - startYear;
   const reading = tri.getReading(parshaName, yearNum);
-  return reading;
+  const triennial = {
+    reading: clone(reading.aliyot),
+    yearNum: reading.yearNum + 1,
+    fullParsha: reading.fullParsha,
+    hyear: hyear,
+    variation: reading.variation,
+    date: reading.date,
+    readSeparately: reading.readSeparately,
+    readTogether: reading.readTogether,
+  };  
+  return triennial;
 }
 
 function doTriennialDiffer(a, b) {
