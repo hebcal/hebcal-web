@@ -282,11 +282,10 @@ function makeReading(date, parshaEv, il, parsha) {
  * @return {import('@hebcal/triennial').TriennialAliyot}
  */
 function getRawTriennial(parshaName, hd, il) {
+  const parsha = parshaName === 'Lech-Lecha' ? [parshaName] : parshaName.split('-');
+  const ev = new ParshaEvent(hd, parsha, il);
+  const reading = getTriennialForParshaHaShavua(ev, il);
   const hyear = hd.getFullYear();
-  const tri = getTriennial(hyear, il);
-  const startYear = tri.getStartYear();
-  const yearNum = hyear - startYear;
-  const reading = tri.getReading(parshaName, yearNum);
   const triennial = {
     reading: reading.aliyot,
     yearNum: reading.yearNum + 1,
@@ -296,7 +295,7 @@ function getRawTriennial(parshaName, hd, il) {
     date: reading.date,
     readSeparately: reading.readSeparately,
     readTogether: reading.readTogether,
-  };  
+  };
   return triennial;
 }
 
