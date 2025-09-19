@@ -28,10 +28,7 @@ export async function hebcalDownload(ctx) {
     options.numYears = getNumYears(options);
   }
   const events = makeHebrewCalendar(ctx, options);
-  // set Last-Modified date to the date of the first calendar
-  // event, unless that would be in the future
-  const firstEvDt = events.length > 0 ? events[0].getDate().greg() : new Date();
-  ctx.lastModified = firstEvDt > ctx.launchDate ? ctx.launchDate : firstEvDt;
+  // don't set a Last-Modified date; we'll rely on etag for cache consistency
   // etag includes actual year because options.year is never 'now'
   const opts = {...query, ...options};
   ctx.response.etag = eTagFromOptions(opts, {extension});
