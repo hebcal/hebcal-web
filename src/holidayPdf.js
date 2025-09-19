@@ -37,7 +37,7 @@ export async function holidayPdf(ctx) {
   };
   ctx.set('Cache-Control', CACHE_CONTROL_60DAYS);
   ctx.response.type = 'application/pdf';
-  ctx.response.etag = eTagFromOptions(options, {outputType: '.pdf'});
+  ctx.response.etag = eTagFromOptions(ctx, options, {outputType: '.pdf'});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

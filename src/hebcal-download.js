@@ -31,7 +31,7 @@ export async function hebcalDownload(ctx) {
   // don't set a Last-Modified date; we'll rely on etag for cache consistency
   // etag includes actual year because options.year is never 'now'
   const opts = {...query, ...options};
-  ctx.response.etag = eTagFromOptions(opts, {extension});
+  ctx.response.etag = eTagFromOptions(ctx, opts, {extension});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

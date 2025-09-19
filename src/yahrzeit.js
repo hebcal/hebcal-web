@@ -429,7 +429,7 @@ export async function yahrzeitDownload(ctx) {
   query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
-  ctx.response.etag = eTagFromOptions(query, {startYear, extension});
+  ctx.response.etag = eTagFromOptions(ctx, query, {startYear, extension});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

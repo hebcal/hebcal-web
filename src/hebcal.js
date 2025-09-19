@@ -92,7 +92,7 @@ export async function hebcalApp(ctx) {
     }
   }
   if (ctx.status < 400 && q.v === '1') {
-    ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
+    ctx.response.etag = eTagFromOptions(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {
       ctx.status = 304;
       return;
@@ -132,7 +132,7 @@ export async function hebcalApp(ctx) {
 async function renderIcal(ctx) {
   const options = ctx.state.options;
   const icalOpt = makeIcalOpts(options, ctx.state.q);
-  ctx.response.etag = eTagFromOptions(icalOpt, {outputType: '.ics'});
+  ctx.response.etag = eTagFromOptions(ctx, icalOpt, {outputType: '.ics'});
   if (isFresh(ctx)) {
     return;
   }

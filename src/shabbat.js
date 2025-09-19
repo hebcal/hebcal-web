@@ -37,7 +37,7 @@ export async function shabbatApp(ctx) {
   const {q, options, dateOverride, dt} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status < 400 && ctx.request.querystring.length > 0) {
-    ctx.response.etag = eTagFromOptions(options, {outputType: q.cfg});
+    ctx.response.etag = eTagFromOptions(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {
       ctx.status = 304;
       return;
