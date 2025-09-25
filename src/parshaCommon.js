@@ -1,4 +1,4 @@
-import {Locale, parshiot} from '@hebcal/core';
+import {HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {langNames} from './common.js';
@@ -266,4 +266,45 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
   const suffix = bookId[aliyah.k] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
   const book = aliyah.k.replace(/ /g, '_');
   return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
+}
+
+/**
+ * Sets ev.memo if the event is a Parsha Hashavua
+ * @param {Event} ev
+ */
+export function addIcalParshaMemo(ev) {
+  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+    const parshaName = ev.getDesc().substring(9);
+    const meta = lookupParshaMeta(parshaName);
+    const memo = meta.summaryHtml?.html;
+    if (memo) {
+      ev.memo = memo;
+    }
+  }
+}
+
+const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
+
+function getCsvParshaMemo(ev, il, locale) {
+  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+    const hd = ev.getDate();
+    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const holidays1 = holidays0.filter((ev) => Boolean(ev.getFlags() & PARSHA_SPECIAL_MASK));
+    if (holidays1.length) {
+      return holidays1.map((ev) => ev.render(locale)).join(' + ');
+    } else {
+      const tommorow = hd.next().getDate();
+      if (tommorow === 30 || tommorow === 1) {
+        return 'Machar Chodesh';
+      }
+    }
+  }
+  return undefined;
+}
+
+export function addCsvParshaMemo(ev, il, locale) {
+  const memo = getCsvParshaMemo(ev, il, locale);
+  if (memo) {
+    ev.memo = memo;
+  }
 }

@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, Event, Zmanim, flags} from '@hebcal/core';
+import {HDate, Event, Zmanim, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
@@ -7,7 +7,7 @@ import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, eTagFromOptions,
   cleanQuery,
   makeIcalOpts, getNumYears, localeMap} from './common.js';
-import {lookupParshaMeta} from './parshaCommon.js';
+import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
 /**
@@ -52,7 +52,7 @@ export async function hebcalDownload(ctx) {
       ctx.response.attachment(basename(path));
     }
     if (options.sedrot) {
-      addParshaMemos(events);
+      events.forEach(addIcalParshaMemo);
     }
     if (options.omer && options.location) {
       addLocationOmerAlarms(options, events);
@@ -107,34 +107,11 @@ function makeDummyEvent(ctx) {
   return [ev];
 }
 
-const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
-
 function addCsvParshaMemos(events, options) {
   const il = options.il;
   const locale = options.locale;
   for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
-    const hd = ev.getDate();
-    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-    const holidays1 = holidays0.filter((ev) => Boolean(ev.getFlags() & PARSHA_SPECIAL_MASK));
-    if (holidays1.length) {
-      ev.memo = holidays1.map((ev) => ev.render(locale)).join(' + ');
-    } else {
-      const tommorow = hd.next().getDate();
-      if (tommorow === 30 || tommorow === 1) {
-        ev.memo = 'Machar Chodesh';
-      }
-    }
-  }
-}
-
-function addParshaMemos(events) {
-  for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
-    const parshaName = ev.getDesc().substring(9);
-    const meta = lookupParshaMeta(parshaName);
-    const memo = meta.summaryHtml?.html;
-    if (memo) {
-      ev.memo = memo;
-    }
+    addCsvParshaMemo(ev, il, locale);
   }
 }
 
