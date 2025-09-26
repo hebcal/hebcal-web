@@ -1,3 +1,4 @@
+import {greg2abs} from '@hebcal/hdate';
 import {HDate, HebrewCalendar, flags} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv, getEventCategories} from '@hebcal/rest-api';
@@ -41,11 +42,10 @@ function removeCompressed(file) {
 }
 
 function getStartAndEnd(years) {
-  const startDt = new Date(TODAY);
-  startDt.setDate(startDt.getDate() - 45); // 45 days ago
-  const start = new HDate(startDt);
-  const year = TODAY.getFullYear();
-  const end = new HDate(new Date(year + years - 1, 11, 31));
+  const nowAbs = greg2abs(TODAY);
+  const start = new HDate(nowAbs - 45); // 45 days ago
+  const endAbs = nowAbs + Math.floor(365.25 * years);
+  const end = new HDate(endAbs);
   return {start, end};
 }
 
@@ -65,6 +65,7 @@ async function doRegularCalendar(cfg) {
       return categories.length < 2 || categories[1] !== 'minor';
     });
   }
+  console.log(file, events.length);
   const icalOpt = {
     ...cfg,
     dtstamp: DTSTAMP,
@@ -88,6 +89,7 @@ async function doLearningCalendar(cfg) {
     dailyLearning: dlOpts,
   };
   const events = HebrewCalendar.calendar(options);
+  console.log(file, events.length);
   const query = {
     dtstamp: DTSTAMP,
     title: cfg.shortName,
