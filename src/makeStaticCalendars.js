@@ -111,7 +111,6 @@ async function doChofetzChaim(cfg) {
     title: cfg.shortName,
     // eslint-disable-next-line max-len
     caldesc: 'Daily study of the Sefer Chofetz Chaim and Shemirat HaLashon, which deal with the Jewish ethics and laws of speech',
-    dtstamp: DTSTAMP,
     publishedTTL: 'PT7D',
     locale: 'en',
   };
@@ -138,7 +137,6 @@ async function doRegularCalendar(cfg) {
   console.log(file, events.length);
   const icalOpt = {
     ...cfg,
-    dtstamp: DTSTAMP,
     publishedTTL: 'PT14D',
   };
   await writeEventsToFile(events, icalOpt, file);
@@ -161,7 +159,6 @@ async function doLearningCalendar(cfg) {
   const events = HebrewCalendar.calendar(options);
   console.log(file, events.length);
   const query = {
-    dtstamp: DTSTAMP,
     title: cfg.shortName,
     caldesc: cfg.descMedium,
     publishedTTL: 'PT14D',
@@ -185,6 +182,7 @@ async function writeEventsToFile(events, icalOpt, file) {
   if (icalOpt.sedrot) {
     events.forEach(addIcalParshaMemo);
   }
+  icalOpt.dtstamp = DTSTAMP;
   const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
   const icalFilename = `ical/${file}.ics`;
   const icalStream = fs.createWriteStream(icalFilename);
