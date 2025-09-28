@@ -30,12 +30,6 @@ mkdir -p ical || exit 1
 
 node dist/makeStaticCalendars.js || exit 1
 
-FILE="chofetz-chaim"
-remove_file $FILE
-node dist/chofetzChaim.js
-mv "${FILE}.ics" "${FILE}.csv" ical
-compress_file $FILE
-
 FILE="kindness"
 remove_file $FILE
 node dist/kindness.js
