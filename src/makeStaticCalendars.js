@@ -1,8 +1,7 @@
 import {greg2abs} from '@hebcal/hdate';
-import {HDate, HebrewCalendar, flags, Event} from '@hebcal/core';
-import {chofetzChaim, ChofetzChaimEvent, shemiratHaLashon, ShemiratHaLashonEvent} from '@hebcal/learning';
+import {HDate, HebrewCalendar, flags, Event, DailyLearning} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
-import {eventsToCsv, getEventCategories} from '@hebcal/rest-api';
+import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {dailyLearningConfig, makeIcalOpts, localeMap} from './common.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {readJSON} from './readJSON.js';
@@ -14,6 +13,8 @@ const execPromise = util.promisify(exec);
 const TODAY = new Date();
 TODAY.setSeconds(0, 0);
 const DTSTAMP = IcalEvent.makeDtstamp(TODAY);
+const UTM_SRC = 'hebcal.com';
+const UTM_MED = 'icalendar';
 
 async function runCommand(cmd) {
   console.log(cmd);
@@ -53,23 +54,22 @@ function getStartAndEnd(years) {
  * Event wrapper around a combo of Chofetz Chaim and Shemirat HaLashon
  */
 class ChofetzChaimShemiratHaLashonEvent extends Event {
-  /**
-   * @param {HDate} hd
-   * @param {any} reading1
-   * @param {any} reading2
-   */
-  constructor(hd, reading1, reading2) {
-    const ev1 = new ChofetzChaimEvent(hd, reading1);
-    const ev2 = new ShemiratHaLashonEvent(hd, reading2);
+  constructor(hd) {
+    const ev1 = DailyLearning.lookup('chofetzChaim', hd, false);
+    const ev2 = DailyLearning.lookup('shemiratHaLashon', hd, false);
     const desc = ev1.getDesc() + ' / ' + ev2.getDesc();
-    super(hd, desc, flags.USER_EVENT);
+    super(hd, desc, flags.DAILY_LEARNING);
     this.ev1 = ev1;
     this.ev2 = ev2;
     const hdateStr = hd.getDate() + ' ' + hd.getMonthName();
     this.memo = 'Sefer Chofetz Chaim, ' + hdateStr + '\n' +
-      ev1.render('memo') + '\n' + ev1.url() + '\n\n' +
+      ev1.render('memo') + '\n' +
+      appendIsraelAndTracking(ev1.url(), false, UTM_SRC, UTM_MED, 'ical-chofetz-chaim') +
+      '\n\n' +
       'Shemirat HaLashon, ' + hdateStr + '\n' +
-      ev2.render('memo') + '\n' + ev2.url();
+      ev2.render('memo') + '\n' +
+      appendIsraelAndTracking(ev2.url(), false, UTM_SRC, UTM_MED, 'ical-chofetz-chaim') +
+      '\n\n';
     this.alarm = false;
     this.category = 'Chofetz Chaim';
     const startDate = IcalEvent.formatYYYYMMDD(hd.greg());
@@ -101,9 +101,7 @@ async function doChofetzChaim(cfg) {
   const events = [];
   for (let abs = startAbs; abs <= endAbs; abs++) {
     const hd = new HDate(abs);
-    const reading1 = chofetzChaim(hd);
-    const reading2 = shemiratHaLashon(hd);
-    const ev = new ChofetzChaimShemiratHaLashonEvent(hd, reading1, reading2);
+    const ev = new ChofetzChaimShemiratHaLashonEvent(hd);
     events.push(ev);
   }
   const icalOpt = {
@@ -172,9 +170,6 @@ async function doLearningCalendar(cfg) {
   if (relcalid) {
     icalOpt.relcalid = relcalid;
   }
-  icalOpt.utmSource = 'hebcal.com';
-  icalOpt.utmMedium = 'icalendar';
-  icalOpt.utmCampaign = 'ical-' + file;
   await writeEventsToFile(events, icalOpt, file);
 }
 
@@ -183,6 +178,9 @@ async function writeEventsToFile(events, icalOpt, file) {
     events.forEach(addIcalParshaMemo);
   }
   icalOpt.dtstamp = DTSTAMP;
+  icalOpt.utmSource = UTM_SRC;
+  icalOpt.utmMedium = UTM_MED;
+  icalOpt.utmCampaign = 'ical-' + file;
   const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
   const icalFilename = `ical/${file}.ics`;
   const icalStream = fs.createWriteStream(icalFilename);

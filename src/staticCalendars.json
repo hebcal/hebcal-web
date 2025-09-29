@@ -12,8 +12,7 @@
   "emoji": true,
   "title": "Jewish Holidays ✡️",
   "caldesc": "Major Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002",
-  "utmCampaign": "ical-jewish-holidays-v2"
+  "calendarColor": "#800002"
 },
 {
   "downloadSlug": "jewish-holidays-all-v2",
@@ -22,8 +21,7 @@
   "emoji": true,
   "title": "Jewish Holidays ✡️",
   "caldesc": "All Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002",
-  "utmCampaign": "ical-jewish-holidays-all-v2"
+  "calendarColor": "#800002"
 },
 {
   "downloadSlug": "jewish-holidays",
@@ -37,8 +35,7 @@
   "emoji": false,
   "title": "Jewish Holidays",
   "caldesc": "Major Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002",
-  "utmCampaign": "ical-jewish-holidays"
+  "calendarColor": "#800002"
 },
 {
   "downloadSlug": "jewish-holidays-all",
@@ -47,8 +44,7 @@
   "emoji": false,
   "title": "Jewish Holidays",
   "caldesc": "All Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002",
-  "utmCampaign": "ical-jewish-holidays-all"
+  "calendarColor": "#800002"
 },
 {
   "downloadSlug": "hdate-en",
@@ -99,8 +95,7 @@
   "years": 5,
   "title": "Torah Readings (Diaspora)",
   "caldesc": "Parashat ha-Shavua - Weekly Torah Portion from Hebcal.com",
-  "calendarColor": "#257E4A",
-  "utmCampaign": "ical-torah-readings-diaspora"
+  "calendarColor": "#257E4A"
 },
 {
   "downloadSlug": "torah-readings-israel",
@@ -111,8 +106,7 @@
   "years": 5,
   "title": "Torah Readings (Israel English)",
   "caldesc": "Parashat ha-Shavua - Weekly Torah Portion from Hebcal.com",
-  "calendarColor": "#257E4A",
-  "utmCampaign": "ical-torah-readings-israel"
+  "calendarColor": "#257E4A"
 },
 {
   "downloadSlug": "torah-readings-israel-he",
@@ -123,8 +117,7 @@
   "years": 5,
   "title": "Torah Readings (Israel Hebrew)",
   "caldesc": "Parashat ha-Shavua - Weekly Torah Portion from Hebcal.com",
-  "calendarColor": "#257E4A",
-  "utmCampaign": "ical-torah-readings-israel-he"
+  "calendarColor": "#257E4A"
 },
 {
   "downloadSlug": "yom-kippur-katan",
@@ -149,8 +142,7 @@
   "emoji": false,
   "title": "Rosh Chodesh",
   "caldesc": "Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar",
-  "calendarColor": "#6F42C1",
-  "utmCampaign": "ical-rosh-chodesh"
+  "calendarColor": "#6F42C1"
 },
 {
   "downloadSlug": "mevarchim",

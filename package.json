@@ -50,7 +50,7 @@
     "@hebcal/core": "^5.10.1",
     "@hebcal/geo-sqlite": "^5.2.1",
     "@hebcal/hdate": "^0.14.5",
-    "@hebcal/icalendar": "^6.1.3",
+    "@hebcal/icalendar": "^6.1.4",
     "@hebcal/learning": "^6.4.4",
     "@hebcal/leyning": "^9.2.5",
     "@hebcal/locales": "^6.2.2",
