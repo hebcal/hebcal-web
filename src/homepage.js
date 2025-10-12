@@ -192,6 +192,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
 
   const isElul = mm === months.ELUL;
   const isTishrei = mm === months.TISHREI;
+  const suffix = il ? '?i=on' : '';
   if ((isElul && dd === 29) || (isTishrei && (dd === 1 || dd === 2))) {
     return [SHANA_TOVA, SHANA_TOVA2];
   } else if (isTishrei && dd > 4 && dd <= 10) {
@@ -211,7 +212,6 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const when = (dd === 14) ? 'tonight at sundown' :
       ` at sundown on ${htmlDate}`;
     const blurb = '🌿&nbsp;🍋&nbsp;<span lang="he" dir="rtl">חַג סוּכּוֹת שָׂמֵחַ</span>&nbsp;🍋&nbsp;🌿';
-    const suffix = il ? '?i=on' : '';
     const longText = `<strong>Chag Sukkot Sameach!</strong>
  <a class="text-green1 text-nowrap" href="/holidays/sukkot-${gy}${suffix}">Sukkot</a>
  begins ${when}`;
@@ -253,7 +253,8 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const holiday = isTishrei ? 'Sukkot' : 'Pesach';
     const emoji = isTishrei ? '🌿🍋' : '🫓';
     const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מוֹעֲדִים לְשִׂמְחָה</span>&nbsp;${emoji}`;
-    return [blurb, `<strong>Moadim L'Simcha!</strong> We wish you a very happy ${holiday}`];
+    return [blurb, `<strong>Moadim L'Simcha!</strong> We wish you a very happy
+ <a class="text-green1" href="/holidays/${holiday.toLowerCase()}-${gy}${suffix}">${holiday}</a>`];
   } else if (mm === months.KISLEV && dd <= 24 && dd >= 2) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
@@ -340,7 +341,7 @@ ${when} on ${htmlDate}`];
     const blurb = '🫓&nbsp;🍷&nbsp;<span lang="he" dir="rtl">חַג כָּשֵׁר וְשָׂמֵחַ</span>&nbsp;🍷&nbsp;🫓';
     const suffix = il ? '?i=on' : '';
     return [blurb, `<strong>Chag Kasher v'Sameach!</strong>
- <a class="text-green1 text-nowrap" href="/holidays/pesach-${gy}${suffix}">Passover</a>
+ <a class="text-green1" href="/holidays/pesach-${gy}${suffix}">Passover</a>
  begins ${deltaDays} at sundown on ${htmlDate}`];
   }
 
