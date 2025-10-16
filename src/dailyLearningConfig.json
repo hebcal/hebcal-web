@@ -125,9 +125,9 @@
     "years": 3,
     "group": "Halacha",
     "settingsName": "Sefer HaMitzvot",
-    "shortName": "Maimonides’ Sefer HaMitzvot",
+    "shortName": "Sefer HaMitzvot",
     "descLong": "Daily study of Rambam’s Sefer Hamitzvos (“Book of Commandments”). Lists of all the commandments of the Torah, with a brief description for each. The cycle takes just under one year to complete.",
-    "descMedium": "Maimonides’ Sefer HaMitzvot"
+    "descMedium": "Maimonides’ list of the 613 commandments"
   },
   {
     "eventCategory": "yerushalmi-vilna",

@@ -8,6 +8,30 @@ import {readJSON} from './readJSON.js';
 import {exec} from 'node:child_process';
 import util from 'util';
 import fs from 'fs';
+import {basename} from 'path';
+import minimist from 'minimist';
+import pino from 'pino';
+
+const argv = minimist(process.argv.slice(2), {
+  boolean: ['help', 'quiet', 'verbose', 'nocompress'],
+  alias: {h: 'help', q: 'quiet', v: 'verbose', c: 'nocompress'},
+});
+
+if (argv.help) {
+  const usage = `Usage: ${basename(process.argv[1])} [options]
+  --help           Help
+  --quiet          Only emit warnings and errors
+  --verbose        Extra debugging information
+  --nocompress    Skip compressing .ics and .csv files
+`;
+  console.log(usage);
+  // eslint-disable-next-line n/no-process-exit
+  process.exit(0);
+}
+
+const logger = pino({
+  level: argv.verbose ? 'debug' : argv.quiet ? 'warn' : 'info',
+});
 
 const execPromise = util.promisify(exec);
 const TODAY = new Date();
@@ -17,17 +41,17 @@ const UTM_SRC = 'hebcal.com';
 const UTM_MED = 'icalendar';
 
 async function runCommand(cmd) {
-  console.log(cmd);
+  logger.debug(cmd);
   try {
     const {stdout, stderr} = await execPromise(cmd);
     if (stderr) {
-      console.error(stderr);
+      logger.warn(stderr);
     }
     if (stdout) {
-      console.error(stdout);
+      logger.info(stdout);
     }
   } catch (error) {
-    console.error('Error: ', error);
+    logger.fatal(error);
     // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   }
@@ -109,40 +133,43 @@ async function doChofetzChaim(cfg) {
     title: cfg.shortName,
     // eslint-disable-next-line max-len
     caldesc: 'Daily study of the Sefer Chofetz Chaim and Shemirat HaLashon, which deal with the Jewish ethics and laws of speech',
-    publishedTTL: 'PT7D',
     locale: 'en',
   };
-  console.log(file, events.length);
+  logger.info(`${file}: ${events.length}`);
   await writeEventsToFile(events, icalOpt, file);
 }
 
+// Avoid "Ignoring unrecognized HebrewCalendar option: caldesc"
+// warnings from HebrewCalendar.calendar()
+const ignoreOpts = ['downloadSlug', 'years', 'noMajor', 'noMinorHolidays',
+  'emoji', 'title', 'caldesc', 'relcalid', 'color', 'calendarColor'];
+
 async function doRegularCalendar(cfg) {
   const file = cfg.downloadSlug;
-  console.log(file);
+  logger.debug(file);
   const {start, end} = getStartAndEnd(cfg.years);
   const options = {
     ...cfg,
     start: start,
     end: end,
   };
+  for (const opt of ignoreOpts) {
+    delete options[opt];
+  }
   let events = HebrewCalendar.calendar(options);
-  if (options.noMinorHolidays) {
+  if (cfg.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
       return categories.length < 2 || categories[1] !== 'minor';
     });
   }
-  console.log(file, events.length);
-  const icalOpt = {
-    ...cfg,
-    publishedTTL: 'PT14D',
-  };
-  await writeEventsToFile(events, icalOpt, file);
+  logger.info(`${file}: ${events.length}`);
+  await writeEventsToFile(events, cfg, file);
 }
 
 async function doLearningCalendar(cfg) {
   const file = cfg.downloadSlug;
-  console.log(file);
+  logger.debug(file);
   const {start, end} = getStartAndEnd(cfg.years);
   const dlOpts = {};
   dlOpts[cfg.dailyLearningOptName] = true;
@@ -155,11 +182,10 @@ async function doLearningCalendar(cfg) {
     dailyLearning: dlOpts,
   };
   const events = HebrewCalendar.calendar(options);
-  console.log(file, events.length);
+  logger.info(`${file}: ${events.length}`);
   const query = {
     title: cfg.shortName,
     caldesc: cfg.descMedium,
-    publishedTTL: 'PT14D',
   };
   const color = cfg.color;
   if (color) {
@@ -173,6 +199,10 @@ async function doLearningCalendar(cfg) {
   await writeEventsToFile(events, icalOpt, file);
 }
 
+function makeFilename(file, ext) {
+  return `ical/${file}.${ext}`;
+}
+
 async function writeEventsToFile(events, icalOpt, file) {
   if (icalOpt.sedrot) {
     events.forEach(addIcalParshaMemo);
@@ -181,9 +211,9 @@ async function writeEventsToFile(events, icalOpt, file) {
   icalOpt.utmSource = UTM_SRC;
   icalOpt.utmMedium = UTM_MED;
   icalOpt.utmCampaign = 'ical-' + file;
+  icalOpt.publishedTTL = 'PT7D';
   const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
-  const icalFilename = `ical/${file}.ics`;
-  const icalStream = fs.createWriteStream(icalFilename);
+  const icalStream = fs.createWriteStream(makeFilename(file, 'ics'));
   const str = await icalEventsToString(icals, icalOpt);
   icalStream.write(str);
   icalStream.close();
@@ -196,8 +226,7 @@ async function writeEventsToFile(events, icalOpt, file) {
       addCsvParshaMemo(ev, il, locale);
     }
   }
-  const csvFilename = `ical/${file}.csv`;
-  const csvStream = fs.createWriteStream(csvFilename);
+  const csvStream = fs.createWriteStream(makeFilename(file, 'csv'));
   const locale = localeMap[icalOpt.locale] || 'en';
   if (locale !== 'en') {
     // Write BOM for UTF-8
@@ -205,11 +234,18 @@ async function writeEventsToFile(events, icalOpt, file) {
   }
   csvStream.write(eventsToCsv(events, {}));
   csvStream.close();
+}
 
-  removeCompressed(icalFilename);
-  removeCompressed(csvFilename);
-  await runCommand(`nice brotli --keep --best ${icalFilename} ${csvFilename}`);
-  await runCommand(`nice gzip --keep --best ${icalFilename} ${csvFilename}`);
+async function compressFiles(files) {
+  logger.info(`Compressing ${files.length} files`);
+  for (const file of files) {
+    const icalFilename = makeFilename(file, 'ics');
+    const csvFilename = makeFilename(file, 'csv');
+    removeCompressed(icalFilename);
+    removeCompressed(csvFilename);
+    await runCommand(`nice brotli --keep --best ${icalFilename} ${csvFilename}`);
+    await runCommand(`nice gzip --keep --best ${icalFilename} ${csvFilename}`);
+  }
 }
 
 (async function() {
@@ -217,17 +253,23 @@ async function writeEventsToFile(events, icalOpt, file) {
     fs.mkdirSync('ical');
   }
   const staticCalendars = readJSON('./staticCalendars.json');
+  const files = [];
   for (const cfg of staticCalendars) {
     await doRegularCalendar(cfg);
+    files.push(cfg.downloadSlug);
   }
   for (const cfg of dailyLearningConfig) {
     const file = cfg.downloadSlug;
     if (file === 'chofetz-chaim') {
       await doChofetzChaim(cfg);
-      continue;
-    }
-    if (cfg.dailyLearningOptName && file) {
+      files.push(file);
+    } else if (cfg.dailyLearningOptName && file) {
       await doLearningCalendar(cfg);
+      files.push(file);
     }
   }
+  if (!argv.nocompress) {
+    await compressFiles(files);
+  }
+  logger.info('Done');
 })();

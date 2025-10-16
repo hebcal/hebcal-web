@@ -14,6 +14,7 @@ import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo,
   logMemoryUsage} from './logger.js';
 import {httpRedirect, stopIfTimedOut, cacheControl,
+  CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE} from './common.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeit.js';
@@ -248,7 +249,7 @@ const CACHE_CONTROL_14DAYS = cacheControl(14);
 app.use(async function sendStatic(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/ical')) {
-    ctx.set('Cache-Control', CACHE_CONTROL_14DAYS);
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
   } else if (rpath === '/favicon.ico') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
