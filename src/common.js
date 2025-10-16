@@ -1210,9 +1210,13 @@ export function getNumYears(options) {
     numYears = 4;
   }
   // Shabbat plus Hebrew Event every day can get very big
-  const hebrewDates = options.addHebrewDates || options.addHebrewDatesForEvents;
-  if (options.candlelighting && hebrewDates) {
-    numYears = 2;
+  const addHebrewDates = options.addHebrewDates;
+  if (options.candlelighting) {
+    if (addHebrewDates) {
+      numYears = 2;
+    } else if (options.addHebrewDatesForEvents) {
+      numYears = 3;
+    }
   }
   // possibly reduce further
   for (const [key, ny] of Object.entries(maxNumYear)) {
@@ -1221,7 +1225,7 @@ export function getNumYears(options) {
     }
   }
   // reduce duration if 2+ daily options are specified
-  const daily = (options.addHebrewDates ? 1 : 0) +
+  const daily = (addHebrewDates ? 1 : 0) +
     Object.keys(options.dailyLearning || {}).length;
   if (daily > 1) {
     numYears = 1;
