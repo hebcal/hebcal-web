@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import {randomUUID} from 'node:crypto';
 import {nearestCity} from './nearestCity.js';
 import {getEventCategories} from '@hebcal/rest-api';
-import etag from 'etag';
+import {murmur128Sync} from 'murmurhash3';
 import {find as geoTzFind} from 'geo-tz';
 import {basename} from 'path';
 import {readJSON} from './readJSON.js';
@@ -1165,7 +1165,12 @@ export function eTagFromOptions(ctx, options, attrs) {
   if (enc) {
     etagObj.enc = enc;
   }
-  return etag(JSON.stringify(etagObj), {weak: true});
+  const str = JSON.stringify(etagObj);
+  const arr4 = murmur128Sync(str);
+  const int32Array = new Int32Array(arr4);
+  const buffer = Buffer.from(int32Array.buffer);
+  const base64String = buffer.toString('base64url');
+  return `W/"${base64String}"`;
 }
 
 const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
