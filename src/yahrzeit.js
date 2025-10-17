@@ -429,7 +429,12 @@ export async function yahrzeitDownload(ctx) {
   query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
-  ctx.response.etag = eTagFromOptions(ctx, query, {startYear, extension});
+  const ics = extension === '.ics';
+  const attrs = {startYear, extension};
+  if (ics) {
+    attrs.icalv = IcalEvent.version();
+  }
+  ctx.response.etag = eTagFromOptions(ctx, query, attrs);
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
@@ -438,7 +443,7 @@ export async function yahrzeitDownload(ctx) {
   if (query.dl == '1') {
     ctx.response.attachment(basename(rpath));
   }
-  if (extension == '.ics') {
+  if (ics) {
     ctx.response.type = 'text/calendar; charset=utf-8';
     const opts = {
       yahrzeit: true,

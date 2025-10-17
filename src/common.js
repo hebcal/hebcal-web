@@ -1160,10 +1160,14 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
  */
 export function eTagFromOptions(ctx, options, attrs) {
   const vers = {core: HebrewCalendar.version(), web: pkg.version};
-  const etagObj = {...vers, ...options, ...attrs};
+  const etagObj = {...vers, ...options, ...attrs, path: ctx.request.path};
   const enc = ctx.get('accept-encoding');
   if (enc) {
-    etagObj.enc = enc;
+    if (enc.indexOf('br') !== -1) {
+      etagObj.br = 1;
+    } else if (enc.indexOf('gzip') !== -1) {
+      etagObj.gzip = 1;
+    }
   }
   const str = JSON.stringify(etagObj);
   const arr4 = murmur128Sync(str);

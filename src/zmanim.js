@@ -413,7 +413,11 @@ export async function zmanimIcalendar(ctx) {
     caldesc,
     locale,
   };
-  ctx.response.etag = eTagFromOptions(ctx, options, {dt: today.format('YYYY-MM-DD')});
+  const attrs = {
+    dt: today.format('YYYY-MM-DD'),
+    icalv: IcalEvent.version(),
+  };
+  ctx.response.etag = eTagFromOptions(ctx, options, attrs);
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
