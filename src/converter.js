@@ -410,7 +410,7 @@ function getEvents(hdate, il) {
   const parsha = sedra.lookup(saturday);
   let hasFullKriyah = false;
   if (!parsha.chag) {
-    const pe = new ParshaEvent(saturday, parsha.parsha, il);
+    const pe = new ParshaEvent(parsha);
     events = events.concat(pe);
     hasFullKriyah = true;
   }
@@ -425,7 +425,11 @@ function getEvents(hdate, il) {
   if (!hasFullKriyah) {
     if (mm === months.TISHREI && (dd > 2 && dd < 15)) {
       const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
-      const pe = new ParshaEvent(simchatTorah, ['Vezot Haberakhah'], il);
+      const pe = new ParshaEvent({
+        hdate: simchatTorah,
+        parsha: ['Vezot Haberakhah'],
+        il,
+      });
       events = events.concat(pe);
     } else {
       const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il) || [];

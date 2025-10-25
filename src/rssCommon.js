@@ -21,8 +21,7 @@ export function getLang(rpath) {
   const bn = basename(rpath);
   const dash = bn.indexOf('-');
   const lang = dash === -1 ? 'en' : bn.substring(dash + 1, bn.indexOf('.'));
-  const locales = Locale.getLocaleNames();
-  if (locales.indexOf(lang) === -1) {
+  if (!Locale.hasLocale(lang)) {
     throw createError(404, `Unknown locale: ${lang}`);
   }
   return lang;

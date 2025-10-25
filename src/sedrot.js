@@ -44,7 +44,7 @@ function makeVezotEvents(il) {
   for (let i = 0; i < YEARS_TOTAL; i++) {
     const hyear = startYear + i;
     const hd = simchatTorahDate(hyear, il);
-    const pe = new ParshaEvent(hd, [VEZOT_HABERAKHAH], il);
+    const pe = new ParshaEvent({hdate: hd, parsha: [VEZOT_HABERAKHAH], il});
     events.push(pe);
   }
   return events;
@@ -283,7 +283,7 @@ function makeReading(date, parshaEv, il, parsha) {
  */
 function getRawTriennial(parshaName, hd, il) {
   const parsha = parshaName === 'Lech-Lecha' ? [parshaName] : parshaName.split('-');
-  const ev = new ParshaEvent(hd, parsha, il);
+  const ev = new ParshaEvent({hdate: hd, parsha, il});
   const reading = getTriennialForParshaHaShavua(ev, il);
   const hyear = hd.getFullYear();
   const triennial = {
@@ -510,7 +510,7 @@ function makeTriReading(tri, yr, parshaName, il) {
     return triReading;
   }
   const hd = triReading.date;
-  const ev = new ParshaEvent(hd, [parshaName], il);
+  const ev = new ParshaEvent({hdate: hd, parsha: [parshaName], il});
   const triReading2 = getTriennialForParshaHaShavua(ev, il);
   triReading2.aliyot = clone(triReading2.aliyot);
   addLinksToLeyning(triReading2.aliyot, false);
@@ -590,7 +590,7 @@ function findParshaEvent(events, parshaName, il) {
     const bereshit = events.find((ev) => ev.getDesc() === 'Parashat Bereshit');
     const hyear = bereshit.getDate().getFullYear();
     const hd = simchatTorahDate(hyear, il);
-    return new ParshaEvent(hd, [parshaName], il);
+    return new ParshaEvent({hdate: hd, parsha: [parshaName], il});
   }
   const desc = 'Parashat ' + parshaName;
   const event = events.find((ev) => ev.getDesc() === desc);

@@ -50,7 +50,7 @@ export async function getLeyning(ctx) {
     for (const reading of readings) {
       const item = makeReadingItem(d, hd, reading);
       if (doTriennial && reading.parsha && hd.getDay() === 6) {
-        const ev = new ParshaEvent(hd, reading.parsha, il);
+        const ev = new ParshaEvent({hdate: hd, parsha: reading.parsha, il});
         const triReading = getTriennialForParshaHaShavua(ev, il);
         item.triennial = triReading.aliyot;
         item.triYear = triReading.yearNum + 1;

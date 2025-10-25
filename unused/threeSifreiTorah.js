@@ -29,7 +29,7 @@ for (let year = startYear; year < endYear; year++) {
             thisYear.push('shekalim');
             const sedra = new Sedra(year, false);
             const p = sedra.lookup(adar1);
-            const pe = new ParshaEvent(adar1, p.parsha, false, p.num);
+            const pe = new ParshaEvent(p);
             if (writeUrls) {
                 console.log(`${p.parsha[0]} ${year} ${adar1.greg().toISOString().substring(0, 10)} ${pe.url()}`);
             }

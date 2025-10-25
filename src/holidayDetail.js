@@ -530,7 +530,7 @@ function getReadingForHoliday(ev, il) {
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
-      const pe = new ParshaEvent(hd, parsha.parsha, il);
+      const pe = new ParshaEvent(parsha);
       return getLeyningForParshaHaShavua(pe, il);
     }
   }

@@ -102,7 +102,7 @@ function getParsha(hd, il) {
       return [parsha, null, undefined];
     }
   } else {
-    const pe = new ParshaEvent(hd, parsha0.parsha, il);
+    const pe = new ParshaEvent(parsha0);
     const parshaHref = shortenUrl(pe.url());
     const meta = lookupParshaMeta(parsha);
     return [parsha, parshaHref, meta];

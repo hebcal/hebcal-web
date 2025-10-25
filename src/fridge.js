@@ -64,9 +64,9 @@ function makeProperties(ctx) {
     return !ev.getDesc().startsWith('Chanukah');
   });
   const items = makeContents(events, options);
-  const itemsRows = formatItemsAsTable(items);
+  const itemsRows = formatItemsAsTable(items, options);
   const url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(query, location, options);
-  const locale = Locale.getLocaleName();
+  const locale = options.locale || 'en';
   const lang = localeMap[locale] || 'en';
   return {
     htmlDir: lang === 'he' ? 'rtl' : 'ltr',
@@ -114,7 +114,7 @@ function getStartAndEnd(query) {
  * @return {any[]}
  */
 function makeContents(events, options) {
-  const locale0 = Locale.getLocaleName();
+  const locale0 = options.locale || 'en';
   const locale = localeMap[locale0] || 'en';
   const objs = [];
   for (let i = 0; i < events.length; i++) {
@@ -174,11 +174,14 @@ function makeContents(events, options) {
  * @param {any[]} items
  * @return {any[]}
  */
-function formatItemsAsTable(items) {
+function formatItemsAsTable(items, options) {
   const half = Math.ceil(items.length / 2);
   const rows = [];
   for (let i = 0; i < half; i++) {
-    rows.push([row(items[i], false), row(items[i + half], true)]);
+    rows.push([
+      row(items[i], false, options),
+      row(items[i + half], true, options),
+    ]);
   }
   return rows;
 }
@@ -190,7 +193,7 @@ const BLANK_ROW = '<td></td><td></td><td></td><td></td><td></td>';
  * @param {boolean} right
  * @return {string}
  */
-function row(item, right) {
+function row(item, right, options) {
   if (!item) {
     return BLANK_ROW;
   }
@@ -199,7 +202,7 @@ function row(item, right) {
     cl.push('yomtov');
   }
   const narrow = [];
-  const locale = Locale.getLocaleName();
+  const locale = options.locale || 'en';
   const lang = localeMap[locale] || 'en';
   const subj = item.reason;
   if (lang == 'he') {

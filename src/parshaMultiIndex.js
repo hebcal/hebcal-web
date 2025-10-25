@@ -27,7 +27,11 @@ export async function parshaMultiYearIndex(ctx) {
       sedrot: true,
     });
     const mday = il ? 22 : 23;
-    const pe = new ParshaEvent(new HDate(mday, months.TISHREI, yr), [VEZOT_HABERAKHAH], il);
+    const pe = new ParshaEvent({
+      hdate: new HDate(mday, months.TISHREI, yr),
+      parsha: [VEZOT_HABERAKHAH],
+      il,
+    });
     events.push(pe);
     for (const ev of events) {
       const reading = getLeyningForParshaHaShavua(ev, il);
