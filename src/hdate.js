@@ -1,12 +1,11 @@
 import {HDate, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
-import {CACHE_CONTROL_7DAYS} from './common.js';
+import {CACHE_CONTROL_7DAYS, makeETag} from './common.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';
 import send from 'koa-send';
-import {stat} from 'node:fs/promises';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
 const hdateMinDir = '/var/www/dist/views/partials';
@@ -21,8 +20,7 @@ function getLocale(rpath) {
 export async function hdateJavascript(ctx) {
   const locale = getLocale(ctx.request.path);
   const fileName = `hdate-${locale}.min.js`;
-  const stats = await stat(`${hdateMinDir}/${fileName}`);
-  ctx.lastModified = stats.mtime;
+  ctx.response.etag = makeETag(ctx, {}, {});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

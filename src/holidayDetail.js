@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, off} from './empty.js';
-import {httpRedirect, wrapHebrewInSpans, langNames, getBaseFromPath} from './common.js';
+import {httpRedirect, wrapHebrewInSpans, langNames, getBaseFromPath,
+  makeETag} from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon.js';
@@ -124,7 +125,7 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
-  ctx.lastModified = ctx.launchDate;
+  ctx.response.etag = makeETag(ctx, q, {});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

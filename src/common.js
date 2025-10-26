@@ -1158,7 +1158,7 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
  * @param {Object.<string,string>} attrs
  * @return {string}
  */
-export function eTagFromOptions(ctx, options, attrs) {
+export function makeETag(ctx, options, attrs) {
   const vers = {core: HebrewCalendar.version(), web: pkg.version};
   const etagObj = {...vers, ...options, ...attrs, path: ctx.request.path};
   const enc = ctx.get('accept-encoding');

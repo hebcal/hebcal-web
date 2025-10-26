@@ -15,7 +15,7 @@ import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
   makeCalendarSubtitleFromOpts,
   queryLongDescr,
   queryToName,
-  localeMap, eTagFromOptions, langNames} from './common.js';
+  localeMap, makeETag, langNames} from './common.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
@@ -92,7 +92,7 @@ export async function hebcalApp(ctx) {
     }
   }
   if (ctx.status < 400 && q.v === '1') {
-    ctx.response.etag = eTagFromOptions(ctx, options, {outputType: q.cfg});
+    ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {
       ctx.status = 304;
       return;
@@ -132,7 +132,7 @@ export async function hebcalApp(ctx) {
 async function renderIcal(ctx) {
   const options = ctx.state.options;
   const icalOpt = makeIcalOpts(options, ctx.state.q);
-  ctx.response.etag = eTagFromOptions(ctx, icalOpt, {outputType: '.ics'});
+  ctx.response.etag = makeETag(ctx, icalOpt, {outputType: '.ics'});
   if (isFresh(ctx)) {
     return;
   }
@@ -404,7 +404,9 @@ function makePrevNextUrl(q, options, events, isNext) {
 }
 
 function isFresh(ctx) {
-  ctx.lastModified = ctx.launchDate;
+  if (!ctx.response.etag) {
+    ctx.response.etag = makeETag(ctx, ctx.state.options, ctx.state.q);
+  }
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
@@ -430,7 +432,6 @@ function renderFullCalendar(ctx) {
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-  ctx.lastModified = new Date();
   ctx.body = events.map((ev) => {
     const item = eventToFullCalendar(ev, tzid, options.il);
     const emoji = ev.getEmoji();
@@ -463,7 +464,6 @@ function renderJson(ctx) {
   const cacheCtrlStr = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
     cacheControl(0.125);
   ctx.set('Cache-Control', cacheCtrlStr);
-  ctx.lastModified = new Date();
   ctx.body = obj;
 }
 

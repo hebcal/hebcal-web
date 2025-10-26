@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {localeMap, httpRedirect, CACHE_CONTROL_1_YEAR, queryLongDescr,
-  dailyLearningConfig} from './common.js';
+  makeETag, dailyLearningConfig} from './common.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
@@ -25,7 +25,7 @@ export function dailyLearningApp(ctx) {
     return;
   }
   const dt = isoDateStringToDate(basename(rpath));
-  ctx.lastModified = ctx.launchDate;
+  ctx.response.etag = makeETag(ctx, {}, {});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
@@ -149,7 +149,7 @@ function dailyLearningSitemap(ctx) {
       body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
     }
   }
-  ctx.lastModified = ctx.launchDate;
+  ctx.response.etag = makeETag(ctx, {}, {currentYear});
   ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   ctx.type = 'text/plain';
   ctx.body = body;

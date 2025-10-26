@@ -2,6 +2,7 @@ import {HebrewCalendar, HDate, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshiot54, parshaByBook, torahBookNames} from './parshaCommon.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
+import {makeETag} from './common.js';
 import dayjs from 'dayjs';
 
 const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
@@ -10,9 +11,15 @@ export async function parshaMultiYearIndex(ctx) {
   const dt = new Date();
   const hd = new HDate(dt);
   const todayHebYear = hd.getFullYear();
-  const hyear0 = parseInt(ctx.request.query?.year, 10);
-  const hyear = hyear0 || getDefaultHebrewYear(hd);
   const q = ctx.request.query;
+  const hyear0 = parseInt(q?.year, 10);
+  const hyear = hyear0 || getDefaultHebrewYear(hd);
+  ctx.response.etag = makeETag(ctx, q, {hyear});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const il = q.i === 'on';
   const byParsha = new Map();
   for (const parshaName of parshiot54) {
@@ -67,7 +74,6 @@ export async function parshaMultiYearIndex(ctx) {
   const next = new URL(canonical);
   next.searchParams.set('year', hyear + 5);
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
-  ctx.lastModified = dt;
   await ctx.render('parsha-multi-year-index', {
     il,
     hyear,

@@ -8,7 +8,7 @@ import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty} from './empty.js';
-import {eTagFromOptions, makeIcalOpts,
+import {makeETag, makeIcalOpts,
   cleanQuery,
   hebcalFormDefaults,
   doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
@@ -434,7 +434,7 @@ export async function yahrzeitDownload(ctx) {
   if (ics) {
     attrs.icalv = IcalEvent.version();
   }
-  ctx.response.etag = eTagFromOptions(ctx, query, attrs);
+  ctx.response.etag = makeETag(ctx, query, attrs);
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

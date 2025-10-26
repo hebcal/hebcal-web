@@ -6,7 +6,7 @@ import {empty} from './empty.js';
 import {getLocationFromQuery,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS,
   pkg,
-  lgToLocale, eTagFromOptions} from './common.js';
+  lgToLocale, makeETag} from './common.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';
@@ -86,7 +86,12 @@ export async function getZmanim(ctx) {
   const {isRange, startD, endD} = myGetStartAndEnd(ctx, q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
-    ctx.lastModified = new Date();
+    ctx.response.etag = makeETag(ctx, q, {});
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
   } else {
     expires(ctx);
   }
@@ -417,14 +422,13 @@ export async function zmanimIcalendar(ctx) {
     dt: today.format('YYYY-MM-DD'),
     icalv: IcalEvent.version(),
   };
-  ctx.response.etag = eTagFromOptions(ctx, options, attrs);
+  ctx.response.etag = makeETag(ctx, options, attrs);
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
     return;
   }
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-  ctx.lastModified = new Date();
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await eventsToIcalendar(events, options);
 }

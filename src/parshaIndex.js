@@ -1,7 +1,7 @@
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
-import {setDefautLangTz, langNames, shortenUrl} from './common.js';
+import {setDefautLangTz, langNames, shortenUrl, makeETag} from './common.js';
 import {parshaByBook, torahBookNames, lookupParshaMeta,
   makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
@@ -26,6 +26,13 @@ export async function parshaIndex(ctx) {
   const saturday = hd.onOrAfter(6);
   const hyear = saturday.getFullYear();
   const il = q.i === 'on';
+  const todayEv = getTodayHolidayEvent(hd, il);
+  ctx.response.etag = makeETag(ctx, q, {hd, saturday, todayEv});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const [parshaDia, parshaDiaHref, metaDia] = getParsha(saturday, false);
   const [parshaIsrael, parshaIsraelHref, metaIL] = getParsha(saturday, true);
   const israelDiasporaDiffer = (parshaDia !== parshaIsrael);
@@ -39,12 +46,8 @@ export async function parshaIndex(ctx) {
     makeParshaJsonLD(saturday, parsha, parshaHref, meta),
     makeParshaJsonLD(nextSaturday, parshaNext, parshaNextHref, metaNext),
   ];
-  const todayEv = getTodayHolidayEvent(hd, il);
-  const now = new Date();
-  if (todayEv) {
-    ctx.lastModified = now;
-  } else {
-    expiresSaturdayNight(ctx, now, ctx.state.timezone);
+  if (!todayEv) {
+    expiresSaturdayNight(ctx, dt, ctx.state.timezone);
   }
   await ctx.render('parsha-index', {
     title: `Weekly Torah Portion - Parashat haShavua - Hebcal`,

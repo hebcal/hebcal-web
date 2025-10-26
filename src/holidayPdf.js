@@ -3,7 +3,7 @@ import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf.js';
-import {lgToLocale, localeMap, eTagFromOptions, cacheControl} from './common.js';
+import {lgToLocale, localeMap, makeETag, cacheControl} from './common.js';
 
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 
@@ -37,7 +37,7 @@ export async function holidayPdf(ctx) {
   };
   ctx.set('Cache-Control', CACHE_CONTROL_60DAYS);
   ctx.response.type = 'application/pdf';
-  ctx.response.etag = eTagFromOptions(ctx, options, {outputType: '.pdf'});
+  ctx.response.etag = makeETag(ctx, options, {outputType: '.pdf'});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;

@@ -4,6 +4,7 @@ import {getTodayDate} from './dateUtil.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
+import {makeETag} from './common.js';
 
 export async function parshaRss(ctx) {
   const rpath = ctx.request.path;
@@ -13,11 +14,21 @@ export async function parshaRss(ctx) {
   const il = bn.startsWith('israel');
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
   const lang = getLang(rpath);
+  ctx.response.etag = makeETag(ctx, ctx.request.query, {
+    il, lang,
+    yy: saturday.year(),
+    mm: saturday.month(),
+    dd: saturday.date(),
+  });
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const hebrew = lang === 'he';
   const utmSource = 'sedrot-' + (il ? 'israel' : 'diaspora');
   const utmMedium = 'rss';
   const events = makeEvents(dt, il, lang);
-  ctx.lastModified = dt.toUTCString();
   expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = eventsToRss2(events, {

@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {httpRedirect, CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './common.js';
+import {httpRedirect, CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS,
+  makeETag} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
@@ -16,7 +17,12 @@ function omerSitemap(ctx) {
       body += `${prefix}/${year}/${day}\n`;
     }
   }
-  ctx.lastModified = ctx.launchDate;
+  ctx.response.etag = makeETag(ctx, {}, {hyear});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   ctx.type = 'text/plain';
   ctx.body = body;
@@ -34,6 +40,12 @@ export async function omerApp(rpath, ctx) {
     const hyear = parseInt(basename(rpath), 10);
     if (isNaN(hyear) || hyear < 3762 || hyear > 9999) {
       return redirCurrentYear(ctx);
+    }
+    ctx.response.etag = makeETag(ctx, {}, {hyear});
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
     }
     const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
     const items = Array(50);
@@ -58,7 +70,6 @@ export async function omerApp(rpath, ctx) {
     ctx.state.currentYear = new HDate().getFullYear();
     delete ctx.state.filename.pdf;
 
-    ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     const meta = await getHolidayMeta('Days of the Omer');
     return ctx.render('omer-year', {
@@ -78,13 +89,18 @@ export async function omerApp(rpath, ctx) {
     httpRedirect(ctx, `/omer/${hyear}/1`, 302);
     return;
   }
+  ctx.response.etag = makeETag(ctx, {}, {hyear, omerDay});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
   const hd = new HDate(beginOmer + omerDay - 1);
   const ev = new OmerEvent(hd, omerDay);
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, false) || [];
   const prev = omerDay === 1 ? 49 : omerDay - 1;
   const next = omerDay === 49 ? 1 : omerDay + 1;
-  ctx.lastModified = ctx.launchDate;
   ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   return ctx.render('omer', {
     ev,

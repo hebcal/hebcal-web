@@ -8,6 +8,7 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults, CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
+  makeETag,
   queryDefaultCandleMins} from './common.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import flag from 'emoji-flag';
@@ -126,13 +127,27 @@ function addHref(r) {
   r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=s`;
 }
 
+function isFresh(ctx) {
+  if (!ctx.response.etag) {
+    ctx.response.etag = makeETag(ctx, ctx.request.query, {});
+  }
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return true;
+  }
+  return false;
+}
+
 export async function shabbatBrowse(ctx) {
   init();
   const rpath = ctx.request.path;
   const base0 = basename(rpath);
   const base = base0.endsWith('.xml') ? base0.substring(0, base0.length - 4) : base0;
   if (rpath === '/shabbat/browse/') {
-    ctx.lastModified = ctx.launchDate;
+    if (isFresh(ctx)) {
+      return;
+    }
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return ctx.render('shabbat-browse', {
       title: 'Shabbat candle-lighting times for world cities - Hebcal',
@@ -140,8 +155,10 @@ export async function shabbatBrowse(ctx) {
     });
   }
   if (rpath === '/shabbat/browse/sitemap.xml') {
+    if (isFresh(ctx)) {
+      return;
+    }
     ctx.type = 'text/xml';
-    ctx.lastModified = new Date();
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
@@ -192,12 +209,23 @@ async function countryPage(ctx, countryCode) {
     return map;
   }, new Map());
 
+  const tzid = results?.[0]?.timezone || 'America/New_York';
+  const eTagAttrs = {
+    countryCode,
+    tzid,
+    numCities: results.length,
+  };
+
   // console.log(countryName, results.length, admin1.size);
   if (results.length > 299) {
+    // cache if the list of cities and timezone is stable
+    ctx.response.etag = makeETag(ctx, ctx.request.query, eTagAttrs);
+    if (isFresh(ctx)) {
+      return;
+    }
     const listItems = makeAdmin1(admin1);
     const countryUrlToken = makeAnchor(countryName);
     listItems.forEach((a1) => a1.href = countryUrlToken + '-' + a1.id);
-    ctx.lastModified = ctx.launchDate;
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return render(ctx, 'shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times - Hebcal`,
@@ -207,6 +235,15 @@ async function countryPage(ctx, countryCode) {
       admin1: listItems,
       results,
     });
+  }
+
+  const saturday = dayjs.tz(new Date(), tzid).day(6);
+  eTagAttrs.yy = saturday.year();
+  eTagAttrs.mm = saturday.month();
+  eTagAttrs.dd = saturday.date();
+  ctx.response.etag = makeETag(ctx, ctx.request.query, eTagAttrs);
+  if (isFresh(ctx)) {
+    return;
   }
 
   const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);

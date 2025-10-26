@@ -3,6 +3,7 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
 import dayjs from 'dayjs';
 import {setDefautLangTz, httpRedirect, lgToLocale,
   localeMap,
+  makeETag,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR,
 } from './common.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
@@ -68,12 +69,19 @@ export async function hebrewDateConverter(ctx) {
     ctx.status = 400;
     p.message = RANGE_REQUIRES_CFG_JSON;
   }
+  if (ctx.status !== 400 && !p.noCache) {
+    ctx.response.etag = makeETag(ctx, q, props);
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
+  }
   if (q.cfg === 'json') {
     ctx.type = 'json';
     if (p.message) {
       ctx.body = {error: p.message};
     } else if (typeof p.hdates === 'object') {
-      ctx.lastModified = ctx.launchDate;
       ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       let result = p;
       const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
@@ -83,7 +91,6 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = result;
     } else {
       if (!p.noCache) {
-        ctx.lastModified = ctx.launchDate;
         ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       }
       let result = {
@@ -125,7 +132,6 @@ export async function hebrewDateConverter(ctx) {
         d: gematriya(p.hd),
       };
       if (!p.noCache) {
-        ctx.lastModified = ctx.launchDate;
         ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       }
       ctx.body = await ctx.render('converter-xml', p);
@@ -134,7 +140,6 @@ export async function hebrewDateConverter(ctx) {
     throw createError(400, RANGE_REQUIRES_CFG_JSON);
   } else {
     if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
-      ctx.lastModified = ctx.launchDate;
       ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     }
     if (q.amp === '1') {
@@ -588,6 +593,12 @@ function g2h(dt, gs, noCache) {
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
+  ctx.response.etag = makeETag(ctx, ctx.request.query, p);
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const hdate = p.hdate;
   const arr = makeFutureYearsHeb(hdate, 75, 'en');
   let csv = 'Gregorian Date,Hebrew Date\r\n';
@@ -595,11 +606,8 @@ export async function dateConverterCsv(ctx) {
     const isoDate = dateToISOString(item.d.toDate());
     csv += isoDate + ',' + item.hd.toString() + '\r\n';
   }
-  if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
-    ctx.lastModified = ctx.launchDate;
+  if (!p.noCache && ctx.request.querystring.length !== 0) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-  } else {
-    ctx.lastModified = new Date();
   }
   const suffix = hdate.getDate() + '-' + makeAnchor(hdate.getMonthName());
   ctx.response.attachment(`hdate-${suffix}.csv`);

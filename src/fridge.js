@@ -5,6 +5,7 @@ import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   makeGeoUrlArgs,
   langNames,
   setDefautLangTz,
+  makeETag,
   cacheControl, queryDefaultCandleMins} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
@@ -17,9 +18,21 @@ export async function fridgeShabbat(ctx) {
   if (ctx.request.path.startsWith('/fridge')) {
     return fridgeIndex(ctx);
   }
+  const q = ctx.request.query;
+  if (empty(q.year)) {
+    const today = new HDate();
+    const hyear = getDefaultHebrewYear(today);
+    q.year = '' + hyear;
+    delete q.yt;
+  }
+  ctx.response.etag = makeETag(ctx, q, {});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const p = makeProperties(ctx);
-  ctx.lastModified = ctx.launchDate;
-  if (!empty(ctx.request.query.year)) {
+  if (!empty(q.year)) {
     ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   }
   return ctx.render('fridge', p);
@@ -45,12 +58,6 @@ function makeProperties(ctx) {
     query[k] = 'on';
   }
   cleanQuery(query);
-  if (empty(query.year)) {
-    const today = new HDate();
-    const hyear = getDefaultHebrewYear(today);
-    query.year = '' + hyear;
-    delete query.yt;
-  }
   const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
   if (!location) {

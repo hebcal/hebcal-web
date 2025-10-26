@@ -10,6 +10,7 @@ import {
   makeQueryAndDownloadProps,
   OMER_TITLE,
 } from './holidayCommon.js';
+import {makeETag} from './common.js';
 
 const SHMINI_ATZERET = 'Shmini Atzeret';
 const SIMCHAT_TORAH = 'Simchat Torah';
@@ -126,7 +127,7 @@ export async function holidayYearIndex(ctx) {
   } else if (yearNum < 1 || yearNum > 9999) {
     throw createError(400, `Sorry, can't display holidays for year ${year}`);
   }
-  ctx.lastModified = ctx.launchDate;
+  ctx.response.etag = makeETag(ctx, ctx.request.query, {year});
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
