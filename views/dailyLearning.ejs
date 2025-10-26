@@ -34,11 +34,18 @@ const groups = {
 for (const [group, emoji] of Object.entries(groups)) { -%>
 <div class="col-lg-6 mt-2 mb-4">
 <h4><%= emoji %> <%= group %></h4>
+<hr>
 <% for (const item of items.filter((item) => item.group === group)) { %>
-<div class="mt-2 mb-3" id="<%= item.id %>">
-<div class="lead"><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
+<div class="mt-2 mb-4" id="<%= item.id %>">
+<div class="fs-4"><% if (item.url) { %><a class="text-body text-decoration-none" href="<%= item.url %>"><% } %><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
+<% if (item.url) { %></a><% } -%>
+</div>
+<% if (item.desc) { %><div><%=item.desc%></div><% } %>
+<div class="lead mt-1"><% if (item.html) { %><%- item.html %><% } else { %>
+<%   if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
+<%   } %>
 <% if (item.flag) { -%>
-<a title="Monthly calendar" class="ms-2" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;start=<%= d.format('YYYY-MM')%>-01&amp;end=<%= d.month() > 5 ? d.year() + 1 : d.year() %>-12-31<%= il ? '&i=on' : ''%>&amp;set=off">
+<a title="Monthly calendar" class="ms-3" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;start=<%= d.format('YYYY-MM')%>-01&amp;end=<%= d.month() > 5 ? d.year() + 1 : d.year() %>-12-31<%= il ? '&i=on' : ''%>&amp;set=off">
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
 <% } -%>
 <% if (item.basename) { -%>
@@ -46,13 +53,8 @@ for (const [group, emoji] of Object.entries(groups)) { -%>
 <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg></a>
 <% } -%>
 </div>
-<% if (item.desc) { %><div><%=item.desc%></div><% } %>
-<div class="fs-4 mt-n1"><% if (item.html) { %><%- item.html %><% } else { %>
-<%   if (item.url) { %><a href="<%= item.url %>"><% } %><%= item.title %><% if (item.url) { %></a><% } %>
-<%   } %>
-</div>
 <% if (item.event && item.event.memo && item.event.memo.indexOf('https://') === -1) { %><div class="fst-italic"><%=item.event.memo%></div><% } %>
-<%   if (item.haftaraHtml) { %><div class="mt-n1">Haftarah: <%- item.haftaraHtml %></div><% } %>
+<%   if (item.haftaraHtml) { %><div>Haftarah: <%- item.haftaraHtml %></div><% } %>
 <% if (item.basename) { -%>
 <div class="collapse" id="sub-<%= item.id %>">
  <div class="card card-body mt-2 mb-3">
