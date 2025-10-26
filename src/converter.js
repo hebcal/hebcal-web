@@ -34,15 +34,15 @@ export async function hebrewDateConverter(ctx) {
   if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
     setDefautLangTz(ctx);
   }
-  const query = ctx.request.query;
-  ctx.state.lg = query.lg || 's';
+  const q = ctx.request.query;
+  ctx.state.lg = q.lg || 's';
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   ctx.state.locale = localeMap[lg] || 'en';
   let props;
   try {
     props = parseConverterQuery(ctx);
   } catch (err) {
-    if (query.strict === '1') {
+    if (q.strict === '1') {
       const status = err.status || 400;
       ctx.throw(status, err);
     }
@@ -54,15 +54,14 @@ export async function hebrewDateConverter(ctx) {
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
-    const json = query.cfg == 'json' ? '&cfg=json' : '';
-    const lg = empty(query.lg) ? '' : `&lg=${query.lg}`;
+    const json = q.cfg == 'json' ? '&cfg=json' : '';
+    const lg = empty(q.lg) ? '' : `&lg=${q.lg}`;
     ctx.set('Cache-Control', 'private, max-age=3600');
     const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}${lg}`;
     httpRedirect(ctx, url, 302);
     return;
   }
   const p = makeProperties(ctx, props);
-  const q = ctx.request.query;
   if (p.message) {
     ctx.status = 400;
   } else if (typeof p.hdates === 'object' && q.cfg !== 'json') {
