@@ -81,7 +81,7 @@ function eventToItem(ev, il) {
     event: ev,
     desc: desc,
     anchor: makeAnchor(desc),
-    d: dayjs(ev.getDate().greg()),
+    d: dayjs(ev.greg()),
     hyear: ev.getDate().getFullYear(),
   };
   const fk = getLeyningForParshaHaShavua(ev, il);
@@ -129,7 +129,7 @@ export async function parshaDetail(ctx) {
       const events = HebrewCalendar.calendar({year, il, sedrot: true, noHolidays: true});
       const parshaEv = findParshaEvent(events, parshaName0, il);
       if (parshaEv) {
-        const dateStr = dayjs(parshaEv.getDate().greg()).format('YYYYMMDD');
+        const dateStr = dayjs(parshaEv.greg()).format('YYYYMMDD');
         const anchor = makeAnchor(parshaEv.getDesc().substring(9));
         httpRedirect(ctx, `/sedrot/${anchor}-${dateStr}${iSuffix}`);
         return;
@@ -441,7 +441,7 @@ function parshaDateAnchor(name, d, il) {
  * @return {Object}
  */
 function getParshaDateAnchor(ev) {
-  const d = dayjs(ev.getDate().greg());
+  const d = dayjs(ev.greg());
   const name = ev.getDesc().substring(9);
   const anchor = parshaDateAnchor(name, d, ev.il);
   return {anchor: anchor, d, ev, name};

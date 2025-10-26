@@ -202,8 +202,8 @@ async function renderForm(ctx, error) {
 }
 
 function getHebMonthNames(events, lang) {
-  const startDate = dayjs(events[0].getDate().greg());
-  const endDate = dayjs(events[events.length - 1].getDate().greg());
+  const startDate = dayjs(events[0].greg());
+  const endDate = dayjs(events[events.length - 1].greg());
   const start = startDate.set('date', 1);
   const end = endDate.add(1, 'day');
   const months = Array(14);
@@ -307,7 +307,7 @@ function renderHtml(ctx) {
     months: localeData.months(),
     hebMonths: getHebMonthNames(events, options.locale || 's'),
   };
-  const gy = events[0].getDate().greg().getFullYear();
+  const gy = events[0].greg().getFullYear();
   if (gy >= 3762 && q.yt === 'G') {
     ctx.state.futureYears = gy - today.year();
     ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
@@ -376,8 +376,8 @@ function pageTitle(options, events) {
   if (typeof options.year === 'number') {
     return shortTitle + yearTitle(options.year);
   }
-  const gy1 = events[0].getDate().greg().getFullYear();
-  const gy2 = events[events.length - 1].getDate().greg().getFullYear();
+  const gy1 = events[0].greg().getFullYear();
+  const gy2 = events[events.length - 1].greg().getFullYear();
   if (gy1 === gy2) {
     return shortTitle + gy1;
   }
@@ -393,7 +393,7 @@ function makePrevNextUrl(q, options, events, isNext) {
     };
   }
   const idx = isNext ? events.length - 1 : 0;
-  const gy = events[idx].getDate().greg().getFullYear();
+  const gy = events[idx].greg().getFullYear();
   const q2 = {...q};
   delete q2.start;
   delete q2.end;
@@ -478,7 +478,7 @@ function renderLegacyJavascript(ctx) {
   const isoDate = new Date().toISOString();
   if (ctx.state.q.cfg === 'e') {
     const strs = events.map((ev) => {
-      const d = dayjs(ev.getDate().greg());
+      const d = dayjs(ev.greg());
       const fmtDt = d.format('YYYYMMDD');
       const desc = ev.render(options.locale);
       const url = ev.url() || '';
@@ -487,7 +487,7 @@ function renderLegacyJavascript(ctx) {
     return `/*! ${isoDate} */\n` + strs.join('\n');
   } else {
     const strs = events.map((ev) => {
-      const d = dayjs(ev.getDate().greg());
+      const d = dayjs(ev.greg());
       const url = ev.url();
       const obj = {d: Number(d.format('YYYYMMDD')), s: ev.render(options.locale)};
       if (url) {

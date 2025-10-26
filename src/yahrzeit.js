@@ -538,7 +538,7 @@ function makeLastModified(details, events) {
     // An old /v2/y/ URL won't have a lastModified
     lastModified = now;
   }
-  const firstEventDt = events[0].getDate().greg();
+  const firstEventDt = events[0].greg();
   if (firstEventDt > lastModified && firstEventDt < now) {
     lastModified = firstEventDt;
   }
@@ -579,7 +579,7 @@ async function makeYahrzeitEvents(maxId, query, reminder) {
   if (yizkor === 'on' || yizkor === '1') {
     const holidays = makeYizkorEvents(startYear, endYear, query.i === 'on');
     for (const ev of holidays) {
-      const d = dayjs(ev.getDate().greg());
+      const d = dayjs(ev.greg());
       const hash = murmur32HexSync(ev.getDesc());
       ev.uid = 'yizkor-' + d.format('YYYYMMDD') + '-' + hash;
       if (query.ulid) {

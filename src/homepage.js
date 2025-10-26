@@ -362,7 +362,7 @@ ${when} on ${htmlDate}`];
  */
 function fastDayGreeting(ctx, ev) {
   const locale = ctx.state.locale;
-  const d = dayjs(ev.getDate().greg()).locale(locale);
+  const d = dayjs(ev.greg()).locale(locale);
   const htmlDate = myDateFormat(d);
   const url = shortenUrl(ev.url());
   return [TZOM_KAL,
@@ -422,7 +422,7 @@ function getRoshChodeshGreeting(ctx, hd, ev) {
   const monthName0 = ev.getDesc().substring(13); // 'Rosh Chodesh '
   const monthName = monthName0.replace(/'/g, '’');
   const url = shortenUrl(ev.url());
-  const d = dayjs(ev.getDate().greg()).locale(locale);
+  const d = dayjs(ev.greg()).locale(locale);
   const today = dayjs(hd.greg()).isSame(d, 'day');
   if (today) {
     return [roshChodeshBlurb,

@@ -187,7 +187,7 @@ export async function holidayYearIndex(ctx) {
     locationName: il ? 'Israel' : 'the Diaspora',
     iSuffix: il ? '?i=on' : '',
     q,
-    isoDateStart: dayjs(events0[0].getDate().greg()).format('YYYY-MM') + '-01',
+    isoDateStart: dayjs(events0[0].greg()).format('YYYY-MM') + '-01',
     options,
     amp: (q.amp === '1') ? true : undefined,
     roshChodesh,

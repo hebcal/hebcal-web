@@ -42,7 +42,7 @@ export async function parshaMultiYearIndex(ctx) {
     events.push(pe);
     for (const ev of events) {
       const reading = getLeyningForParshaHaShavua(ev, il);
-      const d = dayjs(ev.getDate().greg());
+      const d = dayjs(ev.greg());
       const item = {ev, reading, d};
       const parsha = ev.p.parsha;
       // either 1- or 2-element array

@@ -31,7 +31,7 @@ function calId(d) {
 function eventsToCells(events) {
   const cells = {};
   for (const e of events) {
-    const d = e.getDate().greg();
+    const d = e.greg();
     const mday = d.getDate();
     const yearMonth = calId(dayjs(d));
     cells[yearMonth] = cells[yearMonth] || {};
@@ -39,8 +39,8 @@ function eventsToCells(events) {
     cells[yearMonth][mday].push(e);
   }
   // add blank months in the middle, even if there are no events
-  const startDate = dayjs(events[0].getDate().greg());
-  const endDate = dayjs(events[events.length - 1].getDate().greg());
+  const startDate = dayjs(events[0].greg());
+  const endDate = dayjs(events[events.length - 1].greg());
   const start = startDate.set('date', 1);
   for (let i = start; i.isBefore(endDate); i = i.add(1, 'month')) {
     const yearMonth = calId(i);
