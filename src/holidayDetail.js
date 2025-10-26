@@ -144,7 +144,9 @@ export async function holidayDetail(ctx) {
   const [nextObserved, nextObservedHtml] = makeNextObserved(next, year, il);
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium0 = getHolidayDescription(next.event, false) || next.event.memo || '';
-  const descrMedium = appendPeriod(descrMedium0);
+  const descrMediumP = appendPeriod(descrMedium0);
+  const descrMedium = next.event.getFlags() & flags.SHABBAT_MEVARCHIM ?
+    descrMediumP + ' ' + appendPeriod(next.event.memo) : descrMediumP;
   const sentences = descrMedium0.split(/\.\s+/).slice(0, 2);
   const descFirstTwo = appendPeriod(sentences.join('. '));
   const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
