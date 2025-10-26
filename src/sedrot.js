@@ -526,7 +526,7 @@ function makeTriReading(tri, yr, parshaName, il) {
 }
 
 function addSpecialHaftarahToTriennial(ev, triReading2, il) {
-  const parshaName = ev.parsha[0];
+  const parshaName = ev.p.parsha[0];
   if (parshaName === VEZOT_HABERAKHAH) {
     return;
   }

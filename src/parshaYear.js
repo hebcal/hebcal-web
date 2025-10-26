@@ -28,7 +28,7 @@ export async function parshaYear(ctx) {
       const holidays = HebrewCalendar.getHolidaysOnDate(abs, il) || [];
       events.push(...holidays);
     } else {
-      const ev = new ParshaEvent(new HDate(abs), parsha.parsha, il);
+      const ev = new ParshaEvent(parsha);
       events.push(ev);
     }
   }

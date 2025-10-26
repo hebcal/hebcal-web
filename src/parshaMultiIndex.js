@@ -37,7 +37,7 @@ export async function parshaMultiYearIndex(ctx) {
       const reading = getLeyningForParshaHaShavua(ev, il);
       const d = dayjs(ev.getDate().greg());
       const item = {ev, reading, d};
-      const parsha = ev.parsha;
+      const parsha = ev.p.parsha;
       // either 1- or 2-element array
       for (const parshaName of parsha) {
         const map = byParsha.get(parshaName);
