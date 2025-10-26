@@ -402,6 +402,7 @@ function getEvents(hdate, il) {
     il,
     yomKippurKatan: false,
     shabbatMevarchim: true,
+    molad: true,
   });
   events = events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
   const saturday = hdate.onOrAfter(6);
