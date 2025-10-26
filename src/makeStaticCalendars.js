@@ -68,8 +68,8 @@ function removeCompressed(file) {
 
 function getStartAndEnd(years) {
   const nowAbs = greg2abs(TODAY);
-  const start = new HDate(nowAbs - 45); // 45 days ago
-  const endAbs = nowAbs + Math.floor(365.25 * years);
+  const start = new HDate(nowAbs - 90); // 90 days ago
+  const endAbs = nowAbs + Math.round(365.25 * years) - 60;
   const end = new HDate(endAbs);
   return {start, end};
 }
@@ -211,7 +211,7 @@ async function writeEventsToFile(events, icalOpt, file) {
   icalOpt.utmSource = UTM_SRC;
   icalOpt.utmMedium = UTM_MED;
   icalOpt.utmCampaign = 'ical-' + file;
-  icalOpt.publishedTTL = 'PT7D';
+  icalOpt.publishedTTL = 'P7D';
   const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
   const icalStream = fs.createWriteStream(makeFilename(file, 'ics'));
   const str = await icalEventsToString(icals, icalOpt);
