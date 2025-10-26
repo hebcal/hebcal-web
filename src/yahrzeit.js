@@ -450,7 +450,7 @@ export async function yahrzeitDownload(ctx) {
       emoji: true,
       title: makeCalendarTitle(query, 64),
       relcalid: ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null,
-      publishedTTL: 'PT1D',
+      publishedTTL: 'P1D',
       sequence: +(query.seq) || 1,
       locale: 'en',
     };

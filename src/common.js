@@ -1170,11 +1170,16 @@ export function eTagFromOptions(ctx, options, attrs) {
     }
   }
   const str = JSON.stringify(etagObj);
+  const base64String = murmur128SyncBase64(str);
+  return `W/"${base64String}"`;
+}
+
+function murmur128SyncBase64(str) {
   const arr4 = murmur128Sync(str);
-  const int32Array = new Int32Array(arr4);
+  const int32Array = new Uint32Array(arr4);
   const buffer = Buffer.from(int32Array.buffer);
   const base64String = buffer.toString('base64url');
-  return `W/"${base64String}"`;
+  return base64String;
 }
 
 const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;

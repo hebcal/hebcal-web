@@ -409,7 +409,7 @@ export async function zmanimIcalendar(ctx) {
   const options = {
     location,
     title: `${titlePrefix} ${location.getShortName()}`,
-    publishedTTL: 'PT7D',
+    publishedTTL: 'P7D',
     caldesc,
     locale,
   };
