@@ -637,6 +637,8 @@ export function makeHebcalOptions(db, query) {
         throw createError(400, `Sorry, invalid year ${query.year}`);
       } else if (options.isHebrewYear && options.year < 1) {
         throw createError(400, 'Sorry, Hebrew year must be 1 or later');
+      } else if (!options.isHebrewYear && options.year < -3759) {
+        throw createError(400, 'Sorry, Gregorian year must be -3759 or later');
       }
     }
   }

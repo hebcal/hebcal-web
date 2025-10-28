@@ -34,6 +34,7 @@ import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
 import '@hebcal/locales';
 import {myEventsToClassicApi} from './myEventsToClassicApi.js';
+import {greg2abs} from '@hebcal/hdate';
 
 dayjs.extend(localeData);
 
@@ -201,6 +202,8 @@ async function renderForm(ctx, error) {
   });
 }
 
+const EPOCH = -1373428;
+
 function getHebMonthNames(events, lang) {
   const startDate = dayjs(events[0].greg());
   const endDate = dayjs(events[events.length - 1].greg());
@@ -209,7 +212,11 @@ function getHebMonthNames(events, lang) {
   const months = Array(14);
   for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
     const endDay = d.add(1, 'month').subtract(1, 'day');
-    const hd1 = new HDate(d.toDate());
+    const abs = greg2abs(d.toDate());
+    if (abs <= EPOCH) {
+      continue;
+    }
+    const hd1 = new HDate(abs);
     const hd2 = new HDate(endDay.toDate());
     months[hd1.getMonth()] = Locale.gettext(hd1.getMonthName(), lang);
     months[hd2.getMonth()] = Locale.gettext(hd2.getMonthName(), lang);

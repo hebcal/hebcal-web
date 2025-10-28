@@ -65,9 +65,12 @@ function getEventClassName(evt) {
   return className;
 }
 
+const EPOCH = -1373428;
+const HDATE_EPOCH = {yy: 1, mm: 7, dd: 1};
+
 function getHebMonthName(d) {
   const abs = greg2abs(d.toDate());
-  const hdt = abs2hebrew(abs);
+  const hdt = abs <= EPOCH ? HDATE_EPOCH : abs2hebrew(abs);
   const localeData = window['hebcal'].localeConfig;
   const str = localeData.hebMonths[hdt.mm] || getMonthName(hdt.mm, hdt.yy);
   hdt.monthName = str.replace(/'/g, '’');
