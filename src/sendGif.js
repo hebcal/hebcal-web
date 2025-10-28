@@ -1,4 +1,4 @@
-import send from 'koa-send';
+import {send} from '@koa/send';
 
 const DOCUMENT_ROOT = '/var/www/html';
 

@@ -1,5 +1,6 @@
 import createError from 'http-errors';
 import {basename} from 'path';
+import {send} from '@koa/send';
 import {
   getLocationFromQuery,
   httpRedirect,
@@ -40,6 +41,8 @@ import {delCookie} from './delCookie.js';
 import {readJSON} from './readJSON.js';
 
 const redirectMap = readJSON('./redirect.json');
+
+const DOCUMENT_ROOT = '/var/www/html';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -91,7 +94,7 @@ export function wwwRouter() {
       return;
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
-      // let serve() handle this file
+      return send(ctx, rpath, {root: DOCUMENT_ROOT});
     } else if (rpath === '/') {
       onlyGetAndHead(ctx);
       return homepage(ctx);

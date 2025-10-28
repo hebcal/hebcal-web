@@ -4,7 +4,7 @@ import ini from 'ini';
 import Koa from 'koa';
 import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
-import send from 'koa-send';
+import {send} from '@koa/send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';

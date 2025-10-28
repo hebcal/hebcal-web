@@ -5,7 +5,7 @@ import {CACHE_CONTROL_7DAYS, makeETag} from './common.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';
-import send from 'koa-send';
+import {send} from '@koa/send';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
 const hdateMinDir = '/var/www/dist/views/partials';
