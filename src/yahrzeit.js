@@ -423,10 +423,6 @@ export async function yahrzeitDownload(ctx) {
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
-  const reminder = query.yrem !== '0' && query.yrem !== 'off';
-  const events = await makeYahrzeitEvents(maxId, query, reminder);
-  const lastModified = makeLastModified(details, events);
-  query.lastModified = ctx.lastModified = lastModified; // store in query for eTag
   const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
   const ics = extension === '.ics';
@@ -440,6 +436,10 @@ export async function yahrzeitDownload(ctx) {
     ctx.status = 304;
     return;
   }
+
+  const reminder = query.yrem !== '0' && query.yrem !== 'off';
+  const events = await makeYahrzeitEvents(maxId, query, reminder);
+  ctx.lastModified = makeLastModified(details, events);
   if (query.dl == '1') {
     ctx.response.attachment(basename(rpath));
   }
@@ -533,13 +533,10 @@ function makeLastModified(details, events) {
   if (events.length === 0) {
     return now;
   }
+  // An old /v2/y/ URL won't have a details.lastModified
   let lastModified = details.lastModified;
-  if (!lastModified) {
-    // An old /v2/y/ URL won't have a lastModified
-    lastModified = now;
-  }
   const firstEventDt = events[0].greg();
-  if (firstEventDt > lastModified && firstEventDt < now) {
+  if (!lastModified || firstEventDt > lastModified) {
     lastModified = firstEventDt;
   }
   return lastModified;
