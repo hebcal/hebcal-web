@@ -1,6 +1,6 @@
-import {HebrewCalendar, HDate, months, ParshaEvent} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, parshiot} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
-import {parshiot54, parshaByBook, torahBookNames} from './parshaCommon.js';
+import {parshaByBook, torahBookNames} from './parshaCommon.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {makeETag} from './common.js';
 import dayjs from 'dayjs';
@@ -22,7 +22,7 @@ export async function parshaMultiYearIndex(ctx) {
   }
   const il = q.i === 'on';
   const byParsha = new Map();
-  for (const parshaName of parshiot54) {
+  for (const parshaName of parshiot) {
     byParsha.set(parshaName, new Map());
   }
   for (let yr = hyear - 1; yr <= hyear + 4; yr++) {

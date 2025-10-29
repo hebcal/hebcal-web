@@ -19,9 +19,8 @@ export const doubled = new Map();
 export const parshaNum = new Map();
 const parshaAlias = new Map();
 const allLangs = Object.keys(langNames);
-export const parshiot54 = [].concat(parshiot, 'Vezot Haberakhah');
-for (let i = 0; i < parshiot54.length; i++) {
-  const parshaName = parshiot54[i];
+for (let i = 0; i < parshiot.length; i++) {
+  const parshaName = parshiot[i];
   parshaNum.set(parshaName, i + 1);
   addParshaToMeta(parshaName);
 }

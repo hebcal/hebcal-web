@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale} from '@hebcal/core';
+import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
@@ -7,7 +7,7 @@ import {empty} from './empty.js';
 import {httpRedirect, getBaseFromPath, langNames} from './common.js';
 import {makeGregDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
-  parshiot54, drash,
+  drash,
   lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon.js';
 import dayjs from 'dayjs';
 
@@ -27,7 +27,7 @@ const allEvts15yrIsrael = HebrewCalendar.calendar({il: true, ...options15yr});
 const allEvts15yrDiaspora = HebrewCalendar.calendar({il: false, ...options15yr});
 const items15yrIsrael = new Map();
 const items15yrDiaspora = new Map();
-const allParshiot = [].concat(parshiot54, doubledParshiyot);
+const allParshiot = [].concat(parshiot, doubledParshiyot);
 for (const parshaName of allParshiot) {
   items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
   items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
@@ -390,8 +390,8 @@ function prevParshaNum(parsha) {
 function makePrevNext(parsha, date, hd, il) {
   const prevNum = prevParshaNum(parsha);
   const nextNum = nextParshaNum(parsha);
-  const prevName = parshiot54[prevNum];
-  const nextName = parshiot54[nextNum];
+  const prevName = parshiot[prevNum];
+  const nextName = parshiot[nextNum];
   if (date) {
     const abs = hd.abs();
     const events = HebrewCalendar.calendar({
