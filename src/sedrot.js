@@ -140,7 +140,8 @@ export async function parshaDetail(ctx) {
   }
   if (date) {
     const dt = parse8digitDateStr(date);
-    if (dt.getFullYear() > ctx.launchDate.getFullYear() + 1000) {
+    const year = dt.getFullYear();
+    if (year < 1000 || year > ctx.launchDate.getFullYear() + 1000) {
       httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;
     }
