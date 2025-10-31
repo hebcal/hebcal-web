@@ -35,7 +35,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@eslint/js": "^9.38.0",
-    "@rollup/plugin-commonjs": "^28.0.9",
+    "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
     "bootstrap5-autocomplete": "^1.1.40",
@@ -47,9 +47,9 @@
     "rollup": "^4.52.5"
   },
   "dependencies": {
-    "@hebcal/core": "^6.0.3",
+    "@hebcal/core": "^6.0.4",
     "@hebcal/geo-sqlite": "^5.4.0",
-    "@hebcal/hdate": "^0.21.0",
+    "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.0",
     "@hebcal/learning": "^6.6.0",
     "@hebcal/leyning": "^9.3.0",
