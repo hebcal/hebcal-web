@@ -423,10 +423,10 @@ export async function yahrzeitDownload(ctx) {
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
-  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
   const extension = rpath.substring(rpath.length - 4);
   const ics = extension === '.ics';
-  const attrs = {startYear, extension};
+  const {startYear, endYear} = getDateRange(query);
+  const attrs = {startYear, endYear, extension};
   if (ics) {
     attrs.icalv = IcalEvent.version();
   }
@@ -439,7 +439,7 @@ export async function yahrzeitDownload(ctx) {
 
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
   const events = await makeYahrzeitEvents(maxId, query, reminder);
-  ctx.lastModified = makeLastModified(details, events);
+
   if (query.dl == '1') {
     ctx.response.attachment(basename(rpath));
   }
@@ -528,20 +528,6 @@ function makeDummyEvent(ctx) {
   return [ev];
 }
 
-function makeLastModified(details, events) {
-  const now = new Date();
-  if (events.length === 0) {
-    return now;
-  }
-  // An old /v2/y/ URL won't have a details.lastModified
-  let lastModified = details.lastModified;
-  const firstEventDt = events[0].greg();
-  if (!lastModified || firstEventDt > lastModified) {
-    lastModified = firstEventDt;
-  }
-  return lastModified;
-}
-
 /**
  * @return {number}
  */
@@ -553,6 +539,13 @@ function getDefaultStartYear() {
   return isFirst3months ? hyear - 1 : hyear;
 }
 
+function getDateRange(query) {
+  const years = getNumYears(query.years);
+  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
+  const endYear = parseInt(query.end, 10) || (startYear + years - 1);
+  return {startYear, endYear, years};
+}
+
 /**
  * @param {number} maxId
  * @param {any} query
@@ -560,9 +553,7 @@ function getDefaultStartYear() {
  * @return {Promise<Event[]>}
  */
 async function makeYahrzeitEvents(maxId, query, reminder) {
-  const years = getNumYears(query.years);
-  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
-  const endYear = parseInt(query.end, 10) || (startYear + years - 1);
+  const {startYear, endYear, years} = getDateRange(query);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
     const events0 = await getEventsForId(query, id, startYear, years);
