@@ -251,7 +251,7 @@ async function renderFullCalendar(ctx, maxId, q) {
   const il = query.i === 'on';
   const events = await makeYahrzeitEvents(maxId, query, false);
   return events.map((ev) => {
-    const item = eventToFullCalendar(ev, 'UTC', il);
+    const item = eventToFullCalendar(ev, 'UTC', {il});
     const emoji = ev.getEmoji();
     if (emoji) {
       item.emoji = emoji;

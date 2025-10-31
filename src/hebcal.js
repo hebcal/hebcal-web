@@ -440,7 +440,7 @@ function renderFullCalendar(ctx) {
   const tzid = location ? location.getTzid() : 'UTC';
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.body = events.map((ev) => {
-    const item = eventToFullCalendar(ev, tzid, options.il);
+    const item = eventToFullCalendar(ev, tzid, options);
     const emoji = ev.getEmoji();
     if (emoji) {
       item.emoji = emoji;
