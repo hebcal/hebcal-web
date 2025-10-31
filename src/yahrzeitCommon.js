@@ -92,7 +92,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
         });
   }
   const sql2 = 'REPLACE INTO yahrzeit_atime (id, ts) VALUES (?, NOW())';
-  db.execute2(ctx, {sql: sql2, values: [id], timeout: 1000})
+  db.execute({sql: sql2, values: [id], timeout: 1000})
       .then(() => {})
       .catch((err) => {
         ctx.logger.error(err);
