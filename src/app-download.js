@@ -51,8 +51,6 @@ app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
-app.context.launchDate = new Date();
-
 app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));

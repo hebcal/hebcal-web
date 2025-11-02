@@ -39,6 +39,7 @@ import {sendGif, sendMatomoJs} from './sendGif.js';
 import {dailyLearningApp} from './dailyLearning.js';
 import {delCookie} from './delCookie.js';
 import {readJSON} from './readJSON.js';
+import {securityTxt} from './securityTxt.js';
 
 const redirectMap = readJSON('./redirect.json');
 
@@ -89,7 +90,6 @@ export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
-      ctx.lastModified = ctx.launchDate;
       ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\n';
       return;
     } else if (rpath === '/ping') {
@@ -99,7 +99,6 @@ export function wwwRouter() {
       onlyGetAndHead(ctx);
       return homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
-      ctx.lastModified = ctx.launchDate;
       return ctx.render('dir-hidden');
     } else if (typeof redirectMap[rpath] !== 'undefined') {
       const destination = redirectMap[rpath];
@@ -230,14 +229,7 @@ export function wwwRouter() {
       }
       // otherwise fallthrough
     } else if (rpath === '/.well-known/security.txt') {
-      ctx.lastModified = ctx.launchDate;
-      ctx.type = 'text/plain';
-      const expires0 = new Date(ctx.launchDate.getTime() + (365 * 24 * 60 * 60 * 1000));
-      const expires = expires0.toISOString();
-      ctx.body = 'Contact: mailto:security@hebcal.com\n' +
-        `Expires: ${expires}\n` +
-        'OpenBugBounty: https://openbugbounty.org/bugbounty/HebcalDotCom/\n';
-      return;
+      return securityTxt(ctx);
     }
     await next();
   };
