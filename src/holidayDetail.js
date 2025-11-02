@@ -109,6 +109,14 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, rpath + suffix, 302);
     return;
   }
+  const now = new Date();
+  const attrs = dateSuffix ? {} : {hyear: new HDate(now).getFullYear()};
+  ctx.response.etag = makeETag(ctx, q, attrs);
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const meta = await getHolidayMeta(holiday);
   const {multiYearBegin, holidayBegin} = getHolidayBegin(holiday, year, il);
   const occursOn = makeOccursOn(holidayBegin, holiday, il);
@@ -123,12 +131,6 @@ export async function holidayDetail(ctx) {
       occursOn.find((item) => item.ppf === 'future');
   if (typeof next === 'undefined') {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
-    return;
-  }
-  ctx.response.etag = makeETag(ctx, q, {});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
     return;
   }
   const idx = year ? multiYearBegin.findIndex((ev) => ev === next.event) : -1;
@@ -153,9 +155,8 @@ export async function holidayDetail(ctx) {
   const descrLong = appendPeriod(meta.about.text || meta.wikipedia?.text) || descrMedium;
   const hebrew = Locale.lookupTranslation(holiday, 'he') || next.event.render('he');
   const title = makePageTitle(holiday, year, il, descrShort);
-  const now = new Date();
   const today = dayjs(now);
-  const noindex = Boolean(year && (year <= 1752 || year > now.getFullYear() + 100));
+  const noindex = Boolean(year && (year <= 1752 || year > today.year() + 100));
   const upcomingHebrewYear = next.hd.getFullYear();
   const translations0 = Object.keys(langNames)
       .map((lang) => Locale.lookupTranslation(holiday, lang))
