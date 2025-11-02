@@ -4,7 +4,7 @@ import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone}
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {empty} from './empty.js';
-import {httpRedirect, getBaseFromPath, langNames} from './common.js';
+import {httpRedirect, getBaseFromPath, langNames, makeETag} from './common.js';
 import {makeGregDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
@@ -159,6 +159,14 @@ export async function parshaDetail(ctx) {
     httpRedirect(ctx, `/sedrot/${base}${iSuffix}`);
     return;
   }
+  const hd = parshaEv.getDate();
+  const hyear = hd.getFullYear();
+  ctx.response.etag = makeETag(ctx, q, {hyear});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha = lookupParshaMeta(parshaName);
   const items15map = il ? items15yrIsrael : items15yrDiaspora;
@@ -168,8 +176,6 @@ export async function parshaDetail(ctx) {
   if (parsha.seph) {
     parsha.sephardicHtml = makeLeyningHtmlFromParts(parsha.seph);
   }
-  const hd = parshaEv.getDate();
-  const hyear = hd.getFullYear();
   makePrevNext(parsha, date, hd, il);
   const hasTriennial = hyear >= 5744;
   const triennial = hasTriennial ? makeTriennial(parsha, date, parshaEv, hyear, il) : {};

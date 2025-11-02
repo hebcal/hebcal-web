@@ -1163,6 +1163,10 @@ function getLocationFromQueryOrGeoIp(ctx, q) {
 export function makeETag(ctx, options, attrs) {
   const vers = {core: HebrewCalendar.version(), web: pkg.version};
   const etagObj = {...vers, ...options, ...attrs, path: ctx.request.path};
+  const utm = Object.keys(etagObj).filter((k) => k.startsWith('utm_'));
+  for (const key of utm) {
+    delete etagObj[key];
+  }
   const enc = ctx.get('accept-encoding');
   if (enc) {
     if (enc.indexOf('br') !== -1) {
