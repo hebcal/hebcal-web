@@ -37,16 +37,17 @@ export async function shabbatApp(ctx) {
   const {q, options, dateOverride, dt} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status < 400 && ctx.request.querystring.length > 0) {
+    if (dateOverride) {
+      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+    } else {
+      expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
+    }
+  }
+  if (ctx.status === 200) {
     ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {
       ctx.status = 304;
       return;
-    }
-    if (dateOverride) {
-      ctx.lastModified = new Date();
-      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-    } else {
-      expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
     }
   }
   makeItems(ctx, options, q);

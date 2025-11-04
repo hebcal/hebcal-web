@@ -39,8 +39,15 @@ const hmToArg = {
 
 export async function hdateXml(ctx) {
   const rpath = ctx.request.path;
-  const dt = new Date();
+  const q = ctx.request.query;
+  const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
+  ctx.response.etag = makeETag(ctx, q, {hd});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const utcString = dt.toUTCString();
   const hm = hd.getMonthName();
   const lang = getLang(rpath);
@@ -55,7 +62,6 @@ export async function hdateXml(ctx) {
     hm: hmToArg[hm] || hm,
     hd: hd.getDate(),
   };
-  ctx.lastModified = utcString;
   expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('hdate-xml', props);
@@ -63,16 +69,21 @@ export async function hdateXml(ctx) {
 
 export async function dafYomiRss(ctx) {
   const rpath = ctx.request.path;
-  const {dt} = getTodayDate(ctx.request.query);
+  const q = ctx.request.query;
+  const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
+  ctx.response.etag = makeETag(ctx, q, {hd});
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return;
+  }
   const today = dayjs(dt);
-  const utcString = dt.toUTCString();
   const lang = getLang(rpath);
   const bn = basename(rpath);
   const isDafYomi = bn.startsWith('dafyomi');
   const calendarName = isDafYomi ? 'dafYomi' : 'mishnaYomi';
   const event = DailyLearning.lookup(calendarName, hd);
-  ctx.lastModified = utcString;
   expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('dafyomi-rss', {

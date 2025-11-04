@@ -268,7 +268,6 @@ export function getStartAndEnd(q, tzid) {
  * @param {string} tzid
  */
 export function expiresSaturdayNight(ctx, now, tzid) {
-  ctx.lastModified = now;
   const today = dayjs.tz(now, tzid);
   const sunday = today.day(7);
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
