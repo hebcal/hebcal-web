@@ -85,7 +85,7 @@ function makeProperties(ctx) {
     gregYear2: events[events.length - 1].greg().getFullYear(),
     itemsRows,
     url,
-    candleLightingStr: Locale.gettext('Candle lighting'),
+    candleLightingStr: Locale.gettext('Candle lighting', locale),
     q: query,
     options,
     queryDefaultCandleMins,
@@ -145,7 +145,7 @@ function makeContents(events, options) {
     };
     if (i === events.length - 1) {
       if (hd.getMonth() === months.ELUL) {
-        item.reason = Locale.gettext('Rosh Hashana');
+        item.reason = Locale.gettext('Rosh Hashana', locale0);
         item.yomtov = true;
         objs.push(item);
       } else {
@@ -170,7 +170,7 @@ function makeContents(events, options) {
       continue;
     }
     const nextEv = events[i + 1];
-    item.reason = Locale.gettext(nextEv.basename());
+    item.reason = Locale.gettext(nextEv.basename(), locale0);
     item.yomtov = Boolean(nextEv.getFlags() & flags.CHAG);
     objs.push(item);
   }

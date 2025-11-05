@@ -188,7 +188,7 @@ function makeItems(ctx, options, q) {
   const location = options.location;
   const locale = localeMap[options.locale || 'en'] || 'en';
   const items = events.map((ev) => eventToItem(ev, options, locale, q.cfg));
-  const titlePrefix = Locale.gettext('Shabbat Times for') + ' ' + compactLocationName(location);
+  const titlePrefix = Locale.gettext('Shabbat Times for', locale) + ' ' + compactLocationName(location);
   const title = titlePrefix + ' - Hebcal';
   Object.assign(ctx.state, {
     events,
