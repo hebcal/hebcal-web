@@ -253,12 +253,18 @@ function makeCookie(ctx, query, uid) {
   for (const key of Object.keys(negativeOpts)) {
     ck[key] = off(query[key]) ? 'off' : 'on';
   }
-  for (const key of Object.keys(booleanOpts).concat(Object.keys(dailyLearningOpts))) {
+  for (const key of Object.keys(booleanOpts)) {
     if (key === 'euro' || key === 'yto') {
       continue;
     }
     const value = query[key];
     ck[key] = (value === 'on' || value == '1') ? 'on' : 'off';
+  }
+  for (const key of Object.keys(dailyLearningOpts)) {
+    const value = query[key];
+    if (value === 'on' || value == '1') {
+      ck[key] = 'on';
+    }
   }
   if (!empty(query.h12)) {
     ck.h12 = off(query.h12) ? '0' : '1';
