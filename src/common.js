@@ -254,7 +254,7 @@ function makeCookie(ctx, query, uid) {
     ck[key] = off(query[key]) ? 'off' : 'on';
   }
   for (const key of Object.keys(booleanOpts)) {
-    if (key === 'euro' || key === 'yto') {
+    if (key === 'euro' || key === 'yto' || key === 'a') {
       continue;
     }
     const value = query[key];
@@ -416,6 +416,11 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
     delete ck.t;
     delete ck.uid;
     delete ck.exp;
+    // a=on is deprecated; prefer lg=a instead
+    if (ck.a === 'on' && empty(ck.lg)) {
+      ck.lg = 'a';
+    }
+    delete ck.a;
   }
   let found = false;
   const cityTypeahead = query['city-typeahead'];
