@@ -15,7 +15,7 @@ import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
 import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
-import {countryNames, getEventCategories, renderTitleWithoutTime, makeAnchor,
+import {countryNames, getEventCategories, shouldRenderBrief, makeAnchor,
   eventsToRss2, appendIsraelAndTracking} from '@hebcal/rest-api';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
@@ -186,8 +186,9 @@ function makeItems(ctx, options, q) {
   }
   /** @type {Location} */
   const location = options.location;
-  const locale = localeMap[options.locale || 'en'] || 'en';
-  const items = events.map((ev) => eventToItem(ev, options, locale, q.cfg));
+  const locale = options.locale || 'en';
+  const lang = localeMap[locale] || 'en';
+  const items = events.map((ev) => eventToItem(ev, options, lang, q.cfg));
   const titlePrefix = Locale.gettext('Shabbat Times for', locale) + ' ' + compactLocationName(location);
   const title = titlePrefix + ' - Hebcal';
   Object.assign(ctx.state, {
@@ -196,6 +197,7 @@ function makeItems(ctx, options, q) {
     q,
     location,
     locale,
+    lang,
     hyear: getDefaultHebrewYear(events[0].getDate()),
     items,
     h3title: titlePrefix,
@@ -380,21 +382,21 @@ function makeJsonLDevent(item, location, subj, url) {
 /**
  * @param {Event} ev
  * @param {import('@hebcal/core').CalOptions} options
- * @param {string} locale
+ * @param {string} lang
  * @param {string} cfg
  * @return {Object}
  */
-function eventToItem(ev, options, locale, cfg) {
+function eventToItem(ev, options, lang, cfg) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
-  const monthFmt = locale === 'he' ? 'MMMM' : 'MMM';
-  const fmtDate = d.locale(locale).format(`dddd, ${monthFmt} D`);
+  const monthFmt = lang === 'he' ? 'MMMM' : 'MMM';
+  const fmtDate = d.locale(lang).format(`dddd, ${monthFmt} D`);
   const isoDate = d.format('YYYY-MM-DD');
   const categories = getEventCategories(ev);
   const cat0 = categories[0];
   const id = d.format('YYYYMMDD') + '-' + makeAnchor(desc);
-  const subj = renderTitleWithoutTime(ev, locale);
+  const subj = shouldRenderBrief(ev) ? ev.renderBrief(options.locale) : ev.render(options.locale);
   const obj = {
     id,
     desc: subj,
