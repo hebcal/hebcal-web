@@ -188,7 +188,7 @@ const geoposLegacy = {
 const primaryGeoKeys = ['geonameid', 'zip', 'city'];
 const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'elev', 'tzid']);
 const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy)).concat(['city-typeahead']);
-const cookieOpts = geoKeys.concat(['geo', 'lg'], Object.keys(numberOpts));
+const cookieOpts = geoKeys.concat(['lg'], Object.keys(numberOpts));
 
 /**
  * @param {Object.<string,string>} query
@@ -268,6 +268,9 @@ function makeCookie(ctx, query, uid) {
   }
   if (!empty(query.h12)) {
     ck.h12 = off(query.h12) ? '0' : '1';
+  }
+  if (query.geo === 'pos') {
+    ck.geo = 'pos';
   }
   for (const key of cookieOpts) {
     const value = query[key];
