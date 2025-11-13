@@ -78,7 +78,7 @@ function shortParshaRedir(ctx, str, qs) {
   }
   const parshaStr = basename(str);
   const parshaId = parseInt(parshaStr, 10) - 1;
-  if (isNaN(parshaId) || parshaId > parshiot.length - 1) {
+  if (isNaN(parshaId) || parshaId < 0 || parshaId > parshiot.length - 1) {
     ctx.throw(400, `invalid short redirect parsha: ${parshaStr}`);
   }
   const doubled = parshaStr.endsWith('d');
