@@ -78,17 +78,6 @@ app.use(timeout(6000, {
 
 app.use(stopIfTimedOut());
 
-app.use(async function prometheusPrivate(ctx, next) {
-  if (ctx.request.path.startsWith('/metrics')) {
-    const ip = getIpAddress(ctx);
-    if (!ip.startsWith('10.') && !ip.startsWith('127.') && ip !== '::1' && ip !== '::ffff:127.0.0.1') {
-      ctx.throw(403, `Forbidden from IP address ${ip}`);
-    }
-  }
-  await next();
-});
-app.use(prometheus.middleware({}));
-
 app.use(async function fixup0(ctx, next) {
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
@@ -103,6 +92,22 @@ app.use(async function fixup0(ctx, next) {
     ctx.app.emit('error', err, ctx);
   }
 });
+
+app.use(async function prometheusPrivate(ctx, next) {
+  if (ctx.request.path.startsWith('/metrics')) {
+    const ip = getIpAddress(ctx);
+    if (!ip.startsWith('10.') && !ip.startsWith('127.') &&
+        !ip.startsWith('::ffff:10.') && !ip.startsWith('::ffff:127.') &&
+         ip !== '::1') {
+      ctx.status = 403;
+      ctx.type = 'text/plain';
+      ctx.body = 'Forbidden\n';
+      return;
+    }
+  }
+  await next();
+});
+app.use(prometheus.middleware({}));
 
 // Redirect /v2/h/ to /v4/
 app.use(async function redirV2(ctx, next) {

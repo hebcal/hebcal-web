@@ -95,8 +95,13 @@ app.use(stopIfTimedOut());
 app.use(async function prometheusPrivate(ctx, next) {
   if (ctx.request.path.startsWith('/metrics')) {
     const ip = getIpAddress(ctx);
-    if (!ip.startsWith('10.') && !ip.startsWith('127.') && ip !== '::1' && ip !== '::ffff:127.0.0.1') {
-      ctx.throw(403, `Forbidden from IP address ${ip}`);
+    if (!ip.startsWith('10.') && !ip.startsWith('127.') &&
+        !ip.startsWith('::ffff:10.') && !ip.startsWith('::ffff:127.') &&
+         ip !== '::1') {
+      ctx.status = 403;
+      ctx.type = 'text/plain';
+      ctx.body = 'Forbidden\n';
+      return;
     }
   }
   await next();
