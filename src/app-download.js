@@ -22,6 +22,8 @@ import {MysqlDb} from './db.js';
 import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
+import prometheus from '@echo-health/koa-prometheus-exporter';
+import {getIpAddress} from './getIpAddress.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
@@ -75,6 +77,17 @@ app.use(timeout(6000, {
 }));
 
 app.use(stopIfTimedOut());
+
+app.use(async function prometheusPrivate(ctx, next) {
+  if (ctx.request.path.startsWith('/metrics')) {
+    const ip = getIpAddress(ctx);
+    if (!ip.startsWith('10.') && !ip.startsWith('127.') && ip !== '::1' && ip !== '::ffff:127.0.0.1') {
+      ctx.throw(403, `Forbidden from IP address ${ip}`);
+    }
+  }
+  await next();
+});
+app.use(prometheus.middleware({}));
 
 app.use(async function fixup0(ctx, next) {
   // don't allow compress middleware to assume that a missing

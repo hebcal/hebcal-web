@@ -47,6 +47,7 @@
     "rollup": "^4.52.5"
   },
   "dependencies": {
+    "@echo-health/koa-prometheus-exporter": "^1.0.4",
     "@hebcal/core": "^6.0.5",
     "@hebcal/geo-sqlite": "^5.4.0",
     "@hebcal/hdate": "^0.21.1",

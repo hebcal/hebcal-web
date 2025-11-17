@@ -21,6 +21,8 @@ import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
 import {stopIfTimedOut, pkg} from './common.js';
 import {empty} from './empty.js';
+import {getIpAddress} from './getIpAddress.js';
+import prometheus from '@echo-health/koa-prometheus-exporter';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -89,6 +91,17 @@ app.use(timeout(6000, {
 }));
 
 app.use(stopIfTimedOut());
+
+app.use(async function prometheusPrivate(ctx, next) {
+  if (ctx.request.path.startsWith('/metrics')) {
+    const ip = getIpAddress(ctx);
+    if (!ip.startsWith('10.') && !ip.startsWith('127.') && ip !== '::1' && ip !== '::ffff:127.0.0.1') {
+      ctx.throw(403, `Forbidden from IP address ${ip}`);
+    }
+  }
+  await next();
+});
+app.use(prometheus.middleware({}));
 
 const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;
