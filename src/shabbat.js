@@ -197,7 +197,7 @@ function makeItems(ctx, options, q) {
     q,
     location,
     locale,
-    lang,
+    localeLang: lang,
     hyear: getDefaultHebrewYear(events[0].getDate()),
     items,
     h3title: titlePrefix,

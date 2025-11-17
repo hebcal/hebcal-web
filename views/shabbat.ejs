@@ -34,7 +34,7 @@ ul.hebcal-results li {
 <div class="float-start">
   <svg width="60" height="60" class="me-1 mb-1"><use xlink:href="<%=cspriteHref%>#candles"></use></svg>
 </div>
-<% if (lang === 'he') { -%>
+<% if (localeLang === 'he') { -%>
 <%- await include('partials/shabbat-items-he.ejs') -%>
 <% } else { -%>
 <%- await include('partials/shabbat-items.ejs') -%>
