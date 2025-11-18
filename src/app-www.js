@@ -80,6 +80,20 @@ app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
 
+const promClient = prometheus.client;
+const httpRequestsTotal = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'status'],
+});
+app.use(async function httpMetricMiddleware(ctx, next) {
+  await next();
+  httpRequestsTotal
+    .labels(ctx.request.method, ctx.response.status)
+    .inc();
+});
+app.use(prometheus.middleware({}));
+
 app.use(timeout(6000, {
   status: 503,
   message: 'Service Unavailable',
@@ -91,22 +105,6 @@ app.use(timeout(6000, {
 }));
 
 app.use(stopIfTimedOut());
-
-app.use(async function prometheusPrivate(ctx, next) {
-  if (ctx.request.path.startsWith('/metrics')) {
-    const ip = getIpAddress(ctx);
-    if (!ip.startsWith('10.') && !ip.startsWith('127.') &&
-        !ip.startsWith('::ffff:10.') && !ip.startsWith('::ffff:127.') &&
-         ip !== '::1') {
-      ctx.status = 403;
-      ctx.type = 'text/plain';
-      ctx.body = 'Forbidden\n';
-      return;
-    }
-  }
-  await next();
-});
-app.use(prometheus.middleware({}));
 
 const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;

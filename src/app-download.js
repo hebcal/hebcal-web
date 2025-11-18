@@ -57,6 +57,20 @@ app.use(xResponseTime());
 app.use(accessLogger(logger));
 app.on('error', errorLogger(logger));
 
+const promClient = prometheus.client;
+const httpRequestsTotal = new promClient.Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests',
+  labelNames: ['method', 'status'],
+});
+app.use(async function httpMetricMiddleware(ctx, next) {
+  await next();
+  httpRequestsTotal
+    .labels(ctx.request.method, ctx.response.status)
+    .inc();
+});
+app.use(prometheus.middleware({}));
+
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {
@@ -92,22 +106,6 @@ app.use(async function fixup0(ctx, next) {
     ctx.app.emit('error', err, ctx);
   }
 });
-
-app.use(async function prometheusPrivate(ctx, next) {
-  if (ctx.request.path.startsWith('/metrics')) {
-    const ip = getIpAddress(ctx);
-    if (!ip.startsWith('10.') && !ip.startsWith('127.') &&
-        !ip.startsWith('::ffff:10.') && !ip.startsWith('::ffff:127.') &&
-         ip !== '::1') {
-      ctx.status = 403;
-      ctx.type = 'text/plain';
-      ctx.body = 'Forbidden\n';
-      return;
-    }
-  }
-  await next();
-});
-app.use(prometheus.middleware({}));
 
 // Redirect /v2/h/ to /v4/
 app.use(async function redirV2(ctx, next) {
