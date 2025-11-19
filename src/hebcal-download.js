@@ -6,9 +6,11 @@ import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'path';
 import {makeHebcalOptions, makeHebrewCalendar, makeETag,
   cleanQuery,
+  yearIsOutsideGregRange, yearIsOutsideHebRange,
   makeIcalOpts, getNumYears, localeMap} from './common.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
+import createError from 'http-errors';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -20,6 +22,10 @@ export async function hebcalDownload(ctx) {
   }
   cleanQuery(query);
   const options = makeHebcalOptions(ctx.db, query);
+  if ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
+      (!options.isHebrewYear && yearIsOutsideGregRange(options.year))) {
+    throw createError(410, `No calendar for year ${options.year}`);
+  }
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
   const ics = extension === '.ics';

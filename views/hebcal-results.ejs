@@ -115,10 +115,10 @@ accurate.
       <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-list-ul"></use></svg> List
    </label>
   </div><!-- .btn-group -->
-<% if (gy >= 1900) { -%>
+<% if (gy >= 1900 && gy <= 2999) { -%>
 <div class="btn-group me-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
 <% } %>
-<% if (q.c === 'on' && gy >= 1900) { %>
+<% if (q.c === 'on' && gy >= 1900 && gy <= 2999) { -%>
 <div class="btn-group me-1" role="group">
   <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,7 +173,7 @@ data-ad-slot="1867606375"></ins>
 <%- await include('partials/hebcal-form.ejs') -%>
 </div>
 </div>
-<% if (gy >= 1900) { -%>
+<% if (gy >= 1900 && gy <= 2999) { -%>
 <%- await include('partials/download-modal.ejs') -%>
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
