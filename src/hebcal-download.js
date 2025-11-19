@@ -22,8 +22,9 @@ export async function hebcalDownload(ctx) {
   }
   cleanQuery(query);
   const options = makeHebcalOptions(ctx.db, query);
-  if ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
-      (!options.isHebrewYear && yearIsOutsideGregRange(options.year))) {
+  if (typeof options.year === 'number' &&
+      ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
+      (!options.isHebrewYear && yearIsOutsideGregRange(options.year)))) {
     throw createError(410, `No calendar for year ${options.year}`);
   }
   const path = ctx.request.path;
