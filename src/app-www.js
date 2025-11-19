@@ -21,7 +21,6 @@ import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
 import {stopIfTimedOut, pkg} from './common.js';
 import {empty} from './empty.js';
-import {getIpAddress} from './getIpAddress.js';
 import prometheus from '@echo-health/koa-prometheus-exporter';
 import './locale.js';
 
@@ -64,7 +63,7 @@ setImmediate(async () => {
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
-const geoDb = app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
@@ -85,8 +84,8 @@ const httpRequestsTotal = new promClient.Counter({
 app.use(async function httpMetricMiddleware(ctx, next) {
   await next();
   httpRequestsTotal
-    .labels(ctx.request.method, ctx.response.status)
-    .inc();
+      .labels(ctx.request.method, ctx.response.status)
+      .inc();
 });
 app.use(prometheus.middleware({}));
 

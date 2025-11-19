@@ -3,7 +3,7 @@ import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {getDefaultHebrewYear} from './dateUtil.js';
-import {httpRedirect, makeETag} from './common.js';
+import {httpRedirect, makeETag, yearIsOutsideHebRange} from './common.js';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD,
   OMER_TITLE, makeQueryAndDownloadProps} from './holidayCommon.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
@@ -179,7 +179,7 @@ export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear0 = parseInt(ctx.request.query?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(new HDate(dt));
-  if (hyear < 3762 || hyear > 9995) {
+  if (yearIsOutsideHebRange(hyear)) {
     return httpRedirect(ctx, `/holidays/?redir=year`);
   }
   ctx.response.etag = makeETag(ctx, ctx.request.query, {hyear});

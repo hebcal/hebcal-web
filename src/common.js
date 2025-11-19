@@ -665,7 +665,9 @@ export function makeHebcalOptions(db, query) {
     }
   }
   if (options.ashkenazi && empty(query.lg)) {
+    // map very old a=on to lg=a
     query.lg = 'a';
+    delete query.a;
   }
   if (!empty(query.lg)) {
     const lg = query.lg;
@@ -1460,4 +1462,20 @@ export function makeCalendarSubtitleFromOpts(options, query) {
     }
   }
   return ilOrDiaspora;
+}
+
+/**
+ * @param {number} year
+ * @return {boolean}
+ */
+export function yearIsOutsideGregRange(year) {
+  return isNaN(year) || year < 100 || year > 2999;
+}
+
+/**
+ * @param {number} year
+ * @return {boolean}
+ */
+export function yearIsOutsideHebRange(year) {
+  return isNaN(year) || year < 3860 || year > 6759;
 }

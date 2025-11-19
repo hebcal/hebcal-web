@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import {httpRedirect, CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS,
+  yearIsOutsideHebRange,
   makeETag} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {basename, dirname} from 'path';
@@ -38,7 +39,7 @@ export async function omerApp(rpath, ctx) {
     return redirCurrentYear(ctx);
   } else if (yearStr === 'omer') {
     const hyear = parseInt(basename(rpath), 10);
-    if (isNaN(hyear) || hyear < 3762 || hyear > 9999) {
+    if (yearIsOutsideHebRange(hyear)) {
       return redirCurrentYear(ctx);
     }
     ctx.response.etag = makeETag(ctx, {}, {hyear});
@@ -81,7 +82,7 @@ export async function omerApp(rpath, ctx) {
     });
   }
   const hyear = parseInt(yearStr, 10);
-  if (isNaN(hyear) || hyear < 3762 || hyear > 9999) {
+  if (yearIsOutsideHebRange(hyear)) {
     return redirCurrentYear(ctx);
   }
   const omerDay = parseInt(basename(rpath), 10);

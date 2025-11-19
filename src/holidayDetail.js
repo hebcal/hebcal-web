@@ -8,6 +8,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, off} from './empty.js';
 import {httpRedirect, wrapHebrewInSpans, langNames, getBaseFromPath,
+  yearIsOutsideGregRange,
   makeETag} from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
@@ -83,9 +84,8 @@ export async function holidayDetail(ctx) {
     throw createError(404, `Holiday not found: ${base0}`);
   }
   const holidayAnchor = makeAnchor(holiday);
-  if (year && (year < 100 || year > 9999)) {
-    httpRedirect(ctx, `/holidays/${holidayAnchor}`);
-    return;
+  if (year !== null && yearIsOutsideGregRange(year)) {
+    throw createError(410, `${holiday} for ${year} not available`);
   }
   if (base0 !== base) {
     // fix capitalization
@@ -96,10 +96,13 @@ export async function holidayDetail(ctx) {
   const q = ctx.request.query;
   if (!empty(q.gy)) {
     const year = parseInt(q.gy, 10);
-    if (year >= 1000 && year <= 9999) {
-      httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
-      return;
+    if (isNaN(year)) {
+      throw createError(400, `invalid year: ${q.gy}`);
+    } else if (yearIsOutsideGregRange(year)) {
+      throw createError(410, `${holiday} for ${q.gy} not available`);
     }
+    httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
+    return;
   }
   if (doIsraelRedir(ctx, holiday)) {
     // It's Shalosh regalim and the URL doesn't have i=on/off

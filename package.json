@@ -44,11 +44,11 @@
     "eslint-plugin-n": "^17.23.1",
     "gettext-parser": "^8.0.0",
     "globals": "^16.5.0",
-    "rollup": "^4.52.5"
+    "rollup": "^4.53.3"
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
-    "@hebcal/core": "^6.0.5",
+    "@hebcal/core": "^6.0.6",
     "@hebcal/geo-sqlite": "^5.5.0",
     "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.1",
@@ -56,7 +56,7 @@
     "@hebcal/leyning": "^9.3.0",
     "@hebcal/locales": "^6.3.0",
     "@hebcal/rest-api": "^6.3.0",
-    "@hebcal/triennial": "^6.1.0",
+    "@hebcal/triennial": "^6.2.0",
     "@koa/bodyparser": "^6.0.0",
     "@koa/ejs": "^5.1.0",
     "@koa/send": "^6.0.0",
@@ -67,7 +67,7 @@
     "fastest-levenshtein": "^1.0.16",
     "geo-tz": "^8.1.4",
     "geolite2-redist": "^3.1.1",
-    "google-protobuf": "^4.0.0",
+    "google-protobuf": "^4.0.1",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.0",
     "ini": "^6.0.0",

@@ -1,7 +1,7 @@
 import {basename, dirname} from 'node:path';
 import {getSedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {utmSourceFromRef} from './common.js';
+import {utmSourceFromRef, yearIsOutsideHebRange} from './common.js';
 import dayjs from 'dayjs';
 
 const shortToLong = {
@@ -89,6 +89,9 @@ function shortParshaRedir(ctx, str, qs) {
   const year = parseInt(yearStr, 10);
   if (!year) {
     ctx.throw(400, `invalid short redirect parsha: ${str}`);
+  }
+  if (yearIsOutsideHebRange(year)) {
+    ctx.throw(410, `short redirect year out of range: ${yearStr}`);
   }
   const il = yearStr.endsWith('i');
   const sedra = getSedra(year, il);

@@ -23,7 +23,6 @@ import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
 import prometheus from '@echo-health/koa-prometheus-exporter';
-import {getIpAddress} from './getIpAddress.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
@@ -41,7 +40,7 @@ app.context.logger = logger;
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
-const geoDb = app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
 
 const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
 const iniPath = join(iniDir, 'hebcal-dot-com.ini');
@@ -62,8 +61,8 @@ const httpRequestsTotal = new promClient.Counter({
 app.use(async function httpMetricMiddleware(ctx, next) {
   await next();
   httpRequestsTotal
-    .labels(ctx.request.method, ctx.response.status)
-    .inc();
+      .labels(ctx.request.method, ctx.response.status)
+      .inc();
 });
 app.use(prometheus.middleware({}));
 
