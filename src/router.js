@@ -8,6 +8,7 @@ import {
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE,
   dailyLearningConfig,
+  throw410,
 } from './common.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
@@ -105,9 +106,7 @@ export function wwwRouter() {
       if (typeof destination === 'number') {
         throw createError(destination);
       } else if (destination === null) {
-        throw createError(410,
-            'The requested resource is no longer available on this server and there is no forwarding address. ' +
-        'Please remove all references to this resource.');
+        throw410(ctx);
       }
       ctx.status = 301;
       ctx.redirect(destination);

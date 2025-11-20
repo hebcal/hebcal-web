@@ -2,7 +2,8 @@ import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
 import {getLeyningKeyForEvent} from '@hebcal/leyning';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag, yearIsOutsideHebRange} from './common.js';
+import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag,
+  yearIsOutsideHebRange, throw410} from './common.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import createError from 'http-errors';
 
@@ -14,7 +15,7 @@ export async function parshaYear(ctx) {
   if (hyear < 2 || hyear > 32000) {
     throw createError(400, 'Hebrew year must be in range 2-32000');
   } else if (yearIsOutsideHebRange(hyear)) {
-    throw createError(410, `Hebrew year ${hyear} is out of range`);
+    throw410(ctx);
   }
   const q = ctx.request.query;
   ctx.response.etag = makeETag(ctx, q, {hyear});

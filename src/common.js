@@ -1479,3 +1479,9 @@ export function yearIsOutsideGregRange(year) {
 export function yearIsOutsideHebRange(year) {
   return isNaN(year) || year < 3860 || year > 6759;
 }
+
+export function throw410(ctx) {
+  ctx.throw(410,
+      `The requested resource ${ctx.request.path} is no longer available on this server ` +
+      `and there is no forwarding address. Please remove all references to this resource.`);
+}

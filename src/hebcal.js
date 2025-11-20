@@ -92,6 +92,15 @@ export async function hebcalApp(ctx) {
         dt.getMonth() === 11 ? dt.getFullYear() + 1 : dt.getFullYear();
     }
   }
+  if (!options.isHebrewYear && options.year > 9999) {
+    ctx.status = 400;
+    q.v = '0';
+    error = {message: `Gregorian year cannot be greater than 9999: ${options.year}`};
+  } else if (options.isHebrewYear && options.year > 13760) {
+    ctx.status = 400;
+    q.v = '0';
+    error = {message: `Hebrew year cannot be greater than 13760: ${options.year}`};
+  }
   if (ctx.status < 400 && q.v === '1') {
     ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {

@@ -4,7 +4,7 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {lgToLocale, localeMap, makeETag, cacheControl,
-  yearIsOutsideGregRange, yearIsOutsideHebRange} from './common.js';
+  yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
 
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 
@@ -28,7 +28,7 @@ export async function holidayPdf(ctx) {
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761) : yearNum;
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {
-    throw createError(410, `Sorry, can't display holidays for year ${calendarYear}`);
+    throw410(ctx);
   }
   const query = ctx.request.query;
   const lg = lgToLocale[query.lg || 's'] || query.lg;

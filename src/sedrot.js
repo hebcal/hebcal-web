@@ -4,7 +4,8 @@ import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone}
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import createError from 'http-errors';
 import {empty} from './empty.js';
-import {httpRedirect, getBaseFromPath, langNames, makeETag, yearIsOutsideGregRange} from './common.js';
+import {httpRedirect, getBaseFromPath, langNames, makeETag,
+  yearIsOutsideGregRange, throw410} from './common.js';
 import {makeGregDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
@@ -128,7 +129,7 @@ export async function parshaDetail(ctx) {
     if (isNaN(year)) {
       throw createError(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
-      throw createError(410, `Sorry, can't display ${parshaName0} for year ${year}`);
+      throw410(ctx);
     }
     const events = HebrewCalendar.calendar({year, il, sedrot: true, noHolidays: true});
     const parshaEv = findParshaEvent(events, parshaName0, il);
@@ -145,7 +146,7 @@ export async function parshaDetail(ctx) {
     const dt = parse8digitDateStr(date);
     const year = dt.getFullYear();
     if (yearIsOutsideGregRange(year)) {
-      throw createError(410, `Sorry, can't display ${parshaName0} for year ${year}`);
+      throw410(ctx);
     } else if (year < 1000) {
       httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;

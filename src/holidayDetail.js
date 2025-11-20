@@ -9,6 +9,7 @@ import {basename} from 'path';
 import {empty, off} from './empty.js';
 import {httpRedirect, wrapHebrewInSpans, langNames, getBaseFromPath,
   yearIsOutsideGregRange,
+  throw410,
   makeETag} from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
@@ -85,7 +86,7 @@ export async function holidayDetail(ctx) {
   }
   const holidayAnchor = makeAnchor(holiday);
   if (year !== null && yearIsOutsideGregRange(year)) {
-    throw createError(410, `${holiday} for ${year} not available`);
+    throw410(ctx);
   }
   if (base0 !== base) {
     // fix capitalization
@@ -99,7 +100,7 @@ export async function holidayDetail(ctx) {
     if (isNaN(year)) {
       throw createError(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
-      throw createError(410, `${holiday} for ${q.gy} not available`);
+      throw410(ctx);
     }
     httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
     return;

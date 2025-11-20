@@ -10,7 +10,7 @@ import {
   makeQueryAndDownloadProps,
   OMER_TITLE,
 } from './holidayCommon.js';
-import {makeETag, yearIsOutsideGregRange, yearIsOutsideHebRange} from './common.js';
+import {makeETag, yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
 
 const SHMINI_ATZERET = 'Shmini Atzeret';
 const SIMCHAT_TORAH = 'Simchat Torah';
@@ -137,7 +137,7 @@ export async function holidayYearIndex(ctx) {
   const calendarYear = makeCalendarYear(isHebrewYear, yearNum);
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {
-    throw createError(410, `Sorry, can't display holidays for year ${calendarYear}`);
+    throw410(ctx);
   }
   const il = ctx.state.il;
   const options = {
