@@ -144,8 +144,11 @@ export async function hebrewDateConverter(ctx) {
     if (q.amp === '1') {
       p.amp = true;
     }
-    makePrevNext(p);
-    makeFutureYears(ctx, p);
+    p.h2gURL = h2gURL;
+    if (!p.message) {
+      makePrevNext(p);
+      makeFutureYears(ctx, p);
+    }
     return ctx.render('converter', p);
   }
 }
@@ -179,7 +182,6 @@ function makeFutureYears(ctx, p) {
   const locale = ctx.state.locale;
   const arr = makeFutureYearsHeb(p.hdate, 25, locale);
   p.futureYearsHeb = arr;
-  p.h2gURL = h2gURL;
   const arr2 = makeFutureYearsGreg(p.d, locale);
   p.futureYearsGreg = arr2;
 }
@@ -504,6 +506,10 @@ function parseConverterQuery(ctx) {
     // in either mode, this will throw if the params are invalid
     const hdate = makeHebDate(query.hy, query.hm, query.hd);
     const dt = hdate.greg();
+    const gy = dt.getFullYear();
+    if (gy > 9999) {
+      throw createError(400, `Gregorian year cannot be greater than 9999: ${gy}`);
+    }
     return {type: 'h2g', dt, hdate, gs: false};
   }
   if (isset(query.g2h) && query.strict === '1') {

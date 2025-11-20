@@ -225,6 +225,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 </div><!-- .alert -->
 </div>
 <% } %>
+<% if (typeof message === 'undefined') { -%>
 <div id="future" class="row">
 <div class="col-md-6" id="future-heb">
 <div class="row">
@@ -256,6 +257,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 </table>
 </div><!-- .col -->
 </div><!-- .row -->
+<% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
