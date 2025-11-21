@@ -402,6 +402,10 @@ class PseudoParshaEvent extends Event {
  * @return {Event[]}
  */
 function getEvents(hdate, il) {
+  // Matan Torah traditionally on 6 Sivan 2448
+  if (hdate.abs() < -479441) {
+    return [];
+  }
   let events = HebrewCalendar.calendar({
     start: hdate,
     end: hdate,
@@ -411,16 +415,21 @@ function getEvents(hdate, il) {
     molad: true,
   });
   events = events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
+  events = events.concat(getParshaEvents(hdate, il));
+  events = events.concat(makeOmer(hdate));
+  return events;
+}
+
+function getParshaEvents(hdate, il) {
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
   const sedra = HebrewCalendar.getSedra(hy, il);
   const parsha = sedra.lookup(saturday);
-  let hasFullKriyah = false;
   if (!parsha.chag) {
     const pe = new ParshaEvent(parsha);
-    events = events.concat(pe);
-    hasFullKriyah = true;
+    return [pe];
   }
+  let hasFullKriyah = false;
   const readings = getLeyningOnDate(hdate, il, true);
   for (const reading of readings) {
     if (reading.fullkriyah && !reading.parshaNum) {
@@ -429,6 +438,7 @@ function getEvents(hdate, il) {
   }
   const mm = hdate.getMonth();
   const dd = hdate.getDate();
+  let events = [];
   if (!hasFullKriyah) {
     if (mm === months.TISHREI && (dd > 2 && dd < 15)) {
       const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
@@ -446,7 +456,6 @@ function getEvents(hdate, il) {
       }
     }
   }
-  events = events.concat(makeOmer(hdate));
   return events;
 }
 
