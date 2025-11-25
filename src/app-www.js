@@ -19,15 +19,13 @@ import {makeLogger, errorLogger, accessLogger, makeLogInfo,
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
-import {stopIfTimedOut, pkg} from './common.js';
+import {stopIfTimedOut, pkg, DOCUMENT_ROOT} from './common.js';
 import {empty} from './empty.js';
 import prometheus from '@echo-health/koa-prometheus-exporter';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-const DOCUMENT_ROOT = '/var/www/html';
 
 const app = new Koa();
 

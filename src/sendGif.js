@@ -1,6 +1,5 @@
 import {send} from '@koa/send';
-
-const DOCUMENT_ROOT = '/var/www/html';
+import {DOCUMENT_ROOT} from './common.js';
 
 export async function sendGif(ctx) {
   ctx.set('Cache-Control', 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0');

@@ -15,6 +15,8 @@ import {getIpAddress} from './getIpAddress.js';
 export const pkg = readJSON('../package.json');
 export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
+export const DOCUMENT_ROOT = process.env.NODE_ENV === 'production' ? '/var/www/html' : './static';
+
 export const langNames = {
   's': ['Sephardic transliterations', null],
   'a': ['Ashkenazic transliterations', null],

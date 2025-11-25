@@ -9,6 +9,7 @@ import {
   CACHE_CONTROL_IMMUTABLE,
   dailyLearningConfig,
   throw410,
+  DOCUMENT_ROOT,
 } from './common.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
@@ -43,8 +44,6 @@ import {readJSON} from './readJSON.js';
 import {securityTxt} from './securityTxt.js';
 
 const redirectMap = readJSON('./redirect.json');
-
-const DOCUMENT_ROOT = '/var/www/html';
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
