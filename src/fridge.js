@@ -6,6 +6,8 @@ import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   langNames,
   setDefautLangTz,
   makeETag,
+  yearIsOutsideGregRange,
+  yearIsOutsideHebRange,
   cacheControl, queryDefaultCandleMins} from './common.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
@@ -99,16 +101,16 @@ function makeProperties(ctx) {
 function getStartAndEnd(query) {
   if (query.yt === 'G') {
     const year = parseInt(query.year, 10) || new Date().getFullYear();
-    if (year <= 1752) {
-      throw createError(400, 'Gregorian year must be 1753 or later');
+    if (year <= 1752 || yearIsOutsideGregRange(year)) {
+      throw createError(400, 'Gregorian year outside range 1753-2999');
     }
     const start = greg.greg2abs(new Date(year, 0, 1));
     const end = greg.greg2abs(new Date(year, 11, 31));
     return [start, end];
   }
   const hyear = parseInt(query.year, 10) || new HDate().getFullYear();
-  if (hyear < 3761) {
-    throw createError(400, 'Hebrew year must be in the common era (3761 and above)');
+  if (yearIsOutsideHebRange(hyear)) {
+    throw createError(400, 'Hebrew year outside range 3860-6759');
   }
   const start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   const end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
