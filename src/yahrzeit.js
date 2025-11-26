@@ -89,6 +89,14 @@ export async function yahrzeitApp(ctx) {
     ctx.body = `<?xml version="1.0" ?>\n<error message="This API does not support cfg=xml" />\n`;
     return;
   }
+  if (ctx.method === 'GET') {
+    ctx.response.etag = makeETag(ctx, q, {});
+    ctx.status = 200;
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
+  }
   const seq = +(q.seq) || 0;
   ctx.state.seq = seq + 1;
   const count = Math.max(+q.count || 1, maxId);
