@@ -279,9 +279,11 @@ async function makeFormResults(ctx) {
     if (hd.getMonth() >= months.ADAR_I) {
       ctx.state.adarInfo = true;
     }
+    const desc = ev.render('en');
     return {
       d: dayjs(hd.greg()),
-      desc: ev.render('en'),
+      desc,
+      isHebrewName: /[\u0590-\u05FF]/.test(desc),
       year: hd.getFullYear(),
     };
   });
