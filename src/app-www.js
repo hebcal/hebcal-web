@@ -14,8 +14,7 @@ import path from 'path';
 import {fileURLToPath} from 'url';
 import os from 'os';
 import zlib from 'zlib';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo,
-  logMemoryUsage} from './logger.js';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router.js';
 import {MysqlDb} from './db.js';
@@ -32,10 +31,6 @@ const app = new Koa();
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
 const logger = makeLogger(logDir);
 logger.info('Koa server: starting up');
-logMemoryUsage(logger);
-setInterval(() => {
-  logMemoryUsage(logger);
-}, 30000);
 
 app.context.logger = logger;
 

@@ -11,8 +11,7 @@ import xResponseTime from 'koa-better-response-time';
 import zlib from 'zlib';
 import {downloadHref2} from './makeDownloadProps.js';
 import {join} from 'path';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo,
-  logMemoryUsage} from './logger.js';
+import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {httpRedirect, stopIfTimedOut, cacheControl,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE} from './common.js';
@@ -31,10 +30,6 @@ const app = new Koa();
 const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
 const logger = makeLogger(logDir);
 logger.info('Koa server: starting up');
-logMemoryUsage(logger);
-setInterval(() => {
-  logMemoryUsage(logger);
-}, 30000);
 
 app.context.logger = logger;
 
