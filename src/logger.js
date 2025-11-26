@@ -1,5 +1,4 @@
 import pino from 'pino';
-import {murmur128Sync} from 'murmurhash3';
 import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
 import {matomoTrack} from './matomoTrack.js';
@@ -54,7 +53,6 @@ export function makeLogInfo(ctx) {
     method: ctx.request.method,
     url: ctx.request.originalUrl,
     ua: ctx.get('user-agent'),
-    vid: ctx.state.visitorId,
   };
   if (typeof info.length !== 'number') {
     delete info.length;
@@ -121,7 +119,6 @@ export function makeLogInfo(ctx) {
 export function accessLogger(logger) {
   return async function accessLog(ctx, next) {
     ctx.state.startTime = Date.now();
-    ctx.state.visitorId = getVisitorId(ctx);
     await next();
     logger.info(makeLogInfo(ctx));
   };
@@ -148,80 +145,4 @@ export function errorLogger(logger) {
       }
     }
   };
-}
-
-/**
- * @private
- * @param {any} ctx
- * @return {string}
- */
-function getVisitorId(ctx) {
-  const str = ctx.cookies.get('C');
-  if (str) {
-    const cookie = new URLSearchParams(str);
-    if (cookie.has('uid')) {
-      const uid = cookie.get('uid');
-      ctx.state.userId = uid;
-      return uid;
-    }
-  }
-  const userAgent = ctx.get('user-agent');
-  const ipAddress = ctx.get('x-client-ip') || ctx.request.ip;
-  const vid = makeUuid(ipAddress, userAgent, ctx.get('accept-language'));
-  return vid;
-}
-
-/**
- * @private
- * @param {string} ipAddress
- * @param {string} userAgent
- * @param {string} acceptLanguage
- * @return {string}
- */
-function makeUuid(ipAddress, userAgent, acceptLanguage) {
-  const raw = murmur128Sync(ipAddress + userAgent + acceptLanguage);
-  const buf32 = new Uint32Array(raw);
-  const bytes = new Uint8Array(buf32.buffer);
-  bytes[6] = (bytes[6] & 0x0f) | 0x40;
-  bytes[8] = (bytes[8] & 0x3f) | 0x80;
-  let digest = '';
-  for (let i = 0; i < 16; i++) {
-    digest += bytes[i].toString(16).padStart(2, '0');
-    switch (i) {
-      case 3:
-      case 5:
-      case 7:
-      case 9:
-        digest += '-';
-        break;
-      default:
-        break;
-    }
-  }
-  return digest;
-}
-
-const units = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-
-/**
- * @param {number} num
- * @return {string}
- */
-export function niceBytes(num) {
-  let l = 0;
-  let n = parseInt(num, 10) || 0;
-  while (n >= 1024 && ++l) {
-    n = n / 1024;
-  }
-  return (n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
-}
-
-/**
- * @param {pino.Logger} logger
- */
-export function logMemoryUsage(logger) {
-  const memoryUsage = process.memoryUsage();
-  const heapTotal = niceBytes(memoryUsage.heapTotal);
-  const heapUsed = niceBytes(memoryUsage.heapUsed);
-  logger.info(`heap ${heapTotal} total, ${heapUsed} used`);
 }

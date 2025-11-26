@@ -52,7 +52,6 @@ export async function mySendMail(ctx, message) {
   delete result.ehlo;
   const logInfo = {
     url: ctx.request.originalUrl,
-    vid: ctx.state.visitorId,
     duration: Date.now() - startTime,
     mail: result,
   };

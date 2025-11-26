@@ -293,7 +293,7 @@ function makeCookie(ctx, query, uid) {
     return false;
   }
   uid = uid || randomUUID();
-  ctx.state.visitorId = ctx.state.userId = uid;
+  ctx.state.userId = uid;
   return 'uid=' + uid + '&' + new URLSearchParams(ck).toString();
 }
 
