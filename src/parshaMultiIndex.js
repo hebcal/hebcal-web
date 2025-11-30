@@ -1,7 +1,7 @@
 import {HDate, ParshaEvent, parshiot} from '@hebcal/core';
+import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
-import {parshaByBook, torahBookNames,
-  getParshaYear, VEZOT_HABERAKHAH} from './parshaCommon.js';
+import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js';
 import {getDefaultHebrewYear, simchatTorahDate} from './dateUtil.js';
 import {makeETag} from './common.js';
 import dayjs from 'dayjs';
@@ -25,7 +25,7 @@ export async function parshaMultiYearIndex(ctx) {
     byParsha.set(parshaName, new Map());
   }
   for (let yr = hyear - 1; yr <= hyear + 4; yr++) {
-    const events = getParshaYear(yr, il);
+    const events = parshaYear(yr, il);
     const pe = new ParshaEvent({
       hdate: simchatTorahDate(yr, il),
       parsha: [VEZOT_HABERAKHAH],

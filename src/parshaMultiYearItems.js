@@ -1,4 +1,5 @@
 import {HDate, ParshaEvent, parshiot} from '@hebcal/core';
+import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
@@ -6,7 +7,6 @@ import {simchatTorahDate} from './dateUtil.js';
 import {
   doubled,
   doubledParshiyot,
-  getParshaYear,
   VEZOT_HABERAKHAH,
 } from './parshaCommon.js';
 
@@ -28,7 +28,7 @@ export function getParshaMultiYearItems(parshaName, il) {
     const endYear = currentHebYear + YEARS_TOTAL - YEARS_PRE - 1;
     let events = [];
     for (let yr = startYear; yr <= endYear; yr++) {
-      const events0 = getParshaYear(yr, il);
+      const events0 = parshaYear(yr, il);
       events = events.concat(events0);
     }
     const allParshiot = [].concat(parshiot, doubledParshiyot);

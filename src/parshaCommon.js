@@ -4,28 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import {langNames} from './common.js';
 import {transliterate} from 'transliteration';
 import {distance, closest} from 'fastest-levenshtein';
-import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {readJSON} from './readJSON.js';
-import QuickLRU from 'quick-lru';
-
-const parshaYearCache = new QuickLRU({maxSize: 100});
-
-/**
- * Calculates weekly Torah Reading on Saturdays for entire year
- * @param {number} hyear Hebrew year
- * @param {boolean} il Israel (false for Diaspora)
- * @return {Event[]} an array of `ParshaEvent` occurring on Saturdays that contain a regular
- *  (non-holiday) Parashat HaShavua
- */
-export function getParshaYear(hyear, il) {
-  const cacheKey = `${hyear}-${il ? 1 : 0}`;
-  let events = parshaYearCache.get(cacheKey);
-  if (!events) {
-    events = parshaYear(hyear, il);
-    parshaYearCache.set(cacheKey, events);
-  }
-  return events;
-}
 
 export const drash = readJSON('./drash.json');
 export const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
