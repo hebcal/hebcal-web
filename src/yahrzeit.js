@@ -730,7 +730,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const observed = dayjs(hd.greg());
   ev.memo = makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId);
   const hash = calendarId || murmur32HexSync(name);
-  ev.uid = type.toLowerCase() + '-' + observed.format('YYYYMMDD') + '-' + hash + '-' + id;
+  ev.uid = type.toLowerCase() + '-' + hyear + '-' + hash + '-' + id;
   ev.name = name;
   ev.type = type;
   ev.anniversary = yearNumber;
