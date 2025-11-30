@@ -7,7 +7,7 @@ import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag,
 import {makeDownloadProps} from './makeDownloadProps.js';
 import createError from 'http-errors';
 
-export async function parshaYear(ctx) {
+export async function parshaYearApp(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   const todayHebYear = new HDate().getFullYear();

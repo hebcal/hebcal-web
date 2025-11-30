@@ -23,7 +23,7 @@ import {holidayApp} from './holidayApp.js';
 import {homepage} from './homepage.js';
 import {parshaCsv} from './parsha-csv.js';
 import {parshaIndex} from './parshaIndex.js';
-import {parshaYear} from './parshaYear.js';
+import {parshaYearApp} from './parshaYear.js';
 import {parshaMultiYearIndex} from './parshaMultiIndex.js';
 import {parshaDetail} from './sedrot.js';
 import {shabbatApp} from './shabbat.js';
@@ -202,7 +202,7 @@ export function wwwRouter() {
       } else {
         const charCode = rpath.charCodeAt(8);
         if (charCode >= 48 && charCode <= 57) {
-          return parshaYear(ctx);
+          return parshaYearApp(ctx);
         }
         return parshaDetail(ctx);
       }

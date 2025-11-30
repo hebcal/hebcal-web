@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, months, ParshaEvent, Locale, parshiot} from '@hebcal/core';
+import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
@@ -9,92 +9,10 @@ import {httpRedirect, getBaseFromPath, langNames, makeETag,
 import {makeGregDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
-  lookupParshaMeta, lookupParshaAlias, parshaNum, doubledParshiyot} from './parshaCommon.js';
+  VEZOT_HABERAKHAH, simchatTorahDate,
+  lookupParshaMeta, lookupParshaAlias, parshaNum} from './parshaCommon.js';
+import {getParshaMultiYearItems} from './parshaMultiYearItems.js';
 import dayjs from 'dayjs';
-
-const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
-
-const YEARS_PRE = 3;
-const YEARS_TOTAL = 24;
-
-const options15yr = {
-  year: new HDate().getFullYear() - YEARS_PRE,
-  isHebrewYear: true,
-  numYears: YEARS_TOTAL,
-  noHolidays: true,
-  sedrot: true,
-};
-const allEvts15yrIsrael = HebrewCalendar.calendar({il: true, ...options15yr});
-const allEvts15yrDiaspora = HebrewCalendar.calendar({il: false, ...options15yr});
-const items15yrIsrael = new Map();
-const items15yrDiaspora = new Map();
-const allParshiot = [].concat(parshiot, doubledParshiyot);
-for (const parshaName of allParshiot) {
-  items15yrIsrael.set(parshaName, get15yrEvents(parshaName, true));
-  items15yrDiaspora.set(parshaName, get15yrEvents(parshaName, false));
-}
-
-function simchatTorahDate(hyear, il) {
-  const mday = il ? 22 : 23;
-  return new HDate(mday, months.TISHREI, hyear);
-}
-
-function makeVezotEvents(il) {
-  const startYear = new HDate().getFullYear() - YEARS_PRE;
-  const events = [];
-  for (let i = 0; i < YEARS_TOTAL; i++) {
-    const hyear = startYear + i;
-    const hd = simchatTorahDate(hyear, il);
-    const pe = new ParshaEvent({hdate: hd, parsha: [VEZOT_HABERAKHAH], il});
-    events.push(pe);
-  }
-  return events;
-}
-
-/**
- * Returns Parsha events during 15 year period that match this parshaName
- * @param {string} parshaName
- * @param {boolean} il
- * @return {any[]}
- */
-function get15yrEvents(parshaName, il) {
-  if (parshaName === VEZOT_HABERAKHAH) {
-    return makeVezotEvents(il).map((ev) => {
-      return eventToItem(ev, il);
-    });
-  }
-  const allEvents = il ? allEvts15yrIsrael : allEvts15yrDiaspora;
-  const prefix = 'Parashat ';
-  const descs = [prefix + parshaName];
-  const pair = doubled.get(parshaName);
-  if (pair) {
-    descs.push(prefix + pair);
-  }
-  const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
-  return events.map(function(ev) {
-    return eventToItem(ev, il);
-  });
-}
-
-function eventToItem(ev, il) {
-  const desc = ev.getDesc().substring(9);
-  const item = {
-    event: ev,
-    desc: desc,
-    anchor: makeAnchor(desc),
-    d: dayjs(ev.greg()),
-    hyear: ev.getDate().getFullYear(),
-  };
-  const fk = getLeyningForParshaHaShavua(ev, il);
-  if (fk.reason?.haftara) {
-    item.haftara = fk.haftara;
-    item.haftaraReason = fk.reason.haftara;
-  }
-  if (fk.reason?.M) {
-    item.maftir = fk.fullkriyah.M;
-  }
-  return item;
-}
 
 const parshaDateRe = /^([^\d]+)-(\d+)$/;
 
@@ -175,8 +93,6 @@ export async function parshaDetail(ctx) {
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;
   const parsha = lookupParshaMeta(parshaName);
-  const items15map = il ? items15yrIsrael : items15yrDiaspora;
-  const items = items15map.get(parshaName);
   const reading = makeReading(date, parshaEv, il, parsha);
   parsha.haftaraHtml = makeLeyningHtmlFromParts(parsha.haft);
   if (parsha.seph) {
@@ -204,6 +120,7 @@ export async function parshaDetail(ctx) {
     const [p1] = parsha.name.split('-');
     Object.assign(commentary, drash[p1]);
   }
+  const items = getParshaMultiYearItems(parshaName, il);
   let nextRead;
   if (!date) {
     const today = dayjs();
