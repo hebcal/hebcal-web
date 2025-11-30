@@ -12,24 +12,31 @@ import {
 
 const YEARS_PRE = 3;
 const YEARS_TOTAL = 24;
-
-const currentHebYear = new HDate().getFullYear();
-const startYear = currentHebYear - YEARS_PRE;
-const endYear = currentHebYear + YEARS_TOTAL - YEARS_PRE - 1;
-let allEvtsIsrael = [];
-let allEvtsDiaspora = [];
-for (let yr = startYear; yr <= endYear; yr++) {
-  const evtsIsrael = getParshaYear(yr, true);
-  allEvtsIsrael = allEvtsIsrael.concat(evtsIsrael);
-  const evtsDiaspora = getParshaYear(yr, false);
-  allEvtsDiaspora = allEvtsDiaspora.concat(evtsDiaspora);
-}
 const itemsIsrael = new Map();
 const itemsDiaspora = new Map();
-const allParshiot = [].concat(parshiot, doubledParshiyot);
-for (const parshaName of allParshiot) {
-  itemsIsrael.set(parshaName, getAllParshaEvents(parshaName, true));
-  itemsDiaspora.set(parshaName, getAllParshaEvents(parshaName, false));
+
+/**
+ * @param {string} parshaName
+ * @param {boolean} il
+ * @return {any[]}
+ */
+export function getParshaMultiYearItems(parshaName, il) {
+  const map = il ? itemsIsrael : itemsDiaspora;
+  if (map.size === 0) {
+    const currentHebYear = new HDate().getFullYear();
+    const startYear = currentHebYear - YEARS_PRE;
+    const endYear = currentHebYear + YEARS_TOTAL - YEARS_PRE - 1;
+    let events = [];
+    for (let yr = startYear; yr <= endYear; yr++) {
+      const events0 = getParshaYear(yr, il);
+      events = events.concat(events0);
+    }
+    const allParshiot = [].concat(parshiot, doubledParshiyot);
+    for (const parshaName of allParshiot) {
+      map.set(parshaName, getAllParshaEvents(parshaName, il, events));
+    }
+  }
+  return map.get(parshaName);
 }
 
 function makeVezotEvents(il) {
@@ -48,15 +55,15 @@ function makeVezotEvents(il) {
  * Returns Parsha events during 24-year period that match this parshaName
  * @param {string} parshaName
  * @param {boolean} il
+ * @param {Event[]} events
  * @return {any[]}
  */
-function getAllParshaEvents(parshaName, il) {
+function getAllParshaEvents(parshaName, il, allEvents) {
   if (parshaName === VEZOT_HABERAKHAH) {
     return makeVezotEvents(il).map((ev) => {
       return eventToItem(ev, il);
     });
   }
-  const allEvents = il ? allEvtsIsrael : allEvtsDiaspora;
   const prefix = 'Parashat ';
   const descs = [prefix + parshaName];
   const pair = doubled.get(parshaName);
@@ -87,15 +94,4 @@ function eventToItem(ev, il) {
     item.maftir = fk.fullkriyah.M;
   }
   return item;
-}
-
-/**
- * @param {string} parshaName
- * @param {boolean} il
- * @return {any[]}
- */
-export function getParshaMultiYearItems(parshaName, il) {
-  const map = il ? itemsIsrael : itemsDiaspora;
-  const items = map.get(parshaName);
-  return items;
 }
