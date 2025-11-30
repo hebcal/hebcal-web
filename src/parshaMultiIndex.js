@@ -1,8 +1,8 @@
 import {HDate, ParshaEvent, parshiot} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshaByBook, torahBookNames,
-  simchatTorahDate, getParshaYear, VEZOT_HABERAKHAH} from './parshaCommon.js';
-import {getDefaultHebrewYear} from './dateUtil.js';
+  getParshaYear, VEZOT_HABERAKHAH} from './parshaCommon.js';
+import {getDefaultHebrewYear, simchatTorahDate} from './dateUtil.js';
 import {makeETag} from './common.js';
 import dayjs from 'dayjs';
 

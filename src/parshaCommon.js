@@ -1,4 +1,4 @@
-import {HDate, months, HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
+import {HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import {langNames} from './common.js';
@@ -30,7 +30,14 @@ export function getParshaYear(hyear, il) {
 export const drash = readJSON('./drash.json');
 export const VEZOT_HABERAKHAH = 'Vezot Haberakhah';
 
-export const torahBookNames = 'Genesis Exodus Leviticus Numbers Deuteronomy DoubledParshiyot'.split(' ');
+export const bookId = {
+  Genesis: 1,
+  Exodus: 2,
+  Leviticus: 3,
+  Numbers: 4,
+  Deuteronomy: 5,
+};
+export const torahBookNames = Object.keys(bookId).concat('DoubledParshiyot');
 export const parshaByBook = new Map();
 for (const book of torahBookNames) {
   parshaByBook.set(book, new Map());
@@ -117,14 +124,6 @@ export function lookupParshaAlias(str) {
   }
   */
 }
-
-export const bookId = {
-  Genesis: 1,
-  Exodus: 2,
-  Leviticus: 3,
-  Numbers: 4,
-  Deuteronomy: 5,
-};
 
 /**
  * Makes Sefaria links by adding `href` and Tikkun.io link by adding `tikkun`.
@@ -328,9 +327,4 @@ export function addCsvParshaMemo(ev, il, locale) {
   if (memo) {
     ev.memo = memo;
   }
-}
-
-export function simchatTorahDate(hyear, il) {
-  const mday = il ? 22 : 23;
-  return new HDate(mday, months.TISHREI, hyear);
 }

@@ -7,7 +7,7 @@ import {setDefautLangTz, httpRedirect, lgToLocale,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR,
 } from './common.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
-  getStartAndEnd,
+  getStartAndEnd, simchatTorahDate,
   makeHebDate, isoDateStringToDate} from './dateUtil.js';
 import {empty} from './empty.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
@@ -441,7 +441,7 @@ function getParshaEvents(hdate, il) {
   let events = [];
   if (!hasFullKriyah) {
     if (mm === months.TISHREI && (dd > 2 && dd < 15)) {
-      const simchatTorah = new HDate(il ? 22 : 23, months.TISHREI, hy);
+      const simchatTorah = simchatTorahDate(hy, il);
       const pe = new ParshaEvent({
         hdate: simchatTorah,
         parsha: ['Vezot Haberakhah'],

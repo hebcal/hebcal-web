@@ -2,11 +2,11 @@ import {HDate, ParshaEvent, parshiot} from '@hebcal/core';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
+import {simchatTorahDate} from './dateUtil.js';
 import {
   doubled,
   doubledParshiyot,
   getParshaYear,
-  simchatTorahDate,
   VEZOT_HABERAKHAH,
 } from './parshaCommon.js';
 

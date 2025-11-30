@@ -6,10 +6,10 @@ import createError from 'http-errors';
 import {empty} from './empty.js';
 import {httpRedirect, getBaseFromPath, langNames, makeETag,
   yearIsOutsideGregRange, throw410} from './common.js';
-import {makeGregDate} from './dateUtil.js';
+import {makeGregDate, simchatTorahDate} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
-  VEZOT_HABERAKHAH, simchatTorahDate,
+  VEZOT_HABERAKHAH,
   lookupParshaMeta, lookupParshaAlias, parshaNum} from './parshaCommon.js';
 import {getParshaMultiYearItems} from './parshaMultiYearItems.js';
 import dayjs from 'dayjs';

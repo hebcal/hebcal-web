@@ -273,3 +273,13 @@ export function expiresSaturdayNight(ctx, now, tzid) {
   const exp = dayjs.tz(sunday.format('YYYY-MM-DD 00:00'), tzid).toDate();
   ctx.set('Expires', exp.toUTCString());
 }
+
+/**
+ * @param {number} year Hebrew year
+ * @param {boolean} il
+ * @return {HDate}
+ */
+export function simchatTorahDate(year, il) {
+  const mday = il ? 22 : 23;
+  return new HDate(mday, months.TISHREI, year);
+}
