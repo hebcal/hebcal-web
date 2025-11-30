@@ -2,8 +2,7 @@ import {Event, HDate, HebrewCalendar, Locale,
   Location,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
-import {eventsToCsv, eventToFullCalendar} from '@hebcal/rest-api';
-import {myEventsToClassicApi} from './myEventsToClassicApi.js';
+import {eventsToCsv, eventToFullCalendar, eventsToClassicApi} from '@hebcal/rest-api';
 import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
@@ -11,6 +10,7 @@ import {empty} from './empty.js';
 import {makeETag, makeIcalOpts,
   cleanQuery,
   hebcalFormDefaults,
+  pkg,
   doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
 import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';
@@ -219,7 +219,10 @@ async function renderJson(maxId, q) {
   if (q.hdp === '1') {
     options.heDateParts = true;
   }
-  const results = myEventsToClassicApi(events, options, false);
+  const results = eventsToClassicApi(events, options, false);
+  if (typeof results.version === 'string') {
+    results.version += '-' + pkg.version;
+  }
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;

@@ -46,7 +46,7 @@ export async function yahrzeitEmailVerify(ctx) {
       if (info === null) {
         continue;
       }
-      const afterSunset = (info.sunset === 'on' || info.sunset == 1);
+      const afterSunset = info.afterSunset;
       const d = afterSunset ? info.day.subtract(1, 'day') : info.day;
       obj['date'+num] = d.format('D MMM YYYY');
       if (afterSunset) {

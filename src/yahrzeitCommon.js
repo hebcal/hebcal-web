@@ -1,5 +1,5 @@
 import {empty} from './empty.js';
-import {makeGregDate} from './dateUtil.js';
+import {makeGregDate, makeHebDate} from './dateUtil.js';
 import {pad4, pad2} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 
@@ -217,25 +217,54 @@ function getAnniversaryType(str) {
 }
 
 /**
+ * Returns undefined if any of the 3 params are missing.
+ * Throws if all 3 params are defined but invalid Hebrew date.
+ * @private
+ * @param {Object<string,string>} query
+ * @param {number} id
+ * @return {HDate|undefined}
+ */
+function getHebDateForId(query, id) {
+  const hy = query['hy' + id];
+  const hm = query['hm' + id];
+  const hd = query['hd' + id];
+  if (!empty(hd) && !empty(hm) && !empty(hy)) {
+    return makeHebDate(hy, hm, hd);
+  }
+  return undefined;
+}
+
+/**
  * @param {Object<string,any>} query
  * @param {number} id
  * @return {*}
  */
 export function getYahrzeitDetailForId(query, id) {
+  const type = getAnniversaryType(query['t' + id]);
+  const name = getAnniversaryName(query, id, type);
+
+  // API only: try Hebrew date first
+  if (query.cfg === 'json') {
+    const hdate = getHebDateForId(query, id);
+    if (hdate) {
+      const day = dayjs(hdate.greg());
+      return {afterSunset: false, type, name, day};
+    }
+  }
+
   const {yy, mm, dd} = getDateForId(query, id);
   if (empty(dd) || empty(mm) || empty(yy)) {
     return null;
   }
-  const type = getAnniversaryType(query['t' + id]);
-  const sunset = query[`s${id}`];
-  const name = getAnniversaryName(query, id, type);
   // TODO: try/catch for invalid dates like December 32
   const dt = makeGregDate(yy, mm, dd);
   let day = dayjs(dt);
-  if (sunset === 'on' || sunset == 1) {
+  const sunset = query[`s${id}`];
+  const afterSunset = sunset === 'on' || sunset == 1;
+  if (afterSunset) {
     day = day.add(1, 'day');
   }
-  return {yy, mm, dd, sunset, type, name, day};
+  return {afterSunset, type, name, day};
 }
 
 /**
