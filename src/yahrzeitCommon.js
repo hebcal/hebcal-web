@@ -164,17 +164,19 @@ export function getAnniversaryTypes(query) {
 }
 
 /**
- * @param {Object<string,any>} query
- * @return {number[]}
+ * @param {Object<string,any>} q
+ * @return {number[]}—
  */
-export function getYahrzeitIds(query) {
+export function getYahrzeitIds(q) {
   const set = new Set();
-  const numKeys = Object.keys(query).filter(isNumKey);
+  const numKeys = Object.keys(q).filter((s) => /\d+$/.test(s));
   for (const key of numKeys) {
     const id = +(key.substring(1));
-    if (key[0] === 'x' && !empty(query[key])) {
+    if (key[0] === 'x' && !empty(q[key])) {
       set.add(id);
-    } else if (!empty(query['y' + id]) && !empty(query['m' + id]) && !empty(query['d' + id])) {
+    } else if (!empty(q['y' + id]) && !empty(q['m' + id]) && !empty(q['d' + id])) {
+      set.add(id);
+    } else if (!empty(q['hy' + id]) && !empty(q['hm' + id]) && !empty(q['hd' + id])) {
       set.add(id);
     }
   }
@@ -244,12 +246,10 @@ export function getYahrzeitDetailForId(query, id) {
   const name = getAnniversaryName(query, id, type);
 
   // API only: try Hebrew date first
-  if (query.cfg === 'json') {
-    const hdate = getHebDateForId(query, id);
-    if (hdate) {
-      const day = dayjs(hdate.greg());
-      return {afterSunset: false, type, name, day};
-    }
+  const hdate = getHebDateForId(query, id);
+  if (hdate) {
+    const day = dayjs(hdate.greg());
+    return {afterSunset: false, type, name, day};
   }
 
   const {yy, mm, dd} = getDateForId(query, id);
