@@ -22,6 +22,7 @@
   "files": [],
   "scripts": {
     "dev": "node src/app-www.js",
+    "dev:download": "NODE_PORT=8081 node src/app-download.js",
     "build": "node ./po2json.js po/he.po po/pt.po po/es.po po/ashkenazi.po && npx rollup -c",
     "deploy": "./deploy.sh",
     "start": "node src/app-www.js",
