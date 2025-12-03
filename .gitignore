@@ -1,5 +1,6 @@
 src/*.po.js
 package-lock.json
+*.min.js
 
 # Logs
 logs

@@ -29,6 +29,12 @@ module.exports = [
         name: 'hebcalResults',
         banner: '/*! hebcalResults ' + pkg.version + ' */',
       },
+      {
+        file: 'views/partials/hebcalResults.min.js',
+        format: 'iife',
+        name: 'hebcalResults',
+        banner: '/*! hebcalResults ' + pkg.version + ' */',
+      },
     ],
     plugins: [
       terser(),
@@ -41,6 +47,12 @@ module.exports = [
     output: [
       {
         file: 'dist/views/partials/hdate.bundle.min.js',
+        format: 'iife',
+        name: 'hdate',
+        banner: '/*! hdate.bundle ' + pkg.version + ' */',
+      },
+      {
+        file: 'views/partials/hdate.bundle.min.js',
         format: 'iife',
         name: 'hdate',
         banner: '/*! hdate.bundle ' + pkg.version + ' */',
@@ -59,6 +71,11 @@ module.exports = [
         format: 'iife',
         banner: '/*! hdate-en ' + pkg.version + ' */',
       },
+      {
+        file: 'views/partials/hdate-en.min.js',
+        format: 'iife',
+        banner: '/*! hdate-en ' + pkg.version + ' */',
+      },
     ],
     plugins: [
       terser(),
@@ -74,6 +91,11 @@ module.exports = [
         format: 'iife',
         banner: '/*! hdate-he ' + pkg.version + ' */',
       },
+      {
+        file: 'views/partials/hdate-he.min.js',
+        format: 'iife',
+        banner: '/*! hdate-he ' + pkg.version + ' */',
+      },
     ],
     plugins: [
       terser(),
@@ -86,6 +108,11 @@ module.exports = [
     output: [
       {
         file: 'dist/views/partials/hdate-he-x-NoNikud.min.js',
+        format: 'iife',
+        banner: '/*! hdate-he-NoNikud ' + pkg.version + ' */',
+      },
+      {
+        file: 'views/partials/hdate-he-x-NoNikud.min.js',
         format: 'iife',
         banner: '/*! hdate-he-NoNikud ' + pkg.version + ' */',
       },
