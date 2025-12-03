@@ -84,6 +84,8 @@ typings/
 # Nuxt.js build / generate output
 .nuxt
 dist
+# artifacts of `npm run build`
+views/partials/*.min.js
 
 # Gatsby files
 .cache/
