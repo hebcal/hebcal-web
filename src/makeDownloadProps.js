@@ -102,8 +102,8 @@ export function downloadHref2(query, filename, override={}) {
 
   if (on(q.ue)) msg.setUseelevation(true);
 
-  if (on(q.d)) msg.setAddhebrewdates(true);
-  if (on(q.D)) msg.setAddhebrewdatesforevents(true);
+  if (on(q.d)) msg.setAddaltdates(true);
+  if (on(q.D)) msg.setAddaltdatesforevents(true);
 
   if (!empty(q.month) && q.month != 'x') {
     const month = getInt(q.month);

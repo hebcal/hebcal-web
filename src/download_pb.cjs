@@ -332,11 +332,11 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 23:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setAddhebrewdates(value);
+      msg.setAddaltdates(value);
       break;
     case 24:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setAddhebrewdatesforevents(value);
+      msg.setAddaltdatesforevents(value);
       break;
     case 25:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -659,14 +659,14 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getAddhebrewdates();
+  f = message.getAddaltdates();
   if (f) {
     writer.writeBool(
       23,
       f
     );
   }
-  f = message.getAddhebrewdatesforevents();
+  f = message.getAddaltdatesforevents();
   if (f) {
     writer.writeBool(
       24,
@@ -1312,10 +1312,10 @@ proto.Download.prototype.setSubscribe = function(value) {
 
 
 /**
- * optional bool addHebrewDates = 23;
+ * optional bool addAlternateDates = 23;
  * @return {boolean}
  */
-proto.Download.prototype.getAddhebrewdates = function() {
+proto.Download.prototype.getAddaltdates = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 23, false));
 };
 
@@ -1324,16 +1324,16 @@ proto.Download.prototype.getAddhebrewdates = function() {
  * @param {boolean} value
  * @return {!proto.Download} returns this
  */
-proto.Download.prototype.setAddhebrewdates = function(value) {
+proto.Download.prototype.setAddaltdates = function(value) {
   return jspb.Message.setProto3BooleanField(this, 23, value);
 };
 
 
 /**
- * optional bool addHebrewDatesForEvents = 24;
+ * optional bool addAlternateDatesForEvents = 24;
  * @return {boolean}
  */
-proto.Download.prototype.getAddhebrewdatesforevents = function() {
+proto.Download.prototype.getAddaltdatesforevents = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 24, false));
 };
 
@@ -1342,7 +1342,7 @@ proto.Download.prototype.getAddhebrewdatesforevents = function() {
  * @param {boolean} value
  * @return {!proto.Download} returns this
  */
-proto.Download.prototype.setAddhebrewdatesforevents = function(value) {
+proto.Download.prototype.setAddaltdatesforevents = function(value) {
   return jspb.Message.setProto3BooleanField(this, 24, value);
 };
 

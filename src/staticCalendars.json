@@ -48,7 +48,7 @@
 },
 {
   "downloadSlug": "hdate-en",
-  "addHebrewDates": true,
+  "addAlternateDates": true,
   "noHolidays": true,
   "locale": "en",
   "years": 3,
@@ -58,7 +58,7 @@
 },
 {
   "downloadSlug": "hdate-he",
-  "addHebrewDates": true,
+  "addAlternateDates": true,
   "noHolidays": true,
   "locale": "he",
   "years": 3,
@@ -68,7 +68,7 @@
 },
 {
   "downloadSlug": "hdate-he-v2",
-  "addHebrewDates": true,
+  "addAlternateDates": true,
   "noHolidays": true,
   "locale": "he-x-NoNikud",
   "years": 3,
