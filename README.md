@@ -30,8 +30,20 @@ Then, make sure to have the geonames.sqlite3 and zips.sqlite3 in path.
 touch hebcal-dot-com.ini
 ```
 
-4. Run the dev server
+4. Generate PO files:
+
+```bash
+npm run build
+```
+
+5. Run the dev server
 
 ```bash
 npm run dev
+```
+
+6. (Optional) If you want to test `download.hebcal.com` equivalent pages, run:
+
+```bash
+npm run dev:development
 ```
