@@ -24,8 +24,8 @@ message Download {
   bool yearNow = 19;
   bool subscribe = 20;
 
-  bool addHebrewDates = 23;
-  bool addHebrewDatesForEvents = 24;
+  bool addAlternateDates = 23;
+  bool addAlternateDatesForEvents = 24;
   bool omer = 25;
   bool dafyomi = 26;
   bool euro = 27;

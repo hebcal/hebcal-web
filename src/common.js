@@ -120,8 +120,8 @@ const optsToMask = {
 };
 
 const booleanOpts = {
-  d: 'addHebrewDates',
-  D: 'addHebrewDatesForEvents',
+  d: 'addAlternateDates',
+  D: 'addAlternateDatesForEvents',
   o: 'omer',
   a: 'ashkenazi',
   c: 'candlelighting',
@@ -965,12 +965,19 @@ export function makeHebrewCalendar(ctx, options) {
   // stash away values to avoid warning
   const yomTovOnly = options.yomTovOnly;
   const noMinorHolidays = options.noMinorHolidays;
+  const addAlternateDates = options.addAlternateDates;
+  const addAlternateDatesForEvents = options.addAlternateDatesForEvents;
   if (yomTovOnly) {
     delete options.yomTovOnly;
   }
   if (noMinorHolidays) {
     delete options.noMinorHolidays;
   }
+  options.addHebrewDates = addAlternateDates;
+  options.addHebrewDatesForEvents = addAlternateDatesForEvents;
+  // Always remove alternate properties - library doesn't recognize them
+  delete options.addAlternateDates;
+  delete options.addAlternateDatesForEvents;
   try {
     events = HebrewCalendar.calendar(options);
   } catch (err) {
@@ -1228,8 +1235,8 @@ const maxNumYear = {
   candlelighting: 4,
   sedrot: 5,
   omer: 5,
-  addHebrewDatesForEvents: 4,
-  addHebrewDates: 2,
+  addAlternateDatesForEvents: 4,
+  addAlternateDates: 2,
   dailyLearning: 2,
 };
 
@@ -1247,12 +1254,12 @@ export function getNumYears(options) {
   if (options.omer && options.sedrot) {
     numYears = 4;
   }
-  // Shabbat plus Hebrew Event every day can get very big
-  const addHebrewDates = options.addHebrewDates;
+  // Shabbat plus alternate dates every day can get very big
+  const addAlternateDates = options.addAlternateDates;
   if (options.candlelighting) {
-    if (addHebrewDates) {
+    if (addAlternateDates) {
       numYears = 2;
-    } else if (options.addHebrewDatesForEvents) {
+    } else if (options.addAlternateDatesForEvents) {
       numYears = 3;
     }
   }
@@ -1263,7 +1270,7 @@ export function getNumYears(options) {
     }
   }
   // reduce duration if 2+ daily options are specified
-  const daily = (addHebrewDates ? 1 : 0) +
+  const daily = (addAlternateDates ? 1 : 0) +
     Object.keys(options.dailyLearning || {}).length;
   if (daily > 1) {
     numYears = 1;

@@ -52,8 +52,8 @@ export function deserializeDownload(data) {
   if (msg.getMishnayomi()) q.myomi = 'on';
   if (msg.getPerekyomi()) q.dpy = 'on';
   if (msg.getNachyomi()) q.nyomi = 'on';
-  if (msg.getAddhebrewdates()) q.d = 'on';
-  if (msg.getAddhebrewdatesforevents()) q.D = 'on';
+  if (msg.getAddaltdates()) q.d = 'on';
+  if (msg.getAddaltdatesforevents()) q.D = 'on';
   if (msg.getYomkippurkatan()) q.ykk = 'on';
   if (msg.getYerushalmiyomi()) q.yyomi = 'on';
   if (msg.getYyschottenstein()) q.yys = 'on';
