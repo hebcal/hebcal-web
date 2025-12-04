@@ -71,6 +71,18 @@ export function deserializeDownload(data) {
   if (msg.getUseelevation()) q.ue = 'on';
   if (msg.getYizkor()) q.yzkr = 'on';
   if (msg.getShabbatmevarchim()) q.mvch = 'on';
+  // Decode monthMode enum to mg and gn parameters
+  const monthMode = msg.getMonthmode();
+  if (monthMode === 1) { // HEBREW_ARABIC
+    q.mg = 'h';
+    q.gn = 'off';
+  } else if (monthMode === 2) { // HEBREW_HEBREW
+    q.mg = 'h';
+    q.gn = 'on';
+  } else { // GREGORIAN_ARABIC (0) or default
+    q.mg = 'g';
+    q.gn = 'off';
+  }
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
     q.latitude = msg.hasOldLatitude() ? msg.getOldLatitude() : msg.getLatitude();

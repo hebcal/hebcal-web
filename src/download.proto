@@ -79,4 +79,10 @@ message Download {
   bool rambam3 = 61;
   bool seferHaMitzvot = 62;
   bool kitzurShulchanAruch = 63;
+  enum MonthMode {
+    GREGORIAN_ARABIC = 0;
+    HEBREW_ARABIC = 1;
+    HEBREW_HEBREW = 2;
+  }
+  MonthMode monthMode = 64;
 }

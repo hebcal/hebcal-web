@@ -1,7 +1,9 @@
 import dayjs from 'dayjs';
+import {HDate} from '@hebcal/core';
 import {pad2, pad4} from '@hebcal/hdate/dist/esm/pad';
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdateBase';
+import {gematriya} from '@hebcal/hdate';
 
 /**
  * @private
@@ -91,9 +93,167 @@ function addHebMonthName(month) {
   month.monthName = str;
 }
 
+/**
+ * Format Hebrew year-month as a string key
+ * @private
+ * @param {HDate} hd
+ * @return {string}
+ */
+function formatHebrewYearMonth(hd) {
+  const hy = pad4(hd.getFullYear());
+  const hm = pad2(hd.getMonth());
+  return `H${hy}-${hm}`;
+}
+
+/**
+ * Get Hebrew month boundaries for a given Hebrew year-month
+ * @private
+ * @param {number} hyear - Hebrew year
+ * @param {number} hmonth - Hebrew month (1-13)
+ * @return {Object} start and end dayjs objects
+ */
+function getHebrewMonthBoundaries(hyear, hmonth) {
+  const startHd = new HDate(1, hmonth, hyear);
+  const daysInMonth = startHd.daysInMonth();
+  const endHd = new HDate(daysInMonth, hmonth, hyear);
+
+  return {
+    startDay: dayjs(startHd.greg()),
+    endDay: dayjs(endHd.greg()),
+    startHd,
+    endHd,
+    daysInMonth,
+  };
+}
+
+/**
+ * Split events by Hebrew months instead of Gregorian
+ * @private
+ * @param {Array} events
+ * @return {Array}
+ */
+function splitByHebrewMonth(events) {
+  const startDate = makeDayjs(dateOnly(events[0].dt));
+  const endDate = makeDayjs(dateOnly(events[events.length - 1].dt));
+
+  const startHd = new HDate(startDate.toDate());
+  const endHd = new HDate(endDate.toDate());
+
+  const months = {};
+  const out = [];
+  let i = 0;
+
+  let currentHYear = startHd.getFullYear();
+  let currentHMonth = startHd.getMonth();
+
+  // Special case: Skip Elul of previous year if it's just Erev Rosh Hashana before Tishrei of next year
+  // This avoids wasting a full page for one or two events
+  const skipInitialElul = currentHMonth === 6 && // Elul
+                          startHd.getFullYear() < endHd.getFullYear() && // Different years
+                          new HDate(1, 7, currentHYear + 1).abs() <= endHd.abs(); // Tishrei of next year is in range
+
+  if (skipInitialElul) {
+    // Start from Tishrei of the next year instead
+    currentHMonth = 7;
+    currentHYear++;
+  }
+
+  // Use Gregorian dates for loop termination since Hebrew month/year comparisons are complex
+  const endGregDate = endDate.toDate();
+
+  while (true) {
+    const testHd = new HDate(1, currentHMonth, currentHYear);
+    const monthKey = formatHebrewYearMonth(testHd);
+    const boundaries = getHebrewMonthBoundaries(currentHYear, currentHMonth);
+
+    out[i++] = months[monthKey] = {
+      month: monthKey,
+      events: [],
+      startDay: boundaries.startDay,
+      endDay: boundaries.endDay,
+      startHd: boundaries.startHd,
+      endHd: boundaries.endHd,
+      isHebrew: true,
+      daysInMonth: boundaries.daysInMonth,
+    };
+
+    // Check if we've passed the end date
+    // Special case: if we just created Tishrei (month 7, start of new year)
+    // and it's past the original end date, this is the intentional "extra month"
+    // for printed calendars - keep it but don't create any more months after it
+    if (boundaries.startDay.toDate() > endGregDate) {
+      break;
+    }
+    if (currentHMonth === 7 && boundaries.endDay.toDate() >= endGregDate) {
+      // We've created Tishrei of the next year, which extends past or meets the end date
+      // This is intentional, but don't create any more months
+      break;
+    }
+
+    // Advance to next Hebrew month
+    // Hebrew year transitions from Elul (month 6) to Tishrei (month 7)
+    currentHMonth++;
+    if (currentHMonth === 7) {
+      // Tishrei is the start of the next Hebrew year
+      currentHYear++;
+    } else {
+      const monthsInYear = HDate.isLeapYear(currentHYear) ? 13 : 12;
+      if (currentHMonth > monthsInYear) {
+        currentHMonth = 1;
+      }
+    }
+  }
+
+  events.forEach(function(evt) {
+    const isoDate = dateOnly(evt.dt);
+    const d = makeDayjs(isoDate);
+    const hd = new HDate(d.toDate());
+    const monthKey = formatHebrewYearMonth(hd);
+
+    if (months[monthKey]) {
+      months[monthKey].events.push(evt);
+    } else if (skipInitialElul && hd.getMonth() === 6 && hd.getFullYear() === startHd.getFullYear()) {
+      // Events from skipped Elul - store in Tishrei with marker
+      const tishrei = formatHebrewYearMonth(new HDate(1, 7, startHd.getFullYear() + 1));
+      if (months[tishrei]) {
+        months[tishrei].prevMonthEvents = months[tishrei].prevMonthEvents || [];
+        months[tishrei].prevMonthEvents.push({evt, day: hd.getDate()});
+      }
+    }
+  });
+
+  for (let i = 1; i < out.length; i++) {
+    out[i].prev = out[i - 1].month;
+  }
+  for (let i = 0; i < out.length - 1; i++) {
+    out[i].next = out[i + 1].month;
+  }
+
+  Object.values(months).forEach(month => {
+    const localeData = window['hebcal'].localeConfig;
+    const opts = window['hebcal'].opts;
+    const hd = month.startHd;
+    const endHd = month.endHd;
+    const monthName = localeData.hebMonths[hd.getMonth()] || getMonthName(hd.getMonth(), hd.getFullYear());
+    const endYear = endHd.getFullYear();
+    // Use gematriya for Hebrew numerals, Arabic numerals otherwise
+    const endYearStr = opts.gematriyaNumerals ? gematriya(endYear) : endYear;
+    month.monthName = monthName.replace(/'/g, '\u2019') + ' ' + endYearStr;
+  });
+
+  return out;
+}
+
 const langNameWithHebrew = new Set(['ah', 'sh']);
 
 function splitByMonth(events) {
+  const opts = window['hebcal'].opts;
+  const isHebrewMonths = opts.hebrewMonths === true;
+
+  if (isHebrewMonths) {
+    return splitByHebrewMonth(events);
+  }
+
   const startDate = makeDayjs(dateOnly(events[0].dt));
   const endDate = makeDayjs(dateOnly(events[events.length - 1].dt));
   const start = startDate.set('date', 1);
@@ -171,8 +331,13 @@ function tableRow(evt) {
     subj = subj.substring(0, subj.indexOf(':'));
   }
   const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
-  if (isHebrew) {
+  // Gregorian dates (alternate dates in Hebrew month mode) should be left-aligned
+  const isGregorianDate = cat === 'hebdate';
+  if (isHebrew && !isGregorianDate) {
     subj = `<span lang="he" dir="rtl">${subj}</span>`;
+  } else if (isGregorianDate && isHebrew) {
+    // Gregorian dates remain LTR even in Hebrew mode
+    subj = `<span dir="ltr">${subj}</span>`;
   } else if (langNameWithHebrew.has(lang) && evt.h0) {
     subj += ` / <span lang="he" dir="rtl">${evt.h0}</span>`;
   }
@@ -215,12 +380,15 @@ function renderMonthTables(months) {
   window['hebcal'].monthTablesRendered = true;
 }
 
-function subjectSpan(str) {
+function subjectSpan(str, isGregorianDate) {
   const lang = window['hebcal'].lang || 's';
   const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
   str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
-  if (isHebrew) {
+  if (isHebrew && !isGregorianDate) {
     return '<span lang="he" dir="rtl">' + str + '</span>';
+  } else if (isHebrew && isGregorianDate) {
+    // Gregorian dates should be LTR even in Hebrew mode
+    return '<span dir="ltr">' + str + '</span>';
   }
   return str;
 }
@@ -228,6 +396,7 @@ function subjectSpan(str) {
 function renderEventHtml(evt) {
   let subj = evt.t0;
   const cat = evt.cat;
+  const isGregorianDate = cat === 'hebdate';
   if (cat === 'dafyomi') {
     subj = subj.substring(subj.indexOf(':') + 1);
   } else if (cat === 'candles' || cat === 'havdalah') {
@@ -239,9 +408,9 @@ function renderEventHtml(evt) {
     const timeHtml = evt.bn === 'Chanukah' ?
     '<small>' + time + '</small>' :
     '<small class="text-body-secondary">' + time + '</small>';
-    subj = timeHtml + ' ' + subjectSpan(subj);
+    subj = timeHtml + ' ' + subjectSpan(subj, isGregorianDate);
   } else {
-    subj = subjectSpan(subj);
+    subj = subjectSpan(subj, isGregorianDate);
   }
   const className = getEventClassName(evt);
   const lang = window['hebcal'].lang || 's';
@@ -254,30 +423,64 @@ function renderEventHtml(evt) {
   const url = evt.u0;
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
-  return `<div class="fc-event ${className}"${memo}>${ahref}${subj}${aclose}</div>\n`;
+  // Add left-align class for Gregorian dates in Hebrew mode
+  const lang2 = window['hebcal'].lang || 's';
+  const isHebrew = lang2 == 'h' || lang2 == 'he' || lang2 == 'he-x-NoNikud';
+  const alignClass = (isGregorianDate && isHebrew) ? ' text-start' : '';
+  return `<div class="fc-event ${className}${alignClass}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
 function getMonthTitle(month, center, prevNext) {
   const lang = window['hebcal'].lang || 's';
-  const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
-  const span0 = isHebrew ? '<span lang="he" dir="rtl">' : '';
-  const span1 = isHebrew ? '</span>' : '';
+  const isHebrewLang = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const span0 = isHebrewLang ? '<span lang="he" dir="rtl">' : '';
+  const span1 = isHebrewLang ? '</span>' : '';
   const localeData = window['hebcal'].localeConfig;
   const yearMonth = month.month;
-  const yyStr = yearMonth.substring(0, yearMonth.length - 3);
-  const yy = parseInt(yyStr, 10);
-  const yearStr = yy > 0 ? yy : -(yy-1) + ' ' + (isHebrew ? 'לפנה״ס' : 'B.C.E.');
-  const monthStr = yearMonth.substring(yearMonth.length - 2);
-  const mm = parseInt(monthStr, 10);
-  const titleText = localeData.months[mm - 1] + ' ' + yearStr;
+
+  let titleText, subtitleText;
+
+  if (month.isHebrew) {
+    // Hebrew month mode: Hebrew month is primary, Gregorian range is secondary
+    titleText = month.monthName; // e.g., "Kislev 5784"
+
+    // Build Gregorian date range subtitle
+    const startDate = month.startDay;
+    const endDate = month.endDay;
+    const startMon = localeData.monthsShort[startDate.month()];
+    const endMon = localeData.monthsShort[endDate.month()];
+    const startYear = startDate.year();
+    const endYear = endDate.year();
+
+    if (startDate.month() === endDate.month()) {
+      // Same month: "Dec 3 – 31, 2024"
+      subtitleText = `${startMon} ${startDate.date()} \u2013 ${endDate.date()}, ${endYear}`;
+    } else if (startYear === endYear) {
+      // Different months, same year: "Nov 28 – Dec 27, 2024"
+      subtitleText = `${startMon} ${startDate.date()} \u2013 ${endMon} ${endDate.date()}, ${endYear}`;
+    } else {
+      // Different years: "Dec 28, 2023 – Jan 25, 2024"
+      subtitleText = `${startMon} ${startDate.date()}, ${startYear} \u2013 ${endMon} ${endDate.date()}, ${endYear}`;
+    }
+  } else {
+    // Gregorian month mode: Gregorian month is primary, Hebrew month is secondary
+    const yyStr = yearMonth.substring(0, yearMonth.length - 3);
+    const yy = parseInt(yyStr, 10);
+    const yearStr = yy > 0 ? yy : -(yy-1) + ' ' + (isHebrewLang ? 'לפנה״ס' : 'B.C.E.');
+    const monthStr = yearMonth.substring(yearMonth.length - 2);
+    const mm = parseInt(monthStr, 10);
+    titleText = localeData.months[mm - 1] + ' ' + yearStr;
+    subtitleText = month.monthName || '';
+  }
+
   const prev = prevNext && month.prev ?
     `<a class="d-print-none text-body-secondary text-decoration-none" href="#cal-${month.prev}">«</a> ` : '';
   const next = prevNext && month.next ?
     ` <a class="d-print-none text-body-secondary text-decoration-none" href="#cal-${month.next}">»</a>` : '';
   const h3 = center ? '<h3 class="text-center">' : '<h3>';
-  const hebMonthClass = center ? 'text-center text-burgundy' : 'text-burgundy';
-  const hebMonthName = month.monthName ? `\n<h5 class="${hebMonthClass}">${month.monthName}</h5>` : '';
-  return h3 + prev + span0 + titleText + span1 + next + '</h3>' + hebMonthName;
+  const subtitleClass = center ? 'text-center text-burgundy' : 'text-burgundy';
+  const subtitleHtml = subtitleText ? `\n<h5 class="${subtitleClass}">${subtitleText}</h5>` : '';
+  return h3 + prev + span0 + titleText + span1 + next + '</h3>' + subtitleHtml;
 }
 
 function makeMonthHtml(month) {
@@ -291,7 +494,7 @@ function makeMonthHtml(month) {
   html += '<table' + dir + 'class="table table-bordered fc-emulated-table">\n';
   html += '<tbody>\n';
   html += '<tr>';
-  localeData.weekdaysShort.forEach(function(s) {
+  localeData.weekdays.forEach(function(s) {
     html += '<th>' + span0 + s + span1 + '</th>';
   });
   html += '</tr>\n';
@@ -302,29 +505,91 @@ function makeMonthHtml(month) {
 }
 
 function makeMonthTableBody(month) {
+  const isHebrew = month.isHebrew;
   const dayMap = [];
   const events = month.events;
+
   events.forEach(function(evt) {
     const isoDate = dateOnly(evt.dt);
     const d = makeDayjs(isoDate);
-    const date = d.date();
-    dayMap[date] = dayMap[date] || [];
-    dayMap[date].push(evt);
+    let dayNum;
+    if (isHebrew) {
+      const hd = new HDate(d.toDate());
+      dayNum = hd.getDate();
+    } else {
+      dayNum = d.date();
+    }
+    dayMap[dayNum] = dayMap[dayNum] || [];
+    dayMap[dayNum].push(evt);
   });
+
   let html = '<tr>';
-  const isoDate = month.month + '-01';
-  const day1 = makeDayjs(isoDate);
-  const dow = day1.day();
-  for (let i = 0; i < dow; i++) {
-    html += '<td>&nbsp;</td>';
+  let day1, dow, days;
+
+  if (isHebrew) {
+    day1 = month.startDay;
+    dow = day1.day();
+    days = month.daysInMonth;
+  } else {
+    const isoDate = month.month + '-01';
+    day1 = makeDayjs(isoDate);
+    dow = day1.day();
+    days = day1.daysInMonth();
   }
+
+  // Render leading days from previous month (Elul) if this is Tishrei with skipped Elul
+  if (isHebrew && month.startHd.getMonth() === 7 && month.prevMonthEvents) {
+    // Create a map of Elul day -> events
+    const prevDayMap = {};
+    month.prevMonthEvents.forEach(function(item) {
+      prevDayMap[item.day] = prevDayMap[item.day] || [];
+      prevDayMap[item.day].push(item.evt);
+    });
+
+    // Calculate Elul days for leading cells
+    const elulYear = month.startHd.getFullYear() - 1;
+    const elulHd = new HDate(1, 6, elulYear);
+    const elulDays = elulHd.daysInMonth(); // Usually 29
+
+    for (let i = 0; i < dow; i++) {
+      const elulDay = elulDays - (dow - i - 1);
+      if (prevDayMap[elulDay]) {
+        // Render cell with Elul day and events
+        const opts = window['hebcal'].opts || {};
+        const useGematriya = opts.gematriyaNumerals === true;
+        const dayNumStr = useGematriya ? gematriya(elulDay) : elulDay;
+        html += `<td><p style="color:#999;"><b>${dayNumStr}</b></p>`;
+        prevDayMap[elulDay].forEach(function(evt) {
+          html += renderEventHtml(evt);
+        });
+        html += '</td>\n';
+      } else {
+        html += '<td>&nbsp;</td>';
+      }
+    }
+  } else {
+    for (let i = 0; i < dow; i++) {
+      html += '<td>&nbsp;</td>';
+    }
+  }
+
   let n = dow;
   const today = dayjs();
-  const days = day1.daysInMonth();
+
   for (let i = 1; i <= days; i++) {
-    const d = makeDayjs(month.month + '-' + pad2(i));
+    let d;
+    if (isHebrew) {
+      const hd = new HDate(i, month.startHd.getMonth(), month.startHd.getFullYear());
+      d = dayjs(hd.greg());
+    } else {
+      d = makeDayjs(month.month + '-' + pad2(i));
+    }
+
     const clazz = today.isSame(d, 'd') ? ' class="fc-daygrid-day fc-day-today"' : '';
-    html += `<td${clazz}><p><b>${i}</b></p>`;
+    const opts = window['hebcal'].opts || {};
+    const useGematriya = opts.gematriyaNumerals === true;
+    const dayNumStr = useGematriya ? gematriya(i) : i;
+    html += `<td${clazz}><p><b>${dayNumStr}</b></p>`;
     const evts = dayMap[i] || [];
     evts.forEach(function(evt) {
       html += renderEventHtml(evt);
@@ -335,6 +600,7 @@ function makeMonthTableBody(month) {
       html += '</tr>\n<tr>';
     }
   }
+
   while (n % 7 !== 0) {
     html += '<td>&nbsp;</td>';
     n++;

@@ -319,6 +319,7 @@ function renderHtml(ctx) {
   }
   const localeConfig = {
     weekdaysShort: localeData.weekdaysShort(),
+    weekdays: localeData.weekdays(),
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
     hebMonths: getHebMonthNames(events, options.locale || 's'),
@@ -336,6 +337,12 @@ function renderHtml(ctx) {
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   const opts = {...options};
   delete opts.location;
+  if (q.mg === 'h' || q.mg === 'H') {
+    opts.hebrewMonths = true;
+  }
+  if (q.gn === 'on') {
+    opts.gematriyaNumerals = true;
+  }
   return ctx.render('hebcal-results', {
     items,
     memos,

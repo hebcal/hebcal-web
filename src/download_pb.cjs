@@ -24,6 +24,7 @@ var global =
 goog.exportSymbol('proto.Download', null, global);
 goog.exportSymbol('proto.Download.EndOneofCase', null, global);
 goog.exportSymbol('proto.Download.Hour12', null, global);
+goog.exportSymbol('proto.Download.MonthMode', null, global);
 goog.exportSymbol('proto.Download.LatOneofCase', null, global);
 goog.exportSymbol('proto.Download.LongOneofCase', null, global);
 goog.exportSymbol('proto.Download.StartOneofCase', null, global);
@@ -490,6 +491,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setKitzurshulchanaruch(value);
       break;
+    case 64:
+      var value = /** @type {!proto.Download.MonthMode} */ (reader.readEnum());
+      msg.setMonthmode(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -936,6 +941,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       63,
+      f
+    );
+  }
+  f = message.getMonthmode();
+  if (f !== 0) {
+    writer.writeEnum(
+      64,
       f
     );
   }
@@ -2172,6 +2184,38 @@ proto.Download.prototype.getKitzurshulchanaruch = function() {
  */
 proto.Download.prototype.setKitzurshulchanaruch = function(value) {
   return jspb.Message.setProto3BooleanField(this, 63, value);
+};
+
+
+/**
+ * optional bool hebrewMonths = 64;
+ * @return {boolean}
+ */
+/**
+ * optional MonthMode monthMode = 64;
+ * @return {!proto.Download.MonthMode}
+ */
+proto.Download.prototype.getMonthmode = function() {
+  return /** @type {!proto.Download.MonthMode} */ (jspb.Message.getFieldWithDefault(this, 64, 0));
+};
+
+
+/**
+ * @param {!proto.Download.MonthMode} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setMonthmode = function(value) {
+  return jspb.Message.setProto3EnumField(this, 64, value);
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.Download.MonthMode = {
+  GREGORIAN_ARABIC: 0,
+  HEBREW_ARABIC: 1,
+  HEBREW_HEBREW: 2
 };
 
 
