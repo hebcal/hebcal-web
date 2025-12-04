@@ -1,5 +1,7 @@
 import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
-import {getLeyningKeyForEvent} from '@hebcal/leyning';
+import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
+  getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
+import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag,
@@ -100,6 +102,13 @@ function makeItem(ev, locale, il, lang) {
     holidays: [],
     isParsha,
   };
+  const reading = isParsha ? getLeyningForParshaHaShavua(ev, il) : getLeyningForHoliday(ev, il);
+  if (reading.summaryParts) {
+    item.torahHtml = makeLeyningHtmlFromParts(reading.summaryParts);
+  } else {
+    const parts = makeLeyningParts(reading.fullkriyah);
+    item.torahHtml = makeLeyningHtmlFromParts(parts);
+  }
   if (isParsha) {
     const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
     const holidays1 = holidays0.filter((ev) => !(ev.getFlags() & flags.SHABBAT_MEVARCHIM));

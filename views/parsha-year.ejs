@@ -22,7 +22,7 @@
 or <em>parshiyot</em>. Each section (called a <em>parsha</em>, also
 transliterated <em>parashah</em> or <em>parasha</em>) is read during a
 particular week (<em>parashat ha-shavua</em>). The full cycle is read
-over the course of one Jewish year.</p>
+over the course of one Hebrew calendar year.</p>
 <p><a class="float-end btn btn-sm btn-secondary ms-3 mt-1 mb-1 d-print-none"
 href="#hcdl-modal" role="button" data-bs-toggle="modal"
 data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use
@@ -33,7 +33,7 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
 
 <table class="table table-striped">
 <colgroup>
-  <col style="width:128px"><col style="width:128px"><col>
+  <col style="width:128px"><col style="width:128px"><col><col>
 </colgroup>
 <thead>
 <tr>
@@ -41,7 +41,8 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
     <div class="float-start"><a title="<%=hyear-1%>" href="<%=prev%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
     Date</th>
   <th>Hebrew Date</th>
-  <th>Parsha
+  <th>Parsha</th>
+  <th><span class="d-none d-md-inline">Reading</span>
     <div class="float-end"><a title="<%=hyear+1%>" href="<%=next%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a></div>
   </th>
 </tr>
@@ -58,6 +59,7 @@ for (const item of items) { %>
   <li class="mt-2"><% if (holiday.url) { %><a class="link-success link-underline-opacity-25" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title.replace(/'/g, '’')%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
 <% } %>
   </ul></td>
+  <td><span class="d-none d-md-inline"><%- item.torahHtml %></span></td>
 </tr>
 <% py = item.d.year();
 } %>
