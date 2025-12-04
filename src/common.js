@@ -4,6 +4,7 @@ import createError from 'http-errors';
 import {randomUUID} from 'node:crypto';
 import {nearestCity} from './nearestCity.js';
 import {getEventCategories} from '@hebcal/rest-api';
+import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {murmur128Sync} from 'murmurhash3';
 import {find as geoTzFind} from 'geo-tz';
 import {basename} from 'path';
@@ -82,6 +83,8 @@ export const hebcalFormDefaults = {
   lg: 's',
   b: 18,
   M: 'on',
+  mg: 'g',
+  gn: 'off',
 };
 
 export const lgToLocale = {
@@ -456,7 +459,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   return {...defaults, ...ck, ...query};
 }
 
-const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em']);
+const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em', 'mg', 'gn']);
 for (const key of [].concat(allGeoKeys,
     Object.keys(booleanOpts),
     Object.keys(dailyLearningOpts),
@@ -700,6 +703,12 @@ export function makeHebcalOptions(db, query) {
   if (options.candlelighting && typeof options.year === 'number' &&
       ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
+  }
+  if (query.mg === 'h' || query.mg === 'H') {
+    options.hebrewMonths = true;
+  }
+  if (query.gn === 'on') {
+    options.gematriyaNumerals = true;
   }
   return options;
 }
@@ -967,19 +976,59 @@ export function makeHebrewCalendar(ctx, options) {
   const noMinorHolidays = options.noMinorHolidays;
   const addAlternateDates = options.addAlternateDates;
   const addAlternateDatesForEvents = options.addAlternateDatesForEvents;
+  const hebrewMonths = options.hebrewMonths;
+  const gematriyaNumerals = options.gematriyaNumerals;
   if (yomTovOnly) {
     delete options.yomTovOnly;
   }
   if (noMinorHolidays) {
     delete options.noMinorHolidays;
   }
-  options.addHebrewDates = addAlternateDates;
-  options.addHebrewDatesForEvents = addAlternateDatesForEvents;
+  if (!hebrewMonths) {
+    // No need for Hebrew dates when the whole calendar is fully Hebrew
+    options.addHebrewDatesForEvents = addAlternateDatesForEvents;
+    options.addHebrewDates = addAlternateDates;
+  }
   // Always remove alternate properties - library doesn't recognize them
   delete options.addAlternateDates;
   delete options.addAlternateDatesForEvents;
+  delete options.hebrewMonths;
+  delete options.gematriyaNumerals;
   try {
     events = HebrewCalendar.calendar(options);
+
+    // When using Hebrew months with Hebrew year mode, splitByHebrewMonth()
+    // intentionally includes Tishrei of the next year for printed calendars
+    // (useful as a backup when distributed yearly by mail).
+    // Generate events for that extra month so it's not empty.
+    if (hebrewMonths && options.isHebrewYear && options.year && !options.start && !options.end) {
+      const nextYear = options.year + 1;
+      const tishrei = 7; // Tishrei is month 7
+      // Use explicit start/end dates to get ONLY Tishrei, not the whole year
+      const tishreiStart = new HDate(1, tishrei, nextYear);
+      const tishreiEnd = new HDate(30, tishrei, nextYear); // Tishrei always has 30 days
+      events = events.concat(HebrewCalendar.calendar({
+        start: tishreiStart.greg(),
+        end: tishreiEnd.greg(),
+        isHebrewYear: false, // Using Gregorian date range
+        il: options.il,
+        locale: options.locale,
+        mask: options.mask,
+        candlelighting: options.candlelighting,
+        location: options.location,
+        havdalahDeg: options.havdalahDeg,
+        candleLightingMins: options.candleLightingMins,
+        sedrot: options.sedrot,
+        omer: options.omer,
+        dailyLearning: options.dailyLearning,
+        yomKippurKatan: options.yomKippurKatan,
+        molad: options.molad,
+        yizkor: options.yizkor,
+        shabbatMevarchim: options.shabbatMevarchim,
+        hour12: options.hour12,
+        useElevation: options.useElevation,
+      }));
+    }
   } catch (err) {
     const status = err.status || 400;
     ctx.throw(status, err);
@@ -1001,6 +1050,72 @@ export function makeHebrewCalendar(ctx, options) {
   }
   if (noMinorHolidays) {
     options.noMinorHolidays = true;
+  }
+  if (hebrewMonths) {
+    options.hebrewMonths = true;
+  }
+  if (gematriyaNumerals) {
+    options.gematriyaNumerals = true;
+  }
+  if (addAlternateDates) {
+    options.addAlternateDates = addAlternateDates;
+  }
+  if (addAlternateDatesForEvents) {
+    options.addAlternateDatesForEvents = addAlternateDatesForEvents;
+  }
+
+  // When Hebrew months are selected and user wants alternate dates,
+  // add Gregorian date events (reverse of normal behavior)
+  if (hebrewMonths && (options.addAlternateDates || options.addAlternateDatesForEvents)) {
+    // Build a map of dates that have events
+    // Key is absolute day number, value is {hd, events[]}
+    const dateMap = new Map();
+    for (const ev of events) {
+      const hd = ev.getDate();
+      const dateKey = hd.abs();
+      if (!dateMap.has(dateKey)) {
+        dateMap.set(dateKey, {hd, events: []});
+      }
+      dateMap.get(dateKey).events.push(ev);
+    }
+
+    // If addAlternateDates, we need to add Gregorian dates for ALL days in range
+    if (options.addAlternateDates && events.length > 0) {
+      // Find the date range from the events
+      const firstDate = events[0].getDate();
+      const lastDate = events[events.length - 1].getDate();
+
+      // Iterate over all days in the range
+      let currentHd = firstDate;
+      while (currentHd.abs() <= lastDate.abs()) {
+        const dateKey = currentHd.abs();
+        if (!dateMap.has(dateKey)) {
+          // No events on this day, but we need to add a Gregorian date
+          dateMap.set(dateKey, {hd: currentHd, events: []});
+        }
+        currentHd = currentHd.next();
+      }
+    }
+
+    // Now build the final events array with Gregorian dates inserted
+    const newEvents = [];
+    const sortedDates = Array.from(dateMap.keys()).sort((a, b) => a - b);
+
+    for (const dateKey of sortedDates) {
+      const {hd, events: eventsOnDay} = dateMap.get(dateKey);
+
+      // Add Gregorian date event if:
+      // - addAlternateDates is true (all days), OR
+      // - addAlternateDatesForEvents is true AND there are events on this day
+      if (options.addAlternateDates || (options.addAlternateDatesForEvents && eventsOnDay.length > 0)) {
+        newEvents.push(new GregorianDateEvent(hd));
+      }
+
+      // Add all events for this day
+      newEvents.push(...eventsOnDay);
+    }
+
+    events = newEvents;
   }
 
   return events;

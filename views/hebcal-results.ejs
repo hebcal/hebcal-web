@@ -199,13 +199,21 @@ document.addEventListener('DOMContentLoaded', function() {
       const finalChildNode = parentEl.children[parentEl.children.length - 1];
       months.forEach(function(month) {
         const yearMonth = month.month;
-        const yearStr = yearMonth.substring(0, yearMonth.length - 3);
-        const monthStr = yearMonth.substring(yearMonth.length - 2);
-        const mm = parseInt(monthStr, 10);
+        let title, innerHTML;
+        if (month.isHebrew) {
+          title = month.monthName;
+          innerHTML = month.monthName.split(' ')[0];
+        } else {
+          const yearStr = yearMonth.substring(0, yearMonth.length - 3);
+          const monthStr = yearMonth.substring(yearMonth.length - 2);
+          const mm = parseInt(monthStr, 10);
+          title = localeData.months[mm - 1] + ' ' + yearStr;
+          innerHTML = localeData.monthsShort[mm - 1];
+        }
         const newNode = hebcalResults.paginationListItem({
           href: '#cal-' + yearMonth,
-          title: localeData.months[mm - 1] + ' ' + yearStr,
-          innerHTML: localeData.monthsShort[mm - 1],
+          title: title,
+          innerHTML: innerHTML,
         });
         newNode.className = 'page-item d-none d-sm-inline';
         parentEl.insertBefore(newNode, finalChildNode);

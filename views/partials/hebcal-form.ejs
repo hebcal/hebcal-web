@@ -75,7 +75,22 @@ if (typeof year !== 'string' || year.length === 0) {
 </div></fieldset>
 </div><!-- .col-sm-6 -->
 <div class="col-sm-auto mb-2">
-<fieldset>
+<fieldset class="mb-2">
+<div class="form-check mb-1">
+<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="greg-arabic" id="mgG" data-mg="g" data-gn="off" <%= (q.mg !== 'h' && q.mg !== 'H') ? 'checked' : '' %>>
+<label class="form-check-label" for="mgG">Gregorian months &amp; Arabic numerals (1, 2, 3...)</label>
+</div>
+<div class="form-check mb-1">
+<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="heb-arabic" id="mgH-arabic" data-mg="h" data-gn="off" <%= (q.mg === 'h' || q.mg === 'H') && q.gn !== 'on' ? 'checked' : '' %>>
+<label class="form-check-label" for="mgH-arabic">Hebrew months &amp; Arabic numerals (1, 2, 3...)</label>
+</div>
+<div class="form-check mb-2">
+<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="heb-hebrew" id="mgH-hebrew" data-mg="h" data-gn="on" <%= (q.mg === 'h' || q.mg === 'H') && q.gn === 'on' ? 'checked' : '' %>>
+<label class="form-check-label" for="mgH-hebrew">Hebrew months &amp; Hebrew numerals (א׳, ב׳, ג׳...)</label>
+</div>
+</fieldset>
+<input type="hidden" name="mg" id="mg-hidden" value="<%= q.mg === 'h' || q.mg === 'H' ? 'h' : 'g' %>">
+<input type="hidden" name="gn" id="gn-hidden" value="<%= q.gn === 'on' ? 'on' : 'off' %>">
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
 <% for (const langName of ['s', 'a', 'h', 'he-x-NoNikud']) {
@@ -94,11 +109,17 @@ if (typeof year !== 'string' || year.length === 0) {
 </div>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="D" value="on" <%= q.D === 'on' ? 'checked' : '' %> id="d1">
-<label class="form-check-label" for="d1">Show Hebrew date for dates with some event</label>
+<label class="form-check-label" for="d1">
+<span class="d1-heb">Show Hebrew date for dates with some event</span>
+<span class="d1-greg" style="display:none">Show Gregorian date for dates with some event</span>
+</label>
 </div>
 <div class="form-check mb-3">
 <input class="form-check-input" type="checkbox" name="d" value="on" <%= q.d === 'on' ? 'checked' : '' %> id="d2">
-<label class="form-check-label" for="d2">Show Hebrew date every day of the year</label>
+<label class="form-check-label" for="d2">
+<span class="d2-greg">Show Hebrew date every day of the year</span>
+<span class="d2-heb" style="display:none">Show Gregorian date every day of the year</span>
+</label>
 </div>
 </fieldset>
 <details <%= Object.keys(q).filter((key) => q[key] === 'on' && dailyLearningOpts[key]).length > 0 ? 'open' : ''%> class="mb-3">

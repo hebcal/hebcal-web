@@ -104,6 +104,16 @@ export function downloadHref2(query, filename, override={}) {
 
   if (on(q.d)) msg.setAddaltdates(true);
   if (on(q.D)) msg.setAddaltdatesforevents(true);
+  // Set monthMode enum based on mg and gn parameters
+  if (q.mg === 'h' || q.mg === 'H') {
+    if (q.gn === 'on') {
+      msg.setMonthmode(DownloadProtoBuf.Download.MonthMode.HEBREW_HEBREW);
+    } else {
+      msg.setMonthmode(DownloadProtoBuf.Download.MonthMode.HEBREW_ARABIC);
+    }
+  } else {
+    msg.setMonthmode(DownloadProtoBuf.Download.MonthMode.GREGORIAN_ARABIC);
+  }
 
   if (!empty(q.month) && q.month != 'x') {
     const month = getInt(q.month);
