@@ -19,11 +19,11 @@ compress_file() {
 
 mkdir -p ical || exit 1
 
-node dist/makeStaticCalendars.js --quiet || exit 1
+node src/makeStaticCalendars.js --quiet || exit 1
 
 FILE="kindness"
 remove_file $FILE
-node dist/kindness.js
+node src/kindness.js
 mv "${FILE}.ics" "${FILE}.csv" ical
 compress_file $FILE
 

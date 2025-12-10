@@ -154,7 +154,7 @@ app.use(compress({
 app.use(stopIfTimedOut());
 
 render(app, {
-  root: path.join(__dirname, 'views'),
+  root: path.join(__dirname, '..', 'views'),
   layout: false,
   viewExt: 'ejs',
   debug: false,
@@ -181,7 +181,7 @@ app.use(async function errorCsp(ctx, next) {
 
 app.use(error({
   engine: 'ejs',
-  template: path.join(__dirname, 'views', 'error.ejs'),
+  template: path.join(__dirname, '..', 'views', 'error.ejs'),
 }));
 
 app.use(async function checkHttpMethod(ctx, next) {

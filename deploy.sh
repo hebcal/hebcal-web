@@ -14,13 +14,6 @@ fi
 
 npm run build
 
-mkdir -p ./dist && rsync -av ./src/ ./dist/
-
-# for testing out of local
-rsync -av ./views/ ./dist/views/
-
-npx rollup -c
-
 rm -f ./static/i/$npm_package_config_sprite
 ln -s sprite1.svg ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_sprite
@@ -31,6 +24,7 @@ compress_file ./static/i/$npm_package_config_csprite
 rsync -av ./fonts/ /var/www/fonts/
 rsync -av ./static/ /var/www/html/
 rsync -av ./package.json /var/www/
-rsync -av ./dist/ /var/www/dist/
+rsync -av ./src/ /var/www/dist/
+rsync -av ./views/ /var/www/views/
 rsync -av ./node_modules/ /var/www/node_modules/
 rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/

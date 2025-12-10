@@ -22,9 +22,9 @@
   "files": [],
   "scripts": {
     "dev": "node src/app-www.js",
-    "build": "node ./po2json.js po/he.po po/pt.po po/es.po po/ashkenazi.po",
+    "build": "node ./po2json.js po/he.po po/pt.po po/es.po po/ashkenazi.po && npx rollup -c",
     "deploy": "./deploy.sh",
-    "start": "node dist/app-www.js",
+    "start": "node src/app-www.js",
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto && mv src/download_pb.js src/download_pb.cjs",
     "test": "echo \"OK: no test specified\" && exit 0"
   },
