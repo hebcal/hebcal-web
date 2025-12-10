@@ -213,7 +213,11 @@ async function writeEventsToFile(events, icalOpt, file) {
   icalOpt.utmCampaign = 'ical-' + file;
   icalOpt.publishedTTL = 'P7D';
   const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
-  const icalStream = fs.createWriteStream(makeFilename(file, 'ics'));
+  const icalFilename = makeFilename(file, 'ics');
+  const icalStream = fs.createWriteStream(icalFilename);
+  icalStream.on('close', () => {
+    fs.utimesSync(icalFilename, TODAY, TODAY);
+  });
   const str = await icalEventsToString(icals, icalOpt);
   icalStream.write(str);
   icalStream.close();
@@ -226,7 +230,11 @@ async function writeEventsToFile(events, icalOpt, file) {
       addCsvParshaMemo(ev, il, locale);
     }
   }
-  const csvStream = fs.createWriteStream(makeFilename(file, 'csv'));
+  const csvFilename = makeFilename(file, 'csv');
+  const csvStream = fs.createWriteStream(csvFilename);
+  csvStream.on('close', () => {
+    fs.utimesSync(csvFilename, TODAY, TODAY);
+  });
   const locale = localeMap[icalOpt.locale] || 'en';
   if (locale !== 'en') {
     // Write BOM for UTF-8
