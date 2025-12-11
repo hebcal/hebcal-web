@@ -7,7 +7,6 @@ import {basename} from 'path';
 import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag,
   yearIsOutsideHebRange, throw410} from './common.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
-import createError from 'http-errors';
 
 export async function parshaYearApp(ctx) {
   const rpath = ctx.request.path;
@@ -15,7 +14,7 @@ export async function parshaYearApp(ctx) {
   const todayHebYear = new HDate().getFullYear();
   const hyear = parseInt(base, 10) || todayHebYear;
   if (hyear < 2 || hyear > 32000) {
-    throw createError(400, 'Hebrew year must be in range 2-32000');
+    ctx.throw(400, 'Hebrew year must be in range 2-32000');
   } else if (yearIsOutsideHebRange(hyear)) {
     throw410(ctx);
   }

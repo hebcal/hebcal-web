@@ -3,7 +3,7 @@ import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js';
 import {getDefaultHebrewYear, simchatTorahDate} from './dateUtil.js';
-import {makeETag} from './common.js';
+import {makeETag, yearIsOutsideHebRange, throw410} from './common.js';
 import dayjs from 'dayjs';
 
 export async function parshaMultiYearIndex(ctx) {
@@ -13,6 +13,11 @@ export async function parshaMultiYearIndex(ctx) {
   const q = ctx.request.query;
   const hyear0 = parseInt(q?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(hd);
+  if (hyear < 2 || hyear > 32000) {
+    ctx.throw(400, 'Hebrew year must be in range 2-32000');
+  } else if (yearIsOutsideHebRange(hyear)) {
+    throw410(ctx);
+  }
   ctx.response.etag = makeETag(ctx, q, {hyear});
   ctx.status = 200;
   if (ctx.fresh) {
