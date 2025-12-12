@@ -8,7 +8,7 @@ import 'dayjs/locale/he.js';
 import {send} from '@koa/send';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
-const hdateMinDir = '/var/www/dist/views/partials';
+const hdateMinDir = '/var/www/views/partials';
 
 function getLocale(rpath) {
   if (rpath.startsWith('/etc/hdate-he.js')) return 'he';
