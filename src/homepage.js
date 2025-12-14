@@ -1,5 +1,5 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
-  DailyLearning} from '@hebcal/core';
+  DailyLearning, ChanukahEvent} from '@hebcal/core';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz, localeMap, lgToLocale,
   cleanQuery,
@@ -45,7 +45,7 @@ export async function homepage(ctx) {
   ctx.state.gy = gy;
   const hdate = new HDate(dt);
   const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
-  Object.assign(ctx.state, {gy, gm, gd, afterSunset});
+  Object.assign(ctx.state, {gy, gm, gd, dt, afterSunset});
   ctx.state.lg = q.lg || 's';
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   ctx.state.locale = localeMap[lg] || 'en';
@@ -61,9 +61,9 @@ export async function homepage(ctx) {
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
   mastheadDafYomi(ctx, hd);
-  const [blub, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
-  if (blub) {
-    ctx.state.holidayBlurb = blub;
+  const [blurb, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
+  if (blurb) {
+    ctx.state.holidayBlurb = blurb;
     ctx.state.holidayLongText = longText;
   } else {
     ctx.state.holidayBlurb = false;
@@ -258,14 +258,14 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
  <a class="text-green1" href="/holidays/${holiday.toLowerCase()}-${gy}${suffix}">${holiday}</a>`];
   } else if (mm === months.KISLEV && dd <= 24 && dd >= 2) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
-    const erevChanukah = dayjs(new HDate(24, months.KISLEV, yy).greg()).locale(locale);
-    const dow = erevChanukah.day();
-    const htmlDate = myDateFormat(erevChanukah);
-    const when = dow == 5 ? 'before sundown' : dow == 6 ? 'at nightfall' : 'at sundown';
+    const erevHd = new HDate(24, months.KISLEV, yy);
+    const erevEv = new ChanukahEvent(erevHd,
+        'Chanukah: 1 Candle', flags.CHANUKAH_CANDLES, undefined);
+    const d = dayjs(erevHd.greg()).locale(locale);
+    // eslint-disable-next-line no-unused-vars
+    const [blurb, longText] = getChanukahGreeting(d, erevEv);
     return ['🕎&nbsp;<span lang="he" dir="rtl">חֲנוּכָּה שָׂמֵחַ</span>&nbsp;🕎',
-      `<strong>Happy Chanukah!</strong> Light the first
- <a class="text-green1 text-nowrap" href="/holidays/chanukah-${gy}">Chanukah candle</a>
-${when} on ${htmlDate}`];
+      longText];
   }
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
@@ -381,9 +381,9 @@ function fastDayGreeting(ctx, ev) {
  */
 function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
   const mask = ev.getFlags();
-  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
+  if (today && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
     const tzid = ctx.state.timezone;
-    const d = dayjs.tz(new Date(), tzid);
+    const d = dayjs.tz(ctx.state.dt, tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
     const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
@@ -414,7 +414,7 @@ function getChanukahGreeting(d, ev) {
   const dowStr = d.format('dddd');
   return [`🕎&nbsp;<span lang="he" dir="rtl">חַג אוּרִים שָׂמֵחַ</span>&nbsp;🕎`,
     `<strong>Happy Chanukah!</strong> Light the ${nth}
-<a class="text-green1 text-nowrap" href="${url}">Chanukah candle</a> ${dowStr} evening ${when}`];
+<a class="text-green1 text-nowrap" href="${url}#chanukah-candles">Chanukah candle</a> ${dowStr} evening ${when}`];
 }
 
 function getRoshChodeshGreeting(ctx, hd, ev) {
