@@ -45,7 +45,7 @@ export async function homepage(ctx) {
   ctx.state.gy = gy;
   const hdate = new HDate(dt);
   const hd = ctx.state.hd = afterSunset ? hdate.next() : hdate;
-  Object.assign(ctx.state, {gy, gm, gd, dt, afterSunset});
+  Object.assign(ctx.state, {gy, gm, gd, afterSunset});
   ctx.state.lg = q.lg || 's';
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   ctx.state.locale = localeMap[lg] || 'en';
@@ -381,9 +381,9 @@ function fastDayGreeting(ctx, ev) {
  */
 function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
   const mask = ev.getFlags();
-  if (today && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
+  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
     const tzid = ctx.state.timezone;
-    const d = dayjs.tz(ctx.state.dt, tzid);
+    const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
     const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
