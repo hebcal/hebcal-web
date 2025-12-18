@@ -77,20 +77,18 @@ if (typeof year !== 'string' || year.length === 0) {
 <div class="col-sm-auto mb-2">
 <fieldset class="mb-2">
 <div class="form-check mb-1">
-<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="greg-arabic" id="mgG" data-mg="g" data-gn="off" <%= (q.mg !== 'h' && q.mg !== 'H') ? 'checked' : '' %>>
-<label class="form-check-label" for="mgG">Gregorian months &amp; Arabic numerals (1, 2, 3...)</label>
+<input class="form-check-input" type="radio" name="mm" value="0" id="mm0" <%= q.mm !== '1' && q.mm !== '2' ? 'checked' : '' %>>
+<label class="form-check-label" for="mm0">Gregorian months &amp; Arabic numerals (1, 2, 3...)</label>
 </div>
 <div class="form-check mb-1">
-<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="heb-arabic" id="mgH-arabic" data-mg="h" data-gn="off" <%= (q.mg === 'h' || q.mg === 'H') && q.gn !== 'on' ? 'checked' : '' %>>
-<label class="form-check-label" for="mgH-arabic">Hebrew months &amp; Arabic numerals (1, 2, 3...)</label>
+<input class="form-check-input" type="radio" name="mm" value="1" id="mm1" <%= q.mm === '1' ? 'checked' : '' %>>
+<label class="form-check-label" for="mm1">Hebrew months &amp; Arabic numerals (1, 2, 3...)</label>
 </div>
 <div class="form-check mb-2">
-<input class="form-check-input month-mode-radio" type="radio" name="month-mode" value="heb-hebrew" id="mgH-hebrew" data-mg="h" data-gn="on" <%= (q.mg === 'h' || q.mg === 'H') && q.gn === 'on' ? 'checked' : '' %>>
-<label class="form-check-label" for="mgH-hebrew">Hebrew months &amp; Hebrew numerals (א׳, ב׳, ג׳...)</label>
+<input class="form-check-input" type="radio" name="mm" value="2" id="mm2" <%= q.mm === '2' ? 'checked' : '' %>>
+<label class="form-check-label" for="mm2">Hebrew months &amp; Hebrew numerals (א׳, ב׳, ג׳...)</label>
 </div>
 </fieldset>
-<input type="hidden" name="mg" id="mg-hidden" value="<%= q.mg === 'h' || q.mg === 'H' ? 'h' : 'g' %>">
-<input type="hidden" name="gn" id="gn-hidden" value="<%= q.gn === 'on' ? 'on' : 'off' %>">
 <div class="form-floating">
 <select name="lg" class="form-select mb-2" id="lg">
 <% for (const langName of ['s', 'a', 'h', 'he-x-NoNikud']) {

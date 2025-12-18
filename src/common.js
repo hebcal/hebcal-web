@@ -83,8 +83,7 @@ export const hebcalFormDefaults = {
   lg: 's',
   b: 18,
   M: 'on',
-  mg: 'g',
-  gn: 'off',
+  mm: '0',
 };
 
 export const lgToLocale = {
@@ -459,7 +458,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   return {...defaults, ...ck, ...query};
 }
 
-const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em', 'mg', 'gn']);
+const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em', 'mm']);
 for (const key of [].concat(allGeoKeys,
     Object.keys(booleanOpts),
     Object.keys(dailyLearningOpts),
@@ -704,12 +703,9 @@ export function makeHebcalOptions(db, query) {
       ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
   }
-  if (query.mg === 'h' || query.mg === 'H') {
-    options.hebrewMonths = true;
-  }
-  if (query.gn === 'on') {
-    options.gematriyaNumerals = true;
-  }
+  const mm = query.mm || '0';
+  options.hebrewMonths = (mm === '1' || mm === '2');
+  options.gematriyaNumerals = (mm === '2');
   return options;
 }
 
