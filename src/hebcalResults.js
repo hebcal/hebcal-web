@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import {HDate} from '@hebcal/core';
+import {HDate} from '@hebcal/hdate/dist/esm/hdate';
 import {pad2, pad4} from '@hebcal/hdate/dist/esm/pad';
 import {greg2abs} from '@hebcal/hdate/dist/esm/greg';
 import {abs2hebrew, getMonthName} from '@hebcal/hdate/dist/esm/hdateBase';
-import {gematriya} from '@hebcal/hdate';
+import {gematriya} from '@hebcal/hdate/dist/esm/gematriya';
 
 /**
  * @private
