@@ -337,12 +337,9 @@ function renderHtml(ctx) {
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
   const opts = {...options};
   delete opts.location;
-  if (q.mg === 'h' || q.mg === 'H') {
-    opts.hebrewMonths = true;
-  }
-  if (q.gn === 'on') {
-    opts.gematriyaNumerals = true;
-  }
+  const mm = q.mm || '0';
+  opts.hebrewMonths = (mm === '1' || mm === '2');
+  opts.gematriyaNumerals = (mm === '2');
   return ctx.render('hebcal-results', {
     items,
     memos,

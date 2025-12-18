@@ -15,19 +15,15 @@ d.getElementById("m").addEventListener("focus",function(){
   d.getElementById("M1").checked = false;
   d.getElementById("M0").checked = true;
 });
-const monthModeRadios=d.querySelectorAll('.month-mode-radio');
-const mgHidden=d.getElementById('mg-hidden');
-const gnHidden=d.getElementById('gn-hidden');
+const monthModeRadios=d.querySelectorAll('input[name="mm"]');
 const d2gregLabel=d.querySelector('.d2-greg');
 const d2hebLabel=d.querySelector('.d2-heb');
 const d1hebLabel=d.querySelector('.d1-heb');
 const d1gregLabel=d.querySelector('.d1-greg');
 function updateMonthMode(){
-  const checked=d.querySelector('.month-mode-radio:checked');
+  const checked=d.querySelector('input[name="mm"]:checked');
   if(checked){
-    mgHidden.value=checked.getAttribute('data-mg');
-    gnHidden.value=checked.getAttribute('data-gn');
-    const isHebrew=checked.getAttribute('data-mg')==='h';
+    const isHebrew=checked.value==='1'||checked.value==='2';
     if(d2gregLabel&&d2hebLabel){
       d2gregLabel.style.display=isHebrew?'none':'inline';
       d2hebLabel.style.display=isHebrew?'inline':'none';
