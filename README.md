@@ -45,5 +45,5 @@ npm run dev
 6. (Optional) If you want to test `download.hebcal.com` equivalent pages, run:
 
 ```bash
-npm run dev:development
+npm run dev:download
 ```
