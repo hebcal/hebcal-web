@@ -1,4 +1,7 @@
 import {Event, flags} from '@hebcal/core';
+import {localeMap} from './common.js';
+import dayjs from 'dayjs';
+import './dayjs-locales.js';
 
 /** Daily Gregorian date event for Hebrew months mode */
 export class GregorianDateEvent extends Event {
@@ -7,34 +10,19 @@ export class GregorianDateEvent extends Event {
    */
   constructor(hdate) {
     const gdate = hdate.greg();
-    const desc = formatGregorianDate(gdate);
+    const d = dayjs(gdate);
+    const desc = d.format('YYYY-MM-DD');
     super(hdate, desc, flags.HEBREW_DATE); // Use same flag as HebrewDateEvent
+    this.d = d;
   }
 
   /**
    * @param {string} [locale] - Optional locale name (defaults to empty locale)
    */
   render(locale) {
-    return this.getDesc();
+    locale = localeMap[locale] || 'en';
+    const d = this.d.locale(locale);
+    const template = locale === 'en' ? 'MMM D' : 'D MMM';
+    return d.format(template);
   }
-
-  /**
-   * @param {string} [locale] - Optional locale name (defaults to empty locale)
-   */
-  renderBrief(locale) {
-    return this.getDesc();
-  }
-}
-
-/**
- * Format a Gregorian date as "Jan 15" or "15 Jan" depending on locale
- * @param {Date} gdate - Gregorian date
- * @return {string}
- */
-function formatGregorianDate(gdate) {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = gdate.getDate();
-  const month = months[gdate.getMonth()];
-  return `${month} ${day}`;
 }

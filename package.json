@@ -35,17 +35,17 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^9.39.2",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
-    "bootstrap5-autocomplete": "^1.1.40",
+    "bootstrap5-autocomplete": "^1.1.41",
     "csv-parse": "^6.1.0",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-plugin-n": "^17.23.1",
     "gettext-parser": "^8.0.0",
     "globals": "^16.5.0",
-    "rollup": "^4.53.3"
+    "rollup": "^4.53.5"
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
@@ -82,7 +82,7 @@
     "maxmind": "^5.0.1",
     "minimist": "^1.2.8",
     "murmurhash3": "^0.5.0",
-    "mysql2": "^3.15.3",
+    "mysql2": "^3.16.0",
     "nodemailer": "^7.0.11",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.17.2",
@@ -90,7 +90,7 @@
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.3.0",
     "random-bigint": "0.0.1",
-    "transliteration": "^2.3.5",
+    "transliteration": "^2.6.0",
     "ulid": "^3.0.2"
   }
 }
