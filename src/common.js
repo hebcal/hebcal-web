@@ -1007,27 +1007,13 @@ export function makeHebrewCalendar(ctx, options) {
       // Use explicit start/end dates to get ONLY Tishrei, not the whole year
       const tishreiStart = new HDate(1, tishrei, nextYear);
       const tishreiEnd = new HDate(30, tishrei, nextYear); // Tishrei always has 30 days
-      events = events.concat(HebrewCalendar.calendar({
+      const optsNextTishrei = {
+        ...options,
         start: tishreiStart.greg(),
         end: tishreiEnd.greg(),
         isHebrewYear: false, // Using Gregorian date range
-        il: options.il,
-        locale: options.locale,
-        mask: options.mask,
-        candlelighting: options.candlelighting,
-        location: options.location,
-        havdalahDeg: options.havdalahDeg,
-        candleLightingMins: options.candleLightingMins,
-        sedrot: options.sedrot,
-        omer: options.omer,
-        dailyLearning: options.dailyLearning,
-        yomKippurKatan: options.yomKippurKatan,
-        molad: options.molad,
-        yizkor: options.yizkor,
-        shabbatMevarchim: options.shabbatMevarchim,
-        hour12: options.hour12,
-        useElevation: options.useElevation,
-      }));
+      };
+      events = events.concat(HebrewCalendar.calendar(optsNextTishrei));
     }
   } catch (err) {
     const status = err.status || 400;
