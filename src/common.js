@@ -240,7 +240,7 @@ function getGeoKeysToRemove(geo) {
   }
   switch (geo) {
     case 'pos': return primaryGeoKeys;
-    case 'none': return allGeoKeys.concat(['b', 'm', 'M']);
+    case 'none': return allGeoKeys.concat(['b', 'm', 'M', 'ue']);
     case 'geoname': return allGeoKeys.filter((k) => k !== 'geonameid');
     default: return allGeoKeys.filter((k) => k !== geo);
   }
@@ -275,6 +275,11 @@ function makeCookie(ctx, query, uid) {
   }
   if (query.geo === 'pos') {
     ck.geo = 'pos';
+  } else if (query.geo === 'none') {
+    for (const key of getGeoKeysToRemove('none')) {
+      delete query[key];
+      delete ck[key];
+    }
   }
   for (const key of cookieOpts) {
     const value = query[key];
