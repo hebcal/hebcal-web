@@ -5,6 +5,7 @@ import './dayjs-locales.js';
 import {localeMap, locationDefaultCandleMins} from './common.js';
 import {appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 import {pad2, pad4} from '@hebcal/hdate';
+import {GregorianDateEvent} from './GregorianDateEvent.js';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -310,14 +311,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const mask = evt.getFlags();
   let subj = shouldRenderBrief(evt) ? evt.renderBrief(locale) : evt.render(locale);
   // Check if this is a Gregorian date event (alternate date in Hebrew month mode)
-  const isGregorianDate = Boolean(mask & flags.HEBREW_DATE);
+  const isGregorianDate = evt instanceof GregorianDateEvent;
   const isChag = Boolean(mask & flags.CHAG) && !timed;
   let fontSize = rtl ? 12 : 10;
   const heFontName = isChag ? 'hebrew-bold' : 'hebrew';
   const fontStyle = rtl ? heFontName : isChag ? 'bold' : 'plain';
-  // For RTL, reverse Hebrew text only (but not Gregorian dates)
-  // Gregorian dates should remain in "Mon DD" format and be left-aligned
-  if (rtl && !isGregorianDate) {
+  // For RTL, reverse Hebrew text only
+  if (rtl) {
     subj = reverseHebrewWords(subj);
   }
   doc.font(fontStyle).fontSize(fontSize);

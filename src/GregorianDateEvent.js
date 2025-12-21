@@ -12,7 +12,7 @@ export class GregorianDateEvent extends Event {
     const gdate = hdate.greg();
     const d = dayjs(gdate);
     const desc = d.format('YYYY-MM-DD');
-    super(hdate, desc, flags.HEBREW_DATE); // Use same flag as HebrewDateEvent
+    super(hdate, desc, flags.USER_EVENT);
     this.d = d;
   }
 
