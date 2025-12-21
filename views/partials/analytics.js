@@ -1,4 +1,4 @@
-/* eslint-disable keyword-spacing, comma-spacing, brace-style, space-before-blocks, no-var */
+/* eslint-disable */
 var _paq = window._paq = window._paq || [];
 const canonicalMeta=document.querySelector('link[rel="canonical"]');
 const urlHref=canonicalMeta?canonicalMeta.href:window.location.href;
@@ -19,13 +19,19 @@ if (pn.startsWith('/yahrzeit/edit/')) {
   url.pathname='/yahrzeit';
 } else if (pn=='/converter') {
   if (sp.get('h2g')=='1') {
-    url.pathname='/converter/'+sp.get('hy')+'/'+sp.get('hm')+'/'+sp.get('hd');
+    url.pathname=pn+'/'+sp.get('hy')+'/'+sp.get('hm')+'/'+sp.get('hd');
   } else {
-    url.pathname='/converter/'+sp.get('gy')+'/'+sp.get('gm')+'/'+sp.get('gd');
+    url.pathname=pn+'/'+sp.get('gy')+'/'+sp.get('gm')+'/'+sp.get('gd');
   }
 } else if (pn=='/hebcal') {
-  const yr=sp.get('year');
-  url.pathname=sp.get('v')=='1'&&yr?'/hebcal/'+yr:'/hebcal';
+  url.pathname=pn;
+  if(sp.get('v')=='1'){
+    const yr=sp.get('year');
+    if(yr){url.pathname=pn+'/'+yr;}
+    else{const start=sp.get('start');
+      if(start){url.pathname=pn+'/'+start.substring(0, 4);}
+    }
+  }
 }
 /* always remove search params */
 url.search='';
