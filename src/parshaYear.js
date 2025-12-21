@@ -110,7 +110,8 @@ function makeItem(ev, locale, il, lang) {
   }
   if (isParsha) {
     const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-    const holidays1 = holidays0.filter((ev) => !(ev.getFlags() & flags.SHABBAT_MEVARCHIM));
+    const mask = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
+    const holidays1 = holidays0.filter((ev) => (ev.getFlags() & mask) || ev.chanukahDay);
     item.holidays = holidays1.map((ev) => holidayEvToItem(ev, il, lang));
     const roshChodeshToday = holidays1.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
     if (!roshChodeshToday) {
