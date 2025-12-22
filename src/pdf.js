@@ -572,9 +572,7 @@ export function renderPdf(doc, events, options) {
       const hasPrevEvents = Object.keys(cells[yearMonth]).some((k) => k.startsWith('prev_'));
       if (hasPrevEvents) {
         // Render Elul days in the leading empty cells
-        const elulYear = year - 1;
-        const elulHd = new HDate(1, 6, elulYear);
-        const elulDays = elulHd.daysInMonth(); // Should always be 29
+        const elulDays = 29;
 
         // Start from the leftmost cell and work forward
         let prevXpos = xposNewRow;
