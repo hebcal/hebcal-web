@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import {greg, flags, HebrewCalendar, Locale, gematriya, HDate} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
@@ -28,12 +29,10 @@ function calId(d) {
 
 /**
  * @param {Event[]} events
- * @param {boolean} hebrewMonths
  * @return {Object}
  */
-function eventsToCells(events, hebrewMonths) {
+function eventsToCellsHeb(events) {
   const cells = {};
-  if (hebrewMonths) {
     // Create month containers in chronological order (like splitByHebrewMonth in hebcalResults.js)
     const startHd = events[0].getDate();
     const endHd = events[events.length - 1].getDate();
@@ -104,26 +103,31 @@ function eventsToCells(events, hebrewMonths) {
         }
       }
     }
-  } else {
-    // Group by Gregorian months
-    for (const e of events) {
-      const d = e.greg();
-      const mday = d.getDate();
-      const yearMonth = calId(dayjs(d));
-      cells[yearMonth] = cells[yearMonth] || {};
-      cells[yearMonth][mday] = cells[yearMonth][mday] || [];
-      cells[yearMonth][mday].push(e);
-    }
+  return cells;
+}
 
-    // add blank months in the middle, even if there are no events
-    const startDate = dayjs(events[0].greg());
-    const endDate = dayjs(events[events.length - 1].greg());
-    const start = startDate.set('date', 1);
-    for (let i = start; i.isBefore(endDate); i = i.add(1, 'month')) {
-      const yearMonth = calId(i);
-      if (!cells[yearMonth]) {
-        cells[yearMonth] = {dummy: []};
-      }
+/**
+ * @param {Event[]} events
+ * @return {Object}
+ */
+function eventsToCells(events) {
+  const cells = {};
+  for (const e of events) {
+    const d = e.greg();
+    const mday = d.getDate();
+    const yearMonth = calId(dayjs(d));
+    cells[yearMonth] = cells[yearMonth] || {};
+    cells[yearMonth][mday] = cells[yearMonth][mday] || [];
+    cells[yearMonth][mday].push(e);
+  }
+  // add blank months in the middle, even if there are no events
+  const startDate = dayjs(events[0].greg());
+  const endDate = dayjs(events[events.length - 1].greg());
+  const start = startDate.set('date', 1);
+  for (let i = start; i.isBefore(endDate); i = i.add(1, 'month')) {
+    const yearMonth = calId(i);
+    if (!cells[yearMonth]) {
+      cells[yearMonth] = {dummy: []};
     }
   }
   return cells;
@@ -478,7 +482,7 @@ export function createPdfDoc(title, options) {
  */
 export function renderPdf(doc, events, options) {
   const hebrewMonths = options?.hebrewMonths === true;
-  const cells = eventsToCells(events, hebrewMonths);
+  const cells = hebrewMonths ? eventsToCellsHeb(events) : eventsToCells(events);
   const locale0 = options?.locale;
   const locale = localeMap[locale0] || 'en';
   const rtl = Boolean(locale === 'he');
