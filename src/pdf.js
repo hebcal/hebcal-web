@@ -218,24 +218,23 @@ function makeHebMonthStr(d, rtl, options) {
   return rtl ? reverseHebrewWords(str) : str.replace(/'/g, '’');
 }
 
-function renderPdfMonthTitle(doc, d, rtl, options, isHebrew, year, month) {
-  let monthTitle;
-  let subtitle;
-
-  if (isHebrew) {
-    // Hebrew month mode: Hebrew month is primary, Gregorian range is secondary
+// Hebrew month mode: Hebrew month is primary, Gregorian range is secondary
+function pdfMonthTitleHebrew(year, month, options, rtl) {
     const hd = new HDate(1, month, year);
     const monthName = Locale.gettext(hd.getMonthName(), options?.locale);
-    const useGematriya = options?.gematriyaNumerals === true;
-    const yearStr = useGematriya ? gematriya(year) : year;
-    monthTitle = rtl ? reverseHebrewWords(monthName + ' ' + yearStr) : monthName + ' ' + yearStr;
+    const yearStr = rtl ? gematriya(year) : year;
+    const monthTitle0 = monthName + ' ' + yearStr;
+    const monthTitle = rtl ? reverseHebrewWords(monthTitle0) : monthTitle0;
 
     // Build Gregorian date range subtitle
     const lastDay = hd.daysInMonth();
     const endHd = new HDate(lastDay, month, year);
-    const startDay = dayjs(hd.greg());
-    const endDay = dayjs(endHd.greg());
+    const locale0 = options?.locale;
+    const locale = localeMap[locale0] || 'en';
+    const startDay = dayjs(hd.greg()).locale(locale);
+    const endDay = dayjs(endHd.greg()).locale(locale);
 
+    let subtitle;
     if (startDay.month() === endDay.month()) {
       // Same month: "Dec 3 – 31, 2024"
       subtitle = startDay.format('MMM D ') + `\u2013 ` + endDay.format('D, YYYY');
@@ -246,22 +245,30 @@ function renderPdfMonthTitle(doc, d, rtl, options, isHebrew, year, month) {
       // Different years: "Dec 28, 2023 – Jan 25, 2024"
       subtitle = startDay.format('MMM D, YYYY ') + `\u2013` + endDay.format('MMM D, YYYY');
     }
-  } else {
-    // Gregorian month mode: Gregorian month is primary, Hebrew month is secondary
+    subtitle = rtl ? reverseHebrewWords(subtitle) : subtitle;
+    return {monthTitle, subtitle};
+}
+
+// Gregorian month mode: Gregorian month is primary, Hebrew month is secondary
+function pdfMonthTitleGreg(d, options, rtl) {
     const yy = d.year();
-    const titleYear = yy > 0 ? yy : -(yy-1) + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
+    const titleYear = yy > 0 ? yy : -(yy - 1) + ' ' + (rtl ? 'לפנה״ס' : 'B.C.E.');
     const monthTitle0 = d.format('MMMM') + ' ' + titleYear;
-    monthTitle = rtl ? reverseHebrewWords(monthTitle0) : monthTitle0;
-    subtitle = makeHebMonthStr(d, rtl, options);
-  }
-  const useGematriya = options?.gematriyaNumerals === true;
-  // Use 'hebrew' font if RTL (Hebrew text) or using gematriya (Hebrew numerals)
-  const monthFont = (rtl || useGematriya) ? 'hebrew' : 'semi';
+    const monthTitle = rtl ? reverseHebrewWords(monthTitle0) : monthTitle0;
+    const subtitle = makeHebMonthStr(d, rtl, options);
+    return {monthTitle, subtitle};
+}
+
+function renderPdfMonthTitle(doc, d, rtl, options, year, month) {
+  const {monthTitle, subtitle} = options?.hebrewMonths ?
+    pdfMonthTitleHebrew(year, month, options, rtl) :
+    pdfMonthTitleGreg(d, options, rtl);
+  const monthFont = rtl ? 'hebrew' : 'semi';
   doc.fontSize(26)
       .font(monthFont)
       .text(monthTitle, 0, PDF_TMARGIN - 24, {align: 'center'});
   doc.fontSize(14)
-      .font((rtl || useGematriya) ? 'hebrew' : 'plain')
+      .font(rtl ? 'hebrew' : 'plain')
       .text(subtitle, 0, PDF_TMARGIN + 4, {align: 'center'});
 }
 
@@ -434,7 +441,13 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
 function reverseHebrewWords(subj) {
   subj = subj.replace('(', '\u0001').replace(')', '\u0002');
   subj = subj.replace('\u0001', ') ').replace('\u0002', '(');
-  subj = subj.split(' ').reverse().join('  ').replace('   ', '  ');
+  const words = subj.split(' ').reverse();
+  for (let i = 0; i < words.length; i++) {
+    if (words[i].endsWith(',')) {
+      words[i] = ',' + words[i].substring(0, words[i].length - 1);
+    }
+  }
+  subj = words.join('  ').replace('   ', '  ');
   return subj;
 }
 
@@ -512,22 +525,17 @@ export function renderPdf(doc, events, options) {
     let month;
     let daysInMonth;
     let firstDayOfMonth;
-    let startDayOfWeek;
-    let isHebrew;
 
     if (yearMonth.startsWith('H')) {
       // Hebrew month: format "HYYYY-MM"
-      isHebrew = true;
       const parts = yearMonth.substring(1).split('-');
       year = parseInt(parts[0], 10);
       month = parseInt(parts[1], 10);
       const hd = new HDate(1, month, year);
       daysInMonth = hd.daysInMonth();
       firstDayOfMonth = hd.greg();
-      startDayOfWeek = firstDayOfMonth.getDay();
     } else {
       // Gregorian month: format "YYYYMM"
-      isHebrew = false;
       year = parseInt(yearMonth.substring(0, yearMonth.length - 2), 10);
       month = parseInt(yearMonth.substring(yearMonth.length - 2), 10);
       daysInMonth = greg.daysInMonth(month, year);
@@ -535,8 +543,8 @@ export function renderPdf(doc, events, options) {
       if (year < 100) {
         firstDayOfMonth.setFullYear(year);
       }
-      startDayOfWeek = firstDayOfMonth.getDay();
     }
+    const startDayOfWeek = firstDayOfMonth.getDay();
 
     const rows = (daysInMonth == 31 && startDayOfWeek >= 5) ||
       (daysInMonth == 30 && startDayOfWeek == 6) ? 6 : 5;
@@ -544,11 +552,11 @@ export function renderPdf(doc, events, options) {
     const rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN) / rows;
 
     doc.addPage();
-    const pageName = isHebrew ? `cal-H${year}-${pad2(month)}` : 'cal-' + year + '-' + pad2(month);
+    const pageName = hebrewMonths ? `cal-H${year}-${pad2(month)}` : 'cal-' + year + '-' + pad2(month);
     doc.addNamedDestination(pageName);
 
     const d = dayjs(firstDayOfMonth).locale(locale);
-    renderPdfMonthTitle(doc, d, rtl, options, isHebrew, year, month);
+    renderPdfMonthTitle(doc, d, rtl, options, year, month);
 
     renderPdfMonthGrid(doc, d, rtl, rows, rowheight);
 
@@ -559,7 +567,7 @@ export function renderPdf(doc, events, options) {
     // Render last day of previous year's Elul's. NOTE that this day will never
     // be Saturday (according to the Hebrew calendar rules), so it will never
     // require another week and mess up the rendering.
-    if (isHebrew && month === 7) {
+    if (hebrewMonths && month === 7) {
       // Check if we have previous month events
       const hasPrevEvents = Object.keys(cells[yearMonth]).some((k) => k.startsWith('prev_'));
       if (hasPrevEvents) {
