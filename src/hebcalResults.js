@@ -336,7 +336,7 @@ function tableRow(evt) {
   }
   const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
   // Gregorian dates (alternate dates in Hebrew month mode) should be left-aligned
-  const isGregorianDate = cat === 'hebdate';
+  const isGregorianDate = cat === 'gregdate' || cat === 'hebdate';
   if (isHebrew && !isGregorianDate) {
     subj = `<span lang="he" dir="rtl">${subj}</span>`;
   } else if (isGregorianDate && isHebrew) {
@@ -384,15 +384,12 @@ function renderMonthTables(months) {
   window['hebcal'].monthTablesRendered = true;
 }
 
-function subjectSpan(str, isGregorianDate) {
+function subjectSpan(str) {
   const lang = window['hebcal'].lang || 's';
   const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
   str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
-  if (isHebrew && !isGregorianDate) {
+  if (isHebrew) {
     return '<span lang="he" dir="rtl">' + str + '</span>';
-  } else if (isHebrew && isGregorianDate) {
-    // Gregorian dates should be LTR even in Hebrew mode
-    return '<span dir="ltr">' + str + '</span>';
   }
   return str;
 }
@@ -400,7 +397,6 @@ function subjectSpan(str, isGregorianDate) {
 function renderEventHtml(evt) {
   let subj = evt.t0;
   const cat = evt.cat;
-  const isGregorianDate = cat === 'hebdate';
   if (cat === 'dafyomi') {
     subj = subj.substring(subj.indexOf(':') + 1);
   } else if (cat === 'candles' || cat === 'havdalah') {
@@ -412,9 +408,9 @@ function renderEventHtml(evt) {
     const timeHtml = evt.bn === 'Chanukah' ?
     '<small>' + time + '</small>' :
     '<small class="text-body-secondary">' + time + '</small>';
-    subj = timeHtml + ' ' + subjectSpan(subj, isGregorianDate);
+    subj = timeHtml + ' ' + subjectSpan(subj);
   } else {
-    subj = subjectSpan(subj, isGregorianDate);
+    subj = subjectSpan(subj);
   }
   const className = getEventClassName(evt);
   const lang = window['hebcal'].lang || 's';
@@ -430,7 +426,7 @@ function renderEventHtml(evt) {
   // Add left-align class for Gregorian dates in Hebrew mode
   const lang2 = window['hebcal'].lang || 's';
   const isHebrew = lang2 == 'h' || lang2 == 'he' || lang2 == 'he-x-NoNikud';
-  const alignClass = (isGregorianDate && isHebrew) ? ' text-start' : '';
+  const alignClass = isHebrew ? ' text-start' : '';
   return `<div class="fc-event ${className}${alignClass}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
@@ -591,9 +587,20 @@ function makeMonthTableBody(month) {
     const opts = window['hebcal'].opts || {};
     const useGematriya = opts.gematriyaNumerals === true;
     const dayNumStr = useGematriya ? gematriya(i) : i;
-    html += `<td${clazz}><p><b>${dayNumStr}</b></p>`;
+    html += `<td${clazz}><div class="d-flex justify-content-between mb-3"><b>${dayNumStr}</b>`;
     const evts = dayMap[i] || [];
+    const altDates = opts.addAlternateDates || opts.addAlternateDatesForEvents;
+    if (altDates) {
+      const altDateEvt = evts.find((evt) => evt.cat === 'hebdate' || evt.cat === 'gregdate');
+      if (altDateEvt) {
+        html += `<small class="text-body-secondary ms-1 me-1">${altDateEvt.t0}</small>`;
+      }
+    }
+    html += '</div>';
     evts.forEach(function(evt) {
+      if (altDates && evt.cat === 'hebdate' || evt.cat === 'gregdate') {
+        return; // skip these
+      }
       html += renderEventHtml(evt);
     });
     html += '</td>\n';

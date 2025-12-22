@@ -25,4 +25,7 @@ export class GregorianDateEvent extends Event {
     const template = locale === 'en' ? 'MMM D' : 'D MMM';
     return d.format(template);
   }
+  getCategories() {
+    return ['gregdate'];
+  }
 }
