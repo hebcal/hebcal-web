@@ -419,7 +419,7 @@ function makeTriennial(parsha, date, parshaEv, hyear, il) {
 function make3yearTriennial(hyear, parshaName, il) {
   const startYear = Triennial.getCycleStartYear(hyear);
   const tri = getTriennial(startYear, il);
-  const readings = Array(3);
+  const readings = new Array(3);
   for (let yr = 0; yr < 3; yr++) {
     const reading = makeTriReading(tri, yr, parshaName, il);
     reading.hyear = startYear + yr;

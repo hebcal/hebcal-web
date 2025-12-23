@@ -49,7 +49,7 @@ export async function omerApp(rpath, ctx) {
       return;
     }
     const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
-    const items = Array(50);
+    const items = new Array(50);
     for (let omerDay = 1; omerDay <= 49; omerDay++) {
       const abs = beginOmer + omerDay - 1;
       const hd = new HDate(abs);

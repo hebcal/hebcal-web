@@ -194,7 +194,7 @@ export async function holidayMainIndex(ctx) {
     items[catId] = {};
   }
   const rch = items['roshchodesh'];
-  rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = Array(NUM_YEARS));
+  rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = new Array(NUM_YEARS));
   const il = ctx.state.il;
   for (let i = 0; i < NUM_YEARS; i++) {
     let events0 = HebrewCalendar.calendar({
@@ -215,7 +215,7 @@ export async function holidayMainIndex(ctx) {
     for (const [catId, items1] of Object.entries(items0)) {
       for (const item of items1) {
         if (!Array.isArray(items[catId][item.name])) {
-          items[catId][item.name] = Array(NUM_YEARS);
+          items[catId][item.name] = new Array(NUM_YEARS);
         }
         items[catId][item.name][i] = item;
       }

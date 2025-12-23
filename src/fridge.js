@@ -84,7 +84,7 @@ function makeProperties(ctx) {
     locale,
     hyear,
     gregYear1: events[0].greg().getFullYear(),
-    gregYear2: events[events.length - 1].greg().getFullYear(),
+    gregYear2: events.at(-1).greg().getFullYear(),
     itemsRows,
     url,
     candleLightingStr: Locale.gettext('Candle lighting', locale),
@@ -131,7 +131,7 @@ function makeContents(events, options) {
     const desc = ev.getDesc();
     if (desc === 'Havdalah') {
       if (objs.length) {
-        objs[objs.length - 1].havdalah =
+        objs.at(-1).havdalah =
           HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options);
       }
       continue;

@@ -1070,7 +1070,7 @@ export function makeHebrewCalendar(ctx, options) {
     if (options.addAlternateDates && events.length > 0) {
       // Find the date range from the events
       const firstDate = events[0].getDate();
-      const lastDate = events[events.length - 1].getDate();
+      const lastDate = events.at(-1).getDate();
 
       // Iterate over all days in the range
       let currentHd = firstDate;
