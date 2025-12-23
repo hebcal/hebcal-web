@@ -317,7 +317,12 @@ function getTimeStr(dt) {
 
 function hebDayAndMonthName(d) {
   const hdt = getHebMonthName(d);
-  return hdt.dd + ' ' + hdt.monthName;
+  let monthName = hdt.monthName;
+  const abbr = window['hebcal'].localeConfig.hebMonthAbbr;
+  if (abbr) {
+    monthName = abbr[monthName] || monthName;
+  }
+  return hdt.dd + ' ' + monthName;
 }
 
 function tableRow(evt) {

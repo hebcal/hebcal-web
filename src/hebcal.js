@@ -34,7 +34,6 @@ import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
 import '@hebcal/locales';
 import {myEventsToClassicApi} from './myEventsToClassicApi.js';
-import {greg2abs} from '@hebcal/hdate';
 
 dayjs.extend(localeData);
 
@@ -211,24 +210,32 @@ async function renderForm(ctx, error) {
   });
 }
 
-const EPOCH = -1373428;
+const hebMonthAbbr = {
+  'Adar': 'Adar',
+  'Adar I': 'Adar1',
+  'Adar II': 'Adar2',
+  'Av': 'Av',
+  'Cheshvan': 'Chesh.',
+  'Elul': 'Elul',
+  'Iyyar': 'Iyar',
+  'Kislev': 'Kis.',
+  'Nisan': 'Nis.',
+  'Sh\'vat': 'Shv.',
+  'Sh’vat': 'Shv.',
+  'Sivan': 'Siv.',
+  'Tamuz': 'Tam.',
+  'Tevet': 'Tev.',
+  'Teves': 'Tev.',
+  'Tishrei': 'Tish.',
+};
+
 
 function getHebMonthNames(events, lang) {
-  const startDate = dayjs(events[0].greg());
-  const endDate = dayjs(events[events.length - 1].greg());
-  const start = startDate.set('date', 1);
-  const end = endDate.add(1, 'day');
-  const months = Array(14);
-  for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
-    const endDay = d.add(1, 'month').subtract(1, 'day');
-    const abs = greg2abs(d.toDate());
-    if (abs <= EPOCH) {
-      continue;
-    }
-    const hd1 = new HDate(abs);
-    const hd2 = new HDate(endDay.toDate());
-    months[hd1.getMonth()] = Locale.gettext(hd1.getMonthName(), lang);
-    months[hd2.getMonth()] = Locale.gettext(hd2.getMonthName(), lang);
+  const year = events[0].getDate().getFullYear();
+  const months = new Array(14);
+  for (let i = 1; i <= 13; i++) {
+    const name = HDate.getMonthName(i, year);
+    months[i] = Locale.gettext(name, lang);
   }
   return months;
 }
@@ -323,6 +330,7 @@ function renderHtml(ctx) {
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
     hebMonths: getHebMonthNames(events, options.locale || 's'),
+    hebMonthAbbr: locale === 'en' ? hebMonthAbbr : undefined,
   };
   const gy = events[0].greg().getFullYear();
   if (gy >= 3762 && q.yt === 'G') {
@@ -376,12 +384,6 @@ function yearTitle(year) {
   return year > 0 ? '' + year : '' + (-(year-1)) + ' B.C.E.';
 }
 
-const gregMonthNames = [
-  '',
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
-
 /**
  * @private
  * @param {import('@hebcal/core').CalOptions} options
@@ -390,14 +392,15 @@ const gregMonthNames = [
  */
 function pageTitle(options, events) {
   let shortTitle = '';
+  const startDt = events[0].greg();
   if (options.month) {
-    shortTitle += gregMonthNames[options.month] + ' ';
+    shortTitle += dayjs(startDt).format('MMMM') + ' ';
   }
   if (typeof options.year === 'number') {
     return shortTitle + yearTitle(options.year);
   }
-  const gy1 = events[0].greg().getFullYear();
-  const gy2 = events[events.length - 1].greg().getFullYear();
+  const gy1 = startDt.getFullYear();
+  const gy2 = events.at(-1).greg().getFullYear();
   if (gy1 === gy2) {
     return shortTitle + gy1;
   }
