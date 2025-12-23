@@ -452,15 +452,15 @@ function getMonthTitle(month, center, prevNext) {
     const startYear = startDate.year();
     const endYear = endDate.year();
 
-    if (startDate.month() === endDate.month()) {
+    if (startYear === endYear && startMon === endMon) {
       // Same month: "Dec 3 – 31, 2024"
-      subtitleText = `${startMon} ${startDate.date()} \u2013 ${endDate.date()}, ${endYear}`;
+      subtitleText = `${startMon} ${startYear}`;
     } else if (startYear === endYear) {
       // Different months, same year: "Nov 28 – Dec 27, 2024"
-      subtitleText = `${startMon} ${startDate.date()} \u2013 ${endMon} ${endDate.date()}, ${endYear}`;
+      subtitleText = `${startMon} \u2013 ${endMon} ${endYear}`;
     } else {
       // Different years: "Dec 28, 2023 – Jan 25, 2024"
-      subtitleText = `${startMon} ${startDate.date()}, ${startYear} \u2013 ${endMon} ${endDate.date()}, ${endYear}`;
+      subtitleText = `${startMon} ${startYear} \u2013 ${endMon} ${endYear}`;
     }
   } else {
     // Gregorian month mode: Gregorian month is primary, Hebrew month is secondary
