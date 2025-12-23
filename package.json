@@ -50,7 +50,7 @@
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
     "@hebcal/core": "^6.0.6",
-    "@hebcal/geo-sqlite": "^5.7.0",
+    "@hebcal/geo-sqlite": "^5.7.1",
     "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.3",
     "@hebcal/learning": "^6.6.0",
@@ -83,7 +83,7 @@
     "minimist": "^1.2.8",
     "murmurhash3": "^0.5.0",
     "mysql2": "^3.16.0",
-    "nodemailer": "^7.0.11",
+    "nodemailer": "^7.0.12",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.17.2",
     "pino": "^10.1.0",
