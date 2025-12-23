@@ -315,6 +315,11 @@ function getTimeStr(dt) {
   }
 }
 
+function hebDayAndMonthName(d) {
+  const hdt = getHebMonthName(d);
+  return hdt.dd + ' ' + hdt.monthName;
+}
+
 function tableRow(evt) {
   const isoDate = dateOnly(evt.dt);
   const m = makeDayjs(isoDate);
@@ -322,8 +327,12 @@ function tableRow(evt) {
   const localeData = window['hebcal'].localeConfig;
   const lang = window['hebcal'].lang || 's';
   const isHebrew = window['hebcal'].locale === 'he';
-  const dateStr0 = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
-  const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr0}</span>` : dateStr0;
+  const opts = window['hebcal'].opts;
+  const isHebrewMonths = opts.hebrewMonths === true;
+  const dateStr0 = isHebrewMonths ? hebDayAndMonthName(m) :
+    m.format('DD ') + localeData.monthsShort[m.month()];
+  const dateStr1 = localeData.weekdaysShort[m.day()] + ' ' + dateStr0;
+  const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr1}</span>` : dateStr1;
   let subj = evt.t0;
   const timeStr = getTimeStr(evt.dt);
   const className = getEventClassName(evt);
@@ -360,8 +369,10 @@ function monthHtml(month) {
   const divEnd = '</div><!-- .month-table -->';
   const heading = getMonthTitle(month, false, false);
   const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
+  const opts = window['hebcal'].opts;
+  const dateColWidth = opts.hebrewMonths ? 140 : 116;
   // eslint-disable-next-line max-len
-  const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:116px">${timeColumn}<col><tbody>`;
+  const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:${dateColWidth}px">${timeColumn}<col><tbody>`;
   const tableFoot = '</tbody></table>';
   const tableContents = month.events.map(tableRow);
   return divBegin + heading + tableHead + tableContents.join('') + tableFoot + divEnd;
