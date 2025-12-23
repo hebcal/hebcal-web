@@ -315,6 +315,10 @@ function makeAdmin1(admin1) {
 
 function addCandleTime(friday, city) {
   const elevation = (city.elevation && city.elevation > 0) ? city.elevation : 0;
+  if (!city.timezone) {
+    console.log(city);
+    return;
+  }
   const location = new Location(city.latitude, city.longitude, city.countryCode === 'IL',
       city.timezone, city.name, city.countryCode, city.geonameid, elevation);
   const dt = new Date(friday.year(), friday.month(), friday.date());

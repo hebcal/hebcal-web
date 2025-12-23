@@ -1,7 +1,9 @@
+<%- await include('style-clear-button.ejs') -%>
 <div class="mb-3">
   <label class="form-label" for="city-typeahead">City</label>
-  <div>
+  <div class="input-clear-wrapper">
     <input type="text" name="city-typeahead" value="<%= q['city-typeahead'] || '' %>" class="form-control" id="city-typeahead" autocomplete="off" placeholder="Search for city or ZIP code">
+    <button type="button" class="btn-close" aria-label="Clear" id="clear-btn"></button>
   </div>
 </div>
 <div class="row gx-2 mb-3">

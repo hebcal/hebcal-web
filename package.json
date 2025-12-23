@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite13.svg",
     "csprite": "color-icons4.svg",
-    "clientapp": "hebcal-app-5.1.3.min.js"
+    "clientapp": "hebcal-app-5.2.0.min.js"
   },
   "type": "module",
   "engines": {

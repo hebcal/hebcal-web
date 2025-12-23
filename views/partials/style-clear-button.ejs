@@ -1,0 +1,18 @@
+<style>
+.input-clear-wrapper {
+  position: relative;
+}
+.input-clear-wrapper input {
+  padding-right: 2.5rem;
+}
+.input-clear-wrapper .btn-close {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: none;
+}
+.input-clear-wrapper input:not(:placeholder-shown) ~ .btn-close {
+  display: block;
+}
+</style>

@@ -148,6 +148,21 @@ const hebcalClient = {
     cityTypeaheadEl.addEventListener('focus', function() {
       backspaceClearsEverything = true;
     });
+
+    const clearBtn = document.getElementById('clear-btn');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        clearGeo();
+        cityTypeaheadEl.value = '';
+        cityTypeaheadEl.focus();
+        // Trigger input event to update any listeners
+        cityTypeaheadEl.dispatchEvent(new Event('input'));
+      });
+      // Show/hide button based on input value
+      cityTypeaheadEl.addEventListener('input', () => {
+        clearBtn.style.display = cityTypeaheadEl.value ? 'block' : 'none';
+      });
+    }
   },
 };
 
