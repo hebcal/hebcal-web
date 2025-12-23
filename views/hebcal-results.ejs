@@ -184,6 +184,7 @@ data-ad-slot="1867606375"></ins>
 document.addEventListener('DOMContentLoaded', function() {
   window['hebcal']=window['hebcal']||{};
   window['hebcal'].lang='<%= q.lg || "s" %>';
+  window['hebcal'].locale='<%= locale %>';
   window['hebcal'].cconfig=<%- JSON.stringify(cconfig) %>;
   window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
   window['hebcal'].events=<%- JSON.stringify(items) %>;

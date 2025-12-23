@@ -235,13 +235,12 @@ function splitByHebrewMonth(events) {
 
   Object.values(months).forEach((month) => {
     const localeData = window['hebcal'].localeConfig;
-    const opts = window['hebcal'].opts;
     const hd = month.startHd;
     const endHd = month.endHd;
     const monthName = localeData.hebMonths[hd.mm] || getMonthName(hd.mm, hd.yy);
     const endYear = endHd.yy;
-    // Use gematriya for Hebrew numerals, Arabic numerals otherwise
-    const endYearStr = opts.gematriyaNumerals ? gematriya(endYear) : endYear;
+    const isHebrew = window['hebcal'].locale === 'he';
+    const endYearStr = isHebrew ? gematriya(endYear) : endYear;
     month.monthName = monthName.replace(/'/g, '\u2019') + ' ' + endYearStr;
   });
 
@@ -322,7 +321,7 @@ function tableRow(evt) {
   const cat = evt.cat;
   const localeData = window['hebcal'].localeConfig;
   const lang = window['hebcal'].lang || 's';
-  const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const isHebrew = window['hebcal'].locale === 'he';
   const dateStr0 = localeData.weekdaysShort[m.day()] + m.format(' DD ') + localeData.monthsShort[m.month()];
   const dateStr = isHebrew ? `<span lang="he" dir="rtl">${dateStr0}</span>` : dateStr0;
   let subj = evt.t0;
@@ -355,8 +354,7 @@ function tableRow(evt) {
 }
 
 function monthHtml(month) {
-  const lang = window['hebcal'].lang || 's';
-  const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const isHebrew = window['hebcal'].locale === 'he';
   const dir = isHebrew ? 'rtl' : 'ltr';
   const divBegin = `<div class="month-table" dir="${dir}">`;
   const divEnd = '</div><!-- .month-table -->';
@@ -385,8 +383,7 @@ function renderMonthTables(months) {
 }
 
 function subjectSpan(str) {
-  const lang = window['hebcal'].lang || 's';
-  const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const isHebrew = window['hebcal'].locale === 'he';
   str = str.replace(/(\(\d+.+\))$/, '<small>$&</small>');
   if (isHebrew) {
     return '<span lang="he" dir="rtl">' + str + '</span>';
@@ -424,15 +421,13 @@ function renderEventHtml(evt) {
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   // Add left-align class for Gregorian dates in Hebrew mode
-  const lang2 = window['hebcal'].lang || 's';
-  const isHebrew = lang2 == 'h' || lang2 == 'he' || lang2 == 'he-x-NoNikud';
+  const isHebrew = window['hebcal'].locale === 'he';
   const alignClass = isHebrew ? ' text-start' : '';
   return `<div class="fc-event ${className}${alignClass}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
 function getMonthTitle(month, center, prevNext) {
-  const lang = window['hebcal'].lang || 's';
-  const isHebrewLang = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const isHebrewLang = window['hebcal'].locale === 'he';
   const span0 = isHebrewLang ? '<span lang="he" dir="rtl">' : '';
   const span1 = isHebrewLang ? '</span>' : '';
   const localeData = window['hebcal'].localeConfig;
@@ -484,8 +479,7 @@ function getMonthTitle(month, center, prevNext) {
 }
 
 function makeMonthHtml(month) {
-  const lang = window['hebcal'].lang || 's';
-  const isHebrew = lang == 'h' || lang == 'he' || lang == 'he-x-NoNikud';
+  const isHebrew = window['hebcal'].locale === 'he';
   const span0 = isHebrew ? '<span lang="he" dir="rtl">' : '';
   const span1 = isHebrew ? '</span>' : '';
   const localeData = window['hebcal'].localeConfig;
@@ -583,11 +577,11 @@ function makeMonthTableBody(month) {
       d = makeDayjs(month.month + '-' + pad2(i));
     }
 
-    const clazz = today.isSame(d, 'd') ? ' class="fc-daygrid-day fc-day-today"' : '';
+    const clazz = today.isSame(d, 'd') ? 'fc-daygrid-day fc-day-today pb-3' : 'pb-3';
     const opts = window['hebcal'].opts || {};
     const useGematriya = opts.gematriyaNumerals === true;
     const dayNumStr = useGematriya ? gematriya(i) : i;
-    html += `<td${clazz}><div class="d-flex justify-content-between mb-3"><b>${dayNumStr}</b>`;
+    html += `<td class="${clazz}"><div class="d-flex justify-content-between mb-3"><b>${dayNumStr}</b>`;
     const evts = dayMap[i] || [];
     const altDates = opts.addAlternateDates || opts.addAlternateDatesForEvents;
     if (altDates) {
