@@ -134,11 +134,15 @@ function holidayEvToItem(ev, il, lang) {
     item.url = shortenUrl(url);
   }
   if (mask & flags.ROSH_CHODESH) {
+    item.title = 'Rosh Ch. ' + item.title.substring(13);
     return item;
   }
   const key = getLeyningKeyForEvent(ev, il);
   if (key) {
     item.title = key;
   }
+  item.title = item.title.replace(/^Shabbat /, 'Shab. ');
+  // for Shabbat Rosh Chodesh Chanukah
+  item.title = item.title.replaceAll('Rosh Chodesh', 'Rosh Ch.');
   return item;
 }
