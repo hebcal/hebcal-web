@@ -256,14 +256,18 @@ app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: false, maxage: 604800000}));
 
-if (process.env.NODE_ENV === 'production') {
-  fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
-  process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
+if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'production') {
+    fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
+    process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
+  }
+
+  const port = process.env.NODE_PORT || 8080;
+  app.listen(port, () => {
+    const msg = 'Koa server listening on port ' + port;
+    logger.info(msg);
+    console.log(msg);
+  });
 }
 
-const port = process.env.NODE_PORT || 8080;
-app.listen(port, () => {
-  const msg = 'Koa server listening on port ' + port;
-  logger.info(msg);
-  console.log(msg);
-});
+export {app};
