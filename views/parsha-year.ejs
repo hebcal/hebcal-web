@@ -33,14 +33,14 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
 
 <table class="table table-striped">
 <colgroup>
-  <col style="width:128px"><col style="width:128px"><col><col>
+  <col style="width:128px"><col><col><col>
 </colgroup>
 <thead>
 <tr>
   <th>
     <div class="float-start"><a title="<%=hyear-1%>" href="<%=prev%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
     Date</th>
-  <th>Hebrew Date</th>
+  <th><span class="d-none d-sm-inline">Hebrew Date</span></th>
   <th>Parsha</th>
   <th><span class="d-none d-md-inline">Reading</span>
     <div class="float-end"><a title="<%=hyear+1%>" href="<%=next%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a></div>
@@ -52,7 +52,7 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
 for (const item of items) { %>
 <tr>
   <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== py ? item.d.format(', YYYY') : '' %></time></td>
-  <td class="text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></td>
+  <td><span class="d-none d-sm-inline text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></span></td>
   <td><ul class="list-unstyled mb-0">
   <li><a <% if (!item.isParsha) {%> class="link-success link-underline-opacity-25" <% } %> href="<%=item.url%>"><%= item.title.replace(/'/g, '’') %></a></li>
 <% for (const holiday of item.holidays) { %>
