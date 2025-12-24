@@ -27,7 +27,8 @@
     "deploy": "./deploy.sh",
     "start": "node src/app-www.js",
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto && mv src/download_pb.js src/download_pb.cjs",
-    "test": "echo \"OK: no test specified\" && exit 0"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "hebcal"
@@ -45,7 +46,9 @@
     "eslint-plugin-n": "^17.23.1",
     "gettext-parser": "^8.0.0",
     "globals": "^16.5.0",
-    "rollup": "^4.54.0"
+    "rollup": "^4.54.0",
+    "supertest": "^7.1.4",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
