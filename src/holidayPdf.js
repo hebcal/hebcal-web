@@ -35,7 +35,7 @@ export async function holidayPdf(ctx) {
   const locale = localeMap[lg] || 'en';
   const options = {
     year: calendarYear,
-    addAlternateDates: true,
+    addHebrewDates: true,
     isHebrewYear,
     locale,
     il: ctx.state.il,
