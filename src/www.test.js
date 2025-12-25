@@ -162,16 +162,37 @@ describe('Router Tests', () => {
   describe('Holidays Routes', () => {
     it('should return 200 for /holidays with year range', async () => {
       const response = await request(app.callback())
-          .get('/holidays/6336-6337');
+          .get('/holidays/1993-1994');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
     });
 
-    it('should return 200 for specific holiday', async () => {
+    it('should return 200 for /holidays with single year', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/2007');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('html');
+    });
+
+    it('should return 200 for specific holiday + year', async () => {
       const response = await request(app.callback())
           .get('/holidays/rosh-chodesh-adar-i-2022');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+    });
+
+    it('should return 200 for specific holiday without year', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/yom-kippur');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('html');
+    });
+
+    it('should return 200 for holidays PDF', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/hebcal-2026.pdf');
+      expect(response.status).toBe(200);
+      expect(response.type).toBe('application/pdf');
     });
   });
 
@@ -181,6 +202,7 @@ describe('Router Tests', () => {
           .get('/sedrot/');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Weekly Torah Portion - Parashat haShavua - Hebcal<\/title>/);
     });
 
     it('should return 200 for specific parsha', async () => {
@@ -188,6 +210,7 @@ describe('Router Tests', () => {
           .get('/sedrot/bereshit');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Bereshit - Torah Portion - Hebcal<\/title>/);
     });
 
     it('should handle parsha with date', async () => {
@@ -195,6 +218,7 @@ describe('Router Tests', () => {
           .get('/sedrot/vayigash-20251227');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Vayigash 578\d - Torah Portion - Hebcal<\/title>/);
     });
   });
 
@@ -788,6 +812,7 @@ describe('Router Tests', () => {
           .get('/sedrot/grid');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Weekly Torah Readings - Parashat haShavua - Hebcal<\/title>/);
     });
 
     it('should return 200 for parsha RSS feed', async () => {
@@ -809,6 +834,7 @@ describe('Router Tests', () => {
           .get('/sedrot/5786');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Shabbat Torah Readings 5786 - Hebcal<\/title>/);
     });
 
     it('should handle parsha year with Israel parameter', async () => {
@@ -816,6 +842,7 @@ describe('Router Tests', () => {
           .get('/sedrot/5786?i=on');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toMatch(/<title>Shabbat Torah Readings 5786 - Hebcal<\/title>/);
     });
   });
 
