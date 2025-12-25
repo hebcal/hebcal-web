@@ -382,9 +382,11 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     textOptions.width = availableWidth;
   } else if (timed) {
     // For LTR with time, render time first, then text in bold
+    // Add extra left margin to prevent overlap with grid lines
+    const timeX = x + PDF_CELL_MARGIN*2;
     doc.font('bold').fontSize(10);
-    doc.text(timeStr + ' ', x, y + 1);
-    textX = x + timedWidth;
+    doc.text(timeStr + ' ', timeX, y + 1);
+    textX = timeX + timedWidth;
   } else {
     // For LTR non-timed events, add extra left margin to prevent overlap with grid lines
     textX = x + PDF_CELL_MARGIN*2;
