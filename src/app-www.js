@@ -203,7 +203,6 @@ app.use(bodyParser({
   formLimit: '256kb',
   qs: {
     parse: function(str, opts) {
-      logger.info(`Parsing query string with length ${str.length}: ${str}`);
       const sp = new URLSearchParams(str);
       const obj = {};
       for (const [key, value] of sp.entries()) {
