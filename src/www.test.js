@@ -29,6 +29,13 @@ describe('Router Tests', () => {
       expect(response.type).toContain('json');
     });
 
+    it('should return 400 for GET /converter with invalid params', async () => {
+      const response = await request(app.callback())
+          .get('/converter?cfg=json&hy=5785&hm=&hd=24&h2g=1&strict=1');
+      expect(response.status).toBe(400);
+      expect(response.type).toContain('json');
+    });
+
     it('should return 200 for GET /converter with Hebrew date', async () => {
       const response = await request(app.callback())
           .get('/converter?h2g=1&hd=10&hm=Av&hy=6872');
@@ -119,6 +126,42 @@ describe('Router Tests', () => {
           .get('/hebcal?v=0&zip=37876&m=1&M=off&year=2023&c=on&s=on&maj=on&min=on&mod=on&mf=on&ss=on&nx=on&geo=zip');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+    });
+
+    it('should return FullCalendar format with cfg=fc', async () => {
+      const response = await request(app.callback())
+          .get('/hebcal?v=1&cfg=fc&start=2026-03-01&end=2026-04-12&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=s');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('json');
+
+      // Validate response is an array (FullCalendar format)
+      const body = response.body;
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThan(0);
+
+      // Validate FullCalendar event structure
+      const firstEvent = body[0];
+      expect(firstEvent).toHaveProperty('title');
+      expect(firstEvent).toHaveProperty('start');
+      expect(typeof firstEvent.title).toBe('string');
+      expect(typeof firstEvent.start).toBe('string');
+
+      // FullCalendar events should have ISO 8601 date format
+      expect(firstEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}/);
+
+      // Some events may have additional FullCalendar properties
+      const timedEvent = body.find((event) => event.start && event.start.includes('T'));
+      if (timedEvent) {
+        // Timed events should have full ISO timestamp
+        expect(timedEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+      }
+
+      // All-day events should not have time component or have allDay property
+      const allDayEvent = body.find((event) => event.start && !event.start.includes('T'));
+      if (allDayEvent) {
+        // All-day events should have date-only format
+        expect(allDayEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      }
     });
   });
 
