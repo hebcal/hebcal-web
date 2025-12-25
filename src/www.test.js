@@ -66,6 +66,54 @@ describe('Router Tests', () => {
       expect(response.type).toContain('json');
     });
 
+    it('should return comprehensive calendar with all features enabled', async () => {
+      const response = await request(app.callback())
+          .get('/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=2023&month=x&ss=on&mf=on&c=on&geo=geoname&geonameid=3448439&M=on&s=on');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('json');
+
+      // Validate response structure
+      const body = response.body;
+      expect(body).toHaveProperty('title');
+      expect(body).toHaveProperty('date');
+      expect(body).toHaveProperty('items');
+      expect(Array.isArray(body.items)).toBe(true);
+      expect(body.items.length).toBeGreaterThan(0);
+
+      // Validate location information
+      expect(body).toHaveProperty('location');
+      expect(body.location).toHaveProperty('geo');
+      expect(body.location).toHaveProperty('geonameid');
+      expect(body.location.geonameid).toBe(3448439);
+
+      // Should contain major holidays
+      const holidays = body.items.filter((item) => item.category === 'holiday');
+      expect(holidays.length).toBeGreaterThan(0);
+
+      // Should contain candle lighting times (ss=on, c=on)
+      const candleLighting = body.items.filter((item) => item.category === 'candles');
+      expect(candleLighting.length).toBeGreaterThan(0);
+
+      // Should contain havdalah times (M=on)
+      const havdalah = body.items.filter((item) => item.category === 'havdalah');
+      expect(havdalah.length).toBeGreaterThan(0);
+
+      // Should contain Torah readings (s=on)
+      const parsha = body.items.filter((item) => item.category === 'parashat');
+      expect(parsha.length).toBeGreaterThan(0);
+
+      // Should contain Rosh Chodesh (nx=on)
+      const roshChodesh = body.items.filter((item) => item.title && item.title.includes('Rosh Chodesh'));
+      expect(roshChodesh.length).toBeGreaterThan(0);
+
+      // Validate timed events have proper date format
+      const timedEvents = body.items.filter((item) => item.date && item.date.includes('T'));
+      expect(timedEvents.length).toBeGreaterThan(0);
+      timedEvents.forEach((item) => {
+        expect(item.date).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
+      });
+    });
+
     it('should handle /hebcal with zip code', async () => {
       const response = await request(app.callback())
           .get('/hebcal?v=0&zip=37876&m=1&M=off&year=2023&c=on&s=on&maj=on&min=on&mod=on&mf=on&ss=on&nx=on&geo=zip');
@@ -158,6 +206,32 @@ describe('Router Tests', () => {
       expect(response.type).toContain('json');
     });
 
+    it('should handle POST /yahrzeit with form data and multiple anniversaries', async () => {
+      const response = await request(app.callback())
+          .post('/yahrzeit')
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .send('cfg=json&v=yahrzeit&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on&n2=Person2&t2=Yahrzeit&d2=13&m2=11&y2=2008&s2=off&hebdate=on&years=3');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('json');
+
+      // Validate response structure
+      const body = response.body;
+      expect(body).toHaveProperty('items');
+      expect(Array.isArray(body.items)).toBe(true);
+      expect(body).toHaveProperty('title');
+
+      // Should have events for both Person1 and Person2
+      expect(body.items.length).toBeGreaterThan(0);
+
+      // Check that we have birthday events
+      const birthdays = body.items.filter((item) => item.category === 'birthday');
+      expect(birthdays.length).toBeGreaterThan(0);
+
+      // Check that we have yahrzeit events
+      const yahrzeits = body.items.filter((item) => item.category === 'yahrzeit');
+      expect(yahrzeits.length).toBeGreaterThan(0);
+    });
+
     it('should handle POST /email/', async () => {
       const response = await request(app.callback())
           .post('/email/');
@@ -180,6 +254,30 @@ describe('Router Tests', () => {
           .get('/zmanim?cfg=json&geonameid=293397&date=2025-12-24');
       expect(response.status).toBe(200);
       expect(response.type).toContain('json');
+    });
+
+    it('should return Assur Melacha status with im=1 parameter', async () => {
+      const response = await request(app.callback())
+          .get('/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('json');
+
+      // Validate response structure for Assur Melacha API
+      const body = response.body;
+      expect(body).toHaveProperty('date');
+      expect(body).toHaveProperty('version');
+      expect(body).toHaveProperty('location');
+      expect(body).toHaveProperty('status');
+
+      // Validate location object
+      expect(body.location).toHaveProperty('geonameid');
+      expect(body.location.geonameid).toBe(3448439);
+
+      // Validate status object
+      expect(body.status).toHaveProperty('localTime');
+      expect(body.status).toHaveProperty('isAssurBemlacha');
+      expect(typeof body.status.isAssurBemlacha).toBe('boolean');
+      expect(typeof body.status.localTime).toBe('string');
     });
 
     it('should return 200 for /omer with date', async () => {
@@ -563,39 +661,124 @@ describe('Router Tests', () => {
   });
 
   describe('RSS and XML Routes', () => {
-    it('should return 200 for /etc/hdate XML file', async () => {
-      const response = await request(app.callback())
-          .get('/etc/hdate-en.xml');
-      expect(response.status).toBe(200);
-      expect(response.type).toContain('xml');
+    describe('Hebrew Date RSS Feeds', () => {
+      it('should return Today\'s Hebrew Date in English', async () => {
+        const response = await request(app.callback())
+            .get('/etc/hdate-en.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+      });
+
+      it('should return Today\'s Hebrew Date in Hebrew', async () => {
+        const response = await request(app.callback())
+            .get('/etc/hdate-he.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+      });
+
+      it('should return Today\'s Hebrew Date in German', async () => {
+        const response = await request(app.callback())
+            .get('/etc/hdate-de.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+      });
+
+      it('should reject POST on /etc/hdate XML with 405', async () => {
+        const response = await request(app.callback())
+            .post('/etc/hdate-en.xml');
+        expect(response.status).toBe(405);
+        expect(response.type).toContain('html');
+      });
     });
 
-    it('should return 200 for /etc/hdate Hebrew XML file', async () => {
-      const response = await request(app.callback())
-          .get('/etc/hdate-he.xml');
-      expect(response.status).toBe(200);
-      expect(response.type).toContain('xml');
+    describe('Parashat ha-Shavua RSS Feeds', () => {
+      it('should return Torah reading RSS in English', async () => {
+        const response = await request(app.callback())
+            .get('/sedrot/index-en.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+        expect(response.text).toContain('<item>');
+      });
+
+      it('should return Torah reading RSS for Israel in English', async () => {
+        const response = await request(app.callback())
+            .get('/sedrot/israel-en.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+        expect(response.text).toContain('<item>');
+      });
+
+      it('should return Torah reading RSS in French', async () => {
+        const response = await request(app.callback())
+            .get('/sedrot/index-fr.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+        expect(response.text).toContain('<item>');
+      });
     });
 
-    it('should reject POST on /etc/hdate XML with 405', async () => {
-      const response = await request(app.callback())
-          .post('/etc/hdate-en.xml');
-      expect(response.status).toBe(405);
-      expect(response.type).toContain('html');
+    describe('Daily Learning RSS Feeds', () => {
+      it('should return 200 for /etc/dafyomi RSS feed', async () => {
+        const response = await request(app.callback())
+            .get('/etc/dafyomi-en.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+      });
+
+      it('should return 200 for /etc/myomi RSS feed', async () => {
+        const response = await request(app.callback())
+            .get('/etc/myomi-en.xml');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+      });
     });
 
-    it('should return 200 for /etc/dafyomi RSS feed', async () => {
-      const response = await request(app.callback())
-          .get('/etc/dafyomi-en.xml');
-      expect(response.status).toBe(200);
-      expect(response.type).toContain('xml');
-    });
+    describe('Shabbat Times RSS Feeds', () => {
+      it('should return Shabbat times RSS with zip code', async () => {
+        const response = await request(app.callback())
+            .get('/shabbat?geo=zip&zip=90210&m=50&cfg=r');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+        expect(response.text).toContain('<item>');
+        // Should contain candle lighting information
+        expect(response.text).toMatch(/Candle lighting|Havdalah/i);
+      });
 
-    it('should return 200 for /etc/myomi RSS feed', async () => {
-      const response = await request(app.callback())
-          .get('/etc/myomi-en.xml');
-      expect(response.status).toBe(200);
-      expect(response.type).toContain('xml');
+      it('should return Shabbat times RSS with geonameid', async () => {
+        const response = await request(app.callback())
+            .get('/shabbat?cfg=r&geonameid=293397&M=on');
+        expect(response.status).toBe(200);
+        expect(response.type).toContain('xml');
+        expect(response.text).toContain('<?xml');
+        expect(response.text).toContain('<rss');
+        expect(response.text).toContain('<channel>');
+        expect(response.text).toContain('<item>');
+      });
     });
   });
 
