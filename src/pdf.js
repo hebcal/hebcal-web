@@ -1,12 +1,12 @@
 /* eslint-disable indent */
-import {greg, flags, HebrewCalendar, Locale, gematriya, HDate} from '@hebcal/core';
+import {greg, flags, HebrewCalendar, Locale, gematriya, HDate, HebrewDateEvent} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
 import {localeMap, locationDefaultCandleMins} from './common.js';
+import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 import {pad2, pad4} from '@hebcal/hdate';
-import {GregorianDateEvent} from './GregorianDateEvent.js';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -487,6 +487,60 @@ export function createPdfDoc(title, options) {
 }
 
 /**
+ * Renders alternate date (Hebrew or Gregorian) on the same line as day number
+ * @param {PDFDocument} doc
+ * @param {Event[]} eventsForDay - Array of events for this day
+ * @param {number} xpos - X position of day number (right edge of cell)
+ * @param {number} ypos - Y position of day number
+ * @param {number} dayNumWidth - Width of the day number string
+ * @param {string} locale - Locale code
+ * @param {boolean} rtl - Whether we're in RTL mode
+ * @param {string} [colorOverride] - Optional color override (e.g., '#999999' for prev month)
+ * @return {Event|null} - Returns the alternate date event if found, null otherwise
+ */
+function renderAlternateDateOnLine(doc, eventsForDay, xpos, ypos, dayNumWidth, locale, rtl, colorOverride) {
+  const altIdx = eventsForDay.findIndex(evt =>
+    evt instanceof GregorianDateEvent || evt instanceof HebrewDateEvent);
+  if (altIdx === -1) {
+    return null;
+  }
+
+  const alternateDateEvent = eventsForDay[altIdx];
+  const isHebrewDate = alternateDateEvent instanceof HebrewDateEvent;
+  // Use renderBrief for Hebrew dates to avoid including the year
+  let altDateStr = isHebrewDate
+    ? alternateDateEvent.renderBrief(locale)
+    : alternateDateEvent.render(locale);
+
+  // Use Hebrew font when rendering in Hebrew locale (rtl mode), plain font otherwise
+  // This is based on the output language, not the type of date
+  const fontName = rtl ? 'hebrew' : 'plain';
+  doc.font(fontName).fontSize(10);
+
+  // Reverse Hebrew text if in RTL mode
+  if (rtl) {
+    altDateStr = reverseHebrewWords(altDateStr);
+  }
+
+  doc.fillColor(colorOverride || '#666666');
+  const marginFactor = rtl ? 2 : 3;
+  // Position alternate date at left side of cell (left-aligned)
+  const altDateX = xpos - PDF_COLWIDTH + PDF_CELL_MARGIN * marginFactor;
+  doc.text(altDateStr, altDateX, ypos + 3);
+
+  return alternateDateEvent;
+}
+
+/**
+ * Checks if an event is an alternate date event (GregorianDateEvent or HebrewDateEvent)
+ * @param {Event} evt
+ * @return {boolean}
+ */
+function isAlternateDateEvent(evt) {
+  return evt instanceof GregorianDateEvent || evt instanceof HebrewDateEvent;
+}
+
+/**
  * Renders a list of Hebcal holidays as PDF
  * @param {PDFDocument} doc
  * @param {Event[]} events
@@ -591,9 +645,16 @@ export function renderPdf(doc, events, options) {
             const width = doc.widthOfString(str);
             doc.text(str, prevXpos - width, ypos);
 
+            // Render alternate date on the same line if present
+            renderAlternateDateOnLine(doc, cells[yearMonth][prevKey], prevXpos, ypos, width, locale0, rtl, '#999999');
+
             // Render events for this Elul day
+            doc.fillColor('#999999');
             let y = ypos + 18;
             for (const evt of cells[yearMonth][prevKey]) {
+              if (isAlternateDateEvent(evt)) {
+                continue;
+              }
               y = renderPdfEvent(doc, evt, prevXpos - PDF_COLWIDTH + PDF_CELL_MARGIN, y, rtl, options);
             }
           }
@@ -613,10 +674,20 @@ export function renderPdf(doc, events, options) {
       const str = useGematriya ? gematriya(mday) : String(mday);
       const width = doc.widthOfString(str);
       doc.text(str, xpos - width, ypos); // right-align
+
+      // Render alternate date on the same line if present
+      if (cells[yearMonth][mday]) {
+        renderAlternateDateOnLine(doc, cells[yearMonth][mday], xpos, ypos, width, locale0, rtl);
+        doc.fillColor('#000000');
+      }
+
       // events within day mday
       if (cells[yearMonth][mday]) {
         let y = ypos + 18;
         for (const evt of cells[yearMonth][mday]) {
+          if (isAlternateDateEvent(evt)) {
+            continue;
+          }
           y = renderPdfEvent(doc, evt, xpos - PDF_COLWIDTH + PDF_CELL_MARGIN, y, rtl, options);
         }
       }
