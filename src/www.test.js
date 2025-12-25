@@ -403,6 +403,24 @@ describe('Router Tests', () => {
           .get('/dist/calc_triennial.pl');
       expect(response.status).toBe(410);
     });
+
+    it('should return 410 for /holidays after year 2999 (Yom HaAtzmaut)', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/yom-haatzmaut-4493');
+      expect(response.status).toBe(410);
+    });
+
+    it('should return 410 for /sedrot after year 2999', async () => {
+      const response = await request(app.callback())
+          .get('/sedrot/tazria-metzora-82230517');
+      expect(response.status).toBe(410);
+    });
+
+    it('should return 410 for /holidays after year 2999 (Chanukah)', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/chanukah-10069');
+      expect(response.status).toBe(410);
+    });
   });
 
   describe('HTTP Method Restrictions', () => {
