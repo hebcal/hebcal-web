@@ -18,6 +18,7 @@ const PDF_COLUMNS = 7;
 // not intended to be an integer
 const PDF_COLWIDTH = (PDF_WIDTH - PDF_LMARGIN - PDF_RMARGIN) / PDF_COLUMNS;
 const PDF_CELL_MARGIN = 2; // Horizontal margin for event text within cells (per side)
+const TIME_FONT_SIZE = 8.5;
 
 /**
  * @param {dayjs.Dayjs} d
@@ -35,7 +36,7 @@ function eventsToCellsHeb(events) {
   const cells = {};
     // Create month containers in chronological order (like splitByHebrewMonth in hebcalResults.js)
     const startHd = events[0].getDate();
-    const endHd = events[events.length - 1].getDate();
+    const endHd = events.at(-1).getDate();
 
     let currentHYear = startHd.getFullYear();
     let currentHMonth = startHd.getMonth();
@@ -122,7 +123,7 @@ function eventsToCells(events) {
   }
   // add blank months in the middle, even if there are no events
   const startDate = dayjs(events[0].greg());
-  const endDate = dayjs(events[events.length - 1].greg());
+  const endDate = dayjs(events.at(-1).greg());
   const start = startDate.set('date', 1);
   for (let i = start; i.isBefore(endDate); i = i.add(1, 'month')) {
     const yearMonth = calId(i);
@@ -315,7 +316,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   if (timed) {
     timeStr = HebrewCalendar.reformatTimeStr(evt.eventTimeStr, 'p', options);
     // Calculate time width with bold font at 10pt
-    doc.font('bold').fontSize(10);
+    doc.font('bold').fontSize(TIME_FONT_SIZE);
     timedWidth = doc.widthOfString(timeStr + ' ');
   }
   const locale = options?.locale;
@@ -371,7 +372,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     const startX = x + availableWidth - totalWidth;
 
     // Render time first (on the left when reading RTL) in bold
-    doc.font('bold').fontSize(10);
+    doc.font('bold').fontSize(TIME_FONT_SIZE);
     doc.text(timeStr + ' ', startX, y + 1);
 
     // Then render text (on the right when reading RTL)
@@ -384,7 +385,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
     // For LTR with time, render time first, then text in bold
     // Add extra left margin to prevent overlap with grid lines
     const timeX = x + PDF_CELL_MARGIN*2;
-    doc.font('bold').fontSize(10);
+    doc.font('bold').fontSize(TIME_FONT_SIZE);
     doc.text(timeStr + ' ', timeX, y + 1);
     textX = timeX + timedWidth;
   } else {
@@ -501,7 +502,7 @@ export function createPdfDoc(title, options) {
  * @return {Event|null} - Returns the alternate date event if found, null otherwise
  */
 function renderAlternateDateOnLine(doc, eventsForDay, xpos, ypos, dayNumWidth, locale, rtl, colorOverride) {
-  const altIdx = eventsForDay.findIndex(evt =>
+  const altIdx = eventsForDay.findIndex((evt) =>
     evt instanceof GregorianDateEvent || evt instanceof HebrewDateEvent);
   if (altIdx === -1) {
     return null;
@@ -510,9 +511,9 @@ function renderAlternateDateOnLine(doc, eventsForDay, xpos, ypos, dayNumWidth, l
   const alternateDateEvent = eventsForDay[altIdx];
   const isHebrewDate = alternateDateEvent instanceof HebrewDateEvent;
   // Use renderBrief for Hebrew dates to avoid including the year
-  let altDateStr = isHebrewDate
-    ? alternateDateEvent.renderBrief(locale)
-    : alternateDateEvent.render(locale);
+  let altDateStr = isHebrewDate ?
+    alternateDateEvent.renderBrief(locale) :
+    alternateDateEvent.render(locale);
 
   // Use Hebrew font when rendering in Hebrew locale (rtl mode), plain font otherwise
   // This is based on the output language, not the type of date
@@ -652,7 +653,7 @@ export function renderPdf(doc, events, options) {
 
             // Render events for this Elul day
             doc.fillColor('#999999');
-            let y = ypos + 18;
+            let y = ypos + 22;
             for (const evt of cells[yearMonth][prevKey]) {
               if (isAlternateDateEvent(evt)) {
                 continue;
@@ -685,7 +686,7 @@ export function renderPdf(doc, events, options) {
 
       // events within day mday
       if (cells[yearMonth][mday]) {
-        let y = ypos + 18;
+        let y = ypos + 22;
         for (const evt of cells[yearMonth][mday]) {
           if (isAlternateDateEvent(evt)) {
             continue;
