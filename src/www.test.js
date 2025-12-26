@@ -1,7 +1,102 @@
 /* eslint-disable max-len */
-import {describe, it, expect} from 'vitest';
+import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
 import {app} from './app-www.js';
+
+// Mock MysqlDb class for testing email verification routes
+class MockMysqlDb {
+  constructor() {
+    this.mockData = {
+      subscriptions: {
+        '01jthv2t5k88yermamssn96pze': {
+          email_id: '01jthv2t5k88yermamssn96pze',
+          email_address: 'test@example.com',
+          email_status: 'active',
+          email_created: new Date('2025-01-01'),
+          email_candles_zipcode: '10001',
+          email_candles_city: null,
+          email_candles_geonameid: null,
+          email_candles_havdalah: 50,
+          email_havdalah_tzeit: 0,
+          email_sundown_candles: 18,
+          email_use_elevation: 0,
+        },
+        '3fb9stfc55da9afel3aecdca': {
+          email_id: '3fb9stfc55da9afel3aecdca',
+          email_address: 'verify@example.com',
+          email_status: 'pending',
+          email_created: new Date('2025-01-01'),
+          email_candles_zipcode: '90210',
+          email_candles_city: null,
+          email_candles_geonameid: null,
+          email_candles_havdalah: 50,
+          email_havdalah_tzeit: 0,
+          email_sundown_candles: 18,
+          email_use_elevation: 0,
+        },
+      },
+      emailsByAddress: {
+        'nobody@example.com': '01jthv2t5k88yermamssn96pze',
+      },
+    };
+  }
+
+  async query(sql, params) {
+    // Handle SELECT queries for email verification
+    if (sql.includes('SELECT') && sql.includes('hebcal_shabbat_email')) {
+      if (sql.includes('WHERE email_id = ?')) {
+        const subscriptionId = params;
+        const row = this.mockData.subscriptions[subscriptionId];
+        return row ? [row] : [];
+      } else if (sql.includes('WHERE email_address = ?')) {
+        const emailAddress = params;
+        const subscriptionId = this.mockData.emailsByAddress[emailAddress];
+        const row = subscriptionId ? this.mockData.subscriptions[subscriptionId] : null;
+        return row ? [row] : [];
+      }
+    }
+
+    // Handle SELECT queries for yahrzeit verification
+    if (sql.includes('SELECT') && sql.includes('yahrzeit_email')) {
+      // Return empty result to trigger 404 in the test
+      return [];
+    }
+
+    // Handle UPDATE queries
+    if (sql.includes('UPDATE hebcal_shabbat_email') || sql.includes('UPDATE yahrzeit_email')) {
+      return {affectedRows: 1};
+    }
+
+    // Handle INSERT queries for email open tracking
+    if (sql.includes('INSERT INTO email_open')) {
+      return {insertId: 1};
+    }
+
+    // Default: return empty array
+    return [];
+  }
+
+  async execute(...params) {
+    return this.query(...params);
+  }
+
+  async query2(ctx, options) {
+    return await this.query(options.sql, options.values);
+  }
+
+  async execute2(ctx, options) {
+    return this.query2(ctx, options);
+  }
+
+  async close() {
+    return true;
+  }
+}
+
+// Install the mock before all tests
+beforeAll(() => {
+  app.context.mysql = new MockMysqlDb();
+});
 
 describe('Router Tests', () => {
   describe('Homepage and Basic Routes', () => {
@@ -110,11 +205,11 @@ describe('Router Tests', () => {
       expect(parsha.length).toBeGreaterThan(0);
 
       // Should contain Rosh Chodesh (nx=on)
-      const roshChodesh = body.items.filter((item) => item.title && item.title.includes('Rosh Chodesh'));
+      const roshChodesh = body.items.filter((item) => item.title?.includes('Rosh Chodesh'));
       expect(roshChodesh.length).toBeGreaterThan(0);
 
       // Validate timed events have proper date format
-      const timedEvents = body.items.filter((item) => item.date && item.date.includes('T'));
+      const timedEvents = body.items.filter((item) => item.date?.includes('T'));
       expect(timedEvents.length).toBeGreaterThan(0);
       timedEvents.forEach((item) => {
         expect(item.date).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
@@ -414,7 +509,7 @@ describe('Router Tests', () => {
       // Verify long-lived cache headers
       expect(response.headers['cache-control']).toBeDefined();
       expect(response.headers['cache-control']).toMatch(/max-age=\d+/);
-      const maxAge = parseInt(response.headers['cache-control'].match(/max-age=(\d+)/)?.[1] || '0');
+      const maxAge = Number.parseInt(response.headers['cache-control'].match(/max-age=(\d+)/)?.[1] || '0');
       expect(maxAge).toBeGreaterThanOrEqual(31536000); // At least 1 year (31536000 seconds)
     });
 
@@ -733,7 +828,7 @@ describe('Router Tests', () => {
       expect(response.status).toBe(400);
     });
 
-    it.skip('should handle /yahrzeit/verify with token', async () => {
+    it('should handle /yahrzeit/verify with token', async () => {
       const response = await request(app.callback())
           .get('/yahrzeit/verify/01jthv2t5k88yermamssn96pze');
       expect(response.status).toBe(404);
@@ -766,15 +861,16 @@ describe('Router Tests', () => {
     });
   });
 
+  // These tests use a mocked MySQL database connection.
   describe('Email Verification Routes', () => {
-    it.skip('should handle /email/verify.php with token', async () => {
+    it('should handle /email/verify.php with token', async () => {
       const response = await request(app.callback())
           .get('/email/verify.php?3fb9stfc55da9afel3aecdca');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
     });
 
-    it.skip('should handle /email/open tracking pixel', async () => {
+    it('should handle /email/open tracking pixel', async () => {
       const response = await request(app.callback())
           .get('/email/open?msgid=01jthv2t5k88yermamssn96pze.1746503035074&loc=Boston');
       expect(response.status).toBe(200);
