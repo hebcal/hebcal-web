@@ -438,7 +438,7 @@ function renderEventHtml(evt) {
   const aclose = url ? '</a>' : '';
   // Add left-align class for Gregorian dates in Hebrew mode
   const isHebrew = window['hebcal'].locale === 'he';
-  const alignClass = isHebrew ? ' text-start' : '';
+  const alignClass = isHebrew ? ' text-end' : '';
   return `<div class="fc-event ${className}${alignClass}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
@@ -594,21 +594,32 @@ function makeMonthTableBody(month) {
     }
 
     const clazz = today.isSame(d, 'd') ? 'fc-daygrid-day fc-day-today pb-3' : 'pb-3';
+    html += `<td class="${clazz}">`;
     const opts = window['hebcal'].opts || {};
     const useGematriya = opts.gematriyaNumerals === true;
     const dayNumStr = useGematriya ? gematriya(i) : i;
-    html += `<td class="${clazz}"><div class="d-flex justify-content-between mb-3"><b>${dayNumStr}</b>`;
+    let altDateEvt;
     const evts = dayMap[i] || [];
     const altDates = opts.addAlternateDates || opts.addAlternateDatesForEvents;
     if (altDates) {
-      const altDateEvt = evts.find((evt) => evt.cat === 'hebdate' || evt.cat === 'gregdate');
-      if (altDateEvt) {
-        html += `<small class="text-body-secondary ms-1 me-1">${altDateEvt.t0}</small>`;
+      altDateEvt = evts.find((evt) => evt.cat === 'hebdate' || evt.cat === 'gregdate');
+    }
+    if (altDateEvt) {
+      html += `<div class="d-flex justify-content-between mb-3 ms-1 me-1">`;
+      let strs = [
+        `<small class="text-body-secondary me-1">${altDateEvt.t0}</small>`,
+        `<b>${dayNumStr}</b>`,
+      ];
+      if (window['hebcal'].locale === 'he') {
+        strs = strs.reverse();
       }
+      html += strs.join('\n');
+    } else {
+      html += `<div class="text-end me-1 mb-3"><b>${dayNumStr}</b>`;
     }
     html += '</div>';
     evts.forEach(function(evt) {
-      if (altDates && evt.cat === 'hebdate' || evt.cat === 'gregdate') {
+      if (evt === altDateEvt) {
         return; // skip these
       }
       html += renderEventHtml(evt);
