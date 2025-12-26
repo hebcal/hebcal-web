@@ -56,6 +56,16 @@ async function main() {
     }
     obj[dt] = [title, quote];
   }
+  const start = new Date(2025, 0, 1);
+  for (let i = 1; i <= 365; i++) {
+    const dt = new Date(start);
+    dt.setDate(start.getDate() + i - 1);
+    const key = pad2(dt.getMonth() + 1) + '-' + pad2(dt.getDate());
+    if (!obj[key]) {
+      console.error(`Missing date: ${key}`);
+      process.exit(1);
+    }
+  }
   console.log(JSON.stringify(obj, null, 1));
 }
 
