@@ -166,6 +166,19 @@ describe('Router Tests', () => {
   });
 
   describe('Shabbat Routes', () => {
+    it('should handle semicolon-separated query parameters', async () => {
+      const response = await request(app.callback())
+          .get('/shabbat/?geo=city;city=Toronto;m=42;cfg=j;tgt=_top');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('javascript');
+      // Verify the response contains Toronto-specific event data
+      expect(response.text).toContain('Toronto');
+      // The cfg=j parameter should produce JavaScript output with document.write calls
+      expect(response.text).toContain('document.write');
+      // Verify it contains Shabbat-related events (candle lighting, havdalah, etc.)
+      expect(response.text).toMatch(/Candle lighting|Havdalah/);
+    });
+
     it('should return 200 for /shabbat with geonameid', async () => {
       const response = await request(app.callback())
           .get('/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
@@ -237,6 +250,13 @@ describe('Router Tests', () => {
       expect(response.status).toBe(200);
       expect(response.type).toBe('application/pdf');
     });
+
+    it('should handle holiday year search', async () => {
+      const response = await request(app.callback())
+          .get('/holidays/pesach?gy=1980');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toContain('/holidays/pesach-1980');
+    });
   });
 
   describe('Sedrot/Parsha Routes', () => {
@@ -262,6 +282,13 @@ describe('Router Tests', () => {
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
       expect(response.text).toMatch(/<title>Vayigash 578\d - Torah Portion - Hebcal<\/title>/);
+    });
+
+    it('should handle parsha year search', async () => {
+      const response = await request(app.callback())
+          .get('/sedrot/vayechi?gy=1980');
+      expect(response.status).toBe(302);
+      expect(response.headers.location).toContain('/sedrot/vayechi-19800105');
     });
   });
 
@@ -375,6 +402,44 @@ describe('Router Tests', () => {
           .get('/etc/hdate-he.js');
       expect(response.status).toBe(200);
       expect(response.type).toContain('javascript');
+    });
+  });
+
+  describe('Static File Serving', () => {
+    it('should serve SVG sprite file with correct content type', async () => {
+      const response = await request(app.callback())
+          .get('/i/sprite13.svg');
+      expect(response.status).toBe(200);
+      expect(response.type).toMatch(/svg/);
+      // Verify long-lived cache headers
+      expect(response.headers['cache-control']).toBeDefined();
+      expect(response.headers['cache-control']).toMatch(/max-age=\d+/);
+      const maxAge = parseInt(response.headers['cache-control'].match(/max-age=(\d+)/)?.[1] || '0');
+      expect(maxAge).toBeGreaterThanOrEqual(31536000); // At least 1 year (31536000 seconds)
+    });
+
+    it('should serve favicon with correct content type', async () => {
+      const response = await request(app.callback())
+          .get('/favicon.ico');
+      expect(response.status).toBe(200);
+      expect(response.type).toMatch(/icon|octet-stream/);
+    });
+
+    it('should serve WOFF2 font file with correct content type', async () => {
+      const response = await request(app.callback())
+          .get('/i/adobehebrew-regular.woff2');
+      expect(response.status).toBe(200);
+      expect(response.type).toMatch(/woff2|font|octet-stream/);
+    });
+
+    it('should serve minified JavaScript file with correct content type', async () => {
+      const response = await request(app.callback())
+          .get('/i/hebcal-app-5.2.1.min.js');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('javascript');
+      // Verify immutable cache header
+      expect(response.headers['cache-control']).toBeDefined();
+      expect(response.headers['cache-control']).toMatch(/immutable/);
     });
   });
 
@@ -668,14 +733,12 @@ describe('Router Tests', () => {
       expect(response.status).toBe(400);
     });
 
-    /*
-    it('should handle /yahrzeit/verify with token', async () => {
+    it.skip('should handle /yahrzeit/verify with token', async () => {
       const response = await request(app.callback())
           .get('/yahrzeit/verify/01jthv2t5k88yermamssn96pze');
       expect(response.status).toBe(404);
       expect(response.type).toContain('html');
     });
-    */
   });
 
   describe('Short URL Redirects', () => {
@@ -704,28 +767,26 @@ describe('Router Tests', () => {
   });
 
   describe('Email Verification Routes', () => {
-    /*
-    it('should handle /email/verify.php with token', async () => {
+    it.skip('should handle /email/verify.php with token', async () => {
       const response = await request(app.callback())
           .get('/email/verify.php?3fb9stfc55da9afel3aecdca');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
     });
-    */
-    /*
-    it('should handle /email/open tracking pixel', async () => {
+
+    it.skip('should handle /email/open tracking pixel', async () => {
       const response = await request(app.callback())
-          .get('/email/open?msgid=01jthv2t5k88yermamssn96pze.1746503035074');
+          .get('/email/open?msgid=01jthv2t5k88yermamssn96pze.1746503035074&loc=Boston');
       expect(response.status).toBe(200);
       expect(response.type).toContain('gif');
     });
-    */
 
-    it('should handle GET /email form', async () => {
+    it('GET /email base64 decodes arg', async () => {
       const response = await request(app.callback())
-          .get('/email');
+          .get('/email?e=bm9ib2R5QGV4YW1wbGUuY29t');
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
+      expect(response.text).toContain('nobody@example.com');
     });
   });
 
