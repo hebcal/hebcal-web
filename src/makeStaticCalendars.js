@@ -142,7 +142,10 @@ async function doChofetzChaim(cfg) {
 // Avoid "Ignoring unrecognized HebrewCalendar option: caldesc"
 // warnings from HebrewCalendar.calendar()
 const ignoreOpts = ['downloadSlug', 'years', 'noMajor', 'noMinorHolidays',
-  'emoji', 'title', 'caldesc', 'relcalid', 'color', 'calendarColor'];
+  'emoji', 'title', 'caldesc', 'relcalid', 'color', 'calendarColor',
+  'ordinal', 'emojiStr', 'titleName', 'name', 'summary', 'he',
+  'feedLength', 'noCSV', 'moreInfo', 'hasNoEmojiVersion',
+];
 
 async function doRegularCalendar(cfg) {
   const file = cfg.downloadSlug;

@@ -12,7 +12,15 @@
   "emoji": true,
   "title": "Jewish Holidays ✡️",
   "caldesc": "Major Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002"
+  "calendarColor": "#800002",
+  "emojiStr": "✡️",
+  "titleName": "Jewish Holidays (only major holidays)",
+  "name": "Jewish Holidays",
+  "summary": "<p>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah.\n<br>Does NOT include minor &amp; modern holidays, fast days or Rosh Chodesh.</p>\n<p>Diaspora schedule (for Jews living anywhere outside of modern Israel)</p>",
+  "feedLength": "~40",
+  "noCSV": true,
+  "hasNoEmojiVersion": true,
+  "ordinal": 1
 },
 {
   "downloadSlug": "jewish-holidays-all-v2",
@@ -21,7 +29,15 @@
   "emoji": true,
   "title": "Jewish Holidays ✡️",
   "caldesc": "All Jewish holidays for the Diaspora from Hebcal.com",
-  "calendarColor": "#800002"
+  "calendarColor": "#800002",
+  "emojiStr": "✡️ 🌒 🌳 🎭️ 🔥",
+  "titleName": "Jewish Holidays (all holidays)",
+  "name": "Jewish Holidays (all)",
+  "summary": "<p>Major, minor, modern Israeli holidays, fast days and more.\n<br>Diaspora schedule (for Jews living anywhere outside of modern Israel)</p>\n<ul>\n<li>Major holidays such as Rosh Hashana, Yom Kippur, Passover, Hanukkah</li>\n<li>Rosh Chodesh</li>\n<li>Minor holidays</li>\n<li>Fast days</li>\n<li>Modern Israeli holidays</li>\n<li>Special Shabbatot</li>\n</ul>",
+  "feedLength": "~95",
+  "noCSV": true,
+  "hasNoEmojiVersion": true,
+  "ordinal": 2
 },
 {
   "downloadSlug": "jewish-holidays",
@@ -54,7 +70,11 @@
   "years": 3,
   "title": "Hebrew calendar dates (en)",
   "caldesc": "Displays the Hebrew date every day of the week in English transliteration",
-  "calendarColor": "#AC8E68"
+  "calendarColor": "#AC8E68",
+  "name": "Hebrew calendar dates (English)",
+  "summary": "<p>Displays the Hebrew date (such as <strong class=\"text-nowrap text-burgundy\">18th of Tevet</strong>) every day of the week. Sephardic transliteration.</p>\n<p>Hebrew year is included in event title on the 1st of each month (e.g. <strong class=\"text-nowrap text-burgundy\">1st of Kislev, 5782</strong>)</p>",
+  "feedLength": 365,
+  "ordinal": 5
 },
 {
   "downloadSlug": "hdate-he",
@@ -64,7 +84,11 @@
   "years": 3,
   "title": "Hebrew calendar dates (he)",
   "caldesc": "Displays the Hebrew date every day of the week in Hebrew",
-  "calendarColor": "#AC8E68"
+  "calendarColor": "#AC8E68",
+  "name": "Hebrew calendar dates (Hebrew with nikud)",
+  "summary": "<p>Displays the Hebrew date with nikud (e.g. <span lang=\"he\" dir=\"rtl\" class=\"text-nowrap text-burgundy\">י״ח טֵבֵת</span>) every day of the week</p>",
+  "feedLength": 365,
+  "ordinal": 7
 },
 {
   "downloadSlug": "hdate-he-v2",
@@ -74,7 +98,11 @@
   "years": 3,
   "title": "Hebrew calendar dates (he)",
   "caldesc": "Displays the Hebrew date every day of the week in Hebrew",
-  "calendarColor": "#AC8E68"
+  "calendarColor": "#AC8E68",
+  "name": "Hebrew calendar dates (Hebrew)",
+  "summary": "<p>Displays the Hebrew date without nikud (e.g. <span lang=\"he\" dir=\"rtl\" class=\"text-nowrap text-burgundy\">י״ח טבת</span>) every day of the week.</p>\n<p>Hebrew year is included in event title on the 1st of each month (e.g. <span lang=\"he\" dir=\"rtl\" class=\"text-nowrap text-burgundy\">א׳ כסלו תשפ״ב</span>)</p>",
+  "feedLength": 365,
+  "ordinal": 6
 },
 {
   "downloadSlug": "omer",
@@ -85,7 +113,12 @@
   "emoji": false,
   "title": "Days of the Omer",
   "caldesc": "7 weeks from the second night of Pesach to the day before Shavuot",
-  "calendarColor": "#FF9F0A"
+  "calendarColor": "#FF9F0A",
+  "emojiStr": "🌾 ㊾",
+  "name": "Days of the Omer",
+  "summary": "<p>7 weeks from the second night of Pesach to the day before Shavuot</p>",
+  "feedLength": 49,
+  "ordinal": 8
 },
 {
   "downloadSlug": "torah-readings-diaspora",
@@ -95,7 +128,12 @@
   "years": 5,
   "title": "Torah Readings (Diaspora)",
   "caldesc": "Parashat ha-Shavua - Weekly Torah Portion from Hebcal.com",
-  "calendarColor": "#257E4A"
+  "calendarColor": "#257E4A",
+  "emojiStr": "🕍",
+  "name": "Torah Readings (Diaspora)",
+  "summary": "<p>Parashat ha-Shavua - Weekly Torah Portion such as Bereshit, Noach, Lech-Lecha.</p><p>Diaspora schedule</p>",
+  "feedLength": "~50",
+  "ordinal": 3
 },
 {
   "downloadSlug": "torah-readings-israel",
@@ -117,7 +155,13 @@
   "years": 5,
   "title": "Torah Readings (Israel Hebrew)",
   "caldesc": "Parashat ha-Shavua - Weekly Torah Portion from Hebcal.com",
-  "calendarColor": "#257E4A"
+  "calendarColor": "#257E4A",
+  "emojiStr": "🕍",
+  "name": "פרשת השבוע - ישראל",
+  "he": true,
+  "summary": "<p>Parashat ha-Shavua - Weekly Torah Portion such as <span lang=\"he\" dir=\"rtl\">בראשית, נח, לך־לך</span>.</p>\n<p>Israel schedule 🇮🇱</p>",
+  "feedLength": "~50",
+  "ordinal": 4
 },
 {
   "downloadSlug": "yom-kippur-katan",
@@ -128,7 +172,11 @@
   "title": "Yom Kippur Katan",
   "caldesc": "יוֹם כִּפּוּר קָטָן, minor day of atonement on the day preceeding each Rosh Chodesh",
   "relcalid": "457ce561-311f-4eeb-9033-65561b7f7503",
-  "calendarColor": "#800002"
+  "calendarColor": "#800002",
+  "name": "Yom Kippur Katan",
+  "summary": "<p><span lang=\"he\" dir=\"rtl\">יוֹם כִּפּוּר קָטָן</span> is a minor day of atonement occurring monthly on the day preceding each Rosh Chodesh.</p>\n<p class=\"small\">Yom Kippur Katan is omitted in Elul (on the day before Rosh Hashanah),\nTishrei (Yom Kippur has just passed), Kislev (due to Chanukah) or Nisan (fasting not permitted during Nisan).\nWhen Rosh Chodesh occurs on Shabbat or Sunday, Yom Kippur Katan is observed on the preceding\nThursday.&nbsp;<sup><a class=\"outbound\" href=\"https://en.wikipedia.org/wiki/Yom_Kippur_Katan#Practices\">[1]</a></sup></p>",
+  "feedLength": 9,
+  "ordinal": 12
 },
 {
   "downloadSlug": "rosh-chodesh",
@@ -142,7 +190,12 @@
   "emoji": false,
   "title": "Rosh Chodesh",
   "caldesc": "Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar",
-  "calendarColor": "#6F42C1"
+  "calendarColor": "#6F42C1",
+  "emojiStr": "🌒",
+  "name": "Rosh Chodesh",
+  "summary": "<p>Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar, marked by the birth of a new moon.</p>",
+  "feedLength": 18,
+  "ordinal": 9
 },
 {
   "downloadSlug": "mevarchim",
@@ -153,7 +206,11 @@
   "emoji": false,
   "title": "Shabbat Mevarchim",
   "caldesc": "Shabbat announcing new month,Prior to Rosh Chodesh",
-  "calendarColor": "#800002"
+  "calendarColor": "#800002",
+  "name": "Shabbat Mevarchim",
+  "summary": "<p>Shabbat before Rosh Chodesh is known as Shabbat Mevarchim, \"the Shabbat when we bless.\"\nEach event in the feed also includes details on the molad, the moment the new moon is born.</p>",
+  "feedLength": 12,
+  "ordinal": 10
 },
 {
   "downloadSlug": "yizkor-diaspora",
@@ -164,7 +221,12 @@
   "title": "Yizkor (Diaspora)",
   "caldesc": "Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly",
   "relcalid": "64acac8c-a02f-4433-b7ef-f3a5e02d26cc",
-  "calendarColor": "#800002"
+  "calendarColor": "#800002",
+  "emojiStr": "🕯️",
+  "name": "Yizkor",
+  "summary": "<p>Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly.\nDiaspora schedule.</p>\n<ul>\n<li>Yom Kippur</li>\n<li>Shmini Atzeret</li>\n<li>Pesach: 8th day</li>\n<li>Shavuot: 2nd day</li>\n</ul>",
+  "feedLength": 4,
+  "ordinal": 11
 },
 {
   "downloadSlug": "yizkor-il",
