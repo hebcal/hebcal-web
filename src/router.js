@@ -44,6 +44,7 @@ import {readJSON} from './readJSON.js';
 import {securityTxt} from './securityTxt.js';
 
 const redirectMap = readJSON('./redirect.json');
+const staticCalendars = readJSON('./staticCalendars.json');
 
 const needsTrailingSlash = {
   '/shabbat/browse': true,
@@ -174,10 +175,14 @@ export function wwwRouter() {
     } else if (rpath.startsWith('/link')) {
       return shabbatJsLink(ctx);
     } else if (rpath === '/ical/') {
+      const holidayCalendars = staticCalendars
+          .filter((cfg) => cfg.ordinal)
+          .sort((a, b) => a.ordinal - b.ordinal);
       return ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars - Hebcal',
         langNames,
         dailyLearningConfig,
+        holidayCalendars,
       });
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.js')) {
       onlyGetAndHead(ctx);
