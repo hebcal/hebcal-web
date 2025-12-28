@@ -116,7 +116,7 @@
   "calendarColor": "#FF9F0A",
   "emojiStr": "🌾 ㊾",
   "shortName": "Days of the Omer",
-  "descLong": "<p>7 weeks from the second night of Pesach to the day before Shavuot</p>",
+  "descLong": "<p>Counting of the Omer (or Sefirat Ha’omer, Hebrew: <span lang=\"he\" dir=\"rtl\">ספירת העומר</span>) is a verbal counting of each of the forty-nine days between the Jewish holidays of Passover and Shavuot</p>",
   "feedLength": 49,
   "ordinal": 8
 },
@@ -193,7 +193,7 @@
   "calendarColor": "#6F42C1",
   "emojiStr": "🌒",
   "shortName": "Rosh Chodesh",
-  "descLong": "<p>Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar, marked by the birth of a new moon.</p>",
+  "descLong": "<p>Rosh Chodesh is a minor holiday observed at the beginning of every month in the Hebrew calendar, marked by the birth of a new moon</p>",
   "feedLength": 18,
   "ordinal": 9
 },
@@ -208,7 +208,7 @@
   "caldesc": "Shabbat announcing new month,Prior to Rosh Chodesh",
   "calendarColor": "#800002",
   "shortName": "Shabbat Mevarchim",
-  "descLong": "<p>Shabbat before Rosh Chodesh is known as Shabbat Mevarchim, \"the Shabbat when we bless.\"\nEach event in the feed also includes details on the molad, the moment the new moon is born.</p>",
+  "descLong": "<p>Shabbat before Rosh Chodesh is known as Shabbat Mevarchim, \"the Shabbat when we bless.\"\nEach event in the feed also includes details on the molad, the moment the new moon is born</p>",
   "feedLength": 12,
   "ordinal": 10
 },
