@@ -245,7 +245,7 @@ describe('Router Tests', () => {
       expect(firstEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}/);
 
       // Some events may have additional FullCalendar properties
-      const timedEvent = body.find((event) => event.start && event.start.includes('T'));
+      const timedEvent = body.find((event) => event.start?.includes('T'));
       if (timedEvent) {
         // Timed events should have full ISO timestamp
         expect(timedEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
