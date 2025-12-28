@@ -9,6 +9,7 @@ import {makeHebcalOptions, makeHebrewCalendar, localeMap,
   yearIsOutsideGregRange,
   yearIsOutsideHebRange,
   cacheControl, queryDefaultCandleMins} from './common.js';
+import {makeAnchor} from '@hebcal/rest-api';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -37,6 +38,28 @@ export async function fridgeShabbat(ctx) {
   if (!empty(q.year)) {
     ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   }
+  if (q.cfg === 'csv') {
+    let csv = '';
+    if (p.lang !== 'en') {
+      // Write BOM for UTF-8
+      csv += '\uFEFF';
+    }
+    csv += 'Date,Parsha,Candles,Havdalah\r\n';
+    for (const item of p.items) {
+      const isoDate = item.date.format('YYYY-MM-DD');
+      const reason = item.reason;
+      const candles = item.time;
+      const havdalah = item.havdalah || '';
+      csv += isoDate + ',' + reason + ',' + candles + ',' + havdalah + '\r\n';
+    }
+    const locName = makeAnchor(p.location.getShortName());
+    const year = p.hyear || p.gregYear1;
+    ctx.response.attachment(`fridge-${locName}-${year}.csv`);
+    ctx.type = 'text/csv; charset=utf-8';
+    ctx.body = csv;
+    return;
+  }
+  formatForHtml(p);
   return ctx.render('fridge', p);
 }
 
@@ -73,25 +96,27 @@ function makeProperties(ctx) {
     return !ev.getDesc().startsWith('Chanukah');
   });
   const items = makeContents(events, options);
-  const itemsRows = formatItemsAsTable(items, options);
-  const url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(query, location, options);
   const locale = options.locale || 'en';
   const lang = localeMap[locale] || 'en';
   return {
-    htmlDir: lang === 'he' ? 'rtl' : 'ltr',
     lang,
     location,
     locale,
     hyear,
     gregYear1: events[0].greg().getFullYear(),
     gregYear2: events.at(-1).greg().getFullYear(),
-    itemsRows,
-    url,
-    candleLightingStr: Locale.gettext('Candle lighting', locale),
     q: query,
     options,
-    queryDefaultCandleMins,
+    items,
   };
+}
+
+function formatForHtml(p) {
+  p.itemsRows = formatItemsAsTable(p.items, p.options);
+  p.url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(p.q, p.location, p.options);
+  p.htmlDir = p.lang === 'he' ? 'rtl' : 'ltr';
+  p.candleLightingStr = Locale.gettext('Candle lighting', p.locale);
+  p.queryDefaultCandleMins = queryDefaultCandleMins;
 }
 
 /**
