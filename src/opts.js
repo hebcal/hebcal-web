@@ -176,7 +176,7 @@ export const geoposLegacy = {
   lomin: 60,
 };
 
-export const primaryGeoKeys = ['geonameid', 'zip', 'city'];
+const primaryGeoKeys = ['geonameid', 'zip', 'city'];
 export const geoKeys = primaryGeoKeys.concat(['latitude', 'longitude', 'elev', 'tzid']);
 export const allGeoKeys = geoKeys.concat(Object.keys(geoposLegacy)).concat(['city-typeahead']);
 
@@ -296,4 +296,76 @@ export function makeIcalOpts(options, query) {
     }
   }
   return icalOpts;
+}
+
+/**
+ * @param {string} str
+ * @return {boolean}
+ */
+export function is5DigitZip(str) {
+  if (typeof str !== 'string') {
+    return false;
+  }
+  const s = str.trim();
+  if (s.length < 5) {
+    return false;
+  }
+  for (let i = 0; i < 5; i++) {
+    if (s.charCodeAt(i) > 57 || s.charCodeAt(i) < 48) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @param {string} cookieString
+ * @param {Object.<string,string>} defaults
+ * @param {Object.<string,string>} query0
+ * @return {any}
+ */
+export function processCookieAndQuery(cookieString, defaults, query0) {
+  const query = {...query0};
+  const ck = {};
+  if (empty(query.cfg)) {
+    const ck0 = new URLSearchParams(cookieString || '');
+    for (const [key, value] of ck0.entries()) {
+      ck[key] = value;
+    }
+    delete ck.t;
+    delete ck.uid;
+    delete ck.exp;
+    // a=on is deprecated; prefer lg=a instead
+    if (ck.a === 'on' && empty(ck.lg)) {
+      ck.lg = 'a';
+    }
+    delete ck.a;
+  }
+  let found = false;
+  const cityTypeahead = query['city-typeahead'];
+  if (is5DigitZip(cityTypeahead)) {
+    query.zip = cityTypeahead.trim();
+  }
+  if (!empty(query.m)) {
+    delete ck.M;
+  }
+  for (const geoKey of primaryGeoKeys) {
+    if (!empty(query[geoKey]) && query[geoKey].trim().length > 0) {
+      for (const key of allGeoKeys.filter((k) => k !== geoKey)) {
+        delete ck[key];
+        delete query[key];
+      }
+      found = true;
+      break;
+    }
+  }
+  if (!found) {
+    const geo = query.geo;
+    const toRemove = (geo === 'pos') ? primaryGeoKeys : (geo === 'none') ? allGeoKeys : [];
+    for (const key of toRemove) {
+      delete ck[key];
+      delete query[key];
+    }
+  }
+  return {...defaults, ...ck, ...query};
 }

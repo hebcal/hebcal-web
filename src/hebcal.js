@@ -1,5 +1,5 @@
 import {empty} from './empty.js';
-import {makeHebcalOptions, processCookieAndQuery,
+import {makeHebcalOptions,
   urlArgs, getNumYears,
   cacheControl,
   CACHE_CONTROL_7DAYS,
@@ -19,6 +19,7 @@ import {
   dailyLearningOpts,
   makeCalendarSubtitleFromOpts,
   makeIcalOpts,
+  processCookieAndQuery,
 } from './opts.js';
 import {possiblySetCookie} from './cookie.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';

@@ -1,6 +1,6 @@
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
-import {makeHebcalOptions, processCookieAndQuery,
+import {makeHebcalOptions,
   httpRedirect,
   getLocationFromGeoIp,
   makeETag,
@@ -9,7 +9,11 @@ import {makeHebcalOptions, processCookieAndQuery,
   CACHE_CONTROL_7DAYS,
   makeHebrewCalendar} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
-import {localeMap, queryDefaultCandleMins} from './opts.js';
+import {
+  localeMap,
+  queryDefaultCandleMins,
+  processCookieAndQuery,
+} from './opts.js';
 import {possiblySetCookie} from './cookie.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
   expiresSaturdayNight} from './dateUtil.js';
