@@ -481,7 +481,7 @@ export function cleanQuery(query) {
   for (const key of allKeys) {
     const value = query[key];
     if (!empty(value)) {
-      const cleanStr = value.replace(/[<>&"'`]/g, '');
+      const cleanStr = value.replaceAll(/[<>&"'`]/g, '');
       if (value !== cleanStr) {
         query[key] = cleanStr;
       }
@@ -730,10 +730,12 @@ export function getLocationFromQuery(db, query) {
     query.zip = cityTypeahead.substring(cityTypeahead.length - 5);
   }
   if (!empty(query.geonameid)) {
-    const location = db.lookupGeoname(parseInt(query.geonameid, 10));
+    const geonameid = parseInt(query.geonameid, 10);
+    const location = db.lookupGeoname(geonameid);
     if (location == null) {
       throw createError(404, `Sorry, can't find geonameid: ${query.geonameid}`);
     }
+    query.geonameid = geonameid;
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {

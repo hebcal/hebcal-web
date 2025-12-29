@@ -388,7 +388,7 @@ async function writeStagingInfo(ctx, db, q) {
   const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId = makeSubscriptionId(ctx);
   const locationColumn = q.zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
-  const locationValue = q.zip ? q.zip : q.geonameid;
+  const locationValue = q.zip ? q.zip : parseInt(q.geonameid, 10);
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
    email_use_elevation,
