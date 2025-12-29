@@ -1,7 +1,8 @@
 import randomBigInt from 'random-bigint';
 import {getLocationFromQuery, processCookieAndQuery,
-  cleanQuery,
-  queryDefaultCandleMins} from './common.js';
+} from './common.js';
+import {cleanQuery} from './cleanQuery.js';
+import {queryDefaultCandleMins} from './opts.js';
 import {getIpAddress} from './getIpAddress.js';
 import {mySendMail, getImgOpenHtml, validateEmail} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';

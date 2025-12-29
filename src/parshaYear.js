@@ -4,8 +4,9 @@ import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
-import {localeMap, shortenUrl, lgToLocale, getNumYears, makeETag,
+import {shortenUrl, getNumYears, makeETag,
   yearIsOutsideHebRange, throw410} from './common.js';
+import {lgToLocale, localeMap} from './opts.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 
 export async function parshaYearApp(ctx) {

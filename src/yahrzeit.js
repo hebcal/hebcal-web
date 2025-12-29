@@ -7,11 +7,10 @@ import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty} from './empty.js';
-import {makeETag, makeIcalOpts,
-  cleanQuery,
-  hebcalFormDefaults,
-  pkg,
-  doesCookieNeedRefresh, processCookieAndQuery, setHebcalCookie} from './common.js';
+import {makeETag, pkg, processCookieAndQuery} from './common.js';
+import {cleanQuery} from './cleanQuery.js';
+import {hebcalFormDefaults, makeIcalOpts} from './opts.js';
+import {doesCookieNeedRefresh, setHebcalCookie} from './cookie.js';
 import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,

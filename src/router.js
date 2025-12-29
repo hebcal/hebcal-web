@@ -4,13 +4,12 @@ import {send} from '@koa/send';
 import {
   getLocationFromQuery,
   httpRedirect,
-  langNames,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE,
-  dailyLearningConfig,
   throw410,
   DOCUMENT_ROOT,
 } from './common.js';
+import {langNames, dailyLearningConfig} from './opts.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
 import {emailForm, emailVerify} from './email.js';

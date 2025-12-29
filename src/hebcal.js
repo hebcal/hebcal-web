@@ -1,21 +1,26 @@
 import {empty} from './empty.js';
-import {makeHebcalOptions, processCookieAndQuery, possiblySetCookie,
-  cleanQuery,
+import {makeHebcalOptions, processCookieAndQuery,
   urlArgs, getNumYears,
-  hebcalFormDefaults,
-  makeIcalOpts,
   cacheControl,
   CACHE_CONTROL_7DAYS,
   makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
-  queryDefaultCandleMins,
-  dailyLearningOpts,
-  dailyLearningConfig,
-  makeCalendarSubtitleFromOpts,
-  queryLongDescr,
+  makeETag} from './common.js';
+import {cleanQuery} from './cleanQuery.js';
+import {
+  hebcalFormDefaults,
+  langNames,
+  localeMap,
   queryToName,
-  localeMap, makeETag, langNames} from './common.js';
+  queryLongDescr,
+  queryDefaultCandleMins,
+  dailyLearningConfig,
+  dailyLearningOpts,
+  makeCalendarSubtitleFromOpts,
+  makeIcalOpts,
+} from './opts.js';
+import {possiblySetCookie} from './cookie.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';

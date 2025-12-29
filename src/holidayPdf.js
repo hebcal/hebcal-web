@@ -3,8 +3,9 @@ import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf.js';
-import {lgToLocale, localeMap, makeETag, cacheControl,
+import {makeETag, cacheControl,
   yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
+import {lgToLocale, localeMap} from './opts.js';
 
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 

@@ -2,7 +2,7 @@ import {greg2abs} from '@hebcal/hdate';
 import {HDate, HebrewCalendar, flags, Event, DailyLearning} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
-import {dailyLearningConfig, makeIcalOpts, localeMap} from './common.js';
+import {localeMap, dailyLearningConfig, makeIcalOpts} from './opts.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {readJSON} from './readJSON.js';
 import {exec} from 'node:child_process';

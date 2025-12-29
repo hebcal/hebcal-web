@@ -6,7 +6,8 @@ import {empty} from './empty.js';
 import {getLocationFromQuery,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS,
   pkg,
-  lgToLocale, makeETag} from './common.js';
+  makeETag} from './common.js';
+import {lgToLocale} from './opts.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';

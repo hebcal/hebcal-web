@@ -1,14 +1,15 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {empty} from './empty.js';
-import {makeHebcalOptions, makeHebrewCalendar, localeMap,
-  cleanQuery,
+import {makeHebcalOptions, makeHebrewCalendar,
   makeGeoUrlArgs,
-  langNames,
   setDefautLangTz,
   makeETag,
   yearIsOutsideGregRange,
   yearIsOutsideHebRange,
-  cacheControl, queryDefaultCandleMins} from './common.js';
+  cacheControl,
+} from './common.js';
+import {cleanQuery} from './cleanQuery.js';
+import {langNames, localeMap, queryDefaultCandleMins} from './opts.js';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import '@hebcal/locales';
@@ -52,7 +53,9 @@ export async function fridgeShabbat(ctx) {
       const havdalah = item.havdalah || '';
       csv += isoDate + ',' + reason + ',' + candles + ',' + havdalah + '\r\n';
     }
-    const locName = makeAnchor(p.location.getShortName());
+    const loc = p.location;
+    const locName0 = loc.zip || loc.asciiname || loc.getShortName() || '';
+    const locName = makeAnchor(locName0);
     const year = p.hyear || p.gregYear1;
     ctx.response.attachment(`candles-${locName}-${year}.csv`);
     ctx.type = 'text/csv; charset=utf-8';

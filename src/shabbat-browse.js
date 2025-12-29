@@ -6,10 +6,11 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
-import {langTzDefaults, CACHE_CONTROL_7DAYS,
+import {langTzDefaults, queryDefaultCandleMins} from './opts.js';
+import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
   makeETag,
-  queryDefaultCandleMins} from './common.js';
+} from './common.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import flag from 'emoji-flag';
 

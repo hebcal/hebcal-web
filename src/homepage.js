@@ -1,12 +1,13 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
   DailyLearning, ChanukahEvent} from '@hebcal/core';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
-import {setDefautLangTz, localeMap, lgToLocale,
-  cleanQuery,
+import {setDefautLangTz,
   processCookieAndQuery, urlArgs,
   shortenUrl,
   makeGeoUrlArgs2,
 } from './common.js';
+import {cleanQuery} from './cleanQuery.js';
+import {lgToLocale, localeMap} from './opts.js';
 import {pad2, pad4} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';

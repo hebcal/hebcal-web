@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, off} from './empty.js';
-import {httpRedirect, wrapHebrewInSpans, langNames, getBaseFromPath,
+import {langNames} from './opts.js';
+import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
   yearIsOutsideGregRange,
   throw410,
   makeETag} from './common.js';

@@ -2,7 +2,7 @@ import {matomoTrack} from './matomoTrack.js';
 import {getIpAddress} from './getIpAddress.js';
 import {empty} from './empty.js';
 import {sendGif} from './sendGif.js';
-import {cleanQuery} from './common.js';
+import {cleanQuery} from './cleanQuery.js';
 import {transliterate} from 'transliteration';
 
 export async function emailOpen(ctx) {
