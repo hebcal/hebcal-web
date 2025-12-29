@@ -87,7 +87,7 @@ export async function shabbatApp(ctx) {
     ctx.body = obj;
   } else {
     const cookie = ctx.cookies.get('C');
-    const p = makePropsForFullHtml(ctx, dt);
+    const p = makePropsForFullHtml(ctx);
     if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
       // private cache only if we're tailoring results by cookie
       ctx.set('Cache-Control', 'private');
@@ -191,6 +191,7 @@ function makeItems(ctx, options, q) {
   const items = events.map((ev) => eventToItem(ev, options, lang, q.cfg));
   const titlePrefix = Locale.gettext('Shabbat Times for', locale) + ' ' + compactLocationName(location);
   const title = titlePrefix + ' - Hebcal';
+  const fridayDate = events[0].getDate();
   Object.assign(ctx.state, {
     events,
     options,
@@ -198,7 +199,8 @@ function makeItems(ctx, options, q) {
     location,
     locale,
     localeLang: lang,
-    hyear: getDefaultHebrewYear(events[0].getDate()),
+    fridayDate,
+    hyear: getDefaultHebrewYear(fridayDate),
     items,
     h3title: titlePrefix,
     title,
@@ -261,7 +263,7 @@ function makeOptions(ctx) {
   return {q, options, dateOverride: !now, midnight, endOfWeek, dt};
 }
 
-function makePropsForFullHtml(ctx, dt) {
+function makePropsForFullHtml(ctx) {
   const items = ctx.state.items;
   const location = ctx.state.location;
   const briefText = items.map((i) => {
@@ -285,6 +287,7 @@ function makePropsForFullHtml(ctx, dt) {
         parashaItem && parashaItem.desc,
     );
   const geoUrlArgs = ctx.state.geoUrlArgs;
+  const dt = ctx.state.fridayDate.greg();
   const yearInfo = getDefaultYear(dt, new HDate(dt));
   const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
   return {

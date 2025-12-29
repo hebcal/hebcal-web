@@ -54,7 +54,7 @@ export async function fridgeShabbat(ctx) {
     }
     const locName = makeAnchor(p.location.getShortName());
     const year = p.hyear || p.gregYear1;
-    ctx.response.attachment(`fridge-${locName}-${year}.csv`);
+    ctx.response.attachment(`candles-${locName}-${year}.csv`);
     ctx.type = 'text/csv; charset=utf-8';
     ctx.body = csv;
     return;
