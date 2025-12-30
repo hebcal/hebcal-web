@@ -1,3 +1,4 @@
+import createError from 'http-errors';
 import {empty, off} from './empty.js';
 import {readJSON} from './readJSON.js';
 
@@ -368,4 +369,118 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
     }
   }
   return {...defaults, ...ck, ...query};
+}
+
+/**
+ * @param {Object.<string,string>} query
+ * @param {Object.<string,string>} [override]
+ * @return {Object.<string,string>}
+ */
+export function urlArgsObj(query, override = {}) {
+  const q = {...query, ...override};
+  for (const key of getGeoKeysToRemove(q.geo)) {
+    delete q[key];
+  }
+  if (q.M === 'on') {
+    delete q.m;
+  } else if (q.M === 'off' && empty(q.m)) {
+    q.M = 'on';
+    delete q.m;
+  }
+  delete q['.s'];
+  delete q.vis;
+  for (const key of Object.keys(negativeOpts)) {
+    if (off(q[key])) {
+      q[key] = 'off';
+    }
+  }
+  return q;
+}
+
+/**
+ * @param {Object.<string,string>} query
+ * @param {Object.<string,string>} [override]
+ * @return {string}
+ */
+export function urlArgs(query, override = {}) {
+  const q = urlArgsObj(query, override);
+  return new URLSearchParams(q).toString();
+}
+
+/**
+ * @private
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @return {URLSearchParams}
+ */
+export function makeGeoUrlArgs0(q, location) {
+  if (!location) {
+    throw createError(500, 'Internal error: Location required!');
+  }
+  const args = new URLSearchParams();
+  if (location.geo === 'pos') {
+    args.set('geo', 'pos');
+    args.set('latitude', location.getLatitude());
+    args.set('longitude', location.getLongitude());
+    const elev = location.getElevation();
+    if (elev > 0) {
+      args.set('elev', elev);
+    }
+    args.set('tzid', location.getTzid());
+    const cityName = q['city-typeahead'];
+    if (!empty(cityName)) {
+      args.set('city-typeahead', cityName);
+    }
+  } else if (location.geo === 'zip' || q.zip) {
+    args.set('zip', location.getGeoId() || q.zip);
+  } else {
+    args.set('geonameid', location.getGeoId());
+  }
+  args.set('ue', off(q.ue) ? 'off' : 'on');
+  return args;
+}
+
+/**
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @param {import('@hebcal/core').CalOptions} options
+ * @return {string}
+ */
+export function makeGeoUrlArgs(q, location, options) {
+  const args = makeGeoUrlArgs0(q, location);
+  const candleLightingMins = options.candleLightingMins;
+  if (candleLightingMins !== undefined) {
+    args.set('b', candleLightingMins);
+  }
+  const havdalahMins = options.havdalahMins;
+  if (typeof havdalahMins === 'number' && !isNaN(havdalahMins)) {
+    args.set('M', 'off');
+    args.set('m', havdalahMins);
+  } else {
+    args.set('M', 'on');
+  }
+  args.set('lg', q.lg || 's');
+  return args.toString();
+}
+
+/**
+ * @param {Object.<string,string>} q
+ * @param {Location} location
+ * @return {string}
+ */
+export function makeGeoUrlArgs2(q, location) {
+  const args = makeGeoUrlArgs0(q, location);
+  if (q.M === 'on') {
+    delete q.m;
+  } else if (q.M === 'off' && empty(q.m)) {
+    q.M = 'on';
+    delete q.m;
+  }
+  q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
+  for (const key of ['b', 'M', 'm', 'lg']) {
+    if (!empty(q[key])) {
+      args.set(key, q[key]);
+    }
+  }
+  return args.toString();
 }

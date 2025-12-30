@@ -1,6 +1,5 @@
-import {makeGeoUrlArgs2} from './common.js';
 import {getLocationFromQuery} from './location.js';
-import {langNames} from './opts.js';
+import {langNames, makeGeoUrlArgs2} from './opts.js';
 
 export async function shabbatJsLink(ctx) {
   const q = ctx.request.querystring ? ctx.request.query : {geonameid: '281184', M: 'on'};

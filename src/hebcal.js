@@ -1,9 +1,8 @@
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions,
-  urlArgs, getNumYears,
+  getNumYears,
   makeHebrewCalendar,
-  makeGeoUrlArgs,
   shortenUrl,
 } from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
@@ -20,6 +19,8 @@ import {
   makeCalendarSubtitleFromOpts,
   makeIcalOpts,
   processCookieAndQuery,
+  urlArgs,
+  makeGeoUrlArgs,
 } from './opts.js';
 import {possiblySetCookie} from './cookie.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';

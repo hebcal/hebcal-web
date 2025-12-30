@@ -1,7 +1,7 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {empty, off} from './empty.js';
-import {urlArgsObj} from './common.js';
+import {urlArgsObj} from './opts.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
 

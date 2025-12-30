@@ -3,7 +3,6 @@ import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions,
   httpRedirect,
-  makeGeoUrlArgs,
   shortenUrl,
   makeHebrewCalendar} from './common.js';
 import {getLocationFromGeoIp} from './location.js';
@@ -13,6 +12,7 @@ import {
   localeMap,
   queryDefaultCandleMins,
   processCookieAndQuery,
+  makeGeoUrlArgs,
 } from './opts.js';
 import {possiblySetCookie} from './cookie.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
