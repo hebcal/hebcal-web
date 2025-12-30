@@ -5,7 +5,8 @@ import {setDefautLangTz} from './common.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {cacheControl} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
-import {langNames, localeMap, queryDefaultCandleMins,
+import {langNames, localeMap} from './lang.js';
+import {queryDefaultCandleMins,
   makeGeoUrlArgs,
 } from './urlArgs.js';
 import {makeAnchor} from '@hebcal/rest-api';

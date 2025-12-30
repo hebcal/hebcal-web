@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
 import {setDefautLangTz, httpRedirect} from './common.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
-import {lgToLocale, localeMap} from './urlArgs.js';
+import {lgToLocale, localeMap} from './lang.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
   getStartAndEnd, simchatTorahDate,
   makeHebDate, isoDateStringToDate} from './dateUtil.js';

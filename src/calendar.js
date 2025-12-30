@@ -5,12 +5,12 @@ import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {empty, off} from './empty.js';
 import {getLocationFromQuery} from './location.js';
+import {lgToLocale} from './lang.js';
 import {
   negativeOpts,
   booleanOpts,
   dailyLearningOpts,
   numberOpts,
-  lgToLocale,
   locationDefaultCandleMins,
   DEFAULT_CANDLE_MINS,
 } from './urlArgs.js';

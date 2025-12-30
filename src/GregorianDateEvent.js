@@ -1,5 +1,5 @@
 import {Event, flags} from '@hebcal/core';
-import {localeMap} from './urlArgs.js';
+import {localeMap} from './lang.js';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
 

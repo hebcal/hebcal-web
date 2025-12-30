@@ -6,7 +6,8 @@ import createError from 'http-errors';
 import {basename} from 'node:path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
-import {langTzDefaults, queryDefaultCandleMins} from './urlArgs.js';
+import {langTzDefaults} from './lang.js';
+import {queryDefaultCandleMins} from './urlArgs.js';
 import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,

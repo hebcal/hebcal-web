@@ -3,7 +3,8 @@ import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz, shortenUrl} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
-import {lgToLocale, localeMap, processCookieAndQuery,
+import {lgToLocale, localeMap} from './lang.js';
+import {processCookieAndQuery,
   urlArgs,
   makeGeoUrlArgs2,
 } from './urlArgs.js';

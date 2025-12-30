@@ -3,7 +3,8 @@ import {greg, flags, HebrewCalendar, Locale, gematriya, HDate, HebrewDateEvent} 
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
-import {localeMap, locationDefaultCandleMins} from './urlArgs.js';
+import {localeMap} from './lang.js';
+import {locationDefaultCandleMins} from './urlArgs.js';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 import {pad2, pad4} from '@hebcal/hdate';

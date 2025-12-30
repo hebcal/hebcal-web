@@ -6,7 +6,7 @@ import createError from 'http-errors';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {httpRedirect, getBaseFromPath, throw410} from './common.js';
-import {langNames} from './urlArgs.js';
+import {langNames} from './lang.js';
 import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,

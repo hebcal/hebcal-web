@@ -9,8 +9,8 @@ import {
 import {getLocationFromGeoIp} from './location.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
+import {localeMap} from './lang.js';
 import {
-  localeMap,
   queryDefaultCandleMins,
   processCookieAndQuery,
   makeGeoUrlArgs,

@@ -4,10 +4,9 @@ import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js'
 import {shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
+import {langNames, localeMap} from './lang.js';
 import {
   hebcalFormDefaults,
-  langNames,
-  localeMap,
   queryToName,
   queryLongDescr,
   queryDefaultCandleMins,

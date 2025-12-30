@@ -3,7 +3,7 @@ import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
 import {makeETag} from './etag.js';
 import {setDefautLangTz, shortenUrl} from './common.js';
-import {langNames} from './urlArgs.js';
+import {langNames} from './lang.js';
 import {parshaByBook, torahBookNames, lookupParshaMeta,
   makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';

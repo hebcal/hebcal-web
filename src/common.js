@@ -1,12 +1,8 @@
 import '@hebcal/learning';
 import {basename} from 'node:path';
 import {getIpAddress} from './getIpAddress.js';
-import {
-  langTzDefaults,
-  langNames,
-  localeMap,
-  processCookieAndQuery,
-} from './urlArgs.js';
+import {processCookieAndQuery} from './urlArgs.js';
+import {localeMap, langNames, langTzDefaults} from './lang.js';
 import {cleanQuery} from './cleanQuery.js';
 import {CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {getLocationFromQueryOrGeoIp} from './location.js';

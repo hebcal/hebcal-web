@@ -8,7 +8,7 @@ import {makeETag} from './etag.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
 import {getNumYears} from './calendar.js';
 import {shortenUrl, throw410} from './common.js';
-import {lgToLocale, localeMap} from './urlArgs.js';
+import {lgToLocale, localeMap} from './lang.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 
 export async function parshaYearApp(ctx) {

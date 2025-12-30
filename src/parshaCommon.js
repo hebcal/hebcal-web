@@ -1,7 +1,7 @@
 import {HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor} from '@hebcal/rest-api';
-import {langNames} from './urlArgs.js';
+import {langNames} from './lang.js';
 import {transliterate} from 'transliteration';
 import {distance, closest} from 'fastest-levenshtein';
 import {readJSON} from './readJSON.js';
