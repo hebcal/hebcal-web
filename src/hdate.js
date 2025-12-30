@@ -1,7 +1,8 @@
 import {HDate, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
-import {CACHE_CONTROL_7DAYS, makeETag} from './common.js';
+import {makeETag} from './etag.js';
+import {CACHE_CONTROL_7DAYS} from './common.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';

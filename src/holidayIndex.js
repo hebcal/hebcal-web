@@ -3,7 +3,8 @@ import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {getDefaultHebrewYear} from './dateUtil.js';
-import {httpRedirect, makeETag, yearIsOutsideHebRange} from './common.js';
+import {makeETag} from './etag.js';
+import {httpRedirect, yearIsOutsideHebRange} from './common.js';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD,
   OMER_TITLE, makeQueryAndDownloadProps} from './holidayCommon.js';
 import {getHolidayMeta} from './getHolidayMeta.js';

@@ -1,5 +1,5 @@
 import http from 'node:http';
-import {pkg} from './common.js';
+import {pkg} from './pkg.js';
 import {getIpAddress} from './getIpAddress.js';
 
 const knownRobots = {

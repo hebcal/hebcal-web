@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import {CACHE_CONTROL_30DAYS} from './common.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {makeETag} from './common.js';
+import {makeETag} from './etag.js';
 
 export async function sitemapZips(ctx) {
   const db = new Database('zips.sqlite3', {fileMustExist: true});

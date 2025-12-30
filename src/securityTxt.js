@@ -1,4 +1,4 @@
-import {makeETag} from './common.js';
+import {makeETag} from './etag.js';
 
 export async function securityTxt(ctx) {
   const dt = new Date();

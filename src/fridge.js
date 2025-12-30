@@ -1,9 +1,9 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {empty} from './empty.js';
+import {makeETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar,
   makeGeoUrlArgs,
   setDefautLangTz,
-  makeETag,
   yearIsOutsideGregRange,
   yearIsOutsideHebRange,
   cacheControl,

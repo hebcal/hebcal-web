@@ -7,9 +7,9 @@ import {basename} from 'path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults, queryDefaultCandleMins} from './opts.js';
+import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
-  makeETag,
 } from './common.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import flag from 'emoji-flag';

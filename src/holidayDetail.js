@@ -8,10 +8,11 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {empty, off} from './empty.js';
 import {langNames} from './opts.js';
+import {makeETag} from './etag.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
   yearIsOutsideGregRange,
   throw410,
-  makeETag} from './common.js';
+} from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon.js';

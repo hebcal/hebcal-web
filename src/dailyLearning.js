@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
+import {makeETag} from './etag.js';
 import {httpRedirect, CACHE_CONTROL_1_YEAR,
-  makeETag} from './common.js';
+} from './common.js';
 import {localeMap, queryLongDescr, dailyLearningConfig} from './opts.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'path';

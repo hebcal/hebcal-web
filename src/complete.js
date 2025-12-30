@@ -1,5 +1,6 @@
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {cacheControl, makeETag} from './common.js';
+import {cacheControl} from './common.js';
+import {makeETag} from './etag.js';
 import flag from 'emoji-flag';
 
 const NOTFOUND = {error: 'Not Found'};

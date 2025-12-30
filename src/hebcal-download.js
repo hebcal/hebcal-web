@@ -4,7 +4,8 @@ import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'path';
-import {makeHebcalOptions, makeHebrewCalendar, makeETag,
+import {makeETag} from './etag.js';
+import {makeHebcalOptions, makeHebrewCalendar,
   yearIsOutsideGregRange, yearIsOutsideHebRange,
   getNumYears} from './common.js';
 import {cleanQuery} from './cleanQuery.js';

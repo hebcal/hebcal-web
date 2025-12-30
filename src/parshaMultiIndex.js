@@ -3,7 +3,8 @@ import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js';
 import {getDefaultHebrewYear, simchatTorahDate} from './dateUtil.js';
-import {makeETag, yearIsOutsideHebRange, throw410} from './common.js';
+import {makeETag} from './etag.js';
+import {yearIsOutsideHebRange, throw410} from './common.js';
 import dayjs from 'dayjs';
 
 export async function parshaMultiYearIndex(ctx) {

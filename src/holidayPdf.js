@@ -3,7 +3,8 @@ import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf.js';
-import {makeETag, cacheControl,
+import {makeETag} from './etag.js';
+import {cacheControl,
   yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
 import {lgToLocale, localeMap} from './opts.js';
 

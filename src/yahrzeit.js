@@ -7,7 +7,8 @@ import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {empty} from './empty.js';
-import {makeETag, pkg} from './common.js';
+import {makeETag} from './etag.js';
+import {pkg} from './pkg.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
   hebcalFormDefaults,

@@ -4,7 +4,7 @@ import {getTodayDate} from './dateUtil.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
-import {makeETag} from './common.js';
+import {makeETag} from './etag.js';
 
 export async function parshaRss(ctx) {
   const rpath = ctx.request.path;

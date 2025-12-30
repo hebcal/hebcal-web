@@ -1,8 +1,8 @@
 import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
   OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
+import {makeETag} from './etag.js';
 import {setDefautLangTz, httpRedirect,
-  makeETag,
   CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR,
 } from './common.js';
 import {lgToLocale, localeMap} from './opts.js';

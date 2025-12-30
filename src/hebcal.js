@@ -1,4 +1,5 @@
 import {empty} from './empty.js';
+import {makeETag} from './etag.js';
 import {makeHebcalOptions,
   urlArgs, getNumYears,
   cacheControl,
@@ -6,7 +7,7 @@ import {makeHebcalOptions,
   makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
-  makeETag} from './common.js';
+} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
   hebcalFormDefaults,

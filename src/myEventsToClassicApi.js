@@ -4,7 +4,7 @@ import {
   eventsToClassicApiHeader, eventToClassicApiObject,
 } from '@hebcal/rest-api';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
-import {pkg} from './common.js';
+import {pkg} from './pkg.js';
 
 export function myEventsToClassicApi(events, options, leyning) {
   const obj = eventsToClassicApiHeader(events, options);

@@ -1,7 +1,8 @@
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
-import {setDefautLangTz, shortenUrl, makeETag} from './common.js';
+import {makeETag} from './etag.js';
+import {setDefautLangTz, shortenUrl} from './common.js';
 import {langNames} from './opts.js';
 import {parshaByBook, torahBookNames, lookupParshaMeta,
   makeLeyningHtmlFromParts} from './parshaCommon.js';

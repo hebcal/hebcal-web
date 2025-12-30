@@ -1,9 +1,9 @@
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
+import {makeETag} from './etag.js';
 import {makeHebcalOptions,
   httpRedirect,
   getLocationFromGeoIp,
-  makeETag,
   makeGeoUrlArgs,
   shortenUrl,
   CACHE_CONTROL_7DAYS,

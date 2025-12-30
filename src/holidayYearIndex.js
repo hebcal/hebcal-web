@@ -10,7 +10,8 @@ import {
   makeQueryAndDownloadProps,
   OMER_TITLE,
 } from './holidayCommon.js';
-import {makeETag, yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
+import {makeETag} from './etag.js';
+import {yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
 
 const SHMINI_ATZERET = 'Shmini Atzeret';
 const SIMCHAT_TORAH = 'Simchat Torah';
