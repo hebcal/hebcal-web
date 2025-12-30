@@ -194,7 +194,7 @@ app.use(async function fixup2(ctx, next) {
       path.startsWith('/hebcal/index.cgi/')) {
     // note we use unescape() instead of decodeURIComponent() due to ancient latin-1 encoding
     if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
-      const qs = unescape(ctx.request.querystring).replace(/;/g, '&');
+      const qs = unescape(ctx.request.querystring).replaceAll(';', '&');
       httpRedirect(ctx, `${path}?redir=1&${qs}`, 301);
       return;
     } else {
@@ -211,7 +211,7 @@ app.use(async function fixup2(ctx, next) {
     }
     const semi = ctx.request.querystring.indexOf(';');
     if (semi != -1) {
-      ctx.request.querystring = ctx.request.querystring.replace(/;/g, '&');
+      ctx.request.querystring = ctx.request.querystring.replaceAll(';', '&');
     }
   } else if (path.startsWith('/v4/')) {
     const slash = path.indexOf('/', 4);
@@ -243,7 +243,7 @@ app.use(stopIfTimedOut());
 app.use(async function fixup3(ctx, next) {
   const rpath = ctx.request.path;
   const q = ctx.request.query;
-  if (rpath.startsWith('/export/') && (typeof q.v === 'undefined' || !q.v.length) && q.y1 && q.m1 && q.d1) {
+  if (rpath.startsWith('/export/') && (q.v === undefined || !q.v.length) && q.y1 && q.m1 && q.d1) {
     ctx.request.query.v = 'yahrzeit';
   }
   return next();
@@ -276,13 +276,13 @@ app.use(async function router(ctx, next) {
              rpath.startsWith('/hebcal/index.cgi/')) {
     ctx.state.logQuery = true;
     const vv = ctx.request.query.v;
-    if (typeof vv === 'string' && vv[0] === 'y') {
+    if (typeof vv === 'string' && vv.startsWith('y')) {
       return yahrzeitDownload(ctx);
     } else if (vv === '1' || vv === 'now') {
       ctx.set('Cache-Control', CACHE_CONTROL_14DAYS);
       return hebcalDownload(ctx);
     } else {
-      const status = typeof vv === 'undefined' ? 404 : 400;
+      const status = vv === undefined ? 404 : 400;
       ctx.throw(status, `Invalid download URL: v=${vv}`);
     }
   } else if (rpath.startsWith('/zmanim') || rpath.startsWith('/sunrs')) {

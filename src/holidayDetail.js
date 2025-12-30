@@ -33,7 +33,7 @@ for (const [holiday, meta] of Object.entries(holidayMeta)) {
     const article0 = decodeURIComponent(basename(href));
     const hash = article0.indexOf('#');
     const article = hash === -1 ? article0 : article0.substring(hash + 1);
-    const wname = makeAnchor(article).replace(/_/g, '-');
+    const wname = makeAnchor(article).replaceAll('_', '-');
     if (wname !== anchor) {
       holidayAlias.set(wname, anchor);
     }
@@ -74,7 +74,7 @@ export async function holidayDetail(ctx) {
   const base1 = matches === null ? base : matches[1];
   const holiday = holidays.get(base1);
   if (typeof holiday !== 'string') {
-    const str1 = makeAnchor(base1).replace(/_/g, '-');
+    const str1 = makeAnchor(base1).replaceAll('_', '-');
     const alias = holidayAlias.get(str1);
     if (alias) {
       return myRedir(ctx, alias, year);

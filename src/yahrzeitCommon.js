@@ -172,11 +172,9 @@ export function getYahrzeitIds(q) {
   const numKeys = Object.keys(q).filter((s) => /\d+$/.test(s));
   for (const key of numKeys) {
     const id = +(key.substring(1));
-    if (key[0] === 'x' && !empty(q[key])) {
-      set.add(id);
-    } else if (!empty(q['y' + id]) && !empty(q['m' + id]) && !empty(q['d' + id])) {
-      set.add(id);
-    } else if (!empty(q['hy' + id]) && !empty(q['hm' + id]) && !empty(q['hd' + id])) {
+    if ((key.startsWith('x') && !empty(q[key])) ||
+        (!empty(q['y' + id]) && !empty(q['m' + id]) && !empty(q['d' + id])) ||
+        (!empty(q['hy' + id]) && !empty(q['hm' + id]) && !empty(q['hd' + id]))) {
       set.add(id);
     }
   }

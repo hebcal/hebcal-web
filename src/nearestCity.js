@@ -19,7 +19,7 @@ export function nearestCity(geonamesDb, latitude, longitude, tzid) {
   const stmt = geonamesDb.prepare(
       'SELECT geonameid, name, latitude, longitude FROM geoname WHERE timezone = ?');
   const rows = stmt.all(tzid);
-  if (!rows || !rows.length) {
+  if (!rows?.length) {
     cityCache.set(key, null);
     return null;
   }

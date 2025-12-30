@@ -73,7 +73,7 @@ site.webmanifest`.split('\n').map((s) => '/' + s));
  * @param {number} position
  */
 function checkSlash(rpath, position) {
-  if (rpath.indexOf('/', position) !== -1) {
+  if (rpath.includes('/', position)) {
     throw createError(404, 'Unexpected extra / in path');
   }
 }

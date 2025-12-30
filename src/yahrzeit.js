@@ -251,7 +251,7 @@ async function renderJson(maxId, q) {
 
 async function renderFullCalendar(ctx, maxId, q) {
   for (const param of ['start', 'end']) {
-    if (typeof q[param] === 'undefined') {
+    if (q[param] === undefined) {
       ctx.remove('Cache-Control');
       ctx.throw(400, `Please specify required parameter '${param}'`);
     } else if (Array.isArray(q[param])) {

@@ -35,7 +35,7 @@ export async function getHolidayMeta(holiday) {
     return {...prev};
   }
   const meta0 = holidayMeta[holiday];
-  if (typeof meta0 === 'undefined' || typeof meta0.about.href === 'undefined') {
+  if (!meta0?.about?.href) {
     throw createError(500, `Internal error; broken configuration for: ${holiday}`);
   }
   const meta = {...meta0};
