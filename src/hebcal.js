@@ -299,7 +299,7 @@ function renderHtml(ctx) {
     if (item0.yomtov) {
       item.yt = true;
     }
-    if (item0.memo && typeof memos[bn] === 'undefined' && item0.date.indexOf('T') === -1) {
+    if (item0.memo && memos[bn] === undefined && item0.date.indexOf('T') === -1) {
       const fullStop = item0.memo.indexOf('. ');
       memos[bn] = fullStop === -1 ? item0.memo : item0.memo.substring(0, fullStop);
     }
@@ -447,7 +447,7 @@ function renderFullCalendar(ctx) {
   }
   const options = ctx.state.options;
   for (const param of ['start', 'end']) {
-    if (typeof options[param] === 'undefined') {
+    if (options[param] === undefined) {
       if (Array.isArray(ctx.state.q[param])) {
         ctx.throw(400, `Invalid duplicate parameter '${param}'`);
       }
@@ -485,7 +485,7 @@ function renderJson(ctx) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
   const orig = ctx.request.query;
-  const yearNow = typeof orig.year === 'undefined' || orig.year === 'now' || orig.month === 'now';
+  const yearNow = orig.year === undefined || orig.year === 'now' || orig.month === 'now';
   const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
   const cacheCtrlStr = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
     cacheControl(0.125);

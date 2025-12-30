@@ -135,7 +135,7 @@ export async function holidayDetail(ctx) {
     occursOn.find((item) => item.d.format('YYYYMMDD') === dateSuffix) :
     year ? occursOn.find((item) => item.d.year() === year) :
       occursOn.find((item) => item.ppf === 'future');
-  if (typeof next === 'undefined') {
+  if (next === undefined) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
@@ -442,7 +442,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       delete meta.items;
     }
   } else {
-    if (typeof meta.items === 'undefined' && hasFestival(holiday)) {
+    if (meta.items === undefined && hasFestival(holiday)) {
       meta.items = [holiday];
     }
     if (Array.isArray(meta.items)) {

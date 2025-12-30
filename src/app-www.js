@@ -109,7 +109,7 @@ app.use(async function fixup0(ctx, next) {
   ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
-  if (typeof ctx.get('accept-encoding') === 'undefined') {
+  if (ctx.get('accept-encoding') === undefined) {
     ctx.request.header['accept-encoding'] = 'identity';
   }
   // Fix up querystring so we can later use ctx.request.query
