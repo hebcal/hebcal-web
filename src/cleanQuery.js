@@ -6,7 +6,7 @@ import {
   numberOpts,
   allGeoKeys,
   dailyLearningOpts,
-} from './opts.js';
+} from './urlArgs.js';
 
 const allKeys = new Set(['ulid', 'cfg', 'start', 'end', 'id', 'v', 'em', 'mm']);
 for (const key of [].concat(allGeoKeys,

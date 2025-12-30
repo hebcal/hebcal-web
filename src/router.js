@@ -8,7 +8,7 @@ import {
   DOCUMENT_ROOT,
 } from './common.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
-import {langNames, dailyLearningConfig} from './opts.js';
+import {langNames, dailyLearningConfig} from './urlArgs.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
 import {emailForm, emailVerify} from './email.js';

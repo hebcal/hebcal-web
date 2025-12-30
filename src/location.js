@@ -2,7 +2,7 @@ import {Location} from '@hebcal/core';
 import {find as geoTzFind} from 'geo-tz';
 import createError from 'http-errors';
 import {empty} from './empty.js';
-import {is5DigitZip, geoposLegacy} from './opts.js';
+import {is5DigitZip, geoposLegacy} from './urlArgs.js';
 import {getIpAddress} from './getIpAddress.js';
 import {nearestCity} from './nearestCity.js';
 

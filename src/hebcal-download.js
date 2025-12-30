@@ -5,11 +5,10 @@ import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'node:path';
 import {makeETag} from './etag.js';
-import {makeHebcalOptions, makeHebrewCalendar,
-  getNumYears} from './common.js';
+import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
-import {localeMap, makeIcalOpts} from './opts.js';
+import {localeMap, makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 import createError from 'http-errors';

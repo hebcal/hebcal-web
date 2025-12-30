@@ -1,10 +1,11 @@
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
-import {makeHebcalOptions,
+import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
+import {
   httpRedirect,
   shortenUrl,
-  makeHebrewCalendar} from './common.js';
+} from './common.js';
 import {getLocationFromGeoIp} from './location.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
@@ -13,7 +14,7 @@ import {
   queryDefaultCandleMins,
   processCookieAndQuery,
   makeGeoUrlArgs,
-} from './opts.js';
+} from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
   expiresSaturdayNight} from './dateUtil.js';

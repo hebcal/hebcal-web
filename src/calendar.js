@@ -13,7 +13,7 @@ import {
   lgToLocale,
   locationDefaultCandleMins,
   DEFAULT_CANDLE_MINS,
-} from './opts.js';
+} from './urlArgs.js';
 
 const optsToMask = {
   maj: flags.YOM_TOV_ENDS | flags.MAJOR_FAST |
@@ -362,4 +362,51 @@ export function makeHebrewCalendar(ctx, options) {
   }
 
   return events;
+}
+
+export const maxNumYear = {
+  candlelighting: 4,
+  sedrot: 5,
+  omer: 5,
+  addAlternateDatesForEvents: 4,
+  addAlternateDates: 2,
+  dailyLearning: 2,
+};
+
+/**
+ * Parse HebcalOptions to determine ideal numYears
+ * @param {import('@hebcal/core').CalOptions} options
+ * @return {number}
+ */
+export function getNumYears(options) {
+  if (options.numYears) {
+    return options.numYears;
+  }
+  let numYears = 7;
+  // omer + sedrot adds 101 events
+  if (options.omer && options.sedrot) {
+    numYears = 4;
+  }
+  // Shabbat plus alternate dates every day can get very big
+  const addAlternateDates = options.addAlternateDates;
+  if (options.candlelighting) {
+    if (addAlternateDates) {
+      numYears = 2;
+    } else if (options.addAlternateDatesForEvents) {
+      numYears = 3;
+    }
+  }
+  // possibly reduce further
+  for (const [key, ny] of Object.entries(maxNumYear)) {
+    if (options[key] && ny < numYears) {
+      numYears = ny;
+    }
+  }
+  // reduce duration if 2+ daily options are specified
+  const daily = (addAlternateDates ? 1 : 0) +
+    Object.keys(options.dailyLearning || {}).length;
+  if (daily > 1) {
+    numYears = 1;
+  }
+  return numYears;
 }

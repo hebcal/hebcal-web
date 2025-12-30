@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {flags, HDate, HebrewCalendar} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
 import {holidayMeta} from './holidayMeta.js';
-import {getNumYears} from './common.js';
+import {getNumYears} from './calendar.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 
 export const holidays = new Map();

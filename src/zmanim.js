@@ -7,7 +7,7 @@ import {makeETag} from './etag.js';
 import {pkg} from './pkg.js';
 import {getLocationFromQuery} from './location.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS} from './cacheControl.js';
-import {lgToLocale} from './opts.js';
+import {lgToLocale} from './urlArgs.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';

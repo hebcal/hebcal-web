@@ -1,10 +1,7 @@
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
-import {makeHebcalOptions,
-  getNumYears,
-  makeHebrewCalendar,
-  shortenUrl,
-} from './common.js';
+import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
+import {shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
@@ -21,7 +18,7 @@ import {
   processCookieAndQuery,
   urlArgs,
   makeGeoUrlArgs,
-} from './opts.js';
+} from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';

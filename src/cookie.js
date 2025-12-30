@@ -10,7 +10,7 @@ import {
   getGeoKeysToRemove,
   queryDefaultCandleMins,
   dailyLearningOpts,
-} from './opts.js';
+} from './urlArgs.js';
 
 /**
  * @param {any} ctx

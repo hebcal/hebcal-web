@@ -14,7 +14,7 @@ import {
   hebcalFormDefaults,
   makeIcalOpts,
   processCookieAndQuery,
-} from './opts.js';
+} from './urlArgs.js';
 import {doesCookieNeedRefresh, setHebcalCookie} from './cookie.js';
 import {getIpAddress} from './getIpAddress.js';
 import {ulid} from 'ulid';

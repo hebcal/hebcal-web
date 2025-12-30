@@ -7,7 +7,7 @@ import {makeETag} from './etag.js';
 import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cacheControl} from './cacheControl.js';
-import {lgToLocale, localeMap} from './opts.js';
+import {lgToLocale, localeMap} from './urlArgs.js';
 
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 

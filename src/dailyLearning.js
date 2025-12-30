@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR} from './cacheControl.js';
-import {localeMap, queryLongDescr, dailyLearningConfig} from './opts.js';
+import {localeMap, queryLongDescr, dailyLearningConfig} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'node:path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';

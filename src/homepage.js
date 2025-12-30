@@ -6,7 +6,7 @@ import {cleanQuery} from './cleanQuery.js';
 import {lgToLocale, localeMap, processCookieAndQuery,
   urlArgs,
   makeGeoUrlArgs2,
-} from './opts.js';
+} from './urlArgs.js';
 import {pad2, pad4} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
