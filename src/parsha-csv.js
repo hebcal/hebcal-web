@@ -1,4 +1,4 @@
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {PassThrough} from 'stream';
 import {getLeyningOnDate, formatAliyahWithBook} from '@hebcal/leyning';
 import {writeFullKriyahCsv} from '@hebcal/leyning/dist/esm/csv';

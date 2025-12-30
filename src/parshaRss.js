@@ -1,7 +1,7 @@
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
 import {getHolidayDescription, makeTorahMemoText, eventsToRss2} from '@hebcal/rest-api';
 import {getTodayDate} from './dateUtil.js';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 import {makeETag} from './etag.js';

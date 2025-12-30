@@ -3,7 +3,7 @@ import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
   getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {makeETag} from './etag.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
 import {shortenUrl, getNumYears, throw410} from './common.js';

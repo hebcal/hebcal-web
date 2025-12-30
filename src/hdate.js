@@ -3,7 +3,7 @@ import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
 import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';
 import {send} from '@koa/send';

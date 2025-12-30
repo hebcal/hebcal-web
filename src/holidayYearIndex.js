@@ -2,7 +2,7 @@ import {Event, flags, HDate, HebrewCalendar, months} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {getHolidayMeta} from './getHolidayMeta.js';
 import {
   eventToHolidayItem,

@@ -1,5 +1,5 @@
 import {GeoDb} from '@hebcal/geo-sqlite';
-import fs from 'fs';
+import fs from 'node:fs';
 import ini from 'ini';
 import Koa from 'koa';
 import compress from 'koa-compress';
@@ -8,9 +8,9 @@ import {send} from '@koa/send';
 import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
-import zlib from 'zlib';
+import zlib from 'node:zlib';
 import {downloadHref2} from './makeDownloadProps.js';
-import {join} from 'path';
+import {join} from 'node:path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {httpRedirect, stopIfTimedOut} from './common.js';
 import {cacheControl,

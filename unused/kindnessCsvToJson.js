@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import {parse} from 'csv-parse';
 import {pad2} from '@hebcal/rest-api';
 

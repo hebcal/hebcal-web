@@ -1,7 +1,7 @@
 import {Event, flags, HDate} from '@hebcal/core';
 import {IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import fs from 'fs';
+import fs from 'node:fs';
 import {readJSON} from './readJSON.js';
 
 const kindness = readJSON('./areyvut-kindness-a-day.json');

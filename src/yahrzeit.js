@@ -5,7 +5,7 @@ import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, eventToFullCalendar, eventsToClassicApi} from '@hebcal/rest-api';
 import {isoDateStringToDate} from './dateUtil.js';
 import dayjs from 'dayjs';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {pkg} from './pkg.js';

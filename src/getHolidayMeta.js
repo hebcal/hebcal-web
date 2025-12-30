@@ -1,7 +1,7 @@
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import probe from 'probe-image-size';
-import fs from 'fs';
+import fs from 'node:fs';
 import {holidayMeta} from './holidayMeta.js';
 
 const primarySource = {

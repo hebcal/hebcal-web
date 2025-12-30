@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import fs from 'fs';
+import fs from 'node:fs';
 
 (async () => {
   const startD = dayjs(new Date(2023, 3, 23));

@@ -5,7 +5,7 @@ import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {empty, off} from './empty.js';
 import {langNames} from './opts.js';
 import {makeETag} from './etag.js';

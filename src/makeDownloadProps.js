@@ -1,5 +1,5 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {empty, off} from './empty.js';
 import {urlArgsObj} from './common.js';
 import {isoDateStringToDate} from './dateUtil.js';

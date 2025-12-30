@@ -308,6 +308,16 @@ describe('Router Tests', () => {
       expect(response.status).toBe(200);
       expect(response.type).toContain('html');
     });
+
+    it('should redirect when X-Client-IP header is set with no query params', async () => {
+      const response = await request(app.callback())
+          .get('/shabbat')
+          .set('X-Client-IP', '108.35.203.40')
+          .redirects(0);
+      expect(response.status).toBe(302);
+      // Should redirect to a URL with zip code based on GeoIP lookup
+      expect(response.headers.location).toMatch(/\/shabbat\?zip=\d{5}&ue=off&b=18&M=on&lg=s&geoip=zip/);
+    });
   });
 
   describe('Holidays Routes', () => {

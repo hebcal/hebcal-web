@@ -3,7 +3,7 @@ import '@hebcal/learning';
 import createError from 'http-errors';
 import {getEventCategories} from '@hebcal/rest-api';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {empty, off} from './empty.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {getIpAddress} from './getIpAddress.js';

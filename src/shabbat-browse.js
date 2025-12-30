@@ -3,7 +3,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults, queryDefaultCandleMins} from './opts.js';

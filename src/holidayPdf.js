@@ -1,7 +1,7 @@
 import {HebrewCalendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {makeETag} from './etag.js';
 import {throw410} from './common.js';

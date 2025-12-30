@@ -4,7 +4,7 @@ import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR} from './cacheControl.js';
 import {localeMap, queryLongDescr, dailyLearningConfig} from './opts.js';
 import {isoDateStringToDate} from './dateUtil.js';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';

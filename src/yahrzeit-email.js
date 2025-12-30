@@ -9,7 +9,7 @@ import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   compactJsonToSave,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {ulid} from 'ulid';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {matomoTrack} from './matomoTrack.js';
 import {makeLogInfo} from './logger.js';
 

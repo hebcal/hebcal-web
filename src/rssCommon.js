@@ -1,5 +1,5 @@
 import {Locale} from '@hebcal/core';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import createError from 'http-errors';
 
 export const RSS_CONTENT_TYPE = 'application/rss+xml; charset=utf-8';

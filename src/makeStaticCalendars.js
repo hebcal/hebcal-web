@@ -7,8 +7,8 @@ import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {readJSON} from './readJSON.js';
 import {exec} from 'node:child_process';
 import util from 'util';
-import fs from 'fs';
-import {basename} from 'path';
+import fs from 'node:fs';
+import {basename} from 'node:path';
 import minimist from 'minimist';
 import pino from 'pino';
 

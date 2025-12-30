@@ -3,7 +3,7 @@ import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar,
   getNumYears} from './common.js';

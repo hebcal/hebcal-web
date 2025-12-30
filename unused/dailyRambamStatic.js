@@ -2,7 +2,7 @@ import {HDate} from '@hebcal/core';
 import {dailyRambam1, DailyRambamEvent} from '@hebcal/learning';
 import {eventsToIcalendar} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import fs from 'fs';
+import fs from 'node:fs';
 
 (async function() {
   const events = [];

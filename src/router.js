@@ -1,5 +1,5 @@
 import createError from 'http-errors';
-import {basename} from 'path';
+import {basename} from 'node:path';
 import {send} from '@koa/send';
 import {getLocationFromQuery} from './location.js';
 import {
