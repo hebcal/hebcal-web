@@ -1,4 +1,5 @@
-import {getLocationFromQuery, makeGeoUrlArgs2} from './common.js';
+import {makeGeoUrlArgs2} from './common.js';
+import {getLocationFromQuery} from './location.js';
 import {langNames} from './opts.js';
 
 export async function shabbatJsLink(ctx) {

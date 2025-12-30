@@ -1,5 +1,5 @@
 import randomBigInt from 'random-bigint';
-import {getLocationFromQuery} from './common.js';
+import {getLocationFromQuery} from './location.js';
 import {cleanQuery} from './cleanQuery.js';
 import {queryDefaultCandleMins, processCookieAndQuery} from './opts.js';
 import {getIpAddress} from './getIpAddress.js';

@@ -3,10 +3,10 @@ import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions,
   httpRedirect,
-  getLocationFromGeoIp,
   makeGeoUrlArgs,
   shortenUrl,
   makeHebrewCalendar} from './common.js';
+import {getLocationFromGeoIp} from './location.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
