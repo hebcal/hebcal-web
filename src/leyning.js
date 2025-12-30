@@ -3,7 +3,7 @@ import {getLeyningOnDate} from '@hebcal/leyning';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {isoDateStringToDate} from './dateUtil.js';
 import {makeETag} from './etag.js';
-import {CACHE_CONTROL_7DAYS} from './common.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
 import createError from 'http-errors';
 import dayjs from 'dayjs';

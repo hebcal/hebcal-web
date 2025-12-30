@@ -1,5 +1,5 @@
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {cacheControl} from './common.js';
+import {cacheControl} from './cacheControl.js';
 import {makeETag} from './etag.js';
 import flag from 'emoji-flag';
 

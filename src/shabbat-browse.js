@@ -10,7 +10,7 @@ import {langTzDefaults, queryDefaultCandleMins} from './opts.js';
 import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
-} from './common.js';
+} from './cacheControl.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import flag from 'emoji-flag';
 

@@ -12,9 +12,10 @@ import zlib from 'zlib';
 import {downloadHref2} from './makeDownloadProps.js';
 import {join} from 'path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
-import {httpRedirect, stopIfTimedOut, cacheControl,
+import {httpRedirect, stopIfTimedOut} from './common.js';
+import {cacheControl,
   CACHE_CONTROL_7DAYS,
-  CACHE_CONTROL_IMMUTABLE} from './common.js';
+  CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeit.js';
 import {MysqlDb} from './db.js';

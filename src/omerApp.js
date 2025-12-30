@@ -1,8 +1,9 @@
 import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
-import {httpRedirect, CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS,
+import {httpRedirect,
   yearIsOutsideHebRange,
 } from './common.js';
+import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {basename, dirname} from 'path';
 import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';

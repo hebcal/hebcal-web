@@ -5,9 +5,8 @@ import {version} from '@hebcal/core/dist/esm/pkgVersion';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {pkg} from './pkg.js';
-import {getLocationFromQuery,
-  CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS,
-} from './common.js';
+import {getLocationFromQuery} from './common.js';
+import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {lgToLocale} from './opts.js';
 import {nowInTimezone, getStartAndEnd} from './dateUtil.js';
 import createError from 'http-errors';

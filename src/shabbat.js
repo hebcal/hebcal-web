@@ -6,8 +6,8 @@ import {makeHebcalOptions,
   getLocationFromGeoIp,
   makeGeoUrlArgs,
   shortenUrl,
-  CACHE_CONTROL_7DAYS,
   makeHebrewCalendar} from './common.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
   localeMap,
@@ -39,7 +39,7 @@ export async function shabbatApp(ctx) {
     return;
   }
   ctx.status = 200;
-  const {q, options, dateOverride, dt} = makeOptions(ctx);
+  const {q, options, dateOverride} = makeOptions(ctx);
   // only set expiry if there are CGI arguments
   if (ctx.status < 400 && ctx.request.querystring.length > 0) {
     if (dateOverride) {

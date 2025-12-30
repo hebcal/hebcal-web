@@ -6,8 +6,8 @@ import {makeHebcalOptions, makeHebrewCalendar,
   setDefautLangTz,
   yearIsOutsideGregRange,
   yearIsOutsideHebRange,
-  cacheControl,
 } from './common.js';
+import {cacheControl} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {langNames, localeMap, queryDefaultCandleMins} from './opts.js';
 import {makeAnchor} from '@hebcal/rest-api';

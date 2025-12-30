@@ -2,7 +2,7 @@ import {HDate, Locale, DailyLearning} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
 import {makeETag} from './etag.js';
-import {CACHE_CONTROL_7DAYS} from './common.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {basename} from 'path';
 import dayjs from 'dayjs';
 import 'dayjs/locale/he.js';

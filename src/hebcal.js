@@ -2,12 +2,11 @@ import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions,
   urlArgs, getNumYears,
-  cacheControl,
-  CACHE_CONTROL_7DAYS,
   makeHebrewCalendar,
   makeGeoUrlArgs,
   shortenUrl,
 } from './common.js';
+import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
   hebcalFormDefaults,

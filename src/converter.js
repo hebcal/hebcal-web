@@ -2,9 +2,8 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
   OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
-import {setDefautLangTz, httpRedirect,
-  CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR,
-} from './common.js';
+import {setDefautLangTz, httpRedirect} from './common.js';
+import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
 import {lgToLocale, localeMap} from './opts.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
   getStartAndEnd, simchatTorahDate,
