@@ -169,11 +169,11 @@ export async function shabbatBrowse(ctx) {
     return;
   }
   const iso = countryIdToIso[base];
-  if (typeof iso !== 'undefined') {
+  if (iso !== undefined) {
     return countryPage(ctx, iso);
   }
   const countryA1 = countryAdmin1[base];
-  if (typeof countryA1 !== 'undefined') {
+  if (countryA1 !== undefined) {
     const db = new Database(geonamesFilename, {fileMustExist: true});
     const stmt = db.prepare(COUNTRY_ADMIN_SQL);
     const countryCode = countryA1.cc;

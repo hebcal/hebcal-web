@@ -26,7 +26,7 @@ function writePoFile(inpath, outpath) {
   for (const msg of Object.values(poData.translations[''])) {
     const msgid = msg.msgid;
     const msgstr = msg.msgstr;
-    if (msgid && msgid.length && msgstr && msgstr.length) {
+    if (msgid?.length && msgstr?.length) {
       dict[msgid] = msgstr;
     }
   }

@@ -41,7 +41,7 @@ export function httpRedirect(ctx, rpath, status=302) {
   if (!utmSource) {
     utmSource = utmSourceFromRef(ctx);
     if (utmSource) {
-      const sep = rpath.indexOf('?') === -1 ? '?' : '&';
+      const sep = rpath.includes('?') ? '&' : '?';
       url += `${sep}utm_source=${utmSource}`;
       ctx.append('Vary', 'Referer');
     }
@@ -183,4 +183,19 @@ export function throw410(ctx) {
   ctx.throw(410,
       `The requested resource ${ctx.request.path} is no longer available on this server ` +
       `and there is no forwarding address. Please remove all references to this resource.`);
+}
+
+/**
+ * Return candle lighting time description based on day of week
+ * @param {number} dow day of week
+ * @return {string}
+ */
+export function lightCandlesWhen(dow) {
+  if (dow === 5) {
+    return 'before sundown';
+  } else if (dow === 6) {
+    return 'at nightfall';
+  } else {
+    return 'at dusk';
+  }
 }

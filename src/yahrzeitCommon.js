@@ -49,7 +49,7 @@ function compactJsonItem(obj, num) {
   }
   const sunsetKey = 's' + num;
   const sunset = obj[sunsetKey];
-  if (typeof sunset !== 'undefined') {
+  if (sunset !== undefined) {
     obj[sunsetKey] = (sunset === 'on' || sunset == 1) ? 1 : 0;
   }
 }

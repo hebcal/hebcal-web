@@ -100,7 +100,7 @@ export function wwwRouter() {
       return homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
       return ctx.render('dir-hidden');
-    } else if (typeof redirectMap[rpath] !== 'undefined') {
+    } else if (redirectMap[rpath] !== undefined) {
       const destination = redirectMap[rpath];
       if (typeof destination === 'number') {
         throw createError(destination);

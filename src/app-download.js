@@ -86,7 +86,7 @@ app.use(stopIfTimedOut());
 app.use(async function fixup0(ctx, next) {
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
-  if (typeof ctx.get('accept-encoding') === 'undefined') {
+  if (ctx.get('accept-encoding') === undefined) {
     ctx.request.header['accept-encoding'] = 'identity';
   }
   try {
@@ -174,7 +174,7 @@ app.use(async function redirLegacy(ctx, next) {
     const rpath = ctx.request.path;
     const rpath0 = rpath.substring(0, rpath.length - 1);
     const destination = redirectMap[rpath] || redirectMap[rpath0];
-    if (typeof destination !== 'undefined') {
+    if (destination !== undefined) {
       ctx.status = 301;
       ctx.redirect(destination);
       return;
@@ -223,7 +223,7 @@ app.use(async function fixup2(ctx, next) {
       ctx.request.path = '/export/' + filename;
     } catch (err) {
       const userAgent = ctx.get('user-agent');
-      const isBingBot = userAgent.indexOf(bingUA) !== -1;
+      const isBingBot = userAgent.includes(bingUA);
       const status = isBingBot ? 404 : err.status || 400;
       ctx.throw(status, `Invalid download URL: ${data}`);
     }

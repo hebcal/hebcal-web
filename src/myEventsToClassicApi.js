@@ -21,7 +21,7 @@ export function myEventsToClassicApi(events, options, leyning) {
       if (aliyot) {
         const triAliyot = {};
         for (const [num, aliyah] of Object.entries(aliyot)) {
-          if (typeof aliyah !== 'undefined') {
+          if (aliyah !== undefined) {
             const k = num === 'M' ? 'maftir' : num;
             triAliyot[k] = formatAliyahWithBook(aliyah);
           }

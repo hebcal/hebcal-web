@@ -1,7 +1,7 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
   DailyLearning, ChanukahEvent} from '@hebcal/core';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
-import {setDefautLangTz, shortenUrl} from './common.js';
+import {setDefautLangTz, shortenUrl, lightCandlesWhen} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {processCookieAndQuery,
@@ -117,7 +117,7 @@ function mastheadParsha(ctx, hd, il) {
     ctx.state.parshaEvent = pe;
     const url = shortenUrl(pe.url());
     const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-    const parshaStr = pe.render(lg).replace(/'/g, '’');
+    const parshaStr = pe.render(lg).replaceAll('\'', '’');
     items.push(`<a href="${url}">${parshaStr}</a>`);
   }
 }
@@ -139,8 +139,8 @@ function mastheadHolidays(ctx, hd, il) {
         const desc = ev.chanukahDay ?
           Locale.gettext('Chanukah', lg) + ' ' +
           Locale.gettext('day', lg) + ' ' + ev.chanukahDay :
-          ev.render(lg).replace(/'/g, '’');
-        const suffix = il && url && url.indexOf('?') === -1 ? '?i=on' : '';
+          ev.render(lg).replaceAll('\'', '’');
+        const suffix = il && url && !url.includes('?') ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
 }
@@ -221,22 +221,22 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   }
 
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
-  if (holidays.find((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
+  if (holidays.some((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
     return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
  begins tonight at sundown. We wish you an easy fast`];
   }
-  if (holidays.find((ev) => ev.getDesc() === 'Yom HaShoah')) {
+  if (holidays.some((ev) => ev.getDesc() === 'Yom HaShoah')) {
     return ['✡️ We remember ✡️',
       `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>,
  Holocaust and Heroism Remembrance Day`];
   }
-  if (holidays.find((ev) => ev.getDesc() === 'Yom HaZikaron')) {
+  if (holidays.some((ev) => ev.getDesc() === 'Yom HaZikaron')) {
     return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
       `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
  Israeli Memorial Day`];
   }
   const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
-  if (fastDay && fastDay.url()) {
+  if (fastDay?.url()) {
     return fastDayGreeting(ctx, fastDay);
   }
 
@@ -263,8 +263,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const erevEv = new ChanukahEvent(erevHd,
         'Chanukah: 1 Candle', flags.CHANUKAH_CANDLES, undefined);
     const d = dayjs(erevHd.greg()).locale(locale);
-    // eslint-disable-next-line no-unused-vars
-    const [blurb, longText] = getChanukahGreeting(d, erevEv);
+    const [, longText] = getChanukahGreeting(d, erevEv);
     return ['🕎&nbsp;<span lang="he" dir="rtl">חֲנוּכָּה שָׂמֵחַ</span>&nbsp;🕎',
       longText];
   }
@@ -348,7 +347,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   }
 
   const fastTomorrow = tomorrow.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
-  if (fastTomorrow && fastTomorrow.url()) {
+  if (fastTomorrow?.url()) {
     return fastDayGreeting(ctx, fastTomorrow);
   }
 
@@ -409,7 +408,7 @@ const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir=
 function getChanukahGreeting(d, ev) {
   const url = shortenUrl(ev.url());
   const dow = d.day();
-  const when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
+  let when = lightCandlesWhen(dow);
   const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
   const nth = Locale.ordinal(candles, 'en');
   const dowStr = d.format('dddd');
@@ -421,7 +420,7 @@ function getChanukahGreeting(d, ev) {
 function getRoshChodeshGreeting(ctx, hd, ev) {
   const locale = ctx.state.locale;
   const monthName0 = ev.getDesc().substring(13); // 'Rosh Chodesh '
-  const monthName = monthName0.replace(/'/g, '’');
+  const monthName = monthName0.replaceAll('\'', '’');
   const url = shortenUrl(ev.url());
   const d = dayjs(ev.greg()).locale(locale);
   const today = dayjs(hd.greg()).isSame(d, 'day');

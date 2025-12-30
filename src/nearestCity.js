@@ -13,7 +13,7 @@ const cityCache = new QuickLRU({maxSize: 1000});
 export function nearestCity(geonamesDb, latitude, longitude, tzid) {
   const key = latitude + '|' + longitude;
   let city = cityCache.get(key);
-  if (typeof city !== 'undefined') {
+  if (city !== undefined) {
     return city;
   }
   const stmt = geonamesDb.prepare(

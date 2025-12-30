@@ -11,6 +11,7 @@ import {makeETag} from './etag.js';
 import {yearIsOutsideGregRange} from './dateUtil.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
   throw410,
+  lightCandlesWhen,
 } from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
@@ -367,7 +368,7 @@ function makeChanukahItems(hyear) {
   const items = makeMultiDayHolidayItems('Chanukah', hyear, false);
   for (const item of items) {
     const dow = item.hd.getDay();
-    item.when = dow === 5 ? 'before sundown' : dow === 6 ? 'at nightfall' : 'at dusk';
+    item.when = lightCandlesWhen(dow);
     const ev = item.event;
     const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
     if (candles === 9) {
@@ -401,7 +402,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
     const dupes = new Set(); // for Rosh Chodesh day 2
     for (const ev of events) {
       const reading = getReadingForHoliday(ev, il);
-      if (typeof reading !== 'undefined') {
+      if (reading !== undefined) {
         const desc = ev.getDesc();
         const key0 = getLeyningKeyForEvent(ev, il) || desc;
         const key1 = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
@@ -447,7 +448,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
     if (Array.isArray(meta.items)) {
       for (const item of meta.items) {
         const reading = getLeyningForHolidayKey(item);
-        if (typeof reading !== 'undefined') {
+        if (reading !== undefined) {
           makeHolidayReading(holiday, item, meta, reading);
         }
       }

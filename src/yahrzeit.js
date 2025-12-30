@@ -17,6 +17,7 @@ import {
 } from './urlArgs.js';
 import {doesCookieNeedRefresh, setHebcalCookie} from './cookie.js';
 import {getIpAddress} from './getIpAddress.js';
+import {lightCandlesWhen} from './common.js';
 import {ulid} from 'ulid';
 import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getAnniversaryTypes,
@@ -761,7 +762,7 @@ function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calenda
     `sundown on the day of observance.`;
   if (isYahrzeit) {
     const dow = erev.day();
-    const when = dow === 5 ? 'before sundown' : dow === 6 ? 'after nightfall' : 'at sundown';
+    const when = lightCandlesWhen(dow);
     memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
       'May your loved one’s soul be bound up in the bond of eternal life and may their memory ' +
       'serve as a continued source of inspiration and comfort to you.';

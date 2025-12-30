@@ -107,7 +107,7 @@ export async function hebrewDateConverter(ctx) {
       };
       if (p.events.length) {
         result.events = p.events.map(renameChanukah(p.lg));
-        if (typeof q.i !== 'undefined') {
+        if (q.i !== undefined) {
           result.il = p.il;
         }
       }
@@ -572,7 +572,7 @@ function convertDateRange(ctx, startD, endD) {
     const events = getEvents(hdate, il);
     if (events.length) {
       result.events = events.map(renameChanukah(lg));
-      if (typeof query.i !== 'undefined') {
+      if (query.i !== undefined) {
         result.il = il;
       }
     }

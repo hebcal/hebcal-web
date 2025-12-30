@@ -71,7 +71,7 @@ export async function shabbatApp(ctx) {
     const html = await ctx.render('shabbat-js', {Locale, writeResp: false});
     ctx.type = 'text/javascript';
     ctx.body = html.split('\n').map((line) => {
-      return 'document.write("' + line.replace(/"/g, '\\"') + '");\n';
+      return 'document.write("' + line.replaceAll('"', '\\"') + '");\n';
     }).join('');
   } else if (q.cfg === 'r') {
     ctx.type = 'application/rss+xml; charset=utf-8';
@@ -428,7 +428,7 @@ function eventToItem(ev, options, lang, cfg) {
       obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg, 's1c-' + campaign);
     } else {
       let u = url;
-      if (options.il && url.indexOf('?') === -1) {
+      if (options.il && !url.includes('?')) {
         u += '?i=on';
       }
       if (empty(cfg)) {
