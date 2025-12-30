@@ -8,10 +8,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 msgid "Shabbat Times for"
-msgstr "זמני שבת"
+msgstr "זְמַנֵּי שַׁבָּת"
 
 msgid "This week’s Torah portion is"
-msgstr "פרשת השבוע היא"
+msgstr "פָּרָשַׁת הַשָּׁבוּעַ הִיא"
 
 # midnight (sunset + six halachic hours)
 msgid "Chatzot HaLailah"
@@ -137,3 +137,6 @@ msgstr "לְאַחַר הַשְׁקִיעָה"
 
 msgid "Bein Hashemashot"
 msgstr "בין השמשות"
+
+msgid "occurs on"
+msgstr "חָל"

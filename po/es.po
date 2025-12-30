@@ -11,10 +11,10 @@ msgid "Shabbat Times for"
 msgstr "Horarios de Shabat para"
 
 msgid "This week’s Torah portion is"
-msgstr "La Parasha de la Semana es"
+msgstr "La parashá de la semana es"
 
 msgid "on"
-msgstr "en"
+msgstr "en el"
 
 msgid "occurs on"
-msgstr "se celebra"
+msgstr "se celebra el"
