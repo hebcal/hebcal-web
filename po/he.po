@@ -111,7 +111,7 @@ msgstr "שְׁקִיעָה"
 
 # Nightfall - End of ordained fasts
 msgid "Nightfall - End of ordained fasts"
-msgstr "לַיְלָה - גמר תעניות דרבנן"
+msgstr "לַיְלָה - גְּמַר תַּעֲנִיּוֹת דְּרַבָּנָן"
 
 # Nightfall - 3 stars emerge
 msgid "Tzeit HaKochavim"
@@ -130,13 +130,13 @@ msgid "Tzeit 50 min"
 msgstr "צֵאת 50 דַּקּוֹת"
 
 msgid "Tzeit 72 min (Rabbeinu Tam)"
-msgstr "צֵאת 72 דַּקּוֹת (רבינו תמ)"
+msgstr "צֵאת 72 דַּקּוֹת (רַבֵּינוּ תָּם)"
 
 msgid "after sunset"
 msgstr "לְאַחַר הַשְׁקִיעָה"
 
 msgid "Bein Hashemashot"
-msgstr "בין השמשות"
+msgstr "בֵּין הַשְּׁמָשׁוֹת"
 
 msgid "occurs on"
 msgstr "חָל"
