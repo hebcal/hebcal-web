@@ -4,14 +4,15 @@ import {makeETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar,
   makeGeoUrlArgs,
   setDefautLangTz,
-  yearIsOutsideGregRange,
-  yearIsOutsideHebRange,
 } from './common.js';
 import {cacheControl} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {langNames, localeMap, queryDefaultCandleMins} from './opts.js';
 import {makeAnchor} from '@hebcal/rest-api';
-import {getDefaultHebrewYear} from './dateUtil.js';
+import {getDefaultHebrewYear,
+  yearIsOutsideGregRange,
+  yearIsOutsideHebRange,
+} from './dateUtil.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import createError from 'http-errors';

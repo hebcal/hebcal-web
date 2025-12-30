@@ -9,8 +9,8 @@ import {basename} from 'path';
 import {empty, off} from './empty.js';
 import {langNames} from './opts.js';
 import {makeETag} from './etag.js';
+import {yearIsOutsideGregRange} from './dateUtil.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
-  yearIsOutsideGregRange,
   throw410,
 } from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,

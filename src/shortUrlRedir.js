@@ -1,7 +1,8 @@
 import {basename, dirname} from 'node:path';
 import {getSedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {utmSourceFromRef, yearIsOutsideHebRange} from './common.js';
+import {utmSourceFromRef} from './common.js';
+import {yearIsOutsideHebRange} from './dateUtil.js';
 import dayjs from 'dayjs';
 
 const shortToLong = {

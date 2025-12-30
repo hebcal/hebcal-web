@@ -5,8 +5,8 @@ import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import {basename} from 'path';
 import {makeETag} from './etag.js';
-import {shortenUrl, getNumYears,
-  yearIsOutsideHebRange, throw410} from './common.js';
+import {yearIsOutsideHebRange} from './dateUtil.js';
+import {shortenUrl, getNumYears, throw410} from './common.js';
 import {lgToLocale, localeMap} from './opts.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 

@@ -283,3 +283,19 @@ export function simchatTorahDate(year, il) {
   const mday = il ? 22 : 23;
   return new HDate(mday, months.TISHREI, year);
 }
+
+/**
+ * @param {number} year
+ * @return {boolean}
+ */
+export function yearIsOutsideGregRange(year) {
+  return isNaN(year) || year < 100 || year > 2999;
+}
+
+/**
+ * @param {number} year
+ * @return {boolean}
+ */
+export function yearIsOutsideHebRange(year) {
+  return isNaN(year) || year < 3860 || year > 6759;
+}

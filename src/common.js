@@ -26,6 +26,7 @@ import {
   processCookieAndQuery,
 } from './opts.js';
 import {cleanQuery} from './cleanQuery.js';
+import {CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 
 export const DOCUMENT_ROOT = process.env.NODE_ENV === 'production' ? '/var/www/html' : './static';
 
@@ -999,22 +1000,6 @@ export function getBaseFromPath(ctx) {
   } catch (err) {
     ctx.throw(400, err.message, err);
   }
-}
-
-/**
- * @param {number} year
- * @return {boolean}
- */
-export function yearIsOutsideGregRange(year) {
-  return isNaN(year) || year < 100 || year > 2999;
-}
-
-/**
- * @param {number} year
- * @return {boolean}
- */
-export function yearIsOutsideHebRange(year) {
-  return isNaN(year) || year < 3860 || year > 6759;
 }
 
 export function throw410(ctx) {

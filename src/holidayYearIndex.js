@@ -11,7 +11,8 @@ import {
   OMER_TITLE,
 } from './holidayCommon.js';
 import {makeETag} from './etag.js';
-import {yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
+import {throw410} from './common.js';
+import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 
 const SHMINI_ATZERET = 'Shmini Atzeret';
 const SIMCHAT_TORAH = 'Simchat Torah';

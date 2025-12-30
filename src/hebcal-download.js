@@ -6,8 +6,8 @@ import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'path';
 import {makeETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar,
-  yearIsOutsideGregRange, yearIsOutsideHebRange,
   getNumYears} from './common.js';
+import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
 import {localeMap, makeIcalOpts} from './opts.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';

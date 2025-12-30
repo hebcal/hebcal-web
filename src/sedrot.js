@@ -5,10 +5,9 @@ import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/tr
 import createError from 'http-errors';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
-import {httpRedirect, getBaseFromPath,
-  yearIsOutsideGregRange, throw410} from './common.js';
+import {httpRedirect, getBaseFromPath, throw410} from './common.js';
 import {langNames} from './opts.js';
-import {makeGregDate, simchatTorahDate} from './dateUtil.js';
+import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
   VEZOT_HABERAKHAH,

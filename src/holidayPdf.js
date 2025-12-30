@@ -4,7 +4,8 @@ import createError from 'http-errors';
 import {basename} from 'path';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {makeETag} from './etag.js';
-import {yearIsOutsideGregRange, yearIsOutsideHebRange, throw410} from './common.js';
+import {throw410} from './common.js';
+import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cacheControl} from './cacheControl.js';
 import {lgToLocale, localeMap} from './opts.js';
 
