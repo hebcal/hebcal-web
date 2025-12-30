@@ -10,7 +10,6 @@ import {makeGregDate, getBeforeAfterSunsetForLocation,
   makeHebDate, isoDateStringToDate} from './dateUtil.js';
 import {empty} from './empty.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
-import createError from 'http-errors';
 import {pad4} from '@hebcal/hdate';
 import {makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
@@ -135,7 +134,7 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = await ctx.render('converter-xml', p);
     }
   } else if (typeof p.hdates === 'object') {
-    throw createError(400, RANGE_REQUIRES_CFG_JSON);
+    ctx.throw(400, RANGE_REQUIRES_CFG_JSON);
   } else {
     if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
       ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
@@ -493,7 +492,7 @@ function parseConverterQuery(ctx) {
   if (isset(query.h2g) && query.strict === '1') {
     for (const param of ['hy', 'hm', 'hd']) {
       if (empty(query[param])) {
-        throw createError(400, `Missing parameter '${param}' for conversion from Hebrew to Gregorian`);
+        ctx.throw(400, `Missing parameter '${param}' for conversion from Hebrew to Gregorian`);
       }
     }
   }
@@ -501,7 +500,7 @@ function parseConverterQuery(ctx) {
     if (!empty(query.ndays)) {
       const ndays = parseInt(query.ndays, 10);
       if (isNaN(ndays) || ndays < 1) {
-        throw createError(400, `Invalid value for ndays: ${query.ndays}`);
+        ctx.throw(400, `Invalid value for ndays: ${query.ndays}`);
       }
       const startD = dayjs(dt);
       const numDays = Math.min(ndays - 1, 179);
@@ -516,7 +515,7 @@ function parseConverterQuery(ctx) {
     const dt = hdate.greg();
     const gy = dt.getFullYear();
     if (gy > 9999) {
-      throw createError(400, `Gregorian year cannot be greater than 9999: ${gy}`);
+      ctx.throw(400, `Gregorian year cannot be greater than 9999: ${gy}`);
     }
     return {type: 'h2g', dt, hdate, gs: false};
   }
@@ -526,7 +525,7 @@ function parseConverterQuery(ctx) {
     } else {
       for (const param of ['gy', 'gm', 'gd']) {
         if (empty(query[param])) {
-          throw createError(400, `Missing parameter '${param}' for conversion from Gregorian to Hebrew`);
+          ctx.throw(400, `Missing parameter '${param}' for conversion from Gregorian to Hebrew`);
         }
       }
     }

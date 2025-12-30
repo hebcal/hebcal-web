@@ -4,7 +4,6 @@ import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
 import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {getHolidayDescription, makeAnchor} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import createError from 'http-errors';
 import {basename} from 'node:path';
 import {empty, off} from './empty.js';
 import {langNames} from './lang.js';
@@ -84,7 +83,7 @@ export async function holidayDetail(ctx) {
     if (editDist <= 2) {
       return myRedir(ctx, candidate, year);
     }
-    throw createError(404, `Holiday not found: ${base0}`);
+    ctx.throw(404, `Holiday not found: ${base0}`);
   }
   const holidayAnchor = makeAnchor(holiday);
   if (year !== null && yearIsOutsideGregRange(year)) {
@@ -100,7 +99,7 @@ export async function holidayDetail(ctx) {
   if (!empty(q.gy)) {
     const year = parseInt(q.gy, 10);
     if (isNaN(year)) {
-      throw createError(400, `invalid year: ${q.gy}`);
+      ctx.throw(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
       throw410(ctx);
     }

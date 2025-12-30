@@ -3,7 +3,6 @@ import {PassThrough} from 'stream';
 import {getLeyningOnDate, formatAliyahWithBook} from '@hebcal/leyning';
 import {writeFullKriyahCsv} from '@hebcal/leyning/dist/esm/csv';
 import {writeTriennialCsv} from '@hebcal/triennial';
-import createError from 'http-errors';
 import {HDate, months} from '@hebcal/core';
 
 const reFullKriyahIL = /^fullkriyah-il-(\d+).csv$/;
@@ -28,7 +27,7 @@ export async function parshaCsv(ctx) {
     const il = base.startsWith('weekday-il-');
     sendCsv(ctx, base, matches[1], il, writeWeekdayCsv);
   } else {
-    throw createError(404, `Sorry, can't find CSV file: ${base}`);
+    ctx.throw(404, `Sorry, can't find CSV file: ${base}`);
   }
 }
 

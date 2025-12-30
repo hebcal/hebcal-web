@@ -1,7 +1,6 @@
 import {Event, flags, HDate, HebrewCalendar, months} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
-import createError from 'http-errors';
 import {basename} from 'node:path';
 import {getHolidayMeta} from './getHolidayMeta.js';
 import {
@@ -125,9 +124,9 @@ export async function holidayYearIndex(ctx) {
   const year = basename(rpath);
   const yearNum = parseInt(year, 10);
   if (isNaN(yearNum)) {
-    throw createError(404, `Sorry, year ${year} is not numeric`);
+    ctx.throw(404, `Sorry, year ${year} is not numeric`);
   } else if (yearNum < 1 || yearNum > 9999) {
-    throw createError(400, `Sorry, can't display holidays for year ${year}`);
+    ctx.throw(400, `Sorry, can't display holidays for year ${year}`);
   }
   ctx.response.etag = makeETag(ctx, ctx.request.query, {year});
   ctx.status = 200;

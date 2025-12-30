@@ -5,7 +5,6 @@ import {isoDateStringToDate} from './dateUtil.js';
 import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
-import createError from 'http-errors';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import {HDate} from '@hebcal/core';
@@ -22,14 +21,14 @@ export async function getLeyning(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
   const q = ctx.request.query;
   if (q.cfg !== 'json') {
-    throw createError(400, 'Parameter cfg=json is required');
+    ctx.throw(400, 'Parameter cfg=json is required');
   }
   if (!empty(q.date) && empty(q.start) && empty(q.end)) {
     q.start = q.end = q.date;
   }
   for (const param of ['start', 'end']) {
     if (empty(q[param])) {
-      throw createError(400, `Parameter '${param}' is required`);
+      ctx.throw(400, `Parameter '${param}' is required`);
     }
   }
   ctx.response.etag = makeETag(ctx, q, {});

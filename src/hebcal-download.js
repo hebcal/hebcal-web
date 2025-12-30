@@ -12,7 +12,6 @@ import {localeMap} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
-import createError from 'http-errors';
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
@@ -27,7 +26,7 @@ export async function hebcalDownload(ctx) {
   if (typeof options.year === 'number' &&
       ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
       (!options.isHebrewYear && yearIsOutsideGregRange(options.year)))) {
-    throw createError(410, `No calendar for year ${options.year}`);
+    ctx.throw(410, `No calendar for year ${options.year}`);
   }
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);

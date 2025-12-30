@@ -1,6 +1,5 @@
 import {HebrewCalendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
-import createError from 'http-errors';
 import {basename} from 'node:path';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {makeETag} from './etag.js';
@@ -18,14 +17,14 @@ export async function holidayPdf(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   if (!base.startsWith('hebcal-')) {
-    throw createError(404, `Invalid PDF URL format: ${base}`);
+    ctx.throw(404, `Invalid PDF URL format: ${base}`);
   }
   const year = basename(base.substring(7));
   const yearNum = parseInt(year, 10);
   if (isNaN(yearNum)) {
-    throw createError(404, `Invalid holiday year: ${year}`);
+    ctx.throw(404, `Invalid holiday year: ${year}`);
   } else if (yearNum < 1 || yearNum > 32000) {
-    throw createError(400, `Invalid year number: ${yearNum}`);
+    ctx.throw(400, `Invalid year number: ${yearNum}`);
   }
   const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761) : yearNum;

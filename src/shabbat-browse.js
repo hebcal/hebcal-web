@@ -2,7 +2,6 @@ import {HDate, HebrewCalendar, Location, Zmanim} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import Database from 'better-sqlite3';
 import dayjs from 'dayjs';
-import createError from 'http-errors';
 import {basename} from 'node:path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
@@ -194,7 +193,7 @@ export async function shabbatBrowse(ctx) {
       flag: flag(countryCode),
     });
   }
-  throw createError(404, `Browse page not found: ${base}`);
+  ctx.throw(404, `Browse page not found: ${base}`);
 }
 
 async function countryPage(ctx, countryCode) {

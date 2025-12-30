@@ -91,7 +91,7 @@ function makeProperties(ctx) {
   const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
   if (!location) {
-    throw createError(400, 'Location required: geonameid, zip, city');
+    ctx.throw(400, 'Location required: geonameid, zip, city');
   }
   const startEnd = getStartAndEnd(query);
   options.start = startEnd[0];

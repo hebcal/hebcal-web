@@ -34,7 +34,7 @@ export async function parshaDetail(ctx) {
       }
       return;
     }
-    throw createError(404, `Parsha not found: ${base0}`);
+    ctx.throw(404, `Parsha not found: ${base0}`);
   }
   const q = ctx.request.query;
   const il = q.i === 'on';
@@ -46,7 +46,7 @@ export async function parshaDetail(ctx) {
   if (!empty(q.gy)) {
     const year = parseInt(q.gy, 10);
     if (isNaN(year)) {
-      throw createError(400, `invalid year: ${q.gy}`);
+      ctx.throw(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
       throw410(ctx);
     }
@@ -77,7 +77,7 @@ export async function parshaDetail(ctx) {
       httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;
     }
-    throw createError(500, `Internal error: ${parshaName0}`);
+    ctx.throw(500, `Internal error: ${parshaName0}`);
   }
   if (base0 !== base) {
     // fix capitalization
