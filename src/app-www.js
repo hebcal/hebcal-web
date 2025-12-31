@@ -99,6 +99,7 @@ const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;
 const cspriteHref = '/i/' + pkg.config.csprite;
 const clientAppHref = '/i/' + pkg.config.clientapp;
+const mainCssHref = '/i/' + pkg.config.mainCss;
 
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
@@ -106,6 +107,7 @@ app.use(async function fixup0(ctx, next) {
   ctx.state.spriteHref = spriteHref;
   ctx.state.cspriteHref = cspriteHref;
   ctx.state.clientAppHref = clientAppHref;
+  ctx.state.mainCssHref = mainCssHref;
   ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'

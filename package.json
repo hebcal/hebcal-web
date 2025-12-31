@@ -13,6 +13,7 @@
   "config": {
     "sprite": "sprite13.svg",
     "csprite": "color-icons4.svg",
+    "mainCss": "style-5.3.8b.css",
     "clientapp": "hebcal-app-5.2.1.min.js"
   },
   "type": "module",
@@ -23,10 +24,13 @@
   "scripts": {
     "dev": "node src/app-www.js",
     "dev:download": "NODE_PORT=8081 node src/app-download.js",
-    "build": "node ./po2json.js po/he.po po/pt.po po/es.po po/fr.po po/ashkenazi.po && npx rollup -c",
+    "po2json": "node ./po2json.js po/he.po po/pt.po po/es.po po/fr.po po/ashkenazi.po",
+    "build": "npm run po2json && npm run css-compile && npm run css-rename && npx rollup -c",
     "deploy": "./deploy.sh",
     "start": "node src/app-www.js",
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto && mv src/download_pb.js src/download_pb.cjs",
+    "css-compile": "sass --style compressed --embed-sources --no-error-css --load-path=node_modules --load-path=views/partials scss/:css/",
+    "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -37,9 +41,11 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@popperjs/core": "^2.11.8",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "bootstrap": "^5.3.8",
     "bootstrap5-autocomplete": "^1.1.41",
     "csv-parse": "^6.1.0",
     "eslint": "^9.39.2",
@@ -47,6 +53,7 @@
     "gettext-parser": "^9.0.0",
     "globals": "^16.5.0",
     "rollup": "^4.54.0",
+    "sass": "^1.97.1",
     "supertest": "^7.1.4",
     "vitest": "^4.0.16"
   },
