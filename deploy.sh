@@ -19,7 +19,7 @@ ln -s sprite1.svg ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_clientapp
 compress_file ./static/i/$npm_package_config_csprite
-compress_file ./static/i/$npm_package_config_bootstrap
+compress_file ./static/i/$npm_package_config_mainCss
 
 # deploy for prod
 rsync -av ./fonts/ /var/www/fonts/
