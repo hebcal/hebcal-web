@@ -52,7 +52,7 @@
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
-    "@hebcal/core": "^6.0.6",
+    "@hebcal/core": "^6.0.8",
     "@hebcal/geo-sqlite": "^5.7.2",
     "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.3",

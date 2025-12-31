@@ -74,16 +74,8 @@ div#hebcal-loading h3 {
 <div class="container-fluid">
 <div class="row">
 <div class="col-sm-8 mb-2">
-<% if (gy < 0 && q.yt === 'H') { -%>
-<div class="alert alert-warning alert-dismissible" role="alert">
-<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-<strong>Warning!</strong>
-You are viewing <strong>Hebrew year <%=hebrewYear%></strong>,
-which is equivalent to Gregorian year <%=-(gy-1)%> B.C.E. (Before the Common Era).
-Hebrew date conversion before year 1752 C.E. may be inaccurate.<br>
-Perhaps you intended to view the calendar for
-<a href="<%-sameUrlGregYear%>">Gregorian year <%=hebrewYear%></a>?
-</div><!-- .alert -->
+<% if (gy <= 1178) { -%>
+<%- await include('partials/warning-early.ejs') -%>
 <% } else if (gy <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } else if (gy >= 3762 && q.yt === 'G') { -%>

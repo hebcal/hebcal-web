@@ -61,7 +61,11 @@
 <span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
 <% } -%>
 </h2>
-<% if (greg1 <= 1752) { %><%- await include('partials/warning-1752.ejs') %><% } -%>
+<% if (greg1 <= 1178) { -%>
+<%- await include('partials/warning-early.ejs') -%>
+<% } else if (greg1 <= 1752) { -%>
+<%- await include('partials/warning-1752.ejs') -%>
+<% } -%>
 <p class="small">Dates of major and minor Jewish holidays, observances and customs, holiday Torah readings.</p>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
   <div>

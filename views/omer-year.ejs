@@ -15,7 +15,9 @@
 </div>
 <div class="row mt-1">
 <div class="col-md-10">
-<% if (items[1].d.year() <= 1752) { -%>
+<% if (items[1].d.year() <= 1178) { -%>
+<%- await include('partials/warning-early.ejs') -%>
+<% } else if (items[1].d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p>Counting of the Omer (or Sefirat Ha’omer, Hebrew: <span lang="he" dir="rtl">ספירת העומר</span>) is a verbal counting of each of

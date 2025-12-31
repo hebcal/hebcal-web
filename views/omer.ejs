@@ -29,7 +29,9 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<% if (d.year() <= 1752) { -%>
+<% if (d.year() <= 1178) { -%>
+<%- await include('partials/warning-early.ejs') -%>
+<% } else if (d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <div id="today" class="mt-3">
