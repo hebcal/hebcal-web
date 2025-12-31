@@ -14,7 +14,7 @@ msgid "This week’s Torah portion is"
 msgstr "A porção da Torá desta semana é"
 
 msgid "on"
-msgstr "é na"
+msgstr "de"
 
 msgid "occurs on"
-msgstr "ocorre na"
+msgstr "será"
