@@ -1,12 +1,8 @@
-import {HDate, Locale, DailyLearning} from '@hebcal/core';
-import '@hebcal/learning';
+import {HDate} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
 import {makeETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
-import {basename} from 'node:path';
-import dayjs from 'dayjs';
-import 'dayjs/locale/he.js';
 import {send} from '@koa/send';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
@@ -69,33 +65,3 @@ export async function hdateXml(ctx) {
   ctx.body = await ctx.render('hdate-xml', props);
 }
 
-export async function dafYomiRss(ctx) {
-  const rpath = ctx.request.path;
-  const q = ctx.request.query;
-  const {dt} = getTodayDate(q);
-  const hd = new HDate(dt);
-  ctx.response.etag = makeETag(ctx, q, {hd});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return;
-  }
-  const today = dayjs(dt);
-  const lang = getLang(rpath);
-  const bn = basename(rpath);
-  const isDafYomi = bn.startsWith('dafyomi');
-  const calendarName = isDafYomi ? 'dafYomi' : 'mishnaYomi';
-  const event = DailyLearning.lookup(calendarName, hd);
-  expires(ctx, dt);
-  ctx.type = RSS_CONTENT_TYPE;
-  ctx.body = await ctx.render('dafyomi-rss', {
-    writeResp: false,
-    title: Locale.gettext(isDafYomi ? 'Daf Yomi' : 'Mishna Yomi', lang),
-    homepage: isDafYomi ? 'https://www.sefaria.org/daf-yomi' : 'https://www.sefaria.org/texts/Mishnah',
-    description: 'Daily regimen of learning the ' + (isDafYomi ? 'Talmud' : 'Mishna'),
-    dt,
-    memo: today.locale(lang).format('dddd, D MMMM YYYY'),
-    lang,
-    event,
-  });
-}
