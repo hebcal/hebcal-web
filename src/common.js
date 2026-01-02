@@ -2,7 +2,7 @@ import '@hebcal/learning';
 import {basename} from 'node:path';
 import {getIpAddress} from './getIpAddress.js';
 import {processCookieAndQuery} from './urlArgs.js';
-import {localeMap, langNames, langTzDefaults} from './lang.js';
+import {localeMap, langTzDefaults, pickLanguage} from './lang.js';
 import {cleanQuery} from './cleanQuery.js';
 import {CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {getLocationFromQueryOrGeoIp} from './location.js';
@@ -73,7 +73,7 @@ export function setDefautLangTz(ctx) {
     const ip = getIpAddress(ctx);
     cc = ctx.geoipCountry.get(ip);
   }
-  const lg = ctx.state.lg = q.lg = pickLanguage(ctx, q.lg, cc);
+  const lg = ctx.state.lg = q.lg = pickLanguage(ctx, q, cc);
   ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
   cc = cc || 'US';
   ctx.state.countryCode = cc;
@@ -83,31 +83,6 @@ export function setDefautLangTz(ctx) {
   ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
   ctx.state.q = q;
   return q;
-}
-
-const langISOs = ['en', 'he'].concat(Object.keys(langNames).filter((x) => x.length === 2));
-
-/**
- * @param {*} ctx
- * @param {string} lg
- * @param {string} cc
- * @return {string}
- */
-function pickLanguage(ctx, lg, cc) {
-  if (lg) {
-    return lg;
-  }
-  const ccDefaults = langTzDefaults[cc];
-  if (ccDefaults) {
-    return ccDefaults[0];
-  }
-  const acceptsLangs = ctx.acceptsLanguages(langISOs);
-  if (Array.isArray(acceptsLangs)) {
-    return acceptsLangs[0] === 'en' ? 's' : acceptsLangs[0];
-  } else if (typeof acceptsLangs === 'string') {
-    return acceptsLangs === 'en' ? 's' : acceptsLangs;
-  }
-  return 's';
 }
 
 const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;

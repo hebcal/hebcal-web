@@ -76,3 +76,28 @@ export const lgToLocale = {
   s: 's',
   sh: 's',
 };
+
+const langISOs = ['en', 'he'].concat(Object.keys(langNames).filter((x) => x.length === 2));
+
+/**
+ * @param {*} ctx
+ * @param {Object.<string,string>} query
+ * @param {string} cc
+ * @return {string}
+ */
+export function pickLanguage(ctx, query, cc) {
+  if (query.lg) {
+    return query.lg;
+  }
+  const ccDefaults = langTzDefaults[cc];
+  if (ccDefaults) {
+    return ccDefaults[0];
+  }
+  const acceptsLangs = ctx.acceptsLanguages(langISOs);
+  if (Array.isArray(acceptsLangs)) {
+    return acceptsLangs[0] === 'en' ? 's' : acceptsLangs[0];
+  } else if (typeof acceptsLangs === 'string') {
+    return acceptsLangs === 'en' ? 's' : acceptsLangs;
+  }
+  return 's';
+}
