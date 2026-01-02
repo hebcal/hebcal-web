@@ -84,6 +84,10 @@ function makeCookie(ctx, query, uid) {
   if (!empty(query.h12)) {
     ck.h12 = off(query.h12) ? '0' : '1';
   }
+  const monthMode = query.mm;
+  if (monthMode === '1' || monthMode === '2') {
+    ck.mm = monthMode;
+  }  
   if (query.geo === 'pos') {
     ck.geo = 'pos';
   } else if (query.geo === 'none') {
