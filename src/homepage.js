@@ -2,7 +2,8 @@ import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
   DailyLearning, ChanukahEvent} from '@hebcal/core';
 import '@hebcal/learning';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
-import {setDefautLangTz, shortenUrl, lightCandlesWhen} from './common.js';
+import {setDefautLangTz} from './defaultLangTz.js';
+import {shortenUrl, lightCandlesWhen} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {processCookieAndQuery,

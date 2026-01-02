@@ -1,10 +1,5 @@
 import {basename} from 'node:path';
-import {getIpAddress} from './getIpAddress.js';
-import {processCookieAndQuery} from './urlArgs.js';
-import {localeMap, langTzDefaults, pickLanguage} from './lang.js';
-import {cleanQuery} from './cleanQuery.js';
 import {CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
-import {getLocationFromQueryOrGeoIp} from './location.js';
 
 export const DOCUMENT_ROOT = process.env.NODE_ENV === 'production' ? '/var/www/html' : './static';
 
@@ -48,42 +43,6 @@ export function httpRedirect(ctx, rpath, status=302) {
   ctx.redirect(url);
 }
 
-/**
- * MaxMind geoIP lookup GeoLite2-Country.mmdb
- * @return {any}
- * @param {any} ctx
- */
-export function setDefautLangTz(ctx) {
-  ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
-  const prevCookie = ctx.cookies.get('C');
-  const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
-  cleanQuery(q);
-  const location = getLocationFromQueryOrGeoIp(ctx, q);
-  const geoip = ctx.state.geoip;
-  let cc = geoip?.cc;
-  let tzid = geoip?.tzid;
-  if (location !== null) {
-    tzid = location.getTzid();
-    cc = location.getCountryCode();
-    if (location.getIsrael()) {
-      q.i = 'on';
-    }
-  } else if (ctx.geoipCountry) {
-    const ip = getIpAddress(ctx);
-    cc = ctx.geoipCountry.get(ip);
-  }
-  const lg = ctx.state.lg = q.lg = pickLanguage(ctx, q, cc);
-  ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
-  cc = cc || 'US';
-  ctx.state.countryCode = cc;
-  const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
-  ctx.state.timezone = tzid || ccDefaults[1];
-  ctx.state.location = location;
-  ctx.state.il = q.i === 'on' || cc === 'IL' || ctx.state.timezone === 'Asia/Jerusalem';
-  ctx.state.q = q;
-  return q;
-}
-
 const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
 
 /**
@@ -91,7 +50,7 @@ const hebrewRe = /([\u0590-\u05FF][\s\u0590-\u05FF]+[\u0590-\u05FF])/g;
  * @return {string}
  */
 export function wrapHebrewInSpans(str) {
-  return str.replace(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
+  return str.replaceAll(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
 }
 
 export function stopIfTimedOut() {

@@ -1,7 +1,7 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
-import {setDefautLangTz} from './common.js';
+import {setDefautLangTz} from './defaultLangTz.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {cacheControl} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
