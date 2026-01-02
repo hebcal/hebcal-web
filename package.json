@@ -13,12 +13,12 @@
   "config": {
     "sprite": "sprite13.svg",
     "csprite": "color-icons4.svg",
-    "mainCss": "style-5.3.8c.css",
+    "mainCss": "style-5.3.8d.css",
     "clientapp": "hebcal-app-5.2.1.min.js"
   },
   "type": "module",
   "engines": {
-    "node": ">= 20.0.0"
+    "node": ">= 24"
   },
   "files": [],
   "scripts": {
