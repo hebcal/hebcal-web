@@ -1,4 +1,3 @@
-import '@hebcal/learning';
 import {basename} from 'node:path';
 import {getIpAddress} from './getIpAddress.js';
 import {processCookieAndQuery} from './urlArgs.js';

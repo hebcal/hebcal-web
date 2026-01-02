@@ -7,7 +7,7 @@ import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {readJSON} from './readJSON.js';
 import {exec} from 'node:child_process';
-import util from 'util';
+import util from 'node:util';
 import fs from 'node:fs';
 import {basename} from 'node:path';
 import minimist from 'minimist';

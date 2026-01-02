@@ -1,4 +1,5 @@
 import {HDate, Locale, DailyLearning} from '@hebcal/core';
+import '@hebcal/learning';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
 import {makeETag} from './etag.js';

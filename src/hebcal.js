@@ -22,6 +22,7 @@ import {possiblySetCookie} from './cookie.js';
 import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
+import '@hebcal/learning';
 import {
   eventToFullCalendar,
   eventToClassicApiObject,

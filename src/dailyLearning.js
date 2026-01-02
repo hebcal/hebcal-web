@@ -10,6 +10,7 @@ import {HDate, HebrewCalendar, months, OmerEvent, Locale} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {makeAnchor} from '@hebcal/rest-api';
+import '@hebcal/learning';
 
 const currentYear = new Date().getFullYear();
 
