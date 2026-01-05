@@ -229,6 +229,12 @@ app.use(async function setCorsHeader(ctx, next) {
        (rpath.endsWith('.js') || rpath.endsWith('.xml')))) {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.set('Cross-Origin-Resource-Policy', 'cross-origin');
+    if (ctx.method === 'OPTIONS') {
+      const postOK = rpath.startsWith('/yahrzeit') || rpath.startsWith('/email') || rpath.startsWith('/converter');
+      ctx.set('Access-Control-Allow-Methods', postOK ? 'GET, POST', 'GET');
+      ctx.status = 204;
+      return;
+    }
   }
   await next();
 });
