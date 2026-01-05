@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import {basename} from 'node:path';
 import minimist from 'minimist';
 import pino from 'pino';
+import '@hebcal/learning';
 
 const argv = minimist(process.argv.slice(2), {
   boolean: ['help', 'quiet', 'verbose', 'nocompress'],
@@ -146,6 +147,7 @@ const ignoreOpts = ['downloadSlug', 'years', 'noMajor', 'noMinorHolidays',
   'emoji', 'title', 'caldesc', 'relcalid', 'color', 'calendarColor',
   'ordinal', 'emojiStr', 'titleName', 'name', 'summary', 'he',
   'feedLength', 'noCSV', 'moreInfo', 'hasNoEmojiVersion',
+  'shortName', 'descLong',
 ];
 
 async function doRegularCalendar(cfg) {
