@@ -193,6 +193,7 @@ app.use(async function checkHttpMethod(ctx, next) {
     case 'GET':
     case 'POST':
     case 'HEAD':
+    case 'OPTIONS':
       break; // all good!
     default:
       ctx.throw(405, `Method ${method} not allowed`);
@@ -230,8 +231,10 @@ app.use(async function setCorsHeader(ctx, next) {
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.set('Cross-Origin-Resource-Policy', 'cross-origin');
     if (ctx.method === 'OPTIONS') {
-      const postOK = rpath.startsWith('/yahrzeit') || rpath.startsWith('/email') || rpath.startsWith('/converter');
-      ctx.set('Access-Control-Allow-Methods', postOK ? 'GET, POST' : 'GET');
+      const methods = rpath.startsWith('/yahrzeit') || rpath.startsWith('/email') ? 'POST' :
+        rpath.startsWith('/converter') ? 'GET, POST' :
+        'GET';
+      ctx.set('Access-Control-Allow-Methods', methods);
       ctx.status = 204;
       return;
     }
