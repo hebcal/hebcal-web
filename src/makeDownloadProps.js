@@ -113,6 +113,7 @@ export function downloadHref2(query, filename, override={}) {
   } else {
     msg.setMonthmode(DownloadProtoBuf.Download.MonthMode.GREGORIAN_ARABIC);
   }
+  if (on(q.yto)) msg.setYomtovonly(true);
 
   if (!empty(q.month) && q.month != 'x') {
     const month = getInt(q.month);

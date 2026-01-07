@@ -215,7 +215,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     rambam3: jspb.Message.getBooleanFieldWithDefault(msg, 61, false),
     seferhamitzvot: jspb.Message.getBooleanFieldWithDefault(msg, 62, false),
     kitzurshulchanaruch: jspb.Message.getBooleanFieldWithDefault(msg, 63, false),
-    monthmode: jspb.Message.getFieldWithDefault(msg, 64, 0)
+    monthmode: jspb.Message.getFieldWithDefault(msg, 64, 0),
+    yomtovonly: jspb.Message.getBooleanFieldWithDefault(msg, 65, false)
   };
 
   if (includeInstance) {
@@ -495,6 +496,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 64:
       var value = /** @type {!proto.Download.MonthMode} */ (reader.readEnum());
       msg.setMonthmode(value);
+      break;
+    case 65:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setYomtovonly(value);
       break;
     default:
       reader.skipField();
@@ -949,6 +954,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeEnum(
       64,
+      f
+    );
+  }
+  f = message.getYomtovonly();
+  if (f) {
+    writer.writeBool(
+      65,
       f
     );
   }
@@ -2212,6 +2224,24 @@ proto.Download.prototype.getMonthmode = function() {
  */
 proto.Download.prototype.setMonthmode = function(value) {
   return jspb.Message.setProto3EnumField(this, 64, value);
+};
+
+
+/**
+ * optional bool yomTovOnly = 65;
+ * @return {boolean}
+ */
+proto.Download.prototype.getYomtovonly = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 65, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setYomtovonly = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 65, value);
 };
 
 

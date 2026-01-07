@@ -85,4 +85,5 @@ message Download {
     HEBREW_HEBREW = 2;
   }
   MonthMode monthMode = 64;
+  bool yomTovOnly = 65;
 }
