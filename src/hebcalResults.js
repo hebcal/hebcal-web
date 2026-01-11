@@ -54,7 +54,7 @@ function getEventClassName(evt) {
   if (evt.yt) {
     className += ' yomtov';
   }
-  if (evt.dt.indexOf('T') !== -1) {
+  if (evt.dt.includes('T')) {
     className += ' timed';
   }
   const link = evt.u0;
@@ -74,7 +74,7 @@ function getHebMonthName(d) {
   const hdt = abs <= EPOCH ? HDATE_EPOCH : abs2hebrew(abs);
   const localeData = window['hebcal'].localeConfig;
   const str = localeData.hebMonths[hdt.mm] || getMonthName(hdt.mm, hdt.yy);
-  hdt.monthName = str.replace(/'/g, '’');
+  hdt.monthName = str.replaceAll('\'', '’');
   return hdt;
 }
 
@@ -141,7 +141,7 @@ function splitByHebrewMonth(events) {
   const endHd = abs2hebrew(endAbs);
 
   const months = {};
-  const out = [];
+  let out = [];
   let i = 0;
 
   let currentHYear = startHd.yy;
@@ -241,8 +241,13 @@ function splitByHebrewMonth(events) {
     const endYear = endHd.yy;
     const isHebrew = window['hebcal'].locale === 'he';
     const endYearStr = isHebrew ? gematriya(endYear) : endYear;
-    month.monthName = monthName.replace(/'/g, '\u2019') + ' ' + endYearStr;
+    month.monthName = monthName.replaceAll('\'', '\u2019') + ' ' + endYearStr;
   });
+
+  const opts = window['hebcal'].opts;
+  if (opts.yomTovOnly) {
+    out = out.filter((month) => month.events.length > 0);
+  }
 
   return out;
 }
@@ -262,7 +267,7 @@ function splitByMonth(events) {
   const start = startDate.set('date', 1);
   const end = endDate.add(1, 'day');
   const months = {};
-  const out = [];
+  let out = [];
   let i = 0;
   for (let d = start; d.isBefore(end); d = d.add(1, 'month')) {
     const yearMonth = formatYearMonth(d);
@@ -288,21 +293,24 @@ function splitByMonth(events) {
   for (let i = 0; i < out.length - 1; i++) {
     out[i].next = out[i + 1].month;
   }
-  Object.values(months).map(addHebMonthName);
+  Object.values(months).forEach(addHebMonthName);
+  if (opts.yomTovOnly) {
+    out = out.filter((month) => month.events.length > 0);
+  }
   return out;
 }
 
 function getTimeStr(dt) {
-  const allDay = dt.indexOf('T') === -1;
+  const allDay = dt.includes('T');
   if (allDay) {
     return '';
   }
   const opts = window['hebcal'].opts;
-  if (typeof opts.hour12 !== 'undefined' && !opts.hour12) {
+  if (opts.hour12 !== undefined && !opts.hour12) {
     return dt.substring(11, 16);
   }
   const cc = window['hebcal'].cconfig.cc;
-  if (!opts.hour12 && typeof hour12cc[cc] === 'undefined') {
+  if (!opts.hour12 && !hour12cc[cc]) {
     return dt.substring(11, 16);
   } else {
     let hour = +dt.substring(11, 13);
@@ -636,7 +644,7 @@ function makeMonthTableBody(month) {
     n++;
   }
   html += '</tr>\n';
-  if (html.substring(html.length - 10) === '<tr></tr>\n') {
+  if (html.endsWith('<tr></tr>\n')) {
     return html.substring(0, html.length - 10);
   }
   return html;
