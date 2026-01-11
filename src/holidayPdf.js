@@ -53,6 +53,6 @@ export async function holidayPdf(ctx) {
   const events = HebrewCalendar.calendar(options);
   const title = getCalendarTitle(events, options);
   const doc = ctx.body = createPdfDoc(title, options);
-  renderPdf(doc, events, options);
+  renderPdf(doc, events, options, query);
   doc.end();
 }

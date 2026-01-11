@@ -4,7 +4,7 @@ import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
 import {localeMap} from './lang.js';
-import {locationDefaultCandleMins} from './urlArgs.js';
+import {locationDefaultCandleMins, makeCalendarSubtitleFromOpts} from './urlArgs.js';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 import {pad2, pad4} from '@hebcal/hdate';
@@ -551,7 +551,7 @@ function isAlternateDateEvent(evt) {
  * @param {Object} options
  * @return {PDFDocument}
  */
-export function renderPdf(doc, events, options) {
+export function renderPdf(doc, events, options, query) {
   const hebrewMonths = options?.hebrewMonths === true;
   const cells = hebrewMonths ? eventsToCellsHeb(events) : eventsToCells(events);
   const locale0 = options?.locale;
@@ -707,7 +707,7 @@ export function renderPdf(doc, events, options) {
 
     doc.fillColor('#000000');
     doc.font('plain').fontSize(8);
-    const leftText = makeLeftText(options);
+    const leftText = makeLeftText(options, query);
     doc.text(leftText, PDF_LMARGIN, PDF_HEIGHT - 28);
 
     const str = 'Provided by Hebcal.com with a Creative Commons Attribution 4.0 International License';
@@ -722,7 +722,7 @@ export function renderPdf(doc, events, options) {
  * @param {import('@hebcal/core').CalOptions} options
  * @return {string}
  */
-function makeLeftText(options) {
+function makeLeftText(options, query) {
   const locationName = options?.location?.getName();
   if (locationName) {
     const location = options.location;
@@ -735,5 +735,9 @@ function makeLeftText(options) {
     return str + ' · ' +
       `Candle-lighting times ${options.candleLightingMins || offset} min before sunset`;
   }
-  return options.il ? 'Israel holiday schedule' : 'Diaspora holiday schedule';
+  const subtitle = makeCalendarSubtitleFromOpts(options, query);
+  if (subtitle === 'Israel' || subtitle === 'Diaspora') {
+    return subtitle + ' holiday schedule';
+  }
+  return subtitle;
 }

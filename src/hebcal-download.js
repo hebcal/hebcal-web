@@ -101,7 +101,7 @@ export async function hebcalDownload(ctx) {
     options.utmSource = query.utm_source; // OK if undefined
     options.utmMedium = query.utm_medium; // OK if undefined
     options.utmCampaign = query.utm_campaign || 'pdf-' + campaignName(events, options);
-    renderPdf(doc, events, options);
+    renderPdf(doc, events, options, query);
     doc.end();
   }
 }
