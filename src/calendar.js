@@ -1,4 +1,5 @@
 import {HDate, HebrewCalendar, flags} from '@hebcal/core';
+import '@hebcal/learning';
 import {getEventCategories} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
@@ -220,6 +221,15 @@ export function makeHebcalOptions(db, query) {
   return options;
 }
 
+const webOnlyOpts = {
+  yomTovOnly: true,
+  noMinorHolidays: true,
+  addAlternateDates: true,
+  addAlternateDatesForEvents: true,
+  hebrewMonths: true,
+  gematriyaNumerals: true,
+};
+
 /**
  * @param {any} ctx
  * @param {import('@hebcal/core').CalOptions} options
@@ -227,31 +237,21 @@ export function makeHebcalOptions(db, query) {
  */
 export function makeHebrewCalendar(ctx, options) {
   let events;
-  // stash away values to avoid warning
-  const yomTovOnly = options.yomTovOnly;
-  const noMinorHolidays = options.noMinorHolidays;
-  const addAlternateDates = options.addAlternateDates;
-  const addAlternateDatesForEvents = options.addAlternateDatesForEvents;
+  // Remove web-only options before passing to Hebcal library
+  const opts = {...options};
+  for (const key of Object.keys(webOnlyOpts)) {
+    if (key in opts) {
+      delete opts[key];
+    }
+  }
   const hebrewMonths = options.hebrewMonths;
-  const gematriyaNumerals = options.gematriyaNumerals;
-  if (yomTovOnly) {
-    delete options.yomTovOnly;
-  }
-  if (noMinorHolidays) {
-    delete options.noMinorHolidays;
-  }
   if (!hebrewMonths) {
     // No need for Hebrew dates when the whole calendar is fully Hebrew
-    options.addHebrewDatesForEvents = addAlternateDatesForEvents;
-    options.addHebrewDates = addAlternateDates;
+    opts.addHebrewDatesForEvents = options.addAlternateDatesForEvents;
+    opts.addHebrewDates = options.addAlternateDates;
   }
-  // Always remove alternate properties - library doesn't recognize them
-  delete options.addAlternateDates;
-  delete options.addAlternateDatesForEvents;
-  delete options.hebrewMonths;
-  delete options.gematriyaNumerals;
   try {
-    events = HebrewCalendar.calendar(options);
+    events = HebrewCalendar.calendar(opts);
 
     // When using Hebrew months with Hebrew year mode, splitByHebrewMonth()
     // intentionally includes Tishrei of the next year for printed calendars
@@ -265,7 +265,7 @@ export function makeHebrewCalendar(ctx, options) {
       const tishreiStart = new HDate(1, tishrei, nextYear);
       const tishreiEnd = new HDate(30, tishrei, nextYear); // Tishrei always has 30 days
       const optsNextTishrei = {
-        ...options,
+        ...opts,
         start: tishreiStart.greg(),
         end: tishreiEnd.greg(),
         isHebrewYear: false, // Using Gregorian date range
@@ -276,35 +276,16 @@ export function makeHebrewCalendar(ctx, options) {
     const status = err.status || 400;
     ctx.throw(status, err);
   }
-  if (yomTovOnly) {
+  if (options.yomTovOnly) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
       return (categories[0] === 'holiday' && (ev.getFlags() & flags.CHAG));
     });
-  } else if (noMinorHolidays) {
+  } else if (options.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
       return categories.length < 2 || categories[1] !== 'minor';
     });
-  }
-  // restore values
-  if (yomTovOnly) {
-    options.yomTovOnly = true;
-  }
-  if (noMinorHolidays) {
-    options.noMinorHolidays = true;
-  }
-  if (hebrewMonths) {
-    options.hebrewMonths = true;
-  }
-  if (gematriyaNumerals) {
-    options.gematriyaNumerals = true;
-  }
-  if (addAlternateDates) {
-    options.addAlternateDates = addAlternateDates;
-  }
-  if (addAlternateDatesForEvents) {
-    options.addAlternateDatesForEvents = addAlternateDatesForEvents;
   }
 
   // When Hebrew months are selected and user wants alternate dates,
