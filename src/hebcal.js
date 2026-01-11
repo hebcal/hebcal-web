@@ -300,7 +300,7 @@ function renderHtml(ctx) {
     if (item0.yomtov) {
       item.yt = true;
     }
-    if (item0.memo && memos[bn] === undefined && item0.date.indexOf('T') === -1) {
+    if (item0.memo && memos[bn] === undefined && !item0.date.includes('T')) {
       const fullStop = item0.memo.indexOf('. ');
       memos[bn] = fullStop === -1 ? item0.memo : item0.memo.substring(0, fullStop);
     }
