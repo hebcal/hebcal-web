@@ -233,18 +233,19 @@ function splitByHebrewMonth(events) {
     out[i].next = out[i + 1].month;
   }
 
+  const conf = window['hebcal'];
   Object.values(months).forEach((month) => {
-    const localeData = window['hebcal'].localeConfig;
+    const localeData = conf.localeConfig;
     const hd = month.startHd;
     const endHd = month.endHd;
     const monthName = localeData.hebMonths[hd.mm] || getMonthName(hd.mm, hd.yy);
     const endYear = endHd.yy;
-    const isHebrew = window['hebcal'].locale === 'he';
+    const isHebrew = conf.locale === 'he';
     const endYearStr = isHebrew ? gematriya(endYear) : endYear;
     month.monthName = monthName.replaceAll('\'', '\u2019') + ' ' + endYearStr;
   });
 
-  const opts = window['hebcal'].opts;
+  const opts = conf.opts;
   if (opts.yomTovOnly) {
     out = out.filter((month) => month.events.length > 0);
   }
@@ -305,11 +306,12 @@ function getTimeStr(dt) {
   if (allDay) {
     return '';
   }
-  const opts = window['hebcal'].opts;
+  const conf = window['hebcal'];
+  const opts = conf.opts;
   if (opts.hour12 !== undefined && !opts.hour12) {
     return dt.substring(11, 16);
   }
-  const cc = window['hebcal'].cconfig.cc;
+  const cc = conf.cconfig.cc;
   if (!opts.hour12 && !hour12cc[cc]) {
     return dt.substring(11, 16);
   } else {
@@ -337,10 +339,11 @@ function tableRow(evt) {
   const isoDate = dateOnly(evt.dt);
   const m = makeDayjs(isoDate);
   const cat = evt.cat;
-  const localeData = window['hebcal'].localeConfig;
-  const lang = window['hebcal'].lang || 's';
-  const isHebrew = window['hebcal'].locale === 'he';
-  const opts = window['hebcal'].opts;
+  const conf = window['hebcal'];
+  const localeData = conf.localeConfig;
+  const lang = conf.lang || 's';
+  const isHebrew = conf.locale === 'he';
+  const opts = conf.opts;
   const isHebrewMonths = opts.hebrewMonths === true;
   const dateStr0 = isHebrewMonths ? hebDayAndMonthName(m) :
     m.format('DD ') + localeData.monthsShort[m.month()];
@@ -355,7 +358,7 @@ function tableRow(evt) {
     // "Candle lighting: foo" or "Havdalah (42 min): foo"
     subj = subj.substring(0, subj.indexOf(':'));
   }
-  const timeTd = window['hebcal'].cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
+  const timeTd = conf.cconfig['geo'] === 'none' ? '' : `<td>${timeStr}</td>`;
   // Gregorian dates (alternate dates in Hebrew month mode) should be left-aligned
   const isGregorianDate = cat === 'gregdate' || cat === 'hebdate';
   if (isHebrew && !isGregorianDate) {
@@ -370,19 +373,20 @@ function tableRow(evt) {
     subj = `<a href="${evt.u0}">${subj}</a>`;
   }
   const basename = evt.bn || evt.t0;
-  const memo0 = basename && window['hebcal'].memos[basename];
+  const memo0 = basename && conf.memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
   return `<tr><td>${dateStr}</td>${timeTd}<td><span class="table-event ${className}"${memo}>${subj}</span></td></tr>`;
 }
 
 function monthHtml(month) {
-  const isHebrew = window['hebcal'].locale === 'he';
+  const conf = window['hebcal'];
+  const isHebrew = conf.locale === 'he';
   const dir = isHebrew ? 'rtl' : 'ltr';
   const divBegin = `<div class="month-table" dir="${dir}">`;
   const divEnd = '</div><!-- .month-table -->';
   const heading = getMonthTitle(month, false, false);
-  const timeColumn = window['hebcal'].cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
-  const opts = window['hebcal'].opts;
+  const timeColumn = conf.cconfig['geo'] === 'none' ? '' : '<col style="width:27px">';
+  const opts = conf.opts;
   const dateColWidth = opts.hebrewMonths ? 140 : 116;
   // eslint-disable-next-line max-len
   const tableHead = `<table class="table table-striped" dir="${dir}"><col style="width:${dateColWidth}px">${timeColumn}<col><tbody>`;
@@ -392,7 +396,8 @@ function monthHtml(month) {
 }
 
 function renderMonthTables(months) {
-  if (window['hebcal'].monthTablesRendered) {
+  const conf = window['hebcal'];
+  if (conf.monthTablesRendered) {
     return;
   }
   months.forEach(function(month) {
@@ -403,7 +408,7 @@ function renderMonthTables(months) {
       el.innerHTML = html;
     }
   });
-  window['hebcal'].monthTablesRendered = true;
+  conf.monthTablesRendered = true;
 }
 
 function subjectSpan(str) {
@@ -434,27 +439,29 @@ function renderEventHtml(evt) {
     subj = subjectSpan(subj);
   }
   const className = getEventClassName(evt);
-  const lang = window['hebcal'].lang || 's';
+  const conf = window['hebcal'];
+  const lang = conf.lang || 's';
   if (langNameWithHebrew.has(lang) && evt.h0) {
     subj += `<br><span lang="he" dir="rtl">${evt.h0}</span>`;
   }
   const basename = evt.bn || evt.t0;
-  const memo0 = basename && window['hebcal'].memos[basename];
+  const memo0 = basename && conf.memos[basename];
   const memo = memo0 ? ` title="${memo0}"` : '';
   const url = evt.u0;
   const ahref = url ? `<a href="${url}">` : '';
   const aclose = url ? '</a>' : '';
   // Add left-align class for Gregorian dates in Hebrew mode
-  const isHebrew = window['hebcal'].locale === 'he';
+  const isHebrew = conf.locale === 'he';
   const alignClass = isHebrew ? ' text-end' : '';
   return `<div class="fc-event ${className}${alignClass}"${memo}>${ahref}${subj}${aclose}</div>\n`;
 }
 
 function getMonthTitle(month, center, prevNext) {
-  const isHebrewLang = window['hebcal'].locale === 'he';
+  const conf = window['hebcal'];
+  const isHebrewLang = conf.locale === 'he';
   const span0 = isHebrewLang ? '<span lang="he" dir="rtl">' : '';
   const span1 = isHebrewLang ? '</span>' : '';
-  const localeData = window['hebcal'].localeConfig;
+  const localeData = conf.localeConfig;
   const yearMonth = month.month;
 
   let titleText; let subtitleText;
@@ -503,10 +510,11 @@ function getMonthTitle(month, center, prevNext) {
 }
 
 function makeMonthHtml(month) {
-  const isHebrew = window['hebcal'].locale === 'he';
+  const conf = window['hebcal'];
+  const isHebrew = conf.locale === 'he';
   const span0 = isHebrew ? '<span lang="he" dir="rtl">' : '';
   const span1 = isHebrew ? '</span>' : '';
-  const localeData = window['hebcal'].localeConfig;
+  const localeData = conf.localeConfig;
   let html = getMonthTitle(month, true, true);
   const dir = isHebrew ? ' dir="rtl" ' : ' ';
   html += '<table' + dir + 'class="table table-bordered fc-emulated-table">\n';
@@ -651,7 +659,8 @@ function makeMonthTableBody(month) {
 }
 
 function makeMonthDivs(months) {
-  if (window['hebcal'].monthDivsCreated) {
+  const conf = window['hebcal'];
+  if (conf.monthDivsCreated) {
     return;
   }
   const parentDiv = document.getElementById('hebcal-results');
@@ -677,12 +686,12 @@ function makeMonthDivs(months) {
     wrapperEl.appendChild(agendaEl);
     parentDiv.appendChild(wrapperEl);
   }
-  // parentDiv.style.display = 'block';
-  window['hebcal'].monthDivsCreated = true;
+  conf.monthDivsCreated = true;
 }
 
 function renderCalendarGrids(months) {
-  if (window['hebcal'].resultsRendered) {
+  const conf = window['hebcal'];
+  if (conf.resultsRendered) {
     return;
   }
   months.forEach((month) => {
@@ -693,7 +702,7 @@ function renderCalendarGrids(months) {
       el.innerHTML = html;
     }
   });
-  window['hebcal'].resultsRendered = true;
+  conf.resultsRendered = true;
 }
 
 function paginationListItem({href, title, rel, innerHTML}) {
