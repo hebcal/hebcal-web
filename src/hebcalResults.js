@@ -301,7 +301,7 @@ function splitByMonth(events) {
 }
 
 function getTimeStr(dt) {
-  const allDay = dt.includes('T');
+  const allDay = !dt.includes('T');
   if (allDay) {
     return '';
   }
