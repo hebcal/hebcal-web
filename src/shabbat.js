@@ -86,7 +86,7 @@ export async function shabbatApp(ctx) {
       ctx.state.options.heDateParts = true;
     }
     let obj = myEventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    const cb = empty(q.callback) ? false : q.callback.replace(/[^\w\.]/g, '');
+    const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w\.]/g, '');
     if (cb) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
     }
@@ -94,7 +94,7 @@ export async function shabbatApp(ctx) {
   } else {
     const cookie = ctx.cookies.get('C');
     const p = makePropsForFullHtml(ctx);
-    if (ctx.request.querystring.length === 0 && cookie && cookie.length) {
+    if (ctx.request.querystring.length === 0 && cookie?.length) {
       // private cache only if we're tailoring results by cookie
       ctx.set('Cache-Control', 'private');
     }
@@ -122,10 +122,10 @@ function geoIpRedirect(ctx) {
 
   const cookieStr = ctx.cookies.get('C');
   if (cookieStr) {
-    if (cookieStr.indexOf('geonameid=') !== -1 ||
-        cookieStr.indexOf('zip=') !== -1 ||
-        cookieStr.indexOf('city=') !== -1 ||
-        cookieStr.indexOf('geo=pos') !== -1) {
+    if (cookieStr.includes('geonameid=') ||
+        cookieStr.includes('zip=') ||
+        cookieStr.includes('city=') ||
+        cookieStr.includes('geo=pos')) {
       return false;
     }
   }
@@ -290,7 +290,7 @@ function makePropsForFullHtml(ctx) {
         ctx,
         firstCandles,
         havdalah,
-        parashaItem && parashaItem.desc,
+        parashaItem?.desc,
     );
   const geoUrlArgs = ctx.state.geoUrlArgs;
   const dt = ctx.state.fridayDate.greg();
