@@ -47,7 +47,7 @@ function getGeoFromRow(row) {
   } else if (row.email_candles_geonameid) {
     return {geonameid: String(row.email_candles_geonameid)};
   } else if (row.email_candles_city) {
-    return {city: row.email_candles_city.replace(/\+/g, ' ')};
+    return {city: row.email_candles_city.replaceAll('+', ' ')};
   }
   return {};
 }
@@ -140,7 +140,7 @@ export async function emailForm(ctx) {
     q.em = buff.toString('ascii');
     const db = ctx.mysql;
     const subInfo = await getSubInfo(db, q.em);
-    if (subInfo && subInfo.status === 'active') {
+    if (subInfo?.status === 'active') {
       q = {...subInfo, ...q};
     }
     defaultUnsubscribe = q.unsubscribe === '1';
@@ -206,7 +206,7 @@ export async function emailForm(ctx) {
       const db = ctx.mysql;
       if (typeof q.prev === 'string' && q.prev != q.em) {
         const subInfo = await getSubInfo(db, q.prev);
-        if (subInfo && subInfo.status === 'active') {
+        if (subInfo?.status === 'active') {
           await unsubscribe(ctx, q.prev, subInfo);
         }
       }
@@ -217,8 +217,13 @@ export async function emailForm(ctx) {
       if (subInfo && typeof subInfo.k === 'string') {
         ctx.state.subscriptionId = subInfo.k;
       }
-      if (subInfo && subInfo.status === 'active') {
-        await updateActiveSub(ctx, db, q);
+      if (subInfo?.status === 'active') {
+        try {
+          await updateActiveSub(ctx, db, q);
+        } catch (err) {
+          ctx.logger.warn(err);
+          ctx.throw(400, err.message);
+        }
         if (isJSON) {
           ctx.body = {ok: true};
           return;
@@ -227,7 +232,12 @@ export async function emailForm(ctx) {
           updated: true,
         });
       }
-      await writeStagingInfo(ctx, db, q);
+      try {
+        await writeStagingInfo(ctx, db, q);
+      } catch (err) {
+        ctx.logger.warn(err);
+        ctx.throw(400, err.message);
+      }
       if (isJSON) {
         ctx.body = {ok: true};
         return;
