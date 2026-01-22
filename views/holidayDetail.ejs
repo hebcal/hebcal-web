@@ -3,12 +3,12 @@
   ampForm: true,
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on' : '' %>">
+<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof prev !== 'undefined') { %><link rel="prev" href="<%=prev.href%>"><% } %>
 <% if (typeof next !== 'undefined') { %><link rel="next" href="<%=next.href%>"><% } %>
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="<%=descFirstTwo%> <%=holidayQ%> <%=nextObserved%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
-<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>
