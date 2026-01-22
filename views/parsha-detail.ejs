@@ -7,6 +7,7 @@
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev.anchor%>"><%}%>
 <% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next.anchor%>"><%}%>
+<% if (date && (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100)) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
 ol.list-unstyled li {margin-bottom: 0.33em}
 </style>

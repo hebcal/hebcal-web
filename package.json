@@ -50,10 +50,10 @@
     "csv-parse": "^6.1.0",
     "eslint": "^9.39.2",
     "eslint-plugin-n": "^17.23.2",
-    "gettext-parser": "^9.0.0",
+    "gettext-parser": "^9.0.1",
     "globals": "^17.0.0",
-    "rollup": "^4.55.2",
-    "sass": "^1.97.2",
+    "rollup": "^4.56.0",
+    "sass": "^1.97.3",
     "supertest": "^7.2.2",
     "vitest": "^4.0.17"
   },
@@ -64,7 +64,7 @@
     "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.4",
     "@hebcal/learning": "^6.6.1",
-    "@hebcal/leyning": "^9.3.0",
+    "@hebcal/leyning": "^9.4.0",
     "@hebcal/locales": "^6.3.3",
     "@hebcal/rest-api": "^6.4.0",
     "@hebcal/triennial": "^6.2.0",
@@ -100,7 +100,7 @@
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.3.0",
     "random-bigint": "0.0.1",
-    "transliteration": "^2.6.0",
+    "transliteration": "^2.6.1",
     "ulid": "^3.0.2"
   }
 }
