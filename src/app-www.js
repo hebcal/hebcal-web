@@ -83,7 +83,7 @@ app.use(async function httpMetricMiddleware(ctx, next) {
 });
 app.use(prometheus.middleware({}));
 
-app.use(timeout(6000, {
+app.use(timeout(8000, {
   status: 503,
   message: 'Service Unavailable',
   callback: function(ctx) {

@@ -71,7 +71,7 @@ app.use(async function onlyGetAndHead(ctx, next) {
   await next();
 });
 
-app.use(timeout(6000, {
+app.use(timeout(8000, {
   status: 503,
   message: 'Service Unavailable',
   callback: function(ctx) {
@@ -308,6 +308,6 @@ app.listen(port, () => {
 });
 
 function redirEncQuery(path, encQuery, ctx) {
-  const qs = unescape(path.substring(encQuery + 7)).replace(/;/g, '&');
+  const qs = unescape(path.substring(encQuery + 7)).replaceAll(';', '&');
   httpRedirect(ctx, `/export/export.ics?redir=1&${qs}`, 301);
 }

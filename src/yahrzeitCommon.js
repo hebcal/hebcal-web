@@ -68,6 +68,9 @@ export function compactJsonToSave(obj) {
   }
 }
 
+const TIMEOUT = 7000;
+const shortTimeout = 3000;
+
 /**
  * @param {*} ctx
  * @param {string} id
@@ -76,7 +79,7 @@ export function compactJsonToSave(obj) {
 export async function getYahrzeitDetailsFromDb(ctx, id) {
   const db = ctx.mysql;
   const sql = 'SELECT contents, updated, downloaded FROM yahrzeit WHERE id = ?';
-  const results = await db.query2(ctx, {sql, values: [id], timeout: 5000});
+  const results = await db.query2(ctx, {sql, values: [id], timeout: TIMEOUT});
   const row = results?.[0];
   if (!row) {
     ctx.remove('Cache-Control');
@@ -85,17 +88,15 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
   const obj = row.contents;
   if (!row.downloaded) {
     const sqlUpdate = 'UPDATE yahrzeit SET downloaded = 1, updated = NOW() WHERE id = ?';
-    db.execute2(ctx, {sql: sqlUpdate, values: [id], timeout: 1000})
-        .then(() => {})
+    db.execute({sql: sqlUpdate, values: [id], timeout: shortTimeout})
         .catch((err) => {
-          ctx.logger.error(err);
+          ctx.logger.warn(err);
         });
   }
   const sql2 = 'REPLACE INTO yahrzeit_atime (id, ts) VALUES (?, NOW())';
-  db.execute({sql: sql2, values: [id], timeout: 1000})
-      .then(() => {})
+  db.execute({sql: sql2, values: [id], timeout: shortTimeout})
       .catch((err) => {
-        ctx.logger.error(err);
+        ctx.logger.warn(err);
       });
   // convert from 'x' fields back into ymd fields
   const maxId = getMaxYahrzeitId(obj);

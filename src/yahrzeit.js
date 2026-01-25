@@ -32,6 +32,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {murmur128HexSync, murmur32HexSync} from 'murmurhash3';
 
 const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
+const TIMEOUT = 7000;
 
 /**
  * @param {*} ctx
@@ -183,7 +184,7 @@ function getOrMakeUlid(ctx) {
 async function getCalPickerIds(ctx, ids) {
   const db = ctx.mysql;
   const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
-  const results = await db.query2(ctx, {sql, values: ids, timeout: 5000});
+  const results = await db.query2(ctx, {sql, values: ids, timeout: TIMEOUT});
   const nonEmpty = results.filter((row) => getMaxYahrzeitId(row.contents) !== 0);
   const calendars = nonEmpty.map((row) => {
     const names = getCalendarNames(row.contents);
@@ -356,7 +357,7 @@ async function saveDataToDb(ctx) {
   logInfo.calendarId = id;
   const db = ctx.mysql;
   const sqlExists = 'SELECT contents FROM yahrzeit WHERE id = ?';
-  const results = await db.query2(ctx, {sql: sqlExists, values: [id], timeout: 5000});
+  const results = await db.query2(ctx, {sql: sqlExists, values: [id], timeout: TIMEOUT});
   if (results?.[0]) {
     const prev = results[0].contents;
     compactJsonToSave(prev);
@@ -372,12 +373,12 @@ async function saveDataToDb(ctx) {
   const ip = getIpAddress(ctx);
   if (!results?.[0]) {
     const sql = 'REPLACE INTO yahrzeit (id, created, updated, ip, contents) VALUES (?, NOW(), NOW(), ?, ?)';
-    await db.execute2(ctx, {sql, values: [id, ip, contents], timeout: 5000});
+    await db.execute2(ctx, {sql, values: [id, ip, contents], timeout: TIMEOUT});
     logInfo.msg = `yahrzeit-db: created calendarId=${id}`;
     ctx.logger.info(logInfo);
   } else {
     const sql = 'UPDATE yahrzeit SET updated = NOW(), contents = ?, ip = ? WHERE id = ?';
-    await db.execute2(ctx, {sql, values: [contents, ip, id], timeout: 5000});
+    await db.execute2(ctx, {sql, values: [contents, ip, id], timeout: TIMEOUT});
     logInfo.msg = `yahrzeit-db: updated calendarId=${id}`;
     ctx.logger.info(logInfo);
   }
