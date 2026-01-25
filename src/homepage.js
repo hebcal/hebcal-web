@@ -63,7 +63,7 @@ export async function homepage(ctx) {
   mastheadDates(ctx, dt, afterSunset, hd);
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
-  mastheadDafYomi(ctx, hd);
+  mastheadCandles(ctx, dt, il);
   const [blurb, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
   if (blurb) {
     ctx.state.holidayBlurb = blurb;
@@ -71,6 +71,8 @@ export async function homepage(ctx) {
   } else {
     ctx.state.holidayBlurb = false;
   }
+  ctx.state.dafYomi = DailyLearning.lookup('dafYomi', hd);
+  ctx.state.mishnaYomi = DailyLearning.lookup('mishnaYomi', hd);
   return ctx.render('homepage');
 }
 
@@ -109,6 +111,27 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   items.push(locale === 'he' ? hd.renderGematriya() : hd.render(lg));
 }
 
+const MASK_CANDLES = flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS | flags.YOM_TOV_ENDS;
+
+function mastheadCandles(ctx, dt, il) {
+  const location = ctx.state.location;
+  if (!location) return;
+  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
+  const options = {
+    start: dt,
+    end: dt,
+    il,
+    location,
+    candlelighting: true,
+    locale: lg,
+  };
+  const events = HebrewCalendar.calendar(options);
+  const items = ctx.state.items;
+  for (const ev of events.filter((ev) => ev.fmtTime && Boolean(ev.getFlags() & MASK_CANDLES))) {
+    items.push(location.getShortName() + ' ' + ev.renderBrief(lg) + ': ' + ev.fmtTime);
+  }
+}
+
 function mastheadParsha(ctx, hd, il) {
   const items = ctx.state.items;
   const saturday = hd.onOrAfter(6);
@@ -145,11 +168,6 @@ function mastheadHolidays(ctx, hd, il) {
         const suffix = il && url && !url.includes('?') ? '?i=on' : '';
         return url ? `<a href="${url}${suffix}">${desc}</a>` : desc;
       }).forEach((str) => items.push(str));
-}
-
-function mastheadDafYomi(ctx, hd) {
-  ctx.state.dafYomi = DailyLearning.lookup('dafYomi', hd);
-  ctx.state.mishnaYomi = DailyLearning.lookup('mishnaYomi', hd);
 }
 
 function myDateFormat(d) {
@@ -410,7 +428,7 @@ const roshChodeshBlurb = '🌒&nbsp;Chodesh Tov!&nbsp;&nbsp;<span lang="he" dir=
 function getChanukahGreeting(d, ev) {
   const url = shortenUrl(ev.url());
   const dow = d.day();
-  let when = lightCandlesWhen(dow);
+  const when = lightCandlesWhen(dow);
   const candles = typeof ev.chanukahDay === 'number' ? ev.chanukahDay + 1 : 1;
   const nth = Locale.ordinal(candles, 'en');
   const dowStr = d.format('dddd');
