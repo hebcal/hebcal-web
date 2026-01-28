@@ -1,4 +1,4 @@
-<div <%= q.cfg === 'i2' ? '' : 'id="hebcal" ' %>class="hebcal-container">
+<div <%- q.cfg === 'i2' ? '' : 'id="hebcal" ' %>class="hebcal-container">
 <div class="hebcal-<%= location.getGeoId() %>">
 <h3><%= h3title %></h3>
 <%- await include('partials/shabbat-items.ejs') -%>
