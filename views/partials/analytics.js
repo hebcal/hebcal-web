@@ -54,6 +54,8 @@ if(c0&&c0.length&&typeof URLSearchParams=='function'){
       _paq.push(['setVisitorId', vid]);
       _paq.push(['setUserId', uid]);
     }
+  }else if(cks['hebcal']){
+    _paq.push(['setUserId',cks['hebcal']]);
   }
 }
 _paq.push(['trackPageView']);
