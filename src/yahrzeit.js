@@ -421,6 +421,8 @@ async function getDetailsFromDb(ctx) {
   return obj;
 }
 
+const maxEventsIcsSub = 2400;
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
@@ -459,7 +461,8 @@ export async function yahrzeitDownload(ctx) {
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
   const events = await makeYahrzeitEvents(maxId, query, reminder);
 
-  if (query.dl == '1') {
+  const isAttachment = query.dl == '1';
+  if (isAttachment) {
     ctx.response.attachment(basename(rpath));
   }
   if (ics) {
@@ -486,7 +489,8 @@ export async function yahrzeitDownload(ctx) {
       }
     }
     const zeroEvents = events.length === 0;
-    const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
+    const events1 = events.length > maxEventsIcsSub && !isAttachment ? events.slice(0, maxEventsIcsSub) : events;
+    const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
     }
