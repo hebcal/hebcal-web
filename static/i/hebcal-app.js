@@ -65,7 +65,7 @@ const hebcalClient = {
           const s = `<strong>${name}</strong>`;
           const admin1 = item.cc === 'IL' ? '' : item.admin1 || '';
           if (ctry && typeof admin1 === 'string' && admin1.length > 0 &&
-              !admin1.startsWith(item.asciiname)) {
+              !admin1.includes(item.asciiname)) {
             ctryStr = `${admin1}, ${ctryStr}`;
           }
           if (ctryStr) {
