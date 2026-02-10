@@ -726,6 +726,28 @@ describe('Router Tests', () => {
       expect(response.status).toBe(200);
       expect(response.type).toContain('json');
     });
+
+    it('should not include admin1 in value for Berlin', async () => {
+      const response = await request(app.callback())
+          .get('/complete?q=Berlin');
+      expect(response.status).toBe(200);
+      expect(response.type).toContain('json');
+      const body = response.body;
+      expect(typeof body).toBe('object');
+      expect(Array.isArray(body)).toBe(true);
+      expect(body.length).toBeGreaterThanOrEqual(1);
+      expect(body[0]).toEqual({
+        "admin1": "State of Berlin",
+        "asciiname": "Berlin",
+        "cc": "DE",
+        "country": "Germany",
+        "flag": "🇩🇪",
+        "geo": "geoname",
+        "id": 2950159,
+        "value": "Berlin, Germany",
+      });
+    });
+
   });
 
   describe('Daily Learning Routes', () => {
