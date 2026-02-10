@@ -12,7 +12,7 @@ describe('Hebcal Routes', () => {
 
   it('should handle /hebcal with JSON config', async () => {
     const response = await request(app.callback())
-        .get('/hebcal?v=1&cfg=json&maj=on&min=off&mod=off&nx=off&year=now&month=x&ss=off&mf=off&c=off&geo=zip&zip=07039&s=off');
+        .get('/hebcal?v=1&cfg=json&maj=on&min=off&mod=off&nx=off&year=now&month=x&ss=off&mf=off&c=off&geo=city&city=Boston&s=off');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
