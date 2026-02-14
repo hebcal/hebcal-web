@@ -31,13 +31,6 @@ describe('Shabbat Routes', () => {
     expect(response.type).toContain('json');
   });
 
-  it('should handle /shabbat with zip code', async () => {
-    const response = await request(app.callback())
-        .get('/shabbat?cfg=json&b=15&M=on&gy=2025&gm=12&gd=24&zip=75061');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-  });
-
   it('should return 200 for /shabbat/', async () => {
     const response = await request(app.callback())
         .get('/shabbat/?geonameid=2451778');

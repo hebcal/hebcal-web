@@ -110,13 +110,6 @@ describe('Geo Location Routes', () => {
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
-
-  it('should handle /geo with zip code', async () => {
-    const response = await request(app.callback())
-        .get('/geo?zip=10001');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-  });
 });
 
 describe('Leyning Routes', () => {

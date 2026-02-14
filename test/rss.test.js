@@ -97,9 +97,9 @@ describe('Daily Learning RSS Feeds', () => {
 });
 
 describe('Shabbat Times RSS Feeds', () => {
-  it('should return Shabbat times RSS with zip code', async () => {
+  it('should return Shabbat times RSS with city=', async () => {
     const response = await request(app.callback())
-        .get('/shabbat?geo=zip&zip=90210&m=50&cfg=r');
+        .get('/shabbat?city=Los+Angeles&m=50&cfg=r');
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
     expect(response.text).toContain('<?xml');
