@@ -20,6 +20,7 @@ import {holidayMeta} from './holidayMeta.js';
 import {distance, closest} from 'fastest-levenshtein';
 import {getHolidayMeta} from './getHolidayMeta.js';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 
 dayjs.extend(isSameOrAfter);
 
@@ -174,6 +175,7 @@ export async function holidayDetail(ctx) {
   const pesachSukkotItems = isShaloshRegalim && holiday !== 'Shavuot' ?
     makeMultiDayHolidayItems(holiday, upcomingHebrewYear, il) :
     null;
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   await ctx.render('holidayDetail', {
     title,
     year,

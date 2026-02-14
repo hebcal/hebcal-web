@@ -12,6 +12,7 @@ import {
 import {makeETag} from './etag.js';
 import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
+import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 
 const SHMINI_ATZERET = 'Shmini Atzeret';
 const SIMCHAT_TORAH = 'Simchat Torah';
@@ -178,6 +179,7 @@ export async function holidayYearIndex(ctx) {
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
   const title = 'Jewish Holidays ' + makePageTitle(il, isHebrewYear, calendarYear, year) + ' - Hebcal';
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('holiday-year-index', {
     today: dayjs(),
     year: year.padStart(4, '0'),

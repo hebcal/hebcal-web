@@ -2,7 +2,7 @@ import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot} from '@hebcal/core
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
-import createError from 'http-errors';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
 import {makeETag} from './etag.js';
 import {httpRedirect, getBaseFromPath, throw410} from './common.js';
@@ -135,6 +135,7 @@ export async function parshaDetail(ctx) {
   }
   // doubled parsha overwrites first half
   Object.assign(commentary, drash[parsha.name]);
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   await ctx.render('parsha-detail', {
     title,
     parsha,

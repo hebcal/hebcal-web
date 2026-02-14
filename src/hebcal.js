@@ -489,7 +489,7 @@ function renderJson(ctx) {
   const yearNow = orig.year === undefined || orig.year === 'now' || orig.month === 'now';
   const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
   const cacheCtrlStr = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
-    cacheControl(0.125);
+    cacheControl(0.375);
   ctx.set('Cache-Control', cacheCtrlStr);
   ctx.body = obj;
 }

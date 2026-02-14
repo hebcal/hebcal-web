@@ -8,6 +8,7 @@ import {httpRedirect} from './common.js';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD,
   OMER_TITLE, makeQueryAndDownloadProps} from './holidayCommon.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
+import {cacheControl} from './cacheControl.js';
 
 const DoWtiny = ['Su', 'M', 'Tu', 'W', 'Th', 'F', 'Sa'];
 
@@ -176,6 +177,8 @@ const rchNames = [
   'Elul',
 ];
 
+const CACHE_CONTROL_3DAYS = cacheControl(3);
+
 export async function holidayMainIndex(ctx) {
   const dt = new Date();
   const hyear0 = parseInt(ctx.request.query?.year, 10);
@@ -240,6 +243,7 @@ export async function holidayMainIndex(ctx) {
     il,
     numYears: 5,
   });
+  ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   await ctx.render('holiday-main-index', {
     RH: dayjs(tishrei1.greg()),
     today: dayjs(dt),

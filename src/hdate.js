@@ -6,7 +6,8 @@ import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {send} from '@koa/send';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 
-const hdateMinDir = '/var/www/views/partials';
+const hdateMinDir = process.env.NODE_ENV === 'production' ?
+  '/var/www/views/partials' : './views/partials';
 
 function getLocale(rpath) {
   if (rpath.startsWith('/etc/hdate-he.js')) return 'he';
