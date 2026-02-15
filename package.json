@@ -66,7 +66,7 @@
     "@hebcal/icalendar": "^6.3.5",
     "@hebcal/learning": "^6.6.1",
     "@hebcal/leyning": "^9.4.0",
-    "@hebcal/locales": "^6.3.3",
+    "@hebcal/locales": "^6.3.4",
     "@hebcal/rest-api": "^6.4.0",
     "@hebcal/triennial": "^6.2.0",
     "@koa/ejs": "^5.1.0",

@@ -97,12 +97,7 @@ export async function shabbatApp(ctx) {
     }
     ctx.body = obj;
   } else {
-    const cookie = ctx.cookies.get('C');
     const p = makePropsForFullHtml(ctx);
-    if (ctx.request.querystring.length === 0 && cookie?.length) {
-      // private cache only if we're tailoring results by cookie
-      ctx.set('Cache-Control', 'private');
-    }
     if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
@@ -152,7 +147,7 @@ function geoIpRedirect(ctx) {
 }
 
 function redir(ctx, dest) {
-  ctx.set('Cache-Control', 'private, max-age=3600');
+  ctx.set('Cache-Control', 'private, max-age=1200');
   httpRedirect(ctx, dest);
 }
 

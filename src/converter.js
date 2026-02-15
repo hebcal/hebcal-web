@@ -55,7 +55,7 @@ export async function hebrewDateConverter(ctx) {
     const il = location.getIsrael() ? '&i=on' : '';
     const json = q.cfg == 'json' ? '&cfg=json' : '';
     const lg = empty(q.lg) ? '' : `&lg=${q.lg}`;
-    ctx.set('Cache-Control', 'private, max-age=3600');
+    ctx.set('Cache-Control', 'private, max-age=1200');
     const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}${lg}`;
     httpRedirect(ctx, url, 302);
     return;

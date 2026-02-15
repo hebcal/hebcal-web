@@ -21,7 +21,7 @@ export function dailyLearningApp(ctx) {
     if (d.hour() > 19) {
       d = d.add(1, 'day');
     }
-    ctx.set('Cache-Control', 'private, max-age=3600');
+    ctx.set('Cache-Control', 'private, max-age=1200');
     httpRedirect(ctx, `/learning/${d.format('YYYY-MM-DD')}`, 302);
     return;
   } else if (rpath === '/learning/sitemap.txt') {
