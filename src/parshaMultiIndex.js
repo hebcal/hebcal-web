@@ -5,6 +5,7 @@ import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js'
 import {getDefaultHebrewYear, simchatTorahDate, yearIsOutsideHebRange} from './dateUtil.js';
 import {makeETag} from './etag.js';
 import {throw410} from './common.js';
+import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import dayjs from 'dayjs';
 
 export async function parshaMultiYearIndex(ctx) {
@@ -72,6 +73,7 @@ export async function parshaMultiYearIndex(ctx) {
   const next = new URL(canonical);
   next.searchParams.set('year', hyear + 5);
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('parsha-multi-year-index', {
     il,
     hyear,

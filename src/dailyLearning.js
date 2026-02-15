@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
 import {httpRedirect} from './common.js';
-import {CACHE_CONTROL_1_YEAR} from './cacheControl.js';
+import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {localeMap} from './lang.js';
 import {queryLongDescr, dailyLearningConfig} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
@@ -128,6 +128,7 @@ export function dailyLearningApp(ctx) {
   });
   items.unshift(...items0);
 
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   return ctx.render('dailyLearning', {
     d,
     hd,

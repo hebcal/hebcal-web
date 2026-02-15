@@ -10,6 +10,7 @@ import {getNumYears} from './calendar.js';
 import {shortenUrl, throw410} from './common.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
+import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 
 export async function parshaYearApp(ctx) {
   const rpath = ctx.request.path;
@@ -72,6 +73,7 @@ export async function parshaYearApp(ctx) {
 
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
 
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('parsha-year', {
     hyear,
     il,

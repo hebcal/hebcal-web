@@ -178,6 +178,7 @@ export function wwwRouter() {
       const holidayCalendars = staticCalendars
           .filter((cfg) => cfg.ordinal)
           .sort((a, b) => a.ordinal - b.ordinal);
+      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
       return ctx.render('ical', {
         title: 'Jewish Holiday downloads for desktop, mobile and web calendars - Hebcal',
         langNames,
