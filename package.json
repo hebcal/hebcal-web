@@ -25,12 +25,13 @@
     "dev": "node src/app-www.js",
     "dev:download": "NODE_PORT=8081 node src/app-download.js",
     "po2json": "node ./po2json.js po/he.po po/pt.po po/es.po po/fr.po po/ashkenazi.po",
-    "build": "npm run po2json && npm run css-compile && npm run css-rename && npx rollup -c",
+    "build": "npm run po2json && npm run css-compile && npm run css-rename && npm run cp-simplecss && npx rollup -c",
     "deploy": "./deploy.sh",
     "start": "node src/app-www.js",
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto && mv src/download_pb.js src/download_pb.cjs",
     "css-compile": "sass --style compressed --embed-sources --no-error-css --load-path=node_modules --load-path=views/partials scss/:css/",
     "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
+    "cp-simplecss": "cp node_modules/simpledotcss/simple.min.css static/simple.min.css",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -49,7 +50,7 @@
     "bootstrap5-autocomplete": "^1.1.42",
     "csv-parse": "^6.1.0",
     "eslint": "^10.0.0",
-    "eslint-plugin-n": "^17.23.2",
+    "eslint-plugin-n": "^17.24.0",
     "gettext-parser": "^9.0.1",
     "globals": "^17.3.0",
     "rollup": "^4.57.1",
@@ -100,6 +101,7 @@
     "probe-image-size": "^7.2.3",
     "quick-lru": "^7.3.0",
     "random-bigint": "0.0.1",
+    "simpledotcss": "^2.3.7",
     "transliteration": "^2.6.1",
     "ulid": "^3.0.2"
   }

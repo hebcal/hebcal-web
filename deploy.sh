@@ -20,6 +20,7 @@ compress_file ./static/i/$npm_package_config_sprite
 compress_file ./static/i/$npm_package_config_clientapp
 compress_file ./static/i/$npm_package_config_csprite
 compress_file ./static/i/$npm_package_config_mainCss
+compress_file ./static/simple.min.css
 
 # deploy for prod
 rsync -av ./fonts/ /var/www/fonts/

@@ -178,7 +178,7 @@ const CSP_HEADER_NAME = 'Content-Security-Policy';
 app.use(async function errorCsp(ctx, next) {
   await next();
   if (ctx.status !== 200 && ctx.type === 'text/html' && !ctx.response.has(CSP_HEADER_NAME)) {
-    ctx.set(CSP_HEADER_NAME, 'default-src \'self\'; style-src \'unsafe-inline\'');
+    ctx.set(CSP_HEADER_NAME, `default-src 'self'; style-src 'self' 'unsafe-inline'`);
   }
 });
 

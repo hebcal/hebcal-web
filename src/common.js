@@ -113,9 +113,7 @@ export function getBaseFromPath(ctx) {
 }
 
 export function throw410(ctx) {
-  ctx.throw(410,
-      `The requested resource ${ctx.request.path} is no longer available on this server ` +
-      `and there is no forwarding address. Please remove all references to this resource.`);
+  ctx.throw(410, 'Gone');
 }
 
 /**
