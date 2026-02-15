@@ -41,15 +41,20 @@ export async function shabbatApp(ctx) {
   }
   ctx.status = 200;
   const {q, options, dateOverride} = makeOptions(ctx);
-  // only set expiry if there are CGI arguments
-  if (ctx.status < 400 && ctx.request.querystring.length > 0) {
+  // if no CGI args, force redirect to location-based URL
+  if (ctx.status === 200 && ctx.request.querystring.length === 0) {
+    const location = options.location;
+    const geoUrlArgs = makeGeoUrlArgs({}, location, options);
+    const dest = '/shabbat?' + geoUrlArgs;
+    redir(ctx, dest);
+    return;
+  }
+  if (ctx.status === 200) {
     if (dateOverride) {
       ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     } else {
       expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
     }
-  }
-  if (ctx.status === 200) {
     ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
     if (ctx.fresh) {
       ctx.status = 304;
@@ -147,7 +152,7 @@ function geoIpRedirect(ctx) {
 }
 
 function redir(ctx, dest) {
-  ctx.set('Cache-Control', 'private, max-age=0');
+  ctx.set('Cache-Control', 'private, max-age=3600');
   httpRedirect(ctx, dest);
 }
 

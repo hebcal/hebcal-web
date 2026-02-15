@@ -118,7 +118,7 @@ export function getGeoKeysToRemove(geo) {
   }
 }
 
-export const geonameIdCandleOffset = {
+const geonameIdCandleOffset = {
   '281184': 40, // Jerusalem
   '294801': 30, // Haifa
   '293067': 30, // Zikhron Yaakov

@@ -217,8 +217,7 @@ function makeFutureYearsGreg(d, locale) {
       const hdate = new HDate(dt);
       const d = dayjs(dt).locale(locale);
       arr2.push({hd: hdate, d: d, isoDate: dateToISOString(dt)});
-    // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+    } catch {
       // ignore error from makeGregDate
     }
   }
