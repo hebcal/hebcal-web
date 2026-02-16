@@ -10,7 +10,7 @@ msgstr ""
 msgid "Shabbat Times for"
 msgstr "Sjabbat-tijden voor"
 
-msgid "This week's Torah portion is"
+msgid "This week’s Torah portion is"
 msgstr "De Toraportie van deze week is"
 
 msgid "occurs on"
