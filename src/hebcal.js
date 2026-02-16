@@ -244,6 +244,14 @@ function getHebMonthNames(events, lang) {
   return months;
 }
 
+function longCacheCtrl(ctx) {
+  const orig = ctx.request.query;
+  const yearNow = orig.year === undefined || orig.year === 'now' || orig.month === 'now';
+  const options = ctx.state.options;
+  const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
+  return (startEnd || !yearNow);
+}
+
 const LEARNING_MASK =
   flags.DAILY_LEARNING |
   flags.DAF_YOMI |
@@ -306,8 +314,14 @@ function renderHtml(ctx) {
     }
     return item;
   });
+  let didSetCookie = false;
   if (q.set !== 'off') {
-    possiblySetCookie(ctx, q);
+    didSetCookie = possiblySetCookie(ctx, q);
+  }
+  if (!didSetCookie) {
+    const cacheCtrlStr = longCacheCtrl(ctx) ? cacheControl(3) :
+      cacheControl(0.125);
+    ctx.set('Cache-Control', cacheCtrlStr);
   }
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
@@ -485,10 +499,7 @@ function renderJson(ctx) {
   if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
-  const orig = ctx.request.query;
-  const yearNow = orig.year === undefined || orig.year === 'now' || orig.month === 'now';
-  const startEnd = typeof options.start === 'object' && typeof options.end === 'object';
-  const cacheCtrlStr = (startEnd || !yearNow) ? CACHE_CONTROL_7DAYS :
+  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
     cacheControl(0.375);
   ctx.set('Cache-Control', cacheCtrlStr);
   ctx.body = obj;
