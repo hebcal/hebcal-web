@@ -157,6 +157,9 @@ async function renderIcal(ctx) {
   ctx.response.type = 'text/calendar; charset=utf-8';
   icalOpt.utmSource = 'api';
   icalOpt.utmMedium = 'icalendar';
+  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
+    cacheControl(0.25);
+  ctx.set('Cache-Control', cacheCtrlStr);
   ctx.body = await eventsToIcalendar(events, icalOpt);
 }
 
