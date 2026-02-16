@@ -127,7 +127,7 @@ function addHref(r, countryCode) {
   const b = queryDefaultCandleMins(r);
   const ccDefaults = langTzDefaults[countryCode] || langTzDefaults['US'];
   const lg = ccDefaults[0] || 's';
-  r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}`;
+  r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}&set=off`;
 }
 
 function isFresh(ctx) {

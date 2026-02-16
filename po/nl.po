@@ -1,0 +1,20 @@
+#
+msgid ""
+msgstr ""
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Shabbat Times for"
+msgstr "Sjabbat-tijden voor"
+
+msgid "This week's Torah portion is"
+msgstr "De Toraportie van deze week is"
+
+msgid "occurs on"
+msgstr "valt op"
+
+msgid "on"
+msgstr "op"

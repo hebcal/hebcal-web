@@ -5,6 +5,7 @@ package-lock.json
 css
 static/i/style-*.css
 static/simple.min.css
+static/simple.min.css.*
 
 # Logs
 logs
