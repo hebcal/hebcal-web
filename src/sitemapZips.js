@@ -17,7 +17,7 @@ export async function sitemapZips(ctx) {
     return;
   }
   const body = results
-      .map((r) => `https://www.hebcal.com/shabbat?zip=${r.ZipCode}&b=18&M=on&lg=s\n`)
+      .map((r) => `https://www.hebcal.com/shabbat?zip=${r.ZipCode}&b=18&M=on&lg=s&set=off\n`)
       .join('');
   db.close();
   ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
