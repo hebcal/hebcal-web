@@ -44,7 +44,7 @@ export async function shabbatApp(ctx) {
   // if no CGI args, force redirect to location-based URL
   if (ctx.status === 200 && ctx.request.querystring.length === 0) {
     const location = options.location;
-    const geoUrlArgs = makeGeoUrlArgs({}, location, options);
+    const geoUrlArgs = makeGeoUrlArgs(q, location, options);
     const dest = '/shabbat?' + geoUrlArgs;
     redir(ctx, dest);
     return;
