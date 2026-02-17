@@ -27,7 +27,9 @@ export function makeETag(ctx, options, attrs) {
   }
   const enc = ctx.get('accept-encoding');
   if (enc) {
-    if (enc.includes('br')) {
+    if (enc.includes('zstd')) {
+      etagObj.zstd = 1;
+    } else if (enc.includes('br')) {
       etagObj.br = 1;
     } else if (enc.includes('gzip')) {
       etagObj.gzip = 1;
