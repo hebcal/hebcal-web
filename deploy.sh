@@ -6,6 +6,7 @@ compress_file() {
     file=$1
     brotli -f --keep --best "${file}"
     gzip -f --keep --best "${file}"
+    zstd -f --keep -19 "${file}"
 }
 
 if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then
