@@ -217,7 +217,7 @@ function makeHebMonthStr(d, rtl, options) {
   }
   const endYearStr = useGematriya ? gematriya(endYear) : endYear;
   str += ' ' + endYearStr;
-  return rtl ? reverseHebrewWords(str) : str.replace(/'/g, '’');
+  return rtl ? reverseHebrewWords(str) : str.replaceAll('\'', '’');
 }
 
 // Hebrew month mode: Hebrew month is primary, Gregorian range is secondary

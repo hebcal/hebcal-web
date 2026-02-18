@@ -61,14 +61,14 @@ a:not([href]):not([class]),a:not([href]):not([class]):hover {
 .bullet-list-inline li:after{content:"\00a0\00a0\00b7"}
 .bullet-list-inline li:last-child:after{content:""}
 .label{text-transform:none}
-:lang(he) {
+:lang(he), :lang(yi) {
   font-family:'Adobe Hebrew','SBL Hebrew',David,serif;
   font-size:125%;
   font-style:normal;
   font-weight:400;
   direction:rtl;
 }
-small:lang(he) {
+small:lang(he), small:lang(yi) {
   font-size:100%;
 }
 a.outbound::after {

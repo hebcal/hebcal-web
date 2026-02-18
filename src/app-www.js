@@ -119,7 +119,7 @@ app.use(async function fixup0(ctx, next) {
   if (qs?.length) {
     const semi = qs.indexOf(';');
     if (semi !== -1) {
-      ctx.request.querystring = qs.replace(/;/g, '&');
+      ctx.request.querystring = qs.replaceAll(';', '&');
     }
     // We've seen weird qs that have ?back=foo appended
     const qs2 = ctx.request.querystring;
@@ -150,6 +150,12 @@ app.use(compress({
     params: {
       [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
       [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
+    },
+  },
+  zstd: {
+    params: {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      [zlib.constants.ZSTD_c_compressionLevel]: 12,
     },
   },
 }));

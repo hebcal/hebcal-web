@@ -131,6 +131,12 @@ app.use(compress({
       [zlib.constants.BROTLI_PARAM_QUALITY]: 3,
     },
   },
+  zstd: {
+    params: {
+      // eslint-disable-next-line n/no-unsupported-features/node-builtins
+      [zlib.constants.ZSTD_c_compressionLevel]: 10,
+    },
+  },
 }));
 
 app.use(stopIfTimedOut());
