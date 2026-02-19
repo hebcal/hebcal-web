@@ -119,7 +119,9 @@ async function renderBrowseCountryXml(props, ctx) {
   expiresSaturdayNight(ctx, now, tzid);
   ctx.type = 'text/xml';
   props.writeResp = false;
-  props.lastmod = now.toISOString();
+  const today = dayjs.tz(now, tzid);
+  const pastSunday = today.day(0);
+  props.lastmod = pastSunday.format('YYYY-MM-DD');
   ctx.body = await ctx.render('shabbat-browse-country-xml', props);
 }
 
@@ -166,7 +168,7 @@ export async function shabbatBrowse(ctx) {
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
       countries: Object.keys(countryIdToIso),
-      lastmod: new Date().toISOString(),
+      lastmod: dayjs().day(0).format('YYYY-MM-DD'),
     });
     return;
   }

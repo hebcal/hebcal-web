@@ -45,6 +45,26 @@ describe('Shabbat Routes', () => {
     expect(response.type).toContain('html');
   });
 
+  it('should return 200 for /shabbat/browse/sitemap.xml', async () => {
+    const response = await request(app.callback())
+        .get('/shabbat/browse/sitemap.xml');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('xml');
+  });
+
+  it('should return 200 for /shabbat/browse/costa-rica.xml', async () => {
+    const response = await request(app.callback())
+        .get('/shabbat/browse/costa-rica.xml');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('xml');
+  });
+
+  it('should return 404 for /shabbat/browse/bogus.xml', async () => {
+    const response = await request(app.callback())
+        .get('/shabbat/browse/bogus.xml');
+    expect(response.status).toBe(404);
+  });
+
   it.skip('should redirect when X-Client-IP header is set with no query params', async () => {
     const response = await request(app.callback())
         .get('/shabbat')
