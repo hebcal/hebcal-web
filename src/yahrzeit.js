@@ -467,10 +467,15 @@ export async function yahrzeitDownload(ctx) {
   }
   if (ics) {
     ctx.response.type = 'text/calendar; charset=utf-8';
+    const caldesc = makeCalendarTitle(query, Number.POSITIVE_INFINITY);
+    const title = makeCalendarTitle(query, 64);
     const opts = {
       yahrzeit: true,
       emoji: true,
-      title: makeCalendarTitle(query, 64),
+      title: title,
+      caldesc: caldesc === title ?
+        'Personal anniversaries from Hebcal.com' :
+        'Hebcal ' + caldesc,
       relcalid: ctx.state.relcalid ? `hebcal-${ctx.state.relcalid}` : null,
       publishedTTL: 'P1D',
       sequence: +(query.seq) || 1,
