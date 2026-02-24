@@ -3,7 +3,10 @@ import {getSedra, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {utmSourceFromRef} from './common.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
+import {cacheControl} from './cacheControl.js';
 import dayjs from 'dayjs';
+
+const CACHE_CONTROL_1DAY = cacheControl(1);
 
 const shortToLong = {
   h: 'holidays',
@@ -50,6 +53,7 @@ export function shortUrlRedir(ctx) {
   if (!destUrl) {
     destUrl = `https://www.hebcal.com/${dest}/${base}?` + qs.toString();
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_1DAY);
   ctx.redirect(destUrl);
 }
 
