@@ -68,6 +68,35 @@ describe('v4 PDF downloads', () => {
   });
 });
 
+describe('Compression', () => {
+  const icsPath = '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics';
+
+  it('compresses with gzip when Accept-Encoding: gzip', async () => {
+    const response = await request(app.callback())
+        .get(icsPath)
+        .set('Accept-Encoding', 'gzip');
+    expect(response.status).toBe(200);
+    expect(response.headers['content-encoding']).toBe('gzip');
+    expect(response.text).toContain('BEGIN:VCALENDAR');
+  });
+
+  it('compresses with brotli when Accept-Encoding: br', async () => {
+    const response = await request(app.callback())
+        .get(icsPath)
+        .set('Accept-Encoding', 'br');
+    expect(response.status).toBe(200);
+    expect(response.headers['content-encoding']).toBe('br');
+  });
+
+  it('compresses with zstd when Accept-Encoding: zstd', async () => {
+    const response = await request(app.callback())
+        .get(icsPath)
+        .set('Accept-Encoding', 'zstd');
+    expect(response.status).toBe(200);
+    expect(response.headers['content-encoding']).toBe('zstd');
+  });
+});
+
 describe('export URLs with semicolon-separated parameters', () => {
   it('returns 200 ICS for /export with v=1 and Hebrew year via semicolons', async () => {
     const response = await request(app.callback())
