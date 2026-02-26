@@ -32,6 +32,7 @@
     "css-compile": "sass --style compressed --embed-sources --no-error-css --load-path=node_modules --load-path=views/partials scss/:css/",
     "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
     "cp-simplecss": "cp node_modules/simpledotcss/simple.min.css static/simple.min.css",
+    "pretest": "touch hebcal-dot-com.ini",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
