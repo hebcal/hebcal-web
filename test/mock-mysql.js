@@ -1,6 +1,18 @@
 export class MockMysqlDb {
   constructor() {
     this.mockData = {
+      yahrzeitCalendars: {
+        '01jthv2t5k88yermamssn96pzf': {
+          contents: {
+            x1: '1978-12-08', // Golda Meir's date of death
+            n1: 'Golda Meir',
+            t1: 'y',
+            years: 20,
+          },
+          updated: new Date('2025-01-01'),
+          downloaded: 1,
+        },
+      },
       subscriptions: {
         '01jthv2t5k88yermamssn96pze': {
           email_id: '01jthv2t5k88yermamssn96pze',
@@ -48,6 +60,13 @@ export class MockMysqlDb {
         const row = subscriptionId ? this.mockData.subscriptions[subscriptionId] : null;
         return row ? [row] : [];
       }
+    }
+
+    // Handle SELECT queries for yahrzeit calendar data
+    if (sql.includes('SELECT') && sql.includes('FROM yahrzeit') && !sql.includes('yahrzeit_email')) {
+      const id = Array.isArray(params) ? params[0] : params;
+      const row = this.mockData.yahrzeitCalendars[id];
+      return row ? [row] : [];
     }
 
     // Handle SELECT queries for yahrzeit verification
