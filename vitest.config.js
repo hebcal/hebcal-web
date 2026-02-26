@@ -6,5 +6,12 @@ export default defineConfig({
     environment: 'node',
     testTimeout: 10000,
     hookTimeout: 10000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov', 'html'],
+      include: ['src/**/*.js'],
+      exclude: ['src/**/*.cjs'],
+      reportOnFailure: true,
+    },
   },
 });

@@ -33,6 +33,7 @@
     "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
     "cp-simplecss": "cp node_modules/simpledotcss/simple.min.css static/simple.min.css",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
   },
   "keywords": [
@@ -46,6 +47,7 @@
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^0.4.4",
+    "@vitest/coverage-v8": "^4.0.18",
     "bootstrap": "^5.3.8",
     "bootstrap5-autocomplete": "^1.1.42",
     "csv-parse": "^6.1.0",
