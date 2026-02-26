@@ -1,6 +1,7 @@
-import {describe, it, expect} from 'vitest';
+import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
+import {injectZipsMock} from './zipsMock.js';
 
 describe('Zmanim and Omer Routes', () => {
   it('should return 200 for /zmanim', async () => {
@@ -161,11 +162,18 @@ describe('Link Routes', () => {
 });
 
 describe('Sitemap Routes', () => {
-  it('should return 200 for /sitemap_zips.txt', async () => {
+  let teardown;
+  beforeAll(() => {
+    teardown = injectZipsMock(app.context.db);
+  });
+  afterAll(() => teardown());
+
+  it('should return 200 for /sitemap_zips.txt and include zip 90210', async () => {
     const response = await request(app.callback())
         .get('/sitemap_zips.txt');
     expect(response.status).toBe(200);
     expect(response.type).toContain('text');
+    expect(response.text).toContain('90210');
   });
 
   it('should reject POST on /sitemap_zips.txt with 405', async () => {
