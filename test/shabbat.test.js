@@ -1,7 +1,8 @@
 
-import {describe, it, expect} from 'vitest';
+import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
+import {injectZipsMock} from './zipsMock.js';
 
 describe('Shabbat Routes', () => {
   it('should handle semicolon-separated query parameters', async () => {
@@ -89,5 +90,21 @@ describe('Fridge Routes', () => {
         .get('/shabbat/fridge.cgi?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
+  });
+});
+
+describe('ZIP code lookup with mock database', () => {
+  let teardown;
+  beforeAll(() => {
+    teardown = injectZipsMock(app.context.db);
+  });
+  afterAll(() => teardown());
+
+  it('returns 200 HTML for /shabbat?zip=90210 (Beverly Hills)', async () => {
+    const response = await request(app.callback())
+        .get('/shabbat?zip=90210');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('html');
+    expect(response.text).toContain('Beverly Hills');
   });
 });
