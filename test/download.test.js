@@ -1,6 +1,11 @@
-import {describe, it, expect} from 'vitest';
+import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-download.js';
+import {MockMysqlDb} from './mock-mysql.js';
+
+beforeAll(() => {
+  app.context.mysql = new MockMysqlDb();
+});
 
 describe('Static ICS files', () => {
   it('returns 404 for /ical/bogus.ics when file does not exist', async () => {
@@ -115,5 +120,16 @@ describe('export URLs with semicolon-separated parameters', () => {
     expect(response.type).toMatch(/calendar/);
     expect(response.text).toContain('BEGIN:VCALENDAR');
     expect(response.text).toContain('Ploni Almoni');
+  });
+});
+
+describe('v3 yahrzeit subscription downloads', () => {
+  it('returns 200 ICS for /v3/.../golda_meir.ics', async () => {
+    const response = await request(app.callback())
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.ics');
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch(/calendar/);
+    expect(response.text).toContain('BEGIN:VCALENDAR');
+    expect(response.text).toContain('Golda Meir');
   });
 });
