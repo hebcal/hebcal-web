@@ -66,13 +66,6 @@ describe('Hebcal Routes', () => {
     });
   });
 
-  it('should handle /hebcal with zip code', async () => {
-    const response = await request(app.callback())
-        .get('/hebcal?v=0&zip=37876&m=1&M=off&year=2023&c=on&s=on&maj=on&min=on&mod=on&mf=on&ss=on&nx=on&geo=zip');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
   it('should return FullCalendar format with cfg=fc', async () => {
     const response = await request(app.callback())
         .get('/hebcal?v=1&cfg=fc&start=2026-03-01&end=2026-04-12&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=s');
@@ -116,6 +109,14 @@ describe('ZIP code lookup with mock database', () => {
     teardown = injectZipsMock(app.context.db);
   });
   afterAll(() => teardown());
+
+  it('returns HTML calendar with city name for /hebcal?zip=90210', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=0&zip=90210&m=1&M=off&year=2023&c=on&s=on&maj=on&min=on&mod=on&mf=on&ss=on&nx=on&geo=zip');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('html');
+    expect(response.text).toContain('Beverly Hills');
+  });
 
   it('returns JSON calendar with location for /hebcal?zip=90210', async () => {
     const response = await request(app.callback())
