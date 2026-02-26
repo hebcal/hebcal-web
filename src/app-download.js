@@ -301,17 +301,23 @@ app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: false, maxage: 604800000}));
 
-if (process.env.NODE_ENV == 'production') {
-  fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
-  process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
-}
+// Export app for testing
+export {app};
 
-const port = process.env.NODE_PORT || 8080;
-app.listen(port, () => {
-  const msg = 'Koa server listening on port ' + port;
-  logger.info(msg);
-  console.log(msg);
-});
+// Only start server if this file is run directly (not imported)
+if (import.meta.url === `file://${process.argv[1]}`) {
+  if (process.env.NODE_ENV == 'production') {
+    fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
+    process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
+  }
+
+  const port = process.env.NODE_PORT || 8080;
+  app.listen(port, () => {
+    const msg = 'Koa server listening on port ' + port;
+    logger.info(msg);
+    console.log(msg);
+  });
+}
 
 function redirEncQuery(path, encQuery, ctx) {
   const qs = unescape(path.substring(encQuery + 7)).replaceAll(';', '&');
