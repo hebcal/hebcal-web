@@ -161,6 +161,22 @@ describe('Link Routes', () => {
   });
 });
 
+describe('Zmanim Routes with ZIP code mock', () => {
+  let teardown;
+  beforeAll(() => {
+    teardown = injectZipsMock(app.context.db);
+  });
+  afterAll(() => teardown());
+
+  it('should return tzeit7083deg in JSON body for /zmanim?zip=90210', async () => {
+    const response = await request(app.callback())
+        .get('/zmanim?cfg=json&zip=90210&date=2025-12-24');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    expect(response.body).toHaveProperty('tzeit7083deg');
+  });
+});
+
 describe('Sitemap Routes', () => {
   let teardown;
   beforeAll(() => {
