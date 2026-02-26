@@ -1,6 +1,7 @@
-import {describe, it, expect} from 'vitest';
+import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
+import {injectZipsMock} from './zipsMock.js';
 
 describe('Hebcal Routes', () => {
   it('should return 200 for /hebcal with valid params', async () => {
@@ -106,5 +107,30 @@ describe('Hebcal Routes', () => {
       // All-day events should have date-only format
       expect(allDayEvent.start).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     }
+  });
+});
+
+describe('ZIP code lookup with mock database', () => {
+  let teardown;
+  beforeAll(() => {
+    teardown = injectZipsMock(app.context.db);
+  });
+  afterAll(() => teardown());
+
+  it('returns JSON calendar with location for /hebcal?zip=90210', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&zip=90210&geo=zip&c=on&M=on&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+
+    const body = response.body;
+    expect(body.location.geo).toBe('zip');
+    expect(body.location.city).toBe('Beverly Hills');
+    expect(body.location.zip).toBe('90210');
+    expect(body.location.country).toBe('United States');
+    expect(body.location.stateName).toBe('California');
+
+    const candles = body.items.filter((item) => item.category === 'candles');
+    expect(candles.length).toBeGreaterThan(0);
   });
 });
