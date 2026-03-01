@@ -37,7 +37,7 @@ describe('Yahrzeit Email Routes', () => {
   });
 });
 
-describe('Email Verification Routes', () => {
+describe('Shabbat Email Verification Routes', () => {
   it('should handle /email/verify.php with token', async () => {
     const response = await request(app.callback())
         .get('/email/verify.php?3fb9stfc55da9afel3aecdca');
@@ -45,11 +45,16 @@ describe('Email Verification Routes', () => {
     expect(response.type).toContain('html');
   });
 
-  it('should handle /email/open tracking pixel', async () => {
+  it('should return 400 for /email/verify.php with invalid token', async () => {
     const response = await request(app.callback())
-        .get('/email/open?msgid=01jthv2t5k88yermamssn96pze.1746503035074&loc=Boston');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('gif');
+        .get('/email/verify.php?bogus');
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 404 for /email/verify.php with not-found token', async () => {
+    const response = await request(app.callback())
+        .get('/email/verify.php?4rn3dorohk2w7buwmm80uxx6');
+    expect(response.status).toBe(404);
   });
 
   it('GET /email base64 decodes arg', async () => {
@@ -58,5 +63,14 @@ describe('Email Verification Routes', () => {
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('nobody@example.com');
+  });
+});
+
+describe('Email tracking pixel Routes', () => {
+  it('should handle /email/open tracking pixel', async () => {
+    const response = await request(app.callback())
+        .get('/email/open?msgid=01jthv2t5k88yermamssn96pze.1746503035074&loc=Boston');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('gif');
   });
 });
