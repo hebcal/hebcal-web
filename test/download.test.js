@@ -71,6 +71,13 @@ describe('v4 PDF downloads', () => {
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/pdf/);
   });
+
+  it('returns 200 PDF for mm=2 (Hebrew months & Hebrew numerals)', async () => {
+    const response = await request(app.callback())
+        .get('/v4/CAEQARgBIAEoATABQAFg6w9qAmVziAEBgAQC/hebcal_2027.pdf');
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch(/pdf/);
+  });
 });
 
 describe('Compression', () => {
