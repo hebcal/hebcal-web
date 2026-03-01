@@ -16,12 +16,12 @@ export class MockMysqlDb {
       subscriptions: {
         '01jthv2t5k88yermamssn96pze': {
           email_id: '01jthv2t5k88yermamssn96pze',
-          email_address: 'test@example.com',
+          email_address: 'nobody@example.com',
           email_status: 'active',
           email_created: new Date('2025-01-01'),
-          email_candles_zipcode: '10001',
+          email_candles_zipcode: null,
           email_candles_city: null,
-          email_candles_geonameid: null,
+          email_candles_geonameid: 3530597,
           email_candles_havdalah: 50,
           email_havdalah_tzeit: 0,
           email_sundown_candles: 18,

@@ -9,7 +9,7 @@ export class MysqlDb {
    * @param {Object<string,string>} iniConfig
    */
   constructor(logger, iniConfig) {
-    const host = iniConfig['hebcal.mysql.host'];
+    const host = iniConfig['hebcal.mysql.host'] || 'localhost';
     const port = +(iniConfig['hebcal.mysql.port']) || 3306;
     const user = iniConfig['hebcal.mysql.user'];
     const password = iniConfig['hebcal.mysql.password'];
