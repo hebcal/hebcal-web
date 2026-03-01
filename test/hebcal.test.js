@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
@@ -64,6 +65,38 @@ describe('Hebcal Routes', () => {
     timedEvents.forEach((item) => {
       expect(item.date).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
     });
+  });
+
+  it('should return HTML with hebrewMonths and gematriyaNumerals opts when mm=2', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&min=on&nx=on&year=2026&month=3&mm=2');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('html');
+
+    // Template embeds opts as JSON: window['hebcal'].opts={...}
+    // mm=2 sets both hebrewMonths and gematriyaNumerals in the opts
+    expect(response.text).toContain('"hebrewMonths":true');
+    expect(response.text).toContain('"gematriyaNumerals":true');
+  });
+
+  it('should return JSON calendar with mm=2 (Hebrew months & Hebrew numerals)', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&min=on&nx=on&year=2026&month=3&mm=2');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+
+    const body = response.body;
+    expect(body).toHaveProperty('items');
+    expect(Array.isArray(body.items)).toBe(true);
+    expect(body.items.length).toBeGreaterThan(0);
+
+    // Should still contain major holidays even with Hebrew months enabled
+    const holidays = body.items.filter((item) => item.category === 'holiday');
+    expect(holidays.length).toBeGreaterThan(0);
+
+    // Purim falls in Adar II / Adar on March 2026 (Gregorian month 3)
+    const purim = body.items.find((item) => item.title === 'Purim');
+    expect(purim).toBeDefined();
   });
 
   it('should return FullCalendar format with cfg=fc', async () => {
@@ -133,5 +166,169 @@ describe('ZIP code lookup with mock database', () => {
 
     const candles = body.items.filter((item) => item.category === 'candles');
     expect(candles.length).toBeGreaterThan(0);
+  });
+});
+
+describe('Hebcal output formats', () => {
+  it('should return CSV format with cfg=csv', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=csv&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('csv');
+    expect(response.text).toContain('"Subject"');
+    expect(response.text).toContain('"Start Date"');
+  });
+
+  it('should return RSS XML with cfg=rss', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=rss&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('xml');
+    expect(response.text).toContain('<rss');
+  });
+
+  it('should return iCalendar with cfg=ics', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=ics&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('calendar');
+    expect(response.text).toContain('BEGIN:VCALENDAR');
+  });
+
+  it('should return DefineEvent JavaScript with cfg=e', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=e&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('javascript');
+    expect(response.text).toContain('DefineEvent(');
+  });
+
+  it('should return HEBCAL.eraw2 JavaScript with cfg=e2', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=e2&maj=on&year=2026&month=3');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('javascript');
+    expect(response.text).toContain('HEBCAL.eraw2');
+  });
+
+  it('should wrap JSON in JSONP callback when callback param is given', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&callback=myCallback');
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/^myCallback\(/);
+  });
+
+  it('should omit leyning data from parasha items when leyning=off', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&s=on&maj=on&year=2026&month=3&leyning=off');
+    expect(response.status).toBe(200);
+    const body = response.body;
+    expect(Array.isArray(body.items)).toBe(true);
+    const parashat = body.items.find((item) => item.category === 'parashat');
+    if (parashat) {
+      expect(parashat.leyning).toBeUndefined();
+    }
+  });
+
+  it('should include heDateParts on items when hdp=1', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&hdp=1');
+    expect(response.status).toBe(200);
+    const body = response.body;
+    expect(Array.isArray(body.items)).toBe(true);
+    expect(body.items[0]).toHaveProperty('heDateParts');
+  });
+});
+
+describe('Hebcal error handling', () => {
+  it('should return 400 for non-numeric year with cfg=json', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=INVALID');
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 400 HTML form for Gregorian year > 9999', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&year=10000');
+    expect(response.status).toBe(400);
+    expect(response.type).toContain('html');
+  });
+
+  it('should return 400 HTML form for Hebrew year > 13760', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&yt=H&year=13761');
+    expect(response.status).toBe(400);
+    expect(response.type).toContain('html');
+  });
+
+  it('should return 400 with HTML error form for invalid year with v=1', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&year=INVALID');
+    expect(response.status).toBe(400);
+    expect(response.type).toContain('html');
+  });
+
+  it('should return 400 for cfg=fc when start and end are both missing', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=fc&maj=on');
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 400 with error message in HTML when no event types selected', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=off&min=off&mod=off&nx=off&ss=off&mf=off&s=off&c=off&year=2026&month=3');
+    expect(response.status).toBe(400);
+    expect(response.type).toContain('html');
+    expect(response.text).toContain('Please select at least one event option');
+  });
+});
+
+describe('Hebcal HTML rendering options', () => {
+  it('should auto-detect current year when no year param is given', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on');
+    expect(response.status).toBe(200);
+    const body = response.body;
+    expect(body).toHaveProperty('items');
+    expect(body.items.length).toBeGreaterThan(0);
+  });
+
+  it('should auto-detect Hebrew year when yt=H with no year param', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&yt=H');
+    expect(response.status).toBe(200);
+    const body = response.body;
+    expect(body).toHaveProperty('items');
+    expect(body.items.length).toBeGreaterThan(0);
+  });
+
+  it('should return Israel holiday set when Israel mode (i=on) is requested', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&i=on');
+    expect(response.status).toBe(200);
+    const body = response.body;
+    expect(body).toHaveProperty('items');
+    expect(body.items.length).toBeGreaterThan(0);
+  });
+
+  it('should render HTML calendar for date range using start/end params', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&start=2026-03-01&end=2026-03-31&set=off');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('html');
+  });
+
+  it('should render HTML calendar with Hebrew locale (lg=he)', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&year=2026&month=3&lg=he&set=off');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('html');
+  });
+
+  it('should set Cache-Control header when set=off prevents cookie writing', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&maj=on&year=2026&month=3&set=off');
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toBeDefined();
   });
 });
