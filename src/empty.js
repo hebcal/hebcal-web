@@ -7,9 +7,9 @@ export function empty(val) {
 }
 
 /**
- * @param {string} val
+ * @param {string|undefined|number} val
  * @return {boolean}
  */
 export function off(val) {
-  return typeof val === 'undefined' || val === 'off' || val == '0';
+  return val === undefined || val === 'off' || val == '0';
 }

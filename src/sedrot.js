@@ -139,7 +139,7 @@ export async function parshaDetail(ctx) {
   await ctx.render('parsha-detail', {
     title,
     parsha,
-    parshaName: parsha.name.replace(/'/g, '’'),
+    parshaName: parsha.name.replaceAll('\'', '’'),
     parshaAnchor,
     nextRead,
     reading,

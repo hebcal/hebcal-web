@@ -173,7 +173,8 @@ describe('Zmanim Routes with ZIP code mock', () => {
         .get('/zmanim?cfg=json&zip=90210&date=2025-12-24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
-    expect(response.body).toHaveProperty('tzeit7083deg');
+    expect(response.body).toHaveProperty('times');
+    expect(response.body.times).toHaveProperty('tzeit7083deg');
   });
 });
 

@@ -679,7 +679,7 @@ function hebdateNoYear(hd, isHebrewName) {
     const mm = Locale.gettext(hd.getMonthName(), 'he-x-NoNikud');
     return gematriya(dd) + ' ' + mm;
   } else {
-    return hd.render('en', false).replace(/'/g, '’');
+    return hd.render('en', false).replaceAll('\'', '’');
   }
 }
 
@@ -729,7 +729,7 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
     return null;
   }
   const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-  const hebdate = hd.render('en').replace(/'/g, '’');
+  const hebdate = hd.render('en').replaceAll('\'', '’');
   const origHd = new HDate(origDt);
   const origHyear = origHd.getFullYear();
   const yearNumber = hyear - origHyear;

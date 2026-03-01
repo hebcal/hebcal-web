@@ -93,20 +93,28 @@ export function getHolidayDuration(il, mask, holiday) {
 }
 
 /**
+ * @param {string} str
+ * @return {string}
+ */
+export function smartApostrophes(str) {
+  return str.replaceAll('\'', '’');
+}
+
+/**
  * @param {HDate} hd
  * @param {number} duration
  * @param {boolean} showYear
  * @return {string}
  */
 function hebrewDateRange(hd, duration, showYear=true) {
-  const startMonth = hd.getMonthName().replace(/'/g, '’');
+  const startMonth = smartApostrophes(hd.getMonthName());
   const startMday = hd.getDate();
   const yearSuffix = showYear ? ' ' + hd.getFullYear() : '';
   if (duration <= 1) {
     return `${startMday} ${startMonth}${yearSuffix}`;
   }
   const end = new HDate(hd.abs() + duration - 1);
-  const endMonth = end.getMonthName().replace(/'/g, '’');
+  const endMonth = smartApostrophes(end.getMonthName());
   const endMday = end.getDate();
   if (startMonth === endMonth) {
     return `${startMday}-${endMday} ${startMonth}${yearSuffix}`;

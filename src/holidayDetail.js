@@ -15,6 +15,7 @@ import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
 } from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
+  smartApostrophes,
   wrapDisplaySpans, OMER_TITLE, appendPeriod, makeEventJsonLD} from './holidayCommon.js';
 import {holidayMeta} from './holidayMeta.js';
 import {distance, closest} from 'fastest-levenshtein';
@@ -180,13 +181,13 @@ export async function holidayDetail(ctx) {
     title,
     year,
     holiday,
-    holidayQ: holiday.replace(/'/g, '’'),
+    holidayQ: smartApostrophes(holiday),
     holidayAnchor,
     hebrew,
-    descrShort: descrShort.replace(/'/g, '’'),
-    descrMedium: descrMedium.replace(/'/g, '’'),
-    descFirstTwo: descFirstTwo.replace(/'/g, '’'),
-    descrLong: wrapHebrewInSpans(descrLong).replace(/'/g, '’'),
+    descrShort: smartApostrophes(descrShort),
+    descrMedium: smartApostrophes(descrMedium),
+    descFirstTwo: smartApostrophes(descFirstTwo),
+    descrLong: wrapHebrewInSpans(smartApostrophes(descrLong)),
     categoryId: category.id,
     categoryName: category.name,
     currentItem: next,
@@ -248,7 +249,7 @@ function getHolidayBegin(holiday, year, il) {
     return {multiYearBegin: [], holidayBegin: events};
   }
   year = year || new Date().getFullYear();
-  const range = holidayYearRange[holiday] || [3, 8];
+  const range = holidayYearRange[holiday] || [2, 8];
   const startYear = year - range[0];
   const numYears = range[1];
   const events0 = HebrewCalendar.calendar({
@@ -488,7 +489,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else if (itemReading.summary) {
     const matches = /^([^\d]+)(\d.+)$/.exec(itemReading.summary);
     const book = matches[1].trim();
-    const verses = matches[2].replace(/:/g, '.').replace(/\s/g, '');
+    const verses = matches[2].replaceAll(':', '.').replaceAll(/\s/g, '');
     itemReading.torahHref = `https://www.sefaria.org/${book}.${verses}?lang=bi`;
   }
   if (itemReading.haft) {
@@ -502,7 +503,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else if (item.startsWith(holiday)) {
     if (meta.items.length === 1 || item === holiday) {
       itemReading.shortName = item;
-    } else if (item.startsWith(holiday) && item.indexOf('Chol ha-Moed') !== -1) {
+    } else if (item.startsWith(holiday) && item.includes('Chol ha-Moed')) {
       itemReading.shortName = item.substring(holiday.length + 1);
     } else if (item.startsWith(`${holiday} Day`)) {
       itemReading.shortName = item.substring(holiday.length + 1);
@@ -515,7 +516,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else {
     itemReading.shortName = item;
   }
-  if (ev && ev.getDate().getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
+  if (ev?.getDate().getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
     const hd = ev.getDate();
     const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
