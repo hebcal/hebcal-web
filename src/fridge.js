@@ -133,9 +133,9 @@ function getStartAndEnd(query) {
     const thisYear = new Date().getFullYear();
     const year = parseInt(query.year, 10) || thisYear;
     if (year < thisYear - YEAR_RANGE) {
-      throw createError(410, 'Gregorian year too early');
+      throw createError(410, `Gregorian year ${year} too early`);
     } else if (year > thisYear + YEAR_RANGE) {
-      throw createError(410, 'Gregorian year too late');
+      throw createError(410, `Gregorian year ${year} too late`);
     }
     const start = greg.greg2abs(new Date(year, 0, 1));
     const end = greg.greg2abs(new Date(year, 11, 31));
@@ -144,9 +144,9 @@ function getStartAndEnd(query) {
   const thisYear = new HDate().getFullYear();
   const hyear = parseInt(query.year, 10) || thisYear;
   if (hyear < thisYear - YEAR_RANGE) {
-    throw createError(410, 'Hebrew year too early');
+    throw createError(410, `Hebrew year ${hyear} too early`);
   } else if (hyear > thisYear + YEAR_RANGE) {
-    throw createError(410, 'Hebrew year too late');
+    throw createError(410, `Hebrew year ${hyear} too late`);
   }
   const start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   const end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
