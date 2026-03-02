@@ -84,9 +84,9 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
 <tbody>
 <tr>
 <td class="nav"><% if (gregYear1 > today.year() - 50) { -%>
-  <p><a class="nowrap" title="Previous Hebrew year" rel="nofollow"
+  <p><a class="nowrap" title="Previous Hebrew year"
   href="<%= url %>&amp;year=<%= hyear ? hyear - 1 : gregYear1 + 3759 %>">&larr; <%= hyear ? hyear - 1 : gregYear1 + 3759 %></a></p>
-  <p><a class="nowrap" title="Previous Gregorian year" rel="nofollow"
+  <p><a class="nowrap" title="Previous Gregorian year"
   href="<%= url %>&amp;year=<%= gregYear1 - 1 %>&amp;yt=G">&larr; <%= gregYear1 - 1 %></a></p>
 <% } %></td>
 <td class="text-center" style="padding: 0px 8px">
@@ -99,10 +99,10 @@ for 3 small stars (sun 8.5° below the horizon)
 <% } -%>
 </p></div>
 </td>
-<td class="nav"><td class="nav"><% if (gregYear1 < today.year() + 50) { -%>
-  <p><a class="nowrap" title="Next Hebrew year" rel="nofollow"
+<td class="nav"><% if (gregYear1 < today.year() + 50) { -%>
+  <p><a class="nowrap" title="Next Hebrew year"
   href="<%= url %>&amp;year=<%= hyear ? hyear + 1 : gregYear1 + 3761 %>"><%= hyear ? hyear + 1 : gregYear1 + 3761 %> &rarr;</a></p>
-  <p><a class="nowrap" title="Next Gregorian year" rel="nofollow"
+  <p><a class="nowrap" title="Next Gregorian year"
   href="<%= url %>&amp;year=<%= gregYear1 + 1 %>&amp;yt=G"><%= gregYear1 + 1 %> &rarr;</a></p>
 <% } %></td>
 </tr>
