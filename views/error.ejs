@@ -12,11 +12,15 @@
 <h1><%= status %> <%= response.message %></h1>
 </header>
 <main>
-<% if (status == 404) { %>
-<p>The requested URL <strong><%=request.path%></strong> was not found on this server.</p>
-<% } else if (status == 410) { %>
-<p>The requested resource <strong><%=request.path%></strong> is no longer available on this server
-and there is no forwarding address. Please remove all references to this resource.</p>
+<% if (status === 404) { %>
+<p>The requested URL <strong><%= request.url %></strong>
+ was not found on this server.</p>
+<p><em><%= error %></em></p>
+<% } else if (status === 410) { %>
+<p>The requested resource <strong><%= request.url %></strong>
+ is no longer available on this server and there is no forwarding address.
+ Please remove all references to this resource.</p>
+<% if (error !== 'Gone') { %><p><em><%= error %></em></p><% } %>
 <% } else { %>
 <p><%= error %></p>
 <% } %>
