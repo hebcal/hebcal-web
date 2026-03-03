@@ -91,7 +91,7 @@ export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
-      ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\n';
+      ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\nDisallow: /converter/csv\n';
       return;
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
