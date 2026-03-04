@@ -153,12 +153,10 @@ describe('Sedrot Redirects', () => {
     expect(response.headers.location).toContain('/sedrot/bereshit?i=on');
   });
 
-  it('should redirect when date year is before 1000', async () => {
+  it('should return 410 Gone when date year is before 1000', async () => {
     const response = await request(app.callback())
         .get('/sedrot/bereshit-05001010');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit');
-    expect(response.headers.location).not.toContain('-0500');
+    expect(response.status).toBe(410);
   });
 
   it('should redirect gy year search with Israel mode preserving i=on suffix', async () => {

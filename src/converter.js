@@ -30,6 +30,7 @@ const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
 export async function hebrewDateConverter(ctx) {
+  const now = ctx.state.now = new Date();
   if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
     setDefautLangTz(ctx);
   }
@@ -45,12 +46,12 @@ export async function hebrewDateConverter(ctx) {
       const status = err.status || 400;
       ctx.throw(status, err);
     }
-    props = g2h(new Date(), false, true);
+    props = g2h(now, false, true);
     props.message = err.message;
   }
   if (ctx.method === 'GET' && props.noCache && !props.message) {
     const location = ctx.state.location || ctx.db.lookupLegacyCity('New York');
-    const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(new Date(), location);
+    const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(now, location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
     const json = q.cfg == 'json' ? '&cfg=json' : '';
@@ -144,6 +145,7 @@ export async function hebrewDateConverter(ctx) {
       p.amp = true;
     }
     p.h2gURL = h2gURL;
+    p.currentYear = now.getFullYear();
     if (!p.message) {
       makePrevNext(p);
       makeFutureYears(ctx, p);
@@ -178,6 +180,11 @@ function makePrevNext(p) {
 }
 
 function makeFutureYears(ctx, p) {
+  if (p.gy < 1 || p.gy > p.currentYear + 2000) {
+    p.futureYearsHeb = [];
+    p.futureYearsGreg = [];
+    return;
+  }
   const locale = ctx.state.locale;
   const arr = makeFutureYearsHeb(p.hdate, 25, locale);
   p.futureYearsHeb = arr;
@@ -508,7 +515,7 @@ function parseConverterQuery(ctx) {
       return convertDateRange(ctx, startD, endD);
     }
     if (empty(query.hy) && empty(query.hm) && empty(query.hd)) {
-      return g2h(new Date(), false, true);
+      return g2h(ctx.state.now, false, true);
     }
     // in either mode, this will throw if the params are invalid
     const hdate = makeHebDate(query.hy, query.hm, query.hd);
@@ -535,7 +542,7 @@ function parseConverterQuery(ctx) {
     const dt = isoDateStringToDate(query.date);
     return g2h(dt, gs, false);
   } else if (empty(query.gy) && empty(query.gm) && empty(query.gd)) {
-    return g2h(new Date(), gs, true);
+    return g2h(ctx.state.now, gs, true);
   } else {
     const dt = makeGregDate(query.gy, query.gm, query.gd);
     return g2h(dt, gs, false);

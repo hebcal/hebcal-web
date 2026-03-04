@@ -3,7 +3,7 @@
   ampAds: true,
   ampForm: true,
 }) -%>
-<% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="nofollow"><% } %>
+<% if (gy <= 1752 || gy > currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
 <% if (typeof prev === 'object' && prev !== null) { %><link rel="prev" href="<%=prev.url%>"><% } %>
 <% if (typeof next === 'object' && next !== null) { %><link rel="next" href="<%=next.url%>"><% } %>
@@ -207,6 +207,7 @@ Hebrew Birthdays and Anniversaries for 20+ years.
 Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col -->
+<% if (gy > 1752 && gy < currentYear + 1000) { -%>
 <div class="col-sm-6 mb-3">
 <h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
  Jewish Holidays</h5>
@@ -215,8 +216,9 @@ Free annual email reminders &amp; calendar downloads.
   <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
   <%=hy%> Calendar &raquo;</a></div>
 </div><!-- .col -->
+<% } -%>
 </div><!-- .row -->
-<% if (hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
+<% if (futureYearsHeb.length > 0 && hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
 <div class="row">
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -229,14 +231,17 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% } %>
 <% if (typeof message === 'undefined') { -%>
 <div id="future" class="row">
+<% if (futureYearsHeb.length > 0) { -%>
 <div class="col-md-6" id="future-heb">
 <div class="row">
  <div class="col-auto"><h4><%= hdate.render(locale, false) %></h4></div>
+<% if (gy > 1752 && gy < currentYear + 1000) { -%>
  <div class="col-auto"><a
   class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
   <svg class="icon" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
   Download CSV</a>
  </div>
+<% } -%>
 </div>
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
@@ -247,6 +252,8 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 </tbody>
 </table>
 </div><!-- .col -->
+<% } -%>
+<% if (futureYearsGreg.length > 0) { -%>
 <div class="col-md-6" id="future-greg">
 <h4><%= d.format('D MMMM') %></h4>
 <table class="table table-condensed table-striped">
@@ -258,6 +265,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 </tbody>
 </table>
 </div><!-- .col -->
+<% } -%>
 </div><!-- .row -->
 <% } %>
 <% if (typeof amp === 'undefined' || !amp) { -%>
