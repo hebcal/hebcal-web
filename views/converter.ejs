@@ -218,7 +218,8 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col -->
 <% } -%>
 </div><!-- .row -->
-<% if (futureYearsHeb.length > 0 && hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
+<% if (typeof futureYearsHeb === 'object' && futureYearsHeb.length > 0 &&
+ hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
 <div class="row">
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -231,7 +232,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% } %>
 <% if (typeof message === 'undefined') { -%>
 <div id="future" class="row">
-<% if (futureYearsHeb.length > 0) { -%>
+<% if (typeof futureYearsHeb === 'object' && futureYearsHeb.length > 0) { -%>
 <div class="col-md-6" id="future-heb">
 <div class="row">
  <div class="col-auto"><h4><%= hdate.render(locale, false) %></h4></div>
