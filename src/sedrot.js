@@ -64,10 +64,8 @@ export async function parshaDetail(ctx) {
   if (date) {
     const dt = parse8digitDateStr(date);
     const year = dt.getFullYear();
-    if (yearIsOutsideGregRange(year)) {
+    if (year < 1000 || yearIsOutsideGregRange(year)) {
       throw410(ctx);
-    } else if (year < 1000) {
-      httpRedirect(ctx, `/sedrot/${parshaAnchor}${iSuffix}`);
       return;
     }
   }
