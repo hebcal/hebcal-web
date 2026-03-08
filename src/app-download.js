@@ -140,6 +140,13 @@ app.use(compress({
 }));
 
 app.use(stopIfTimedOut());
+app.use(async function responseLength(ctx, next) {
+  await next();
+  const length = ctx.length;
+  if (typeof length === 'number') {
+    ctx.state.responseLength = length;
+  }
+});
 
 const DOCUMENT_ROOT = '/var/www/html';
 

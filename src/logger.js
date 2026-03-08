@@ -47,7 +47,7 @@ export function makeLogInfo(ctx) {
   const status = ctx.response.status;
   const info = {
     status: status,
-    length: ctx.response.length,
+    length: ctx.length || ctx.state.responseLength,
     duration: Date.now() - ctx.state.startTime,
     ip: getIpAddress(ctx),
     method: ctx.request.method,

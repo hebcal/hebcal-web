@@ -161,6 +161,13 @@ app.use(compress({
 }));
 
 app.use(stopIfTimedOut());
+app.use(async function responseLength(ctx, next) {
+  await next();
+  const length = ctx.length;
+  if (typeof length === 'number') {
+    ctx.state.responseLength = length;
+  }
+});
 
 render(app, {
   root: path.join(__dirname, '..', 'views'),
