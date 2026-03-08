@@ -19,7 +19,12 @@ import {
   makeGeoUrlArgs,
 } from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
-import {getDefaultYear, getDefaultHebrewYear} from './dateUtil.js';
+import {
+  getDefaultYear,
+  getDefaultHebrewYear,
+  yearIsOutsideGregRange,
+  yearIsOutsideHebRange,
+} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
 import '@hebcal/learning';
@@ -123,15 +128,18 @@ export async function hebcalApp(ctx) {
       break;
     case 'e':
     case 'e2':
+      checkYearRange(ctx);
       ctx.body = renderLegacyJavascript(ctx);
       break;
     case 'csv':
       ctx.body = renderCsv(ctx);
       break;
     case 'rss':
+      checkYearRange(ctx);
       ctx.body = renderRss(ctx);
       break;
     case 'ics':
+      checkYearRange(ctx);
       return renderIcal(ctx);
     default:
       if (q.v === '1') {
@@ -139,6 +147,15 @@ export async function hebcalApp(ctx) {
       } else {
         return renderForm(ctx, error);
       }
+  }
+}
+
+function checkYearRange(ctx) {
+  const options = ctx.state.options;
+  if (typeof options.year === 'number' &&
+      ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
+      (!options.isHebrewYear && yearIsOutsideGregRange(options.year)))) {
+    ctx.throw(410, `No calendar for year ${options.year}`);
   }
 }
 
