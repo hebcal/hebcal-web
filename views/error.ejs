@@ -15,7 +15,7 @@
 <% if (status === 404) { %>
 <p>The requested URL <strong><%= request.url %></strong>
  was not found on this server.</p>
-<p><em><%= error %></em></p>
+<% if (error !== 'Not Found') { %><p><em><%= error %></em></p><% } %>
 <% } else if (status === 410) { %>
 <p>The requested resource <strong><%= request.url %></strong>
  is no longer available on this server and there is no forwarding address.
