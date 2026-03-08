@@ -142,6 +142,12 @@ export function makeHebcalOptions(db, query) {
     throw createError(400, `If one of 'start' or 'end' is specified, both are required`);
   }
   if (options.start && options.end) {
+    // Clamp end to max 10 years after start
+    const maxEnd = new Date(options.start);
+    maxEnd.setFullYear(maxEnd.getFullYear() + 10);
+    if (options.end > maxEnd) {
+      options.end = maxEnd;
+    }
     delete query.year;
     delete query.month;
     delete query.yt;
@@ -361,7 +367,7 @@ export const maxNumYear = {
  */
 export function getNumYears(options) {
   if (options.numYears) {
-    return options.numYears;
+    return Math.max(options.numYears, 10);
   }
   let numYears = 7;
   // omer + sedrot adds 101 events
