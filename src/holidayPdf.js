@@ -43,6 +43,8 @@ export async function holidayPdf(ctx) {
     il: ctx.state.il,
   };
   ctx.set('Cache-Control', CACHE_CONTROL_60DAYS);
+  ctx.remove('Vary');
+  ctx.compress = false;
   ctx.response.type = 'application/pdf';
   ctx.response.etag = makeETag(ctx, options, {outputType: '.pdf'});
   ctx.status = 200;

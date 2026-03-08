@@ -94,6 +94,8 @@ export async function hebcalDownload(ctx) {
       ctx.remove('ETag');
       ctx.throw(400, 'Please select at least one event option');
     }
+    ctx.remove('Vary');
+    ctx.compress = false;
     ctx.set('Access-Control-Allow-Origin', '*');
     ctx.response.type = 'application/pdf';
     const title = getCalendarTitle(events, options);

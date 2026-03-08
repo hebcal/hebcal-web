@@ -143,7 +143,7 @@ app.use(stopIfTimedOut());
 app.use(async function responseLength(ctx, next) {
   await next();
   const length = ctx.length;
-  if (typeof length === 'number') {
+  if (ctx.status === 200 && typeof length === 'number') {
     ctx.state.responseLength = length;
   }
 });
