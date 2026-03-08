@@ -162,11 +162,11 @@ app.use(async function fixup1(ctx, next) {
     return;
   } else if (rpath.startsWith('/cal/')) {
     const path = rpath.substring(5);
-    httpRedirect(ctx, `/ical/${path}`, 302);
+    httpRedirect(ctx, `/ical/${path}`, 301);
     return;
   } else if (rpath.startsWith('/index.php/ical/')) {
     const path = rpath.substring(16);
-    httpRedirect(ctx, `/ical/${path}`, 302);
+    httpRedirect(ctx, `/ical/${path}`, 301);
     return;
   } else {
     return next();

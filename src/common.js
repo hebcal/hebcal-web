@@ -1,5 +1,5 @@
 import {basename} from 'node:path';
-import {CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
+import {CACHE_CONTROL_IMMUTABLE, cacheControl} from './cacheControl.js';
 
 export const DOCUMENT_ROOT = process.env.NODE_ENV === 'production' ? '/var/www/html' : './static';
 
@@ -15,6 +15,8 @@ function getHostname(ctx) {
   return HEBCAL_HOSTNAME;
 }
 
+const CACHE_CONTROL = 'Cache-Control';
+
 /**
  * Perform a 302 redirect to `rpath`.
  * @param {any} ctx
@@ -26,7 +28,9 @@ export function httpRedirect(ctx, rpath, status=302) {
   const host = getHostname(ctx);
   ctx.status = status;
   if (status === 301) {
-    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
+    ctx.set(CACHE_CONTROL, CACHE_CONTROL_IMMUTABLE);
+  } else if (!ctx.has(CACHE_CONTROL)) {
+    ctx.set(CACHE_CONTROL, cacheControl(0.25));
   }
   let url = `${proto}://${host}${rpath}`;
   const u = new URL(url);
