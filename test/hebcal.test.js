@@ -332,3 +332,59 @@ describe('Hebcal HTML rendering options', () => {
     expect(response.headers['cache-control']).toBeDefined();
   });
 });
+
+function uniqueYears(items) {
+  const years = new Set(items.map((item) => item.date.substring(0, 4)));
+  return years.size;
+}
+
+describe('Hebcal ny (number of years) parameter', () => {
+  it('should return 1 year when ny=1', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=1');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(1);
+  });
+
+  it('should return 1 year when ny=0 (below minimum)', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=0');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(1);
+  });
+
+  it('should return 1 year when ny=-5 (negative)', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=-5');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(1);
+  });
+
+  it('should return 3 years when ny=3', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=3');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(3);
+  });
+
+  it('should return 5 years when ny=5', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=5');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(5);
+  });
+
+  it('should return 10 years when ny=10', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=10');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(10);
+  });
+
+  it('should cap to 10 years when ny=15 (above maximum)', async () => {
+    const response = await request(app.callback())
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=15');
+    expect(response.status).toBe(200);
+    expect(uniqueYears(response.body.items)).toBe(10);
+  });
+});

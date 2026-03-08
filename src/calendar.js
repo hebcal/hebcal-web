@@ -132,6 +132,10 @@ export function makeHebcalOptions(db, query) {
       }
     }
   }
+  // force numYears to be >= 1 and <= 10, but only if explicitly specified
+  if (typeof options.numYears === 'number') {
+    options.numYears = getNumYears(options);
+  }
   if (!empty(query.start)) {
     options.start = isoDateStringToDate(query.start);
   }
@@ -366,8 +370,11 @@ export const maxNumYear = {
  * @return {number}
  */
 export function getNumYears(options) {
-  if (options.numYears) {
-    return Math.max(options.numYears, 10);
+  if (typeof options.numYears === 'number') {
+    if (options.numYears < 1) {
+      return 1;
+    }
+    return Math.min(options.numYears, 10);
   }
   let numYears = 7;
   // omer + sedrot adds 101 events
