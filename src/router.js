@@ -7,7 +7,11 @@ import {
   throw410,
   DOCUMENT_ROOT,
 } from './common.js';
-import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
+import {
+  CACHE_CONTROL_7DAYS,
+  CACHE_CONTROL_IMMUTABLE,
+  cacheControl,
+} from './cacheControl.js';
 import {langNames} from './lang.js';
 import {dailyLearningConfig} from './urlArgs.js';
 import {geoAutoComplete} from './complete.js';
@@ -87,10 +91,13 @@ function onlyGetAndHead(ctx) {
   }
 }
 
+const CACHE_CONTROL_2DAYS = cacheControl(2);
+
 export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
+      ctx.set('Cache-Control', CACHE_CONTROL_2DAYS);
       ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\nDisallow: /converter/csv\n';
       return;
     } else if (rpath === '/ping') {

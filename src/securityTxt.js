@@ -1,4 +1,5 @@
 import {makeETag} from './etag.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 
 export async function securityTxt(ctx) {
   const dt = new Date();
@@ -16,6 +17,7 @@ export async function securityTxt(ctx) {
   dt.setFullYear(dt.getFullYear() + 1);
   dt.setHours(0, 0, 0, 0);
   const expires = dt.toISOString();
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.body = 'Contact: mailto:security@hebcal.com\n' +
     `Expires: ${expires}\n` +
     'OpenBugBounty: https://openbugbounty.org/bugbounty/HebcalDotCom/\n';
