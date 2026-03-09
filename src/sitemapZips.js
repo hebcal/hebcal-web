@@ -2,9 +2,11 @@ import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {makeETag} from './etag.js';
 
+const sql = 'SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0) ORDER BY population DESC';
+
 export async function sitemapZips(ctx) {
   const db = ctx.db.zipsDb;
-  const results = db.prepare('SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0)').all();
+  const results = db.prepare(sql).all();
   ctx.response.etag = makeETag(ctx, {}, {
     numZips: results.length,
     geodbv: GeoDb.version(),
