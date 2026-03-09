@@ -140,3 +140,47 @@ describe('v3 yahrzeit subscription downloads', () => {
     expect(response.text).toContain('Golda Meir');
   });
 });
+
+describe('304 Not Modified (ETag / If-None-Match)', () => {
+  it('returns 304 for ICS when If-None-Match matches ETag', async () => {
+    const icsPath = '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics';
+    const first = await request(app.callback()).get(icsPath);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(icsPath)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+
+  it('returns 304 for CSV when If-None-Match matches ETag', async () => {
+    const csvPath = '/v4/CAEQARgBIAEoATABQAFQAViX17kBYOoPagFziAEB2AEB/hebcal_2026_patrick_eur.csv';
+    const first = await request(app.callback()).get(csvPath);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(csvPath)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+
+  it('returns 304 for PDF when If-None-Match matches ETag', async () => {
+    const pdfPath = '/v4/CAEYAUABWPaN_QFg5A9qAXN4EogBAQ/hebcal_2020_bayshore_gardens.pdf';
+    const first = await request(app.callback()).get(pdfPath);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(pdfPath)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+});

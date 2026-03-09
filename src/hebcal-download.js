@@ -35,7 +35,6 @@ export async function hebcalDownload(ctx) {
   if (ics || csv) {
     options.numYears = getNumYears(options);
   }
-  const events = makeHebrewCalendar(ctx, options);
   // don't set a Last-Modified date; we'll rely on etag for cache consistency
   // etag includes actual year because options.year is never 'now'
   const opts = {...query, ...options};
@@ -49,6 +48,7 @@ export async function hebcalDownload(ctx) {
     ctx.status = 304;
     return;
   }
+  const events = makeHebrewCalendar(ctx, options);
   if (ics) {
     const icalOpt = makeIcalOpts(options, query);
     if (!icalOpt.title) {

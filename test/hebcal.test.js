@@ -388,3 +388,61 @@ describe('Hebcal ny (number of years) parameter', () => {
     expect(uniqueYears(response.body.items)).toBe(10);
   });
 });
+
+describe('304 Not Modified (ETag / If-None-Match)', () => {
+  it('returns 304 for cfg=json when If-None-Match matches ETag', async () => {
+    const url = '/hebcal?v=1&cfg=json&maj=on&year=2026&month=3';
+    const first = await request(app.callback()).get(url);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(url)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+
+  it('returns 304 for cfg=ics when If-None-Match matches ETag', async () => {
+    const url = '/hebcal?v=1&cfg=ics&maj=on&year=2026&month=3';
+    const first = await request(app.callback()).get(url);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(url)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+
+  it('returns 304 for cfg=fc when If-None-Match matches ETag', async () => {
+    const url = '/hebcal?v=1&cfg=fc&start=2026-03-01&end=2026-04-12&maj=on&min=on&nx=on';
+    const first = await request(app.callback()).get(url);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(url)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+
+  it('returns 304 for HTML calendar (no cfg) when If-None-Match matches ETag', async () => {
+    const url = '/hebcal?v=1&maj=on&year=2026&month=3&set=off';
+    const first = await request(app.callback()).get(url);
+    expect(first.status).toBe(200);
+    const etag = first.headers['etag'];
+    expect(etag).toBeDefined();
+
+    const second = await request(app.callback())
+        .get(url)
+        .set('If-None-Match', etag);
+    expect(second.status).toBe(304);
+    expect(second.text).toBeFalsy();
+  });
+});
