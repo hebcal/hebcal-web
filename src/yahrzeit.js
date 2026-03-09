@@ -421,7 +421,7 @@ async function getDetailsFromDb(ctx) {
   return obj;
 }
 
-const maxEventsIcsSub = 2400;
+const maxEventsIcsSub = 1200;
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
