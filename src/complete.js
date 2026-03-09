@@ -1,7 +1,7 @@
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {cacheControl} from './cacheControl.js';
 import {makeETag} from './etag.js';
-import flag from 'emoji-flag';
+import {flag} from './emoji-flag.js';
 
 const NOTFOUND = {error: 'Not Found'};
 const CACHE_CONTROL_3DAYS = cacheControl(3);
@@ -32,7 +32,7 @@ export async function geoAutoComplete(ctx) {
     for (const item of items) {
       const cc = item.cc;
       if (cc?.length === 2) {
-        item.flag = flag(cc.toUpperCase());
+        item.flag = flag(cc);
       }
     }
     ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);

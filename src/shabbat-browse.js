@@ -12,7 +12,7 @@ import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
 } from './cacheControl.js';
 import {expiresSaturdayNight} from './dateUtil.js';
-import flag from 'emoji-flag';
+import {flag} from './emoji-flag.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
