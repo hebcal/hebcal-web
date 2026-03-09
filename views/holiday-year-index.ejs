@@ -207,10 +207,13 @@ precedence over what would be a minor holiday.</p>
 <p class="small">Create and download a custom calendar with event titles in different languages,
 candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p>
 </div>
+<% if ((isHebrewYear && calendarYear >= 5000 && calendarYear <= 6759) ||
+       (!isHebrewYear && year >= 1900 && year < 3000)) { -%>
 <div class="mb-4">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 <p class="small">Printable PDF, one page per month, in landscape</p>
 </div>
+<% } -%>
 </div><!-- .col-md-3 -->
 </div><!-- .row -->
 <%- await include('partials/download-modal.ejs') -%>
