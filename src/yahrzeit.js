@@ -86,7 +86,8 @@ export async function yahrzeitApp(ctx) {
     ctx.body = await renderJson(maxId, q);
     return;
   } else if (q.cfg === 'fc') {
-    ctx.body = await renderFullCalendar(ctx, maxId, q);
+    ctx.status = 400;
+    ctx.body = {error: 'This API does not support cfg=fc'};
     return;
   } else if (q.cfg === 'xml') {
     ctx.status = 400;
@@ -232,7 +233,7 @@ async function renderJson(maxId, q) {
     delete item.hebrew;
     delete item.category;
     if (typeof item.memo === 'string') {
-      item.memo = item.memo.replace(/\\n/g, '\n');
+      item.memo = item.memo.replaceAll('\\n', '\n');
     }
     const ev = item.ev;
     delete item.ev;
@@ -409,19 +410,23 @@ export async function yahrzeitDownload(ctx) {
     }
   }
   const vv = query.v;
-  if (!vv || vv[0] !== 'y') {
+  if (vv?.[0] !== 'y') {
     return;
   }
-  const maxId = getMaxYahrzeitId(query);
   if (ctx.state.ulid) {
     query.ulid = ctx.state.ulid;
   }
   const extension = rpath.substring(rpath.length - 4);
   const ics = extension === '.ics';
-  const {startYear, endYear} = getDateRange(query);
+  const {today, startYear, endYear} = getDateRange(query);
+  const sunday = today.onOrBefore(0).abs();
   const attrs = {startYear, endYear, extension};
+  const isAttachment = query.dl == '1';
   if (ics) {
     attrs.icalv = IcalEvent.version();
+    if (!isAttachment) {
+      attrs.sunday = sunday;
+    }
   }
   ctx.response.etag = makeETag(ctx, query, attrs);
   ctx.status = 200;
@@ -431,9 +436,11 @@ export async function yahrzeitDownload(ctx) {
   }
 
   const reminder = query.yrem !== '0' && query.yrem !== 'off';
-  const events = await makeYahrzeitEvents(maxId, query, reminder);
+  const maxId = getMaxYahrzeitId(query);
+  const events0 = await makeYahrzeitEvents(maxId, query, reminder);
+  const startAbs = sunday - 12 * 7; // 12 weeks ago
+  const events = !ics || isAttachment ? events0 : events0.filter((ev) => ev.getDate().abs() >= startAbs);
 
-  const isAttachment = query.dl == '1';
   if (isAttachment) {
     ctx.response.attachment(basename(rpath));
   }
@@ -531,8 +538,7 @@ function makeDummyEvent(ctx) {
 /**
  * @return {number}
  */
-function getDefaultStartYear() {
-  const today = new HDate();
+function getDefaultStartYear(today) {
   const hmonth = today.getMonth();
   const hyear = today.getFullYear();
   const isFirst3months = hmonth >= months.TISHREI && hmonth <= months.TEVET;
@@ -540,10 +546,11 @@ function getDefaultStartYear() {
 }
 
 function getDateRange(query) {
+  const today = new HDate();
   const years = getNumYears(query.years);
-  const startYear = parseInt(query.start, 10) || getDefaultStartYear();
+  const startYear = parseInt(query.start, 10) || getDefaultStartYear(today);
   const endYear = parseInt(query.end, 10) || (startYear + years - 1);
-  return {startYear, endYear, years};
+  return {today, startYear, endYear, years};
 }
 
 /**
