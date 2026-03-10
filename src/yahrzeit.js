@@ -2,8 +2,7 @@ import {Event, HDate, HebrewCalendar, Locale,
   Location,
   flags, gematriya, months} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
-import {eventsToCsv, eventToFullCalendar, eventsToClassicApi} from '@hebcal/rest-api';
-import {isoDateStringToDate} from './dateUtil.js';
+import {eventsToCsv, eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
 import {empty} from './empty.js';
@@ -248,33 +247,6 @@ async function renderJson(maxId, q) {
   results.title = makeCalendarTitle(q, 255);
   delete results.location;
   return results;
-}
-
-async function renderFullCalendar(ctx, maxId, q) {
-  for (const param of ['start', 'end']) {
-    if (q[param] === undefined) {
-      ctx.remove('Cache-Control');
-      ctx.throw(400, `Please specify required parameter '${param}'`);
-    } else if (Array.isArray(q[param])) {
-      ctx.remove('Cache-Control');
-      ctx.throw(400, `Invalid duplicate parameter '${param}'`);
-    }
-  }
-  const start = new HDate(isoDateStringToDate(q.start)).getFullYear();
-  const end = new HDate(isoDateStringToDate(q.end)).getFullYear();
-  const years = (end - start) + 1;
-  const query = {...q, start, end, years};
-  delete query.ulid;
-  const il = query.i === 'on';
-  const events = await makeYahrzeitEvents(maxId, query, false);
-  return events.map((ev) => {
-    const item = eventToFullCalendar(ev, 'UTC', {il});
-    const emoji = ev.getEmoji();
-    if (emoji) {
-      item.emoji = emoji;
-    }
-    return item;
-  });
 }
 
 async function makeFormResults(ctx) {

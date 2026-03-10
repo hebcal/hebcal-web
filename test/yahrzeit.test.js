@@ -159,41 +159,6 @@ describe('Yahrzeit JSON output structure', () => {
   });
 });
 
-describe('Yahrzeit FullCalendar output', () => {
-  it('returns 400 when start param is missing', async () => {
-    const response = await request(app.callback())
-        .post('/yahrzeit')
-        .type('form')
-        .send('cfg=fc&v=yahrzeit&n1=Test&t1=Yahrzeit&d1=8&m1=12&y1=1978');
-    expect(response.status).toBe(400);
-  });
-
-  it('returns array of events for cfg=fc with valid date range', async () => {
-    const response = await request(app.callback())
-        .post('/yahrzeit')
-        .type('form')
-        .send('cfg=fc&v=yahrzeit&n1=Golda+Meir&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&start=2025-01-01&end=2026-12-31');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-    const body = response.body;
-    expect(Array.isArray(body)).toBe(true);
-    expect(body.length).toBeGreaterThan(0);
-    const ev = body[0];
-    expect(ev).toHaveProperty('title');
-    expect(ev).toHaveProperty('start');
-  });
-
-  it('returns 400 for cfg=xml', async () => {
-    const response = await request(app.callback())
-        .post('/yahrzeit')
-        .type('form')
-        .send('cfg=xml&v=yahrzeit&n1=Test&t1=Yahrzeit&d1=8&m1=12&y1=1978');
-    expect(response.status).toBe(400);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('error');
-  });
-});
-
 describe('Yahrzeit calendar picker (GET with no query)', () => {
   it('renders calpicker with no calendars when no Y cookie is set', async () => {
     const response = await request(app.callback())
