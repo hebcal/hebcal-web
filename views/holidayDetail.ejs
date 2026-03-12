@@ -47,12 +47,11 @@ layout="responsive"></amp-img>
 <picture>
 <% if (meta.photo.avif) { -%>
 <source type="image/avif"
-width="<%=meta.photo.dimensions[640].width%>"
-height="<%=meta.photo.dimensions[640].height%>"
 srcset="/i/is/800/<%=meta.photo.avif%> 800w, /i/is/640/<%=meta.photo.avif%> 640w, /i/is/400/<%=meta.photo.avif%> 400w"
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px">
 <% } -%>
 <img alt="<%=meta.photo.caption||holiday%>"
+fetchpriority="high"
 src="/i/is/640/<%=meta.photo.fn%>"
 width="<%=meta.photo.dimensions[640].width%>"
 height="<%=meta.photo.dimensions[640].height%>"
@@ -283,12 +282,9 @@ height="<%=book.dimensions?.height||160%>"
 layout="responsive"></amp-img>
 <% } else { -%>
 <picture>
-<% if (typeof book.avif === 'object') { %>
-<source type="image/avif"
-srcset="/i/<%=book.ASIN%>.01.MZZZZZZZ.avif"
-width="<%=book.avif?.width||200%>"
-height="<%=book.avif?.height||160%>">
-<% } %>
+<% if (typeof book.avif === 'object') { -%>
+<source type="image/avif" srcset="/i/<%=book.ASIN%>.01.MZZZZZZZ.avif">
+<% } -%>
 <img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
 class="img-fluid card-img-top"
