@@ -13,6 +13,8 @@ import {makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
+const maxEventsIcsSub = 2400;
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
@@ -60,7 +62,8 @@ export async function hebcalDownload(ctx) {
     icalOpt.utmSource = query.utm_source;
     icalOpt.utmMedium = query.utm_medium;
     icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
-    if (!query.subscribe) {
+    const isAttachment = !query.subscribe;
+    if (isAttachment) {
       ctx.response.attachment(basename(path));
     }
     if (options.sedrot) {
@@ -72,7 +75,8 @@ export async function hebcalDownload(ctx) {
     ctx.response.type = 'text/calendar; charset=utf-8';
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
     const zeroEvents = events.length === 0;
-    const events2 = zeroEvents ? makeDummyEvent(ctx) : events;
+    const events1 = events.length > maxEventsIcsSub && !isAttachment ? events.slice(0, maxEventsIcsSub) : events;
+    const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
     }

@@ -159,6 +159,8 @@ function checkYearRange(ctx) {
   }
 }
 
+const maxEventsIcsSub = 2400;
+
 async function renderIcal(ctx) {
   const options = ctx.state.options;
   const icalOpt = makeIcalOpts(options, ctx.state.q);
@@ -177,7 +179,8 @@ async function renderIcal(ctx) {
   const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
     cacheControl(0.25);
   ctx.set('Cache-Control', cacheCtrlStr);
-  ctx.body = await eventsToIcalendar(events, icalOpt);
+  const events1 = events.length > maxEventsIcsSub ? events.slice(0, maxEventsIcsSub) : events;
+  ctx.body = await eventsToIcalendar(events1, icalOpt);
 }
 
 function renderRss(ctx) {
