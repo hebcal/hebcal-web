@@ -50,6 +50,35 @@ afterAll(() => {
   fs.rmSync(avifPath, {force: true});
 });
 
+// Chanukah has photo.fn = "528498099.webp"; use it to test the no-AVIF case
+// to avoid cache collisions with the lag-baomer tests above
+const CHANUKAH_STEM = '528498099';
+const CHANUKAH_WEBP = CHANUKAH_STEM + '.webp';
+const CHANUKAH_AVIF = CHANUKAH_STEM + '.avif';
+const chanukahWebpPath = path.join(imageDir640, CHANUKAH_WEBP);
+const chanukahAvifPath = path.join(imageDir640, CHANUKAH_AVIF);
+
+describe('Holiday detail page image formats without AVIF', () => {
+  beforeAll(() => {
+    fs.mkdirSync(imageDir640, {recursive: true});
+    fs.writeFileSync(chanukahWebpPath, MINIMAL_WEBP);
+    // Intentionally do NOT create chanukahAvifPath
+  });
+
+  afterAll(() => {
+    fs.rmSync(chanukahWebpPath, {force: true});
+    fs.rmSync(chanukahAvifPath, {force: true});
+  });
+
+  it('should not include AVIF in <picture> or <source> when AVIF file does not exist', async () => {
+    const res = await request(app.callback()).get('/holidays/chanukah');
+    expect(res.status).toBe(200);
+    expect(res.type).toContain('html');
+    expect(res.text).not.toContain('type="image/avif"');
+    expect(res.text).not.toContain(CHANUKAH_AVIF);
+  });
+});
+
 describe('Holiday detail page image formats', () => {
   it('should include an <img> with webp srcset for lag-baomer', async () => {
     const res = await request(app.callback()).get('/holidays/lag-baomer');
