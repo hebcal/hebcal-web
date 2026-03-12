@@ -193,6 +193,12 @@ app.use(async function errorCsp(ctx, next) {
   if (ctx.status !== 200 && ctx.type === 'text/html' && !ctx.response.has(CSP_HEADER_NAME)) {
     ctx.set(CSP_HEADER_NAME, `default-src 'self'; style-src 'self' 'unsafe-inline'`);
   }
+  if (ctx.status === 404) {
+    const str = ctx.response.get('Cache-Control');
+    if (str && str.includes('immutable')) {
+      ctx.response.remove('Cache-Control');
+    }
+  }
 });
 
 app.use(error({

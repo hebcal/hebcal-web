@@ -26,6 +26,25 @@ function sourceName(href) {
 
 const cache = new Map();
 
+const imgSizes = ['16x9-768', '800', '640', '400'];
+
+/**
+ * @private
+ * @param {string} fn filename
+ * @return {boolean}
+ */
+async function hasAllSizes(fn) {
+  for (const sz of imgSizes) {
+    const path = DOCUMENT_ROOT + '/i/is/' + sz + '/' + fn;
+    try {
+      await fs.promises.access(path);
+    } catch {
+      return false; // file not found
+    }
+  }
+  return true;
+}
+
 /**
  * @param {string} holiday
  * @return {Promise<any>}
@@ -43,12 +62,8 @@ export async function getHolidayMeta(holiday) {
   meta.about.name = sourceName(meta.about.href);
   if (meta.photo?.fn) {
     const avif = meta.photo.fn.replace(/.webp$/, '.avif');
-    const path = DOCUMENT_ROOT + '/i/is/640/' + avif;
-    try {
-      await fs.promises.access(path);
+    if (await hasAllSizes(avif)) {
       meta.photo.avif = avif;
-    } catch {
-      // ignore file not found
     }
   }
   if (meta.wikipedia?.href) {

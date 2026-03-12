@@ -5,8 +5,8 @@ import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {DOCUMENT_ROOT} from '../src/common.js';
 
-// Lag BaOmer has photo.fn = "myazv2ldos.webp" with 640 and 800 dimensions
-const PHOTO_STEM = 'myazv2ldos';
+// Pesach has photo.fn = "112151899.webp" with 640 and 800 dimensions
+const PHOTO_STEM = '112151899';
 const PHOTO_WEBP = PHOTO_STEM + '.webp';
 const PHOTO_AVIF = PHOTO_STEM + '.avif';
 
@@ -35,74 +35,89 @@ const MINIMAL_AVIF = Buffer.from(
     'hex',
 );
 
+const imgSizes = ['16x9-768', '800', '640', '400'];
 const imageDir640 = path.join(DOCUMENT_ROOT, 'i', 'is', '640');
 const webpPath = path.join(imageDir640, PHOTO_WEBP);
 const avifPath = path.join(imageDir640, PHOTO_AVIF);
 
 beforeAll(() => {
-  fs.mkdirSync(imageDir640, {recursive: true});
-  fs.writeFileSync(webpPath, MINIMAL_WEBP);
-  fs.writeFileSync(avifPath, MINIMAL_AVIF);
+  for (const sz of imgSizes) {
+    const imageDir = path.join(DOCUMENT_ROOT, 'i', 'is', sz);
+    fs.mkdirSync(imageDir, {recursive: true});
+    const webpPath = path.join(imageDir, PHOTO_WEBP);
+    const avifPath = path.join(imageDir, PHOTO_AVIF);
+    fs.writeFileSync(webpPath, MINIMAL_WEBP);
+    fs.writeFileSync(avifPath, MINIMAL_AVIF);
+  }
 });
 
 afterAll(() => {
-  fs.rmSync(webpPath, {force: true});
-  fs.rmSync(avifPath, {force: true});
+  for (const sz of imgSizes) {
+    const imageDir = path.join(DOCUMENT_ROOT, 'i', 'is', sz);
+    const webpPath = path.join(imageDir, PHOTO_WEBP);
+    const avifPath = path.join(imageDir, PHOTO_AVIF);
+    fs.rmSync(webpPath, {force: true});
+    fs.rmSync(avifPath, {force: true});
+  }
 });
 
 // Chanukah has photo.fn = "528498099.webp"; use it to test the no-AVIF case
-// to avoid cache collisions with the lag-baomer tests above
+// to avoid cache collisions with the pesach tests above
 const CHANUKAH_STEM = '528498099';
 const CHANUKAH_WEBP = CHANUKAH_STEM + '.webp';
 const CHANUKAH_AVIF = CHANUKAH_STEM + '.avif';
-const chanukahWebpPath = path.join(imageDir640, CHANUKAH_WEBP);
-const chanukahAvifPath = path.join(imageDir640, CHANUKAH_AVIF);
 
 describe('Holiday detail page image formats without AVIF', () => {
   beforeAll(() => {
-    fs.mkdirSync(imageDir640, {recursive: true});
-    fs.writeFileSync(chanukahWebpPath, MINIMAL_WEBP);
-    // Intentionally do NOT create chanukahAvifPath
+    for (const sz of imgSizes) {
+      const imageDir = path.join(DOCUMENT_ROOT, 'i', 'is', sz);
+      fs.mkdirSync(imageDir, {recursive: true});
+      const chanukahWebpPath = path.join(imageDir, CHANUKAH_WEBP);
+      fs.writeFileSync(chanukahWebpPath, MINIMAL_WEBP);
+      // Intentionally do NOT create chanukahAvifPath
+    }
   });
 
   afterAll(() => {
-    fs.rmSync(chanukahWebpPath, {force: true});
-    fs.rmSync(chanukahAvifPath, {force: true});
+    for (const sz of imgSizes) {
+      const chanukahWebpPath = path.join(DOCUMENT_ROOT, 'i', 'is', sz, CHANUKAH_WEBP);
+      fs.rmSync(chanukahWebpPath, {force: true});
+    }
   });
 
   it('should not include AVIF in <picture> or <source> when AVIF file does not exist', async () => {
     const res = await request(app.callback()).get('/holidays/chanukah');
     expect(res.status).toBe(200);
     expect(res.type).toContain('html');
-    expect(res.text).not.toContain('type="image/avif"');
+    expect(res.text).toContain(CHANUKAH_WEBP);
     expect(res.text).not.toContain(CHANUKAH_AVIF);
   });
 });
 
 describe('Holiday detail page image formats', () => {
-  it('should include an <img> with webp srcset for lag-baomer', async () => {
-    const res = await request(app.callback()).get('/holidays/lag-baomer');
+  it('should include an <img> with webp srcset for pesach', async () => {
+    const res = await request(app.callback()).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.type).toContain('html');
     expect(res.text).toContain(PHOTO_WEBP);
   });
 
-  it('should include a <source type="image/avif"> for lag-baomer when avif file exists', async () => {
-    const res = await request(app.callback()).get('/holidays/lag-baomer');
+  it('should include a <source type="image/avif"> for pesach when avif file exists', async () => {
+    const res = await request(app.callback()).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.text).toContain('type="image/avif"');
     expect(res.text).toContain(PHOTO_AVIF);
   });
 
-  it('should wrap images in a <picture> element for lag-baomer', async () => {
-    const res = await request(app.callback()).get('/holidays/lag-baomer');
+  it('should wrap images in a <picture> element for pesach', async () => {
+    const res = await request(app.callback()).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.text).toContain('<picture>');
     expect(res.text).toContain('</picture>');
   });
 
-  it('avif source should list multiple widths in srcset for lag-baomer', async () => {
-    const res = await request(app.callback()).get('/holidays/lag-baomer');
+  it('avif source should list multiple widths in srcset for pesach', async () => {
+    const res = await request(app.callback()).get('/holidays/pesach');
     expect(res.status).toBe(200);
     // srcset should contain 800w, 640w, and 400w variants
     const avifSrcset = res.text.match(
