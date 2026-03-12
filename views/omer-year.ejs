@@ -71,13 +71,13 @@
 <a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
 <% if (typeof amp === 'boolean' && amp) { -%>
 <amp-img alt="<%=book.text%>"
-src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
+src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
 width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"
 layout="responsive"></amp-img>
 <% } else { -%>
 <img alt="<%=book.text%>"
-src="/i/<%=book.ASIN%>.01.MZZZZZZZ.jpg"
+src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
 class="img-fluid card-img-top"
 width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"

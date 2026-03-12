@@ -3,6 +3,7 @@ import {basename} from 'node:path';
 import probe from 'probe-image-size';
 import fs from 'node:fs';
 import {holidayMeta} from './holidayMeta.js';
+import {DOCUMENT_ROOT} from './common.js';
 
 const primarySource = {
   'hebcal.com': 'Hebcal',
@@ -41,7 +42,15 @@ export async function getHolidayMeta(holiday) {
   const meta = {...meta0};
   meta.about.name = sourceName(meta.about.href);
   if (meta.photo?.fn) {
-    meta.photo.webp = meta.photo.fn.replace(/.jpg$/, '.webp');
+    const avif = meta.photo.fn.replace(/.webp$/, '.avif');
+    const path = DOCUMENT_ROOT + '/i/is/640/' + avif;
+    try {
+      if (await fs.promises.access(path)) {
+        meta.photo.avif = avif;
+      }
+    } catch {
+      // ignore file not found
+    }
   }
   if (meta.wikipedia?.href) {
     meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
@@ -61,43 +70,25 @@ export async function getHolidayMeta(holiday) {
     for (const book of meta.books) {
       const colon = book.text.indexOf(':');
       book.shortTitle = colon === -1 ? book.text.trim() : book.text.substring(0, colon).trim();
-      const path0 = '/var/www/html/i/' + book.ASIN + '.01.MZZZZZZZ';
-      try {
-        const path = path0 + '.jpg';
-        const rs = fs.createReadStream(path);
-        book.dimensions = await probe(rs);
-      // eslint-disable-next-line no-unused-vars
-      } catch (err) {
-        // ignore file not found
-      }
+      const path0 = DOCUMENT_ROOT + '/i/' + book.ASIN + '.01.MZZZZZZZ';
       try {
         const path = path0 + '.webp';
         const rs = fs.createReadStream(path);
-        book.webp = await probe(rs);
-      // eslint-disable-next-line no-unused-vars
-      } catch (err) {
+        book.dimensions = await probe(rs);
+        rs.close();
+      } catch {
+        // ignore file not found
+      }
+      try {
+        const path = path0 + '.avif';
+        const rs = fs.createReadStream(path);
+        book.avif = await probe(rs);
+        rs.close();
+      } catch {
         // ignore file not found
       }
     }
   }
-  /*
-  if (meta.photo) {
-    meta.photo.dimensions = {};
-    const a = {};
-    for (const size of [400, 640, 800, 1024, '1x1', '4x3', '16x9']) {
-      try {
-        const path = '/var/www/html/i/is/' + size + '/' + meta.photo.fn;
-        const rs = fs.createReadStream(path);
-        meta.photo.dimensions[size] = await probe(rs);
-        a[size] = {width: meta.photo.dimensions[size].width, height: meta.photo.dimensions[size].height};
-      } catch (err) {
-      // ignore file not found
-      }
-    }
-    console.log(holiday);
-    console.log(JSON.stringify(a, null, 1));
-  }
-  */
   cache.set(holiday, meta);
   return {...meta};
 }

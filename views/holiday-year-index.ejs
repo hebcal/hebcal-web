@@ -100,9 +100,11 @@
 <% if (typeof item?.meta?.photo === 'object') { -%>
 <div class="col-md-4">
 <a href="<%=item.href%>"><picture>
-<source type="image/webp"
- srcset="/i/is/16x9-768/<%=item.meta.photo.webp%>"
+<% if (item.meta.photo.avif) { -%>
+<source type="image/avif"
+ srcset="/i/is/16x9-768/<%=item.meta.photo.avif%>"
  width="240">
+<% } -%>
 <img alt="<%=item.meta.photo.caption||holiday%>"
 src="/i/is/16x9-768/<%=item.meta.photo.fn%>"
 width="240"
