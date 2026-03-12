@@ -692,6 +692,10 @@ export function renderPdf(doc, events, options, query) {
           if (isAlternateDateEvent(evt)) {
             continue;
           }
+          if (y + 10 > ypos + rowheight) {
+            // we're going to overrun the cell height; stop rendering events for this day
+            break;
+          }
           y = renderPdfEvent(doc, evt, xpos - PDF_COLWIDTH + PDF_CELL_MARGIN, y, rtl, options);
         }
       }
