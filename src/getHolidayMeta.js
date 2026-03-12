@@ -45,9 +45,8 @@ export async function getHolidayMeta(holiday) {
     const avif = meta.photo.fn.replace(/.webp$/, '.avif');
     const path = DOCUMENT_ROOT + '/i/is/640/' + avif;
     try {
-      if (await fs.promises.access(path)) {
-        meta.photo.avif = avif;
-      }
+      await fs.promises.access(path);
+      meta.photo.avif = avif;
     } catch {
       // ignore file not found
     }
