@@ -39,7 +39,7 @@
   data-hebcal-attr="href" data-hebcal-src="webcal"
   title="Subscribe to <%= url.title %>"
   rel="nofollow" href="<%= url.webcal %>">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg>
+  <svg class="icon align-top"><use href="<%=spriteHref%>#icon-appleinc"></use></svg>
   Subscribe on iPhone, iPad &amp; macOS</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
@@ -52,7 +52,7 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </div>
 <div>
  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ios-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
-  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events and merge with your own calendar.</p>
@@ -73,7 +73,7 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
   data-hebcal-attr="href" data-hebcal-src="webcal"
   title="Add <%= url.title %> to Outlook for Windows"
   rel="nofollow" href="<%= url.webcal %>">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
+  <svg class="icon align-top"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook Internet Calendar Subscription</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
@@ -84,7 +84,7 @@ href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 </div>
 <div>
   <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
-  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events into Outlook and merge with your own calendar.</p>
@@ -111,14 +111,14 @@ title="Add <%= url.title %> to Google Calendar"
 target="_blank"
 data-hebcal-attr="href" data-hebcal-src="gcal"
 href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal) %>">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg>
+  <svg class="icon align-top"><use href="<%=spriteHref%>#icon-google"></use></svg>
   Add to Google Calendar</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 <div>
   <a class="btn btn-secondary btn-sm download mb-2" id="dl-gcal-alt" title="<%= filename.ics %>" rel="nofollow" href="<%= url.ics1year %>" download="<%= filename.ics %>">
-  <svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events into Google Calendar and merge with your own calendar
@@ -143,7 +143,7 @@ href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(url.gcal
 data-hebcal-attr="value" data-hebcal-src="subical"
 value="<%= url.subical %>">
 <button id="grabBtn" class="btn btn-secondary grabBtn" data-bs-animation="false" data-clipboard-target="#grabLink">
-<svg class="icon icon-md align-top"><use xlink:href="<%=spriteHref%>#clippy"></use></svg>
+<svg class="icon icon-md align-top"><use href="<%=spriteHref%>#clippy"></use></svg>
 Copy
 </button>
 </div>
@@ -167,7 +167,7 @@ title="Add <%= url.title %> to Outlook.com"
 target="_blank"
 data-hebcal-attr="href" data-hebcal-src="olcom"
 href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(url.gcal) %>&amp;name=<%=encodeURIComponent(url.title)%>&amp;mkt=en-001">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
+  <svg class="icon align-top"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg>
   Add to Outlook.com</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
@@ -182,9 +182,9 @@ href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(ur
 <p class="small">CSV is a legacy calendar file format for Outlook 97-2003.
   Select the file that matches your computer’s date format:</p>
 <ul class="list-unstyled">
-<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
+<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-usa" title="<%= filename.csv_usa %>" rel="nofollow" href="<%= url.csv_usa %>" download="<%= filename.csv_usa %>"><svg class="icon align-top"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
   <small><code>mm/dd/yyyy</code></small></li>
-<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
+<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-eur" title="<%= filename.csv_eur %>" rel="nofollow" href="<%= url.csv_eur %>" download="<%= filename.csv_eur %>"><svg class="icon align-top"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
   <small><code>dd/mm/yyyy</code></small></li>
 </ul>
 <p class="mb-0 small">Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
@@ -199,7 +199,7 @@ href="/home/12/outlook-csv-jewish-holidays">CSV for Outlook for Windows</a></p>
   Print PDF (formatted for 8.5"x11" paper)
 </h6>
 <div>
-<p><a class="btn btn-primary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" rel="nofollow" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
+<p><a class="btn btn-primary download mb-1" id="dl-pdf" title="<%= filename.pdf %>" rel="nofollow" href="<%= url.pdf %>" download="<%= filename.pdf %>"><svg class="icon align-top"><use href="<%=spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
 
 </div>
 </div><!-- #pdf-body -->

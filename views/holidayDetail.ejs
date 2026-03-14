@@ -1,7 +1,4 @@
-<%- await include('partials/header2.ejs', {
-  ampAds: true,
-  ampForm: true,
-}) -%>
+<%- await include('partials/header.ejs') -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on' : '' %>">
 <% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } else if (!currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
 <% if (typeof prev !== 'undefined') { %><link rel="prev" href="<%=prev.href%>"><% } %>
@@ -9,12 +6,10 @@
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <meta name="description" content="<%=descFirstTwo%> <%=holidayQ%> <%=nextObserved%>">
 <meta name="keywords" content="<%=translations.join(',')%>">
-<% if (typeof amp === 'undefined' || !amp) { -%>
-<link rel="amphtml" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on&amp=1' : '?amp=1' %>">
 <style>
 .past {color: var(--bs-secondary-color) !important}
 </style>
-<% } -%>
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -37,13 +32,6 @@
 </p>
 <% if (typeof meta.photo === 'object') { -%>
 <div>
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-img alt="<%=meta.photo.caption||holiday%>"
-src="/i/is/640/<%=meta.photo.fn%>"
-width="<%=meta.photo.dimensions[640].width/meta.photo.dimensions[640].height%>"
-height="1"
-layout="responsive"></amp-img>
-<% } else { -%>
 <picture>
 <% if (meta.photo.avif) { -%>
 <source type="image/avif"
@@ -59,7 +47,6 @@ srcset="/i/is/800/<%=meta.photo.fn%> 800w, /i/is/640/<%=meta.photo.fn%> 640w, /i
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
 class="img-fluid">
 </picture>
-<% } -%>
 </div>
 <% } -%>
 <p class="mt-3"><%-descrLong%></p>
@@ -157,16 +144,6 @@ is forbidden.</p>
 <h6 class="text-body-secondary mb-1 mt-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-4">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-ad width="100vw" height="320"
- type="adsense"
- data-ad-client="ca-pub-7687563417622459"
- data-ad-slot="3531211046"
- data-auto-format="rspv"
- data-full-width="">
-<div overflow=""></div>
-</amp-ad>
-<% } else { -%>
 <script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
@@ -178,7 +155,6 @@ data-ad-slot="5342180883"></ins>
 <script nonce="<%=nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-<% } -%>
 </div><!-- .d-print-none -->
 
 <% if (typeof meta.reading !== 'undefined') { %>
@@ -274,13 +250,6 @@ href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
 <a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-img alt="<%=book.text%>"
-src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
-width="<%=book.dimensions?.width||104%>"
-height="<%=book.dimensions?.height||160%>"
-layout="responsive"></amp-img>
-<% } else { -%>
 <picture>
 <% if (typeof book.avif === 'object') { -%>
 <source type="image/avif" srcset="/i/<%=book.ASIN%>.01.MZZZZZZZ.avif">
@@ -292,7 +261,6 @@ width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"
 style="border:none">
 </picture>
-<% } -%>
 </a>
 <div class="card-body">
 <p class="card-text small"><a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>

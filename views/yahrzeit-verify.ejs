@@ -4,14 +4,14 @@
 <p class="lead">Receive anniversary reminders by email.</p>
 <% if (confirmed) { %>
 <div class="alert alert-success">
-<svg class="icon me-2"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> Your annual email reminders are now active.
 </div><!-- .alert -->
 <p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
-  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
   View calendar</a>
   <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>#form">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg>
   Edit calendar</a></p>
 <% } else { %>
 <p>To activate your <%= anniversaryType %> reminders, please confirm your email
@@ -20,7 +20,7 @@ and complete your registration via the button below.</p>
 <form method="post" action="<%= rpath %>">
 <input type="hidden" name="commit" value="1">
 <button type="submit" class="btn btn-primary mb-2">
-  <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+  <svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
   Confirm
 </button>
 </form>

@@ -23,7 +23,7 @@ function htmlMenu(selected) {
   str += '</ul>';
   return str;
 }
-const logoImage = '<svg width="77" height="21" xmlns="http://www.w3.org/2000/svg"><use xlink:href="' + spriteHref + '#hebcal-logo"></use></svg>';
+const logoImage = '<svg width="77" height="21" xmlns="http://www.w3.org/2000/svg"><use href="' + spriteHref + '#hebcal-logo"></use></svg>';
 const logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
 if (rpath === '/') {
     logoHtml = '<span ' + logoIdClassTitle + '>' + logoImage + '</span>';
@@ -33,18 +33,14 @@ if (rpath === '/') {
 %><nav class="navbar navbar-expand-lg bg-body-tertiary">
 <div class="container-fluid">
   <%- logoHtml %>
-<% if (typeof amp === 'undefined' || !amp) { -%>
   <button class="navbar-toggler d-print-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-<% } -%>
   <div class="collapse navbar-collapse d-print-none" id="navbarSupportedContent">
     <%- htmlMenu(rpath) %>
-<% if (typeof amp === 'undefined' || !amp) { -%>
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search">
     </form>
-<% } -%>
   </div>
 </div>
 </nav>
