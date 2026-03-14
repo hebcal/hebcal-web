@@ -147,6 +147,7 @@ export async function hebrewDateConverter(ctx) {
       makePrevNext(p);
       makeFutureYears(ctx, p);
     }
+    ctx.append('Link', '</i/adobehebrew-regular.woff2>; rel=preload; as=font; type="font/woff2"; crossorigin');
     return ctx.render('converter', p);
   }
 }
