@@ -141,9 +141,6 @@ export async function hebrewDateConverter(ctx) {
     if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
       ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     }
-    if (q.amp === '1') {
-      p.amp = true;
-    }
     p.h2gURL = h2gURL;
     p.currentYear = now.getFullYear();
     if (!p.message) {
