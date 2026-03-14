@@ -196,7 +196,6 @@ export async function holidayYearIndex(ctx) {
     q,
     isoDateStart: dayjs(events0[0].greg()).format('YYYY-MM') + '-01',
     options,
-    amp: (q.amp === '1') ? true : undefined,
     roshChodesh,
     modernHolidays,
     title,

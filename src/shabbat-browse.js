@@ -106,9 +106,6 @@ async function render(ctx, view, props) {
   if (basename(ctx.request.path).endsWith('.xml')) {
     return renderBrowseCountryXml(props, ctx);
   }
-  if (ctx.request.query.amp === '1') {
-    props.amp = true;
-  }
   return ctx.render(view, props);
 }
 

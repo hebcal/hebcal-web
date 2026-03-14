@@ -101,9 +101,6 @@ export async function shabbatApp(ctx) {
     if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
-    if (q.amp === '1') {
-      p.amp = true;
-    }
     p.queryDefaultCandleMins = queryDefaultCandleMins;
     makeDownloadProps(ctx, q, options);
     ctx.state.numYears = 4;

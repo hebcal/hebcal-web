@@ -113,7 +113,7 @@ export async function holidayDetail(ctx) {
     // It's Shalosh regalim and the URL doesn't have i=on/off
     ctx.set('Cache-Control', 'private, max-age=0');
     const rpath = ctx.request.path;
-    const suffix = (q.amp === '1') ? '?i=on&amp=1' : '?i=on';
+    const suffix = '?i=on';
     httpRedirect(ctx, rpath + suffix, 302);
     return;
   }
@@ -205,7 +205,6 @@ export async function holidayDetail(ctx) {
     pesachSukkotItems,
     translations,
     emoji: holiday === 'Chanukah' ? '🕎' : (next.event.getEmoji() || ''),
-    amp: (q.amp === '1') ? true : undefined,
     prev: prevNext.prev,
     next: prevNext.next,
   });
