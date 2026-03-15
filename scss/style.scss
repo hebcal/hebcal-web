@@ -24,6 +24,22 @@ $container-max-widths: (
 
 // Required
 @import "bootstrap/scss/variables";
+
+// Remove unused color variables to reduce CSS output size.
+// We use theme colors (primary, secondary, success, info, warning, danger, dark)
+// but never reference these extended palette colors directly.
+$indigo: null;
+$purple: null;
+$pink: null;
+$orange: null;
+$teal: null;
+$cyan: null;
+$yellow: null;
+
+// Remove unused colors from the $colors map to prevent
+// generation of --bs-{color} CSS custom properties
+$colors: map-remove($colors, "indigo", "purple", "pink", "orange", "yellow", "teal", "cyan", "blue", "red", "green");
+
 @import "bootstrap/scss/variables-dark";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
