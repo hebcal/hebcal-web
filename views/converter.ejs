@@ -1,5 +1,6 @@
 <%- await include('partials/header.ejs', {
   title: `Hebrew Date Converter - ${gdateStr}${gs?' after sunset':''} / ${hdateStr}`,
+  criticalCss: 'critical-converter.css',
 }) -%>
 <% if (gy <= 1752 || gy > currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">

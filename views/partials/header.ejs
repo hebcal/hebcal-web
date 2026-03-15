@@ -3,7 +3,14 @@
 <meta charset="utf-8">
 <title><%= title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<% if (typeof criticalCss === 'string') { -%>
+<style><%- await include(criticalCss) %></style>
+<link rel="stylesheet" href="<%= mainCssHref %>" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="<%= mainCssHref %>"></noscript>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<% } else { -%>
 <%- await include('bootstrap-css.ejs') -%>
+<% } -%>
 <link rel="preload" href="<%=spriteHref%>" as="image" fetchpriority="high">
 <script nonce="<%=nonce%>">
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
