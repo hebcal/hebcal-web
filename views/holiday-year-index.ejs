@@ -5,30 +5,6 @@
 <% } else { %>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>">
 <% } %>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [{
-  "@type": "ListItem",
-  "position": 1,
-  "name": "Holidays",
-  "item": "https://www.hebcal.com/holidays/<%=iSuffix%>"
- },{
-<% if (isHebrewYear) { -%>
-  "@type": "ListItem",
-  "position": 2,
-  "name": "<%=calendarYear%>",
-  "item": "https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>"
-<% } else { -%>
-  "@type": "ListItem",
-  "position": 2,
-  "name": "<%=year%>",
-  "item": "https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>"
-<% } -%>
- }]
-}
-</script>
 <%- await include('partials/style-fullcalendar.ejs') -%>
 <style>
 .fc * a {
@@ -219,6 +195,30 @@ candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p
 <%- await include('partials/download-modal.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% if (greg1 > 1752) { %><%- await include('partials/script-fullcalendar.ejs') %><% } -%>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Holidays",
+  "item": "https://www.hebcal.com/holidays/<%=iSuffix%>"
+ },{
+<% if (isHebrewYear) { -%>
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=calendarYear%>",
+  "item": "https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>"
+<% } else { -%>
+  "@type": "ListItem",
+  "position": 2,
+  "name": "<%=year%>",
+  "item": "https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>"
+<% } -%>
+ }]
+}
+</script>
 <%- await include('partials/footer.ejs', {
   footerScripts: {clipboard: true},
 }) _%>

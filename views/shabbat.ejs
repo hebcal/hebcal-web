@@ -1,8 +1,5 @@
 <%- await include('partials/header.ejs') -%>
 <meta name="description" content="<%= summary %>">
-<% if (jsonLD) { -%>
-<script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
-<% } -%>
 <link rel="canonical" href="https://www.hebcal.com/shabbat?<%= geoUrlArgs %>&amp;set=off">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rssUrl %>">
 <style>
@@ -140,6 +137,9 @@ d.getElementById("m").addEventListener("focus",function(){
 });
 });
 </script>
+<% if (jsonLD) { -%>
+<script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
+<% } -%>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, typeahead: true, clipboard: true},
 }) _%>

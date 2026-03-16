@@ -6,23 +6,6 @@
 <style>
 #today {text-align: center}
 </style>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "BreadcrumbList",
- "itemListElement": [{
-  "@type": "ListItem",
-  "position": 1,
-  "name": "Omer <%=hyear%>",
-  "item": "https://www.hebcal.com/omer/<%=hyear%>"
- },{
-  "@type": "ListItem",
-  "position": 2,
-  "name": "Day <%=omerDay%>",
-  "item": "https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>"
- }]
-}
-</script>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -67,4 +50,21 @@
 <div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "BreadcrumbList",
+ "itemListElement": [{
+  "@type": "ListItem",
+  "position": 1,
+  "name": "Omer <%=hyear%>",
+  "item": "https://www.hebcal.com/omer/<%=hyear%>"
+ },{
+  "@type": "ListItem",
+  "position": 2,
+  "name": "Day <%=omerDay%>",
+  "item": "https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>"
+ }]
+}
+</script>
 <%- await include('partials/footer.ejs') _%>
