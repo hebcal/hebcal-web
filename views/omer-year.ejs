@@ -27,7 +27,7 @@
   <sup><a title="Counting of the Omer from Wikipedia"
     href="https://en.wikipedia.org/wiki/Counting_of_the_Omer">[2]</a></sup>
 </p>
-<div class="float-end ms-3 mt-1 mb-1 d-print-none"><a class="btn btn-sm btn-secondary" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
+<div class="float-end ms-3 mt-1 mb-1 d-print-none"><a class="btn btn-sm btn-secondary" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
 <p>We begin counting on the evening of the second night of Pesach:
   <time class="text-burgundy text-nowrap" datetime="<%=items[1].d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=items[1].d.subtract(1, 'd').format('dddd, D MMMM YYYY')%></time>,
   corresponding to the <span class="text-nowrap"><%=items[1].hd.render('en')%></span>.
@@ -69,20 +69,12 @@
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
 <a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-img alt="<%=book.text%>"
-src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
-width="<%=book.dimensions?.width||104%>"
-height="<%=book.dimensions?.height||160%>"
-layout="responsive"></amp-img>
-<% } else { -%>
 <img alt="<%=book.text%>"
 src="/i/<%=book.ASIN%>.01.MZZZZZZZ.webp"
 class="img-fluid card-img-top"
 width="<%=book.dimensions?.width||104%>"
 height="<%=book.dimensions?.height||160%>"
 style="border:none">
-<% } -%>
 </a>
 <div class="card-body">
 <p class="card-text small"><a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20"><%=book.shortTitle%></a>

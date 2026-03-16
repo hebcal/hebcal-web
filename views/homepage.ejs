@@ -58,7 +58,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 </div>
 <div class="col-md-auto text-center pe-3">
 <p><a class="btn btn-primary btn-xl fs-3" href="<%=calendarUrl + yearArgs %>">
-  <svg class="icon icon-md mb-1 me-1"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <svg class="icon icon-md mb-1 me-1"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
   <%= gregRangeShort %> Calendar</a>
 <br><small><a title="Hebcal Custom Calendar" href="/hebcal">Customize calendar settings</a></small></p>
 </div>
@@ -69,7 +69,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 </div>
 <div class="col-md-auto text-center pe-3">
 <p><a class="btn btn-secondary btn-xl fs-3 text-nowrap" href="/converter?gd=<%=gd%>&gm=<%=gm%>&gy=<%=gy%><%=afterSunset?'&gs=on':''%><%=il?'&i=on':''%>&g2h=1">
-  <svg class="icon icon-md mb-1 me-1"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
+  <svg class="icon icon-md mb-1 me-1"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
   Date Converter</a></p>
 </div>
 </div><!-- .row -->
@@ -77,7 +77,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 <div class="row mt-3">
 <div class="col-sm-4 mb-3">
 <a href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">
-  <svg width="68" height="68" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#magen-david"></use></svg>
+  <svg width="68" height="68" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#magen-david"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
@@ -90,7 +90,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 
 <div class="col-sm-4 mb-3">
 <a href="/yahrzeit">
-  <svg width="80" height="65" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+  <svg width="80" height="65" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#couple"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/yahrzeit">Yahrzeits and Birthdays</a></h3>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
@@ -101,7 +101,7 @@ Free annual email reminders &amp; calendar downloads.
 
 <div class="col-sm-4 mb-3">
 <a href="<%=shabbatUrl%>">
-  <svg width="64" height="64" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#candles"></use></svg>
+  <svg width="64" height="64" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#candles"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="<%=shabbatUrl%>">Shabbat Times</a></h3>
 <p>Candle-lighting &amp; Havdalah times for Shabbat and holidays.
@@ -115,7 +115,7 @@ href="/fridge">Year at-a-glance &raquo;</a></p>
 <div class="row">
 <div class="col-sm-4 mb-3">
 <a href="/sedrot/<%=il?'?i=on':''%>">
-  <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#torah-235339"></use></svg>
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#torah-235339"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/sedrot/<%=il?'?i=on':''%>">Torah Readings</a></h3>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
@@ -128,7 +128,7 @@ Spreadsheets for <em>leyning</em> coordinators.
 
 <div class="col-sm-4 mb-3">
 <a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">
-<svg width="80" height="69" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#book"></use></svg>
+<svg width="80" height="69" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#book"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/learning/<%=isoDt%><%=il?'?i=on':''%>">Daily learning</a></h3>
 <div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
@@ -143,7 +143,7 @@ Spreadsheets for <em>leyning</em> coordinators.
 
 <div class="col-sm-4 mb-3">
 <a href="/ical/">
-  <svg width="80" height="72" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#cloud-download"></use></svg>
+  <svg width="80" height="72" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#cloud-download"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/ical/">Download</a></h3>
 <p>Download Jewish holidays and Hebrew dates for iPhone, iPad, Android
@@ -157,7 +157,7 @@ app that supports iCalendar (.ics) feeds.
 <div class="row">
 <div class="col-sm-2">
 <a href="/home/developer-apis">
-  <svg width="80" height="80" class="mx-auto d-block mb-2"><use xlink:href="<%=cspriteHref%>#code"></use></svg>
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#code"></use></svg>
 </a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">

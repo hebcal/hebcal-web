@@ -48,11 +48,11 @@ for (const [group, emoji] of Object.entries(groups)) { -%>
 <%   } %>
 <% if (item.flag) { -%>
 <a title="Monthly calendar" class="ms-3" href="/hebcal?v=1&amp;<%= item.flag %>=on&amp;start=<%= d.format('YYYY-MM')%>-01&amp;end=<%= d.month() > 5 ? d.year() + 1 : d.year() %>-12-31<%= il ? '&i=on' : ''%>&amp;set=off">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
+<svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-calendar3"></use></svg></a>
 <% } -%>
 <% if (item.basename) { -%>
 <a title="Subscribe to calendar feed" class="ms-2" href="#sub-<%= item.id %>" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sub-<%= item.id %>">
-<svg class="icon icon-sm"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg></a>
+<svg class="icon icon-sm"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg></a>
 <% } -%>
 </div>
 <% if (item.event && item.event.memo && item.event.memo.indexOf('https://') === -1) { %><div class="fst-italic"><%=item.event.memo%></div><% } %>
@@ -65,27 +65,27 @@ for (const [group, emoji] of Object.entries(groups)) { -%>
     <a class="btn btn-secondary btn-sm me-2 mb-2 download" id="quick-ical-<%=item.basename%>"
     title="Subscribe to <%=item.category%> for Apple iPhone, iPad, macOS"
     href="webcal://download.hebcal.com/ical/<%=item.basename%>.ics">
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-appleinc"></use></svg> Apple</a>
+    <svg class="icon align-top"><use href="<%=spriteHref%>#icon-appleinc"></use></svg> Apple</a>
     <a class="btn btn-secondary btn-sm me-2 mb-2 download" id="quick-gcal-<%=item.basename%>"
     target="_blank"
     title="Add <%=item.category%> to Google Calendar"
     href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F<%=item.basename%>.ics">
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-google"></use></svg> Google</a>
+    <svg class="icon align-top"><use href="<%=spriteHref%>#icon-google"></use></svg> Google</a>
     <a class="btn btn-secondary btn-sm me-2 mb-2 download" id="quick-olcom-<%=item.basename%>"
     target="_blank"
     title="Subscribe to <%=item.category%> in Outlook.com"
     href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/<%=item.basename%>.ics&amp;name=<%=encodeURIComponent(item.category)%>&amp;mkt=en-001">
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+    <svg class="icon align-top"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
     <a class="btn btn-secondary btn-sm me-2 mb-2 download" id="quick-csv-<%=item.basename%>"
     title="Download <%=item.category%> legacy Comma Separated Values format"
     href="https://download.hebcal.com/ical/<%=item.basename%>.csv" download="<%=item.basename%>.csv">
-    <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> CSV</a>
+    <svg class="icon align-top"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> CSV</a>
   </div><!-- .btn-toolbar -->
   <div class="input-group input-group-sm mb-3">
     <input type="text" class="form-control" id="grab-<%=item.basename%>"
     value="https://download.hebcal.com/ical/<%=item.basename%>.ics">
     <button id="grabBtn-<%=item.basename%>" class="btn btn-secondary grabBtn" data-clipboard-target="#grab-<%=item.basename%>">
-    <svg class="icon"><use xlink:href="<%=spriteHref%>#clippy"></use></svg>
+    <svg class="icon"><use href="<%=spriteHref%>#clippy"></use></svg>
     Copy
     </button>
   </div>

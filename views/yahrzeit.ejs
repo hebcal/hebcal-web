@@ -30,18 +30,18 @@ div.yahrzeit-row {
 <div class="me-2 mb-2">
   <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
   <% if (!q.em) { -%>
-    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+    <svg class="icon"><use href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
   <% } else { -%>
-    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+    <svg class="icon"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
   <% } -%>
   </a>
 </div>
 <div class="me-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
 <% } -%>
 <div class="me-2 mb-2">
-<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
+<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
 </div><!-- .btn-toolbar -->
 <% if (typesSet.has('Yahrzeit')) { %>
@@ -97,22 +97,22 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 <div class="me-2 mb-2">
 <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
   <% if (!q.em) { -%>
-    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+    <svg class="icon"><use href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
   <% } else { -%>
-    <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+    <svg class="icon"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
   <% } -%>
 </a>
 </div>
 <div class="me-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
   Download</a>
 </div>
 </div><!-- .btn-toolbar -->
 <% } %>
 <div class="d-print-none mt-2">
 <div class="float-start">
-  <svg width="64" height="64" class="me-3 mb-2"><use xlink:href="<%=cspriteHref%>#couple"></use></svg>
+  <svg width="64" height="64" class="me-3 mb-2"><use href="<%=cspriteHref%>#couple"></use></svg>
 </div>
 <p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 and Hebrew Anniversaries.</p>
@@ -131,7 +131,7 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 <div class="tab-content">
 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 <p class="mt-3 d-print-none">In the form below, enter the date of death (or birth or anniversary).
-Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
 Add another name</span> button at the bottom of the page to add
 additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit">
@@ -149,13 +149,13 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <div class="clearfix">
 <p class="text-end float-sm-end">
  <button type="button" class="btn btn-success mt-2" id="newrow">
-  <svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+  <svg class="icon align-top"><use href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
   Add another name</button>
 </p>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' %> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
-&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1’s Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1’s Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' %> id="yizkor" >
@@ -165,12 +165,12 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   <div class="form-check mb-1">
     <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="off">
     <label class="form-check-label" for="i0">Diaspora Yizkor schedule</label>
-    &nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+    &nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
   <div class="form-check mb-1">
     <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="on">
     <label class="form-check-label" for="i1">Israel Yizkor schedule</label>
-    &nbsp;<span title="Pesach 7th day, Shavuot, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+    &nbsp;<span title="Pesach 7th day, Shavuot, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
 </div>
 <div class="row gx-2 mb-3 align-items-center">
@@ -208,7 +208,7 @@ additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
   Error: 0 records imported. Please check the CSV file format and try again.
 </div><!-- .alert -->
 <div id="success-alert" class="alert alert-success" role="alert" hidden>
-  <svg class="icon icon-sm mt-n1"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+  <svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
   Successfully imported <span id="success-numrecords">?</span> records from <span id="success-filename">?</span>.
   <br>Please review the imported data.
   <br>Click the <strong>Form</strong> tab above to continue.

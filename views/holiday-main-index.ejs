@@ -1,9 +1,10 @@
-<%- await include('partials/header2.ejs', {
+<%- await include('partials/header.ejs', {
   title: 'Jewish Holidays' + (yearOverride ? ` ${hyear - 1}-${hyear + 4}` : '') + ' - Hebcal',
 }) -%>
 <link rel="canonical" href="<%=canonical.href%>">
 <% if (hyear <= 5513 || hyear > (today.year() + 3860)) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <meta name="description" content="Dates of major and minor Jewish holidays for years <%=hyear-3762%>-<%=hyear-3756%>. Links to pages describing observance and customs, holiday Torah readings.">
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -51,13 +52,13 @@ data-ad-slot="1140358973"></ins>
 <div class="row mt-2 d-print-none">
 <div class="col-auto">
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 </div>
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal<%=il?'?i=on':''%>"><svg class="icon"><use xlink:href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
+<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal<%=il?'?i=on':''%>"><svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .col-auto -->
 </div><!-- .row -->
@@ -96,7 +97,7 @@ precedence over what would be a minor holiday.</p>
 <thead class="table-group-divider">
 <tr><th>
 <% if (hyear > 3762) { -%>
-<div><a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+<div><a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
 <% } -%>
 Holiday
 </th>
@@ -104,7 +105,7 @@ Holiday
 <th>
 <% if (yr === hyear + 4) { %>
 <div class="float-end">
-<a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
+<a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
 </div>
 <% } %>
 <a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
