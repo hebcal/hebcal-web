@@ -38,6 +38,7 @@ export async function geoAutoComplete(ctx) {
     ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
     ctx.body = items;
   } else {
+    ctx.response.remove('ETag');
     ctx.status = 404;
     ctx.body = NOTFOUND;
   }
