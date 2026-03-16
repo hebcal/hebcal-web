@@ -5,8 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <% if (typeof criticalCss === 'string') { -%>
 <style><%- await include(criticalCss) %></style>
-<link rel="stylesheet" href="<%= mainCssHref %>" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="<%= mainCssHref %>" media="print" id="maincss">
 <noscript><link rel="stylesheet" href="<%= mainCssHref %>"></noscript>
+<script nonce="<%=nonce%>">
+document.getElementById('maincss').addEventListener('load',function(){
+  this.media = 'all';
+});
+</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <% } else { -%>
 <%- await include('bootstrap-css.ejs') -%>
