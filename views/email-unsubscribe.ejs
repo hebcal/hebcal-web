@@ -35,7 +35,7 @@ body { background-color: #eee;}
 <div class="card">
 <div class="card-body">
   <h3 class="card-title">
-    <svg class="icon-lg me-2 text-success"><use xlink:href="<%=spriteHref%>#bs-check-large"></use></svg>
+    <svg class="icon-lg me-2 text-success"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
     Unsubscribed</h3>
   <p class="card-text">
     <strong><%= emailAddress %></strong>
@@ -49,7 +49,7 @@ body { background-color: #eee;}
     <input type="hidden" name="k" value="<%=subscriptionId%>">
     <input type="hidden" name="commit" value="1">
     <button type="submit" class="btn btn-secondary">
-      <svg class="icon mt-n05"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+      <svg class="icon mt-n05"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
       Subscribe again
     </button>
   </form>

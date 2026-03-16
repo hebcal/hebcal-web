@@ -1,15 +1,11 @@
-<%- await include('partials/header2.ejs', {
+<%- await include('partials/header.ejs', {
   title: `Hebrew Date Converter - ${gdateStr}${gs?' after sunset':''} / ${hdateStr}`,
-  ampAds: true,
-  ampForm: true,
 }) -%>
 <% if (gy <= 1752 || gy > currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
 <% if (typeof prev === 'object' && prev !== null) { %><link rel="prev" href="<%=prev.url%>"><% } %>
 <% if (typeof next === 'object' && next !== null) { %><link rel="next" href="<%=next.url%>"><% } %>
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
-<% if (typeof amp === 'undefined' || !amp) { -%>
-<link rel="amphtml" href="https://www.hebcal.com/converter?<%=canonical%>&amp;amp=1">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <style>
 #converter-results {
@@ -31,7 +27,7 @@
   border-radius: 0.2rem;
 }
 </style>
-<% } -%>
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -68,14 +64,12 @@ const isPast = hy < todayHebYear;
 </div><!-- #converter-results -->
 </div><!-- .col -->
 </div><!-- .row -->
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <div class="d-flex justify-content-center d-print-none">
 <div class="form-check form-switch mb-2">
 <input class="form-check-input" type="checkbox" role="switch" id="nikud-checkbox" checked>
 <label class="form-check-label" for="nikud-checkbox">Show Hebrew <i>niqqud</i></label>
 </div>
 </div><!-- .d-flex -->
-<% } -%>
 <div class="overflow-auto">
 <% if (typeof prev === 'object' && prev !== null) { -%>
 <div class="float-start d-print-none me-2">
@@ -88,9 +82,6 @@ const isPast = hy < todayHebYear;
 </div>
 <% } -%>
 <div id="ctoday" class="d-flex justify-content-center d-print-none">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<div class="small"><a href="/converter">Convert today’s date</a></div>
-<% } -%>
 </div>
 </div><!-- .clearfix -->
 <div id="converter-form" class="d-print-none mt-4">
@@ -132,7 +123,7 @@ const isPast = hy < todayHebYear;
 <% if (il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col-auto mb-3">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
   Convert to Hebrew
 </button>
 </div><!-- .col -->
@@ -152,7 +143,7 @@ const isPast = hy < todayHebYear;
 <% if (il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col mb-3">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" class="icon align-top"><use xlink:href="<%=spriteHref%>#gi-refresh"></use></svg>
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
   Convert to Gregorian
 </button>
 </div><!-- .col -->
@@ -165,16 +156,6 @@ const isPast = hy < todayHebYear;
 <h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-ad width="100vw" height="320"
-  type="adsense"
-  data-ad-client="ca-pub-7687563417622459"
-  data-ad-slot="8149436309"
-  data-auto-format="rspv"
-  data-full-width="">
-<div overflow=""></div>
-</amp-ad>
-<% } else { -%>
 <script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
@@ -186,7 +167,6 @@ data-ad-slot="5342180883"></ins>
 <script nonce="<%=nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
-<% } -%>
 </div><!-- .d-print-none -->
 
 <div class="row d-print-none mt-4">
@@ -200,7 +180,7 @@ represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
  Yahrzeit + Anniversary Calendar</h5>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
 Hebrew Birthdays and Anniversaries for 20+ years.
@@ -209,11 +189,11 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col -->
 <% if (gy > 1752 && gy < currentYear + 1000) { -%>
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
  Jewish Holidays</h5>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.</p>
 <div><a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
   <%=hy%> Calendar &raquo;</a></div>
 </div><!-- .col -->
 <% } -%>
@@ -239,7 +219,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% if (gy > 1752 && gy < currentYear + 1000) { -%>
  <div class="col-auto"><a
   class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
-  <svg class="icon" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  <svg class="icon" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
   Download CSV</a>
  </div>
 <% } -%>
@@ -269,7 +249,6 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% } -%>
 </div><!-- .row -->
 <% } %>
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const d = document;
@@ -302,5 +281,4 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
-<% } -%>
 <%- await include('partials/footer.ejs') _%>

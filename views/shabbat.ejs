@@ -1,12 +1,10 @@
-<%- await include('partials/header2.ejs', {ampAds: true}) -%>
+<%- await include('partials/header.ejs') -%>
 <meta name="description" content="<%= summary %>">
 <% if (jsonLD) { -%>
 <script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
 <% } -%>
 <link rel="canonical" href="https://www.hebcal.com/shabbat?<%= geoUrlArgs %>&amp;set=off">
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <link rel="alternate" type="application/rss+xml" title="RSS" href="<%= rssUrl %>">
-<link rel="amphtml" href="https://www.hebcal.com/shabbat?<%= geoUrlArgs %>&amp;amp=1">
 <style>
 ul.hebcal-results li {
   margin-bottom: 11px;
@@ -15,7 +13,7 @@ ul.hebcal-results li {
   line-height: normal;
 }
 </style>
-<% } -%>
+<link rel="preconnect" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -32,7 +30,7 @@ ul.hebcal-results li {
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
 <div class="float-start">
-  <svg width="60" height="60" class="me-1 mb-1"><use xlink:href="<%=cspriteHref%>#candles"></use></svg>
+  <svg width="60" height="60" class="me-1 mb-1"><use href="<%=cspriteHref%>#candles"></use></svg>
 </div>
 <% if (localeLang === 'he') { -%>
 <%- await include('partials/shabbat-items-he.ejs') -%>
@@ -41,23 +39,22 @@ ul.hebcal-results li {
 <% } -%>
 <div class="mt-4 d-print-none">
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" rel="nofollow" href="/email?<%= geoUrlArgs %>" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
   Weekly email</a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/hebcal?v=1&amp;geo=<%= q.geo %>&amp;<%= geoUrlArgs %><%= yearArgs %>&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
   <%= isHebrewYear ? hy : gregRangeShort %> calendar</a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= gregRangeShort %>" rel="nofollow" href="<%= fridgeURL %>">
-  <svg class="icon"><use xlink:href="<%=spriteHref%>#bi-printer-fill"></use></svg>
+  <svg class="icon"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg>
   Print <%= gregRangeShort %></a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Download <%= gregRangeShort %> CSV" download rel="nofollow" href="<%= fridgeURL %>&amp;cfg=csv">
-  <svg class="icon" fill="currentColor"><use xlink:href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  <svg class="icon" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
   Download CSV</a>
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" title="RSS feed of candle-lighting times" href="<%= rssUrl %>">
-  <svg class="icon" style="width:1rem;height:1rem"><use xlink:href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  <svg class="icon" style="width:1rem;height:1rem"><use href="<%=spriteHref%>#bi-rss-fill"></use></svg>
   RSS feed</a>
 </div>
 <div class="d-print-none">
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <hr class="mt-3">
 <form action="/shabbat" method="get" autocomplete="off" id="shabbat-form">
 <input type="hidden" name="geo" value="<%= q.geo %>" id="geo">
@@ -66,10 +63,9 @@ ul.hebcal-results li {
 <%- await include('partials/city-and-havdalah.ejs') -%>
 <input type="hidden" name="lg" value="<%= q.lg || 's' %>">
   <button type="submit" class="btn btn-primary">
-    <svg class="icon mb-1"><use xlink:href="<%=spriteHref%>#gi-candle"></use></svg>
+    <svg class="icon mb-1"><use href="<%=spriteHref%>#gi-candle"></use></svg>
     Get Shabbat Times</button>
 </form>
-<% } -%>
 <hr class="mt-3">
 <h6 class="mt-3 mb-2"><%= Locale.gettext("Shabbat", locale) %> times for world cities</h6>
 <ul class="bullet-list-inline">
@@ -120,16 +116,6 @@ for (const [geonameid, city, min] of worldCities) { -%>
 </div><!-- .col-md-8 -->
 <div class="col-md-4 d-print-none" role="complementary">
 <h6 class="text-body-secondary mb-1">Advertisement</h6>
-<% if (typeof amp === 'boolean' && amp) { -%>
-<amp-ad width="100vw" height="320"
-  type="adsense"
-  data-ad-client="ca-pub-7687563417622459"
-  data-ad-slot="5981467974"
-  data-auto-format="rspv"
-  data-full-width="">
-<div overflow=""></div>
-</amp-ad>
-<% } else { -%>
 <script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
      crossorigin="anonymous"></script>
 <!-- responsive textonly -->
@@ -143,9 +129,7 @@ for (const [geonameid, city, min] of worldCities) { -%>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .col-md-4 -->
-<% } -%>
 </div><!-- .row -->
-<% if (typeof amp === 'undefined' || !amp) { -%>
 <%- await include('partials/email-candles-modal.ejs') _%>
 <script nonce="<%=nonce%>">
 document.addEventListener("DOMContentLoaded", function() {
@@ -156,7 +140,6 @@ d.getElementById("m").addEventListener("focus",function(){
 });
 });
 </script>
-<% } -%>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, typeahead: true, clipboard: true},
 }) _%>
