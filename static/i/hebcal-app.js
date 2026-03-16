@@ -3,7 +3,7 @@ import Autocomplete from 'bootstrap5-autocomplete';
 const hebcalClient = {
   createCityTypeahead: function(autoSubmit, fixedPosition) {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
-    const doFlags = navigator.userAgent.indexOf('Win') === -1;
+    const doFlags = !navigator.userAgent.includes('Win');
     const cityTypeaheadEl = document.getElementById('city-typeahead');
     const autocomplete = new Autocomplete(cityTypeaheadEl, {
       noCache: false,
@@ -25,7 +25,7 @@ const hebcalClient = {
         inst._config.notFoundMessage = undefined;
         const query = cityTypeaheadEl.value;
         if (query.length) {
-          const encodedStr = query.replace(/[\u00A0-\u9999<>&]/gim, function(i) {
+          const encodedStr = query.replaceAll(/[\u00A0-\u9999<>&]/gim, function(i) {
             return `&#${i.charCodeAt(0)};`;
           });
           inst._config.notFoundMessage = `Sorry, no city names match <b>${encodedStr}</b>.`;

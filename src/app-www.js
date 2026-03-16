@@ -195,7 +195,7 @@ app.use(async function errorCsp(ctx, next) {
   }
   if (ctx.status === 404) {
     const str = ctx.response.get('Cache-Control');
-    if (str && str.includes('immutable')) {
+    if (str?.includes('immutable')) {
       ctx.response.remove('Cache-Control');
     }
   }
