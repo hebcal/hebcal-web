@@ -16,7 +16,6 @@ document.getElementById('maincss').addEventListener('load',function(){
 <% } else { -%>
 <%- await include('bootstrap-css.ejs') -%>
 <% } -%>
-<link rel="preload" href="<%=spriteHref%>" as="fetch" crossorigin="anonymous" fetchpriority="high">
 <script nonce="<%=nonce%>">
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.setAttribute('data-bs-theme', 'dark');
