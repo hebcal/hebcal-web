@@ -62,6 +62,13 @@ describe('Static File Serving', () => {
     expect(response.type).toMatch(/icon|octet-stream/);
   });
 
+  it('should serve favicon.svg with correct content type', async () => {
+    const response = await request(app.callback())
+        .get('/favicon.svg');
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('image/svg+xml');
+  });
+
   it('should serve WOFF2 font file with correct content type', async () => {
     const response = await request(app.callback())
         .get('/i/adobehebrew-regular.woff2');

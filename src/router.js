@@ -61,6 +61,7 @@ const needsTrailingSlash = {
 // favicon-like files in the directory root that should be cached for 365 days
 const rootDirStatic = new Set(`ads.txt
 favicon.ico
+favicon.svg
 android-chrome-192x192.png
 android-chrome-512x512.png
 apple-touch-icon.png
