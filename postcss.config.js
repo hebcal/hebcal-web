@@ -1,3 +1,6 @@
+import purgecss from '@fullhuman/postcss-purgecss';
+import purgecssConfig from './purgecss.config.cjs';
+
 /**
  * Custom PostCSS plugin to remove vendor-prefixed properties where
  * the unprefixed version exists in the same rule, and to remove
@@ -39,5 +42,5 @@ function removeVendorPrefixes() {
 removeVendorPrefixes.postcss = true;
 
 export default {
-  plugins: [removeVendorPrefixes],
+  plugins: [removeVendorPrefixes, purgecss(purgecssConfig)],
 };

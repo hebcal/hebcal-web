@@ -24,43 +24,20 @@ $container-max-widths: (
 
 // Required
 @import "bootstrap/scss/variables";
-
-// Remove unused color variables to reduce CSS output size.
-// We use theme colors (primary, secondary, success, info, warning, danger, dark)
-// but never reference these extended palette colors directly.
-$indigo: null;
-$purple: null;
-$pink: null;
-$orange: null;
-$teal: null;
-$cyan: null;
-$yellow: null;
-
-// Remove unused colors from the $colors map to prevent
-// generation of --bs-{color} CSS custom properties
-$colors: map-remove($colors, "indigo", "purple", "pink", "orange", "yellow", "teal", "cyan", "blue", "red", "green");
-
 @import "bootstrap/scss/variables-dark";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
+
+// Layout & components
 @import "bootstrap/scss/root";
 @import "bootstrap/scss/reboot";
-
 @import "bootstrap/scss/type";
 @import "bootstrap/scss/images";
 @import "bootstrap/scss/containers";
 @import "bootstrap/scss/grid";
 @import "bootstrap/scss/tables";
-@import "bootstrap/scss/forms/labels";
-@import "bootstrap/scss/forms/form-text";
-@import "bootstrap/scss/forms/form-control";
-@import "bootstrap/scss/forms/form-select";
-@import "bootstrap/scss/forms/form-check";
-// @import "bootstrap/scss/forms/form-range"; // unused
-@import "bootstrap/scss/forms/floating-labels";
-@import "bootstrap/scss/forms/input-group";
-@import "bootstrap/scss/forms/validation";
+@import "bootstrap/scss/forms";
 @import "bootstrap/scss/buttons";
 @import "bootstrap/scss/transitions";
 @import "bootstrap/scss/dropdown";

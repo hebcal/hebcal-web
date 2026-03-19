@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite14.svg",
     "csprite": "color-icons4.svg",
-    "mainCss": "style-5.3.8e.css",
+    "mainCss": "style-5.3.8f.css",
     "clientapp": "hebcal-app-5.2.2.min.js"
   },
   "type": "module",
@@ -44,6 +44,7 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@fullhuman/postcss-purgecss": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
