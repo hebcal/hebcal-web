@@ -263,6 +263,15 @@ function makeOptions(ctx) {
   const [midnight, endOfWeek] = startAndEnd;
   options.start = new Date(midnight.year(), midnight.month(), midnight.date());
   options.end = new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date());
+  // override some options that don't make sense for this app
+  delete options.dailyLearning;
+  delete options.mask;
+  delete options.hebrewMonths;
+  delete options.gematriyaNumerals;
+  options.shabbatMevarchim = true;
+  options.yomKippurKatan = false;
+  options.omer = false;
+  options.yizkor = false;
   return {q, options, dateOverride: !now, midnight, endOfWeek, dt};
 }
 
