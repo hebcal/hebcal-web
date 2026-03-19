@@ -54,6 +54,8 @@ module.exports = {
       /data-bs-theme/,
       // Print styles
       /d-print/,
+      // Hebrew language selector
+      /^:lang/,
     ],
   },
 
