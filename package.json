@@ -52,6 +52,7 @@
     "@vitest/coverage-v8": "^4.1.0",
     "bootstrap": "^5.3.8",
     "bootstrap5-autocomplete": "^1.1.42",
+    "critical": "^7.2.1",
     "csv-parse": "^6.2.0",
     "eslint": "^10.0.3",
     "eslint-plugin-n": "^17.24.0",

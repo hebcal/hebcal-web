@@ -1,4 +1,6 @@
-<%- await include('partials/header.ejs') -%>
+<%- await include('partials/header.ejs', {
+  criticalCss: 'critical-holiday-year.css',
+}) -%>
 <% if (greg1 <= 1752 || greg1 > today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <% if (isHebrewYear) { %>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>">
