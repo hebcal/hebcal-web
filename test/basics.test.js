@@ -1,6 +1,7 @@
 import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
+import {pkg} from '../src/pkg.js';
 
 describe('Homepage and Basic Routes', () => {
   it('should return 200 for homepage', async () => {
@@ -78,7 +79,7 @@ describe('Static File Serving', () => {
 
   it('should serve minified JavaScript file with correct content type', async () => {
     const response = await request(app.callback())
-        .get('/i/hebcal-app-5.2.1.min.js');
+        .get('/i/' + pkg.config.clientapp);
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
     // Verify immutable cache header
