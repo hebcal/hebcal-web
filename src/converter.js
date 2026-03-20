@@ -2,7 +2,7 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
   OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {makeETag} from './etag.js';
-import {httpRedirect} from './common.js';
+import {httpRedirect, hebrewFontPreload} from './common.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
 import {lgToLocale, localeMap} from './lang.js';
@@ -147,7 +147,7 @@ export async function hebrewDateConverter(ctx) {
       makePrevNext(p);
       makeFutureYears(ctx, p);
     }
-    ctx.append('Link', '</i/adobehebrew-regular.woff2>; rel=preload; as=font; type="font/woff2"; crossorigin');
+    hebrewFontPreload(ctx);
     return ctx.render('converter', p);
   }
 }

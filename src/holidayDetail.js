@@ -12,6 +12,7 @@ import {yearIsOutsideGregRange} from './dateUtil.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
   throw410,
   lightCandlesWhen,
+  hebrewFontPreload,
 } from './common.js';
 import {categories, holidays, israelOnly, getFirstOcccurences, eventToHolidayItem,
   eventToHolidayItemBase,
@@ -177,6 +178,7 @@ export async function holidayDetail(ctx) {
     makeMultiDayHolidayItems(holiday, upcomingHebrewYear, il) :
     null;
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+  hebrewFontPreload(ctx);
   await ctx.render('holidayDetail', {
     title,
     year,

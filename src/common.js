@@ -15,6 +15,10 @@ function getHostname(ctx) {
   return HEBCAL_HOSTNAME;
 }
 
+export function hebrewFontPreload(ctx) {
+  ctx.append('Link', '</i/adobehebrew-regular.woff2>; rel=preload; as=font; type="font/woff2"; crossorigin');
+}
+
 const CACHE_CONTROL = 'Cache-Control';
 
 /**
