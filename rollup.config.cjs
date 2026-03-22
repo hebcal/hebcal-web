@@ -109,4 +109,17 @@ module.exports = [
       terser(),
     ],
   },
+  {
+    input: 'views/partials/analytics.js',
+    output: [
+      {
+        file: 'views/partials/analytics.min.js',
+        format: 'iife',
+        banner: '/*! analytics ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+    ],
+  },
 ];

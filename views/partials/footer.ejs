@@ -26,7 +26,7 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <%   if (footerScripts.typeahead) { %><%- await include('script-typeahead.ejs') %><% } -%>
 <% } -%>
 <% if (typeof xtra_html !== 'undefined') { %><%- xtra_html %><% } -%>
-<script nonce="<%=nonce%>"><%- await include('analytics.js') %></script>
+<script nonce="<%=nonce%>"><%- await include('analytics.min.js') %></script>
 <% if (typeof cookieBanner === 'boolean' && cookieBanner) { -%>
 <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom mb-2">
  <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
