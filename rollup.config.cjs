@@ -96,4 +96,17 @@ module.exports = [
       commonjs(),
     ],
   },
+  {
+    input: 'src/client-clipboard.js',
+    output: [
+      {
+        file: 'views/partials/client-clipboard.min.js',
+        format: 'iife',
+        banner: '/*! client-clipboard ' + pkg.version + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+    ],
+  },
 ];
