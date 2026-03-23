@@ -270,7 +270,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
     const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
       ` style-src 'self' https: data: 'unsafe-inline';` +
       ` frame-ancestors https: data:;` +
-      ` frame-src https: data:;` +
+      ` frame-src https: data: blob:;` +
       ` img-src 'self' https: data:;` +
       ` font-src 'self' data: https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
