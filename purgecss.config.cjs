@@ -45,11 +45,9 @@ module.exports = {
       /^modal/,
       /^offcanvas/,
       /^tooltip/,
-      /^popover/,
       /^accordion/,
       /^alert/,
       /^btn-close/,
-      /^carousel/,
       // Dark mode
       /data-bs-theme/,
       // Print styles
