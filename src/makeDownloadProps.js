@@ -1,9 +1,21 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {empty, off} from './empty.js';
-import {urlArgsObj} from './urlArgs.js';
+import {urlArgsObj, dailyLearningConfig} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
+
+/**
+ * Transforms a protocName (e.g. "shemiratHaLashon") into the capitalized
+ * suffix used by the protobuf library (e.g. "Shemirathalashon"), so that
+ * getter/setter method names can be constructed dynamically.
+ * @param {string} protocName
+ * @return {string}
+ */
+function protocNameToMethodSuffix(protocName) {
+  const lower = protocName.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
 
 const dlPrefix = process.env.NODE_ENV == 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
@@ -77,27 +89,14 @@ export function downloadHref2(query, filename, override={}) {
   if (ny !== null) msg.setNumyears(ny);
   if (!empty(q.zip)) msg.setZip(q.zip);
 
-  if (on(q.s)) msg.setSedrot(true);
   if (on(q.o)) msg.setOmer(true);
-  if (on(q.F)) msg.setDafyomi(true);
-  if (on(q.myomi)) msg.setMishnayomi(true);
-  if (on(q.dpy)) msg.setPerekyomi(true);
-  if (on(q.nyomi)) msg.setNachyomi(true);
   if (on(q.ykk)) msg.setYomkippurkatan(true);
-  if (on(q.yyomi)) msg.setYerushalmiyomi(true);
-  if (on(q.yys)) msg.setYyschottenstein(true);
-  if (on(q.dr1)) msg.setRambam1(true);
-  if (on(q.dr3)) msg.setRambam3(true);
-  if (on(q.dsm)) msg.setSeferhamitzvot(true);
-  if (on(q.dksa)) msg.setKitzurshulchanaruch(true);
-  if (on(q.dcc)) msg.setChofetzchaim(true);
-  if (on(q.dshl)) msg.setShemirathalashon(true);
-  if (on(q.dps)) msg.setPsalms(true);
-  if (on(q.dw)) msg.setDafweekly(true);
-  if (on(q.ayd)) msg.setDirshuamudyomi(true);
-  if (on(q.dty)) msg.setTanakhyomi(true);
-  if (on(q.dpa)) msg.setPirkeiavotsummer(true);
-  if (on(q.ahsy)) msg.setArukhhashulchanyomi(true);
+  for (const {queryParam, protocName} of dailyLearningConfig) {
+    if (on(q[queryParam])) {
+      const suffix = protocNameToMethodSuffix(protocName);
+      msg[`set${suffix}`](true);
+    }
+  }
   if (on(q.yzkr)) msg.setYizkor(true);
   if (on(q.mvch)) msg.setShabbatmevarchim(true);
 
