@@ -1,4 +1,17 @@
 import DownloadProtoBuf from './download_pb.cjs';
+import {dailyLearningConfig} from './urlArgs.js';
+
+/**
+ * Transforms a protocName (e.g. "shemiratHaLashon") into the capitalized
+ * suffix used by the protobuf library (e.g. "Shemirathalashon"), so that
+ * getter/setter method names can be constructed dynamically.
+ * @param {string} protocName
+ * @return {string}
+ */
+function protocNameToMethodSuffix(protocName) {
+  const lower = protocName.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
 
 /**
  * @param {string} data
@@ -46,33 +59,18 @@ export function deserializeDownload(data) {
   q.subscribe = msg.getSubscribe() ? '1' : undefined;
   q.ny = msg.getNumyears() || undefined;
   q.zip = msg.getZip() || undefined;
-  if (msg.getSedrot()) q.s = 'on';
   if (msg.getOmer()) q.o = 'on';
-  if (msg.getDafyomi()) q.F = 'on';
-  if (msg.getMishnayomi()) q.myomi = 'on';
-  if (msg.getPerekyomi()) q.dpy = 'on';
-  if (msg.getNachyomi()) q.nyomi = 'on';
   if (msg.getAddaltdates()) q.d = 'on';
   if (msg.getAddaltdatesforevents()) q.D = 'on';
   if (msg.getYomkippurkatan()) q.ykk = 'on';
-  if (msg.getYerushalmiyomi()) q.yyomi = 'on';
-  if (msg.getYyschottenstein()) q.yys = 'on';
-  if (msg.getRambam1()) q.dr1 = 'on';
-  if (msg.getRambam3()) q.dr3 = 'on';
-  if (msg.getSeferhamitzvot()) q.dsm = 'on';
-  if (msg.getKitzurshulchanaruch()) q.dksa = 'on';
-  if (msg.getChofetzchaim()) q.dcc = 'on';
-  if (msg.getShemirathalashon()) q.dshl = 'on';
-  if (msg.getDafweekly()) q.dw = 'on';
-  if (msg.getPsalms()) q.dps = 'on';
-  if (msg.getTanakhyomi()) q.dty = 'on';
-  if (msg.getPirkeiavotsummer()) q.dpa = 'on';
-  if (msg.getArukhhashulchanyomi()) q.ahsy = 'on';
+  for (const {queryParam, protocName} of dailyLearningConfig) {
+    const suffix = protocNameToMethodSuffix(protocName);
+    if (msg[`get${suffix}`]()) q[queryParam] = 'on';
+  }
   if (msg.getUseelevation()) q.ue = 'on';
   if (msg.getYizkor()) q.yzkr = 'on';
   if (msg.getShabbatmevarchim()) q.mvch = 'on';
   q.mm = String(msg.getMonthmode());
-  if (msg.getDirshuamudyomi()) q.ayd = 'on';
   if (msg.getYomtovonly()) q.yto = 'on';
   q.month = msg.getMonth() || undefined;
   if (msg.getGeopos()) {
