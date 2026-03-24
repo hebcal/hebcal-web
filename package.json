@@ -49,7 +49,7 @@
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.1",
     "bootstrap": "^5.3.8",
     "bootstrap5-autocomplete": "^1.1.42",
     "critical": "^7.2.1",
@@ -63,7 +63,7 @@
     "rollup": "^4.60.0",
     "sass": "^1.98.0",
     "supertest": "^7.2.2",
-    "vitest": "^4.1.0"
+    "vitest": "^4.1.1"
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
@@ -71,7 +71,7 @@
     "@hebcal/geo-sqlite": "^5.9.2",
     "@hebcal/hdate": "^0.21.1",
     "@hebcal/icalendar": "^6.3.6",
-    "@hebcal/learning": "^6.6.2",
+    "@hebcal/learning": "^6.7.0",
     "@hebcal/leyning": "^9.4.1",
     "@hebcal/locales": "^6.4.2",
     "@hebcal/rest-api": "^6.4.0",
