@@ -144,12 +144,12 @@ describe('v3 yahrzeit subscription downloads', () => {
 });
 
 describe('Dirshu Amud HaYomi protobuf round-trip', () => {
-  it('should serialize and deserialize dah=on correctly', () => {
+  it('should serialize and deserialize ayd=on correctly', () => {
     const query = {
       v: '1',
       maj: 'on',
       year: '2026',
-      dah: 'on',
+      ayd: 'on',
       geonameid: '281184',
       lg: 's',
       M: 'on',
@@ -162,11 +162,11 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
         .replace(/-/g, '+')
         .replace(/_/g, '/');
     const result = deserializeDownload(encoded);
-    expect(result.dah).toBe('on');
+    expect(result.ayd).toBe('on');
     expect(result.maj).toBe('on');
   });
 
-  it('should not include dah when not set', () => {
+  it('should not include ayd when not set', () => {
     const query = {
       v: '1',
       maj: 'on',
@@ -181,7 +181,7 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
         .replace(/-/g, '+')
         .replace(/_/g, '/');
     const result = deserializeDownload(encoded);
-    expect(result.dah).toBeUndefined();
+    expect(result.ayd).toBeUndefined();
   });
 });
 

@@ -94,7 +94,7 @@ export function downloadHref2(query, filename, override={}) {
   if (on(q.dshl)) msg.setShemirathalashon(true);
   if (on(q.dps)) msg.setPsalms(true);
   if (on(q.dw)) msg.setDafweekly(true);
-  if (on(q.dah)) msg.setDirshuamudyomi(true);
+  if (on(q.ayd)) msg.setDirshuamudyomi(true);
   if (on(q.dty)) msg.setTanakhyomi(true);
   if (on(q.dpa)) msg.setPirkeiavotsummer(true);
   if (on(q.ahsy)) msg.setArukhhashulchanyomi(true);
