@@ -2,6 +2,8 @@ import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
+import {downloadHref2} from '../src/makeDownloadProps.js';
+import {deserializeDownload} from '../src/deserializeDownload.js';
 
 beforeAll(() => {
   app.context.mysql = new MockMysqlDb();
@@ -138,6 +140,48 @@ describe('v3 yahrzeit subscription downloads', () => {
     expect(response.type).toMatch(/calendar/);
     expect(response.text).toContain('BEGIN:VCALENDAR');
     expect(response.text).toContain('Golda Meir');
+  });
+});
+
+describe('Dirshu Amud HaYomi protobuf round-trip', () => {
+  it('should serialize and deserialize dah=on correctly', () => {
+    const query = {
+      v: '1',
+      maj: 'on',
+      year: '2026',
+      dah: 'on',
+      geonameid: '281184',
+      lg: 's',
+      M: 'on',
+    };
+    const href = downloadHref2(query, 'test.ics');
+    // Extract base64 encoded protobuf from the URL path
+    const match = href.match(/\/v4\/([^/]+)\//);
+    expect(match).toBeTruthy();
+    const encoded = match[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const result = deserializeDownload(encoded);
+    expect(result.dah).toBe('on');
+    expect(result.maj).toBe('on');
+  });
+
+  it('should not include dah when not set', () => {
+    const query = {
+      v: '1',
+      maj: 'on',
+      year: '2026',
+      geonameid: '281184',
+      lg: 's',
+      M: 'on',
+    };
+    const href = downloadHref2(query, 'test.ics');
+    const match = href.match(/\/v4\/([^/]+)\//);
+    const encoded = match[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const result = deserializeDownload(encoded);
+    expect(result.dah).toBeUndefined();
   });
 });
 
