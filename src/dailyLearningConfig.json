@@ -197,6 +197,20 @@
     "descMedium": "One page of Babylonian Talmud per week"
   },
   {
+    "eventCategory": "dirshuAmudYomi",
+    "queryParam": "dah",
+    "dailyLearningOptName": "dirshuAmudYomi",
+    "downloadSlug": "dirshu-amud-hayomi",
+    "color": "#BF5AF2",
+    "feedLength": 365,
+    "years": 8,
+    "group": "Talmud and Mishna",
+    "settingsName": "Dirshu Amud HaYomi",
+    "shortName": "Dirshu Amud HaYomi",
+    "descLong": "A daily Talmud learning program covering one amud (page side) per day, cycling through the entire Babylonian Talmud. The first cycle began on 1 Cheshvan 5784 (October 16, 2023).",
+    "descMedium": "One amud (page side) of Babylonian Talmud per day"
+  },
+  {
     "eventCategory": "pirkeiAvotSummer",
     "queryParam": "dpa",
     "dailyLearningOptName": "pirkeiAvotSummer",
