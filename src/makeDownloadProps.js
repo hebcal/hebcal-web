@@ -1,21 +1,9 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {empty, off} from './empty.js';
-import {urlArgsObj, dailyLearningConfig} from './urlArgs.js';
+import {urlArgsObj, dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
-
-/**
- * Transforms a protocName (e.g. "shemiratHaLashon") into the capitalized
- * suffix used by the protobuf library (e.g. "Shemirathalashon"), so that
- * getter/setter method names can be constructed dynamically.
- * @param {string} protocName
- * @return {string}
- */
-function protocNameToMethodSuffix(protocName) {
-  const lower = protocName.toLowerCase();
-  return lower.charAt(0).toUpperCase() + lower.slice(1);
-}
 
 const dlPrefix = process.env.NODE_ENV == 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
