@@ -4,6 +4,18 @@ import {readJSON} from './readJSON.js';
 
 export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
+/**
+ * Transforms a protocName (e.g. "shemiratHaLashon") into the capitalized
+ * suffix used by the protobuf library (e.g. "Shemirathalashon"), so that
+ * getter/setter method names can be constructed dynamically.
+ * @param {string} protocName
+ * @return {string}
+ */
+export function protocNameToMethodSuffix(protocName) {
+  const lower = protocName.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 export const DEFAULT_CANDLE_MINS = 18;
 
 export const hebcalFormDefaults = {

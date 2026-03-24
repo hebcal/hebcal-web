@@ -1,17 +1,5 @@
 import DownloadProtoBuf from './download_pb.cjs';
-import {dailyLearningConfig} from './urlArgs.js';
-
-/**
- * Transforms a protocName (e.g. "shemiratHaLashon") into the capitalized
- * suffix used by the protobuf library (e.g. "Shemirathalashon"), so that
- * getter/setter method names can be constructed dynamically.
- * @param {string} protocName
- * @return {string}
- */
-function protocNameToMethodSuffix(protocName) {
-  const lower = protocName.toLowerCase();
-  return lower.charAt(0).toUpperCase() + lower.slice(1);
-}
+import {dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
 
 /**
  * @param {string} data
