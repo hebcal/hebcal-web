@@ -19,6 +19,5 @@ export async function securityTxt(ctx) {
   const expires = dt.toISOString();
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.body = 'Contact: mailto:security@hebcal.com\n' +
-    `Expires: ${expires}\n` +
-    'OpenBugBounty: https://openbugbounty.org/bugbounty/HebcalDotCom/\n';
+    `Expires: ${expires}\n`;
 }
