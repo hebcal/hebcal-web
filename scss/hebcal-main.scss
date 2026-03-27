@@ -101,3 +101,14 @@ a.outbound::after {
   --bs-btn-color: var(--bs-link-color);
   --bs-btn-border-color: var(--bs-link-color);
 }
+
+[data-bs-toggle="tooltip"] {
+  opacity: 0.3;
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+[data-bs-toggle="tooltip"]:hover {
+  opacity: 1;
+  cursor: pointer;
+}

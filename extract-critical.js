@@ -28,8 +28,8 @@ const PAGES = [
     out: 'views/partials/critical-holiday-detail.css',
   },
   {
-    src: `${SITE}/shabbat?geonameid=5128581`,
-    out: 'views/partials/critical-shabbat.css',
+    src: `${SITE}/hebcal?v=1&year=2026&yt=G&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&s=on&mm=0&lg=s&c=on&geo=geoname&zip=&geonameid=5128581&b=18&M=on&m=&ue=off`,
+    out: 'views/partials/critical-hebcal-results.css',
   },
 ];
 
