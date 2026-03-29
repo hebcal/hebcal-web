@@ -110,38 +110,38 @@ describe('Daily Learning page', () => {
     expect(response.headers['cache-control']).toBeDefined();
   });
 
-  it('should include Dirshu Amud HaYomi on a date after program start', async () => {
+  it('should include Amud HaYomi (Dirshu) on a date after program start', async () => {
     // Program started 2023-10-16 (1 Cheshvan 5784), so any date after should have it
     const response = await request(app.callback()).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
-    expect(response.text).toContain('Dirshu Amud HaYomi');
+    expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
 
-  it('should include Dirshu Amud HaYomi with Sefaria link', async () => {
+  it('should include Amud HaYomi (Dirshu) with Sefaria link', async () => {
     const response = await request(app.callback()).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.text).toContain('sefaria.org');
-    expect(response.text).toContain('Dirshu Amud HaYomi');
+    expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
 
-  it('should not include Dirshu Amud HaYomi before program start', async () => {
+  it('should not include Amud HaYomi (Dirshu) before program start', async () => {
     // 2023-10-15 is one day before the program started
     const response = await request(app.callback()).get('/learning/2023-10-15');
     expect(response.status).toBe(200);
-    expect(response.text).not.toContain('Dirshu Amud HaYomi');
+    expect(response.text).not.toContain('Amud HaYomi (Dirshu)');
   });
 
-  it('should include Dirshu Amud HaYomi on first day of program', async () => {
-    // 2023-10-16 is the first day of the Dirshu Amud HaYomi program
+  it('should include Amud HaYomi (Dirshu) on first day of program', async () => {
+    // 2023-10-16 is the first day of the Amud HaYomi (Dirshu) program
     const response = await request(app.callback()).get('/learning/2023-10-16');
     expect(response.status).toBe(200);
-    expect(response.text).toContain('Dirshu Amud HaYomi');
+    expect(response.text).toContain('Amud HaYomi (Dirshu)');
     expect(response.text).toContain('Berakhot');
   });
 
-  it('should include Dirshu Amud HaYomi in Israel mode', async () => {
+  it('should include Amud HaYomi (Dirshu) in Israel mode', async () => {
     const response = await request(app.callback()).get('/learning/2026-03-01?i=on');
     expect(response.status).toBe(200);
-    expect(response.text).toContain('Dirshu Amud HaYomi');
+    expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
 });
