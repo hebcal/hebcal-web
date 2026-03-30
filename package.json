@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "3.6.2",
+  "version": "3.6.3",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite14.svg",
     "csprite": "color-icons4.svg",
-    "mainCss": "style-5.3.8h.css",
+    "mainCss": "style-5.3.8i.css",
     "clientapp": "hebcal-app-5.2.2.min.js"
   },
   "type": "module",
@@ -60,7 +60,7 @@
     "globals": "^17.4.0",
     "postcss": "^8.5.8",
     "postcss-cli": "^11.0.1",
-    "rollup": "^4.60.0",
+    "rollup": "^4.60.1",
     "sass": "^1.98.0",
     "supertest": "^7.2.2",
     "vitest": "^4.1.2"

@@ -60,6 +60,8 @@ module.exports = {
       /tooltip-arrow/,
       /popover-arrow/,
       /\[data-popper/,
+      // Responsive display utilities (built dynamically in holidayCommon.js)
+      /^d-(sm|md|lg|xl)-(none|inline)/,
     ],
   },
 
