@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const iframe = document.createElement('iframe');
       iframe.setAttribute('id', 'ipdf');
       iframe.setAttribute('name', 'ipdf');
+      iframe.setAttribute('sandbox', 'allow-same-origin allow-modals');
       iframe.src = URL.createObjectURL(pdfBlob);
       const focusHandler = () => {
         window.removeEventListener('focus', focusHandler);
