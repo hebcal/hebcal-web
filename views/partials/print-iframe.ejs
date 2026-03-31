@@ -10,38 +10,42 @@
 </div>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', () => {
-  function myPrint() {
+  async function myPrint() {
     const modal = document.getElementById('printModal');
     const myModal = new bootstrap.Modal(modal, {backdrop: 'static', keyboard: false});
     myModal.show();
-    const pdfUrl = document.getElementById('print-pdf').getAttribute('href');
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('id', 'ipdf');
-    iframe.setAttribute('name', 'ipdf');
-    const focusHandler = () => {
-      window.removeEventListener('focus', focusHandler);
-      document.getElementById('ipdf')?.remove();
-    };
-    iframe.onload = () => {
-      myModal.hide();
-      try {
+    const printEl = document.getElementById('print-pdf');
+    const pdfUrl = printEl.getAttribute('href');
+    try {
+      const response = await fetch(pdfUrl, {mode: 'cors', credentials: 'omit'});
+      const pdf = await response.arrayBuffer();
+      const pdfBlob = new Blob([pdf], {type: 'application/pdf'});
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('id', 'ipdf');
+      iframe.setAttribute('name', 'ipdf');
+      iframe.src = URL.createObjectURL(pdfBlob);
+      const focusHandler = () => {
+        window.removeEventListener('focus', focusHandler);
+        document.getElementById('ipdf')?.remove();
+      };
+      iframe.onload = () => {
+        URL.revokeObjectURL(iframe.src);
+        window.addEventListener('focus', focusHandler);
+      };
+      document.body.style.overflow = 'hidden';
+      document.body.style.margin = '0';
+      document.body.style.padding = '0';
+      document.body.appendChild(iframe);
+      setTimeout(() => {
+        myModal.hide();
         const cw = iframe.contentWindow;
         cw.focus();
         cw.print();
-        window.addEventListener('focus', focusHandler);
-      } catch (_) {
-        document.location.href = pdfUrl;
-      }
-    };
-    iframe.onerror = () => {
+      }, 1200);
+    } catch (err) {
       myModal.hide();
       document.location.href = pdfUrl;
-    };
-    document.body.style.overflow = 'hidden';
-    document.body.style.margin = '0';
-    document.body.style.padding = '0';
-    document.body.appendChild(iframe);
-    iframe.src = pdfUrl;
+    }
   }
   document.addEventListener('keydown', (e) => {
     if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
