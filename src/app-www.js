@@ -269,7 +269,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
   if ((status === 200 || status === 404 || status === 400) && ctx.type === 'text/html') {
     const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
       ` style-src 'self' https: data: 'unsafe-inline';` +
-      ` frame-ancestors https: data:;` +
+      ` frame-ancestors https: data: blob:;` +
       ` frame-src https: data: blob:;` +
       ` img-src 'self' https: data:;` +
       ` font-src 'self' data: https://fonts.gstatic.com/;` +

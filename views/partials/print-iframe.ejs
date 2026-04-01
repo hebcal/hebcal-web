@@ -9,31 +9,27 @@
   </div>
 </div>
 <script nonce="<%=nonce%>">
-document.addEventListener('DOMContentLoaded', function() {
-function myPrint() {
-  const modal = document.getElementById('printModal');
-  const myModal = new bootstrap.Modal(modal, {backdrop: 'static', keyboard: false});
-  myModal.show();
-  const printEl = document.getElementById('print-pdf');
-  const pdfUrl = printEl.getAttribute('href');
-  fetch(pdfUrl, {mode: 'cors', credentials: 'omit'})
-    .then(function(response) { return response && response.arrayBuffer(); })
-    .then(function(pdf) {
-      if (!pdf) { return; }
-      const pdfBlob = new Blob([new Uint8Array(pdf, 0)], {type: 'application/pdf'});
+document.addEventListener('DOMContentLoaded', () => {
+  async function myPrint() {
+    const modal = document.getElementById('printModal');
+    const myModal = new bootstrap.Modal(modal, {backdrop: 'static', keyboard: false});
+    myModal.show();
+    const printEl = document.getElementById('print-pdf');
+    const pdfUrl = printEl.getAttribute('href');
+    try {
+      const response = await fetch(pdfUrl, {mode: 'cors', credentials: 'omit'});
+      const pdf = await response.arrayBuffer();
+      const pdfBlob = new Blob([pdf], {type: 'application/pdf'});
       const iframe = document.createElement('iframe');
-      // iframe.style.display = 'none';
       iframe.setAttribute('id', 'ipdf');
       iframe.setAttribute('name', 'ipdf');
+      iframe.setAttribute('sandbox', 'allow-same-origin allow-modals');
       iframe.src = URL.createObjectURL(pdfBlob);
-      const focusHandler = function() {
+      const focusHandler = () => {
         window.removeEventListener('focus', focusHandler);
-        const el = document.getElementById('ipdf');
-        if (el) {
-          el.remove();
-        }
+        document.getElementById('ipdf')?.remove();
       };
-      iframe.onload = function() {
+      iframe.onload = () => {
         URL.revokeObjectURL(iframe.src);
         window.addEventListener('focus', focusHandler);
       };
@@ -41,27 +37,23 @@ function myPrint() {
       document.body.style.margin = '0';
       document.body.style.padding = '0';
       document.body.appendChild(iframe);
-      setTimeout(function() {
+      setTimeout(() => {
         myModal.hide();
         const cw = iframe.contentWindow;
         cw.focus();
         cw.print();
       }, 1200);
-    })
-    .catch(function(err) {
+    } catch (err) {
       myModal.hide();
       document.location.href = pdfUrl;
-    });
+    }
   }
-  // For now, only do magic print stuff on Chrome, Edge 20+ and Firefox
-  if (!!window.chrome || !!window.StyleMedia || typeof InstallTrigger !== 'undefined') {
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
-        myPrint();
-        e.preventDefault();
-        e.stopImmediatePropagation();
-      }
-    });
-  }
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
+      myPrint();
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+  });
 });
 </script>
