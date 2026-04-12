@@ -37,6 +37,12 @@ CREATE TABLE hebcal_shabbat_bounce (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE yahrzeit_atime (
+  id varchar(26) NOT NULL,
+  ts timestamp NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
 CREATE TABLE yahrzeit_email (
   id varchar(26) NOT NULL,
   email_addr varchar(200) NOT NULL,
@@ -47,10 +53,11 @@ CREATE TABLE yahrzeit_email (
   ip_addr varchar(16) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY email_addr (email_addr),
-  KEY sub_status (sub_status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  KEY sub_status (sub_status),
+  KEY email_addr_2 (email_addr,calendar_id)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
-CREATE TABLE yahrzeit_sent (
+CREATE TABLE yahrzeit_sent1 (
   id int NOT NULL AUTO_INCREMENT,
   yahrzeit_id varchar(26) NOT NULL,
   name_hash char(8) DEFAULT NULL,
@@ -58,7 +65,18 @@ CREATE TABLE yahrzeit_sent (
   hyear smallint NOT NULL,
   sent_date datetime NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE KEY sent_key (yahrzeit_id, name_hash, num, hyear)
+  UNIQUE KEY sent_key (yahrzeit_id,name_hash,num,hyear)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
+CREATE TABLE yahrzeit_sent7 (
+  id int NOT NULL AUTO_INCREMENT,
+  yahrzeit_id varchar(26) NOT NULL,
+  name_hash char(8) DEFAULT NULL,
+  num smallint NOT NULL,
+  hyear smallint NOT NULL,
+  sent_date datetime NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY sent_key (yahrzeit_id,name_hash,num,hyear)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
 CREATE TABLE yahrzeit_optout (
@@ -68,7 +86,8 @@ CREATE TABLE yahrzeit_optout (
   num smallint NOT NULL,
   deactivated tinyint(1) NOT NULL,
   updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  KEY email_id (email_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
 CREATE TABLE email_open (
