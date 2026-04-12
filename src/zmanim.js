@@ -25,6 +25,7 @@ const VERSION = version + '-' + pkg.version;
 
 const TIMES = {
   chatzotNight: 1,
+  alosBaalHatanya: 1,
   alotHaShachar: 1,
   misheyakir: 1,
   misheyakirMachmir: 1,
@@ -34,21 +35,27 @@ const TIMES = {
   sofZmanShmaMGA19Point8: 1,
   sofZmanShmaMGA16Point1: 1,
   sofZmanShmaMGA: 1,
+  sofZmanShmaBaalHatanya: 1,
   sofZmanShma: 1,
   sofZmanTfillaMGA19Point8: 1,
   sofZmanTfillaMGA16Point1: 1,
   sofZmanTfillaMGA: 1,
+  sofZmanTfilaBaalHatanya: 1,
   sofZmanTfilla: 1,
   chatzot: 1,
   minchaGedola: 1,
+  minchaGedolaBaalHatanya: 1,
   minchaGedolaMGA: 1,
   minchaKetana: 1,
+  minchaKetanaBaalHatanya: 1,
   minchaKetanaMGA: 1,
   plagHaMincha: 1,
+  plagHaminchaBaalHatanya: 1,
   seaLevelSunset: 1,
   sunset: 1,
   beinHaShmashos: 1,
   dusk: 1,
+  tzaisBaalHatanya: 1,
 };
 
 const TZEIT_TIMES = {
@@ -384,6 +391,40 @@ const ZMAN_NAMES = {
   tzeit72min: [
     'Tzeit 72 min (Rabbeinu Tam)',
     'Nightfall. When 3 small stars are observable in the night sky with the naked eye (fixed 72 minutes after sunset)',
+  ],
+  alosBaalHatanya: [
+    'Alot HaShachar (Baal Hatanya)',
+    'Dawn. Sun is 16.9° below the horizon in the morning, based on the time of 72 minutes before netz amiti (sunrise)' +
+    ' in Jerusalem around the equinox',
+  ],
+  sofZmanShmaBaalHatanya: [
+    'Kriat Shema, sof zeman (Baal Hatanya)',
+    'Latest Shema (Baal Hatanya). 3 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from sunrise' +
+    ' to sunset',
+  ],
+  sofZmanTfilaBaalHatanya: [
+    'Tefilah, sof zeman (Baal Hatanya)',
+    'Latest Shacharit (Baal Hatanya). 4 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from' +
+    ' sunrise to sunset',
+  ],
+  minchaGedolaBaalHatanya: [
+    'Mincha Gedolah (Baal Hatanya)',
+    'Earliest Mincha (Baal Hatanya). 6.5 shaos zmaniyos (sea level solar hours) after netz amiti (sunrise),' +
+    ' calculated from sunrise to sunset',
+  ],
+  minchaKetanaBaalHatanya: [
+    'Mincha Ketanah (Baal Hatanya)',
+    'Preferable earliest time to recite Minchah (Baal Hatanya). 9.5 shaos zmaniyos (sea level solar hours) after' +
+    ' netz amiti (sunrise), calculated from sunrise to sunset',
+  ],
+  plagHaminchaBaalHatanya: [
+    'Plag HaMincha (Baal Hatanya)',
+    'Plag HaMincha (Baal Hatanya). 10.75 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from' +
+    ' sunrise to sunset',
+  ],
+  tzaisBaalHatanya: [
+    'Tzeit (Baal Hatanya)',
+    'Nightfall (Baal Hatanya). Sun is 6° below the western geometric horizon after sunset',
   ],
 };
 
