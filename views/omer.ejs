@@ -11,6 +11,11 @@
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div class="row">
+<div class="col mt-2 d-none d-lg-block">
+<p><a href="/omer/<%=hyear%>">Counting of the Omer <%= hyear - 3760 %></a> / <span class="text-nowrap" dir="rtl" lang="he">סְפִירַת הָעוֹמֶר <%= hyear %></span></p>
+</div>
+</div>
+<div class="row">
 <div class="col">
 <% if (d.year() <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
