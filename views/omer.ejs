@@ -32,6 +32,13 @@
 <li dir="rtl" lang="he" class="fs-1"><%= sefHebrew %></li>
 <li class="fs-4 lh-sm"><em><%= sefTranslit %></em></li>
 <li class="fs-4 lh-sm"><%= sefEnglish %></li>
+<li class="fs-3 lh-sm pt-2" dir="rtl" lang="he">
+  <%= ev.getAnaBekoachWord() %>
+  &nbsp; &nbsp; &nbsp; &nbsp;
+  <%= ev.getLamnatzeachWord() %>
+  &nbsp; &nbsp; &nbsp; &nbsp;
+  <%= ev.getLamnatzeachLetter() %>
+</li>
 <% for (const ev of holidays) { %>
 <li class="fs-4 mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render('en') %><% if (ev.url()) { %></a><% } %></li>
 <% } %>
