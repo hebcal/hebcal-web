@@ -185,6 +185,47 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
   });
 });
 
+// https://github.com/hebcal/hebcal/issues/308
+describe('tzeit protobuf round-trip', () => {
+  it('should serialize and deserialize tzeit correctly', () => {
+    const query = {
+      v: '1',
+      maj: 'on',
+      year: '2026',
+      geonameid: '281184',
+      lg: 's',
+      tzeit: '16.1',
+    };
+    const href = downloadHref2(query, 'test.ics');
+    const match = href.match(/\/v4\/([^/]+)\//);
+    expect(match).toBeTruthy();
+    const encoded = match[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const result = deserializeDownload(encoded);
+    expect(typeof result.tzeit).toBe('number');
+    expect(result.tzeit).toBeCloseTo(16.1, 4);
+  });
+
+  it('should not include tzeit when not set', () => {
+    const query = {
+      v: '1',
+      maj: 'on',
+      year: '2026',
+      geonameid: '281184',
+      lg: 's',
+      M: 'on',
+    };
+    const href = downloadHref2(query, 'test.ics');
+    const match = href.match(/\/v4\/([^/]+)\//);
+    const encoded = match[1]
+        .replace(/-/g, '+')
+        .replace(/_/g, '/');
+    const result = deserializeDownload(encoded);
+    expect(result.tzeit).toBeUndefined();
+  });
+});
+
 describe('304 Not Modified (ETag / If-None-Match)', () => {
   it('returns 304 for ICS when If-None-Match matches ETag', async () => {
     const icsPath = '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics';

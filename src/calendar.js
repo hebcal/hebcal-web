@@ -132,6 +132,18 @@ export function makeHebcalOptions(db, query) {
       }
     }
   }
+  // Undocumented tzeit=<degrees> overrides M=on (8.5 degrees) or m=<minutes>
+  // See https://github.com/hebcal/hebcal/issues/308
+  if (!empty(query.tzeit)) {
+    const deg = parseFloat(query.tzeit);
+    if (!isNaN(deg)) {
+      options.havdalahDeg = deg;
+      delete options.havdalahMins;
+      delete query.m;
+    } else {
+      delete query.tzeit;
+    }
+  }
   // force numYears to be >= 1 and <= 10, but only if explicitly specified
   if (typeof options.numYears === 'number') {
     options.numYears = getNumYears(options);
