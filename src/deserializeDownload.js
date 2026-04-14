@@ -20,6 +20,10 @@ export function deserializeDownload(data) {
   if (q.M === 'off') {
     q.m = msg.getHavdalahmins();
   }
+  const tzeit = msg.getTzeit();
+  if (tzeit !== 0) {
+    q.tzeit = tzeit;
+  }
   q.yt = msg.getIshebrewyear() ? 'H' : 'G';
   if (msg.getCandlelighting()) q.c = 'on';
   q.geonameid = msg.getGeonameid() || undefined;
