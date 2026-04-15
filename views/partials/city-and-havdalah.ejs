@@ -12,12 +12,21 @@
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
-<div class="mb-1">Havdalah</div>
-<div class="form-check mb-1">
-  <input class="form-check-input" type="radio" name="M" id="M1" <%= (q.M === 'on' || q.m === '') ? 'checked' : (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? '' : 'checked' %> value="on">
-  <label class="form-check-label" for="M1">nightfall (tzeit hakochavim)</label>
-  &nbsp; <span id="M1t" title="the point when 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+<div>Havdalah</div>
+<div class="row gx-2 mb-1">
+<div class="col-auto">
+<div class="form-check">
+  <input class="form-check-input" style="margin-top: 0.75em" type="radio" name="M" id="M1" <%= (q.M === 'on' || q.m === '') ? 'checked' : (q.M === 'off' || (typeof q.m === 'string' && q.m.charCodeAt(0) >= 48 && q.m.charCodeAt(0) <= 57)) ? '' : 'checked' %> value="on">
+  <label class="col-auto col-form-label" for="M1">degrees below horizon:</label>
 </div><!-- .form-check -->
+</div><!-- .col-auto --> 
+<div class="col-auto">
+  <input class="form-control" inputmode="decimal" type="text" name="td" value="<%=q.td||''%>" size="5" maxlength="5" id="td" pattern="\d{1,2}(\.\d+)?">
+</div>
+<div class="col-auto" style="margin: auto 0">
+  <span title="Use 7.083 degrees below the horizon for three medium-sized stars, 8.5 for three small stars, 16.1 for Rabbeinu Tam" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
+</div><!-- .row -->
 <div class="row gx-2 mb-2">
 <div class="col-auto">
 <div class="form-check">

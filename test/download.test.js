@@ -186,15 +186,15 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
 });
 
 // https://github.com/hebcal/hebcal/issues/308
-describe('tzeit protobuf round-trip', () => {
-  it('should serialize and deserialize tzeit correctly', () => {
+describe('td protobuf round-trip', () => {
+  it('should serialize and deserialize td correctly', () => {
     const query = {
       v: '1',
       maj: 'on',
       year: '2026',
       geonameid: '281184',
       lg: 's',
-      tzeit: '16.1',
+      td: '16.1',
     };
     const href = downloadHref2(query, 'test.ics');
     const match = href.match(/\/v4\/([^/]+)\//);
@@ -203,11 +203,12 @@ describe('tzeit protobuf round-trip', () => {
         .replace(/-/g, '+')
         .replace(/_/g, '/');
     const result = deserializeDownload(encoded);
-    expect(typeof result.tzeit).toBe('number');
-    expect(result.tzeit).toBeCloseTo(16.1, 4);
+    const td = parseFloat(result.td);
+    expect(typeof td).toBe('number');
+    expect(td).toBeCloseTo(16.1, 4);
   });
 
-  it('should not include tzeit when not set', () => {
+  it('should not include td when not set', () => {
     const query = {
       v: '1',
       maj: 'on',
@@ -222,7 +223,7 @@ describe('tzeit protobuf round-trip', () => {
         .replace(/-/g, '+')
         .replace(/_/g, '/');
     const result = deserializeDownload(encoded);
-    expect(result.tzeit).toBeUndefined();
+    expect(result.td).toBeUndefined();
   });
 });
 

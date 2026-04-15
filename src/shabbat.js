@@ -129,13 +129,13 @@ function geoIpRedirect(ctx) {
 
   const geoip = ctx.state.geoip = getLocationFromGeoIp(ctx);
   if (geoip.zip) {
-    const dest = `/shabbat?zip=${geoip.zip}&ue=off&b=18&M=on&lg=s&geoip=zip`;
+    const dest = `/shabbat?zip=${geoip.zip}&ue=off&b=18&M=on&td=8.5&lg=s&geoip=zip`;
     redir(ctx, dest);
     return true;
   } else if (geoip.geonameid) {
     const mode = geoip.nn ? 'nn' : 'geonameid';
     const candleMins = queryDefaultCandleMins(geoip);
-    const dest = `/shabbat?geonameid=${geoip.geonameid}&ue=off&b=${candleMins}&M=on&lg=s&geoip=${mode}`;
+    const dest = `/shabbat?geonameid=${geoip.geonameid}&ue=off&b=${candleMins}&M=on&td=8.5&lg=s&geoip=${mode}`;
     redir(ctx, dest);
     return true;
   }
@@ -221,8 +221,9 @@ function makeOptions(ctx) {
   for (const k of ['c', 's', 'maj', 'min', 'nx', 'mod', 'mf', 'ss']) {
     q0[k] = 'on';
   }
-  if (empty(q0.M) && empty(q0.m)) {
+  if (empty(q0.M) && empty(q0.m) && empty(q0.td)) {
     q0.M = 'on';
+    q0.td = '8.5';
   }
   const cfg = q0.cfg;
   const isApi = (cfg === 'json' || cfg === 'i' || cfg === 'r' || cfg === 'j' || cfg === 'i2');

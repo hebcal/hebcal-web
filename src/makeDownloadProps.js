@@ -63,8 +63,8 @@ export function downloadHref2(query, filename, override={}) {
   const m = getInt(q.m);
   if (m !== null) msg.setHavdalahmins(m);
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
-  if (!empty(q.tzeit)) {
-    const tzeit = parseFloat(q.tzeit);
+  if (!empty(q.td)) {
+    const tzeit = parseFloat(q.td);
     if (!isNaN(tzeit)) msg.setTzeit(tzeit);
   }
   const b = getInt(q.b);

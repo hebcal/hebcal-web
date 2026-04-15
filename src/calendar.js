@@ -115,9 +115,33 @@ export function makeHebcalOptions(db, query) {
     (options.mask & flags.PARSHA_HASHAVUA)) {
     options.mask |= flags.SHABBAT_MEVARCHIM;
   }
-  // Before we parse numberOpts, check for tzeit preference
+  // if both tzeit degrees and fixed minutes, use M=on/off to disambiguate
+  if (!empty(query.td) && !empty(query.m)) {
+    if (options.havdalahTzeit) {
+      delete query.m;
+    } else {
+      delete query.td;
+      query.M = 'off';
+    }
+  }
+  // tzeit degrees overrides M=on (legacy 8.5 degrees) or m=<minutes>
+  // See https://github.com/hebcal/hebcal/issues/308
+  if (!empty(query.td)) {
+    const deg = parseFloat(query.td);
+    if (deg) { // ignore NaN or 0.0
+      options.havdalahDeg = deg;
+      delete options.havdalahMins;
+      delete options.havdalahTzeit;
+      delete query.m;
+      query.M = 'on';
+    } else {
+      delete query.td;
+    }
+  }
+  // Before we parse numberOpts, check for legacy tzeit preference
   if (options.havdalahTzeit) {
     options.havdalahDeg = 8.5;
+    query.td = '8.5';
     delete options.havdalahTzeit;
     delete query.m;
   }
@@ -130,18 +154,6 @@ export function makeHebcalOptions(db, query) {
       } else {
         options[val] = num;
       }
-    }
-  }
-  // Undocumented tzeit=<degrees> overrides M=on (8.5 degrees) or m=<minutes>
-  // See https://github.com/hebcal/hebcal/issues/308
-  if (!empty(query.tzeit)) {
-    const deg = parseFloat(query.tzeit);
-    if (!isNaN(deg)) {
-      options.havdalahDeg = deg;
-      delete options.havdalahMins;
-      delete query.m;
-    } else {
-      delete query.tzeit;
     }
   }
   // force numYears to be >= 1 and <= 10, but only if explicitly specified

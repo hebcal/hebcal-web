@@ -55,7 +55,7 @@ function setCookie(ctx, newCookie) {
   }
 }
 
-const cookieOpts = geoKeys.concat(['lg'], Object.keys(numberOpts));
+const cookieOpts = geoKeys.concat(['lg', 'td'], Object.keys(numberOpts));
 
 /**
  * @param {any} ctx

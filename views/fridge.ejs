@@ -95,7 +95,7 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
 <% if (typeof options.havdalahMins === 'number' && !isNaN(options.havdalahMins)) { -%>
 <%= options.havdalahMins %> min after sunset
 <% } else { -%>
-for 3 small stars (sun 8.5° below the horizon)
+for 3 stars (sun <%=q.td||8.5%>° below the horizon)
 <% } -%>
 </p></div>
 </td>

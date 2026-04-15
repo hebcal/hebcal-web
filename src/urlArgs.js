@@ -28,7 +28,7 @@ export const hebcalFormDefaults = {
   i: 'off',
   yt: 'G',
   lg: 's',
-  b: 18,
+  b: '18',
   M: 'on',
   mm: '0',
 };
@@ -124,7 +124,7 @@ export function getGeoKeysToRemove(geo) {
   }
   switch (geo) {
     case 'pos': return primaryGeoKeys;
-    case 'none': return allGeoKeys.concat(['b', 'm', 'M', 'ue']);
+    case 'none': return allGeoKeys.concat(['b', 'm', 'td', 'M', 'ue']);
     case 'geoname': return allGeoKeys.filter((k) => k !== 'geonameid');
     default: return allGeoKeys.filter((k) => k !== geo);
   }
@@ -314,9 +314,7 @@ export function urlArgsObj(query, override = {}) {
   for (const key of getGeoKeysToRemove(q.geo)) {
     delete q[key];
   }
-  if (q.M === 'on') {
-    delete q.m;
-  } else if (q.M === 'off' && empty(q.m)) {
+  if (q.M === 'on' || !empty(q.td) || (q.M === 'off' && empty(q.m))) {
     q.M = 'on';
     delete q.m;
   }
@@ -385,8 +383,11 @@ export function makeGeoUrlArgs(q, location, options) {
   if (candleLightingMins !== undefined) {
     args.set('b', candleLightingMins);
   }
+  const havdalahDeg = options.havdalahDeg;
   const havdalahMins = options.havdalahMins;
-  if (typeof havdalahMins === 'number' && !isNaN(havdalahMins)) {
+  if (havdalahDeg) {
+    args.set('td', havdalahDeg);
+  } else if (typeof havdalahMins === 'number' && !isNaN(havdalahMins)) {
     args.set('M', 'off');
     args.set('m', havdalahMins);
   } else {
@@ -403,14 +404,17 @@ export function makeGeoUrlArgs(q, location, options) {
  */
 export function makeGeoUrlArgs2(q, location) {
   const args = makeGeoUrlArgs0(q, location);
-  if (q.M === 'on') {
+  if (!empty(q.td)) {
+    delete q.m;
+    q.M = 'on';
+  } else if (q.M === 'on') {
     delete q.m;
   } else if (q.M === 'off' && empty(q.m)) {
     q.M = 'on';
     delete q.m;
   }
   q.lg = q.lg || (q.a === 'on' ? 'a' : 's');
-  for (const key of ['b', 'M', 'm', 'lg']) {
+  for (const key of ['b', 'td', 'M', 'm', 'lg']) {
     if (!empty(q[key])) {
       args.set(key, q[key]);
     }

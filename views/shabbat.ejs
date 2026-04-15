@@ -106,7 +106,7 @@ ul.hebcal-results li {
 [2657896, "Zürich"],
 ];
 for (const [geonameid, city, min] of worldCities) { -%>
-<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;ue=off&amp;b=<%= queryDefaultCandleMins({geonameid}) %>&amp;M=on&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
+<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;ue=off&amp;b=<%= queryDefaultCandleMins({geonameid}) %>&amp;M=on&amp;td=<%=q.td||8.5%>&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
 <% } -%>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>
@@ -135,6 +135,12 @@ const d=document;
 d.getElementById("m").addEventListener("focus",function(){
   d.getElementById("M1").checked = false;
   d.getElementById("M0").checked = true;
+  d.getElementById("td").value = "";
+});
+d.getElementById("td").addEventListener("focus",function(){
+  d.getElementById("M0").checked = false;
+  d.getElementById("M1").checked = true;
+  d.getElementById("m").value = "";
 });
 });
 </script>

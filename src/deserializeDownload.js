@@ -22,7 +22,7 @@ export function deserializeDownload(data) {
   }
   const tzeit = msg.getTzeit();
   if (tzeit !== 0) {
-    q.tzeit = tzeit;
+    q.td = String(tzeit);
   }
   q.yt = msg.getIshebrewyear() ? 'H' : 'G';
   if (msg.getCandlelighting()) q.c = 'on';
