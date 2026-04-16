@@ -162,7 +162,7 @@ if (typeof year !== 'string' || year.length === 0) {
 </div><!-- .form-check -->
 </div><!-- .col-auto -->
 <div class="col-auto">
-  <input class="form-control" inputmode="decimal" type="text" name="td" value="<%=q.td||''%>" size="5" maxlength="5" id="td" pattern="\d{1,2}(\.\d+)?">
+  <input class="form-control" inputmode="decimal" type="text" name="td" value="<%=q.td||''%>" size="4" maxlength="8" id="td" pattern="\d{1,2}(\.\d+)?">
 </div>
 <div class="col-auto" style="margin: auto 0">
   <span title="Use 7.083 degrees below the horizon for three medium-sized stars, 8.5 for three small stars, 16.1 for Rabbeinu Tam" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
