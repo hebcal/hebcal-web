@@ -271,7 +271,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
       ` style-src 'self' https: data: 'unsafe-inline';` +
       ` frame-ancestors https: data:;` +
       ` frame-src https: data: blob:;` +
-      ` img-src 'self' https: data:;` +
+      ` img-src 'self' https: data: blob:;` +
       ` font-src 'self' data: https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
       ` base-uri 'none';` +

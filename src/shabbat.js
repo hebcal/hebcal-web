@@ -223,7 +223,6 @@ function makeOptions(ctx) {
   }
   if (empty(q0.M) && empty(q0.m) && empty(q0.td)) {
     q0.M = 'on';
-    q0.td = '8.5';
   }
   const cfg = q0.cfg;
   const isApi = (cfg === 'json' || cfg === 'i' || cfg === 'r' || cfg === 'j' || cfg === 'i2');

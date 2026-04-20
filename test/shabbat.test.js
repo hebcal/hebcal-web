@@ -75,6 +75,15 @@ describe('Shabbat Routes', () => {
     // Should redirect to a URL with zip code based on GeoIP lookup
     expect(response.headers.location).toMatch(/\/shabbat\?zip=\d{5}&ue=off&b=18&M=on&lg=s&geoip=zip/);
   });
+
+  it('should redirect when Cookie header is set with no query params', async () => {
+    const response = await request(app.callback())
+        .get('/shabbat')
+        .set('Cookie', 'C=uid=2f5aec00-999c-4003-8e26-153ee1ad3b75&maj=on&min=on&nx=on&mod=on&mf=on&ss=on&c=on&i=off&s=on&M=on&geonameid=5128581&lg=es&td=7.083333')
+        .redirects(0);
+    expect(response.status).toBe(302);
+    expect(response.headers.location).toMatch(/\/shabbat\?geonameid=5128581&ue=off&td=7.083333&lg=es/);
+  });
 });
 
 describe('Fridge Routes', () => {

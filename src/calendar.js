@@ -117,7 +117,7 @@ export function makeHebcalOptions(db, query) {
   }
   // if both tzeit degrees and fixed minutes, use M=on/off to disambiguate
   if (!empty(query.td) && !empty(query.m)) {
-    if (options.havdalahTzeit) {
+    if (options.havdalahTzeit || empty(query.M)) {
       delete query.m;
     } else {
       delete query.td;
