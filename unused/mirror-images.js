@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import {WritableStream} from 'node:stream/web';
 import pino from 'pino';
 
+//const imgDir = '/workspaces/hebcal-web-static/i';
+const imgDir = '/var/www/html/i';
 const logger = pino();
 
 const ASINs = new Set();
@@ -23,7 +25,7 @@ async function main() {
   const toFetch = new Set();
   for (const asin of ASINs) {
     const fn = `${asin}.01.LZZZZZZZ.jpg`;
-    const path = `/var/www/html/i/${fn}`;
+    const path = `${imgDir}/${fn}`;
     try {
       await access(path, fs.constants.R_OK);
       logger.info(`skipping ${asin}`);
@@ -50,7 +52,7 @@ async function main() {
 }
 
 async function fetchFromAmzn(fn) {
-  const path = `/var/www/html/i/${fn}`;
+  const path = `${imgDir}/${fn}`;
   const url = `https://images.amazon.com/images/P/${fn}`;
   logger.info(url);
   const res = await fetch(url, {
