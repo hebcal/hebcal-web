@@ -28,7 +28,6 @@ describe('makeHebcalOptions td (tzeit degrees) parameter', () => {
   it('ignores invalid td value', () => {
     const query = {year: '2026', M: 'on', td: 'not-a-number'};
     const options = makeHebcalOptions(null, query);
-    console.log(options);
     expect(options.havdalahDeg).toBe(8.5);
     expect(query.td).toBe('8.5');
   });
