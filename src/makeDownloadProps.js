@@ -65,7 +65,12 @@ export function downloadHref2(query, filename, override={}) {
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
   if (!empty(q.td)) {
     const tzeit = parseFloat(q.td);
-    if (!isNaN(tzeit)) msg.setTzeit(tzeit);
+    if (!isNaN(tzeit) && tzeit !== 0.0) {
+      msg.setHavdalahtzeit(true);
+      if (tzeit !== 8.5) {
+        msg.setTzeit(tzeit);
+      }
+    }
   }
   const b = getInt(q.b);
   if (b !== null) msg.setCandlelightingmins(b);
