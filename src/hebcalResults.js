@@ -718,6 +718,48 @@ function paginationListItem({href, title, rel, innerHTML}) {
   return listEl;
 }
 
+async function myPrint() {
+  const modal = document.getElementById('printModal');
+  let myModal;
+  if (modal) {
+    myModal = new bootstrap.Modal(modal, { backdrop: 'static', keyboard: false });
+    myModal.show();
+  }
+  const pdfUrl = document.getElementById('print-pdf').getAttribute('href');
+
+  try {
+    const response = await fetch(pdfUrl, { mode: 'cors', credentials: 'omit' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const pdfBlob = await response.blob(); // already typed application/pdf from the server
+    const blobUrl = URL.createObjectURL(pdfBlob);
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'ipdf';
+    iframe.name = 'ipdf';
+    iframe.src = blobUrl;
+
+    iframe.onload = () => {
+      URL.revokeObjectURL(blobUrl);
+      window.addEventListener('focus', function focusHandler() {
+        window.removeEventListener('focus', focusHandler);
+        document.getElementById('ipdf')?.remove();
+      });
+    };
+
+    Object.assign(document.body.style, { overflow: 'hidden', margin: '0', padding: '0' });
+    document.body.appendChild(iframe);
+
+    setTimeout(() => {
+      if (myModal) myModal.hide();
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+    }, 1200);
+  } catch (err) {
+    if (myModal) myModal.hide();
+    document.location.href = pdfUrl;
+  }
+}
+
 const hebcalResults = {
   makeMonthDivs,
   renderMonthTables,
@@ -725,6 +767,7 @@ const hebcalResults = {
   renderCalendarGrids,
   paginationListItem,
   splitByMonth,
+  myPrint,
 };
 
 export default hebcalResults;

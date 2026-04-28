@@ -10,54 +10,13 @@
 </div>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
-function myPrint() {
-  const modal = document.getElementById('printModal');
-  const myModal = new bootstrap.Modal(modal, {backdrop: 'static', keyboard: false});
-  myModal.show();
-  const printEl = document.getElementById('print-pdf');
-  const pdfUrl = printEl.getAttribute('href');
-  fetch(pdfUrl, {mode: 'cors', credentials: 'omit'})
-    .then(function(response) { return response && response.arrayBuffer(); })
-    .then(function(pdf) {
-      if (!pdf) { return; }
-      const pdfBlob = new Blob([new Uint8Array(pdf, 0)], {type: 'application/pdf'});
-      const iframe = document.createElement('iframe');
-      // iframe.style.display = 'none';
-      iframe.setAttribute('id', 'ipdf');
-      iframe.setAttribute('name', 'ipdf');
-      iframe.src = URL.createObjectURL(pdfBlob);
-      const focusHandler = function() {
-        window.removeEventListener('focus', focusHandler);
-        const el = document.getElementById('ipdf');
-        if (el) {
-          el.remove();
-        }
-      };
-      iframe.onload = function() {
-        URL.revokeObjectURL(iframe.src);
-        window.addEventListener('focus', focusHandler);
-      };
-      document.body.style.overflow = 'hidden';
-      document.body.style.margin = '0';
-      document.body.style.padding = '0';
-      document.body.appendChild(iframe);
-      setTimeout(function() {
-        myModal.hide();
-        const cw = iframe.contentWindow;
-        cw.focus();
-        cw.print();
-      }, 1200);
-    })
-    .catch(function(err) {
-      myModal.hide();
-      document.location.href = pdfUrl;
-    });
-  }
   // For now, only do magic print stuff on Chrome, Edge 20+ and Firefox
-  if (!!window.chrome || !!window.StyleMedia || typeof InstallTrigger !== 'undefined') {
+  const isChromium = navigator.userAgent.includes('Chrome'); // also matches Edge
+  const isFirefox = navigator.userAgent.includes('Firefox');
+  if (isChromium || isFirefox) {
     document.addEventListener('keydown', function(e) {
       if (e.key === 'p' && (e.metaKey || e.ctrlKey)) {
-        myPrint();
+        hebcalResults.myPrint();
         e.preventDefault();
         e.stopImmediatePropagation();
       }

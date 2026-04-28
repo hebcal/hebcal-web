@@ -172,8 +172,8 @@ data-ad-slot="1867606375"></ins>
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
-<%- await include('partials/print-iframe.ejs') -%>
 <script nonce="<%=nonce%>"><%- await include('partials/hebcalResults.min.js') %></script>
+<%- await include('partials/print-iframe.ejs') -%>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   window['hebcal']=window['hebcal']||{};
