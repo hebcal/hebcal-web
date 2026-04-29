@@ -9,7 +9,7 @@ import serve from 'koa-static';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import ini from 'ini';
-import maxmind from 'maxmind';
+import {openGeoIpDbs} from './geoip.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
@@ -35,33 +35,15 @@ logger.info('Koa server: starting up');
 
 app.context.logger = logger;
 
-const geoipCountryMmdbPath = 'GeoLite2-Country.mmdb';
-setImmediate(async () => {
-  logger.info(`Opening ${geoipCountryMmdbPath}`);
-  try {
-    app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath);
-  } catch (err) {
-    logger.error(err, `while opening ${geoipCountryMmdbPath}`);
-  }
-});
+const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
+const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
+app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
-const geoipCityMmdbPath = 'GeoLite2-City.mmdb';
-setImmediate(async () => {
-  logger.info(`Opening ${geoipCityMmdbPath}`);
-  try {
-    app.context.geoipCity = await maxmind.open(geoipCityMmdbPath);
-  } catch (err) {
-    logger.error(err, `while opening ${geoipCityMmdbPath}`);
-  }
-});
+openGeoIpDbs(app);
 
 const zipsFilename = 'zips.sqlite3';
 const geonamesFilename = 'geonames.sqlite3';
 app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
-
-const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
-const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
-app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
 app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 

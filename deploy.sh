@@ -8,10 +8,6 @@ compress_file() {
     gzip -f --keep --best "${file}"
 }
 
-if [ ! -e node_modules/geolite2-redist/dbs/GeoLite2-City.mmdb ]; then
-  node -e "import('geolite2-redist').then(geolite => geolite.downloadDbs())"
-fi
-
 npm run build
 
 rm -f ./static/i/$npm_package_config_sprite
@@ -24,9 +20,9 @@ compress_file ./static/favicon.svg
 
 # deploy for prod
 rsync -av ./fonts/ /var/www/fonts/
+rsync -av node_modules/simpledotcss/simple.min.css static/simple.min.css
 rsync -av ./static/ /var/www/html/
 rsync -av ./package.json /var/www/
 rsync -av ./src/ /var/www/dist/
 rsync -av ./views/ /var/www/views/
 rsync -av ./node_modules/ /var/www/node_modules/
-rsync -av ./node_modules/geolite2-redist/dbs/GeoLite2-*.mmdb /var/www/

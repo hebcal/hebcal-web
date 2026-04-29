@@ -29,7 +29,7 @@ npm run test:watch         # watch mode
 npm run dev                # start www.hebcal.com server
 npm run dev:download       # start download.hebcal.com server (port 8081)
 
-npm run build              # full build: po2json + css-compile + css-rename + cp-simplecss + rollup
+npm run build              # full build: po2json + css-compile + css-rename + rollup
 npm run css-compile        # compile SCSS → CSS (Sass + PostCSS + PurgeCSS)
 npm run po2json            # convert gettext .po translation files → JSON
 ```
