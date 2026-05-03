@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hebcal REST APIs &mdash; OpenAPI / Swagger</title>
+<meta name="description" content="Interactive Swagger UI documentation for the Hebcal Jewish Calendar, Hebrew Date Converter, Zmanim, Leyning, Yahrzeit, and Assur Melacha REST APIs.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui.css">
+<style>
+  html, body { margin: 0; background: #fafafa; }
+  .topbar { display: none; }
+</style>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui-bundle.js" crossorigin="anonymous"></script>
+<script nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.17.14/swagger-ui-standalone-preset.js" crossorigin="anonymous"></script>
+<script nonce="<%=nonce%>">
+window.addEventListener('load', function() {
+  window.ui = SwaggerUIBundle({
+    url: '/api-docs/openapi.json',
+    dom_id: '#swagger-ui',
+    deepLinking: true,
+    presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+    plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+    layout: 'BaseLayout',
+    defaultModelsExpandDepth: 0,
+    docExpansion: 'list',
+    tryItOutEnabled: true,
+    persistAuthorization: false
+  });
+});
+</script>
+</body>
+</html>

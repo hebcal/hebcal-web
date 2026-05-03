@@ -16,6 +16,7 @@ import {langNames} from './lang.js';
 import {dailyLearningConfig} from './urlArgs.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
+import {apiDocs} from './apiDocs.js';
 import {emailForm, emailVerify} from './email.js';
 import {emailOpen} from './emailOpen.js';
 import {fridgeShabbat} from './fridge.js';
@@ -56,6 +57,7 @@ const needsTrailingSlash = {
   '/ical': true,
   '/sedrot': true,
   '/ma': true,
+  '/api-docs': true,
 };
 
 // favicon-like files in the directory root that should be cached for 365 days
@@ -125,6 +127,9 @@ export function wwwRouter() {
     } else if (rootDirStatic.has(rpath) || rpath.startsWith('/i/')) {
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       // let serve() handle this file
+    } else if (rpath === '/api-docs/') {
+      onlyGetAndHead(ctx);
+      return apiDocs(ctx);
     } else if (rpath.startsWith('/complete')) {
       return geoAutoComplete(ctx);
     } else if (rpath.startsWith('/zmanim')) {
