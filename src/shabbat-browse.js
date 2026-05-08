@@ -1,6 +1,7 @@
 import {HDate, HebrewCalendar, Location, Zmanim} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import Database from 'better-sqlite3';
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+import {DatabaseSync} from 'node:sqlite';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
 import utc from 'dayjs/plugin/utc.js';
@@ -57,7 +58,7 @@ function init() {
   if (didInit) {
     return;
   }
-  const geonamesDb = new Database(geonamesFilename, {fileMustExist: true});
+  const geonamesDb = new DatabaseSync(geonamesFilename, {readOnly: true});
   const geonamesStmt = geonamesDb.prepare(CONTINENT_SQL);
   const results = geonamesStmt.all();
   for (const [iso, name] of Object.entries(CONTINENTS)) {
@@ -175,7 +176,7 @@ export async function shabbatBrowse(ctx) {
   }
   const countryA1 = countryAdmin1[base];
   if (countryA1 !== undefined) {
-    const db = new Database(geonamesFilename, {fileMustExist: true});
+    const db = new DatabaseSync(geonamesFilename, {readOnly: true});
     const stmt = db.prepare(COUNTRY_ADMIN_SQL);
     const countryCode = countryA1.cc;
     const results = stmt.all(countryCode, countryA1.admin1);
@@ -199,7 +200,7 @@ export async function shabbatBrowse(ctx) {
 
 async function countryPage(ctx, countryCode) {
   const countryName = isoToCountry[countryCode];
-  const db = new Database(geonamesFilename, {fileMustExist: true});
+  const db = new DatabaseSync(geonamesFilename, {readOnly: true});
   const stmt = db.prepare(COUNTRY_SQL);
   const results = stmt.all(countryCode);
   db.close();

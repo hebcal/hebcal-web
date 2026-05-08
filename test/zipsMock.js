@@ -1,4 +1,5 @@
-import Database from 'better-sqlite3';
+// eslint-disable-next-line n/no-unsupported-features/node-builtins
+import {DatabaseSync} from 'node:sqlite';
 
 const INSERT_SQL =
   'INSERT INTO ZIPCodes_Primary' +
@@ -28,7 +29,7 @@ export function injectZipsMock(geoDb, rows = defaultRows) {
   const origZipStmt = geoDb.zipStmt;
   const origZipCache = geoDb.zipCache;
 
-  const mockDb = new Database(':memory:');
+  const mockDb = new DatabaseSync(':memory:');
   mockDb.exec(`
     CREATE TABLE ZIPCodes_Primary (
       ZipCode TEXT PRIMARY KEY,
@@ -44,7 +45,7 @@ export function injectZipsMock(geoDb, rows = defaultRows) {
   `);
   const insertStmt = mockDb.prepare(INSERT_SQL);
   for (const row of rows) {
-    insertStmt.run(row);
+    insertStmt.run(...row);
   }
 
   geoDb.zipsDb = mockDb;
