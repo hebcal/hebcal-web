@@ -129,11 +129,9 @@ export function matomoTrack(ctx, category, action, name=null) {
   if (ref?.length) {
     headers.Referer = ref;
   }
-  const hostname = isProduction ? 'matomo-internal.hebcal.com' : httpHost;
-  const port = isProduction ? 8080 : 80;
   const options = {
-    hostname: hostname,
-    port: port,
+    hostname: httpHost,
+    port: 80,
     path: path,
     method: 'POST',
     headers: headers,
