@@ -113,7 +113,7 @@ function formatHebrewYearMonth(hd) {
  */
 function getHebrewMonthBoundaries(hyear, hmonth) {
   const startHd = {yy: hyear, mm: hmonth, dd: 1};
-  const ndays = daysInMonth(hyear, hmonth);
+  const ndays = daysInMonth(hmonth, hyear);
   const endHd = {yy: hyear, mm: hmonth, dd: ndays};
 
   return {
