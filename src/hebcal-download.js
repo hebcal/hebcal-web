@@ -13,7 +13,16 @@ import {makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
-const maxEventsIcsSub = 2400;
+export const maxEventsIcsSub = 2399;
+
+function makeTruncationNoticeEvent(lastEvent) {
+  const noticeDate = lastEvent.getDate().next();
+  const ev = new Event(noticeDate, 'Hebcal calendar feed truncated', flags.USER_EVENT);
+  ev.alarm = false;
+  ev.memo = 'Your Hebcal calendar subscription exceeded the maximum number of events and has been truncated. ' +
+    'To see additional events, visit https://www.hebcal.com/';
+  return ev;
+}
 
 /**
  * @param {Event[]} events
@@ -21,12 +30,14 @@ const maxEventsIcsSub = 2400;
  * @param {HDate} today
  * @return {Event[]}
  */
-function limitIcsFeedLength(events, isSubscription, today) {
+export function limitIcsFeedLength(events, isSubscription, today) {
   if (isSubscription && events.length > maxEventsIcsSub) {
     const startAbs = today.abs() - 12 * 7; // 12 weeks ago;
     const filteredEvts = events.filter((ev) => ev.getDate().abs() >= startAbs);
     if (filteredEvts.length > maxEventsIcsSub) {
-      return filteredEvts.slice(0, maxEventsIcsSub);
+      const truncated = filteredEvts.slice(0, maxEventsIcsSub);
+      truncated.push(makeTruncationNoticeEvent(truncated[truncated.length - 1]));
+      return truncated;
     }
     return filteredEvts;
   }
