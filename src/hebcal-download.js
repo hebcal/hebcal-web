@@ -20,7 +20,7 @@ function makeTruncationNoticeEvent(lastEvent) {
   const ev = new Event(noticeDate, 'Hebcal calendar feed truncated', flags.USER_EVENT);
   ev.alarm = false;
   ev.memo = 'Your Hebcal calendar subscription exceeded the maximum number of events and has been truncated. ' +
-    'To see additional events, visit https://www.hebcal.com/';
+    'Visit https://www.hebcal.com/home/1398/number-of-years-in-calendar-feed-subscriptions to learn more about the feed length limit.';
   return ev;
 }
 
