@@ -15,9 +15,15 @@ import {murmur128HexSync} from 'murmurhash3';
 
 const maxEventsIcsSub = 2400;
 
-function limitIcsFeedLength(events, isSubscription) {
+/**
+ * @param {Event[]} events
+ * @param {boolean} isSubscription
+ * @param {HDate} today
+ * @return {Event[]}
+ */
+function limitIcsFeedLength(events, isSubscription, today) {
   if (isSubscription && events.length > maxEventsIcsSub) {
-    const startAbs = new HDate().abs() - 12 * 7; // 12 weeks ago;
+    const startAbs = today.abs() - 12 * 7; // 12 weeks ago;
     const filteredEvts = events.filter((ev) => ev.getDate().abs() >= startAbs);
     if (filteredEvts.length > maxEventsIcsSub) {
       return filteredEvts.slice(0, maxEventsIcsSub);
@@ -85,9 +91,20 @@ export async function hebcalDownload(ctx) {
       addLocationOmerAlarms(options, events);
     }
     ctx.response.type = 'text/calendar; charset=utf-8';
-    icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
+    const now = new Date();
+    icalOpt.dtstamp = IcalEvent.makeDtstamp(now);
     const zeroEvents = events.length === 0;
-    const events1 = limitIcsFeedLength(events, !isAttachment);
+    const today = new HDate(now);
+    const events1 = limitIcsFeedLength(events, !isAttachment, today);
+    if (events1.length !== events.length) {
+      const sunday = today.onOrBefore(0).abs();
+      attrs.sunday = sunday;
+      ctx.response.etag = makeETag(ctx, opts, attrs);
+      if (ctx.fresh) {
+        ctx.status = 304;
+        return;
+      }
+    }
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
