@@ -303,8 +303,8 @@ describe('limitIcsFeedLength truncation notice', () => {
     const today = new HDate(new Date(year, 0, 1));
     const limited = limitIcsFeedLength(events, true, today);
     expect(limited.length).toBe(maxEventsIcsSub + 1);
-    const lastEvent = limited[limited.length - 1];
-    const prevEvent = limited[limited.length - 2];
+    const lastEvent = limited.at(-1);
+    const prevEvent = limited.at(-2);
     expect(lastEvent.render()).toContain('truncated');
     expect(lastEvent.getDate().abs()).toBe(prevEvent.getDate().abs() + 1);
   });

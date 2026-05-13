@@ -36,7 +36,7 @@ export function limitIcsFeedLength(events, isSubscription, today) {
     const filteredEvts = events.filter((ev) => ev.getDate().abs() >= startAbs);
     if (filteredEvts.length > maxEventsIcsSub) {
       const truncated = filteredEvts.slice(0, maxEventsIcsSub);
-      truncated.push(makeTruncationNoticeEvent(truncated[truncated.length - 1]));
+      truncated.push(makeTruncationNoticeEvent(truncated.at(-1)));
       return truncated;
     }
     return filteredEvts;
