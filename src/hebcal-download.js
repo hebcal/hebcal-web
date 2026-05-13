@@ -15,6 +15,18 @@ import {murmur128HexSync} from 'murmurhash3';
 
 const maxEventsIcsSub = 2400;
 
+function limitIcsFeedLength(events, isSubscription) {
+  if (isSubscription && events.length > maxEventsIcsSub) {
+    const startAbs = new HDate().abs() - 12 * 7; // 12 weeks ago;
+    const filteredEvts = events.filter((ev) => ev.getDate().abs() >= startAbs);
+    if (filteredEvts.length > maxEventsIcsSub) {
+      return filteredEvts.slice(0, maxEventsIcsSub);
+    }
+    return filteredEvts;
+  }
+  return events;
+}
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
@@ -75,7 +87,7 @@ export async function hebcalDownload(ctx) {
     ctx.response.type = 'text/calendar; charset=utf-8';
     icalOpt.dtstamp = IcalEvent.makeDtstamp(new Date());
     const zeroEvents = events.length === 0;
-    const events1 = events.length > maxEventsIcsSub && !isAttachment ? events.slice(0, maxEventsIcsSub) : events;
+    const events1 = limitIcsFeedLength(events, !isAttachment);
     const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
