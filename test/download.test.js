@@ -1,9 +1,12 @@
 import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
+import {HDate, HebrewCalendar} from '@hebcal/core';
+import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
 import {downloadHref2} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
+import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
 
 beforeAll(() => {
   app.context.mysql = new MockMysqlDb();
@@ -268,5 +271,52 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
         .set('If-None-Match', etag);
     expect(second.status).toBe(304);
     expect(second.text).toBeFalsy();
+  });
+});
+
+describe('limitIcsFeedLength truncation notice', () => {
+  it('appends a synthetic truncation notice when feed exceeds the limit', () => {
+    const year = 2024;
+    const events = HebrewCalendar.calendar({
+      year,
+      isHebrewYear: false,
+      noHolidays: true,
+      dailyLearning: {
+        dafYomi: true,
+        mishnaYomi: true,
+        perekYomi: true,
+        nachYomi: true,
+        tanakhYomi: true,
+        psalms: true,
+        rambam1: true,
+        rambam3: true,
+        seferHaMitzvot: true,
+        'yerushalmi-vilna': true,
+        chofetzChaim: true,
+        shemiratHaLashon: true,
+        dirshuAmudYomi: true,
+        arukhHaShulchanYomi: true,
+        kitzurShulchanAruch: true,
+      },
+    });
+    expect(events.length).toBeGreaterThan(maxEventsIcsSub);
+    const today = new HDate(new Date(year, 0, 1));
+    const limited = limitIcsFeedLength(events, true, today);
+    expect(limited.length).toBe(maxEventsIcsSub + 1);
+    const lastEvent = limited[limited.length - 1];
+    const prevEvent = limited[limited.length - 2];
+    expect(lastEvent.render()).toContain('truncated');
+    expect(lastEvent.getDate().abs()).toBe(prevEvent.getDate().abs() + 1);
+  });
+
+  it('returns events unchanged when below the limit', () => {
+    const events = HebrewCalendar.calendar({
+      year: 2024,
+      isHebrewYear: false,
+    });
+    expect(events.length).toBeLessThan(maxEventsIcsSub);
+    const today = new HDate(new Date(2024, 0, 1));
+    const limited = limitIcsFeedLength(events, true, today);
+    expect(limited).toBe(events);
   });
 });
