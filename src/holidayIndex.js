@@ -181,7 +181,7 @@ const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function holidayMainIndex(ctx) {
   const dt = new Date();
-  const hyear0 = parseInt(ctx.request.query?.year, 10);
+  const hyear0 = Number.parseInt(ctx.request.query?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(new HDate(dt));
   if (yearIsOutsideHebRange(hyear)) {
     return httpRedirect(ctx, `/holidays/?redir=year`);

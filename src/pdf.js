@@ -587,15 +587,15 @@ export function renderPdf(doc, events, options, query) {
     if (yearMonth.startsWith('H')) {
       // Hebrew month: format "HYYYY-MM"
       const parts = yearMonth.substring(1).split('-');
-      year = parseInt(parts[0], 10);
-      month = parseInt(parts[1], 10);
+      year = Number.parseInt(parts[0], 10);
+      month = Number.parseInt(parts[1], 10);
       const hd = new HDate(1, month, year);
       daysInMonth = hd.daysInMonth();
       firstDayOfMonth = hd.greg();
     } else {
       // Gregorian month: format "YYYYMM"
-      year = parseInt(yearMonth.substring(0, yearMonth.length - 2), 10);
-      month = parseInt(yearMonth.substring(yearMonth.length - 2), 10);
+      year = Number.parseInt(yearMonth.substring(0, yearMonth.length - 2), 10);
+      month = Number.parseInt(yearMonth.substring(yearMonth.length - 2), 10);
       daysInMonth = greg.daysInMonth(month, year);
       firstDayOfMonth = new Date(year, month - 1, 1);
       if (year < 100) {

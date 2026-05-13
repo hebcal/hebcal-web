@@ -1,7 +1,6 @@
 import { generate } from 'critical';
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
-import { dirname } from 'path';
-import postcss from 'postcss';
+import { dirname } from 'node:path';
 
 const fileUrl = new URL('package.json', import.meta.url);
 const pkg = JSON.parse(readFileSync(fileUrl, 'utf8'));

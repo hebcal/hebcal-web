@@ -754,7 +754,7 @@ async function myPrint() {
       iframe.contentWindow.focus();
       iframe.contentWindow.print();
     }, 1200);
-  } catch (err) {
+  } catch {
     if (myModal) myModal.hide();
     document.location.href = pdfUrl;
   }

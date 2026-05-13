@@ -129,7 +129,7 @@ export function getLocationFromQuery(db, query) {
     query.zip = cityTypeahead.substring(cityTypeahead.length - 5);
   }
   if (!empty(query.geonameid)) {
-    const geonameid = parseInt(query.geonameid, 10);
+    const geonameid = Number.parseInt(query.geonameid, 10);
     const location = db.lookupGeoname(geonameid);
     if (location == null) {
       throw createError(404, `Sorry, can't find geonameid: ${query.geonameid}`);
@@ -158,12 +158,12 @@ export function getLocationFromQuery(db, query) {
     query.geonameid = location.getGeoId();
     return location;
   } else if (!empty(query.latitude) && !empty(query.longitude)) {
-    const latitude = parseFloat(query.latitude);
-    if (isNaN(latitude) || latitude > 90 || latitude < -90) {
+    const latitude = Number.parseFloat(query.latitude);
+    if (Number.isNaN(latitude) || latitude > 90 || latitude < -90) {
       throw createError(400, `Invalid latitude specified: ${query.latitude}`);
     }
-    const longitude = parseFloat(query.longitude);
-    if (isNaN(longitude) || longitude > 180 || longitude < -180) {
+    const longitude = Number.parseFloat(query.longitude);
+    if (Number.isNaN(longitude) || longitude > 180 || longitude < -180) {
       throw createError(400, `Invalid longitude specified: ${query.longitude}`);
     }
     if (empty(query.tzid)) {
@@ -186,7 +186,7 @@ export function getLocationFromQuery(db, query) {
       const m = /^([ +-])(\d\d):00$/.exec(tzid);
       if (m?.[2]) {
         const dir = m[1] === '-' ? '-' : '+';
-        query.tzid = 'Etc/GMT' + dir + parseInt(m[2], 10);
+        query.tzid = 'Etc/GMT' + dir + Number.parseInt(m[2], 10);
       }
     }
     try {
@@ -196,7 +196,7 @@ export function getLocationFromQuery(db, query) {
     }
     const cityName = cityTypeahead || makeGeoCityName(latitude, longitude, query.tzid);
     query.geo = 'pos';
-    const elevation0 = parseFloat(query.elev);
+    const elevation0 = Number.parseFloat(query.elev);
     const elevation = (elevation0 && elevation0 > 0) ? elevation0 : 0;
     const loc = new Location(latitude, longitude, il, query.tzid, cityName, undefined, undefined, elevation);
     loc.geo = 'pos';
@@ -204,12 +204,12 @@ export function getLocationFromQuery(db, query) {
   } else if (hasLatLongLegacy(query)) {
     for (const [key, max] of Object.entries(geoposLegacy)) {
       const value = query[key];
-      if (empty(value) || parseInt(value, 10) > max) {
+      if (empty(value) || Number.parseInt(value, 10) > max) {
         throw createError(400, `Sorry, ${key}=${value} out of valid range 0-${max}`);
       }
     }
-    let latitude = parseInt(query.ladeg, 10) + (parseInt(query.lamin, 10) / 60.0);
-    let longitude = parseInt(query.lodeg, 10) + (parseInt(query.lomin, 10) / 60.0);
+    let latitude = Number.parseInt(query.ladeg, 10) + (Number.parseInt(query.lamin, 10) / 60.0);
+    let longitude = Number.parseInt(query.lodeg, 10) + (Number.parseInt(query.lomin, 10) / 60.0);
     if (query.ladir === 's') {
       latitude *= -1;
     }
@@ -220,7 +220,7 @@ export function getLocationFromQuery(db, query) {
     if (empty(tzid) && !empty(query.tz) && !empty(query.dst)) {
       tzid = Location.legacyTzToTzid(query.tz, query.dst);
       if (!tzid && query.dst === 'none') {
-        const tz = parseInt(query.tz, 10);
+        const tz = Number.parseInt(query.tz, 10);
         const plus = tz > 0 ? '+' : '';
         tzid = `Etc/GMT${plus}${tz}`;
       }

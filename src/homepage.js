@@ -317,7 +317,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return [SHANA_TOVA, SHANA_TOVA2 + `.<br>
  <a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-${gy}">Rosh Hashana ${nextYear}</a>
  begins at sundown on ${htmlDate}`];
-  } else if (mm == months.IYYAR && dd >= 12 && dd <= 17) {
+  } else if (mm == months.IYYAR && dd >= 14 && dd <= 17) {
     const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevLagBaOmer);
     return ['🔥&nbsp;<span lang="he" dir="rtl">ל״ג בָּעוֹמֶר שָׂמֵחַ</span>&nbsp;🔥',

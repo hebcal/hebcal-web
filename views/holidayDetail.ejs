@@ -95,7 +95,7 @@ Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 <% for (let i = 0; i < pesachSukkotItems.length; i++) { const item = pesachSukkotItems[i]; %>
 <tr>
 <td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
-<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc.replace(/'/g, '’')%></td>
+<td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc.replaceAll("'", '’')%></td>
 </tr>
 <% } %>
 </tbody>
@@ -179,10 +179,10 @@ Jews living <%=il?'outside of':'in'%> modern Israel.</p>
 
 <% for (const [item, reading] of Object.entries(meta.reading)) { %>
 <% if (typeof reading.d !== 'undefined') { %><div id="r-<%=reading.d.format('YYYY-MM-DD')%><%= item.endsWith(" (Mincha)") ? '-mincha':''%>"></div><% } -%>
-<h4 id="reading-<%=reading.id%>"><%=item.replace(/'/g, '’')%>
+<h4 id="reading-<%=reading.id%>"><%=item.replaceAll("'", '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (reading.note) { %><br><span class="text-burgundy small"><%=reading.note%></span><% } -%>
-<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString().replace(/'/g, '’')%></span></time><% } %>
+<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString().replaceAll("'", '’')%></span></time><% } %>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
@@ -283,8 +283,8 @@ Thank you for supporting Hebcal.</p>
 </div>
 <% if (typeof prev !== 'undefined' || typeof next !== 'undefined') { %>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name.replace(/'/g, '’')%></a></div><% } %>
-<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name.replace(/'/g, '’')%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
+<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name.replaceAll("'", '’')%></a></div><% } %>
+<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name.replaceAll("'", '’')%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
 <% if (!noindex && !currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>

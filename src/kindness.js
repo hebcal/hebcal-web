@@ -61,7 +61,7 @@ csvStream.close();
 
 function makeEvent(gyear, monthDay, arr) {
   const [monthStr, mday] = monthDay.split('-');
-  const month = parseInt(monthStr, 10);
+  const month = Number.parseInt(monthStr, 10);
   const dt = new Date(gyear, month - 1, +mday);
   const summary = cleanStr(arr[0]);
   const memo = cleanStr(arr[1]);

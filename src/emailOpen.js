@@ -45,7 +45,7 @@ async function saveEmailOpenToDb(ctx, loc) {
  */
 function computeDelta(msgid) {
   const parts = msgid.split('.');
-  const sentTime = parseInt(parts.at(-1), 10);
+  const sentTime = Number.parseInt(parts.at(-1), 10);
   if (sentTime) {
     const delta = Math.trunc((Date.now() - sentTime) / 1000);
     if (delta < 0 || delta > 2147483647) {

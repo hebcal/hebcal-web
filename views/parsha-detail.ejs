@@ -3,7 +3,7 @@
 <link rel="dns-prefetch" href="https://www.sefaria.org/">
 <link rel="dns-prefetch" href="https://tikkun.io/">
 <link rel="canonical" href="https://www.hebcal.com/sedrot/<%= parsha.anchor %><%= date ? ('-' + date) : '' %><%=iSuffix%>">
-<meta name="description" content="Parashat <%=parshaName%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString().replace(/'/g, '’') %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
+<meta name="description" content="Parashat <%=parshaName%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString().replaceAll("'", '’') %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
 <meta name="keywords" content="<%=translations.join(',')%>">
 <% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev.anchor%>"><%}%>
 <% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next.anchor%>"><%}%>
@@ -20,7 +20,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <h2><span class="d-none d-sm-inline">Parashat</span> <%=parshaName%> <%= date ? hd.getFullYear() : '' %> /
 <bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
 <% if (date) { -%>
-<p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString().replace(/'/g, '’') %></span><% if (israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
+<p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString().replaceAll("'", '’') %></span><% if (israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
 <% } -%>
 <% if (date && d.year() <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
@@ -31,7 +31,7 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <% if (!date && nextRead) { -%>
 Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on 
 <a href="<%=nextRead.anchor%>-<%=nextRead.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=nextRead.d.format('YYYY-MM-DD')%>"><%=nextRead.d.format('D MMM YYYY')%></time>
- / <span class="text-nowrap"><%= nextRead.event.getDate().toString().replace(/'/g, '’') %></span></a>.
+ / <span class="text-nowrap"><%= nextRead.event.getDate().toString().replaceAll("'", '’') %></span></a>.
 <% } -%>
 </p>
 <% if (israelDiasporaDiffer) { -%>
@@ -42,7 +42,7 @@ by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <% if (reading.torahHtml) { %><%- reading.torahHtml -%>
 <% } else { -%>
-<a href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replace(/:/g, '.')%>?lang=bi&amp;aliyot=1"
+<a href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replaceAll(':', '.')%>?lang=bi&amp;aliyot=1"
 title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%></a>
 <% } -%>
 </h4>
@@ -316,10 +316,10 @@ href="http://www.rabbinicalassembly.org/sites/default/files/public/halakhah/tesh
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <% if (parsha.prev) { %><div>
-<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name.replace(/'/g, '’')%></a>
+<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name.replaceAll("'", '’')%></a>
 </div><% } %>
 <% if (parsha.next) { %><div>
-<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name.replace(/'/g, '’')%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name.replaceAll("'", '’')%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 

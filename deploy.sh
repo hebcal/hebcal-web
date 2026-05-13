@@ -19,10 +19,10 @@ compress_file ./static/i/$npm_package_config_mainCss
 compress_file ./static/favicon.svg
 
 # deploy for prod
-rsync -av ./fonts/ /var/www/fonts/
-rsync -av node_modules/simpledotcss/simple.min.css static/simple.min.css
-rsync -av ./static/ /var/www/html/
-rsync -av ./package.json /var/www/
-rsync -av ./src/ /var/www/dist/
-rsync -av ./views/ /var/www/views/
-rsync -av ./node_modules/ /var/www/node_modules/
+rsync -a ./fonts/ /var/www/fonts/
+rsync -a node_modules/simpledotcss/simple.min.css static/simple.min.css
+rsync -a ./static/ /var/www/html/
+rsync -a ./package.json /var/www/
+rsync -a ./src/ /var/www/dist/
+rsync -a ./views/ /var/www/views/
+rsync -a ./node_modules/ /var/www/node_modules/

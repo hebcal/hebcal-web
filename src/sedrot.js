@@ -44,8 +44,8 @@ export async function parshaDetail(ctx) {
     return;
   }
   if (!empty(q.gy)) {
-    const year = parseInt(q.gy, 10);
-    if (isNaN(year)) {
+    const year = Number.parseInt(q.gy, 10);
+    if (Number.isNaN(year)) {
       ctx.throw(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
       throw410(ctx);

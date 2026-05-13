@@ -289,7 +289,7 @@ async function makeDownloadProps(ctx) {
   const type = summarizeAnniversaryTypes(q);
   ctx.state.anniversaryType = type;
   ctx.state.numYears = getNumYears(q.years);
-  ctx.state.currentYear = parseInt(q.start, 10) || new HDate().getFullYear();
+  ctx.state.currentYear = Number.parseInt(q.start, 10) || new HDate().getFullYear();
   const filename = 'personal';
   ctx.state.downloadAltTitle = `${filename}.ics`;
   q.v = 'yahrzeit';
@@ -376,7 +376,7 @@ function removeEmptyArgs(q) {
   // remove anything larger than maxId
   for (const k of Object.keys(q)) {
     if (isNumKey(k)) {
-      const id = parseInt(k.substring(1), 10);
+      const id = Number.parseInt(k.substring(1), 10);
       if (id > maxId) {
         delete q[k];
       }
@@ -495,8 +495,8 @@ export async function yahrzeitDownload(ctx) {
 }
 
 function makeLocation(query) {
-  const tzo = parseInt(query.tzo, 10);
-  if (isNaN(tzo)) {
+  const tzo = Number.parseInt(query.tzo, 10);
+  if (Number.isNaN(tzo)) {
     return Location.lookup('New York');
   }
   const tz = tzo / -60;
@@ -548,8 +548,8 @@ function getDefaultStartYear(today) {
 function getDateRange(query) {
   const today = new HDate();
   const years = getNumYears(query.years);
-  const startYear = parseInt(query.start, 10) || getDefaultStartYear(today);
-  const endYear = parseInt(query.end, 10) || (startYear + years - 1);
+  const startYear = Number.parseInt(query.start, 10) || getDefaultStartYear(today);
+  const endYear = Number.parseInt(query.end, 10) || (startYear + years - 1);
   return {today, startYear, endYear, years};
 }
 

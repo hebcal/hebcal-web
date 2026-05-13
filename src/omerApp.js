@@ -38,7 +38,7 @@ export async function omerApp(rpath, ctx) {
   if (yearStr === '') {
     return redirCurrentYear(ctx);
   } else if (yearStr === 'omer') {
-    const hyear = parseInt(basename(rpath), 10);
+    const hyear = Number.parseInt(basename(rpath), 10);
     if (yearIsOutsideHebRange(hyear)) {
       return redirCurrentYear(ctx);
     }
@@ -81,12 +81,12 @@ export async function omerApp(rpath, ctx) {
       emoiSwitchDisabled: true,
     });
   }
-  const hyear = parseInt(yearStr, 10);
+  const hyear = Number.parseInt(yearStr, 10);
   if (yearIsOutsideHebRange(hyear)) {
     return redirCurrentYear(ctx);
   }
-  const omerDay = parseInt(basename(rpath), 10);
-  if (isNaN(omerDay) || omerDay < 1 || omerDay > 49) {
+  const omerDay = Number.parseInt(basename(rpath), 10);
+  if (Number.isNaN(omerDay) || omerDay < 1 || omerDay > 49) {
     httpRedirect(ctx, `/omer/${hyear}/1`, 302);
     return;
   }

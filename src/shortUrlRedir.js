@@ -82,8 +82,8 @@ function shortParshaRedir(ctx, str, qs) {
     return false; // not a number, let old redirect logic happen
   }
   const parshaStr = basename(str);
-  const parshaId = parseInt(parshaStr, 10) - 1;
-  if (isNaN(parshaId) || parshaId < 0 || parshaId > parshiot.length - 1) {
+  const parshaId = Number.parseInt(parshaStr, 10) - 1;
+  if (Number.isNaN(parshaId) || parshaId < 0 || parshaId > parshiot.length - 1) {
     ctx.throw(400, `invalid short redirect parsha: ${parshaStr}`);
   }
   const doubled = parshaStr.endsWith('d');
@@ -91,7 +91,7 @@ function shortParshaRedir(ctx, str, qs) {
     ctx.throw(400, `invalid short redirect double parsha: ${parshaStr}`);
   }
   const yearStr = dirname(str);
-  const year = parseInt(yearStr, 10);
+  const year = Number.parseInt(yearStr, 10);
   if (!year) {
     ctx.throw(400, `invalid short redirect parsha: ${str}`);
   }

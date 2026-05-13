@@ -48,7 +48,7 @@
     "@rollup/plugin-commonjs": "^29.0.2",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
-    "@vitest/coverage-v8": "^4.1.5",
+    "@vitest/coverage-v8": "^4.1.6",
     "bootstrap": "^5.3.8",
     "bootstrap5-autocomplete": "^1.1.42",
     "critical": "^7.2.1",
@@ -62,7 +62,7 @@
     "rollup": "^4.60.3",
     "sass": "^1.99.0",
     "supertest": "^7.2.2",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.6"
   },
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",

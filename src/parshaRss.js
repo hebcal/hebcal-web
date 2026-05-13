@@ -88,7 +88,7 @@ class WrappedEvent extends Event {
 
 function createMemo(ev, il) {
   const memoText = makeTorahMemoText(ev, il);
-  const memoHtml = memoText ? '<p>' + memoText.replace(/\n/g, '</p>\n<p>') + '</p>' : '';
+  const memoHtml = memoText ? '<p>' + memoText.replaceAll('\n', '</p>\n<p>') + '</p>' : '';
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
     return memoHtml;
   } else {

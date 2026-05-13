@@ -123,8 +123,8 @@ function makeCalendarYear(isHebrewYear, yearNum) {
 export async function holidayYearIndex(ctx) {
   const rpath = ctx.request.path;
   const year = basename(rpath);
-  const yearNum = parseInt(year, 10);
-  if (isNaN(yearNum)) {
+  const yearNum = Number.parseInt(year, 10);
+  if (Number.isNaN(yearNum)) {
     ctx.throw(404, `Sorry, year ${year} is not numeric`);
   } else if (yearNum < 1 || yearNum > 9999) {
     ctx.throw(400, `Sorry, can't display holidays for year ${year}`);

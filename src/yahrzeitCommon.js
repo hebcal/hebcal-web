@@ -12,8 +12,8 @@ export const DEFAULT_YEARS = 20;
  * @return {number}
  */
 export function getNumYears(str) {
-  const y = parseInt(str, 10);
-  if (isNaN(y)) {
+  const y = Number.parseInt(str, 10);
+  if (Number.isNaN(y)) {
     return DEFAULT_YEARS;
   } else if (y < MIN_YEARS) {
     return MIN_YEARS;

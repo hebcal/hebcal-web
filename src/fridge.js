@@ -131,7 +131,7 @@ const YEAR_RANGE = 50;
 function getStartAndEnd(query) {
   if (query.yt === 'G') {
     const thisYear = new Date().getFullYear();
-    const year = parseInt(query.year, 10) || thisYear;
+    const year = Number.parseInt(query.year, 10) || thisYear;
     if (year < thisYear - YEAR_RANGE) {
       throw createError(410, `Gregorian year ${year} too early`);
     } else if (year > thisYear + YEAR_RANGE) {
@@ -142,7 +142,7 @@ function getStartAndEnd(query) {
     return [start, end];
   }
   const thisYear = new HDate().getFullYear();
-  const hyear = parseInt(query.year, 10) || thisYear;
+  const hyear = Number.parseInt(query.year, 10) || thisYear;
   if (hyear < thisYear - YEAR_RANGE) {
     throw createError(410, `Hebrew year ${hyear} too early`);
   } else if (hyear > thisYear + YEAR_RANGE) {

@@ -503,8 +503,8 @@ function parseConverterQuery(ctx) {
   }
   if (isset(query.h2g)) {
     if (!empty(query.ndays)) {
-      const ndays = parseInt(query.ndays, 10);
-      if (isNaN(ndays) || ndays < 1) {
+      const ndays = Number.parseInt(query.ndays, 10);
+      if (Number.isNaN(ndays) || ndays < 1) {
         ctx.throw(400, `Invalid value for ndays: ${query.ndays}`);
       }
       const startD = dayjs(dt);

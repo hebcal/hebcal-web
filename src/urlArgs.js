@@ -387,7 +387,7 @@ export function makeGeoUrlArgs(q, location, options) {
   const havdalahMins = options.havdalahMins;
   if (havdalahDeg) {
     args.set('td', havdalahDeg);
-  } else if (typeof havdalahMins === 'number' && !isNaN(havdalahMins)) {
+  } else if (typeof havdalahMins === 'number' && !Number.isNaN(havdalahMins)) {
     args.set('M', 'off');
     args.set('m', havdalahMins);
   } else {

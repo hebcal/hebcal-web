@@ -55,7 +55,7 @@ for (const parshaName of doubledParshiyot) {
 function addParshaToMeta(parshaName) {
   const anchor = makeAnchor(parshaName);
   sedrot.set(anchor, parshaName);
-  sedrot.set(anchor.replace(/-/g, ''), parshaName);
+  sedrot.set(anchor.replaceAll('-', ''), parshaName);
   const meta = lookupParsha(parshaName);
   const bookId = meta.combined ? 'DoubledParshiyot' : torahBookNames[meta.book - 1];
   parshaByBook.get(bookId).set(anchor, parshaName);
@@ -263,7 +263,7 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
     sefAliyot = false;
   }
   const suffix = bookId[aliyah.k] ? `&aliyot=${sefAliyot ? 1 : 0}` : '';
-  const book = aliyah.k.replace(/ /g, '_');
+  const book = aliyah.k.replaceAll(' ', '_');
   return `https://www.sefaria.org/${book}.${beginStr}${endStr}?lang=bi${suffix}`;
 }
 

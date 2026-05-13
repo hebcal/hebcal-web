@@ -127,7 +127,7 @@ export function makeHebcalOptions(db, query) {
   // tzeit degrees overrides M=on (legacy 8.5 degrees) or m=<minutes>
   // See https://github.com/hebcal/hebcal/issues/308
   if (!empty(query.td)) {
-    const deg = parseFloat(query.td);
+    const deg = Number.parseFloat(query.td);
     if (deg) { // ignore NaN or 0.0
       options.havdalahDeg = deg;
       delete options.havdalahMins;
@@ -148,8 +148,8 @@ export function makeHebcalOptions(db, query) {
   for (const [key, val] of Object.entries(numberOpts)) {
     const value = query[key];
     if (typeof value === 'string' && value.length) {
-      const num = parseInt(value, 10);
-      if (isNaN(num)) {
+      const num = Number.parseInt(value, 10);
+      if (Number.isNaN(num)) {
         delete query[key];
       } else {
         options[val] = num;
@@ -196,8 +196,8 @@ export function makeHebcalOptions(db, query) {
       }
       query.year = String(options.year);
     } else {
-      options.year = parseInt(query.year, 10);
-      if (isNaN(options.year)) {
+      options.year = Number.parseInt(query.year, 10);
+      if (Number.isNaN(options.year)) {
         throw createError(400, `Sorry, invalid year ${query.year}`);
       } else if (options.isHebrewYear && options.year < 1) {
         throw createError(400, 'Sorry, Hebrew year must be 1 or later');
@@ -207,7 +207,7 @@ export function makeHebcalOptions(db, query) {
     }
   }
   if (!empty(query.month)) {
-    const month = parseInt(query.month, 10);
+    const month = Number.parseInt(query.month, 10);
     if (month >= 1 && month <= 12) {
       options.month = month;
     } else {

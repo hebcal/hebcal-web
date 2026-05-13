@@ -330,7 +330,7 @@ async function unsub(ctx, q) {
     await dbQuery(ctx, sqlUpdate, [ip, q.id]);
   } else {
     const sql = 'INSERT INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
-    const num = q.num === 'all' ? 0 : parseInt(q.num, 10);
+    const num = q.num === 'all' ? 0 : Number.parseInt(q.num, 10);
     const nameHash = num == 0 ? null : (q.hash || null);
     await dbQuery(ctx, sql, [q.id, nameHash, num]);
   }
@@ -359,7 +359,7 @@ async function unsub(ctx, q) {
 }
 
 function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
-  unsubUrl = unsubUrl.replace(/&/g, '&amp;');
+  unsubUrl = unsubUrl.replaceAll('&', '&amp;');
   return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
 <div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>

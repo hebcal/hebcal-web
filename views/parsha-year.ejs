@@ -54,9 +54,9 @@ for (const item of items) { %>
   <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== py ? item.d.format(', YYYY') : '' %></time></td>
   <td><span class="d-none d-sm-inline text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></span></td>
   <td><ul class="list-unstyled mb-0">
-  <li><a <% if (!item.isParsha) {%> class="link-success link-underline-opacity-25" <% } %> href="<%=item.url%>"><%= item.title.replace(/'/g, '’') %></a></li>
+  <li><a <% if (!item.isParsha) {%> class="link-success link-underline-opacity-25" <% } %> href="<%=item.url%>"><%= item.title.replaceAll("'", '’') %></a></li>
 <% for (const holiday of item.holidays) { %>
-  <li class="mt-2"><% if (holiday.url) { %><a class="link-success link-underline-opacity-25" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title.replace(/'/g, '’')%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
+  <li class="mt-2"><% if (holiday.url) { %><a class="link-success link-underline-opacity-25" href="<%= holiday.url %>"><% } else { %><span class="text-success"><% } %><%=holiday.title.replaceAll("'", '’')%><% if (holiday.url) { %></a><% } else { %></span><% } %></li>
 <% } %>
   </ul></td>
   <td><span class="d-none d-md-inline"><%- item.torahHtml %></span></td>

@@ -42,8 +42,8 @@ async function main() {
     const gregDateStr = r[0];
     const dateParts = gregDateStr.split(/\s+/);
     const month = monthNames[dateParts[1]];
-    const day = parseInt(dateParts[2]);
-    if (isNaN(day)) {
+    const day = Number.parseInt(dateParts[2]);
+    if (Number.isNaN(day)) {
       continue;
     }
     const dt = pad2(month) + '-' + pad2(day);

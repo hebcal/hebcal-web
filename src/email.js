@@ -358,7 +358,7 @@ async function writeSubInfo(ctx, db, q) {
     WHERE email_id = ?`;
   await db.query(sql, [
     q.zip || null,
-    parseInt(q.geonameid, 10) || null,
+    Number.parseInt(q.geonameid, 10) || null,
     getUseElevation(q),
     getHavdalahMins(q),
     getHavdalahTzeit(q),
@@ -378,13 +378,13 @@ function getHavdalahTzeit(q) {
 
 function getCandleMins(q) {
   const minDefault = queryDefaultCandleMins(q);
-  return parseInt(q.b, 10) || minDefault;
+  return Number.parseInt(q.b, 10) || minDefault;
 }
 
 // allow zero as a valid Havdalah minutes past sundown
 function getHavdalahMins(q) {
-  const havdalahMins = parseInt(q.m, 10);
-  return isNaN(havdalahMins) ? null : havdalahMins;
+  const havdalahMins = Number.parseInt(q.m, 10);
+  return Number.isNaN(havdalahMins) ? null : havdalahMins;
 }
 
 function makeSubscriptionId(ctx) {
@@ -398,7 +398,7 @@ async function writeStagingInfo(ctx, db, q) {
   const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId = makeSubscriptionId(ctx);
   const locationColumn = q.zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
-  const locationValue = q.zip ? q.zip : parseInt(q.geonameid, 10);
+  const locationValue = q.zip ? q.zip : Number.parseInt(q.geonameid, 10);
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
    email_use_elevation,

@@ -18,17 +18,17 @@
  <a href="<%= todayEv.url %>#reading"><%= todayEv.ev.render('en') %></a></p>
 <p>Torah reading: <%- todayEv.torahHtml %></p>
 <% } %>
-<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replace(/'/g, '’')%>
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replaceAll("'", '’')%>
 <% if (israelDiasporaDiffer) { %><small class="text-body-secondary">· <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
 </h2>
 <% if (israelDiasporaDiffer) { %>
 <p class="lead">
  This week’s Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
- <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia.replace(/'/g, '’')%></a> in the Diaspora</span>
- · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael.replace(/'/g, '’')%></a> in Israel 🇮🇱</span>
+ <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia.replaceAll("'", '’')%></a> in the Diaspora</span>
+ · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael.replaceAll("'", '’')%></a> in Israel 🇮🇱</span>
 </p>
 <% } else { %>
-<p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha.replace(/'/g, '’')%></a>
+<p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha.replaceAll("'", '’')%></a>
  (read on <time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>).</p>
 <% } %>
 <% if (typeof meta === 'object') { %>
@@ -61,7 +61,7 @@ English-language commentary from a range of Jewish traditions.</p>
 <h4 id="<%=book%>"><%= book === 'DoubledParshiyot' ? 'Doubled Parshiyot' : book %></h4>
 <ol class="list-unstyled lh-lg">
 <%   for (const [anchor, parshaName] of parshaByBook.get(book)) { %>
-<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replace(/'/g, '’') %></a></li>
+<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replaceAll("'", '’') %></a></li>
 <%   } %>
 </ol>
 </div><!-- .col -->

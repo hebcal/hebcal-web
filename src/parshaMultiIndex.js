@@ -13,7 +13,7 @@ export async function parshaMultiYearIndex(ctx) {
   const hd = new HDate(dt);
   const todayHebYear = hd.getFullYear();
   const q = ctx.request.query;
-  const hyear0 = parseInt(q?.year, 10);
+  const hyear0 = Number.parseInt(q?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(hd);
   if (hyear < 2 || hyear > 32000) {
     ctx.throw(400, 'Hebrew year must be in range 2-32000');

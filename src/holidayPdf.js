@@ -20,8 +20,8 @@ export async function holidayPdf(ctx) {
     ctx.throw(404, `Invalid PDF URL format: ${base}`);
   }
   const year = basename(base.substring(7));
-  const yearNum = parseInt(year, 10);
-  if (isNaN(yearNum)) {
+  const yearNum = Number.parseInt(year, 10);
+  if (Number.isNaN(yearNum)) {
     ctx.throw(404, `Invalid holiday year: ${year}`);
   } else if (yearNum < 1 || yearNum > 32000) {
     ctx.throw(400, `Invalid year number: ${yearNum}`);

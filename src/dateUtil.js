@@ -19,9 +19,9 @@ export function isoDateStringToDate(str) {
   if (!reIsoDate.test(str)) {
     throw createError(400, `Date does not match format YYYY-MM-DD: ${str}`);
   }
-  const yy = parseInt(str, 10);
-  const mm = parseInt(str.substring(5, 7), 10);
-  const dd = parseInt(str.substring(8, 10), 10);
+  const yy = Number.parseInt(str, 10);
+  const mm = Number.parseInt(str.substring(5, 7), 10);
+  const dd = Number.parseInt(str.substring(8, 10), 10);
   const dt = new Date(yy, mm - 1, dd);
   if (yy < 100) {
     dt.setFullYear(yy);
@@ -55,14 +55,14 @@ export function getTodayDate(query) {
  * @return {Date}
  */
 export function makeGregDate(gy, gm, gd) {
-  const yy = parseInt(gy, 10);
-  const mm = parseInt(gm, 10);
-  const dd = parseInt(gd, 10);
-  if (isNaN(dd)) {
+  const yy = Number.parseInt(gy, 10);
+  const mm = Number.parseInt(gm, 10);
+  const dd = Number.parseInt(gd, 10);
+  if (Number.isNaN(dd)) {
     throw createError(400, `Gregorian day must be numeric: ${gd}`);
-  } else if (isNaN(mm)) {
+  } else if (Number.isNaN(mm)) {
     throw createError(400, `Gregorian month must be numeric: ${gm}`);
-  } else if (isNaN(yy)) {
+  } else if (Number.isNaN(yy)) {
     throw createError(400, `Gregorian year must be numeric: ${gy}`);
   } else if (mm > 12 || mm < 1) {
     throw createError(400, `Gregorian month out of valid range 1-12: ${gm}`);
@@ -93,11 +93,11 @@ export function makeGregDate(gy, gm, gd) {
  * @return {HDate}
  */
 export function makeHebDate(hyStr, hmStr, hdStr) {
-  const hy = parseInt(hyStr, 10);
-  const hd = parseInt(hdStr, 10);
-  if (isNaN(hd)) {
+  const hy = Number.parseInt(hyStr, 10);
+  const hd = Number.parseInt(hdStr, 10);
+  if (Number.isNaN(hd)) {
     throw createError(400, `Hebrew day must be numeric: ${hdStr}`);
-  } else if (isNaN(hy)) {
+  } else if (Number.isNaN(hy)) {
     throw createError(400, `Hebrew year must be numeric: ${hyStr}`);
   } else if (hy < 1) {
     throw createError(400, `Hebrew year must be year 1 or later: ${hy}`);
@@ -129,9 +129,9 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
 export function getBeforeAfterSunsetForLocation(dt, location) {
   const tzid = location.getTzid();
   const isoDate = Zmanim.formatISOWithTimeZone(tzid, dt);
-  const gy = parseInt(isoDate.substring(0, 4), 10);
-  const gm = parseInt(isoDate.substring(5, 7), 10);
-  const gd = parseInt(isoDate.substring(8, 10), 10);
+  const gy = Number.parseInt(isoDate.substring(0, 4), 10);
+  const gm = Number.parseInt(isoDate.substring(5, 7), 10);
+  const gd = Number.parseInt(isoDate.substring(8, 10), 10);
   const day = new Date(gy, gm - 1, gd);
   const zman = new Zmanim(location, day);
   const sunset = zman.sunset();
@@ -289,7 +289,7 @@ export function simchatTorahDate(year, il) {
  * @return {boolean}
  */
 export function yearIsOutsideGregRange(year) {
-  return isNaN(year) || year < 100 || year > 2999;
+  return Number.isNaN(year) || year < 100 || year > 2999;
 }
 
 /**
@@ -297,5 +297,5 @@ export function yearIsOutsideGregRange(year) {
  * @return {boolean}
  */
 export function yearIsOutsideHebRange(year) {
-  return isNaN(year) || year < 3860 || year > 6759;
+  return Number.isNaN(year) || year < 3860 || year > 6759;
 }

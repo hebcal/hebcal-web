@@ -159,8 +159,8 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
     const match = href.match(/\/v4\/([^/]+)\//);
     expect(match).toBeTruthy();
     const encoded = match[1]
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
     const result = deserializeDownload(encoded);
     expect(result.ayd).toBe('on');
     expect(result.maj).toBe('on');
@@ -178,8 +178,8 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
     const href = downloadHref2(query, 'test.ics');
     const match = href.match(/\/v4\/([^/]+)\//);
     const encoded = match[1]
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
     const result = deserializeDownload(encoded);
     expect(result.ayd).toBeUndefined();
   });
@@ -200,10 +200,10 @@ describe('td protobuf round-trip', () => {
     const match = href.match(/\/v4\/([^/]+)\//);
     expect(match).toBeTruthy();
     const encoded = match[1]
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
     const result = deserializeDownload(encoded);
-    const td = parseFloat(result.td);
+    const td = Number.parseFloat(result.td);
     expect(typeof td).toBe('number');
     expect(td).toBeCloseTo(16.1, 4);
   });
@@ -220,8 +220,8 @@ describe('td protobuf round-trip', () => {
     const href = downloadHref2(query, 'test.ics');
     const match = href.match(/\/v4\/([^/]+)\//);
     const encoded = match[1]
-        .replace(/-/g, '+')
-        .replace(/_/g, '/');
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
     const result = deserializeDownload(encoded);
     expect(result.td).toBeUndefined();
   });

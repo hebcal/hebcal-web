@@ -67,7 +67,7 @@ export async function getHolidayMeta(holiday) {
     }
   }
   if (meta.wikipedia?.href) {
-    meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replace(/_/g, ' ');
+    meta.wikipedia.title = decodeURIComponent(basename(meta.wikipedia.href)).replaceAll('_', ' ');
     const anchorIdx = meta.wikipedia.title.indexOf('#');
     if (anchorIdx !== -1) {
       meta.wikipedia.title = meta.wikipedia.title.substring(anchorIdx + 1);

@@ -25,7 +25,7 @@ async function handleTractate(masechet) {
       console.error(`ignoring ${masechet} ArrayMapNode without refs`);
       continue;
     }
-    const startPage = parseInt(node.startingAddress, 10);
+    const startPage = Number.parseInt(node.startingAddress, 10);
     const startSide = node.startingAddress[node.startingAddress.length - 1]; // a or b
     let currentSide = startSide === 'a';
     let currentPage = startPage;

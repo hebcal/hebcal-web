@@ -90,7 +90,7 @@ class="card-img img-fluid">
 <div class="col-md-8">
 <% } -%>
 <div class="card-body">
-<h4 class="card-title"><a href="<%=item.href%>"><%=item.name.replace(/'/g, '’')%></a>
+<h4 class="card-title"><a href="<%=item.href%>"><%=item.name.replaceAll("'", '’')%></a>
 <% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h4>
 <p><%- await include('partials/holiday-index-dates.ejs', {item}) -%>
 <% if (item.name === 'Pesach' || item.name === 'Shmini Atzeret & Simchat Torah' || item.name === 'Shavuot') { -%>

@@ -144,7 +144,7 @@ function addLocationOmerAlarms(options, events) {
     const alarm = dow === 5 ? zman.sunsetOffset(-30) :
         dow === 6 ? zman.tzeit(8.5) : zman.dusk();
     const millis = alarm.getTime();
-    if (!isNaN(millis)) {
+    if (!Number.isNaN(millis)) {
       ev.alarm = alarm;
       ev.locationName = locationName;
       if (geoid) {

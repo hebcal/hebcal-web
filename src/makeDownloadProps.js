@@ -13,8 +13,8 @@ const dlPrefix = process.env.NODE_ENV == 'production' ?
  * @return {number}
  */
 function getInt(str) {
-  const n = parseInt(str, 10);
-  if (isNaN(n)) {
+  const n = Number.parseInt(str, 10);
+  if (Number.isNaN(n)) {
     return null;
   }
   return n;
@@ -64,8 +64,8 @@ export function downloadHref2(query, filename, override={}) {
   if (m !== null) msg.setHavdalahmins(m);
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
   if (!empty(q.td)) {
-    const tzeit = parseFloat(q.td);
-    if (!isNaN(tzeit) && tzeit !== 0.0) {
+    const tzeit = Number.parseFloat(q.td);
+    if (!Number.isNaN(tzeit) && tzeit !== 0.0) {
       msg.setHavdalahtzeit(true);
       if (tzeit !== 8.5) {
         msg.setTzeit(tzeit);
@@ -130,22 +130,22 @@ export function downloadHref2(query, filename, override={}) {
 
   if (q.geo === 'pos') {
     msg.setGeopos(true);
-    const latitude = parseFloat(q.latitude);
-    if (!isNaN(latitude)) msg.setLatitude(latitude);
-    const longitude = parseFloat(q.longitude);
-    if (!isNaN(longitude)) msg.setLongitude(longitude);
+    const latitude = Number.parseFloat(q.latitude);
+    if (!Number.isNaN(latitude)) msg.setLatitude(latitude);
+    const longitude = Number.parseFloat(q.longitude);
+    if (!Number.isNaN(longitude)) msg.setLongitude(longitude);
     if (!empty(q.tzid)) msg.setTzid(q.tzid);
     if (!empty(q['city-typeahead'])) msg.setCityname(q['city-typeahead']);
-    const elev = parseFloat(q.elev);
+    const elev = Number.parseFloat(q.elev);
     if (elev > 0) msg.setElev(elev);
   }
 
   const msgBin = msg.serializeBinary();
   const encoded = Buffer.from(msgBin)
       .toString('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .replaceAll('=', '');
   return `${dlPrefix}/v4/${encoded}/${filename}`;
 }
 
@@ -157,7 +157,7 @@ function getSubFilename(location) {
   let fileName = 'hebcal';
   if (location) {
     const name = location.zip || location.asciiname || location.getShortName();
-    fileName += '_' + makeAnchor(name).replace(/[-]/g, '_');
+    fileName += '_' + makeAnchor(name).replaceAll('-', '_');
   }
   return fileName;
 }

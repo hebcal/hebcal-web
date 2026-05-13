@@ -247,7 +247,7 @@ describe('Holiday Detail with Gregorian Year', () => {
         .get('/holidays/yom-kippur-2024');
     expect(response.status).toBe(200);
     // prev/next links to adjacent years should be present
-    expect(response.text).toMatch(/yom-kippur-202[0-9]/);
+    expect(response.text).toMatch(/yom-kippur-202\d/);
   });
 
   it('should return 200 for Chanukah with year', async () => {

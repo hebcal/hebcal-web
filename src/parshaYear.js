@@ -16,7 +16,7 @@ export async function parshaYearApp(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   const todayHebYear = new HDate().getFullYear();
-  const hyear = parseInt(base, 10) || todayHebYear;
+  const hyear = Number.parseInt(base, 10) || todayHebYear;
   if (hyear < 2 || hyear > 32000) {
     ctx.throw(400, 'Hebrew year must be in range 2-32000');
   } else if (yearIsOutsideHebRange(hyear)) {

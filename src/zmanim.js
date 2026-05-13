@@ -135,7 +135,7 @@ function checkMelacha(ctx, q, loc, locObj, useElevation) {
   if (!empty(dateStr) && /^\d\d\d\d-\d\d-\d\d/.test(dateStr)) {
     dateStr = dateStr.trim();
     dt = new Date(dateStr);
-    if (isNaN(dt.getTime())) {
+    if (Number.isNaN(dt.getTime())) {
       throw createError(400, `Invalid Date: ${dateStr}`);
     }
     if (!dateStr.endsWith('Z')) {
@@ -240,7 +240,7 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   if (formatAsString) {
     const tzid = location.getTzid();
     for (const [name, dt] of Object.entries(times)) {
-      times[name] = isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, dt);
+      times[name] = Number.isNaN(dt.getTime()) ? null : Zmanim.formatISOWithTimeZone(tzid, dt);
     }
   }
   return times;
@@ -487,7 +487,7 @@ function makeAllDayEvents(times, location, locale) {
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
       byDate[isoDate] = byDate[isoDate] || [];
-      if (!isNaN(dt.getTime())) {
+      if (!Number.isNaN(dt.getTime())) {
         byDate[isoDate].push([dt, zman]);
       }
     }
@@ -533,7 +533,7 @@ function makeEvents(times, location) {
   const events = [];
   for (const [zman, map] of Object.entries(times)) {
     for (const [isoDate, dt] of Object.entries(map)) {
-      if (!isNaN(dt.getTime())) {
+      if (!Number.isNaN(dt.getTime())) {
         const ev = makeTimedEvent(isoDate, zman, dt, location);
         events.push(ev);
       }
