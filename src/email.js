@@ -358,12 +358,17 @@ async function writeSubInfo(ctx, db, q) {
       email_sundown_candles = ?,
       email_ip = ?
     WHERE email_id = ?`;
+  const mins = getHavdalahMins(q);
+  let degs = getHavdalahDegrees(q);
+  if (mins === null && degs === null) {
+    degs = 8.5;
+  }
   await db.query(sql, [
     q.zip || null,
     Number.parseInt(q.geonameid, 10) || null,
     getUseElevation(q),
-    getHavdalahMins(q),
-    getHavdalahDegrees(q),
+    mins,
+    degs,
     getCandleMins(q),
     getIpAddress(ctx),
     ctx.state.subscriptionId,
@@ -377,8 +382,10 @@ function getUseElevation(q) {
 function getHavdalahDegrees(q) {
   if (q.M !== 'on') return null;
   const deg = Number.parseFloat(q.td);
-  if (Number.isNaN(deg) || deg <= 0) return 8.5;
-  return deg;
+  if (deg) return deg;
+  const mins = getHavdalahMins(q);
+  if (mins === null || Number.isNaN(mins)) return 8.5;
+  return null;
 }
 
 function getCandleMins(q) {
@@ -410,12 +417,17 @@ async function writeStagingInfo(ctx, db, q) {
    email_candles_havdalah, email_havdalah_degrees, email_sundown_candles,
    ${locationColumn}, email_ip)
   VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?, ?, ?)`;
+  const mins = getHavdalahMins(q);
+  let degs = getHavdalahDegrees(q);
+  if (mins === null && degs === null) {
+    degs = 8.5;
+  }
   await db.query(sql, [
     subscriptionId,
     q.em,
     getUseElevation(q),
-    getHavdalahMins(q),
-    getHavdalahDegrees(q),
+    mins,
+    degs,
     getCandleMins(q),
     locationValue,
     ip,
