@@ -124,5 +124,4 @@ function redirCurrentYear(ctx) {
   const hd = new HDate();
   const hyear = getDefaultHebrewYear(hd);
   httpRedirect(ctx, `/omer/${hyear}`, 302);
-  return;
 }

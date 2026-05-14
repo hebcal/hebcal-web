@@ -1,6 +1,6 @@
 import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString, clone} from '@hebcal/leyning';
+import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
@@ -113,7 +113,7 @@ export async function parshaDetail(ctx) {
       })
       .filter((s) => typeof s === 'string')
       .concat('Parashat ' + parsha.name);
-  const translations = Array.from(new Set(translations0)).sort();
+  const translations = Array.from(new Set(translations0)).sort((a, b) => a.localeCompare(b));
   const commentary = {};
   if (parsha.combined) {
     const [p1] = parsha.name.split('-');
@@ -389,7 +389,7 @@ function makeTriennial(parsha, date, parshaEv, hyear, il) {
     }
   }
   const triennial = {
-    reading: clone(reading.aliyot),
+    reading: structuredClone(reading.aliyot),
     yearNum: reading.yearNum + 1,
     fullParsha: reading.fullParsha,
     hyear: hyear,
@@ -442,7 +442,7 @@ function makeTriReading(tri, yr, parshaName, il) {
   const hd = triReading.date;
   const ev = new ParshaEvent({hdate: hd, parsha: [parshaName], il});
   const triReading2 = getTriennialForParshaHaShavua(ev, il);
-  triReading2.aliyot = clone(triReading2.aliyot);
+  triReading2.aliyot = structuredClone(triReading2.aliyot);
   addLinksToLeyning(triReading2.aliyot, false);
   for (const aliyah of Object.values(triReading2.aliyot)) {
     aliyah.href = aliyah.href.replace('aliyot=1', 'aliyot=0');

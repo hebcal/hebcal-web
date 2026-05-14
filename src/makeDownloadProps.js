@@ -65,7 +65,7 @@ export function downloadHref2(query, filename, override={}) {
   if (q.M === 'on' || m === null) msg.setHavdalahtzeit(true);
   if (!empty(q.td)) {
     const tzeit = Number.parseFloat(q.td);
-    if (!Number.isNaN(tzeit) && tzeit !== 0.0) {
+    if (!Number.isNaN(tzeit) && tzeit !== 0) {
       msg.setHavdalahtzeit(true);
       if (tzeit !== 8.5) {
         msg.setTzeit(tzeit);

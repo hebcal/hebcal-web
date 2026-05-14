@@ -142,7 +142,7 @@ export async function holidayDetail(ctx) {
     httpRedirect(ctx, `/holidays/${holidayAnchor}`);
     return;
   }
-  const idx = year ? multiYearBegin.findIndex((ev) => ev === next.event) : -1;
+  const idx = year ? multiYearBegin.indexOf(next.event) : -1;
   const prevNext = {};
   if (idx !== -1) {
     prevNext.prev = eventToHolidayItemBase(multiYearBegin[idx - 1], il);
@@ -171,7 +171,7 @@ export async function holidayDetail(ctx) {
       .map((lang) => Locale.lookupTranslation(holiday, lang))
       .filter((s) => typeof s === 'string')
       .concat(holiday);
-  const translations = Array.from(new Set(translations0)).sort();
+  const translations = Array.from(new Set(translations0)).sort((a, b) => a.localeCompare(b));
   const jsonLD = makeJsonLD(noindex, year, next.event, il, meta);
   const isShaloshRegalim = shaloshRegalim[holiday];
   const pesachSukkotItems = isShaloshRegalim && holiday !== 'Shavuot' ?

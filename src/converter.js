@@ -364,8 +364,8 @@ function makeDiasporaIsraelItems(ctx, hdate) {
   const israel = getEvents(hdate, true);
   const both = diaspora.filter((a) => israel.find((b) => a.getDesc() === b.getDesc()));
   const diasporaOnly = diaspora.filter((ev) => !both.includes(ev));
-  const bothIL = israel.filter((a) => diaspora.find((b) => a.getDesc() === b.getDesc()));
-  const israelOnly = israel.filter((ev) => !bothIL.includes(ev));
+  const bothIL = new Set(israel.filter((a) => diaspora.find((b) => a.getDesc() === b.getDesc())));
+  const israelOnly = israel.filter((ev) => !bothIL.has(ev));
   return {
     both: both.map((ev) => eventToItem(ctx, ev)),
     diasporaOnly: diasporaOnly.map((ev) => eventToItem(ctx, ev)),

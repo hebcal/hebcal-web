@@ -11,7 +11,7 @@ export async function holidayApp(ctx) {
   } else if (rpath.endsWith('.pdf')) {
     await holidayPdf(ctx);
   } else {
-    const charCode = rpath.charCodeAt(10);
+    const charCode = rpath.codePointAt(10);
     if (charCode >= 48 && charCode <= 57) {
       await holidayYearIndex(ctx);
     } else {

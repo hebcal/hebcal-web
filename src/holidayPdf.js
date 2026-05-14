@@ -26,7 +26,7 @@ export async function holidayPdf(ctx) {
   } else if (yearNum < 1 || yearNum > 32000) {
     ctx.throw(400, `Invalid year number: ${yearNum}`);
   }
-  const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
+  const isHebrewYear = yearNum >= 3761 || year.includes('-');
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761) : yearNum;
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {

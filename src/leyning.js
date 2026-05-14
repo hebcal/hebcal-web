@@ -1,4 +1,4 @@
-import {ParshaEvent} from '@hebcal/core';
+import {ParshaEvent, HDate} from '@hebcal/core';
 import {getLeyningOnDate} from '@hebcal/leyning';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {isoDateStringToDate} from './dateUtil.js';
@@ -7,7 +7,6 @@ import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
 import dayjs from 'dayjs';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
-import {HDate} from '@hebcal/core';
 
 dayjs.extend(isSameOrBefore);
 

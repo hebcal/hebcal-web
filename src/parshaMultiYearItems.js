@@ -65,12 +65,12 @@ function getAllParshaEvents(parshaName, il, allEvents) {
     });
   }
   const prefix = 'Parashat ';
-  const descs = [prefix + parshaName];
+  const descs = new Set([prefix + parshaName]);
   const pair = doubled.get(parshaName);
   if (pair) {
-    descs.push(prefix + pair);
+    descs.add(prefix + pair);
   }
-  const events = allEvents.filter((ev) => descs.indexOf(ev.getDesc()) !== -1);
+  const events = allEvents.filter((ev) => descs.has(ev.getDesc()));
   return events.map(function(ev) {
     return eventToItem(ev, il);
   });

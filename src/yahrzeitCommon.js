@@ -126,7 +126,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
  * @return {boolean}
  */
 export function isNumKey(k) {
-  const code = k.charCodeAt(1);
+  const code = k.codePointAt(1);
   return code >= 48 && code <= 57;
 }
 

@@ -77,7 +77,7 @@ function shortParshaRedir(ctx, str, qs) {
   if (!str) {
     return sedrotBaseUrl;
   }
-  const code = str.charCodeAt(0);
+  const code = str.codePointAt(0);
   if (code < 48 || code > 57) {
     return false; // not a number, let old redirect logic happen
   }

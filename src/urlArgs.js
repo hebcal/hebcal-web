@@ -245,7 +245,7 @@ export function is5DigitZip(str) {
     return false;
   }
   for (let i = 0; i < 5; i++) {
-    if (s.charCodeAt(i) > 57 || s.charCodeAt(i) < 48) {
+    if (s.codePointAt(i) > 57 || s.codePointAt(i) < 48) {
       return false;
     }
   }

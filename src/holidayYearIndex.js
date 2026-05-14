@@ -135,7 +135,7 @@ export async function holidayYearIndex(ctx) {
     ctx.status = 304;
     return;
   }
-  const isHebrewYear = yearNum >= 3761 || year.indexOf('-') !== -1;
+  const isHebrewYear = yearNum >= 3761 || year.includes('-');
   const calendarYear = makeCalendarYear(isHebrewYear, yearNum);
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {

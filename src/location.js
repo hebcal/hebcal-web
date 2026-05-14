@@ -208,8 +208,8 @@ export function getLocationFromQuery(db, query) {
         throw createError(400, `Sorry, ${key}=${value} out of valid range 0-${max}`);
       }
     }
-    let latitude = Number.parseInt(query.ladeg, 10) + (Number.parseInt(query.lamin, 10) / 60.0);
-    let longitude = Number.parseInt(query.lodeg, 10) + (Number.parseInt(query.lomin, 10) / 60.0);
+    let latitude = Number.parseInt(query.ladeg, 10) + (Number.parseInt(query.lamin, 10) / 60);
+    let longitude = Number.parseInt(query.lodeg, 10) + (Number.parseInt(query.lomin, 10) / 60);
     if (query.ladir === 's') {
       latitude *= -1;
     }
@@ -285,8 +285,7 @@ export function getLocationFromQueryOrGeoIp(ctx, q) {
     try {
       const location2 = getLocationFromQuery(ctx.db, geoip);
       return location2;
-    // eslint-disable-next-line no-unused-vars
-    } catch (err) {
+    } catch {
       // ignore
     }
   }

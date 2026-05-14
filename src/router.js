@@ -219,7 +219,7 @@ export function wwwRouter() {
         ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
         return parshaCsv(ctx);
       } else {
-        const charCode = rpath.charCodeAt(8);
+        const charCode = rpath.codePointAt(8);
         if (charCode >= 48 && charCode <= 57) {
           return parshaYearApp(ctx);
         }

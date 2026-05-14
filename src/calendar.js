@@ -94,7 +94,7 @@ export function makeHebcalOptions(db, query) {
   }
   const yerushalmiEd = query.yye;
   if (typeof yerushalmiEd === 'string' &&
-    yerushalmiEd.toLowerCase()[0] === 's') {
+    yerushalmiEd.toLowerCase().startsWith('s')) {
     dailyLearning.yerushalmi = 2;
     hasDailyLearning = true;
   }

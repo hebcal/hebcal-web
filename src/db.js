@@ -71,6 +71,6 @@ export class MysqlDb {
   }
   /** */
   async close() {
-    return Promise.resolve(true);
+    return true;
   }
 }
