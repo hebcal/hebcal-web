@@ -1,6 +1,7 @@
 import {empty} from './empty.js';
 import {makeGregDate, makeHebDate} from './dateUtil.js';
 import {pad4, pad2} from '@hebcal/hdate';
+import {isDigit} from './isDigit.js';
 import dayjs from 'dayjs';
 
 const MIN_YEARS = 2;
@@ -126,8 +127,7 @@ export async function getYahrzeitDetailsFromDb(ctx, id) {
  * @return {boolean}
  */
 export function isNumKey(k) {
-  const code = k.codePointAt(1);
-  return code >= 48 && code <= 57;
+  return isDigit(k, 1);
 }
 
 /**

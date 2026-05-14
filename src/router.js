@@ -47,6 +47,7 @@ import {dailyLearningApp} from './dailyLearning.js';
 import {delCookie} from './delCookie.js';
 import {readJSON} from './readJSON.js';
 import {securityTxt} from './securityTxt.js';
+import {isDigit} from './isDigit.js';
 
 const redirectMap = readJSON('./redirect.json');
 const staticCalendars = readJSON('./staticCalendars.json');
@@ -218,11 +219,9 @@ export function wwwRouter() {
       } else if (/^\/sedrot\/.+\.csv$/.test(rpath)) {
         ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
         return parshaCsv(ctx);
+      } else if (isDigit(rpath, 8)) {
+        return parshaYearApp(ctx);
       } else {
-        const charCode = rpath.codePointAt(8);
-        if (charCode >= 48 && charCode <= 57) {
-          return parshaYearApp(ctx);
-        }
         return parshaDetail(ctx);
       }
     } else if (rpath.startsWith('/calc')) {

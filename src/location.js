@@ -2,7 +2,8 @@ import {Location} from '@hebcal/core';
 import {find as geoTzFind} from 'geo-tz';
 import createError from 'http-errors';
 import {empty} from './empty.js';
-import {is5DigitZip, geoposLegacy} from './urlArgs.js';
+import {geoposLegacy} from './urlArgs.js';
+import {GeoDb} from '@hebcal/geo-sqlite';
 import {getIpAddress} from './getIpAddress.js';
 import {nearestCity} from './nearestCity.js';
 
@@ -123,7 +124,7 @@ export function getLocationFromQuery(db, query) {
   if (typeof cityTypeahead === 'string') {
     cityTypeahead = cityTypeahead.trim();
   }
-  if (is5DigitZip(cityTypeahead)) {
+  if (GeoDb.is5DigitZip(cityTypeahead)) {
     query.zip = cityTypeahead;
   } else if (!empty(cityTypeahead) && empty(query.zip) && / \d\d\d\d\d$/.test(cityTypeahead)) {
     query.zip = cityTypeahead.substring(cityTypeahead.length - 5);
@@ -138,7 +139,7 @@ export function getLocationFromQuery(db, query) {
     query.geo = 'geoname';
     return location;
   } else if (!empty(query.zip)) {
-    if (!is5DigitZip(query.zip)) {
+    if (!GeoDb.is5DigitZip(query.zip)) {
       throw createError(400, `Sorry, invalid ZIP code: ${query.zip}`);
     }
     const zip = query.zip.trim().substring(0, 5); // truncate ZIP+4 to 5-digit ZIP

@@ -2,6 +2,7 @@ import {holidayDetail} from './holidayDetail.js';
 import {holidayMainIndex} from './holidayIndex.js';
 import {holidayPdf} from './holidayPdf.js';
 import {holidayYearIndex} from './holidayYearIndex.js';
+import {isDigit} from './isDigit.js';
 
 export async function holidayApp(ctx) {
   const rpath = ctx.request.path;
@@ -10,12 +11,9 @@ export async function holidayApp(ctx) {
     await holidayMainIndex(ctx);
   } else if (rpath.endsWith('.pdf')) {
     await holidayPdf(ctx);
+  } else if (isDigit(rpath, 10)) {
+    await holidayYearIndex(ctx);
   } else {
-    const charCode = rpath.codePointAt(10);
-    if (charCode >= 48 && charCode <= 57) {
-      await holidayYearIndex(ctx);
-    } else {
-      await holidayDetail(ctx);
-    }
+    await holidayDetail(ctx);
   }
 }

@@ -1,6 +1,7 @@
 import createError from 'http-errors';
 import {empty, off} from './empty.js';
 import {readJSON} from './readJSON.js';
+import {GeoDb} from '@hebcal/geo-sqlite';
 
 export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
@@ -233,26 +234,6 @@ export function makeIcalOpts(options, query) {
 }
 
 /**
- * @param {string} str
- * @return {boolean}
- */
-export function is5DigitZip(str) {
-  if (typeof str !== 'string') {
-    return false;
-  }
-  const s = str.trim();
-  if (s.length < 5) {
-    return false;
-  }
-  for (let i = 0; i < 5; i++) {
-    if (s.codePointAt(i) > 57 || s.codePointAt(i) < 48) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
  * @param {string} cookieString
  * @param {Object.<string,string>} defaults
  * @param {Object.<string,string>} query0
@@ -277,7 +258,7 @@ export function processCookieAndQuery(cookieString, defaults, query0) {
   }
   let found = false;
   const cityTypeahead = query['city-typeahead'];
-  if (is5DigitZip(cityTypeahead)) {
+  if (GeoDb.is5DigitZip(cityTypeahead)) {
     query.zip = cityTypeahead.trim();
   }
   if (!empty(query.m)) {

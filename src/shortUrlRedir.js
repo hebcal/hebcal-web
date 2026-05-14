@@ -4,6 +4,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import {utmSourceFromRef} from './common.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
 import {cacheControl} from './cacheControl.js';
+import {isDigit} from './isDigit.js';
 import dayjs from 'dayjs';
 
 const CACHE_CONTROL_1DAY = cacheControl(1);
@@ -77,8 +78,7 @@ function shortParshaRedir(ctx, str, qs) {
   if (!str) {
     return sedrotBaseUrl;
   }
-  const code = str.codePointAt(0);
-  if (code < 48 || code > 57) {
+  if (!isDigit(str, 0)) {
     return false; // not a number, let old redirect logic happen
   }
   const parshaStr = basename(str);
