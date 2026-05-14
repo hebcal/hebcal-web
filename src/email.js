@@ -322,7 +322,7 @@ async function getSubInfo(db, emailAddress) {
     email_candles_zipcode, email_candles_city,
     email_candles_geonameid,
     email_use_elevation,
-    email_candles_havdalah, email_havdalah_tzeit, email_sundown_candles
+    email_candles_havdalah, email_havdalah_degrees, email_sundown_candles
   FROM hebcal_shabbat_email
   WHERE email_address = ?`;
   const results = await db.query(sql, emailAddress);
@@ -331,13 +331,15 @@ async function getSubInfo(db, emailAddress) {
     return null;
   }
   const m = r.email_candles_havdalah === null ? null : String(r.email_candles_havdalah);
+  const td = r.email_havdalah_degrees;
   const geo = getGeoFromRow(r);
   return {
     k: r.email_id,
     em: r.email_address,
     status: r.email_status,
     m: m,
-    M: r.email_havdalah_tzeit == 1 ? 'on' : 'off',
+    M: td == null ? 'off' : 'on',
+    td: td == null ? undefined : String(td),
     t: r.email_created,
     b: r.email_sundown_candles,
     ue: r.email_use_elevation == 1 ? 'on' : 'off',
@@ -352,7 +354,7 @@ async function writeSubInfo(ctx, db, q) {
       email_candles_geonameid = ?,
       email_use_elevation = ?,
       email_candles_havdalah = ?,
-      email_havdalah_tzeit = ?,
+      email_havdalah_degrees = ?,
       email_sundown_candles = ?,
       email_ip = ?
     WHERE email_id = ?`;
@@ -361,7 +363,7 @@ async function writeSubInfo(ctx, db, q) {
     Number.parseInt(q.geonameid, 10) || null,
     getUseElevation(q),
     getHavdalahMins(q),
-    getHavdalahTzeit(q),
+    getHavdalahDegrees(q),
     getCandleMins(q),
     getIpAddress(ctx),
     ctx.state.subscriptionId,
@@ -372,8 +374,11 @@ function getUseElevation(q) {
   return q.ue === 'on' ? 1 : 0;
 }
 
-function getHavdalahTzeit(q) {
-  return q.M === 'on' ? 1 : 0;
+function getHavdalahDegrees(q) {
+  if (q.M !== 'on') return null;
+  const deg = Number.parseFloat(q.td);
+  if (Number.isNaN(deg) || deg <= 0) return 8.5;
+  return deg;
 }
 
 function getCandleMins(q) {
@@ -402,7 +407,7 @@ async function writeStagingInfo(ctx, db, q) {
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
    email_use_elevation,
-   email_candles_havdalah, email_havdalah_tzeit, email_sundown_candles,
+   email_candles_havdalah, email_havdalah_degrees, email_sundown_candles,
    ${locationColumn}, email_ip)
   VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?, ?, ?)`;
   await db.query(sql, [
@@ -410,7 +415,7 @@ async function writeStagingInfo(ctx, db, q) {
     q.em,
     getUseElevation(q),
     getHavdalahMins(q),
-    getHavdalahTzeit(q),
+    getHavdalahDegrees(q),
     getCandleMins(q),
     locationValue,
     ip,
