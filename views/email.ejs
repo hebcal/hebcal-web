@@ -51,19 +51,4 @@ class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubs
 <% } %>
 </div><!-- .col -->
 </div><!-- .row -->
-<script nonce="<%=nonce%>">
-document.addEventListener("DOMContentLoaded", function() {
-  const d=document;
-  d.getElementById("m").addEventListener("focus",function(){
-    d.getElementById("M1").checked = false;
-    d.getElementById("M0").checked = true;
-    d.getElementById("td").value = "";
-  });
-  d.getElementById("td").addEventListener("focus",function(){
-    d.getElementById("M0").checked = false;
-    d.getElementById("M1").checked = true;
-    d.getElementById("m").value = "";
-  });
-});
-</script>
 <%- await include('partials/footer.ejs', {footerScripts: {tooltip: true, typeahead: true}}) -%>
