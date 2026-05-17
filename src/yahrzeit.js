@@ -316,6 +316,7 @@ async function makeDownloadProps(ctx) {
     csv_usa: dlhref + usaCSV + '?dl=1',
     csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
     title: makeCalendarTitle(q, 64),
+    analyticsTitle: type,
   };
 }
 

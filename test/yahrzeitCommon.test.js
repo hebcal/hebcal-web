@@ -178,6 +178,14 @@ describe('summarizeAnniversaryTypes', () => {
   it('long-form Birthday with multiple birthday entries', () => {
     expect(summarizeAnniversaryTypes({t1: 'b', t2: 'b'}, true)).toBe('Hebrew Birthday');
   });
+
+  it('short-form Birthday with multiple birthday entries', () => {
+    expect(summarizeAnniversaryTypes({t1: 'b', t2: 'b'}, false)).toBe(BIRTHDAY);
+  });
+
+  it('short-form Other', () => {
+    expect(summarizeAnniversaryTypes({t1: 'o'}, false)).toBe(ANNIVERSARY);
+  });
 });
 
 describe('getCalendarNames', () => {

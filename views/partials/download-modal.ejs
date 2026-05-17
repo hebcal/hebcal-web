@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const modalEl = document.getElementById('hcdl-modal');
   modalEl.addEventListener('show.bs.modal', function () {
     var _paq = window._paq = window._paq || [];
-    _paq.push(['trackEvent', 'Interaction', 'download-modal', '<%=url.title%>']);
+    _paq.push(['trackEvent', 'Interaction', 'download-modal', '<%=url.analyticsTitle||url.title%>']);
   });
   const ua = window.navigator.userAgent;
   if (typeof ua === 'string' && ua.startsWith('Mozilla/5.0 (Linux; Android ')) {
