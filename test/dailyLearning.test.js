@@ -144,4 +144,26 @@ describe('Daily Learning page', () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
+
+  it('should include 929 on a weekday (Sun-Thu)', async () => {
+    // 2026-03-01 is a Sunday
+    const response = await request(app.callback()).get('/learning/2026-03-01');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('929');
+    expect(response.text).toContain('Numbers 14');
+  });
+
+  it('should not include 929 on Shabbat', async () => {
+    // 2026-03-07 is a Saturday
+    const response = await request(app.callback()).get('/learning/2026-03-07');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('929:');
+  });
+
+  it('should not include 929 on Friday', async () => {
+    // 2026-03-06 is a Friday; 929 runs Sun-Thu only
+    const response = await request(app.callback()).get('/learning/2026-03-06');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('929:');
+  });
 });

@@ -92,6 +92,21 @@
     "descMedium": "Daily study of few chapters from the book of Psalms"
   },
   {
+    "eventCategory": "929",
+    "queryParam": "d929",
+    "dailyLearningOptName": "929",
+    "protocName": "nine29",
+    "downloadSlug": "929",
+    "color": "#800002",
+    "feedLength": "~265",
+    "years": 4,
+    "group": "Tanakh",
+    "settingsName": "929",
+    "shortName": "929: Tanakh B'yachad",
+    "descLong": "A synchronized chapter-a-day reading program. Named after the 929 chapters in the Hebrew Bible (Tanakh), participants read one chapter a day, five days a week, covering the entire text in about 3.5 years.",
+    "descMedium": "Chapter-a-day Tanakh reading, five days a week"
+  },
+  {
     "eventCategory": "dailyRambam1",
     "queryParam": "dr1",
     "dailyLearningOptName": "rambam1",

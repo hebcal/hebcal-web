@@ -218,7 +218,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     monthmode: jspb.Message.getFieldWithDefault(msg, 64, 0),
     yomtovonly: jspb.Message.getBooleanFieldWithDefault(msg, 65, false),
     dirshuamudyomi: jspb.Message.getBooleanFieldWithDefault(msg, 66, false),
-    tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0)
+    tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0),
+    nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false)
   };
 
   if (includeInstance) {
@@ -510,6 +511,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 67:
       var value = /** @type {number} */ (reader.readFloat());
       msg.setTzeit(value);
+      break;
+    case 68:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setNine29(value);
       break;
     default:
       reader.skipField();
@@ -985,6 +990,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0.0) {
     writer.writeFloat(
       67,
+      f
+    );
+  }
+  f = message.getNine29();
+  if (f) {
+    writer.writeBool(
+      68,
       f
     );
   }
@@ -2302,6 +2314,24 @@ proto.Download.prototype.getTzeit = function() {
  */
 proto.Download.prototype.setTzeit = function(value) {
   return jspb.Message.setProto3FloatField(this, 67, value);
+};
+
+
+/**
+ * optional bool nine29 = 68;
+ * @return {boolean}
+ */
+proto.Download.prototype.getNine29 = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 68, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setNine29 = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 68, value);
 };
 
 
