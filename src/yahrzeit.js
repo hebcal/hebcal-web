@@ -419,6 +419,7 @@ export async function yahrzeitDownload(ctx) {
   }
   const extension = rpath.substring(rpath.length - 4);
   const ics = extension === '.ics';
+  const csv = extension === '.csv';
   const {today, startYear, endYear} = getDateRange(query);
   const sunday = today.onOrBefore(0).abs();
   const attrs = {startYear, endYear, extension};
@@ -436,7 +437,10 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
 
-  const reminder = query.yrem !== '0' && query.yrem !== 'off';
+  let reminder = query.yrem !== '0' && query.yrem !== 'off';
+  if (csv) {
+    reminder = false;
+  }
   const maxId = getMaxYahrzeitId(query);
   const events0 = await makeYahrzeitEvents(maxId, query, reminder);
   const startAbs = sunday - 12 * 7; // 12 weeks ago
@@ -487,11 +491,15 @@ export async function yahrzeitDownload(ctx) {
     }
     ctx.append('Vary', 'User-Agent');
     ctx.body = await icalEventsToString(icals, icalOpt);
-  } else if (extension == '.csv') {
+  } else if (csv) {
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = '\uFEFF' + csv;
+  } else {
+    ctx.status = 404;
+    ctx.response.type = 'text/plain';
+    ctx.body = 'Invalid download format: ' + extension;
   }
 }
 
