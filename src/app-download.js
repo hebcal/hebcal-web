@@ -17,7 +17,7 @@ import {cacheControl,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {hebcalDownload} from './hebcal-download.js';
-import {yahrzeitDownload} from './yahrzeit.js';
+import {yahrzeitDownload} from './yahrzeitDownload.js';
 import {MysqlDb} from './db.js';
 import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
