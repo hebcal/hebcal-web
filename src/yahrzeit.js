@@ -498,8 +498,10 @@ export async function yahrzeitDownload(ctx) {
     ctx.body = '\uFEFF' + csv;
   } else {
     ctx.status = 404;
+    ctx.remove('ETag');
+    ctx.remove('Cache-Control');
     ctx.response.type = 'text/plain';
-    ctx.body = 'Invalid download format: ' + extension;
+    ctx.body = 'Invalid download format: ' + extension + '\n';
   }
 }
 

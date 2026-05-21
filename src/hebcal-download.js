@@ -149,6 +149,12 @@ export async function hebcalDownload(ctx) {
     options.utmCampaign = query.utm_campaign || 'pdf-' + campaignName(events, options);
     renderPdf(doc, events, options, query);
     doc.end();
+  } else {
+    ctx.status = 404;
+    ctx.remove('Cache-Control');
+    ctx.remove('ETag');
+    ctx.response.type = 'text/plain';
+    ctx.body = 'Invalid download format: ' + extension + '\n';
   }
 }
 
