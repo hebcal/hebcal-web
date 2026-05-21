@@ -144,6 +144,37 @@ describe('v3 yahrzeit subscription downloads', () => {
     expect(response.text).toContain('BEGIN:VCALENDAR');
     expect(response.text).toContain('Golda Meir');
   });
+
+  it('includes day-before reminder events by default', async () => {
+    const response = await request(app.callback())
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.ics');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Golda Meir Yahrzeit reminder');
+  });
+
+  it('omits day-before reminder events when yrem=0', async () => {
+    const response = await request(app.callback())
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.ics?yrem=0');
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch(/calendar/);
+    expect(response.text).toContain('Golda Meir');
+    expect(response.text).not.toContain('Yahrzeit reminder');
+  });
+
+  it('omits day-before reminder events when yrem=off', async () => {
+    const response = await request(app.callback())
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.ics?yrem=off');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('Yahrzeit reminder');
+  });
+
+  it('omits day-before reminder events from CSV export when yrem=0', async () => {
+    const response = await request(app.callback())
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.csv?yrem=0');
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch(/csv/);
+    expect(response.text).not.toContain('Yahrzeit reminder');
+  });
 });
 
 describe('Dirshu Amud HaYomi protobuf round-trip', () => {
