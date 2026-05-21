@@ -33,6 +33,9 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!emojiChecked) {
         url.searchParams.set('emoji', '0');
       }
+      if (!yahrzeitReminderChecked) {
+        url.searchParams.set('yrem', '0');
+      }
       btn2.href = url.href;
     }
   }
