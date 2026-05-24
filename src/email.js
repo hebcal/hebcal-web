@@ -5,6 +5,7 @@ import {queryDefaultCandleMins, processCookieAndQuery} from './urlArgs.js';
 import {getIpAddress} from './getIpAddress.js';
 import {mySendMail, getImgOpenHtml, validateEmail} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';
+import {xmlEsc} from './sanitize.js';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
@@ -59,7 +60,7 @@ function getGeoFromRow(row) {
 function makeFooter(emailAddress) {
   const unsubUrl = getUnsubUrl(emailAddress);
   return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+<div>This email was sent to ${xmlEsc(emailAddress)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div><a href="${unsubUrl}&amp;unsubscribe=1&amp;cfg=html&amp;${UTM_PARAM}">Unsubscribe</a> |
@@ -459,7 +460,7 @@ ${BLANK}
 <br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+<div>This email was sent to ${xmlEsc(q.em)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div>[${ip}]</div>

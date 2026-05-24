@@ -15,6 +15,7 @@ import {pad4} from '@hebcal/hdate';
 import {makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
 import {gematriyaDate} from './gematriyaDate.js';
+import {xmlEsc} from './sanitize.js';
 
 /**
  * @param {string} val
@@ -25,18 +26,6 @@ function isset(val) {
 }
 
 const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
-
-const xmlEscMap = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  '\'': '&apos;',
-};
-
-function xmlEsc(s) {
-  return String(s).replace(/[&<>"']/g, (c) => xmlEscMap[c]);
-}
 
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx

@@ -6,6 +6,7 @@ import {geoposLegacy} from './urlArgs.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {getIpAddress} from './getIpAddress.js';
 import {nearestCity} from './nearestCity.js';
+import {xmlEsc} from './sanitize.js';
 
 /**
  * MaxMind geoIP lookup GeoLite2-Country.mmdb
@@ -122,7 +123,7 @@ function makeGeoCityName(latitude, longitude, tzid) {
 export function getLocationFromQuery(db, query) {
   let cityTypeahead = query['city-typeahead'];
   if (typeof cityTypeahead === 'string') {
-    cityTypeahead = cityTypeahead.trim();
+    cityTypeahead = xmlEsc(cityTypeahead.trim());
   }
   if (GeoDb.is5DigitZip(cityTypeahead)) {
     query.zip = cityTypeahead;

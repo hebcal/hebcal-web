@@ -12,6 +12,7 @@ import {ulid} from 'ulid';
 import {basename} from 'node:path';
 import {matomoTrack} from './matomoTrack.js';
 import {makeLogInfo} from './logger.js';
+import {xmlEsc} from './sanitize.js';
 
 const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
@@ -174,7 +175,7 @@ ${BLANK}
 <br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${utmParam}">Hebcal.com</a>.
+<div>This email was sent to ${xmlEsc(q.em)} by <a href="https://www.hebcal.com/?${utmParam}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div>[${ip}]</div>
@@ -277,7 +278,7 @@ ${BLANK}
 <br>Hebcal.com</div>
 ${BLANK}
 <div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${q.em} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+<div>This email was sent to ${xmlEsc(q.em)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div>[${ip}]</div>
@@ -369,7 +370,7 @@ async function unsub(ctx, q) {
 function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
   unsubUrl = unsubUrl.replaceAll('&', '&amp;');
   return `<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${emailAddress} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
+<div>This email was sent to ${xmlEsc(emailAddress)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
 Hebcal is a free Jewish calendar and holiday web site.</div>
 ${BLANK}
 <div><a href="${editUrl}">Edit ${typeStr} Calendar</a> |
