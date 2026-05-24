@@ -1,11 +1,22 @@
 <%- await include('partials/header-and-navbar.ejs') -%>
 <div class="row mt-2">
 <div class="col">
-<p class="lead">Receive anniversary reminders by email.</p>
+<p class="lead">Receive personal Hebrew calendar anniversary reminders by email.</p>
 <% if (confirmed) { %>
 <div class="alert alert-success">
 <svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> Your annual email reminders are now active.
+</div><!-- .alert -->
+<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
+  View calendar</a>
+  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>#form">
+  <svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  Edit calendar</a></p>
+<% } else if (alreadyVerified) { %>
+<div class="alert alert-info">
+<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+<strong>Email already verified.</strong> Your annual email reminders are already active and will be sent to <strong><%= emailAddress %></strong>.
 </div><!-- .alert -->
 <p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
   <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>

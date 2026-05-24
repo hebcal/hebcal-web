@@ -31,13 +31,14 @@ export async function yahrzeitEmailVerify(ctx) {
   const emailAddress = contents.emailAddress;
   const calendarId = contents.calendarId;
   const confirmed = (q.commit === '1');
+  const alreadyVerified = !confirmed && contents.subStatus === 'active';
   if (confirmed) {
     const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'active', ip_addr = ? WHERE id = ?`;
     const ip = getIpAddress(ctx);
     await dbQuery(ctx, sqlUpdate, [ip, subscriptionId]);
     matomoTrack(ctx, 'Email', 'signup-confirmed', 'yahrzeit-reminder');
     await sendConfirmEmail(ctx, contents, subscriptionId);
-  } else {
+  } else if (!alreadyVerified) {
     const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, calendarId);
     ctx.state.anniversaryType = summarizeAnniversaryTypes(obj, true);
     const maxId = ctx.state.maxId = getMaxYahrzeitId(obj);
@@ -54,10 +55,18 @@ export async function yahrzeitEmailVerify(ctx) {
       }
     }
   }
-  const title = confirmed ? 'Email Subscription Confirmed' : 'Confirm Email Subscription';
+  let title;
+  if (confirmed) {
+    title = 'Email Subscription Confirmed';
+  } else if (alreadyVerified) {
+    title = 'Email Already Verified';
+  } else {
+    title = 'Confirm Email Subscription';
+  }
   await ctx.render('yahrzeit-verify', {
     title: `${title} - Hebcal`,
     confirmed,
+    alreadyVerified,
     subscriptionId,
     emailAddress,
     calendarId,
@@ -283,7 +292,7 @@ ${imgOpen}</div>
 }
 
 async function lookupSubContents(ctx, id) {
-  const sql2 = `SELECT e.email_addr, e.calendar_id, y.contents, y.updated, y.downloaded
+  const sql2 = `SELECT e.email_addr, e.calendar_id, e.sub_status, y.contents, y.updated, y.downloaded
 FROM yahrzeit_email e, yahrzeit y
 WHERE e.id = ?
 AND e.calendar_id = y.id`;
@@ -295,6 +304,7 @@ AND e.calendar_id = y.id`;
   const contents = row.contents;
   contents.emailAddress = row.email_addr;
   contents.calendarId = row.calendar_id;
+  contents.subStatus = row.sub_status;
   contents.maxId = getMaxYahrzeitId(contents);
   contents.numIds = getYahrzeitIds(contents).length;
   const type = contents.type = contents.anniversaryType = summarizeAnniversaryTypes(contents, false);

@@ -114,6 +114,56 @@ describe('Yahrzeit Email Verification', () => {
   });
 });
 
+describe('Yahrzeit Email Signup and Verify Flow', () => {
+  it('signs up, verifies, then reports already-verified on re-visit', async () => {
+    const email = 'flowtest@example.com';
+
+    // 1. Sign up: creates a new pending subscription
+    const signup = await request(app.callback())
+        .post('/yahrzeit/email')
+        .type('form')
+        .send(`em=${email}&ulid=${CALENDAR_ID}&type=Yahrzeit`);
+    expect(signup.status).toBe(200);
+    expect(signup.type).toContain('json');
+    expect(signup.body).toMatchObject({ok: true});
+
+    // The subscription id is generated server-side; find it in the mock
+    const subs = app.context.mysql.mockData.yahrzeitEmailSubs;
+    const sub = Object.values(subs)
+        .find((r) => r.email_addr === email && r.calendar_id === CALENDAR_ID);
+    expect(sub).toBeDefined();
+    expect(sub.sub_status).toBe('pending');
+    const subId = sub.id;
+
+    // 2. Verify page for the pending subscription shows the confirm form
+    const pendingPage = await request(app.callback())
+        .get(`/yahrzeit/verify/${subId}`);
+    expect(pendingPage.status).toBe(200);
+    expect(pendingPage.type).toContain('html');
+    expect(pendingPage.text).toContain(email);
+    expect(pendingPage.text).toContain('Confirm');
+    expect(pendingPage.text).not.toContain('already verified');
+
+    // 3. Confirm the subscription
+    const confirmed = await request(app.callback())
+        .post(`/yahrzeit/verify/${subId}`)
+        .type('form')
+        .send('commit=1');
+    expect(confirmed.status).toBe(200);
+    expect(confirmed.type).toContain('html');
+    expect(confirmed.text).toContain('now active');
+    expect(subs[subId].sub_status).toBe('active');
+
+    // 4. Re-visiting the verify page reports the email is already verified
+    const alreadyVerified = await request(app.callback())
+        .get(`/yahrzeit/verify/${subId}`);
+    expect(alreadyVerified.status).toBe(200);
+    expect(alreadyVerified.type).toContain('html');
+    expect(alreadyVerified.text).toContain('Email already verified');
+    expect(alreadyVerified.text).toContain('Edit calendar');
+  });
+});
+
 describe('Yahrzeit Email Search', () => {
   it('renders not-found page when em param is missing', async () => {
     const response = await request(app.callback())

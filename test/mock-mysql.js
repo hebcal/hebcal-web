@@ -13,6 +13,9 @@ export class MockMysqlDb {
           downloaded: 1,
         },
       },
+      // Yahrzeit email subscriptions, keyed by subscription id.
+      // Mutated by INSERT/UPDATE so signup/verify flows can be exercised end-to-end.
+      yahrzeitEmailSubs: {},
       subscriptions: {
         '01jthv2t5k88yermamssn96pze': {
           email_id: '01jthv2t5k88yermamssn96pze',
@@ -48,35 +51,104 @@ export class MockMysqlDb {
   }
 
   async query(sql, params) {
-    // Handle SELECT queries for email verification
+    // Normalize the mysql2 options-object call form: query({sql, values, timeout})
+    if (sql && typeof sql === 'object' && typeof sql.sql === 'string') {
+      params = sql.values;
+      sql = sql.sql;
+    }
+    const args = Array.isArray(params) ? params : params === undefined ? [] : [params];
+
+    // Handle SELECT queries for shabbat email verification
     if (sql.includes('SELECT') && sql.includes('hebcal_shabbat_email')) {
       if (sql.includes('WHERE email_id = ?')) {
-        const subscriptionId = params;
+        const subscriptionId = args[0];
         const row = this.mockData.subscriptions[subscriptionId];
         return row ? [row] : [];
       } else if (sql.includes('WHERE email_address = ?')) {
-        const emailAddress = params;
+        const emailAddress = args[0];
         const subscriptionId = this.mockData.emailsByAddress[emailAddress];
         const row = subscriptionId ? this.mockData.subscriptions[subscriptionId] : null;
         return row ? [row] : [];
       }
     }
 
-    // Handle SELECT queries for yahrzeit calendar data
-    if (sql.includes('SELECT') && sql.includes('FROM yahrzeit') && !sql.includes('yahrzeit_email')) {
-      const id = Array.isArray(params) ? params[0] : params;
-      const row = this.mockData.yahrzeitCalendars[id];
-      return row ? [row] : [];
+    // Handle yahrzeit verify lookup (joins yahrzeit_email + yahrzeit by subscription id)
+    if (sql.includes('FROM yahrzeit_email e, yahrzeit y') && sql.includes('WHERE e.id = ?')) {
+      const subId = args[0];
+      const sub = this.mockData.yahrzeitEmailSubs[subId];
+      if (!sub) {
+        return [];
+      }
+      const cal = this.mockData.yahrzeitCalendars[sub.calendar_id];
+      if (!cal) {
+        return [];
+      }
+      return [{
+        email_addr: sub.email_addr,
+        calendar_id: sub.calendar_id,
+        sub_status: sub.sub_status,
+        contents: structuredClone(cal.contents),
+        updated: cal.updated,
+        downloaded: cal.downloaded,
+      }];
     }
 
-    // Handle SELECT queries for yahrzeit verification
+    // Handle existingSubByEmailAndCalendar lookup
+    if (sql.includes('SELECT id, sub_status FROM yahrzeit_email')) {
+      const [emailAddr, calendarId] = args;
+      return Object.values(this.mockData.yahrzeitEmailSubs)
+          .filter((r) => r.email_addr === emailAddr && r.calendar_id === calendarId)
+          .map((r) => ({id: r.id, sub_status: r.sub_status}));
+    }
+
+    // Handle SELECT queries for yahrzeit calendar data
+    if (sql.includes('SELECT') && sql.includes('FROM yahrzeit') && !sql.includes('yahrzeit_email')) {
+      const id = args[0];
+      const row = this.mockData.yahrzeitCalendars[id];
+      if (!row) {
+        return [];
+      }
+      return [{
+        contents: structuredClone(row.contents),
+        updated: row.updated,
+        downloaded: row.downloaded,
+      }];
+    }
+
+    // Handle remaining yahrzeit_email SELECT queries (e.g. search) — no results
     if (sql.includes('SELECT') && sql.includes('yahrzeit_email')) {
-      // Return empty result to trigger 404 in the test
       return [];
     }
 
-    // Handle UPDATE queries
-    if (sql.includes('UPDATE hebcal_shabbat_email') || sql.includes('UPDATE yahrzeit_email')) {
+    // Handle INSERT of a new yahrzeit email subscription
+    if (sql.includes('INSERT INTO yahrzeit_email')) {
+      const [id, emailAddr, calendarId] = args;
+      this.mockData.yahrzeitEmailSubs[id] = {
+        id,
+        email_addr: emailAddr,
+        calendar_id: calendarId,
+        sub_status: 'pending',
+      };
+      return {affectedRows: 1};
+    }
+
+    // Handle UPDATE of a yahrzeit email subscription status
+    if (sql.includes('UPDATE yahrzeit_email')) {
+      const id = args[args.length - 1];
+      const sub = this.mockData.yahrzeitEmailSubs[id];
+      if (sub) {
+        for (const status of ['active', 'pending', 'unsub']) {
+          if (sql.includes(`sub_status = '${status}'`)) {
+            sub.sub_status = status;
+            break;
+          }
+        }
+      }
+      return {affectedRows: 1};
+    }
+
+    // Handle UPDATE queries for shabbat email
+    if (sql.includes('UPDATE hebcal_shabbat_email')) {
       return {affectedRows: 1};
     }
 
