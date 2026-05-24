@@ -26,6 +26,18 @@ function isset(val) {
 
 const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
 
+const xmlEscMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  '\'': '&apos;',
+};
+
+function xmlEsc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => xmlEscMap[c]);
+}
+
 /**
  * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
  */
@@ -122,7 +134,7 @@ export async function hebrewDateConverter(ctx) {
   } else if (q.cfg === 'xml') {
     ctx.type = 'text/xml';
     if (p.message) {
-      ctx.body = `<?xml version="1.0" ?>\n<error message="${p.message}" />\n`;
+      ctx.body = `<error message="${xmlEsc(p.message)}" />\n`;
     } else {
       p.writeResp = false;
       p.heDateParts = {
