@@ -207,7 +207,6 @@ function setYahrzeitCookie(ctx) {
     expires: expires,
     overwrite: true,
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
   });
   ctx.state.yahrzeitCookieSet = true;
   return true;
