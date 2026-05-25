@@ -5,12 +5,12 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tenth_of_Tevet",
-   "text": "Tenth of Tevet (Hebrew: עשרה בטבת, Asarah BeTevet), the tenth day of the Hebrew month of Tevet, is a minor fast day in Judaism. The fast commemorates the siege of Jerusalem by Nebuchadnezzar II of Babylonia. Like other minor fasts, Asara B’Tevet begins at dawn (first light) and ends at nightfall (full dark)."
+   "text": "Tenth of Tevet (Hebrew: עשרה בטבת, Asarah BeTevet), the tenth day of the Hebrew month of Tevet, is a minor fast day in Judaism. The fast commemorates the siege of Jerusalem by Nebuchadnezzar II of Babylonia in 587 BCE, which ultimately led to the destruction of Solomon’s Temple and the Babylonian exile of the Jewish people. Unlike most minor fast days that are postponed when they fall on Friday, Asara B’Tevet is observed even on the Friday preceding Shabbat."
   },
   "items": [
-    "Asara B'Tevet",
-    "Asara B'Tevet (Mincha)"
-   ]
+   "Asara B'Tevet",
+   "Asara B'Tevet (Mincha)"
+  ]
  },
  "Birkat Hachamah": {
   "about": {
@@ -18,7 +18,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Birkat_Hachama",
-   "text": "Birkat Hachama (Hebrew: ברכת החמה) refers to a rare Jewish blessing that is recited to the Creator, thanking Him for creating the sun. The blessing is recited when the sun completes its cycle every 28 years on a Tuesday at sundown. Jewish tradition says that when the Sun completes this cycle, it has returned to its position when the world was created"
+   "text": "Birkat Hachama (Hebrew: ברכת החמה) refers to a rare Jewish blessing recited to thank the Creator for the sun. The blessing is recited once every 28 years when, according to Jewish tradition, the sun returns to the position it occupied at the moment of Creation. The sun’s 28-year cycle completes on Tuesday at sundown, but since the sun must be visible for the blessing, it is recited the following Wednesday morning. The most recent occurrence was April 8, 2009; the next is scheduled for April 8, 2037."
   }
  },
  "Shushan Purim Katan": {
@@ -31,77 +31,77 @@
    "href": "https://oukosher.org/halacha-yomis/purim-meshulash-is-celebrated-this-year-in-yerushalayim-what-is-purim-meshulash/"
   },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Purim#Purim_Meshulash",
-    "text": "Purim Meshulash, or the three-fold Purim, is a somewhat rare calendric occurrence that affects how Purim is observed in Jerusalem (and, in theory at least, in other cities that were surrounded by a wall in ancient times). When Shushan Purim (Adar 15) falls on the Sabbath, the holiday is celebrated over a period of three days. The megilla reading and distribution of charity takes place on the Friday (Adar 14), which day is called Purim dePrazos. The Al ha-Nissim prayer is only recited on Sabbath (Adar 15), which is Purim itself. The weekly Torah portion (Tetzaveh or Ki Tissa in regular years, Tzav in leap years) is read as usual, while the Torah portion for Purim is read for maftir, and the haftarah is the same as read the previous Shabbat, Parshat Zachor. On Sunday (Adar 16), called Purim Meshullash, mishloach manot are sent and the festive Purim meal is held"
+   "href": "https://en.wikipedia.org/wiki/Purim#Purim_Meshulash",
+   "text": "Purim Meshulash, meaning “threefold Purim,” is a rare calendric occurrence affecting how Purim is observed in Jerusalem and other ancient walled cities. It occurs when Shushan Purim (Adar 15) falls on the Sabbath, causing the holiday to be celebrated over three days. The Megilla reading and distribution of charity take place on Friday (Adar 14, called Purim dePrazos). The Al ha-Nissim prayer is recited on the Sabbath (Adar 15, Purim itself). On Sunday (Adar 16), called Purim Meshullash, mishloach manot are sent and the festive Purim meal is held. Intervals between occurrences vary considerably, ranging from three to twenty years."
   }
  },
  "Ben-Gurion Day": {
   "about": {
-    "href": "https://knesset.gov.il/vip/BenGurion/eng/BenGurion_Law_eng.html"
-   },
+   "href": "https://knesset.gov.il/vip/BenGurion/eng/BenGurion_Law_eng.html"
+  },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Ben-Gurion_Day",
-    "text": "Ben-Gurion Day (Hebrew: יום בן־גוריון‎) is an Israeli national holiday celebrated annually on the sixth of the Hebrew month of Kislev, to commemorate the life and vision of Zionist leader, and Israel’s first Prime Minister David Ben-Gurion. If the sixth of Kislev falls on Shabbat eve, or on Shabbat, the memorial day is held on the following Sunday"
+   "href": "https://en.wikipedia.org/wiki/Ben-Gurion_Day",
+   "text": "Ben-Gurion Day (Hebrew: יום בן‐גוריון) is an Israeli national holiday observed annually on the sixth of the Hebrew month of Kislev, commemorating the life and vision of Zionist leader and Israel’s first Prime Minister, David Ben-Gurion. The date marks the anniversary of Ben-Gurion’s death. The holiday was established by the Knesset through the Ben-Gurion Law, which mandates memorial services in Israeli institutions, IDF bases, and schools. If the sixth of Kislev falls on Shabbat eve or on Shabbat, the memorial day is held on the following Sunday."
   },
   "israelOnly": true
  },
  "Hebrew Language Day": {
   "about": {
-    "href": "https://embassies.gov.il/MFA/IsraelExperience/history/Pages/Hebrew-Language-Day-The-revival-of-the-language-of-the-Bible.aspx"
+   "href": "https://embassies.gov.il/MFA/IsraelExperience/history/Pages/Hebrew-Language-Day-The-revival-of-the-language-of-the-Bible.aspx"
   },
   "wikipedia": {
-    "href": "https://he.wikipedia.org/wiki/%D7%99%D7%95%D7%9D_%D7%94%D7%9C%D7%A9%D7%95%D7%9F_%D7%94%D7%A2%D7%91%D7%A8%D7%99%D7%AA",
-    "text": "Hebrew Language Day (Hebrew: יום השפה העברית‎, or יום הלשון העברית‎) is an Israeli national holiday celebrated annually on the 21st of the Hebrew month of Tevet, the birthday of Eliezer Ben-Yehuda, the “reviver” of the Hebrew language. If the 21st of Tevet occurs on Friday or Saturday (Shabbat), the day is instead observed on the preceding Thursday"
+   "href": "https://he.wikipedia.org/wiki/%D7%99%D7%95%D7%9D_%D7%94%D7%9C%D7%A9%D7%95%D7%9F_%D7%94%D7%A2%D7%91%D7%A8%D7%99%D7%AA",
+   "text": "Hebrew Language Day (Hebrew: יום השפה העברית‎, or יום הלשון העברית‎) is an Israeli national holiday celebrated annually on the 21st of the Hebrew month of Tevet, the birthday of Eliezer Ben-Yehuda, the “reviver” of the Hebrew language. If the 21st of Tevet occurs on Friday or Saturday (Shabbat), the day is instead observed on the preceding Thursday"
   },
   "israelOnly": true
  },
  "Family Day": {
   "about": {
-    "href": "https://en.wikipedia.org/wiki/Family_Day#Israel"
-   },
+   "href": "https://en.wikipedia.org/wiki/Family_Day#Israel"
+  },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Family_Day#Israel",
-    "text": "Yom HaMishpacha (Hebrew: יום המשפחה) is a day to honor the family unit, as a whole, and its centrality to our lives. In the 1990s, the last day of Shevat was declared Family Day in Israel, in memory of Henrietta Szold, American-born founder of Hadassah, the Women’s Zionist Organization of America."
+   "href": "https://en.wikipedia.org/wiki/Family_Day#Israel",
+   "text": "Yom HaMishpacha (Hebrew: יום המשפחה) is a day to honor the family unit, as a whole, and its centrality to our lives. In the 1990s, the last day of Shevat was declared Family Day in Israel, in memory of Henrietta Szold, American-born founder of Hadassah, the Women’s Zionist Organization of America."
   },
   "israelOnly": true
  },
  "Herzl Day": {
   "about": {
-    "href": "https://knesset.gov.il/vip/herzl/eng/Herz_Law_eng.html"
-   },
+   "href": "https://knesset.gov.il/vip/herzl/eng/Herz_Law_eng.html"
+  },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Herzl_Day",
-    "text": "Herzl Day (Hebrew: יום הרצל‎) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Iyar, to commemorate the life and vision of Zionist leader Theodor Herzl. If the 10th of Iyar falls on Shabbat, Herzl Day is postponed until Sunday"
+   "href": "https://en.wikipedia.org/wiki/Herzl_Day",
+   "text": "Herzl Day (Hebrew: יום הרצל‎) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Iyar, to commemorate the life and vision of Zionist leader Theodor Herzl. If the 10th of Iyar falls on Shabbat, Herzl Day is postponed until Sunday"
   },
   "israelOnly": true
  },
  "Jabotinsky Day": {
   "about": {
-    "href": "https://knesset.gov.il/vip/jabotinsky/eng/law_eng.html"
-   },
+   "href": "https://knesset.gov.il/vip/jabotinsky/eng/law_eng.html"
+  },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Jabotinsky_Day",
-    "text": "Jabotinsky Day (Hebrew: יום ז׳בוטינסקי‎) is an Israeli national holiday celebrated annually on the twenty ninth of the Hebrew month of Tammuz, to commemorate the life and vision of Zionist leader Ze'ev Jabotinsky. If Tammuz 29 falls on a Sabbath, Jabotinsky Day is held on the following Sunday"
+   "href": "https://en.wikipedia.org/wiki/Jabotinsky_Day",
+   "text": "Jabotinsky Day (Hebrew: יום ז׳בוטינסקי‎) is an Israeli national holiday celebrated annually on the twenty ninth of the Hebrew month of Tammuz, to commemorate the life and vision of Zionist leader Ze'ev Jabotinsky. If Tammuz 29 falls on a Sabbath, Jabotinsky Day is held on the following Sunday"
   },
   "israelOnly": true
  },
  "Yitzhak Rabin Memorial Day": {
   "about": {
-    "href": "https://en.wikipedia.org/wiki/Rabin_Day"
-   },
+   "href": "https://en.wikipedia.org/wiki/Rabin_Day"
+  },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Rabin_Day",
-    "text": "Yitzhak Rabin Memorial Day (Hebrew: יום הזיכרון ליצחק רבין) is an Israeli day of remembrance observed annually on the twelfth of the Hebrew month of Cheshvan, to commemorate the life of Zionist leader and Israeli Prime Minister and Defense Minister, Yitzhak Rabin, and his assassination"
+   "href": "https://en.wikipedia.org/wiki/Rabin_Day",
+   "text": "Yitzhak Rabin Memorial Day (Hebrew: יום הזיכרון ליצחק רבין) is an Israeli day of remembrance observed annually on the twelfth of the Hebrew month of Cheshvan, to commemorate the life of Zionist leader and Israeli Prime Minister and Defense Minister, Yitzhak Rabin, and his assassination"
   },
   "israelOnly": true
  },
  "Chag HaBanot": {
   "about": {
-    "href": "https://rossingcenter.org/judaisms/chag-habanot/"
+   "href": "https://rossingcenter.org/judaisms/chag-habanot/"
   },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Girls_Day_(Judaism)",
-    "text": "Rosh Chodesh l'banot (ראש חודש לבנות‎ also known as Chag habanot חג הבנות‎ [Girls' Day]), and in Arabic as Eid al-Banat, is a holiday, celebrated by some of the Jewish communities in the Middle East on Rosh Chodesh of the Jewish month of Tevet, during the Jewish holiday of Chanukah. The Jewish community where the holiday was most preserved is in Tunisia. But there is also evidence that it was also celebrated in Jewish communities in Libya, Algeria, Kushta, Morocco and Thessaloniki."
+   "href": "https://en.wikipedia.org/wiki/Girls_Day_(Judaism)",
+   "text": "Rosh Chodesh l’banot (ראש חודש לבנות‎, also known as Chag HaBanot חג הבנות‎ [Girls’ Day]), and in Arabic as Eid al-Banat, is a holiday celebrated by some Jewish communities in the Middle East on Rosh Chodesh of the Hebrew month of Tevet, during the Jewish holiday of Chanukah. The Jewish community where the holiday was best preserved is in Tunisia, though it was also observed in Jewish communities in Libya, Algeria, Istanbul, Morocco, and Thessaloniki. The holiday carries connections to the narrative of Judith, who tricked and killed the invading general Holofernes, and to other heroic women in Jewish history."
   }
  },
  "Chanukah": {
@@ -110,41 +110,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Hanukkah",
-   "text": "Hanukkah (Hebrew: חֲנֻכָּה, usually spelled חנוכה pronounced [χanuˈka] in Modern Hebrew, also romanized as Chanukah or Chanuka), also known as the Festival of Lights, is an eight-day Jewish holiday commemorating the rededication of the Holy Temple (the Second Temple) in Jerusalem at the time of the Maccabean Revolt of the 2nd century BCE. Hanukkah is observed for eight nights and days, starting on the 25th day of Kislev according to the Hebrew calendar, which may occur at any time from late November to late December in the Gregorian calendar."
+   "text": "Hanukkah (Hebrew: חֲנֻכָּה, also romanized as Chanukah or Chanuka), also known as the Festival of Lights, is an eight-day Jewish holiday commemorating the Maccabean Revolt against the Seleucid Empire in the 2nd century BCE, during which the Maccabees recaptured Jerusalem and rededicated the Second Temple. Hanukkah is observed for eight nights and days, starting on the 25th day of Kislev according to the Hebrew calendar, which may occur at any time from late November to late December in the Gregorian calendar. Each evening, an additional candle is lit on a nine-branched menorah called a hanukkiah, beginning with one candle on the first night and reaching all eight by the final night."
   },
   "photo": {
-    "fn": "528498099.webp",
-    "caption": "Menorah, doughnuts, chocolate coins and wooden dreidels",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 267
-      },
-      "640": {
-       "width": 640,
-       "height": 427
-      },
-      "800": {
-       "width": 800,
-       "height": 533
-      },
-      "1024": {
-       "width": 1024,
-       "height": 683
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "528498099.webp",
+   "caption": "Menorah, doughnuts, chocolate coins and wooden dreidels",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 267
+    },
+    "640": {
+     "width": 640,
+     "height": 427
+    },
+    "800": {
+     "width": 800,
+     "height": 533
+    },
+    "1024": {
+     "width": 1024,
+     "height": 683
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -226,37 +226,37 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Lag_BaOmer",
-   "text": "Lag BaOmer (Hebrew: ל״ג בעומר), also Lag B’Omer, is a Jewish holiday celebrated on the 33rd day of the Counting of the Omer, which occurs on the 18th day of the Hebrew month of Iyar. One reason given for the holiday is as the day of passing of Rabbi Shimon bar Yochai. Modern Jewish tradition links the holiday to the Bar Kokhba Revolt against the Roman Empire (132-135 CE). In Israel, it is celebrated as a symbol for the fighting Jewish spirit."
+   "text": "Lag BaOmer (Hebrew: ל״ג בעומר), also Lag B’Omer, is a Jewish holiday celebrated on the 33rd day of the Counting of the Omer, which occurs on the 18th day of the Hebrew month of Iyar. The name derives from the Hebrew letters lamed (ל, value 30) and gimel (ג, value 3), together equaling 33. According to rabbinic tradition, the holiday marks the end of a devastating plague among Rabbi Akiva’s 24,000 students. It is also commemorated as the death anniversary of Rabbi Shimon bar Yochai, and modern Jewish tradition links the holiday to the Bar Kokhba revolt against the Roman Empire (132–135 CE)."
   },
   "photo": {
-    "fn": "myazv2ldos.webp",
-    "caption": "Crackling bonfire on a dark background, CC0, photo by Matheus Bertelli",
-    "dimensions": {
-      "640": {
-       "width": 640,
-       "height": 400
-      },
-      "800": {
-       "width": 800,
-       "height": 500
-      },
-      "1024": {
-       "width": 1024,
-       "height": 640
-      },
-      "1x1": {
-       "width": 3334,
-       "height": 3334
-      },
-      "4x3": {
-       "width": 4445,
-       "height": 3334
-      },
-      "16x9": {
-       "width": 5334,
-       "height": 3000
-      }
+   "fn": "myazv2ldos.webp",
+   "caption": "Crackling bonfire on a dark background, CC0, photo by Matheus Bertelli",
+   "dimensions": {
+    "640": {
+     "width": 640,
+     "height": 400
+    },
+    "800": {
+     "width": 800,
+     "height": 500
+    },
+    "1024": {
+     "width": 1024,
+     "height": 640
+    },
+    "1x1": {
+     "width": 3334,
+     "height": 3334
+    },
+    "4x3": {
+     "width": 4445,
+     "height": 3334
+    },
+    "16x9": {
+     "width": 5334,
+     "height": 3000
     }
+   }
   }
  },
  "Leil Selichot": {
@@ -265,7 +265,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Selichot#Selichot_of_the_High_Holidays",
-   "text": "Selichot or slichot (Hebrew: סליחות) are Jewish penitential poems and prayers, especially those said in the period leading up to the High Holidays, and on Fast Days. In the Ashkenazic tradition, it begins on the Saturday night before Rosh Hashanah. If, however, the first day of Rosh Hashanah falls on Monday or Tuesday, Selichot are said beginning the Saturday night prior to ensure that Selichot are recited at least four times."
+   "text": "Selichot or slichot (Hebrew: סליחות) are Jewish penitential poems and prayers, especially those said in the period leading up to the High Holidays and on fast days. In Sephardic communities, recitation begins at the start of the Hebrew month of Elul. In the Ashkenazic tradition, Selichot begin on the Saturday night before Rosh Hashanah — or, if the first day of Rosh Hashanah falls on Monday or Tuesday, on the Saturday night of the preceding week — to ensure that Selichot are recited at least four times before the holiday."
   }
  },
  "Pesach": {
@@ -274,41 +274,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Passover",
-   "text": "Passover (Hebrew: פֶּסַח Pesach) commemorates the story of the Exodus, in which the ancient Israelites were freed from slavery in Egypt. Passover begins on the 15th day of the month of Nisan in the Jewish calendar, which is in spring in the Northern Hemisphere, and is celebrated for seven or eight days. It is one of the most widely observed Jewish holidays."
+   "text": "Passover (Hebrew: פֶּסַח Pesach) commemorates the Exodus of the Israelites from slavery in Egypt. According to the Book of Exodus, G‑d commanded the Israelites to mark their doorframes with lamb’s blood so that G‑d would “pass over” their homes during the tenth plague, which struck the firstborn of Egypt. Passover begins on the 15th day of the month of Nisan in the Jewish calendar and is celebrated for seven or eight days. The story of the Exodus is retold during the Passover Seder, a ceremonial meal in which families read from the Haggadah. A central observance is abstaining from leavened foods (chametz) and eating matzah (unleavened bread) throughout the holiday."
   },
   "photo": {
-    "fn": "112151899.webp",
-    "caption": "Traditional symbols on a seder plate for the Jewish festival of Passover",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 268
-      },
-      "640": {
-       "width": 640,
-       "height": 428
-      },
-      "800": {
-       "width": 800,
-       "height": 536
-      },
-      "1024": {
-       "width": 1024,
-       "height": 685
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "112151899.webp",
+   "caption": "Traditional symbols on a seder plate for the Jewish festival of Passover",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 268
+    },
+    "640": {
+     "width": 640,
+     "height": 428
+    },
+    "800": {
+     "width": 800,
+     "height": 536
+    },
+    "1024": {
+     "width": 1024,
+     "height": 685
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -361,45 +361,45 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Purim",
-   "text": "Purim (Hebrew: פּוּרִים, Pûrîm “lots”, from the word פור pur, also called the Festival of Lots) is a Jewish holiday which commemorates the saving of the Jewish people from Haman in the ancient Persian Empire, a story recorded in the Biblical Book of Esther (Megillat Esther)."
+   "text": "Purim (Hebrew: פּוּרִים, Pûrîm, “lots,” from the word פור pur) is a Jewish holiday commemorating the deliverance of the Jewish people from the plot of Haman, an official of the Achaemenid Persian Empire, as recounted in the Book of Esther. Haman served as royal vizier to King Ahasuerus and sought to destroy the Jewish people; his plans were thwarted by Mordecai of the tribe of Benjamin and his adopted daughter, Queen Esther. The holiday is celebrated with public readings of the Book of Esther (Megillat Esther), exchanging gifts of food (mishloach manot), giving charity to the poor (matanot l’evyonim), and festive meals."
   },
   "items": [
-    "Erev Purim",
-    "Purim"
+   "Erev Purim",
+   "Purim"
   ],
   "photo": {
-    "fn": "177122920.webp",
-    "caption": "Traditional hamantaschen cookies for the Jewish festival of Purim",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 268
-      },
-      "640": {
-       "width": 640,
-       "height": 428
-      },
-      "800": {
-       "width": 800,
-       "height": 536
-      },
-      "1024": {
-       "width": 1024,
-       "height": 685
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "177122920.webp",
+   "caption": "Traditional hamantaschen cookies for the Jewish festival of Purim",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 268
+    },
+    "640": {
+     "width": 640,
+     "height": 428
+    },
+    "800": {
+     "width": 800,
+     "height": 536
+    },
+    "1024": {
+     "width": 1024,
+     "height": 685
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -437,183 +437,222 @@
    "Rosh Chodesh Adar",
    "Rosh Chodesh Adar I"
   ],
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Adar I": {
   "about": {
    "href": "https://www.ou.org/holidays/month-adar/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Adar II": {
   "about": {
    "href": "https://www.ou.org/holidays/month-adar/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Av": {
   "about": {
    "href": "https://www.ou.org/holidays/the_month_of_av/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Cheshvan": {
   "about": {
    "href": "https://www.ou.org/holidays/cheshvan/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Elul": {
   "about": {
    "href": "https://www.ou.org/holidays/rosh_chodesh_elul1/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Iyyar": {
   "about": {
    "href": "https://www.ou.org/holidays/rosh_chodesh_iyar/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Kislev": {
   "about": {
    "href": "https://www.ou.org/holidays/the_month_of_kislev/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Nisan": {
   "about": {
    "href": "https://www.ou.org/holidays/rosh_chodesh_nisan/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Sh'vat": {
   "about": {
    "href": "https://www.ou.org/holidays/month-shevat/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Sivan": {
   "about": {
    "href": "https://www.ou.org/holidays/rosh_chodesh_sivan/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Tamuz": {
   "about": {
    "href": "https://www.ou.org/holidays/the_month_of_tammuz/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Chodesh Tevet": {
   "about": {
    "href": "https://www.ou.org/holidays/rosh_chodesh_tevet/"
   },
-  "books": [{
+  "books": [
+   {
     "ASIN": "1683365852",
     "author": "Leora Tanenbaum et al",
     "text": "Moonbeams: A Hadassah Rosh Hodesh Guide"
-   },{
+   },
+   {
     "ASIN": "1533040605",
     "author": "Rabbi Yaakov Goldstein",
     "text": "The Laws & Customs of Rosh Chodesh"
-   }]
+   }
+  ]
  },
  "Rosh Hashana": {
   "about": {
@@ -621,41 +660,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Rosh_Hashanah",
-   "text": "Rosh Hashanah (Hebrew: ראש השנה), (literally “head of the year”), is the Jewish New Year. It is the first of the High Holidays or Yamim Noraim (“Days of Awe”), celebrated ten days before Yom Kippur. Rosh Hashanah is observed on the first two days of Tishrei, the seventh month of the Hebrew calendar. It is described in the Torah as יום תרועה (Yom Teruah, a day of sounding [the Shofar])."
+   "text": "Rosh Hashanah (Hebrew: ראש השנה), literally “head of the year,” is the Jewish New Year. According to Jewish tradition, the holiday commemorates the creation of humanity and serves as a day of divine judgment. It is the first of the High Holy Days and begins the Ten Days of Repentance, culminating in Yom Kippur. Rosh Hashanah is observed on the first two days of Tishrei, the seventh month of the Hebrew calendar. The central ritual is the sounding of the shofar (a ram’s horn), and festive meals feature symbolic foods representing hopes for a sweet new year."
   },
   "photo": {
-    "fn": "625144562.webp",
-    "caption": "Honey, apple and pomegranate",
-    "dimensions": {
-      "400": {
-        "width": 400,
-        "height": 267
-       },
-       "640": {
-        "width": 640,
-        "height": 427
-       },
-       "800": {
-        "width": 800,
-        "height": 533
-       },
-       "1024": {
-        "width": 1024,
-        "height": 683
-       },
-       "1x1": {
-        "width": 2160,
-        "height": 2160
-       },
-       "4x3": {
-        "width": 2880,
-        "height": 2160
-       },
-       "16x9": {
-        "width": 3840,
-        "height": 2160
-       }
+   "fn": "625144562.webp",
+   "caption": "Honey, apple and pomegranate",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 267
+    },
+    "640": {
+     "width": 640,
+     "height": 427
+    },
+    "800": {
+     "width": 800,
+     "height": 533
+    },
+    "1024": {
+     "width": 1024,
+     "height": 683
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -687,7 +726,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Rosh_Hashanah_LaBehema",
-   "text": "Rosh Hashanah L’Ma’sar Behemah (Hebrew: ראש השנה למעשר בהמה‎ “New Year for Tithing Animals”) or Rosh Hashanah LaBehemot (Hebrew: ראש השנה לבהמות‎ “New Year for (Domesticated) Animals”) is one of the four New Year’s day festivals (Rosh Hashanot) in the Jewish calendar as indicated in the Mishnah. During the time of the Temple, this was a day on which shepherds determined which of their mature animals were to be tithed. The day coincides with Rosh Chodesh Elul, the New Moon for the month of Elul, exactly one month before Rosh Hashanah"
+   "text": "Rosh Hashanah L’Ma’sar Behemah (Hebrew: ראש השנה למעשר בהמה, “New Year for Tithing Animals”) or Rosh Hashanah LaBehemot (Hebrew: ראש השנה לבהמות, “New Year for Domesticated Animals”) is one of the four New Year’s day festivals (Rosh Hashanot) in the Jewish calendar, as indicated in the Mishnah. During the time of the Temple, this was a day on which shepherds determined which of their mature animals were to be tithed. Talmudic tradition records a dispute about the date: one view places it on Rosh Chodesh Elul, one month before Rosh Hashanah, while another view (Rabbi Elazar and Rabbi Shimon) places it on Rosh Hashanah itself."
   }
  },
  "Shabbat Chazon": {
@@ -718,7 +757,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_HaGadol",
-   "text": "Shabbat HaGadol (“Great Shabbat” שבת הגדול) is the Shabbat immediately before Passover. There is a special Haftarah reading on this Shabbat of the book of Malachi. Traditionally a lengthy and expansive sermon is given to the general community in the afternoon."
+   "text": "Shabbat HaGadol (“Great Shabbat” שבת הגדול) is the Shabbat immediately before Passover. According to tradition, the name recalls the first such Shabbat in Egypt, when the Israelites received the commandment to set aside a lamb for the Passover sacrifice. There is a special Haftarah reading on this Shabbat from the book of Malachi. Traditionally, a lengthy sermon is given to the community in the afternoon."
   }
  },
  "Shabbat Machar Chodesh": {
@@ -727,38 +766,77 @@
   }
  },
  "Shabbat Mevarchim Chodesh Cheshvan": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Kislev": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Tevet": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Sh'vat": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Adar": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Adar I": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Adar II": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Nisan": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Iyyar": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Sivan": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Tamuz": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Av": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Mevarchim Chodesh Elul": {
-  "about":{"href":"https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"}},
+  "about": {
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Mevarchim"
+  }
+ },
  "Shabbat Nachamu": {
   "about": {
    "href": "https://www.jewfaq.org/special.htm#Nachamu"
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Nachamu",
-   "text": "Shabbat Nachamu (“Sabbath of comfort/ing) takes its name from the haftarah from Isaiah in the Book of Isaiah 40:1-26 that speaks of “comforting” the Jewish people for their suffering. It the first of seven haftarahs of consolation leading up to the holiday of Rosh Hashanah, the Jewish New Year."
+   "text": "Shabbat Nachamu (“Sabbath of comfort” שבת נחמו) takes its name from the haftarah from the Book of Isaiah 40:1-26 that speaks of comforting the Jewish people for their suffering. It is the first of seven haftarahs of consolation read over the seven weeks leading up to Rosh Hashanah, the Jewish New Year. Shabbat Nachamu falls immediately after Tisha B’Av, and communities traditionally celebrate with singing, dancing, and festive meals."
   }
  },
  "Shabbat Parah": {
@@ -790,12 +868,12 @@
  },
  "Shabbat Shirah": {
   "about": {
-    "href": "https://www.ou.org/holidays/shabbat-shirah-sabbath-song/"
+   "href": "https://www.ou.org/holidays/shabbat-shirah-sabbath-song/"
   },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shirah_–_Song",
-    "text": "Shabbat Shirah (“Sabbath [of] song” שבת שירה) is the name given to the Shabbat that includes Parsha Beshalach. The Torah reading of the week contains the Song of the sea (Exodus 15:1–18). This was the song by the Children of Israel after the Passage of the Red Sea."
-   }
+   "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shirah_–_Song",
+   "text": "Shabbat Shirah (“Sabbath [of] song” שבת שירה) is the name given to the Shabbat that includes Parsha Beshalach. The Torah reading contains the Song of the Sea (Exodus 15:1–18), the song sung by the Israelites after crossing the Red Sea, and the haftarah includes the Song of Deborah. An Ashkenazic custom is to place bird feeders outdoors before Shabbat in memory of birds’ assistance to Moses in the wilderness."
+  }
  },
  "Shabbat Shuva": {
   "about": {
@@ -803,7 +881,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Special_Shabbat#Shabbat_Shuvah_–_Return",
-   "text": "Shabbat Shuvah (“Sabbath [of] Return” שבת שובה) refers to the Shabbat that occurs during the Ten Days of Repentance between Rosh Hashanah and Yom Kippur. Only one Shabbat can occur between these dates. This Shabbat is named after the first word of the Haftarah (Hosea 14:2-10) and literally means “Return!” It is perhaps a play on, but not to be confused with, the word Teshuvah (the word for repentance)."
+   "text": "Shabbat Shuvah (“Sabbath [of] Return” שבת שובה) refers to the Shabbat that occurs during the Ten Days of Repentance between Rosh Hashanah and Yom Kippur. This Shabbat is named after the first word of the Haftarah (Hosea 14:2–10) and literally means “Return!” — a play on, but not to be confused with, the word Teshuvah (repentance). Some communities also read additional passages from Joel and Micah. A lengthy rabbinical sermon is traditionally given to the congregation in the afternoon."
   }
  },
  "Shabbat Zachor": {
@@ -821,41 +899,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Shavuot",
-   "text": "The festival of Shavuot (or Shavuos, in Ashkenazi usage; Shabhuʿoth in Classical and Mizrahi Hebrew Hebrew: שבועות, lit. “Weeks”) is a Jewish holiday that occurs on the sixth day of the Hebrew month of Sivan (late May or early June). Shavuot commemorates the anniversary of the day G-d gave the Torah to the entire Israelite nation assembled at Mount Sinai, although the association between the giving of the Torah (Matan Torah) and Shavuot is not explicit in the Biblical text. The holiday is one of the Shalosh Regalim, the three Biblical pilgrimage festivals. It marks the conclusion of the Counting of the Omer."
+   "text": "The festival of Shavuot (or Shavuos, in Ashkenazi usage; Hebrew: שבועות, lit. “Weeks”) is a Jewish holiday occurring on the sixth day of the Hebrew month of Sivan (late May or early June). The holiday marks two dimensions: an ancient agricultural festival celebrating the wheat harvest in the Land of Israel, and, according to rabbinic tradition, the anniversary of G‑d giving the Torah to the entire Israelite nation assembled at Mount Sinai. It is one of the Shalosh Regalim, the three Biblical pilgrimage festivals, and marks the conclusion of the Counting of the Omer."
   },
   "photo": {
-    "fn": "1139660958.webp",
-    "caption": "Milk, bread, fruits and dairy products on wooden table",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 267
-      },
-      "640": {
-       "width": 640,
-       "height": 427
-      },
-      "800": {
-       "width": 800,
-       "height": 533
-      },
-      "1024": {
-       "width": 1024,
-       "height": 683
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
-     }
+   "fn": "1139660958.webp",
+   "caption": "Milk, bread, fruits and dairy products on wooden table",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 267
+    },
+    "640": {
+     "width": 640,
+     "height": 427
+    },
+    "800": {
+     "width": 800,
+     "height": 533
+    },
+    "1024": {
+     "width": 1024,
+     "height": 683
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
+    }
+   }
   },
   "books": [
    {
@@ -887,7 +965,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Shemini_Atzeret",
-   "text": "Shemini Atzeret (שמיני עצרת - “the Eighth [day] of Assembly”) is a Jewish holiday. It is celebrated on the 22nd day of the Hebrew month of Tishrei (first month of calendar). In the Diaspora, an additional day is celebrated, the second day being separately referred to as Simchat Torah. In Israel and Reform Judaism, the holidays of Shemini Atzeret and Simchat Torah are combined into a single day and the names are used interchangeably."
+   "text": "Shemini Atzeret (שמיני עצרת, “the Eighth [day] of Assembly”) is a Jewish holiday celebrated on the 22nd day of the Hebrew month of Tishrei, directly following Sukkot. It is considered a holiday in its own right rather than a continuation of Sukkot; unlike Sukkot, it has no mandated ritual objects such as the sukkah or the Four Species. In the Diaspora, an additional day is celebrated, the second day being separately referred to as Simchat Torah. In Israel and Reform Judaism, the holidays of Shemini Atzeret and Simchat Torah are combined into a single day."
   },
   "items": [
    "Shmini Atzeret",
@@ -899,8 +977,8 @@
    "href": "https://reformjudaism.org/what-shushan-purim"
   },
   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Purim#Shushan_Purim",
-    "text": "Shushan Purim falls on Adar 15 and is the day on which Jews in Jerusalem celebrate Purim."
+   "href": "https://en.wikipedia.org/wiki/Purim#Shushan_Purim",
+   "text": "Shushan Purim falls on Adar 15 and is the day on which Jews in walled cities celebrate Purim. The observance recalls that fighting in the walled city of Shushan continued through the 14th of Adar, so its residents rested and celebrated on the 15th. By rabbinic decree, cities surrounded by walls at the time of Joshua’s conquest observe Purim on Adar 15, while unwalled communities observe it on Adar 14. Jerusalem is the primary city observing Purim on the 15th; communities in Hebron, Safed, Tiberias, and some diaspora cities observe Purim on both the 14th and 15th."
   }
  },
  "Sigd": {
@@ -909,7 +987,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Sigd",
-   "text": "Sigd is an Amharic word meaning “prostration” or “worship” and is the commonly used name for a holiday celebrated by the Ethiopian Jewish community on the 29th of the Hebrew month of Cheshvan. This date is exactly 50 days after Yom Kippur, usually falling out in late October or November, and according to Ethiopian Jewish tradition is also the date that G-d first revealed himself to Moses."
+   "text": "Sigd is a word derived from Ge’ez meaning “prostration” or “worship,” and is the commonly used name for a holiday celebrated by the Beta Israel (Ethiopian Jewish) community on the 29th of the Hebrew month of Cheshvan. This date is exactly 50 days after Yom Kippur, usually falling in late October or November. According to Ethiopian Jewish tradition, this is also the date that G‑d first revealed Himself to Moses. Since 2008, Sigd has been an official Israeli state holiday."
   }
  },
  "Simchat Torah": {
@@ -918,41 +996,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Simchat_Torah",
-   "text": "Simchat Torah or Simḥath Torah (also Simkhes Toreh, Hebrew: שִׂמְחַת תורָה, lit., “Rejoicing with/of the Torah,”) is a celebration marking the conclusion of the annual cycle of public Torah readings, and the beginning of a new cycle. Simchat Torah is a component of the Biblical Jewish holiday of Shemini Atzeret (“Eighth Day of Assembly”), which follows immediately after the festival of Sukkot in the month of Tishrei (mid-September to early October on the Gregorian calendar)."
+   "text": "Simchat Torah (Hebrew: שִׂמְחַת תורָה, lit. “Rejoicing with/of the Torah”) is a celebration marking the conclusion of the annual cycle of public Torah readings and the beginning of a new cycle. It is a component of the Biblical holiday of Shemini Atzeret, which follows immediately after Sukkot. The central celebration takes place during evening services — one of the rare occasions when Torah scrolls are taken from the ark at night. In the morning, the last parashah of Deuteronomy and the first of Genesis are read consecutively, and the congregation dances and sings joyfully with the Torah scrolls."
   },
   "photo": {
-    "fn": "1303904366.webp",
-    "caption": "Prayer shawl (tallit) with Torah scroll in a synagogue",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 267
-      },
-      "640": {
-       "width": 640,
-       "height": 427
-      },
-      "800": {
-       "width": 800,
-       "height": 534
-      },
-      "1024": {
-       "width": 1024,
-       "height": 683
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
-     }
+   "fn": "1303904366.webp",
+   "caption": "Prayer shawl (tallit) with Torah scroll in a synagogue",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 267
+    },
+    "640": {
+     "width": 640,
+     "height": 427
+    },
+    "800": {
+     "width": 800,
+     "height": 534
+    },
+    "1024": {
+     "width": 1024,
+     "height": 683
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
+    }
+   }
   },
   "items": [
    "Erev Simchat Torah",
@@ -965,41 +1043,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Sukkot",
-   "text": "Sukkot (Hebrew: סוכות or סֻכּוֹת, sukkōt, or sukkos, Feast of Booths, Feast of Tabernacles) is a Biblical holiday celebrated on the 15th day of the month of Tishrei (late September to late October). It is one of the three biblically mandated festivals Shalosh regalim on which Jews were commanded to make a pilgrimage to the Temple in Jerusalem."
+   "text": "Sukkot (Hebrew: סוכות, sukkot, also called the Feast of Tabernacles or Feast of Booths) is a Biblical holiday beginning on the 15th day of the Hebrew month of Tishrei (late September to late October). It is one of the three Pilgrimage Festivals (Shalosh Regalim) on which Jews were commanded to make a pilgrimage to the Temple in Jerusalem. The holiday commemorates both the autumn harvest season and the Israelites’ forty-year journey through the desert after the Exodus from Egypt. Modern observances include festive meals in a sukkah (a temporary booth) and rituals with the four species: palm, myrtle, willow, and etrog."
   },
   "photo": {
-    "fn": "121697710.webp",
-    "caption": "Lulav (date palm frond), hadass (myrtle), aravah (willow), and etrog (citron) on a red tablecloth",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 266
-      },
-      "640": {
-       "width": 640,
-       "height": 426
-      },
-      "800": {
-       "width": 800,
-       "height": 532
-      },
-      "1024": {
-       "width": 1024,
-       "height": 681
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "121697710.webp",
+   "caption": "Lulav (date palm frond), hadass (myrtle), aravah (willow), and etrog (citron) on a red tablecloth",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 266
+    },
+    "640": {
+     "width": 640,
+     "height": 426
+    },
+    "800": {
+     "width": 800,
+     "height": 532
+    },
+    "1024": {
+     "width": 1024,
+     "height": 681
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -1032,12 +1110,12 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_the_Firstborn",
-   "text": "Fast of the Firstborn (Hebrew: תענית בכורות, Ta’anit B’khorot or תענית בכורים, Ta’anit B’khorim); is a unique fast day in Judaism which usually falls on the day before Passover. Usually, the fast is broken at a siyum celebration (typically made at the conclusion of the morning services), which, according to prevailing custom, creates an atmosphere of rejoicing that overrides the requirement to continue the fast. Unlike most Jewish fast days, only firstborns are required to fast on the Fast of the Firstborn."
+   "text": "Fast of the Firstborn (Hebrew: תענית בכורות, Ta’anit B’khorot) is a unique fast day in Judaism observed on the 14th of Nisan, the day before Passover, by firstborn individuals. The fast commemorates the salvation of Israelite firstborns during the Plague of the Firstborn — the tenth plague in Egypt — contrasting their deliverance with the fate of Egyptian firstborns. In contemporary practice, the fast is typically broken at a siyum (a celebration marking the completion of a Talmudic tractate), which, according to prevailing custom, overrides the requirement to continue fasting."
   },
   "items": [
-    "Ta'anit Bechorot",
-    "Ta'anit Bechorot (Mincha)"
-   ]
+   "Ta'anit Bechorot",
+   "Ta'anit Bechorot (Mincha)"
+  ]
  },
  "Ta'anit Esther": {
   "about": {
@@ -1045,12 +1123,12 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_Esther",
-   "text": "The Fast of Esther (Ta’anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish fast from dawn until dusk on Purim eve, commemorating the three-day fast observed by the Jewish people in the story of Purim. If the date of the Fast of Esther falls on Shabbat (Saturday), the fast is instead observed on the preceding Thursday. Like other minor fasts, Ta’anit Esther begins at dawn (first light) and ends at nightfall (full dark)."
+   "text": "The Fast of Esther (Ta’anit Ester, Hebrew: תַּעֲנִית אֶסְתֵּר) is a Jewish fast observed from dawn until dusk on the 13th of Adar, the eve of Purim. The fast is traditionally linked to the three-day fast that Queen Esther asked the Jewish people to undertake before she approached King Ahasuerus. Unlike major fast days, the Fast of Esther is considered a custom rather than a biblically ordained observance. If the date falls on Shabbat, the fast is observed on the preceding Thursday."
   },
   "items": [
-    "Ta'anit Esther",
-    "Ta'anit Esther (Mincha)"
-   ]
+   "Ta'anit Esther",
+   "Ta'anit Esther (Mincha)"
+  ]
  },
  "Tish'a B'Av": {
   "about": {
@@ -1058,7 +1136,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tish%27a_B%27Av",
-   "text": "Tisha B’Av (Hebrew: תשעה באב or ט׳ באב, “the Ninth of Av,”) is an annual fast day in Judaism, named for the ninth day (Tisha) of the month of Av in the Hebrew calendar. The fast commemorates the destruction of both the First Temple and Second Temple in Jerusalem, which occurred about 655 years apart, but on the same Hebrew calendar date. Tisha B’Av is never observed on Shabbat. If the 9th of Av falls on a Saturday, the fast is postponed until the 10th of Av."
+   "text": "Tisha B’Av (Hebrew: תשעה באב, “the Ninth of Av”) is an annual fast day in Judaism, named for the ninth day of the month of Av in the Hebrew calendar. The fast commemorates the destruction of both the First Temple and the Second Temple in Jerusalem, which occurred about 655 years apart on the same Hebrew calendar date. Regarded as the saddest day in the Jewish calendar, the 25-hour observance includes five prohibitions: eating and drinking, washing the body, wearing leather shoes, applying lotions or creams, and marital relations. Over the centuries, the observance has expanded to encompass other major tragedies in Jewish history. Tisha B’Av is never observed on Shabbat; if the 9th of Av falls on Saturday, the fast is postponed until the 10th of Av."
   },
   "books": [
    {
@@ -1078,10 +1156,10 @@
    }
   ],
   "items": [
-    "Erev Tish'a B'Av",
-    "Tish'a B'Av",
-    "Tish'a B'Av (Mincha)"
-   ]
+   "Erev Tish'a B'Av",
+   "Tish'a B'Av",
+   "Tish'a B'Av (Mincha)"
+  ]
  },
  "Tu B'Av": {
   "about": {
@@ -1089,7 +1167,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tu_B%27Av",
-   "text": "Tu B’Av (Hebrew: ט״ו באב, the fifteenth of the month Av) is a minor Jewish holiday. In modern-day Israel, it is celebrated as a holiday of love (חג האהבה Ḥag HaAhava). It has been said to be an auspicious day for weddings"
+   "text": "Tu B’Av (Hebrew: ט״ו באב, the fifteenth of the month of Av) is a minor Jewish holiday. In modern Israel, it is celebrated as a holiday of love (חג האהבה, Ḥag HaAhava), with couples exchanging romantic gestures and a popular occasion for weddings. Historically, during the Temple period, Tu B’Av marked the beginning of the grape harvest season, when unmarried women would dress in white garments and dance in vineyards — making it one of the most festive occasions in the ancient Jewish calendar."
   }
  },
  "Tu BiShvat": {
@@ -1098,41 +1176,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Tu_BiShvat",
-   "text": "Tu BiShvat or Tu B’Shevat or Tu B’Shvat (Hebrew: ט״ו בשבט‎) is a minor Jewish holiday, occurring on the 15th day of the Hebrew month of Shevat. It is also called “The New Year of the Trees” or (Hebrew: ראש השנה לאילנות, Rosh HaShanah La’Ilanot‎). Tu BiShvat is one of four “New Years” mentioned in the Mishnah."
+   "text": "Tu BiShvat (Hebrew: ט״ו בשבט‎) is a minor Jewish holiday occurring on the 15th day of the Hebrew month of Shevat, also called “The New Year of the Trees” (Hebrew: ראש השנה לאילנות, Rosh HaShanah La’Ilanot). It is one of four “New Years” mentioned in the Mishnah. Historically, the date served as a halakhic boundary marker to distinguish one year’s fruit from another for the purpose of calculating tithes and other agricultural commandments. In modern Israel, the holiday is also celebrated with tree-planting and environmental awareness initiatives."
   },
   "photo": {
-    "fn": "1168843512.webp",
-    "caption": "Tree planting growing on soil in child’s hand",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 320
-      },
-      "640": {
-       "width": 640,
-       "height": 512
-      },
-      "800": {
-       "width": 800,
-       "height": 640
-      },
-      "1024": {
-       "width": 1024,
-       "height": 819
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "1168843512.webp",
+   "caption": "Tree planting growing on soil in child’s hand",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 320
+    },
+    "640": {
+     "width": 640,
+     "height": 512
+    },
+    "800": {
+     "width": 800,
+     "height": 640
+    },
+    "1024": {
+     "width": 1024,
+     "height": 819
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -1163,12 +1241,12 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Fast_of_Gedalia",
-   "text": "The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a Jewish fast day from dawn until dusk to lament the assassination of the righteous governor of Judah of that name, which ended Jewish rule following the destruction of the First Temple. Like other minor fasts, Tzom Gedaliah begins at dawn (first light) and ends at nightfall (full dark)."
+   "text": "The Fast of Gedalia (Hebrew: צוֹם גְּדַלְיָּה), also spelled Gedaliah, is a minor Jewish fast day from dawn until dusk to lament the assassination of Gedaliah, the Jewish governor appointed by Nebuchadnezzar II to oversee the remaining Jewish population in the land of Israel following the destruction of the First Temple. His murder by Yishmael ben Netaniah, reportedly at the instigation of the King of Ammon, ended the last vestige of Jewish autonomy in the land and prompted the surviving community to flee to Egypt. Like other minor fasts, Tzom Gedaliah begins at dawn and ends at nightfall."
   },
   "items": [
-    "Tzom Gedaliah",
-    "Tzom Gedaliah (Mincha)"
-   ]
+   "Tzom Gedaliah",
+   "Tzom Gedaliah (Mincha)"
+  ]
  },
  "Tzom Tammuz": {
   "about": {
@@ -1176,12 +1254,12 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Seventeenth_of_Tammuz",
-   "text": "The Seventeenth of Tammuz (Hebrew: שבעה עשר בתמוז‎, Shiv’ah Asar b’Tammuz) is a Jewish fast day commemorating the breach of the walls of Jerusalem before the destruction of the Second Temple. It falls on the 17th day of the Hebrew month of Tammuz and marks the beginning of the three-week mourning period leading up to Tisha B’Av. Like other minor fasts, Tzom Tammuz begins at dawn (first light) and ends at nightfall (full dark). If the 17th of Tammuz falls on a Shabbat, the fast is instead observed the next day, the 18th of Tammuz (on Sunday)."
+   "text": "The Seventeenth of Tammuz (Hebrew: שבעה עשר בתמוז‎, Shiv’ah Asar b’Tammuz) is a Jewish fast day commemorating the breach of the walls of Jerusalem before the destruction of the Second Temple. It falls on the 17th day of the Hebrew month of Tammuz and marks the beginning of the Three Weeks, a period of mourning leading up to Tisha B’Av. Traditional sources also associate this day with Moses shattering the tablets of the Ten Commandments upon witnessing the Israelites worshiping the Golden Calf. Like other minor fasts, Tzom Tammuz begins at dawn and ends at nightfall. If the 17th of Tammuz falls on Shabbat, the fast is instead observed the following day."
   },
   "items": [
-    "Tzom Tammuz",
-    "Tzom Tammuz (Mincha)"
-   ]
+   "Tzom Tammuz",
+   "Tzom Tammuz (Mincha)"
+  ]
  },
  "Yom HaAliyah": {
   "about": {
@@ -1189,7 +1267,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_HaAliyah",
-   "text": "Yom HaAliyah (Aliyah Day) (Hebrew: יום העליה) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Nisan to commemorate the Jewish people entering the Land of Israel as written in the Hebrew Bible. The holiday was established to acknowledge Aliyah, immigration to the Jewish state, as a core value of the State of Israel, and honor the ongoing contributions of Olim to Israeli society."
+   "text": "Yom HaAliyah (Aliyah Day, Hebrew: יום העליה) is an Israeli national holiday celebrated annually on the tenth of the Hebrew month of Nisan to commemorate the Jewish people entering the Land of Israel as written in the Hebrew Bible. The holiday acknowledges aliyah — Jewish immigration to Israel — as a core value of the State of Israel and honors the ongoing contributions of olim to Israeli society. An additional observance is held in Israeli schools on the seventh of the Hebrew month of Cheshvan."
   }
  },
  "Yom HaAliyah School Observance": {
@@ -1225,7 +1303,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_HaShoah",
-   "text": "Yom HaZikaron laShoah ve-laG'vurah (Hebrew: יום הזיכרון לשואה ולגבורה, lit. 'Holocaust and Heroism Remembrance Day'), known colloquially in Israel and abroad as Yom HaShoah (Hebrew: יום השואה, Yiddish: יום השואה) and in English as Holocaust Remembrance Day, or Holocaust Day, is Israel's day of commemoration for the approximately six million Jews murdered in the Holocaust by Nazi Germany and its allies, and for the Jewish resistance in that period. In Israel, it is a national Memorial day, but several Jewish communities around the world observe the day as well. The first official commemorations took place in 1951, and the observance of the day was anchored in a law passed by the Knesset in 1959. It is held on the 27th of Nisan (which falls in April or May), unless the 27th would be adjacent to the Jewish Sabbath, in which case the date is shifted by a day."
+   "text": "Yom HaZikaron laShoah ve-laG’vurah (Hebrew: יום הזיכרון לשואה ולגבורה, lit. ‘Holocaust and Heroism Remembrance Day’), known colloquially as Yom HaShoah (יום השואה) and in English as Holocaust Remembrance Day, is Israel’s day of commemoration for the approximately six million Jews murdered in the Holocaust by Nazi Germany and its allies, and for the Jewish resistance in that period. The first official commemorations took place in 1951, and the observance was established by law in 1959. It is held on the 27th of Nisan, unless that date would be adjacent to the Sabbath, in which case it is shifted by a day. In Israel, the day is marked by a two-minute silence at 10:00 a.m. and the lowering of flags to half-mast throughout the country."
   },
   "books": [
    {
@@ -1246,41 +1324,41 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Yom_Kippur",
-   "text": "Yom Kippur (Hebrew: יוֹם כִּפּוּר or יום הכיפורים), Also known as Day of Atonement, is the holiest day of the year for the Jews. Its central themes are atonement and repentance. Jews traditionally observe this holy day with a 25-hour period of fasting and intensive prayer, often spending most of the day in synagogue services. Yom Kippur completes the annual period known in Judaism as the High Holy Days (or sometimes “the Days of Awe”)."
+   "text": "Yom Kippur (Hebrew: יוֹם כִּפּוּר or יום הכִפּוּרִים), also known as the Day of Atonement, is the holiest day of the year in Judaism. Its central themes are atonement and repentance, observed through a 25-hour fast and extended prayer services in synagogues. Alongside Rosh Hashanah, Yom Kippur is one of the two High Holy Days, representing the culmination of the Ten Days of Repentance. Jewish tradition teaches that during this period G‑d inscribes each person’s fate for the coming year, with the verdict sealed on Yom Kippur itself."
   },
   "photo": {
-    "fn": "1061644482.webp",
-    "caption": "Jewish person in a tallit prayer shawl against dramatic sky",
-    "dimensions": {
-      "400": {
-       "width": 400,
-       "height": 233
-      },
-      "640": {
-       "width": 640,
-       "height": 373
-      },
-      "800": {
-       "width": 800,
-       "height": 466
-      },
-      "1024": {
-       "width": 1024,
-       "height": 597
-      },
-      "1x1": {
-       "width": 2160,
-       "height": 2160
-      },
-      "4x3": {
-       "width": 2880,
-       "height": 2160
-      },
-      "16x9": {
-       "width": 3840,
-       "height": 2160
-      }
+   "fn": "1061644482.webp",
+   "caption": "Jewish person in a tallit prayer shawl against dramatic sky",
+   "dimensions": {
+    "400": {
+     "width": 400,
+     "height": 233
+    },
+    "640": {
+     "width": 640,
+     "height": 373
+    },
+    "800": {
+     "width": 800,
+     "height": 466
+    },
+    "1024": {
+     "width": 1024,
+     "height": 597
+    },
+    "1x1": {
+     "width": 2160,
+     "height": 2160
+    },
+    "4x3": {
+     "width": 2880,
+     "height": 2160
+    },
+    "16x9": {
+     "width": 3840,
+     "height": 2160
     }
+   }
   },
   "books": [
    {
@@ -1313,12 +1391,12 @@
  },
  "Yom Kippur Katan": {
   "about": {
-    "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan"
-   },
-   "wikipedia": {
-    "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan",
-    "text": "Yom Kippur Katan (Hebrew: יוֹם כִּפּוּר קָטָן) is a minor day of atonement occurring monthly on the day preceeding each Rosh Chodesh"
-   }
+   "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan"
+  },
+  "wikipedia": {
+   "href": "https://en.wikipedia.org/wiki/Yom_Kippur_Katan",
+   "text": "Yom Kippur Katan (Hebrew: יוֹם כִּפּוּר קָטָן, “Minor Day of Atonement”) is observed by some Jews on the day preceding each Rosh Chodesh. The day involves fasting and penitential prayers, though the observance is considerably less rigorous than Yom Kippur proper."
+  }
  },
  "Yom Yerushalayim": {
   "about": {
@@ -1326,7 +1404,7 @@
   },
   "wikipedia": {
    "href": "https://en.wikipedia.org/wiki/Jerusalem_Day",
-   "text": "Jerusalem Day (Hebrew: יום ירושלים, Yom Yerushalayim) is an Israeli national holiday commemorating the reunification of Jerusalem and the establishment of Israeli control over the Old City in June 1967. The Chief Rabbinate of Israel declared Jerusalem Day a minor religious holiday to thank G-d for victory in the Six-Day War and for answering the 2,000-year-old prayer of “Next Year in Jerusalem”."
+   "text": "Jerusalem Day (Hebrew: יום ירושלים, Yom Yerushalayim) is an Israeli national holiday commemorating the reunification of Jerusalem and the establishment of Israeli control over the Old City in June 1967. It is observed annually on the 28th of Iyar in the Hebrew calendar, with state ceremonies and the “Dance of Flags” parade in Jerusalem. The Chief Rabbinate of Israel declared Jerusalem Day a minor religious holiday to mark the restoration of Jewish access to the Western Wall and to give thanks for the events of the Six-Day War."
   }
  }
 }
