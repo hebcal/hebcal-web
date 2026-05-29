@@ -5,6 +5,7 @@ import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {
   httpRedirect,
   shortenUrl,
+  utmSourceFromRef,
 } from './common.js';
 import {getLocationFromGeoIp} from './location.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
@@ -61,13 +62,14 @@ export async function shabbatApp(ctx) {
       return;
     }
   }
-  makeItems(ctx, options, q);
+  const utmSource = utmSourceFromRef(ctx) || 'shabbat1c';
+  makeItems(ctx, options, q, utmSource);
   const location = options.location;
   const campaign = makeAnchor(location.getShortName());
   const selfUrl = `${BASE_URL}?${ctx.state.geoUrlArgs}`;
   ctx.state.q = q;
   ctx.state.poweredByUrl = appendIsraelAndTracking(selfUrl,
-      options.il, 'shabbat1c', 'js-' + q.cfg, 's1c-' + campaign);
+      options.il, utmSource, 'js-' + q.cfg, 's1c-' + campaign);
   if (q.cfg === 'i') {
     return ctx.render('shabbat-iframe', {Locale});
   } else if (q.cfg === 'i2') {
@@ -182,7 +184,7 @@ function compactLocationName(location) {
   return GeoDb.geonameCityDescr(city, null, country);
 }
 
-function makeItems(ctx, options, q) {
+function makeItems(ctx, options, q, utmSource) {
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     ctx.throw(400, 'Bad request: no events');
@@ -191,7 +193,7 @@ function makeItems(ctx, options, q) {
   const location = options.location;
   const locale = options.locale || 'en';
   const lang = localeMap[locale] || 'en';
-  const items = events.map((ev) => eventToItem(ev, options, lang, q.cfg));
+  const items = events.map((ev) => eventToItem(ev, options, lang, q.cfg, utmSource));
   const titlePrefix = Locale.gettext('Shabbat Times for', locale) + ' ' + compactLocationName(location);
   const title = titlePrefix + ' - Hebcal';
   const fridayDate = events[0].getDate();
@@ -399,9 +401,10 @@ function makeJsonLDevent(item, location, subj, url) {
  * @param {import('@hebcal/core').CalOptions} options
  * @param {string} lang
  * @param {string} cfg
+ * @param {string} utmSource
  * @return {Object}
  */
-function eventToItem(ev, options, lang, cfg) {
+function eventToItem(ev, options, lang, cfg, utmSource) {
   const desc = ev.getDesc();
   const hd = ev.getDate();
   const d = dayjs(hd.greg());
@@ -431,7 +434,7 @@ function eventToItem(ev, options, lang, cfg) {
     if (cfg === 'i' || cfg === 'j' || cfg === 'i2') {
       const location = options.location;
       const campaign = makeAnchor(location.getShortName());
-      obj.url = appendIsraelAndTracking(url, options.il, 'shabbat1c', 'js-' + cfg, 's1c-' + campaign);
+      obj.url = appendIsraelAndTracking(url, options.il, utmSource, 'js-' + cfg, 's1c-' + campaign);
     } else {
       let u = url;
       if (options.il && !url.includes('?')) {
