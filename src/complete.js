@@ -1,6 +1,6 @@
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {cacheControl} from './cacheControl.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {flag} from './emoji-flag.js';
 
 const NOTFOUND = {error: 'Not Found'};
@@ -14,10 +14,7 @@ export async function geoAutoComplete(ctx) {
     ctx.body = NOTFOUND;
     return;
   }
-  ctx.response.etag = makeETag(ctx, q, {geodbv: GeoDb.version()});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {geodbv: GeoDb.version()})) {
     ctx.body = {status: 'Not Modified'};
     return;
   }

@@ -1,5 +1,5 @@
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
@@ -468,15 +468,7 @@ function makePrevNextUrl(q, options, events, isNext) {
 }
 
 function isFresh(ctx) {
-  if (!ctx.response.etag) {
-    ctx.response.etag = makeETag(ctx, ctx.state.options, ctx.state.q);
-  }
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return true;
-  }
-  return false;
+  return checkFreshETag(ctx, ctx.state.options, ctx.state.q);
 }
 
 function renderFullCalendar(ctx) {

@@ -8,7 +8,7 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults} from './lang.js';
 import {queryDefaultCandleMins} from './urlArgs.js';
-import {makeETag} from './etag.js';
+import {makeETag, checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
 } from './cacheControl.js';
@@ -131,15 +131,7 @@ function addHref(r, countryCode) {
 }
 
 function isFresh(ctx) {
-  if (!ctx.response.etag) {
-    ctx.response.etag = makeETag(ctx, ctx.request.query, {});
-  }
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
-    return true;
-  }
-  return false;
+  return checkFreshETag(ctx, ctx.request.query, {});
 }
 
 export async function shabbatBrowse(ctx) {
