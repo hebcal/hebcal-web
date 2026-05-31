@@ -1,6 +1,6 @@
 import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {
   httpRedirect,
@@ -56,9 +56,7 @@ export async function shabbatApp(ctx) {
     } else {
       expiresSaturdayNight(ctx, new Date(), options.location.getTzid());
     }
-    ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, options, {outputType: q.cfg})) {
       return;
     }
   }

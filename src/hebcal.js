@@ -110,9 +110,7 @@ export async function hebcalApp(ctx) {
     error = {message: `Hebrew year cannot be greater than 13760: ${options.year}`};
   }
   if (ctx.status < 400 && q.v === '1') {
-    ctx.response.etag = makeETag(ctx, options, {outputType: q.cfg});
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, options, {outputType: q.cfg})) {
       return;
     }
   }
