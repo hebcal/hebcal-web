@@ -8,11 +8,11 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
 import {wwwRouter} from './router.js';
-import {stopIfTimedOut, DOCUMENT_ROOT} from './common.js';
+import {DOCUMENT_ROOT} from './common.js';
 import {pkg} from './pkg.js';
 import {empty} from './empty.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
-  useResponseLength, startServer} from './app-common.js';
+  useResponseLength, startServer, stopIfTimedOut} from './app-common.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);

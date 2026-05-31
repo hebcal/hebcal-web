@@ -140,3 +140,11 @@ export function startServer(app, logger, defaultPort) {
     console.log(msg);
   });
 }
+
+export function stopIfTimedOut() {
+  return async function stopIfTimedOut0(ctx, next) {
+    if (!ctx.state.timeout) {
+      await next();
+    }
+  };
+}

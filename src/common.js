@@ -61,14 +61,6 @@ export function wrapHebrewInSpans(str) {
   return str.replaceAll(hebrewRe, `<span lang="he" dir="rtl">$&</span>`);
 }
 
-export function stopIfTimedOut() {
-  return async function stopIfTimedOut0(ctx, next) {
-    if (!ctx.state.timeout) {
-      await next();
-    }
-  };
-}
-
 const hebcalPrefix = `https://${HEBCAL_HOSTNAME}/`;
 
 /**

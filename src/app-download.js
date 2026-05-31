@@ -2,7 +2,7 @@ import conditional from 'koa-conditional-get';
 import {send} from '@koa/send';
 import serve from 'koa-static';
 import {downloadHref2} from './makeDownloadProps.js';
-import {httpRedirect, stopIfTimedOut} from './common.js';
+import {httpRedirect} from './common.js';
 import {cacheControl,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
@@ -12,7 +12,7 @@ import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
-  useResponseLength, startServer} from './app-common.js';
+  useResponseLength, startServer, stopIfTimedOut} from './app-common.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
@@ -82,28 +82,32 @@ app.use(async function fixup1(ctx, next) {
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
     return;
-  } else if (rpath === '/robots.txt') {
+  }
+  if (rpath === '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
     return;
-  } else if (rpath === '/ical' || rpath === '/ical/') {
+  }
+  if (rpath === '/ical' || rpath === '/ical/') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     ctx.redirect('https://www.hebcal.com/ical/', 301);
     return;
-  } else if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
+  }
+  if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
     const path = rpath.substring(0, rpath.length - 1);
     httpRedirect(ctx, path, 301);
     return;
-  } else if (rpath.startsWith('/cal/')) {
+  }
+  if (rpath.startsWith('/cal/')) {
     const path = rpath.substring(5);
     httpRedirect(ctx, `/ical/${path}`, 301);
     return;
-  } else if (rpath.startsWith('/index.php/ical/')) {
+  }
+  if (rpath.startsWith('/index.php/ical/')) {
     const path = rpath.substring(16);
     httpRedirect(ctx, `/ical/${path}`, 301);
     return;
-  } else {
-    return next();
   }
+  return next();
 });
 
 app.use(stopIfTimedOut());
@@ -191,10 +195,12 @@ app.use(async function sendStatic(ctx, next) {
   if (rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
-  } else if (rpath === '/favicon.ico') {
+  }
+  if (rpath === '/favicon.ico') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
-  } else if (rpath === '/ping') {
+  }
+  if (rpath === '/ping') {
     ctx.type = 'text/plain';
     return send(ctx, rpath, {root: DOCUMENT_ROOT});
   }
