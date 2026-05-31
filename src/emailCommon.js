@@ -1,6 +1,10 @@
 import {getIpAddress} from './getIpAddress.js';
 import nodemailer from 'nodemailer';
 import {htmlToText} from 'nodemailer-html-to-text';
+import {xmlEsc} from './sanitize.js';
+
+/** Empty spacer line used between paragraphs in HTML email bodies. */
+export const BLANK = '<div>&nbsp;</div>';
 
 /**
  * @param {Object<string,any>} iniConfig
@@ -57,6 +61,68 @@ export async function mySendMail(ctx, message) {
   };
   ctx.logger.info(logInfo);
   return result;
+}
+
+/**
+ * Sends a transactional email fire-and-forget, logging any delivery error
+ * instead of propagating it (so the HTTP response succeeds regardless).
+ * @param {any} ctx
+ * @param {any} message
+ */
+export function sendMailLogErr(ctx, message) {
+  mySendMail(ctx, message).catch((err) => {
+    ctx.logger.error(err);
+  });
+}
+
+/**
+ * Builds an RFC 5322 Message-ID local part of the form `<id>.<timestamp>`.
+ * @param {string} id subscription identifier
+ * @return {string}
+ */
+export function makeMessageId(id) {
+  return `${id}.${Date.now()}`;
+}
+
+/**
+ * Builds the HTML body for a "please confirm your subscription" verification
+ * email. The Shabbat and Yahrzeit flows share an identical layout, footer and
+ * tracking pixel; only the descriptive sentences differ.
+ * @param {Object} opts
+ * @param {string} opts.intro sentence(s) after "Hello," describing the request
+ * @param {string} opts.confirmPrompt sentence prompting the user to click the link
+ * @param {string} opts.url confirmation link
+ * @param {string} opts.declineText sentence for users who did not make the request
+ * @param {string} opts.email recipient address (shown in the footer)
+ * @param {string} opts.ip originating IP address (shown in the footer)
+ * @param {string} opts.utmParam campaign UTM query string for the footer link
+ * @param {string} opts.imgOpen tracking pixel HTML
+ * @return {string}
+ */
+export function makeVerificationEmailHtml(opts) {
+  const {intro, confirmPrompt, url, declineText, email, ip, utmParam, imgOpen} = opts;
+  return `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Hello,</div>
+${BLANK}
+<div>${intro}</div>
+${BLANK}
+<div>${confirmPrompt}</div>
+${BLANK}
+<div><a href="${url}">${url}</a></div>
+${BLANK}
+<div>${declineText}</div>
+${BLANK}
+<div style="font-size:16px">Kol Tuv,
+<br>Hebcal.com</div>
+${BLANK}
+<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
+<div>This email was sent to ${xmlEsc(email)} by <a href="https://www.hebcal.com/?${utmParam}">Hebcal.com</a>.
+Hebcal is a free Jewish calendar and holiday web site.</div>
+${BLANK}
+<div>[${ip}]</div>
+</div>
+${imgOpen}</div>
+`;
 }
 
 /**

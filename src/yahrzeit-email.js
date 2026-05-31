@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import {empty} from './empty.js';
 import {getIpAddress} from './getIpAddress.js';
-import {validateEmail, mySendMail, getImgOpenHtml} from './emailCommon.js';
+import {validateEmail, getImgOpenHtml, sendMailLogErr, makeMessageId,
+  makeVerificationEmailHtml, BLANK} from './emailCommon.js';
 import {getMaxYahrzeitId, summarizeAnniversaryTypes,
   YAHRZEIT, ANNIVERSARY, OTHER,
   getYahrzeitIds,
@@ -14,7 +15,6 @@ import {matomoTrack} from './matomoTrack.js';
 import {makeLogInfo} from './logger.js';
 import {xmlEsc} from './sanitize.js';
 
-const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
 async function dbQuery(ctx, sql, params) {
@@ -187,9 +187,7 @@ ${BLANK}
     subject: `View your Yahrzeit + Anniversary Calendar subscriptions`,
     html: html,
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
   return ctx.render('yahrzeit-search-found', {q, count: seen.size});
 }
 
@@ -254,41 +252,27 @@ export async function yahrzeitEmailSub(ctx) {
   matomoTrack(ctx, 'Email', 'signup-backend', 'yahrzeit-reminder');
   const anniversaryType = q.type === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const url = `https://www.hebcal.com/yahrzeit/verify/${id}`;
-  const msgid = `${id}.${Date.now()}`;
+  const msgid = makeMessageId(id);
   const imgOpen = getImgOpenHtml(msgid, q.type, 'yahrzeit-verify');
   const message = {
     to: q.em,
     subject: `Activate your ${anniversaryType} reminders`,
     messageId: `<${msgid}@hebcal.com>`,
-    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
-<div>Hello,</div>
-${BLANK}
-<div>We have received your request to receive ${anniversaryType} reminders
-from Hebcal.com.</div>
-${BLANK}
-<div>Please confirm your request and activate your subscription
-by clicking on this link:</div>
-${BLANK}
-<div><a href="${url}">${url}</a></div>
-${BLANK}
-<div>If you did not request (or do not want) ${anniversaryType} reminders,
-please accept our apologies and ignore this message.</div>
-${BLANK}
-<div style="font-size:16px">Kol Tuv,
-<br>Hebcal.com</div>
-${BLANK}
-<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${xmlEsc(q.em)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
-Hebcal is a free Jewish calendar and holiday web site.</div>
-${BLANK}
-<div>[${ip}]</div>
-</div>
-${imgOpen}</div>
-`,
+    html: makeVerificationEmailHtml({
+      intro: `We have received your request to receive ${anniversaryType} reminders
+from Hebcal.com.`,
+      confirmPrompt: `Please confirm your request and activate your subscription
+by clicking on this link:`,
+      url,
+      declineText: `If you did not request (or do not want) ${anniversaryType} reminders,
+please accept our apologies and ignore this message.`,
+      email: q.em,
+      ip,
+      utmParam: UTM_PARAM,
+      imgOpen,
+    }),
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
   ctx.body = {ok: true, status: status};
 }
 
@@ -382,7 +366,7 @@ ${BLANK}
 async function sendConfirmEmail(ctx, contents, subscriptionId) {
   const anniversaryType = contents.anniversaryType === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const calendarId = contents.calendarId;
-  const msgid = `${subscriptionId}.${Date.now()}`;
+  const msgid = makeMessageId(subscriptionId);
   const imgOpen = getImgOpenHtml(msgid, anniversaryType, 'yahrzeit-complete');
   const urlBase = 'https://www.hebcal.com/yahrzeit';
   const editUrl = `${urlBase}/edit/${calendarId}`;
@@ -417,7 +401,5 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
 }
