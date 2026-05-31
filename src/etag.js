@@ -39,3 +39,23 @@ export function makeETag(ctx, options, attrs) {
   const base64String = murmur128SyncBase64(str);
   return `W/"${base64String}"`;
 }
+
+/**
+ * Computes a weak ETag for the response and checks whether the client's
+ * cached copy is still fresh. Sets `ctx.response.etag` and `ctx.status`
+ * (200, or 304 when fresh). Returns `true` when the response is fresh, in
+ * which case the caller should return immediately without rendering a body.
+ * @param {any} ctx
+ * @param {Object.<string,string>} options
+ * @param {Object.<string,string>} attrs
+ * @return {boolean}
+ */
+export function checkFreshETag(ctx, options, attrs) {
+  ctx.response.etag = makeETag(ctx, options, attrs);
+  ctx.status = 200;
+  if (ctx.fresh) {
+    ctx.status = 304;
+    return true;
+  }
+  return false;
+}

@@ -1,7 +1,7 @@
 import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
   OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {httpRedirect, hebrewFontPreload} from './common.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
@@ -70,10 +70,7 @@ export async function hebrewDateConverter(ctx) {
     p.message = RANGE_REQUIRES_CFG_JSON;
   }
   if (ctx.status !== 400 && !p.noCache) {
-    ctx.response.etag = makeETag(ctx, q, props);
-    ctx.status = 200;
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, q, props)) {
       return;
     }
   }
@@ -611,10 +608,7 @@ function g2h(dt, gs, noCache) {
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
-  ctx.response.etag = makeETag(ctx, ctx.request.query, p);
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, ctx.request.query, p)) {
     return;
   }
   const hdate = p.hdate;

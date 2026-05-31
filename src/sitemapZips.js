@@ -1,19 +1,16 @@
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 
 const sql = 'SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0) ORDER BY population DESC';
 
 export async function sitemapZips(ctx) {
   const db = ctx.db.zipsDb;
   const results = db.prepare(sql).all();
-  ctx.response.etag = makeETag(ctx, {}, {
+  if (checkFreshETag(ctx, {}, {
     numZips: results.length,
     geodbv: GeoDb.version(),
-  });
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  })) {
     return;
   }
   const body = results

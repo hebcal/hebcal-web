@@ -4,7 +4,7 @@ import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {httpRedirect, getBaseFromPath, throw410} from './common.js';
 import {langNames} from './lang.js';
 import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil.js';
@@ -84,10 +84,7 @@ export async function parshaDetail(ctx) {
   }
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
-  ctx.response.etag = makeETag(ctx, q, {hyear});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {hyear})) {
     return;
   }
   const parshaName = date ? parshaEv.getDesc().substring(9) : parshaName0;

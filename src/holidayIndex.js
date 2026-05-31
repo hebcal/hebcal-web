@@ -3,7 +3,7 @@ import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
 import {getDefaultHebrewYear, yearIsOutsideHebRange} from './dateUtil.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {categories, getFirstOcccurences, eventToHolidayItem, makeEventJsonLD,
   OMER_TITLE, makeQueryAndDownloadProps} from './holidayCommon.js';
@@ -186,10 +186,7 @@ export async function holidayMainIndex(ctx) {
   if (yearIsOutsideHebRange(hyear)) {
     return httpRedirect(ctx, `/holidays/?redir=year`);
   }
-  ctx.response.etag = makeETag(ctx, ctx.request.query, {hyear});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, ctx.request.query, {hyear})) {
     return;
   }
   const tishrei1 = new HDate(1, 'Tishrei', hyear);

@@ -9,7 +9,7 @@ import {
   makeQueryAndDownloadProps,
   OMER_TITLE,
 } from './holidayCommon.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
@@ -129,10 +129,7 @@ export async function holidayYearIndex(ctx) {
   } else if (yearNum < 1 || yearNum > 9999) {
     ctx.throw(400, `Sorry, can't display holidays for year ${year}`);
   }
-  ctx.response.etag = makeETag(ctx, ctx.request.query, {year});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, ctx.request.query, {year})) {
     return;
   }
   const isHebrewYear = yearNum >= 3761 || year.includes('-');

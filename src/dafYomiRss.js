@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import './dayjs-locales.js';
 import {basename} from 'node:path';
 import {getTodayDate} from './dateUtil.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {getLang, expires, RSS_CONTENT_TYPE} from './rssCommon.js';
 
 export async function dafYomiRss(ctx) {
@@ -12,10 +12,7 @@ export async function dafYomiRss(ctx) {
   const q = ctx.request.query;
   const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
-  ctx.response.etag = makeETag(ctx, q, {hd});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {hd})) {
     return;
   }
   const today = dayjs(dt);
