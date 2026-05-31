@@ -18,11 +18,11 @@ import './locale.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const {app, logger} = createBaseApp();
+const app = createBaseApp();
 
 openGeoIpDbs(app);
 
-useObservability(app, logger);
+useObservability(app);
 
 useTimeout(app);
 
@@ -207,5 +207,5 @@ export {app};
 
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  startServer(app, logger, 8080);
+  startServer(app, 8080);
 }

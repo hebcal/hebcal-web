@@ -19,7 +19,7 @@ export const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' 
 /**
  * Creates a Koa app and attaches the shared logger, parsed INI config,
  * GeoDb and MySQL connection pool to `app.context`.
- * @return {{app: Koa, logger: any}}
+ * @return {Koa}
  */
 export function createBaseApp() {
   const app = new Koa();
@@ -35,16 +35,16 @@ export function createBaseApp() {
   app.context.db = new GeoDb(logger, 'zips.sqlite3', 'geonames.sqlite3');
   app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
-  return {app, logger};
+  return app;
 }
 
 /**
  * Registers response-time tracking, access/error logging, and Prometheus
  * HTTP request metrics.
  * @param {Koa} app
- * @param {any} logger
  */
-export function useObservability(app, logger) {
+export function useObservability(app) {
+  const logger = app.context.logger;
   app.use(xResponseTime());
   app.use(accessLogger(logger));
   app.on('error', errorLogger(logger));
@@ -124,10 +124,10 @@ export function useResponseLength(app) {
  * Call this from inside the `import.meta.url === file://...` guard of the
  * entry-point file so the server only starts when run directly.
  * @param {Koa} app
- * @param {any} logger
  * @param {number} defaultPort
  */
-export function startServer(app, logger, defaultPort) {
+export function startServer(app, defaultPort) {
+  const logger = app.context.logger;
   if (process.env.NODE_ENV === 'production') {
     fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
     process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));

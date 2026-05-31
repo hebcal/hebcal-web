@@ -17,9 +17,9 @@ import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
 
-const {app, logger} = createBaseApp();
+const app = createBaseApp();
 
-useObservability(app, logger);
+useObservability(app);
 
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
@@ -241,7 +241,7 @@ export {app};
 
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  startServer(app, logger, 8080);
+  startServer(app, 8080);
 }
 
 function redirEncQuery(path, encQuery, ctx) {
