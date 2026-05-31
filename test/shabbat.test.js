@@ -3,6 +3,7 @@ import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
+import {expectConditionalEtag} from './conditionalEtag.js';
 
 describe('Shabbat Routes', () => {
   it('should handle semicolon-separated query parameters', async () => {
@@ -115,5 +116,26 @@ describe('ZIP code lookup with mock database', () => {
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Beverly Hills');
+  });
+});
+
+describe('Shabbat 304 Not Modified (ETag / If-None-Match)', () => {
+  it('handles conditional requests for HTML', async () => {
+    await expectConditionalEtag(app, '/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
+  });
+
+  it('handles conditional requests for cfg=json', async () => {
+    await expectConditionalEtag(app, '/shabbat?cfg=json&geonameid=293397&gy=2025&gm=12&gd=24');
+  });
+
+  // /shabbat/browse uses a local isFresh() wrapper around checkFreshETag().
+  it('handles conditional requests for /shabbat/browse/', async () => {
+    await expectConditionalEtag(app, '/shabbat/browse/');
+  });
+
+  // The country page pre-sets a Saturday-aware ETag before calling isFresh(),
+  // exercising checkFreshETag()'s "don't overwrite an existing ETag" guard.
+  it('handles conditional requests for a browse country feed', async () => {
+    await expectConditionalEtag(app, '/shabbat/browse/australia.xml');
   });
 });

@@ -7,6 +7,7 @@ import {MockMysqlDb} from './mock-mysql.js';
 import {downloadHref2} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
+import {expectConditionalEtag} from './conditionalEtag.js';
 
 beforeAll(() => {
   app.context.mysql = new MockMysqlDb();
@@ -262,46 +263,16 @@ describe('td protobuf round-trip', () => {
 });
 
 describe('304 Not Modified (ETag / If-None-Match)', () => {
-  it('returns 304 for ICS when If-None-Match matches ETag', async () => {
-    const icsPath = '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics';
-    const first = await request(app.callback()).get(icsPath);
-    expect(first.status).toBe(200);
-    const etag = first.headers['etag'];
-    expect(etag).toBeDefined();
-
-    const second = await request(app.callback())
-        .get(icsPath)
-        .set('If-None-Match', etag);
-    expect(second.status).toBe(304);
-    expect(second.text).toBeFalsy();
+  it('handles conditional requests for ICS', async () => {
+    await expectConditionalEtag(app, '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics');
   });
 
-  it('returns 304 for CSV when If-None-Match matches ETag', async () => {
-    const csvPath = '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv';
-    const first = await request(app.callback()).get(csvPath);
-    expect(first.status).toBe(200);
-    const etag = first.headers['etag'];
-    expect(etag).toBeDefined();
-
-    const second = await request(app.callback())
-        .get(csvPath)
-        .set('If-None-Match', etag);
-    expect(second.status).toBe(304);
-    expect(second.text).toBeFalsy();
+  it('handles conditional requests for CSV', async () => {
+    await expectConditionalEtag(app, '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
   });
 
-  it('returns 304 for PDF when If-None-Match matches ETag', async () => {
-    const pdfPath = '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf';
-    const first = await request(app.callback()).get(pdfPath);
-    expect(first.status).toBe(200);
-    const etag = first.headers['etag'];
-    expect(etag).toBeDefined();
-
-    const second = await request(app.callback())
-        .get(pdfPath)
-        .set('If-None-Match', etag);
-    expect(second.status).toBe(304);
-    expect(second.text).toBeFalsy();
+  it('handles conditional requests for PDF', async () => {
+    await expectConditionalEtag(app, '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf');
   });
 });
 

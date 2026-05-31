@@ -2,6 +2,7 @@ import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {pkg} from '../src/pkg.js';
+import {expectConditionalEtag} from './conditionalEtag.js';
 
 describe('Homepage and Basic Routes', () => {
   it('should return 200 for homepage', async () => {
@@ -124,5 +125,11 @@ describe('Hidden Directory Routes', () => {
         .get('/etc/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
+  });
+});
+
+describe('security.txt 304 Not Modified (ETag / If-None-Match)', () => {
+  it('handles conditional requests for /.well-known/security.txt', async () => {
+    await expectConditionalEtag(app, '/.well-known/security.txt');
   });
 });
