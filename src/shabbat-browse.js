@@ -174,6 +174,20 @@ export async function shabbatBrowse(ctx) {
     const results = stmt.all(countryCode, countryA1.admin1);
     db.close();
     results.forEach((r) => addHref(r, countryCode));
+    const tzid = results?.[0]?.timezone || 'America/New_York';
+    const saturday = dayjs.tz(new Date(), tzid).day(6);
+    ctx.response.etag = makeETag(ctx, ctx.request.query, {
+      countryCode,
+      admin1: countryA1.admin1,
+      tzid,
+      numCities: results.length,
+      yy: saturday.year(),
+      mm: saturday.month(),
+      dd: saturday.date(),
+    });
+    if (isFresh(ctx)) {
+      return;
+    }
     const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
     const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
     return render(ctx, 'shabbat-browse-country-small', {

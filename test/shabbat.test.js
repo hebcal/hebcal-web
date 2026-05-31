@@ -138,4 +138,9 @@ describe('Shabbat 304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for a browse country feed', async () => {
     await expectConditionalEtag(app, '/shabbat/browse/australia.xml');
   });
+
+  // Small admin1-region page (e.g. Calabria, Italy).
+  it('handles conditional requests for a browse small-region page', async () => {
+    await expectConditionalEtag(app, '/shabbat/browse/italy-calabria');
+  });
 });
