@@ -1,79 +1,30 @@
 import {randomBytes} from 'node:crypto';
-import fs from 'node:fs';
-import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
-import compress from 'koa-compress';
 import error from 'koa-error';
 import render from '@koa/ejs';
 import serve from 'koa-static';
-import timeout from 'koa-timeout-v2';
-import xResponseTime from 'koa-better-response-time';
-import ini from 'ini';
 import {openGeoIpDbs} from './geoip.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
-import zlib from 'node:zlib';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
-import {GeoDb} from '@hebcal/geo-sqlite';
 import {wwwRouter} from './router.js';
-import {MysqlDb} from './db.js';
 import {stopIfTimedOut, DOCUMENT_ROOT} from './common.js';
 import {pkg} from './pkg.js';
 import {empty} from './empty.js';
-import prometheus from '@echo-health/koa-prometheus-exporter';
+import {createBaseApp, useObservability, useTimeout, useCompression,
+  useResponseLength, startServer} from './app-common.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = new Koa();
-
-const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
-const logger = makeLogger(logDir);
-logger.info('Koa server: starting up');
-
-app.context.logger = logger;
-
-const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
-const iniPath = path.join(iniDir, 'hebcal-dot-com.ini');
-app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
+const {app, logger} = createBaseApp();
 
 openGeoIpDbs(app);
 
-const zipsFilename = 'zips.sqlite3';
-const geonamesFilename = 'geonames.sqlite3';
-app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
+useObservability(app, logger);
 
-app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
-
-app.use(xResponseTime());
-app.use(accessLogger(logger));
-app.on('error', errorLogger(logger));
-
-const promClient = prometheus.client;
-const httpRequestsTotal = new promClient.Counter({
-  name: 'http_requests_total',
-  help: 'Total number of HTTP requests',
-  labelNames: ['method', 'status'],
-});
-app.use(async function httpMetricMiddleware(ctx, next) {
-  await next();
-  httpRequestsTotal
-      .labels(ctx.request.method, ctx.response.status)
-      .inc();
-});
-app.use(prometheus.middleware({}));
-
-app.use(timeout(8000, {
-  status: 503,
-  message: 'Service Unavailable',
-  callback: function(ctx) {
-    const logInfo = makeLogInfo(ctx);
-    logInfo.status = 503;
-    ctx.logger.warn(logInfo);
-  },
-}));
+useTimeout(app);
 
 app.use(stopIfTimedOut());
 
@@ -125,31 +76,10 @@ app.use(async function fixup0(ctx, next) {
   await next();
 });
 
-app.use(compress({
-  gzip: true,
-  deflate: false,
-  br: {
-    params: {
-      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 6,
-    },
-  },
-  zstd: {
-    params: {
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
-      [zlib.constants.ZSTD_c_compressionLevel]: 12,
-    },
-  },
-}));
+useCompression(app, {brotliQuality: 6, zstdLevel: 12});
 
 app.use(stopIfTimedOut());
-app.use(async function responseLength(ctx, next) {
-  await next();
-  const length = ctx.length;
-  if (ctx.status === 200 && typeof length === 'number') {
-    ctx.state.responseLength = length;
-  }
-});
+useResponseLength(app);
 
 render(app, {
   root: path.join(__dirname, '..', 'views'),
@@ -277,15 +207,5 @@ export {app};
 
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  if (process.env.NODE_ENV === 'production') {
-    fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
-    process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
-  }
-
-  const port = process.env.NODE_PORT || 8080;
-  app.listen(port, () => {
-    const msg = 'Koa server listening on port ' + port;
-    logger.info(msg);
-    console.log(msg);
-  });
+  startServer(app, logger, 8080);
 }
