@@ -35,7 +35,7 @@
 <div class="row">
 <div class="col-md-9 mt-2">
 <h2>Jewish Holidays <%=year%>
-<% if (isHebrewYear && year.indexOf('-') !== -1) { -%>
+<% if (isHebrewYear && year.includes('-')) { -%>
 <span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
 <% } -%>
 </h2>

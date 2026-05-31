@@ -205,7 +205,7 @@ export async function emailForm(ctx) {
         delete q.m;
       }
       const db = ctx.mysql;
-      if (typeof q.prev === 'string' && q.prev != q.em) {
+      if (typeof q.prev === 'string' && q.prev !== q.em) {
         const subInfo = await getSubInfo(db, q.prev);
         if (subInfo?.status === 'active') {
           await unsubscribe(ctx, q.prev, subInfo);
@@ -339,11 +339,11 @@ async function getSubInfo(db, emailAddress) {
     em: r.email_address,
     status: r.email_status,
     m: m,
-    M: td == null ? 'off' : 'on',
-    td: td == null ? undefined : String(td),
+    M: td === null ? 'off' : 'on',
+    td: td === null ? undefined : String(td),
     t: r.email_created,
     b: r.email_sundown_candles,
-    ue: r.email_use_elevation == 1 ? 'on' : 'off',
+    ue: r.email_use_elevation ? 'on' : 'off',
     ...geo,
   };
 }

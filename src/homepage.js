@@ -263,7 +263,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   const chmStart = il ? 16 : 17;
   const isNisan = mm === months.NISAN;
 
-  if (mm == months.SIVAN && dd <= 5 && dd >= 2) {
+  if (mm === months.SIVAN && dd <= 5 && dd >= 2) {
     const erevShavuot = dayjs(new HDate(5, months.SIVAN, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevShavuot);
     const suffix = il ? '?i=on' : '';
@@ -317,7 +317,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return [SHANA_TOVA, SHANA_TOVA2 + `.<br>
  <a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-${gy}">Rosh Hashana ${nextYear}</a>
  begins at sundown on ${htmlDate}`];
-  } else if (mm == months.IYYAR && dd >= 14 && dd <= 17) {
+  } else if (mm === months.IYYAR && dd >= 14 && dd <= 17) {
     const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevLagBaOmer);
     return ['🔥&nbsp;<span lang="he" dir="rtl">ל״ג בָּעוֹמֶר שָׂמֵחַ</span>&nbsp;🔥',
@@ -345,7 +345,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     // Shushan Purim
     return getHolidayGreeting(ctx, holidays[0], il, true, dateOverride);
   }
-  if (mm == purimMonth && dd <= 13) {
+  if (mm === purimMonth && dd <= 13) {
     // show Purim greeting 1.5 weeks before
     const erevPurim = dayjs(new HDate(13, purimMonth, yy).greg()).locale(locale);
     const htmlDate = myDateFormat(erevPurim);
@@ -353,7 +353,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
       `<strong>Chag Purim Sameach!</strong> <a class="text-green1 text-nowrap" href="/holidays/purim-${gy}">Purim</a>
  begins at sundown on ${htmlDate}`];
   }
-  if ((mm == purimMonth && dd >= 17) || (isNisan && dd <= 14)) {
+  if ((mm === purimMonth && dd >= 17) || (isNisan && dd <= 14)) {
     // show Pesach greeting shortly after Purim and ~2 weeks before
     const erevPesach = dayjs(new HDate(14, months.NISAN, yy).greg()).locale(locale);
     const deltaDays0 = erevPesach.diff(dayjs(hd.greg()), 'd');

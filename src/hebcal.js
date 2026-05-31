@@ -211,7 +211,7 @@ function renderCsv(ctx) {
   ctx.response.attachment(getDownloadFilename(options) + '.csv');
   ctx.response.type = 'text/x-csv; charset=utf-8';
   const locale = localeMap[options.locale] || 'en';
-  const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
+  const byteOrderMark = locale === 'en' ? '' : '\uFEFF';
   return byteOrderMark + csv;
 }
 

@@ -26,7 +26,7 @@ async function makeItems(events, il, showYear, addIsraelAsterisk) {
     const descrMedium = getHolidayDescription(ev, false) || ev.memo || '';
     const sentences = descrMedium.split(/\.\s+/).slice(0, 2);
     const firstTwo = sentences.join('. ');
-    item.descrMedium = sentences.length == 2 ? firstTwo + '.' : firstTwo;
+    item.descrMedium = sentences.length === 2 ? firstTwo + '.' : firstTwo;
     const meta = item.meta = await getHolidayMeta(item.name);
     items[category].push(item);
     if (today.isBefore(item.d) && ev.url()) {

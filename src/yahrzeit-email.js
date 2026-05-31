@@ -342,7 +342,7 @@ async function unsub(ctx, q) {
   } else {
     const sql = 'INSERT INTO yahrzeit_optout (email_id, name_hash, num, deactivated) VALUES (?, ?, ?, 1)';
     const num = q.num === 'all' ? 0 : Number.parseInt(q.num, 10);
-    const nameHash = num == 0 ? null : (q.hash || null);
+    const nameHash = num === 0 ? null : (q.hash || null);
     await dbQuery(ctx, sql, [q.id, nameHash, num]);
   }
   matomoTrack(ctx, 'Email', 'unsubscribe', 'yahrzeit-reminder');

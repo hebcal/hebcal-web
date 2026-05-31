@@ -194,7 +194,7 @@ function makeContents(events, options) {
       }
       continue;
     }
-    if (d.day() == 5) {
+    if (d.day() === 5) {
       const parshaEv = events.slice(i + 1).find((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA);
       if (parshaEv?.getDate().isSameDate(hd.next())) {
         const parsha = parshaEv.render(locale0);
@@ -250,7 +250,7 @@ function row(item, right, options) {
   const locale = options.locale || 'en';
   const lang = localeMap[locale] || 'en';
   const subj = item.reason;
-  if (lang == 'he') {
+  if (lang === 'he') {
     narrow.push('text-right');
   } else if (lang === 'ru' && subj.length > 10) {
     narrow.push('narrow');

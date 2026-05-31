@@ -11,7 +11,7 @@ import {matomoTrack} from './matomoTrack.js';
 export function makeLogger(logDir) {
   const transport = pino.transport({
     target: 'pino/file',
-    level: process.env.NODE_ENV == 'production' ? 'info' : 'debug',
+    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
     options: {destination: logDir + '/access.log'},
   });
   const logger = pino(transport);

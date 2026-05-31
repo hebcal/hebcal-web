@@ -55,7 +55,7 @@ export async function hebrewDateConverter(ctx) {
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(now, location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
-    const json = q.cfg == 'json' ? '&cfg=json' : '';
+    const json = q.cfg === 'json' ? '&cfg=json' : '';
     const lg = empty(q.lg) ? '' : `&lg=${q.lg}`;
     ctx.set('Cache-Control', 'private, max-age=1200');
     const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}${lg}`;
@@ -418,7 +418,7 @@ function getEvents(hdate, il) {
     shabbatMevarchim: true,
     molad: true,
   });
-  events = events.filter((ev) => ev.getDesc() != 'Chanukah: 1 Candle');
+  events = events.filter((ev) => ev.getDesc() !== 'Chanukah: 1 Candle');
   events = events.concat(getParshaEvents(hdate, il));
   events = events.concat(makeOmer(hdate));
   return events;

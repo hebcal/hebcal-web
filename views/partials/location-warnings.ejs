@@ -1,6 +1,6 @@
 <% if (typeof location === 'object') { -%>
-<% if (location.getCountryCode() == 'US' &&
-      (locationName.indexOf(' IN ') != -1 || locationName.indexOf(' Indiana') != -1)) { -%>
+<% if (location.getCountryCode() === 'US' &&
+      (locationName.includes(' IN ') || locationName.includes(' Indiana'))) { -%>
 <div class="alert alert-warning alert-dismissible">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
@@ -10,8 +10,8 @@ href="https://en.wikipedia.org/wiki/Time_in_Indiana">What time is it in
 Indiana?</a> to make sure the above settings are correct.
 </div><!-- .alert -->
 <% } -%>
-<% if (location.getCountryCode() == 'US' && location.getTzid() == 'America/Denver' &&
-      (locationName.indexOf(' AZ ') != -1 || locationName.indexOf(' Arizona') != -1)) { -%>
+<% if (location.getCountryCode() === 'US' && location.getTzid() === 'America/Denver' &&
+      (locationName.includes(' AZ ') || locationName.includes(' Arizona'))) { -%>
 <div class="alert alert-warning alert-dismissible">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>

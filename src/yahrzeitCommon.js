@@ -158,7 +158,7 @@ export function summarizeAnniversaryTypes(query, long=false) {
  */
 export function getAnniversaryTypes(query) {
   const types0 = Object.entries(query)
-      .filter(([k, val]) => k[0] == 't' && isNumKey(k))
+      .filter(([k, val]) => k[0] === 't' && isNumKey(k))
       .map((x) => getAnniversaryType(x[1]))
       .map((x) => x === OTHER ? ANNIVERSARY : x);
   return new Set(types0);
@@ -309,7 +309,7 @@ function getDateForId(query, id) {
  */
 export function getCalendarNames(query) {
   return Object.entries(query)
-      .filter(([k, val]) => k[0] == 'n' && isNumKey(k))
+      .filter(([k, val]) => k[0] === 'n' && isNumKey(k))
       .map((x) => x[1])
       .filter((str) => str.length > 0);
 }

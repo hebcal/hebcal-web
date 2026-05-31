@@ -10,7 +10,7 @@ const MENU_ITEMS = [
 ];
 
 function menuItem(path, title, tooltip, selected) {
-  const active = (path != '/' && path == selected) ? ' active" aria-current="page' : '';
+  const active = (path !== '/' && path === selected) ? ' active" aria-current="page' : '';
   return `<li class="nav-item"><a class="nav-link${active}" href="${path}" title="${tooltip}">${title}</a>`;
 }
 

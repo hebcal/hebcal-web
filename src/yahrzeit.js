@@ -24,7 +24,7 @@ import {makeYahrzeitEvents} from './makeYahrzeitEvents.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 
-const urlPrefix = process.env.NODE_ENV == 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
+const urlPrefix = process.env.NODE_ENV === 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 const TIMEOUT = 7000;
 
 /**

@@ -130,9 +130,9 @@ export async function hebcalDownload(ctx) {
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
     const locale = localeMap[options.locale] || 'en';
-    const byteOrderMark = locale == 'en' ? '' : '\uFEFF';
+    const byteOrderMark = locale === 'en' ? '' : '\uFEFF';
     ctx.body = byteOrderMark + csv;
-  } else if (extension == '.pdf') {
+  } else if (extension === '.pdf') {
     if (!events.length) {
       ctx.remove('Cache-Control');
       ctx.remove('ETag');

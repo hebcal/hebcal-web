@@ -70,7 +70,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 <tbody class="table-group-divider">
 <% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
 <tr>
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() != chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() !== chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
 <%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
 <%   } else { %>

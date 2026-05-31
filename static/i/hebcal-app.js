@@ -59,7 +59,7 @@ const hebcalClient = {
           return `${item.asciiname}, ${item.admin1} <strong>${item.id}</strong> - USA${flag}`;
         } else {
           const country = item.country;
-          const ctry = country == 'United Kingdom' ? 'UK' : country == 'United States' ? 'USA' : country;
+          const ctry = country === 'United Kingdom' ? 'UK' : country === 'United States' ? 'USA' : country;
           let ctryStr = ctry || '';
           const name = item.name || item.asciiname;
           const s = `<strong>${name}</strong>`;

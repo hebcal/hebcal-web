@@ -108,7 +108,7 @@ function monthSubtitle(view) {
               if (ev.emoji) {
                 ev.title += '\u00a0' + ev.emoji;
               }
-              if (typeof ev.url == 'string') {
+              if (typeof ev.url === 'string') {
                 const u = new URL(ev.url);
                 const p = u.pathname;
                 if (p.startsWith('/h/')) {

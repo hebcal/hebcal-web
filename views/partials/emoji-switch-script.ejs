@@ -7,28 +7,28 @@ document.addEventListener('DOMContentLoaded', function() {
   function changeButtonTarget(id) {
     const btn = document.getElementById(id);
     const srcType = btn.dataset.hebcalSrc;
-    const baseUrl = srcType == 'olcom' ? 'gcal' : srcType;
+    const baseUrl = srcType === 'olcom' ? 'gcal' : srcType;
     const url = new URL(dlURLs[baseUrl]);
     if (!emojiChecked) {
       url.searchParams.set('emoji', '0');
     }
-    if (calColor && id == 'dl-ios') {
+    if (calColor && id === 'dl-ios') {
       url.searchParams.set('color', calColor);
     }
     if (!yahrzeitReminderChecked) {
       url.searchParams.set('yrem', '0');
     }
     let href = url.href;
-    if (srcType == 'gcal') {
+    if (srcType === 'gcal') {
       href = 'https://www.google.com/calendar/render?cid=' + encodeURIComponent(href);
-    } else if (srcType == 'olcom') {
+    } else if (srcType === 'olcom') {
       href = 'https://outlook.live.com/calendar/addfromweb?url=' +
         encodeURIComponent(href) + '&name=' + encodeURIComponent(dlURLs.title) +
         '&mkt=en-001';
     }
     btn[btn.dataset.hebcalAttr] = href;
     const btn2 = document.getElementById(id + '-alt');
-    if (btn2 && typeof btn2.href == 'string') {
+    if (btn2 && typeof btn2.href === 'string') {
       const url = new URL(dlURLs.ics1year);
       if (!emojiChecked) {
         url.searchParams.set('emoji', '0');

@@ -156,7 +156,7 @@ app.use(async function fixup1(ctx, next) {
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
     return;
-  } else if (rpath == '/robots.txt') {
+  } else if (rpath === '/robots.txt') {
     ctx.body = 'User-agent: *\nAllow: /\n';
     return;
   } else if (rpath === '/ical' || rpath === '/ical/') {
@@ -212,18 +212,18 @@ app.use(async function fixup2(ctx, next) {
       return;
     } else {
       const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');
-      if (encQuery != -1) {
+      if (encQuery !== -1) {
         redirEncQuery(path, encQuery, ctx);
         return;
       }
       const encQueryDL = path.indexOf('.ics%3Fdl%3D1');
-      if (encQueryDL != -1) {
+      if (encQueryDL !== -1) {
         redirEncQuery(path, encQueryDL, ctx);
         return;
       }
     }
-    const semi = ctx.request.querystring.indexOf(';');
-    if (semi != -1) {
+    const semi = ctx.request.querystring.includes(';');
+    if (semi) {
       ctx.request.querystring = ctx.request.querystring.replaceAll(';', '&');
     }
   } else if (path.startsWith('/v4/')) {
@@ -313,7 +313,7 @@ export {app};
 
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  if (process.env.NODE_ENV == 'production') {
+  if (process.env.NODE_ENV === 'production') {
     fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
     process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
   }

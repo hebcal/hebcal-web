@@ -122,7 +122,7 @@ export function addLinksToLeyning(aliyot, showBook, pocketTorahAudio=true) {
     const end = aliyah.e.split(':');
     const endChapVerse = begin[0] === end[0] ? end[1] : aliyah.e;
     const verses = `${aliyah.b}-${endChapVerse}`;
-    aliyah.verses = showBook || (book1 != aliyah.k) ? `${aliyah.k} ${verses}` : verses;
+    aliyah.verses = showBook || (book1 !== aliyah.k) ? `${aliyah.k} ${verses}` : verses;
     const sefAliyot = !showBook && !isMaftir;
     aliyah.href = sefariaAliyahHref(aliyah, sefAliyot);
     const bid = bookId[aliyah.k];

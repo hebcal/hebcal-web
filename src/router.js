@@ -237,7 +237,7 @@ export function wwwRouter() {
       if (bn === 'ma.js' || bn === 'matomo.js') {
         return sendMatomoJs(ctx);
       } else if (bn === 'ma.php' || bn === 'matomo.php') {
-        if (ctx.request.query.send_image == '0') {
+        if (ctx.request.query.send_image === '0') {
           ctx.status = 204;
           return;
         }

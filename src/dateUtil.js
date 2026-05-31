@@ -145,7 +145,7 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
  */
 export function getSunsetAwareDate(q, location) {
   const {dt, now} = getTodayDate(q);
-  if (now && location != null) {
+  if (now && location) {
     return getBeforeAfterSunsetForLocation(dt, location);
   }
   return {

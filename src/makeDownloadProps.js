@@ -5,7 +5,7 @@ import {urlArgsObj, dailyLearningConfig, protocNameToMethodSuffix} from './urlAr
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
 
-const dlPrefix = process.env.NODE_ENV == 'production' ?
+const dlPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
 /**
@@ -112,7 +112,7 @@ export function downloadHref2(query, filename, override={}) {
   }
   if (on(q.yto)) msg.setYomtovonly(true);
 
-  if (!empty(q.month) && q.month != 'x') {
+  if (!empty(q.month) && q.month !== 'x') {
     const month = getInt(q.month);
     if (month !== null) msg.setMonth(month);
   }

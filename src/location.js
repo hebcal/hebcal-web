@@ -133,7 +133,7 @@ export function getLocationFromQuery(db, query) {
   if (!empty(query.geonameid)) {
     const geonameid = Number.parseInt(query.geonameid, 10);
     const location = db.lookupGeoname(geonameid);
-    if (location == null) {
+    if (location === null) {
       throw createError(404, `Sorry, can't find geonameid: ${query.geonameid}`);
     }
     query.geonameid = geonameid;
@@ -145,7 +145,7 @@ export function getLocationFromQuery(db, query) {
     }
     const zip = query.zip.trim().substring(0, 5); // truncate ZIP+4 to 5-digit ZIP
     const location = db.lookupZip(zip);
-    if (location == null) {
+    if (location === null) {
       throw createError(404, `Sorry, can't find ZIP code: ${query.zip}`);
     }
     query.zip = zip;
@@ -153,7 +153,7 @@ export function getLocationFromQuery(db, query) {
     return location;
   } else if (!empty(query.city)) {
     const location = db.lookupLegacyCity(query.city.trim());
-    if (location == null) {
+    if (location === null) {
       throw createError(404, `Invalid legacy city specified: ${query.city}`);
     }
     query.geo = 'geoname';

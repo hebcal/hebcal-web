@@ -141,7 +141,7 @@ function eventsToCells(events) {
  */
 function getWeekdays(d) {
   let sunday = d;
-  while (sunday.day() != 0) {
+  while (sunday.day() !== 0) {
     sunday = sunday.add(1, 'day');
   }
   const weekdays = [];
@@ -604,8 +604,8 @@ export function renderPdf(doc, events, options, query) {
     }
     const startDayOfWeek = firstDayOfMonth.getDay();
 
-    const rows = (daysInMonth == 31 && startDayOfWeek >= 5) ||
-      (daysInMonth == 30 && startDayOfWeek == 6) ? 6 : 5;
+    const rows = (daysInMonth === 31 && startDayOfWeek >= 5) ||
+      (daysInMonth === 30 && startDayOfWeek === 6) ? 6 : 5;
     // not intended to be an integer
     const rowheight = (PDF_HEIGHT - PDF_TMARGIN - PDF_BMARGIN) / rows;
 
@@ -700,7 +700,7 @@ export function renderPdf(doc, events, options, query) {
         }
       }
 
-      if (++dow == 7) {
+      if (++dow === 7) {
         dow = 0;
         xpos = xposNewRow;
         ypos += rowheight; // move down the page

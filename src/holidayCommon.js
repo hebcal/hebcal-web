@@ -36,13 +36,13 @@ export function getFirstOcccurences(events) {
   for (const ev of events) {
     const hd = ev.getDate();
     const hy = hd.getFullYear();
-    if (hy != prevYear) {
+    if (hy !== prevYear) {
       prevYear = hy;
       seen = new Set();
     }
     const subj = ev.getDesc();
     if (subj.startsWith('Erev ') ||
-      (subj.startsWith('Chanukah: ') && subj != 'Chanukah: 2 Candles')) {
+      (subj.startsWith('Chanukah: ') && subj !== 'Chanukah: 2 Candles')) {
       continue;
     }
     const holiday = ev.basename();
