@@ -34,14 +34,14 @@ describe('Shabbat Routes', () => {
 
   it('should return 200 for /shabbat/', async () => {
     const response = await request(app.callback())
-        .get('/shabbat/?geonameid=2451778');
+        .get('/shabbat/?geonameid=5128581');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /shabbat/browse/', async () => {
     const response = await request(app.callback())
-        .get('/shabbat/browse/italy-sicily');
+        .get('/shabbat/browse/italy-calabria');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
@@ -53,9 +53,9 @@ describe('Shabbat Routes', () => {
     expect(response.type).toContain('xml');
   });
 
-  it('should return 200 for /shabbat/browse/costa-rica.xml', async () => {
+  it('should return 200 for /shabbat/browse/australia.xml', async () => {
     const response = await request(app.callback())
-        .get('/shabbat/browse/costa-rica.xml');
+        .get('/shabbat/browse/australia.xml');
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
   });

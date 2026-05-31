@@ -7,7 +7,7 @@ import {injectZipsMock} from './zipsMock.js';
 describe('Hebcal Routes', () => {
   it('should return 200 for /hebcal with valid params', async () => {
     const response = await request(app.callback())
-        .get('/hebcal?c=on&geo=geoname&geonameid=2654285&m=50&maj=on&mf=on&min=on&mod=on&nx=on&s=on&ss=on&v=1&year=2023');
+        .get('/hebcal?c=on&geo=geoname&geonameid=5128581&m=50&maj=on&mf=on&min=on&mod=on&nx=on&s=on&ss=on&v=1&year=2023');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
