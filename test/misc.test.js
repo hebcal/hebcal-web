@@ -46,7 +46,7 @@ describe('Zmanim and Omer Routes', () => {
 describe('Autocomplete Routes', () => {
   it('should return 200 for /complete with query', async () => {
     const response = await request(app.callback())
-        .get('/complete?q=san+francisco');
+        .get('/complete?q=Whyalla');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
@@ -59,15 +59,18 @@ describe('Autocomplete Routes', () => {
   });
 
   it('should handle /complete with international characters', async () => {
+    // Néa Alikarnassós (Greece) exercises non-ASCII / accented input.
     const response = await request(app.callback())
-        .get('/complete?q=%D7%AA%D7%9C%20%D7%90%D7%91%D7%99%D7%91');
+        .get('/complete?q=N%C3%A9a%20Alikarnass%C3%B3s');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
-  it('should not include admin1 in value for Berlin', async () => {
+  it('should not include admin1 in value for an Israeli city', async () => {
+    // Israeli cities carry an admin1 (district) but it is intentionally
+    // omitted from the displayed value (e.g. "Mevo Shivta, Israel").
     const response = await request(app.callback())
-        .get('/complete?q=Berlin');
+        .get('/complete?q=Mevo+Shivta');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
     const body = response.body;
@@ -75,14 +78,14 @@ describe('Autocomplete Routes', () => {
     expect(Array.isArray(body)).toBe(true);
     expect(body.length).toBeGreaterThanOrEqual(1);
     expect(body[0]).toEqual({
-      'admin1': 'State of Berlin',
-      'asciiname': 'Berlin',
-      'cc': 'DE',
-      'country': 'Germany',
-      'flag': '🇩🇪',
+      'admin1': 'Southern District',
+      'asciiname': 'Mevo Shivta',
+      'cc': 'IL',
+      'country': 'Israel',
+      'flag': '🇮🇱',
       'geo': 'geoname',
-      'id': 2950159,
-      'value': 'Berlin, Germany',
+      'id': 294240,
+      'value': 'Mevo Shivta, Israel',
     });
   });
 });

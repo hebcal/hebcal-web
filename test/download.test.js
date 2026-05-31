@@ -53,9 +53,9 @@ describe('v4 ICS downloads', () => {
 });
 
 describe('v4 CSV downloads', () => {
-  it('returns 200 CSV for /v4/.../hebcal_2026_patrick_eur.csv', async () => {
+  it('returns 200 CSV for /v4/.../hebcal_2026_berlin.csv', async () => {
     const response = await request(app.callback())
-        .get('/v4/CAEQARgBIAEoATABQAFQAViX17kBYOoPagFziAEB2AEB/hebcal_2026_patrick_eur.csv');
+        .get('/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/csv/);
     expect(response.text).toBeTruthy();
@@ -63,16 +63,16 @@ describe('v4 CSV downloads', () => {
 });
 
 describe('v4 PDF downloads', () => {
-  it('returns 200 PDF for /v4/.../hebcal_2020_bayshore_gardens.pdf', async () => {
+  it('returns 200 PDF for /v4/.../hebcal_2020_new_york.pdf', async () => {
     const response = await request(app.callback())
-        .get('/v4/CAEYAUABWPaN_QFg5A9qAXN4EogBAQ/hebcal_2020_bayshore_gardens.pdf');
+        .get('/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/pdf/);
   });
 
-  it('returns 200 PDF for /v4/.../hebcal_2021_alberti.pdf', async () => {
+  it('returns 200 PDF for /v4/.../hebcal_2021_toronto.pdf', async () => {
     const response = await request(app.callback())
-        .get('/v4/CAEYAUABUAFYr_7rAWDlD2oBc3gSiAEB/hebcal_2021_alberti.pdf');
+        .get('/v4/CAEYAUABWLm6-AJg5Q9qAXN4EogBAQ/hebcal_2021_toronto.pdf');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/pdf/);
   });
@@ -277,7 +277,7 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
   });
 
   it('returns 304 for CSV when If-None-Match matches ETag', async () => {
-    const csvPath = '/v4/CAEQARgBIAEoATABQAFQAViX17kBYOoPagFziAEB2AEB/hebcal_2026_patrick_eur.csv';
+    const csvPath = '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv';
     const first = await request(app.callback()).get(csvPath);
     expect(first.status).toBe(200);
     const etag = first.headers['etag'];
@@ -291,7 +291,7 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
   });
 
   it('returns 304 for PDF when If-None-Match matches ETag', async () => {
-    const pdfPath = '/v4/CAEYAUABWPaN_QFg5A9qAXN4EogBAQ/hebcal_2020_bayshore_gardens.pdf';
+    const pdfPath = '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf';
     const first = await request(app.callback()).get(pdfPath);
     expect(first.status).toBe(200);
     const etag = first.headers['etag'];
