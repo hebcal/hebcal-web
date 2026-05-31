@@ -3,11 +3,11 @@ import {getLocationFromQuery} from './location.js';
 import {cleanQuery} from './cleanQuery.js';
 import {queryDefaultCandleMins, processCookieAndQuery} from './urlArgs.js';
 import {getIpAddress} from './getIpAddress.js';
-import {mySendMail, getImgOpenHtml, validateEmail} from './emailCommon.js';
+import {getImgOpenHtml, validateEmail, sendMailLogErr, makeMessageId,
+  makeVerificationEmailHtml, BLANK} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';
 import {xmlEsc} from './sanitize.js';
 
-const BLANK = '<div>&nbsp;</div>';
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
 
 export async function emailVerify(ctx) {
@@ -80,7 +80,7 @@ async function updateDbAndEmail(ctx, db) {
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
   const emailAddress = ctx.state.emailAddress;
   const locationName = ctx.state.locationName;
-  const msgid = `${subscriptionId}.${Date.now()}`;
+  const msgid = makeMessageId(subscriptionId);
   const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-complete');
   const footerHtml = makeFooter(emailAddress);
   const message = {
@@ -104,9 +104,7 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
 }
 
 function getUnsubUrl(emailAddress) {
@@ -262,7 +260,7 @@ async function updateActiveSub(ctx, db, q) {
   const emailAddress = ctx.state.emailAddress;
   const subscriptionId = ctx.state.subscriptionId;
   const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
-  const msgid = `${subscriptionId}.${Date.now()}`;
+  const msgid = makeMessageId(subscriptionId);
   const locationName = ctx.state.locationName;
   matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly');
   const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-update');
@@ -287,9 +285,7 @@ ${footerHtml}
 ${imgOpen}</div>
 `,
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
 }
 
 async function unsubscribe(ctx, emailAddress, subInfo) {
@@ -436,39 +432,25 @@ async function writeStagingInfo(ctx, db, q) {
   const locationName = ctx.state.locationName;
   matomoTrack(ctx, 'Email', 'signup-backend', 'shabbat-weekly');
   const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
-  const msgid = `${subscriptionId}.${Date.now()}`;
+  const msgid = makeMessageId(subscriptionId);
   const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-verify');
   const message = {
     to: q.em,
     subject: 'Please confirm your request to subscribe to Hebcal',
     messageId: `<${msgid}@hebcal.com>`,
-    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
-<div>Hello,</div>
-${BLANK}
-<div>We have received your request to receive weekly Shabbat
+    html: makeVerificationEmailHtml({
+      intro: `We have received your request to receive weekly Shabbat
 candle-lighting times from Hebcal.com for
-${locationName}.</div>
-${BLANK}
-<div>Please confirm your request by clicking on this link:</div>
-${BLANK}
-<div><a href="${url}">${url}</a></div>
-${BLANK}
-<div>If you did not request (or do not want) weekly Shabbat
-candle-lighting times, please accept our apologies and ignore this message.</div>
-${BLANK}
-<div style="font-size:16px">Kol Tuv,
-<br>Hebcal.com</div>
-${BLANK}
-<div style="font-size:11px;color:#999;font-family:arial,helvetica,sans-serif">
-<div>This email was sent to ${xmlEsc(q.em)} by <a href="https://www.hebcal.com/?${UTM_PARAM}">Hebcal.com</a>.
-Hebcal is a free Jewish calendar and holiday web site.</div>
-${BLANK}
-<div>[${ip}]</div>
-</div>
-${imgOpen}</div>
-`,
+${locationName}.`,
+      confirmPrompt: 'Please confirm your request by clicking on this link:',
+      url,
+      declineText: `If you did not request (or do not want) weekly Shabbat
+candle-lighting times, please accept our apologies and ignore this message.`,
+      email: q.em,
+      ip,
+      utmParam: UTM_PARAM,
+      imgOpen,
+    }),
   };
-  mySendMail(ctx, message).catch((err) => {
-    ctx.logger.error(err);
-  });
+  sendMailLogErr(ctx, message);
 }
