@@ -2,6 +2,7 @@ import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
+import {expectConditionalEtag} from './conditionalEtag.js';
 
 describe('Zmanim and Omer Routes', () => {
   it('should return 200 for /zmanim', async () => {
@@ -229,5 +230,11 @@ describe('Analytics Routes', () => {
     const response = await request(app.callback())
         .get('/matomo/matomo.php?send_image=0');
     expect(response.status).toBe(204);
+  });
+});
+
+describe('geo autocomplete 304 Not Modified (ETag / If-None-Match)', () => {
+  it('handles conditional requests for /complete', async () => {
+    await expectConditionalEtag(app, '/complete?q=Bos');
   });
 });
