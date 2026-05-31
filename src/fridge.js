@@ -1,6 +1,6 @@
 import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {cacheControl} from './cacheControl.js';
@@ -28,10 +28,7 @@ export async function fridgeShabbat(ctx) {
     q.year = '' + hyear;
     delete q.yt;
   }
-  ctx.response.etag = makeETag(ctx, q, {});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {})) {
     return;
   }
   const p = makeProperties(ctx);

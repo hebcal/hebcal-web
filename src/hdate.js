@@ -1,7 +1,7 @@
 import {HDate} from '@hebcal/core';
 import {gematriyaDate} from './gematriyaDate.js';
 import {getTodayDate} from './dateUtil.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {send} from '@koa/send';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
@@ -19,10 +19,7 @@ function getLocale(rpath) {
 export async function hdateJavascript(ctx) {
   const locale = getLocale(ctx.request.path);
   const fileName = `hdate-${locale}.min.js`;
-  ctx.response.etag = makeETag(ctx, {}, {});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, {}, {})) {
     return;
   }
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
@@ -41,10 +38,7 @@ export async function hdateXml(ctx) {
   const q = ctx.request.query;
   const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
-  ctx.response.etag = makeETag(ctx, q, {hd});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {hd})) {
     return;
   }
   const utcString = dt.toUTCString();

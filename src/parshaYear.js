@@ -4,7 +4,7 @@ import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
 import {getNumYears} from './calendar.js';
 import {shortenUrl, throw410} from './common.js';
@@ -23,10 +23,7 @@ export async function parshaYearApp(ctx) {
     throw410(ctx);
   }
   const q = ctx.request.query;
-  ctx.response.etag = makeETag(ctx, q, {hyear});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {hyear})) {
     return;
   }
   const il = q.i === 'on';

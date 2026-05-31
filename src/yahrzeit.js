@@ -3,7 +3,7 @@ import {eventsToClassicApi} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {pkg} from './pkg.js';
 import {cleanQuery} from './cleanQuery.js';
 import {
@@ -90,10 +90,7 @@ export async function yahrzeitApp(ctx) {
     return;
   }
   if (ctx.method === 'GET') {
-    ctx.response.etag = makeETag(ctx, q, {});
-    ctx.status = 200;
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, q, {})) {
       return;
     }
   }

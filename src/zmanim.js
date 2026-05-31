@@ -3,7 +3,7 @@ import {Zmanim, TimedEvent, HDate, flags,
   HebrewCalendar, HebrewDateEvent, Locale} from '@hebcal/core';
 import {version} from '@hebcal/core/dist/esm/pkgVersion';
 import {empty} from './empty.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {pkg} from './pkg.js';
 import {getLocationFromQuery} from './location.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_30DAYS} from './cacheControl.js';
@@ -94,10 +94,7 @@ export async function getZmanim(ctx) {
   const {isRange, startD, endD} = myGetStartAndEnd(ctx, q, loc.getTzid());
   if (isRange || !empty(q.date)) {
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
-    ctx.response.etag = makeETag(ctx, q, {});
-    ctx.status = 200;
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, q, {})) {
       return;
     }
   } else {
@@ -464,10 +461,7 @@ export async function zmanimIcalendar(ctx) {
     dt: today.format('YYYY-MM-DD'),
     icalv: IcalEvent.version(),
   };
-  ctx.response.etag = makeETag(ctx, options, attrs);
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, options, attrs)) {
     return;
   }
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);

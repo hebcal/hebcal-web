@@ -2,7 +2,7 @@ import {ParshaEvent, HDate} from '@hebcal/core';
 import {getLeyningOnDate} from '@hebcal/leyning';
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {isoDateStringToDate} from './dateUtil.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
 import dayjs from 'dayjs';
@@ -30,10 +30,7 @@ export async function getLeyning(ctx) {
       ctx.throw(400, `Parameter '${param}' is required`);
     }
   }
-  ctx.response.etag = makeETag(ctx, q, {});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {})) {
     return;
   }
 

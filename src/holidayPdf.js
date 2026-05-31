@@ -2,7 +2,7 @@ import {HebrewCalendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {createPdfDoc, renderPdf} from './pdf.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cacheControl} from './cacheControl.js';
@@ -46,10 +46,7 @@ export async function holidayPdf(ctx) {
   ctx.remove('Vary');
   ctx.compress = false;
   ctx.response.type = 'application/pdf';
-  ctx.response.etag = makeETag(ctx, options, {outputType: '.pdf'});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, options, {outputType: '.pdf'})) {
     return;
   }
   const events = HebrewCalendar.calendar(options);

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {makeETag} from './etag.js';
+import {makeETag, checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {localeMap} from './lang.js';
@@ -29,10 +29,7 @@ export function dailyLearningApp(ctx) {
     return;
   }
   const dt = isoDateStringToDate(basename(rpath));
-  ctx.response.etag = makeETag(ctx, {}, {});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, {}, {})) {
     return;
   }
   const hd = new HDate(dt);

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear, yearIsOutsideHebRange} from './dateUtil.js';
@@ -18,10 +18,7 @@ function omerSitemap(ctx) {
       body += `${prefix}/${year}/${day}\n`;
     }
   }
-  ctx.response.etag = makeETag(ctx, {}, {hyear});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, {}, {hyear})) {
     return;
   }
   ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
@@ -42,10 +39,7 @@ export async function omerApp(rpath, ctx) {
     if (yearIsOutsideHebRange(hyear)) {
       return redirCurrentYear(ctx);
     }
-    ctx.response.etag = makeETag(ctx, {}, {hyear});
-    ctx.status = 200;
-    if (ctx.fresh) {
-      ctx.status = 304;
+    if (checkFreshETag(ctx, {}, {hyear})) {
       return;
     }
     const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
@@ -90,10 +84,7 @@ export async function omerApp(rpath, ctx) {
     httpRedirect(ctx, `/omer/${hyear}/1`, 302);
     return;
   }
-  ctx.response.etag = makeETag(ctx, {}, {hyear, omerDay});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, {}, {hyear, omerDay})) {
     return;
   }
   const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);

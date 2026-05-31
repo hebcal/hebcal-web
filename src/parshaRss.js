@@ -1,10 +1,10 @@
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
 import {getHolidayDescription, makeTorahMemoText, eventsToRss2} from '@hebcal/rest-api';
-import {getTodayDate} from './dateUtil.js';
+import {getTodayDate, shabbatWeekRange} from './dateUtil.js';
 import {basename} from 'node:path';
 import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 
 export async function parshaRss(ctx) {
   const rpath = ctx.request.path;
@@ -14,15 +14,12 @@ export async function parshaRss(ctx) {
   const il = bn.startsWith('israel');
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
   const lang = getLang(rpath);
-  ctx.response.etag = makeETag(ctx, ctx.request.query, {
+  if (checkFreshETag(ctx, ctx.request.query, {
     il, lang,
     yy: saturday.year(),
     mm: saturday.month(),
     dd: saturday.date(),
-  });
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  })) {
     return;
   }
   const hebrew = lang === 'he';
@@ -46,11 +43,7 @@ export async function parshaRss(ctx) {
 }
 
 function makeEvents(dt, il, lang) {
-  const d = dayjs(dt);
-  const start = (d.day() === 6) ? d.subtract(1, 'day') : d;
-  const saturday = start.add(6 - start.day(), 'day');
-  const fiveDaysAhead = start.add(5, 'day');
-  const endOfWeek = fiveDaysAhead.isAfter(saturday) ? fiveDaysAhead : saturday;
+  const [start, endOfWeek] = shabbatWeekRange(dayjs(dt));
   const events0 = HebrewCalendar.calendar({
     start: new Date(start.year(), start.month(), start.date()),
     end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),

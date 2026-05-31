@@ -4,7 +4,7 @@ import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'node:path';
-import {makeETag} from './etag.js';
+import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
@@ -73,10 +73,7 @@ export async function hebcalDownload(ctx) {
   if (ics) {
     attrs.icalv = IcalEvent.version();
   }
-  ctx.response.etag = makeETag(ctx, opts, attrs);
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, opts, attrs)) {
     return;
   }
   const events = makeHebrewCalendar(ctx, options);

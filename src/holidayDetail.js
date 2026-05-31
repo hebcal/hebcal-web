@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import {basename} from 'node:path';
 import {empty, off} from './empty.js';
 import {langNames} from './lang.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {yearIsOutsideGregRange} from './dateUtil.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
   throw410,
@@ -120,10 +120,7 @@ export async function holidayDetail(ctx) {
   }
   const now = new Date();
   const attrs = dateSuffix ? {} : {hyear: new HDate(now).getFullYear()};
-  ctx.response.etag = makeETag(ctx, q, attrs);
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, attrs)) {
     return;
   }
   const meta = await getHolidayMeta(holiday);

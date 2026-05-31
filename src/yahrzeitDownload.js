@@ -3,7 +3,7 @@ import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {murmur128HexSync} from 'murmurhash3';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {getMaxYahrzeitId,
   getAnniversaryTypes,
@@ -57,10 +57,7 @@ export async function yahrzeitDownload(ctx) {
       attrs.sunday = sunday;
     }
   }
-  ctx.response.etag = makeETag(ctx, query, attrs);
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, query, attrs)) {
     return;
   }
 

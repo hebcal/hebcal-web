@@ -18,7 +18,7 @@ import {
 } from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
-  expiresSaturdayNight} from './dateUtil.js';
+  expiresSaturdayNight, shabbatWeekRange} from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
@@ -160,12 +160,7 @@ function redir(ctx, dest) {
 function getStartAndEnd(dt, now, tzid) {
   const input = now ? dt : dayjs(dt).format('YYYY-MM-DD 12:00');
   const d = dayjs.tz(input, tzid);
-  // back up to Friday if today is Saturday (include last night's candle-lighting times)
-  const start = (d.day() === 6) ? d.subtract(1, 'day') : d;
-  const saturday = start.add(6 - start.day(), 'day');
-  const fiveDaysAhead = start.add(5, 'day');
-  const endOfWeek = fiveDaysAhead.isAfter(saturday) ? fiveDaysAhead : saturday;
-  return [start, endOfWeek];
+  return shabbatWeekRange(d);
 }
 
 const includeAdmin1 = {US: 1, CA: 1, UK: 1};

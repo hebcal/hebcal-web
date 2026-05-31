@@ -1,7 +1,7 @@
 import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {shortenUrl} from './common.js';
 import {langNames} from './lang.js';
@@ -30,10 +30,7 @@ export async function parshaIndex(ctx) {
   const hyear = saturday.getFullYear();
   const il = q.i === 'on';
   const todayEv = getTodayHolidayEvent(hd, il);
-  ctx.response.etag = makeETag(ctx, q, {hd, saturday, todayEv});
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  if (checkFreshETag(ctx, q, {hd, saturday, todayEv})) {
     return;
   }
   const [parshaDia, parshaDiaHref, metaDia] = getParsha(saturday, false);

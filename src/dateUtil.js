@@ -262,6 +262,22 @@ export function getStartAndEnd(q, tzid) {
 }
 
 /**
+ * Given a day, returns the Shabbat week window `[start, endOfWeek]` used for
+ * weekly Shabbat/parsha listings. If the day is Saturday, backs up to Friday
+ * so last night's candle-lighting times are included; the end is the later of
+ * the upcoming Saturday or five days ahead.
+ * @param {dayjs.Dayjs} d
+ * @return {dayjs.Dayjs[]}
+ */
+export function shabbatWeekRange(d) {
+  const start = (d.day() === 6) ? d.subtract(1, 'day') : d;
+  const saturday = start.add(6 - start.day(), 'day');
+  const fiveDaysAhead = start.add(5, 'day');
+  const endOfWeek = fiveDaysAhead.isAfter(saturday) ? fiveDaysAhead : saturday;
+  return [start, endOfWeek];
+}
+
+/**
  * @param {any} ctx
  * @param {Date} now
  * @param {string} tzid
