@@ -1,17 +1,14 @@
-import {makeETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 
 export async function securityTxt(ctx) {
   const dt = new Date();
-  ctx.response.etag = makeETag(ctx, {}, {
+  ctx.type = 'text/plain';
+  if (checkFreshETag(ctx, {}, {
     yy: dt.getFullYear(),
     mm: dt.getMonth(),
     dd: dt.getDate(),
-  });
-  ctx.type = 'text/plain';
-  ctx.status = 200;
-  if (ctx.fresh) {
-    ctx.status = 304;
+  })) {
     return;
   }
   dt.setFullYear(dt.getFullYear() + 1);

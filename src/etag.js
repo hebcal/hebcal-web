@@ -41,17 +41,20 @@ export function makeETag(ctx, options, attrs) {
 }
 
 /**
- * Computes a weak ETag for the response and checks whether the client's
- * cached copy is still fresh. Sets `ctx.response.etag` and `ctx.status`
- * (200, or 304 when fresh). Returns `true` when the response is fresh, in
- * which case the caller should return immediately without rendering a body.
+ * Computes a weak ETag for the response (unless one has already been set by
+ * the caller) and checks whether the client's cached copy is still fresh.
+ * Sets `ctx.response.etag` and `ctx.status` (200, or 304 when fresh). Returns
+ * `true` when the response is fresh, in which case the caller should return
+ * immediately without rendering a body.
  * @param {any} ctx
  * @param {Object.<string,string>} options
  * @param {Object.<string,string>} attrs
  * @return {boolean}
  */
 export function checkFreshETag(ctx, options, attrs) {
-  ctx.response.etag = makeETag(ctx, options, attrs);
+  if (!ctx.response.etag) {
+    ctx.response.etag = makeETag(ctx, options, attrs);
+  }
   ctx.status = 200;
   if (ctx.fresh) {
     ctx.status = 304;
