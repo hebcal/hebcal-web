@@ -1,66 +1,25 @@
-import {GeoDb} from '@hebcal/geo-sqlite';
-import fs from 'node:fs';
-import ini from 'ini';
-import Koa from 'koa';
-import compress from 'koa-compress';
 import conditional from 'koa-conditional-get';
 import {send} from '@koa/send';
 import serve from 'koa-static';
-import timeout from 'koa-timeout-v2';
-import xResponseTime from 'koa-better-response-time';
-import zlib from 'node:zlib';
 import {downloadHref2} from './makeDownloadProps.js';
-import {join} from 'node:path';
-import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {httpRedirect, stopIfTimedOut} from './common.js';
 import {cacheControl,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeitDownload.js';
-import {MysqlDb} from './db.js';
 import {zmanimIcalendar} from './zmanim.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
-import prometheus from '@echo-health/koa-prometheus-exporter';
+import {createBaseApp, useObservability, useTimeout, useCompression,
+  useResponseLength, startServer} from './app-common.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
-const app = new Koa();
 
-const logDir = process.env.NODE_ENV === 'production' ? '/var/log/hebcal' : '.';
-const logger = makeLogger(logDir);
-logger.info('Koa server: starting up');
+const {app, logger} = createBaseApp();
 
-app.context.logger = logger;
-
-const zipsFilename = 'zips.sqlite3';
-const geonamesFilename = 'geonames.sqlite3';
-app.context.db = new GeoDb(logger, zipsFilename, geonamesFilename);
-
-const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
-const iniPath = join(iniDir, 'hebcal-dot-com.ini');
-app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
-
-app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
-
-app.use(xResponseTime());
-app.use(accessLogger(logger));
-app.on('error', errorLogger(logger));
-
-const promClient = prometheus.client;
-const httpRequestsTotal = new promClient.Counter({
-  name: 'http_requests_total',
-  help: 'Total number of HTTP requests',
-  labelNames: ['method', 'status'],
-});
-app.use(async function httpMetricMiddleware(ctx, next) {
-  await next();
-  httpRequestsTotal
-      .labels(ctx.request.method, ctx.response.status)
-      .inc();
-});
-app.use(prometheus.middleware({}));
+useObservability(app, logger);
 
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
@@ -71,15 +30,7 @@ app.use(async function onlyGetAndHead(ctx, next) {
   await next();
 });
 
-app.use(timeout(8000, {
-  status: 503,
-  message: 'Service Unavailable',
-  callback: function(ctx) {
-    const logInfo = makeLogInfo(ctx);
-    logInfo.status = 503;
-    ctx.logger.warn(logInfo);
-  },
-}));
+useTimeout(app);
 
 app.use(stopIfTimedOut());
 
@@ -118,31 +69,10 @@ app.use(async function redirV2(ctx, next) {
 });
 
 app.use(conditional());
-app.use(compress({
-  gzip: true,
-  deflate: false,
-  br: {
-    params: {
-      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_TEXT,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 3,
-    },
-  },
-  zstd: {
-    params: {
-      // eslint-disable-next-line n/no-unsupported-features/node-builtins
-      [zlib.constants.ZSTD_c_compressionLevel]: 10,
-    },
-  },
-}));
+useCompression(app, {brotliQuality: 3, zstdLevel: 10});
 
 app.use(stopIfTimedOut());
-app.use(async function responseLength(ctx, next) {
-  await next();
-  const length = ctx.length;
-  if (ctx.status === 200 && typeof length === 'number') {
-    ctx.state.responseLength = length;
-  }
-});
+useResponseLength(app);
 
 const DOCUMENT_ROOT = '/var/www/html';
 
@@ -305,17 +235,7 @@ export {app};
 
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
-  if (process.env.NODE_ENV === 'production') {
-    fs.writeFileSync(logDir + '/koa.pid', String(process.pid));
-    process.on('SIGHUP', () => logger.info('Ignoring SIGHUP'));
-  }
-
-  const port = process.env.NODE_PORT || 8080;
-  app.listen(port, () => {
-    const msg = 'Koa server listening on port ' + port;
-    logger.info(msg);
-    console.log(msg);
-  });
+  startServer(app, logger, 8080);
 }
 
 function redirEncQuery(path, encQuery, ctx) {
