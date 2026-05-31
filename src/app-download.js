@@ -102,11 +102,7 @@ app.use(async function fixup0(ctx, next) {
 app.use(async function redirV2(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/v2/h/')) {
-    const slash = rpath.indexOf('/', 6);
-    const data = (slash === -1) ? rpath.substring(6) : rpath.substring(6, slash);
-    const filename = (slash === -1) ? 'hebcal.ics' : rpath.substring(slash + 1);
-    const buff = Buffer.from(data, 'base64');
-    const qs = buff.toString('ascii');
+    const {filename, qs} = parseV2Path(rpath);
     const sp = new URLSearchParams(qs);
     const query = Object.fromEntries(sp.entries());
     // Only do the redirect if this looks like a valid v2 download URL
@@ -241,11 +237,7 @@ app.use(async function fixup2(ctx, next) {
       ctx.throw(status, `Invalid download URL: ${data}`);
     }
   } else if (path.startsWith('/v2')) {
-    const slash = path.indexOf('/', 6);
-    const data = (slash === -1) ? path.substring(6) : path.substring(6, slash);
-    const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
-    const buff = Buffer.from(data, 'base64');
-    const qs = buff.toString('ascii');
+    const {filename, qs} = parseV2Path(path);
     ctx.request.url = '/export/' + filename + '?' + qs;
   }
   await next();
@@ -329,4 +321,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 function redirEncQuery(path, encQuery, ctx) {
   const qs = unescape(path.substring(encQuery + 7)).replaceAll(';', '&');
   httpRedirect(ctx, `/export/export.ics?redir=1&${qs}`, 301);
+}
+
+// Parse a /v2 download path of the form /v2/<base64-querystring>/<filename>,
+// returning the filename and the base64-decoded query string.
+function parseV2Path(path) {
+  const slash = path.indexOf('/', 6);
+  const data = (slash === -1) ? path.substring(6) : path.substring(6, slash);
+  const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
+  const qs = Buffer.from(data, 'base64').toString('ascii');
+  return {filename, qs};
 }
