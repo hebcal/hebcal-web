@@ -18,9 +18,7 @@
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
-The <a href="<%=inverse.href%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
-by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: inverse.href, subject: 'Torah reading schedule'}) -%></p>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup>

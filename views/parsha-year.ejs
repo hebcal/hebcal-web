@@ -27,9 +27,7 @@ over the course of one Hebrew calendar year.</p>
 href="#hcdl-modal" role="button" data-bs-toggle="modal"
 data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use
 href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
-<small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading schedule.
-The <a href="<%=hyear%>?i=<%=il?'off':'on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
-by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
+<small><%- await include('partials/israel-diaspora-note.ejs', {il, href: hyear + '?i=' + (il ? 'off' : 'on'), subject: 'Torah reading schedule'}) -%></small></p>
 
 <table class="table table-striped">
 <colgroup>
