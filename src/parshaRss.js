@@ -14,12 +14,13 @@ export async function parshaRss(ctx) {
   const il = bn.startsWith('israel');
   const suffix = il ? ' (Israel)' : ' (Diaspora)';
   const lang = getLang(rpath);
-  if (checkFreshETag(ctx, ctx.request.query, {
+  const attrs = {
     il, lang,
     yy: saturday.year(),
     mm: saturday.month(),
     dd: saturday.date(),
-  })) {
+  };
+  if (checkFreshETag(ctx, ctx.request.query, attrs)) {
     return;
   }
   const hebrew = lang === 'he';

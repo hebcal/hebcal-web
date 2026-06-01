@@ -7,10 +7,11 @@ const sql = 'SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Lo
 export async function sitemapZips(ctx) {
   const db = ctx.db.zipsDb;
   const results = db.prepare(sql).all();
-  if (checkFreshETag(ctx, {}, {
+  const attrs = {
     numZips: results.length,
     geodbv: GeoDb.version(),
-  })) {
+  };
+  if (checkFreshETag(ctx, {}, attrs)) {
     return;
   }
   const body = results

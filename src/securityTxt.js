@@ -4,11 +4,12 @@ import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 export async function securityTxt(ctx) {
   const dt = new Date();
   ctx.type = 'text/plain';
-  if (checkFreshETag(ctx, {}, {
+  const attrs = {
     yy: dt.getFullYear(),
     mm: dt.getMonth(),
     dd: dt.getDate(),
-  })) {
+  };
+  if (checkFreshETag(ctx, {}, attrs)) {
     return;
   }
   dt.setFullYear(dt.getFullYear() + 1);
