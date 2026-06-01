@@ -8,7 +8,7 @@ import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults} from './lang.js';
 import {queryDefaultCandleMins} from './urlArgs.js';
-import {makeETag, checkFreshETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
 } from './cacheControl.js';
@@ -53,6 +53,7 @@ const continents = {};
 const countryIdToIso = {};
 const isoToCountry = {};
 const countryAdmin1 = {};
+let numCountries = 0;
 
 function init() {
   if (didInit) {
@@ -76,6 +77,7 @@ function init() {
     countryIdToIso[id] = iso;
     isoToCountry[iso] = result.Country;
   }
+  numCountries = results.length;
   const stmt2 = geonamesDb.prepare('SELECT key,name,asciiname FROM admin1');
   const results2 = stmt2.all();
   for (const result of results2) {
@@ -130,17 +132,11 @@ function addHref(r, countryCode) {
   r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}&set=off`;
 }
 
-function isFresh(ctx) {
-  return checkFreshETag(ctx, ctx.request.query, {});
-}
-
 export async function shabbatBrowse(ctx) {
   init();
   const rpath = ctx.request.path;
-  const base0 = basename(rpath);
-  const base = base0.endsWith('.xml') ? base0.substring(0, base0.length - 4) : base0;
   if (rpath === '/shabbat/browse/') {
-    if (isFresh(ctx)) {
+    if (checkFreshETag(ctx, ctx.request.query, {numCountries})) {
       return;
     }
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
@@ -150,10 +146,10 @@ export async function shabbatBrowse(ctx) {
     });
   }
   if (rpath === '/shabbat/browse/sitemap.xml') {
-    if (isFresh(ctx)) {
+    ctx.type = 'text/xml';
+    if (checkFreshETag(ctx, ctx.request.query, {numCountries})) {
       return;
     }
-    ctx.type = 'text/xml';
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
@@ -162,47 +158,54 @@ export async function shabbatBrowse(ctx) {
     });
     return;
   }
+  const base0 = basename(rpath);
+  const base = base0.endsWith('.xml') ? base0.substring(0, base0.length - 4) : base0;
   const iso = countryIdToIso[base];
   if (iso !== undefined) {
     return countryPage(ctx, iso);
   }
   const countryA1 = countryAdmin1[base];
   if (countryA1 !== undefined) {
-    const db = new DatabaseSync(geonamesFilename, {readOnly: true});
-    const stmt = db.prepare(COUNTRY_ADMIN_SQL);
-    const countryCode = countryA1.cc;
-    const results = stmt.all(countryCode, countryA1.admin1);
-    db.close();
-    results.forEach((r) => addHref(r, countryCode));
-    const tzid = results?.[0]?.timezone || 'America/New_York';
-    const saturday = dayjs.tz(new Date(), tzid).day(6);
-    ctx.response.etag = makeETag(ctx, ctx.request.query, {
-      countryCode,
-      admin1: countryA1.admin1,
-      tzid,
-      numCities: results.length,
-      yy: saturday.year(),
-      mm: saturday.month(),
-      dd: saturday.date(),
-    });
-    if (isFresh(ctx)) {
-      return;
-    }
-    const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
-    const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
-    return render(ctx, 'shabbat-browse-country-small', {
-      title: `${countryName} Shabbat Times - Hebcal`,
-      countryName,
-      results,
-      friday,
-      parsha,
-      admin1: {size: 0},
-      countryA1,
-      flag: flag(countryCode),
-    });
+    return countryAdmin1Page(ctx, countryA1);
   }
   ctx.throw(404, `Browse page not found: ${base}`);
 }
+
+async function countryAdmin1Page(ctx, countryA1) {
+  const db = new DatabaseSync(geonamesFilename, {readOnly: true});
+  const stmt = db.prepare(COUNTRY_ADMIN_SQL);
+  const countryCode = countryA1.cc;
+  const results = stmt.all(countryCode, countryA1.admin1);
+  db.close();
+  results.forEach((r) => addHref(r, countryCode));
+  const tzid = results?.[0]?.timezone || 'America/New_York';
+  const saturday = dayjs.tz(new Date(), tzid).day(6);
+  const eTagAttrs = {
+    countryCode,
+    admin1: countryA1.admin1,
+    tzid,
+    numCities: results.length,
+    yy: saturday.year(),
+    mm: saturday.month(),
+    dd: saturday.date(),
+  };
+  if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
+    return;
+  }
+  const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
+  const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
+  const props = {
+    title: `${countryName} Shabbat Times - Hebcal`,
+    countryName,
+    results,
+    friday,
+    parsha,
+    admin1: {size: 0},
+    countryA1,
+    flag: flag(countryCode),
+  };
+  return render(ctx, 'shabbat-browse-country-small', props);
+};
 
 async function countryPage(ctx, countryCode) {
   const countryName = isoToCountry[countryCode];
@@ -225,11 +228,9 @@ async function countryPage(ctx, countryCode) {
     numCities: results.length,
   };
 
-  // console.log(countryName, results.length, admin1.size);
   if (results.length > 299) {
     // cache if the list of cities and timezone is stable
-    ctx.response.etag = makeETag(ctx, ctx.request.query, eTagAttrs);
-    if (isFresh(ctx)) {
+    if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
       return;
     }
     const listItems = makeAdmin1(admin1);
@@ -250,8 +251,7 @@ async function countryPage(ctx, countryCode) {
   eTagAttrs.yy = saturday.year();
   eTagAttrs.mm = saturday.month();
   eTagAttrs.dd = saturday.date();
-  ctx.response.etag = makeETag(ctx, ctx.request.query, eTagAttrs);
-  if (isFresh(ctx)) {
+  if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
     return;
   }
 

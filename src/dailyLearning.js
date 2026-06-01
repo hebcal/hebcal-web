@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {makeETag, checkFreshETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {localeMap} from './lang.js';
@@ -12,8 +12,6 @@ import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/learning';
 
-const currentYear = new Date().getFullYear();
-
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
   if (rpath === '/learning/' || rpath === '/learning') {
@@ -24,10 +22,12 @@ export function dailyLearningApp(ctx) {
     ctx.set('Cache-Control', 'private, max-age=1200');
     httpRedirect(ctx, `/learning/${d.format('YYYY-MM-DD')}`, 302);
     return;
-  } else if (rpath === '/learning/sitemap.txt') {
+  }
+  if (rpath === '/learning/sitemap.txt') {
     dailyLearningSitemap(ctx);
     return;
   }
+  // let this 400 if URL contains invalid date
   const dt = isoDateStringToDate(basename(rpath));
   if (checkFreshETag(ctx, {}, {})) {
     return;
@@ -126,6 +126,7 @@ export function dailyLearningApp(ctx) {
   items.unshift(...items0);
 
   ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+  const currentYear = new Date().getFullYear();
   return ctx.render('dailyLearning', {
     d,
     hd,
@@ -141,17 +142,20 @@ export function dailyLearningApp(ctx) {
 }
 
 function dailyLearningSitemap(ctx) {
+  const currentYear = new Date().getFullYear();
+  if (checkFreshETag(ctx, {}, {currentYear})) {
+    return;
+  }
   const prefix = 'https://www.hebcal.com/learning';
   let body = '';
-  for (let i = -1; i < 4; i++) {
-    const year = currentYear + i;
+  const endYear = currentYear + 4;
+  for (let year = currentYear - 1; year < endYear; year++) {
     const startD = dayjs(new Date(year, 0, 1));
     const endD = dayjs(new Date(year + 1, 0, 1));
     for (let d = startD; d.isBefore(endD); d = d.add(1, 'day')) {
       body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
     }
   }
-  ctx.response.etag = makeETag(ctx, {}, {currentYear});
   ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   ctx.type = 'text/plain';
   ctx.body = body;
