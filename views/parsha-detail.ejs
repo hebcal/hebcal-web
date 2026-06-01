@@ -35,9 +35,7 @@ Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on
 <% } -%>
 </p>
 <% if (israelDiasporaDiffer) { -%>
-<p><small>This page displays the <%=il?'Israel':'Diaspora'%> Torah reading for <%=parshaName%><%= date ? ' ' + hd.getFullYear() : '' %>.
-The <a href="<%=date ? otherLocationAnchor : parshaAnchor + (il?'':'?i=on')%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used
-by Jews living <%=il?'outside of':'in'%> modern Israel.</small></p>
+<p><small><%- await include('partials/israel-diaspora-note.ejs', {il, href: date ? otherLocationAnchor : parshaAnchor + (il ? '' : '?i=on'), subject: 'Torah reading for ' + parshaName + (date ? ' ' + hd.getFullYear() : '')}) -%></small></p>
 <% } -%>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
 <% if (reading.torahHtml) { %><%- reading.torahHtml -%>

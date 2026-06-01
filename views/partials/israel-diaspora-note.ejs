@@ -1,0 +1,8 @@
+<%# Israel/Diaspora schedule disclaimer sentence.
+   Locals:
+     il      - boolean, true when displaying the Israel schedule
+     href    - link to the inverse (other location) schedule
+     subject - noun phrase, e.g. 'holiday schedule', 'Torah reading schedule'
+   Caller is responsible for the wrapping element (e.g. <p class="small">). -%>
+This page displays the <%=il ? 'Israel' : 'Diaspora'%> <%=subject%>.
+The <a href="<%=href%>"><%=il ? 'Diaspora' : 'Israel'%> schedule</a> is used by Jews living <%=il ? 'outside of' : 'in'%> modern Israel.

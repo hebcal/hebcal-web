@@ -28,8 +28,7 @@ on the last date specified. For example, if the dates for Rosh
 Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
 then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
 and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=inverse.href%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: inverse.href, subject: 'holiday schedule'}) -%></p>
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none">

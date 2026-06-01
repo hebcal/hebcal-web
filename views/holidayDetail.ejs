@@ -82,9 +82,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </table>
 </div><!-- #chanukah-candles -->
 <% } else if (pesachSukkotItems !== null) { %>
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by
-Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: rpath + (il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
 <div class="table-responsive" id="shalosh-regalim">
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
@@ -161,9 +159,7 @@ data-ad-slot="5342180883"></ins>
 <% if (typeof meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-4">Tanakh</h3>
 <% if (isShaloshRegalim) { %>
-<p class="small">This page displays the <%=il?'Israel':'Diaspora'%> holiday schedule.
-The <a href="<%=rpath%><%=il?'':'?i=on'%>"><%=il?'Diaspora':'Israel'%> schedule</a> is used by
-Jews living <%=il?'outside of':'in'%> modern Israel.</p>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: rpath + (il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
 <% } %>
 <% if (Object.keys(meta.reading).length >= 3) { %>
 <div class="d-print-none">
