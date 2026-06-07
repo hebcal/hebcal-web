@@ -3,6 +3,14 @@ const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser');
 const pkg = require('./package.json');
 
+const stripHdateComment = {
+  name: 'strip-hdate-comment',
+  transform(code, id) {
+    const replaced = code.replace(/^\/\*! @hebcal\/hdate .* \*\//, '');
+    return replaced === code ? null : {code: replaced, map: null};
+  },
+};
+
 module.exports = [
   {
     input: 'static/i/hebcal-app.js',
@@ -34,6 +42,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
+      stripHdateComment,
     ],
   },
   {
@@ -49,6 +58,7 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
+      stripHdateComment,
     ],
   },
   {
@@ -64,6 +74,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
+      stripHdateComment,
     ],
   },
   {
@@ -79,6 +90,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
+      stripHdateComment,
     ],
   },
   {
@@ -94,6 +106,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
+      stripHdateComment,
     ],
   },
   {
