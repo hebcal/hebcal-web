@@ -5,7 +5,7 @@ import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/tr
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
-import {httpRedirect, getBaseFromPath, throw410} from './common.js';
+import {httpRedirect, getBaseFromPath} from './common.js';
 import {langNames} from './lang.js';
 import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
@@ -48,7 +48,7 @@ export async function parshaDetail(ctx) {
     if (Number.isNaN(year)) {
       ctx.throw(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
-      throw410(ctx);
+      ctx.throw(410, 'Gone');
     }
     const events = HebrewCalendar.calendar({year, il, sedrot: true, noHolidays: true});
     const parshaEv = findParshaEvent(events, parshaName0, il);
@@ -65,7 +65,7 @@ export async function parshaDetail(ctx) {
     const dt = parse8digitDateStr(date);
     const year = dt.getFullYear();
     if (year < 1000 || yearIsOutsideGregRange(year)) {
-      throw410(ctx);
+      ctx.throw(410, 'Gone');
       return;
     }
   }

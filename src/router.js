@@ -4,7 +4,6 @@ import {send} from '@koa/send';
 import {getLocationFromQuery} from './location.js';
 import {
   httpRedirect,
-  throw410,
   DOCUMENT_ROOT,
 } from './common.js';
 import {
@@ -117,7 +116,7 @@ export function wwwRouter() {
       if (typeof destination === 'number') {
         throw createError(destination);
       } else if (destination === null) {
-        throw410(ctx);
+        ctx.throw(410, 'Gone');
       }
       ctx.status = 301;
       ctx.redirect(destination);

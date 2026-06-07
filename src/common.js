@@ -112,10 +112,6 @@ export function getBaseFromPath(ctx) {
   }
 }
 
-export function throw410(ctx) {
-  ctx.throw(410, 'Gone');
-}
-
 /**
  * Return candle lighting time description based on day of week
  * @param {number} dow day of week

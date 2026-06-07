@@ -3,7 +3,6 @@ import {getCalendarTitle} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {checkFreshETag} from './etag.js';
-import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cacheControl} from './cacheControl.js';
 import {lgToLocale, localeMap} from './lang.js';
@@ -30,7 +29,7 @@ export async function holidayPdf(ctx) {
   const calendarYear = isHebrewYear ? (yearNum >= 3761 ? yearNum : yearNum + 3761) : yearNum;
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {
-    throw410(ctx);
+    ctx.throw(410, 'Gone');
   }
   const query = ctx.request.query;
   const lg = lgToLocale[query.lg || 's'] || query.lg;

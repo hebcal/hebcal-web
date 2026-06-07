@@ -4,7 +4,6 @@ import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js';
 import {getDefaultHebrewYear, simchatTorahDate, yearIsOutsideHebRange} from './dateUtil.js';
 import {checkFreshETag} from './etag.js';
-import {throw410} from './common.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import dayjs from 'dayjs';
 
@@ -18,7 +17,7 @@ export async function parshaMultiYearIndex(ctx) {
   if (hyear < 2 || hyear > 32000) {
     ctx.throw(400, 'Hebrew year must be in range 2-32000');
   } else if (yearIsOutsideHebRange(hyear)) {
-    throw410(ctx);
+    ctx.throw(410, 'Gone');
   }
   if (checkFreshETag(ctx, q, {hyear})) {
     return;

@@ -7,7 +7,7 @@ import {basename} from 'node:path';
 import {checkFreshETag} from './etag.js';
 import {yearIsOutsideHebRange} from './dateUtil.js';
 import {getNumYears} from './calendar.js';
-import {shortenUrl, throw410} from './common.js';
+import {shortenUrl} from './common.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
@@ -20,7 +20,7 @@ export async function parshaYearApp(ctx) {
   if (hyear < 2 || hyear > 32000) {
     ctx.throw(400, 'Hebrew year must be in range 2-32000');
   } else if (yearIsOutsideHebRange(hyear)) {
-    throw410(ctx);
+    ctx.throw(410, 'Gone');
   }
   const q = ctx.request.query;
   if (checkFreshETag(ctx, q, {hyear})) {
