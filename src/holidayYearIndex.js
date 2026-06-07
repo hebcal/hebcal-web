@@ -10,7 +10,6 @@ import {
   OMER_TITLE,
 } from './holidayCommon.js';
 import {checkFreshETag} from './etag.js';
-import {throw410} from './common.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 
@@ -136,7 +135,7 @@ export async function holidayYearIndex(ctx) {
   const calendarYear = makeCalendarYear(isHebrewYear, yearNum);
   if ((isHebrewYear && yearIsOutsideHebRange(calendarYear)) ||
       (!isHebrewYear && yearIsOutsideGregRange(calendarYear))) {
-    throw410(ctx);
+    ctx.throw(410, 'Gone');
   }
   const il = ctx.state.il;
   const options = {

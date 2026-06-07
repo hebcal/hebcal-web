@@ -10,7 +10,6 @@ import {langNames} from './lang.js';
 import {checkFreshETag} from './etag.js';
 import {yearIsOutsideGregRange} from './dateUtil.js';
 import {httpRedirect, wrapHebrewInSpans, getBaseFromPath,
-  throw410,
   lightCandlesWhen,
   hebrewFontPreload,
 } from './common.js';
@@ -91,7 +90,7 @@ export async function holidayDetail(ctx) {
   }
   const holidayAnchor = makeAnchor(holiday);
   if (year !== null && yearIsOutsideGregRange(year)) {
-    throw410(ctx);
+    ctx.throw(410, 'Gone');
   }
   if (base0 !== base) {
     // fix capitalization
@@ -105,7 +104,7 @@ export async function holidayDetail(ctx) {
     if (Number.isNaN(year)) {
       ctx.throw(400, `invalid year: ${q.gy}`);
     } else if (yearIsOutsideGregRange(year)) {
-      throw410(ctx);
+      ctx.throw(410, 'Gone');
     }
     httpRedirect(ctx, `/holidays/${holidayAnchor}-${year}`);
     return;
