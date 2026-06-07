@@ -176,51 +176,20 @@ data-ad-slot="1867606375"></ins>
 <%- await include('partials/print-iframe.ejs') -%>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
-  window['hebcal']=window['hebcal']||{};
-  window['hebcal'].lang='<%= q.lg || "s" %>';
-  window['hebcal'].locale='<%= locale %>';
-  window['hebcal'].cconfig=<%- JSON.stringify(cconfig) %>;
-  window['hebcal'].localeConfig=<%- JSON.stringify(localeConfig) %>;
-  window['hebcal'].events=<%- JSON.stringify(items) %>;
-  window['hebcal'].memos=<%- JSON.stringify(memos) %>;
-  window['hebcal'].opts=<%- JSON.stringify(opts) %>;
+  window.hebcal=window.hebcal||{};
+  window.hebcal.lang='<%= q.lg || "s" %>';
+  window.hebcal.locale='<%= locale %>';
+  window.hebcal.cconfig=<%- JSON.stringify(cconfig) %>;
+  window.hebcal.localeConfig=<%- JSON.stringify(localeConfig) %>;
+  window.hebcal.events=<%- JSON.stringify(items) %>;
+  window.hebcal.memos=<%- JSON.stringify(memos) %>;
+  window.hebcal.opts=<%- JSON.stringify(opts) %>;
   const d = document;
-  function renderPagination(months) {
-    if (window['hebcal'].paginationRendered) {
-      return;
-    }
-    const localeData = window['hebcal'].localeConfig;
-    d.querySelectorAll('nav ul.pagination').forEach(function(parentEl) {
-      const finalChildNode = parentEl.children[parentEl.children.length - 1];
-      months.forEach(function(month) {
-        const yearMonth = month.month;
-        let title, innerHTML;
-        if (month.isHebrew) {
-          title = month.monthName;
-          innerHTML = month.monthName.split(' ')[0];
-        } else {
-          const yearStr = yearMonth.substring(0, yearMonth.length - 3);
-          const monthStr = yearMonth.substring(yearMonth.length - 2);
-          const mm = parseInt(monthStr, 10);
-          title = localeData.months[mm - 1] + ' ' + yearStr;
-          innerHTML = localeData.monthsShort[mm - 1];
-        }
-        const newNode = hebcalResults.paginationListItem({
-          href: '#cal-' + yearMonth,
-          title: title,
-          innerHTML: innerHTML,
-        });
-        newNode.className = 'page-item d-none d-sm-inline';
-        parentEl.insertBefore(newNode, finalChildNode);
-      });
-    });
-    window['hebcal'].paginationRendered = true;
-  }
   function show(el) { if (el) { el.style.display = 'block' } }
   function hide(el) { if (el) { el.style.display = 'none' } }
 
-  const months = hebcalResults.splitByMonth(window['hebcal'].events);
-  renderPagination(months);
+  const months = hebcalResults.splitByMonth(window.hebcal.events);
+  hebcalResults.renderPagination(months);
   hebcalResults.makeMonthDivs(months);
 
   const toggleMonth = d.getElementById('toggle-month');

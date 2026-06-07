@@ -74,7 +74,7 @@ describe('Hebcal Routes', () => {
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
 
-    // Template embeds opts as JSON: window['hebcal'].opts={...}
+    // Template embeds opts as JSON: window.hebcal.opts={...}
     // mm=2 sets both hebrewMonths and gematriyaNumerals in the opts
     expect(response.text).toContain('"hebrewMonths":true');
     expect(response.text).toContain('"gematriyaNumerals":true');
