@@ -71,6 +71,11 @@ export async function hebrewDateConverter(ctx) {
   }
   if (ctx.status !== 400 && !p.noCache) {
     if (checkFreshETag(ctx, q, props)) {
+      // RFC 7232 §4.1: a 304 SHOULD carry the same
+      // Cache-Control/Expires/Vary it would have sent on a 200
+      const ccVal = q.cfg === 'json' || q.cfg === 'xml' ?
+        CACHE_CONTROL_1_YEAR : CACHE_CONTROL_7DAYS;
+      ctx.set('Cache-Control', ccVal);
       return;
     }
   }
@@ -608,6 +613,9 @@ function g2h(dt, gs, noCache) {
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
+  if (!p.noCache && ctx.request.querystring.length !== 0) {
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
+  }
   if (checkFreshETag(ctx, ctx.request.query, p)) {
     return;
   }
@@ -617,9 +625,6 @@ export async function dateConverterCsv(ctx) {
   for (const item of arr) {
     const isoDate = dateToISOString(item.d.toDate());
     csv += isoDate + ',' + item.hd.toString() + '\r\n';
-  }
-  if (!p.noCache && ctx.request.querystring.length !== 0) {
-    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   }
   const suffix = hdate.getDate() + '-' + makeAnchor(hdate.getMonthName());
   ctx.response.attachment(`hdate-${suffix}.csv`);
