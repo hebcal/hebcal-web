@@ -28,13 +28,13 @@ export async function fridgeShabbat(ctx) {
     q.year = '' + hyear;
     delete q.yt;
   }
+  if (!empty(q.year)) {
+    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
+  }
   if (checkFreshETag(ctx, q, {})) {
     return;
   }
   const p = makeProperties(ctx);
-  if (!empty(q.year)) {
-    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
-  }
   if (q.cfg === 'csv') {
     let csv = '';
     if (p.lang !== 'en') {

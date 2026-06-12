@@ -12,6 +12,7 @@ export async function dafYomiRss(ctx) {
   const q = ctx.request.query;
   const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
+  expires(ctx, dt);
   if (checkFreshETag(ctx, q, {hd})) {
     return;
   }
@@ -21,7 +22,6 @@ export async function dafYomiRss(ctx) {
   const isDafYomi = bn.startsWith('dafyomi');
   const calendarName = isDafYomi ? 'dafYomi' : 'mishnaYomi';
   const event = DailyLearning.lookup(calendarName, hd);
-  expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('dafyomi-rss', {
     writeResp: false,

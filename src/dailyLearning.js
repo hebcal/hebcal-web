@@ -29,6 +29,7 @@ export function dailyLearningApp(ctx) {
   }
   // let this 400 if URL contains invalid date
   const dt = isoDateStringToDate(basename(rpath));
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, {}, {})) {
     return;
   }
@@ -125,7 +126,6 @@ export function dailyLearningApp(ctx) {
   });
   items.unshift(...items0);
 
-  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   const currentYear = new Date().getFullYear();
   return ctx.render('dailyLearning', {
     d,
@@ -143,6 +143,7 @@ export function dailyLearningApp(ctx) {
 
 function dailyLearningSitemap(ctx) {
   const currentYear = new Date().getFullYear();
+  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   if (checkFreshETag(ctx, {}, {currentYear})) {
     return;
   }
@@ -156,7 +157,6 @@ function dailyLearningSitemap(ctx) {
       body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
     }
   }
-  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   ctx.type = 'text/plain';
   ctx.body = body;
 }

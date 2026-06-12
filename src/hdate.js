@@ -19,10 +19,10 @@ function getLocale(rpath) {
 export async function hdateJavascript(ctx) {
   const locale = getLocale(ctx.request.path);
   const fileName = `hdate-${locale}.min.js`;
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, {}, {})) {
     return;
   }
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.type = 'text/javascript';
   return send(ctx, fileName, {root: hdateMinDir});
 }
@@ -38,6 +38,7 @@ export async function hdateXml(ctx) {
   const q = ctx.request.query;
   const {dt} = getTodayDate(q);
   const hd = new HDate(dt);
+  expires(ctx, dt);
   if (checkFreshETag(ctx, q, {hd})) {
     return;
   }
@@ -55,7 +56,6 @@ export async function hdateXml(ctx) {
     hm: hmToArg[hm] || hm,
     hd: hd.getDate(),
   };
-  expires(ctx, dt);
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('hdate-xml', props);
 }

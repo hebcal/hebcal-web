@@ -14,6 +14,7 @@ export async function geoAutoComplete(ctx) {
     ctx.body = NOTFOUND;
     return;
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   if (checkFreshETag(ctx, q, {geodbv: GeoDb.version()})) {
     ctx.body = {status: 'Not Modified'};
     return;
@@ -32,7 +33,6 @@ export async function geoAutoComplete(ctx) {
         item.flag = flag(cc);
       }
     }
-    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
     ctx.body = items;
   } else {
     ctx.response.remove('ETag');
