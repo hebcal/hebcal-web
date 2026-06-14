@@ -45,7 +45,7 @@ export function limitIcsFeedLength(events, isSubscription, today) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function hebcalDownload(ctx) {
   const query = {...ctx.request.query};

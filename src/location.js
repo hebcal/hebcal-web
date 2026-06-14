@@ -11,7 +11,7 @@ import {xmlEsc} from './sanitize.js';
 /**
  * MaxMind geoIP lookup GeoLite2-Country.mmdb
  * @return {any}
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {number} maxAccuracyRadius
  */
 export function getLocationFromGeoIp(ctx, maxAccuracyRadius = 500) {
@@ -266,7 +266,7 @@ export function getLocationFromQuery(db, query) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {any} q
  * @return {any}
  */

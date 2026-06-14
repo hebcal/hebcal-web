@@ -13,7 +13,7 @@ import {getMaxYahrzeitId,
 import {makeYahrzeitEvents, getDateRange, makeEditMemo} from './makeYahrzeitEvents.js';
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 async function getDetailsFromDb(ctx) {
   const id = ctx.request.path.substring(4, 30);
@@ -25,7 +25,7 @@ async function getDetailsFromDb(ctx) {
 const maxEventsIcsSub = 1200;
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function yahrzeitDownload(ctx) {
   const rpath = ctx.request.path;

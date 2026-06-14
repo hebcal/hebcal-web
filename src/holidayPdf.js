@@ -10,7 +10,7 @@ import {lgToLocale, localeMap} from './lang.js';
 const CACHE_CONTROL_60DAYS = cacheControl(60);
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function holidayPdf(ctx) {
   const rpath = ctx.request.path;

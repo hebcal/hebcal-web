@@ -73,7 +73,7 @@ function fridgeIndex(ctx) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  * @return {Object}
  */
 function makeProperties(ctx) {
@@ -122,7 +122,7 @@ function formatForHtml(p) {
 const YEAR_RANGE = 50;
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {number[]}
  */
 function getStartAndEnd(query) {

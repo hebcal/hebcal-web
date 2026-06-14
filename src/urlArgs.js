@@ -138,7 +138,7 @@ const geonameIdCandleOffset = {
 };
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {number}
  */
 export function queryDefaultCandleMins(query) {

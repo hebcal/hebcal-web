@@ -199,7 +199,7 @@ const SHANA_TOVA2 = '<strong>Shana Tova u\'Metukah!</strong> We wish you a happy
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {HDate} hd
  * @param {boolean} il
  * @param {boolean} dateOverride
@@ -376,7 +376,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Event} ev
  * @return {string[]}
  */
@@ -392,7 +392,7 @@ function fastDayGreeting(ctx, ev) {
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Event} ev
  * @param {boolean} il
  * @param {boolean} today

@@ -304,7 +304,7 @@ function getDateForId(query, id) {
 }
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @return {string[]}
  */
 export function getCalendarNames(query) {
@@ -315,7 +315,7 @@ export function getCalendarNames(query) {
 }
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @param {number} maxlen
  * @return {string}
  */

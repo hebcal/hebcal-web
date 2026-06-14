@@ -12,7 +12,7 @@ function murmur128SyncBase64(str) {
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} options
  * @param {Object.<string,string>} attrs
  * @return {string}
@@ -46,7 +46,7 @@ export function makeETag(ctx, options, attrs) {
  * Sets `ctx.response.etag` and `ctx.status` (200, or 304 when fresh). Returns
  * `true` when the response is fresh, in which case the caller should return
  * immediately without rendering a body.
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} options
  * @param {Object.<string,string>} attrs
  * @return {boolean}

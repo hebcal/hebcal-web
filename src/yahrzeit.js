@@ -61,7 +61,7 @@ async function makeQuery(ctx) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function yahrzeitApp(ctx) {
   ctx.set('Cache-Control', 'private');

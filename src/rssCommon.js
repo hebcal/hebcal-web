@@ -5,7 +5,7 @@ import createError from 'http-errors';
 export const RSS_CONTENT_TYPE = 'application/rss+xml; charset=utf-8';
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Date} dt
  */
 export function expires(ctx, dt) {

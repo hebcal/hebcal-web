@@ -28,7 +28,7 @@ export function makeEmailTransport(iniConfig) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {any} message
  * @return {Promise}
  */
@@ -66,7 +66,7 @@ export async function mySendMail(ctx, message) {
 /**
  * Sends a transactional email fire-and-forget, logging any delivery error
  * instead of propagating it (so the HTTP response succeeds regardless).
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {any} message
  */
 export function sendMailLogErr(ctx, message) {

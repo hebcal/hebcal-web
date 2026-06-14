@@ -7,7 +7,7 @@ import {processCookieAndQuery} from './urlArgs.js';
 /**
  * MaxMind geoIP lookup GeoLite2-Country.mmdb
  * @return {any}
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 export function setDefautLangTz(ctx) {
   ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP

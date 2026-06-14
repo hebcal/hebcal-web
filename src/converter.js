@@ -28,7 +28,7 @@ function isset(val) {
 const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function hebrewDateConverter(ctx) {
   const now = ctx.state.now = new Date();
@@ -286,7 +286,7 @@ const hmonthArg = {
 };
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object} props
  * @return {Object}
  */
@@ -358,7 +358,7 @@ function eventToItem(ctx, ev) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {HDate} hdate
  * @return {any}
  */
@@ -484,7 +484,7 @@ function makeOmer(hdate) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  * @return {Object}
  */
 function parseConverterQuery(ctx) {
@@ -551,7 +551,7 @@ function parseConverterQuery(ctx) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  * @param {dayjs.Dayjs} startD
  * @param {dayjs.Dayjs} endD
  * @return {Object}
@@ -609,7 +609,7 @@ function g2h(dt, gs, noCache) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);

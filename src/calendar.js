@@ -265,7 +265,7 @@ const webOnlyOpts = {
 };
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {import('@hebcal/core').CalOptions} options
  * @return {Event[]}
  */

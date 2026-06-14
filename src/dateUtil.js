@@ -278,7 +278,7 @@ export function shabbatWeekRange(d) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Date} now
  * @param {string} tzid
  */

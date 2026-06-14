@@ -40,7 +40,7 @@ export function makeLogger(logDir) {
 }
 
 /**
- * @param {Koa.ParameterizedContext<Koa.DefaultState, Koa.DefaultContext>} ctx
+ * @param {import('koa').Context} ctx
  * @return {Object}
  */
 export function makeLogInfo(ctx) {

@@ -42,7 +42,7 @@ export function getDateRange(query) {
 
 /**
  * @param {number} maxId
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @param {boolean} reminder
  * @return {Promise<Event[]>}
  */
@@ -105,7 +105,7 @@ function makeReminderEvents(events, id) {
 }
 
 /**
- * @param {any} query
+ * @param {Object.<string,string>} query
  * @param {number} id
  * @param {number} startYear
  * @param {number} numYears

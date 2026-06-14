@@ -163,7 +163,7 @@ function getSubFilename(location) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {any} q
  * @param {import('@hebcal/core').CalOptions} options
  */

@@ -23,7 +23,7 @@ const CACHE_CONTROL = 'Cache-Control';
 
 /**
  * Perform a 302 redirect to `rpath`.
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {string} rpath
  * @param {number} status
  */
@@ -101,7 +101,7 @@ export function utmSourceFromRef(ctx) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @return {string}
  */
 export function getBaseFromPath(ctx) {

@@ -1,5 +1,5 @@
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @return {string}
  */
 export function getIpAddress(ctx) {
