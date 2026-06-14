@@ -1,53 +1,9 @@
 import http from 'node:http';
 import {pkg} from './pkg.js';
 import {getIpAddress} from './getIpAddress.js';
-
-const knownRobots = {
-  'check_http': 1,
-  'checkhttp2': 1,
-  'curl': 1,
-  'Excel': 1,
-  'GuzzleHttp': 1,
-  'kube-probe': 1,
-  'python-requests': 1,
-  'Mediapartners-Google': 1,
-  'Mozilla/5.0 (compatible; Google-Apps-Script)': 1,
-  'Mozilla/5.0 (compatible; GoogleDocs; apps-spreadsheets; +http://docs.google.com)': 1,
-  'Mozilla/5.0 (compatible; AhrefsBot/7.0; +http://ahrefs.com/robot/)': 1,
-  'Mozilla/5.0 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)': 1,
-  'Mozilla/5.0 (compatible; BLEXBot/1.0; +http://webmeup-crawler.com/)': 1,
-  'Mozilla/5.0 (compatible; DotBot/1.2; +https://opensiteexplorer.org/dotbot; help@moz.com)': 1,
-  'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)': 1,
-  'Mozilla/5.0 (compatible; MJ12bot/v1.4.8; http://mj12bot.com/)': 1,
-  'Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)': 1,
-  'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)': 1,
-  'Rainmeter WebParser plugin': 1,
-  'Varnish Health Probe': 1,
-};
+import {isRobot} from './isRobot.js';
 
 const isProduction = process.env.NODE_ENV === 'production';
-
-/**
- * @private
- * @param {string} userAgent
- * @return {boolean}
- */
-function isRobot(userAgent) {
-  if (typeof userAgent !== 'string' || userAgent.length === 0) {
-    return false;
-  }
-  if (knownRobots[userAgent]) {
-    return true;
-  }
-  const idx = userAgent.indexOf('/');
-  if (idx !== -1) {
-    const uaPrefix = userAgent.substring(0, idx);
-    if (knownRobots[uaPrefix]) {
-      return true;
-    }
-  }
-  return false;
-}
 
 /**
  * @param {*} ctx

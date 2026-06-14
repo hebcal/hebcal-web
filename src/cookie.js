@@ -11,9 +11,10 @@ import {
   queryDefaultCandleMins,
   dailyLearningOpts,
 } from './urlArgs.js';
+import {isRobot} from './isRobot.js';
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @return {boolean}
  */
 export function doesCookieNeedRefresh(ctx) {
@@ -39,7 +40,7 @@ export function doesCookieNeedRefresh(ctx) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {string} newCookie
  */
 function setCookie(ctx, newCookie) {
@@ -58,7 +59,7 @@ function setCookie(ctx, newCookie) {
 const cookieOpts = geoKeys.concat(['lg', 'td'], Object.keys(numberOpts));
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} query
  * @param {string} uid
  * @return {string | boolean}
@@ -87,7 +88,7 @@ function makeCookie(ctx, query, uid) {
   const monthMode = query.mm;
   if (monthMode === '1' || monthMode === '2') {
     ck.mm = monthMode;
-  }  
+  }
   if (query.geo === 'pos') {
     ck.geo = 'pos';
   } else if (query.geo === 'none') {
@@ -120,7 +121,7 @@ function makeCookie(ctx, query, uid) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} query
  * @return {boolean}
  */
@@ -152,12 +153,15 @@ export function setHebcalCookie(ctx, query) {
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} query
  * @return {boolean}
  */
 export function possiblySetCookie(ctx, query) {
   if (ctx.status >= 301) {
+    return false;
+  }
+  if (isRobot(ctx.get('user-agent'))) {
     return false;
   }
   return setHebcalCookie(ctx, query);
