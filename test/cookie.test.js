@@ -174,6 +174,12 @@ describe('possiblySetCookie', () => {
     expect(ctx._appended['Set-Cookie']).toBeUndefined();
   });
 
+  it('returns false for missing user agents', () => {
+    const ctx = makeCtx({userAgent: ''});
+    expect(possiblySetCookie(ctx, {c: 'on'})).toBe(false);
+    expect(ctx._appended['Set-Cookie']).toBeUndefined();
+  });
+
   it('sets the cookie for a normal browser request', () => {
     const ctx = makeCtx({userAgent: 'Mozilla/5.0 (Macintosh)'});
     expect(possiblySetCookie(ctx, {c: 'on'})).toBe(true);

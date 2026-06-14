@@ -161,7 +161,8 @@ export function possiblySetCookie(ctx, query) {
   if (ctx.status >= 301) {
     return false;
   }
-  if (isRobot(ctx.get('user-agent'))) {
+  const ua = ctx.get('user-agent');
+  if (!ua || isRobot(ua)) {
     return false;
   }
   return setHebcalCookie(ctx, query);
