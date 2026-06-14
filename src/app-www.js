@@ -8,7 +8,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
 import {wwwRouter} from './router.js';
-import {DOCUMENT_ROOT} from './common.js';
+import {DOCUMENT_ROOT, httpRedirect} from './common.js';
 import {pkg} from './pkg.js';
 import {empty} from './empty.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
@@ -199,6 +199,26 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
 app.use(wwwRouter());
 
 app.use(stopIfTimedOut());
+
+app.use(async function handleStatic404(ctx, next) {
+  await next();
+  if (ctx.status === 404) {
+    ctx.remove('Cache-Control');
+    const rpath = ctx.request.path;
+    if (rpath.startsWith('/i/style-') && rpath.endsWith('.css')) {
+      httpRedirect(ctx, mainCssHref);
+    }
+    if (rpath.startsWith('/i/hebcal-app-5') && rpath.endsWith('.js')) {
+      httpRedirect(ctx, clientAppHref);
+    }
+    if (rpath.startsWith('/i/sprite') && rpath.endsWith('.svg')) {
+      httpRedirect(ctx, spriteHref);
+    }
+    if (rpath.startsWith('/i/color-icons') && rpath.endsWith('.svg')) {
+      httpRedirect(ctx, cspriteHref);
+    }
+  }
+});
 
 app.use(serve(DOCUMENT_ROOT, {defer: false, maxage: 604800000}));
 
