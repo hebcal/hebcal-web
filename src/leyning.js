@@ -14,7 +14,7 @@ const MAX_DAYS = 180;
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function getLeyning(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
@@ -30,6 +30,7 @@ export async function getLeyning(ctx) {
       ctx.throw(400, `Parameter '${param}' is required`);
     }
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, q, {})) {
     return;
   }
@@ -73,7 +74,6 @@ export async function getLeyning(ctx) {
     items,
   };
 
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.body = result;
 }
 

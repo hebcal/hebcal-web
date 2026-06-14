@@ -1,5 +1,5 @@
 import {empty} from './empty.js';
-import {makeETag, checkFreshETag} from './etag.js';
+import {checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
@@ -46,6 +46,8 @@ import {myEventsToClassicApi} from './myEventsToClassicApi.js';
 
 dayjs.extend(localeData);
 
+const outputTypes = new Set(['json', 'fc', 'e', 'e2', 'csv', 'rss', 'ics']);
+
 export async function hebcalApp(ctx) {
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ?
@@ -60,23 +62,13 @@ export async function hebcalApp(ctx) {
     options = makeHebcalOptions(ctx.db, q);
   } catch (err) {
     const status = err.status || 400;
-    switch (q.cfg) {
-      case 'json':
-      case 'fc':
-      case 'e':
-      case 'e2':
-      case 'csv':
-      case 'rss':
-      case 'ics':
-        ctx.throw(status, err);
-        break;
-      default:
-        if (q.v === '1') {
-          ctx.status = status;
-          q.v = '0';
-          error = err;
-        }
-        break;
+    if (outputTypes.has(q.cfg)) {
+      ctx.throw(status, err);
+    }
+    if (q.v === '1') {
+      ctx.status = status;
+      q.v = '0';
+      error = err;
     }
   }
   if (options.il) {
@@ -109,10 +101,8 @@ export async function hebcalApp(ctx) {
     q.v = '0';
     error = {message: `Hebrew year cannot be greater than 13760: ${options.year}`};
   }
-  if (ctx.status < 400 && q.v === '1') {
-    if (checkFreshETag(ctx, options, {outputType: q.cfg})) {
-      return;
-    }
+  if (error && ctx.status === 400 && outputTypes.has(q.cfg)) {
+    ctx.throw(ctx.status, error);
   }
   ctx.state.q = q;
   ctx.state.options = options;
@@ -160,23 +150,22 @@ function checkYearRange(ctx) {
 const maxEventsIcsSub = 2400;
 
 async function renderIcal(ctx) {
-  const options = ctx.state.options;
-  const icalOpt = makeIcalOpts(options, ctx.state.q);
-  ctx.response.etag = makeETag(ctx, icalOpt, {outputType: '.ics'});
+  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
+    cacheControl(0.25);
+  ctx.set('Cache-Control', cacheCtrlStr);
   if (isFresh(ctx)) {
     return;
   }
+  const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
   if (events.length === 0) {
     ctx.throw(400, 'No events');
   }
   ctx.response.attachment(getDownloadFilename(options) + '.ics');
   ctx.response.type = 'text/calendar; charset=utf-8';
+  const icalOpt = makeIcalOpts(options, ctx.state.q);
   icalOpt.utmSource = 'api';
   icalOpt.utmMedium = 'icalendar';
-  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
-    cacheControl(0.25);
-  ctx.set('Cache-Control', cacheCtrlStr);
   const events1 = events.length > maxEventsIcsSub ? events.slice(0, maxEventsIcsSub) : events;
   ctx.body = await eventsToIcalendar(events1, icalOpt);
 }
@@ -298,8 +287,20 @@ function renderHtml(ctx) {
     }
     return renderForm(ctx, {message: 'Please select at least one event option'});
   }
-  const location = ctx.state.location;
   const q = ctx.state.q;
+  let didSetCookie = false;
+  if (q.set !== 'off') {
+    didSetCookie = possiblySetCookie(ctx, q);
+  }
+  if (!didSetCookie) {
+    const cacheCtrlStr = longCacheCtrl(ctx) ? cacheControl(3) :
+      cacheControl(0.125);
+    ctx.set('Cache-Control', cacheCtrlStr);
+  }
+  if (isFresh(ctx)) {
+    return;
+  }
+  const location = ctx.state.location;
   const locationName = location ? location.getName() : makeCalendarSubtitleFromOpts(options, q);
   const shortTitle = pageTitle(options, events);
   const locale = localeMap[options.locale] || 'en';
@@ -335,15 +336,6 @@ function renderHtml(ctx) {
     }
     return item;
   });
-  let didSetCookie = false;
-  if (q.set !== 'off') {
-    didSetCookie = possiblySetCookie(ctx, q);
-  }
-  if (!didSetCookie) {
-    const cacheCtrlStr = longCacheCtrl(ctx) ? cacheControl(3) :
-      cacheControl(0.125);
-    ctx.set('Cache-Control', cacheCtrlStr);
-  }
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
   makeDownloadProps(ctx, q, options);
@@ -470,6 +462,7 @@ function isFresh(ctx) {
 }
 
 function renderFullCalendar(ctx) {
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (isFresh(ctx)) {
     return;
   }
@@ -485,7 +478,6 @@ function renderFullCalendar(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.body = events.map((ev) => {
     const item = eventToFullCalendar(ev, tzid, options);
     const emoji = ev.getEmoji();
@@ -497,6 +489,9 @@ function renderFullCalendar(ctx) {
 }
 
 function renderJson(ctx) {
+  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
+    cacheControl(0.375);
+  ctx.set('Cache-Control', cacheCtrlStr);
   if (isFresh(ctx)) {
     return;
   }
@@ -512,9 +507,6 @@ function renderJson(ctx) {
   if (cb) {
     obj = cb + '(' + JSON.stringify(obj) + ')\n';
   }
-  const cacheCtrlStr = longCacheCtrl(ctx) ? CACHE_CONTROL_7DAYS :
-    cacheControl(0.375);
-  ctx.set('Cache-Control', cacheCtrlStr);
   ctx.body = obj;
 }
 

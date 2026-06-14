@@ -20,6 +20,7 @@ export async function parshaRss(ctx) {
     mm: saturday.month(),
     dd: saturday.date(),
   };
+  expires(ctx, saturday.toDate());
   if (checkFreshETag(ctx, ctx.request.query, attrs)) {
     return;
   }
@@ -27,7 +28,6 @@ export async function parshaRss(ctx) {
   const utmSource = 'sedrot-' + (il ? 'israel' : 'diaspora');
   const utmMedium = 'rss';
   const events = makeEvents(dt, il, lang);
-  expires(ctx, saturday.toDate());
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = eventsToRss2(events, {
     mainUrl: 'https://www.hebcal.com/sedrot/' + (il ? '?i=on' : ''),

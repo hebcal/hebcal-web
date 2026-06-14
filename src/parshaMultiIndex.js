@@ -19,6 +19,7 @@ export async function parshaMultiYearIndex(ctx) {
   } else if (yearIsOutsideHebRange(hyear)) {
     ctx.throw(410, 'Gone');
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, q, {hyear})) {
     return;
   }
@@ -69,7 +70,6 @@ export async function parshaMultiYearIndex(ctx) {
   const next = new URL(canonical);
   next.searchParams.set('year', hyear + 5);
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
-  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('parsha-multi-year-index', {
     il,
     hyear,

@@ -136,10 +136,10 @@ export async function shabbatBrowse(ctx) {
   init();
   const rpath = ctx.request.path;
   if (rpath === '/shabbat/browse/') {
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     if (checkFreshETag(ctx, ctx.request.query, {numCountries})) {
       return;
     }
-    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return ctx.render('shabbat-browse', {
       title: 'Shabbat candle-lighting times for world cities - Hebcal',
       continents: Object.values(continents),
@@ -147,10 +147,10 @@ export async function shabbatBrowse(ctx) {
   }
   if (rpath === '/shabbat/browse/sitemap.xml') {
     ctx.type = 'text/xml';
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     if (checkFreshETag(ctx, ctx.request.query, {numCountries})) {
       return;
     }
-    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
       countries: Object.keys(countryIdToIso),
@@ -177,9 +177,9 @@ async function countryAdmin1Page(ctx, countryA1) {
   const countryCode = countryA1.cc;
   const results = stmt.all(countryCode, countryA1.admin1);
   db.close();
-  results.forEach((r) => addHref(r, countryCode));
   const tzid = results?.[0]?.timezone || 'America/New_York';
-  const saturday = dayjs.tz(new Date(), tzid).day(6);
+  const now = new Date();
+  const saturday = dayjs.tz(now, tzid).day(6);
   const eTagAttrs = {
     countryCode,
     admin1: countryA1.admin1,
@@ -189,9 +189,11 @@ async function countryAdmin1Page(ctx, countryA1) {
     mm: saturday.month(),
     dd: saturday.date(),
   };
+  expiresSaturdayNight(ctx, now, tzid);
   if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
     return;
   }
+  results.forEach((r) => addHref(r, countryCode));
   const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
   const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
   const props = {
@@ -230,13 +232,13 @@ async function countryPage(ctx, countryCode) {
 
   if (results.length > 299) {
     // cache if the list of cities and timezone is stable
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
       return;
     }
     const listItems = makeAdmin1(admin1);
     const countryUrlToken = makeAnchor(countryName);
     listItems.forEach((a1) => a1.href = countryUrlToken + '-' + a1.id);
-    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     return render(ctx, 'shabbat-browse-admin1', {
       title: `${countryName} Shabbat Times - Hebcal`,
       countryCode,
@@ -247,10 +249,12 @@ async function countryPage(ctx, countryCode) {
     });
   }
 
-  const saturday = dayjs.tz(new Date(), tzid).day(6);
+  const now = new Date();
+  const saturday = dayjs.tz(now, tzid).day(6);
   eTagAttrs.yy = saturday.year();
   eTagAttrs.mm = saturday.month();
   eTagAttrs.dd = saturday.date();
+  expiresSaturdayNight(ctx, now, tzid);
   if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
     return;
   }
@@ -286,7 +290,6 @@ async function countryPage(ctx, countryCode) {
 function makeCandleLighting(ctx, results, countryCode) {
   const tzid = results?.[0]?.timezone || 'America/New_York';
   const now = new Date();
-  expiresSaturdayNight(ctx, now, tzid);
   const today = dayjs.tz(now, tzid);
   const friday = today.day(5);
   const parsha = getParsha(today.day(6), countryCode === 'IL');

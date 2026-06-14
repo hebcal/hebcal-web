@@ -186,6 +186,7 @@ export async function holidayMainIndex(ctx) {
   if (yearIsOutsideHebRange(hyear)) {
     return httpRedirect(ctx, `/holidays/?redir=year`);
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   if (checkFreshETag(ctx, ctx.request.query, {hyear})) {
     return;
   }
@@ -240,7 +241,6 @@ export async function holidayMainIndex(ctx) {
     il,
     numYears: 5,
   });
-  ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   await ctx.render('holiday-main-index', {
     RH: dayjs(tishrei1.greg()),
     today: dayjs(dt),

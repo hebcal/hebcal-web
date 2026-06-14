@@ -23,6 +23,7 @@ export async function parshaYearApp(ctx) {
     ctx.throw(410, 'Gone');
   }
   const q = ctx.request.query;
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, q, {hyear})) {
     return;
   }
@@ -70,7 +71,6 @@ export async function parshaYearApp(ctx) {
 
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
 
-  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('parsha-year', {
     hyear,
     il,

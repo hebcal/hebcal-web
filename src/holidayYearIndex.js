@@ -128,6 +128,7 @@ export async function holidayYearIndex(ctx) {
   } else if (yearNum < 1 || yearNum > 9999) {
     ctx.throw(400, `Sorry, can't display holidays for year ${year}`);
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, ctx.request.query, {year})) {
     return;
   }
@@ -175,7 +176,6 @@ export async function holidayYearIndex(ctx) {
   const greg1 = isHebrewYear ? calendarYear - 3761 : yearNum;
   const greg2 = isHebrewYear ? calendarYear - 3760 : yearNum;
   const title = 'Jewish Holidays ' + makePageTitle(il, isHebrewYear, calendarYear, year) + ' - Hebcal';
-  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   await ctx.render('holiday-year-index', {
     today: dayjs(),
     year: year.padStart(4, '0'),

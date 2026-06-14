@@ -84,6 +84,7 @@ export async function parshaDetail(ctx) {
   }
   const hd = parshaEv.getDate();
   const hyear = hd.getFullYear();
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, q, {hyear})) {
     return;
   }
@@ -130,7 +131,6 @@ export async function parshaDetail(ctx) {
   }
   // doubled parsha overwrites first half
   Object.assign(commentary, drash[parsha.name]);
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   await ctx.render('parsha-detail', {
     title,
     parsha,

@@ -70,7 +70,7 @@ const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function getZmanim(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
@@ -160,7 +160,7 @@ function checkMelacha(ctx, q, loc, locObj, useElevation) {
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} q
  * @param {string} tzid
  * @return {any}
@@ -244,7 +244,7 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
 }
 
 /**
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 function expires(ctx) {
   const tzid = ctx.state.location.getTzid();
@@ -427,7 +427,7 @@ const ZMAN_NAMES = {
 
 /**
  * @private
- * @param {any} ctx
+ * @param {import('koa').Context} ctx
  */
 export async function zmanimIcalendar(ctx) {
   const query = ctx.request.query;
@@ -461,10 +461,10 @@ export async function zmanimIcalendar(ctx) {
     dt: today.format('YYYY-MM-DD'),
     icalv: IcalEvent.version(),
   };
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, options, attrs)) {
     return;
   }
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await eventsToIcalendar(events, options);
 }

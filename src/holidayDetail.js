@@ -119,6 +119,7 @@ export async function holidayDetail(ctx) {
   }
   const now = new Date();
   const attrs = dateSuffix ? {} : {hyear: new HDate(now).getFullYear()};
+  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, q, attrs)) {
     return;
   }
@@ -173,7 +174,6 @@ export async function holidayDetail(ctx) {
   const pesachSukkotItems = isShaloshRegalim && holiday !== 'Shavuot' ?
     makeMultiDayHolidayItems(holiday, upcomingHebrewYear, il) :
     null;
-  ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   hebrewFontPreload(ctx);
   await ctx.render('holidayDetail', {
     title,

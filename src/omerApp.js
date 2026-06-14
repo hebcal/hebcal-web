@@ -10,6 +10,7 @@ import {getHolidayMeta} from './getHolidayMeta.js';
 
 function omerSitemap(ctx) {
   const hyear = new HDate().getFullYear();
+  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   if (checkFreshETag(ctx, {}, {hyear})) {
     return;
   }
@@ -21,7 +22,6 @@ function omerSitemap(ctx) {
       body += `${prefix}/${year}/${day}\n`;
     }
   }
-  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
   ctx.type = 'text/plain';
   ctx.body = body;
 }
@@ -39,6 +39,7 @@ export async function omerApp(rpath, ctx) {
     if (yearIsOutsideHebRange(hyear)) {
       return redirCurrentYear(ctx);
     }
+    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     if (checkFreshETag(ctx, {}, {hyear})) {
       return;
     }
@@ -65,7 +66,6 @@ export async function omerApp(rpath, ctx) {
     ctx.state.currentYear = new HDate().getFullYear();
     delete ctx.state.filename.pdf;
 
-    ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     const meta = await getHolidayMeta('Days of the Omer');
     return ctx.render('omer-year', {
       hyear,
@@ -84,6 +84,7 @@ export async function omerApp(rpath, ctx) {
     httpRedirect(ctx, `/omer/${hyear}/1`, 302);
     return;
   }
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, {}, {hyear, omerDay})) {
     return;
   }
@@ -93,7 +94,6 @@ export async function omerApp(rpath, ctx) {
   const holidays = HebrewCalendar.getHolidaysOnDate(hd, false) || [];
   const prev = omerDay === 1 ? 49 : omerDay - 1;
   const next = omerDay === 49 ? 1 : omerDay + 1;
-  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   return ctx.render('omer', {
     ev,
     d: dayjs(hd.greg()),
