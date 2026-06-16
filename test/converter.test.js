@@ -39,6 +39,26 @@ describe('Converter Routes', () => {
   });
 });
 
+describe('Converter compression', () => {
+  it('should compress a large batch date range response', async () => {
+    const response = await request(app.callback())
+        .get('/converter?cfg=json&start=2025-01-01&end=2025-12-31')
+        .set('Accept-Encoding', 'gzip');
+    expect(response.status).toBe(200);
+    expect(response.headers['content-encoding']).toBeDefined();
+    expect(response.headers['vary']).toContain('Accept-Encoding');
+  });
+
+  it('should not compress a small single date response', async () => {
+    const response = await request(app.callback())
+        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1')
+        .set('Accept-Encoding', 'gzip');
+    expect(response.status).toBe(200);
+    expect(response.headers['content-encoding']).toBeUndefined();
+    expect(response.headers['vary']).toBeUndefined();
+  });
+});
+
 describe('Converter CSV Route', () => {
   it('should handle /converter/csv with params', async () => {
     const response = await request(app.callback())
