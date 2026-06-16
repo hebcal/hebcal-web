@@ -91,11 +91,13 @@ export function useCompression(app, {brotliQuality, zstdLevel}) {
     await next();
     const vary = ctx.response.get('Vary');
     const enc = ctx.response.get('Content-Encoding');
-    const cfg = ctx.request.query.cfg;
-    if (vary && !enc && (cfg === 'json' || cfg === 'fc')) {
-      if (vary.includes(',')) {
-        // Split headers, filter out 'Accept-Encoding', and rejoin them
-        const headers = vary.split(',').map(h => h.trim()).filter(h => h.toLowerCase() !== 'accept-encoding');
+    const type = ctx.response.type;
+    if (vary && !enc && type === 'application/json' &&
+        vary.toLowerCase().includes('accept-encoding')) {
+      // Filter out 'Accept-Encoding' and rejoin the remaining headers
+      const headers = vary.split(',').map((h) => h.trim())
+          .filter((h) => h.toLowerCase() !== 'accept-encoding');
+      if (headers.length) {
         ctx.set('Vary', headers.join(', '));
       } else {
         ctx.remove('Vary');
