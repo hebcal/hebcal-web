@@ -82,10 +82,27 @@ export function useTimeout(app) {
 
 /**
  * Registers gzip/brotli/zstd response compression.
+ * Avoids setting Vary: Accept-Encoding for uncompressed responses.
  * @param {Koa} app
  * @param {{brotliQuality: number, zstdLevel: number}} opts
  */
 export function useCompression(app, {brotliQuality, zstdLevel}) {
+  app.use(async function noVaryOnUncompressed(ctx, next) {
+    await next();
+    const vary = ctx.response.get('Vary');
+    const enc = ctx.response.get('Content-Encoding');
+    const cfg = ctx.request.query.cfg;
+    if (vary && !enc && (cfg === 'json' || cfg === 'fc')) {
+      if (vary.includes(',')) {
+        // Split headers, filter out 'Accept-Encoding', and rejoin them
+        const headers = vary.split(',').map(h => h.trim()).filter(h => h.toLowerCase() !== 'accept-encoding');
+        ctx.set('Vary', headers.join(', '));
+      } else {
+        ctx.remove('Vary');
+      }
+    }
+  });
+
   app.use(compress({
     gzip: true,
     deflate: false,
