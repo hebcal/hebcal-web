@@ -111,7 +111,7 @@
               "application/rss+xml": {"schema": {"type": "string"}}
             }
           },
-          "400": {"$ref": "#/components/responses/BadRequest"},
+          "400": {"$ref": "#/components/responses/HebcalBadRequest"},
           "404": {"$ref": "#/components/responses/NotFound"}
         }
       }
@@ -159,7 +159,7 @@
               "text/xml": {"schema": {"type": "string"}}
             }
           },
-          "400": {"$ref": "#/components/responses/BadRequest"}
+          "400": {"$ref": "#/components/responses/ConverterBadRequest"}
         }
       }
     },
@@ -201,7 +201,7 @@
               }
             }
           },
-          "400": {"$ref": "#/components/responses/BadRequest"},
+          "400": {"$ref": "#/components/responses/ZmanimBadRequest"},
           "404": {"$ref": "#/components/responses/NotFound"}
         }
       }
@@ -231,7 +231,7 @@
               }}
             }
           },
-          "400": {"$ref": "#/components/responses/BadRequest"}
+          "400": {"$ref": "#/components/responses/LeyningBadRequest"}
         }
       }
     },
@@ -258,7 +258,7 @@
               "application/json": {"schema": {"$ref": "#/components/schemas/YahrzeitResponse"}}
             }
           },
-          "400": {"$ref": "#/components/responses/BadRequest"}
+          "400": {"$ref": "#/components/responses/YahrzeitBadRequest"}
         }
       }
     }
@@ -627,12 +627,57 @@
 
     "responses": {
       "BadRequest": {
-        "description": "Invalid input.",
+        "description": "Invalid input. The body is an `Error` object whose `error` property describes the problem.",
         "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}
       },
+      "HebcalBadRequest": {
+        "description": "Invalid input. Common causes:\n- A required parameter is missing — e.g. `Please specify required parameter 'v'`.\n- A required parameter was supplied more than once — e.g. `Invalid duplicate parameter 'year'`.\n- `year` exceeds the supported maximum — `Gregorian year cannot be greater than 9999: 12000` or `Hebrew year cannot be greater than 13760: 14000`.\n- The selected options produce no events for the requested range — `No events`.\n- A malformed location parameter (e.g. invalid `latitude`/`longitude`, or `latitude`/`longitude` supplied without `tzid`). See also `404` for unknown `geonameid`/`zip`.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "missingParam": {"summary": "Missing required parameter", "value": {"error": "Please specify required parameter 'v'"}},
+          "yearTooLarge": {"summary": "Year out of range", "value": {"error": "Gregorian year cannot be greater than 9999: 12000"}},
+          "noEvents": {"summary": "No events for the selected options", "value": {"error": "No events"}}
+        }}}
+      },
+      "ConverterBadRequest": {
+        "description": "Invalid input. Common causes:\n- A range query (`start`/`end`, or `ndays`) was requested without `cfg=json` — `Date range conversion using 'start' and 'end' requires cfg=json`.\n- A required field for the chosen direction is missing — e.g. `Missing parameter 'hy' for conversion from Hebrew to Gregorian` or `Missing parameter 'gd' for conversion from Gregorian to Hebrew`.\n- `ndays` is not a valid number — `Invalid value for ndays: foo`.\n- A Gregorian date is malformed or out of range — `Date does not match format YYYY-MM-DD: 2026-13-01`, `Gregorian month out of valid range 1-12: 13`, `Gregorian day 30 out of valid range for 2/2026`, or `Gregorian year cannot be greater than 9999: 12000`.\n- An unrecognized Hebrew month name — e.g. `Unable to parse month name: Foobar`.\n- A Hebrew day outside the month's length — e.g. `Hebrew day out of valid range 1-29 for Kislev 5786`, or `Hebrew year must be year 1 or later: 0`.\n\nNote: `400` is only returned for invalid dates when `strict=1`; otherwise the API falls back to a nearby valid date.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "badGregMonth": {"summary": "Gregorian month out of range", "value": {"error": "Gregorian month out of valid range 1-12: 13"}},
+          "badGregDay": {"summary": "Impossible Gregorian day (e.g. Feb 30)", "value": {"error": "Gregorian day 30 out of valid range for 2/2026"}},
+          "badHebMonth": {"summary": "Unknown Hebrew month name", "value": {"error": "Unable to parse month name: Foobar"}},
+          "badHebDay": {"summary": "Hebrew day out of range", "value": {"error": "Hebrew day out of valid range 1-29 for Kislev 5786"}},
+          "rangeNeedsJson": {"summary": "Range query without cfg=json", "value": {"error": "Date range conversion using 'start' and 'end' requires cfg=json"}}
+        }}}
+      },
+      "ZmanimBadRequest": {
+        "description": "Invalid input. Common causes:\n- `cfg=json` is missing — `Parameter cfg=json is required`.\n- No location was supplied — `Location is required` (provide `geonameid`, `zip`, or `latitude`+`longitude`+`tzid`).\n- A malformed location — e.g. `Invalid latitude specified: 200`, `Invalid longitude specified: foo`, `Timezone required`, or `geo=pos requires latitude, longitude, tzid parameters`.\n- A malformed `date`/`start`/`end` — e.g. `Invalid Date: 2026-02-30`.\n- A malformed `dt` (Assur Melacha mode) ISO 8601 datetime.\n\nSee also `404` for an unknown `geonameid`/`zip`.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "missingCfg": {"summary": "Missing cfg=json", "value": {"error": "Parameter cfg=json is required"}},
+          "missingLocation": {"summary": "No location supplied", "value": {"error": "Location is required"}},
+          "badLatitude": {"summary": "Invalid latitude", "value": {"error": "Invalid latitude specified: 200"}},
+          "badDate": {"summary": "Invalid date", "value": {"error": "Invalid Date: 2026-02-30"}}
+        }}}
+      },
+      "LeyningBadRequest": {
+        "description": "Invalid input. Common causes:\n- `cfg=json` is missing — `Parameter cfg=json is required`.\n- Neither `date` nor both `start` and `end` were supplied — e.g. `Parameter 'start' is required`.\n- A malformed date — `Date does not match format YYYY-MM-DD: 2026-13-01`.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "missingCfg": {"summary": "Missing cfg=json", "value": {"error": "Parameter cfg=json is required"}},
+          "missingStart": {"summary": "Missing date/start/end", "value": {"error": "Parameter 'start' is required"}},
+          "badDate": {"summary": "Malformed date", "value": {"error": "Date does not match format YYYY-MM-DD: 2026-13-01"}}
+        }}}
+      },
+      "YahrzeitBadRequest": {
+        "description": "Invalid input. Common causes:\n- An unsupported output format was requested — `This API does not support cfg=fc` or `This API does not support cfg=xml` (only `cfg=json` is supported here).\n- A date field in one of the records is malformed or impossible — e.g. `Gregorian day 30 out of valid range for 2/1983`, `Gregorian month out of valid range 1-12: 13`, `Unable to parse month name: Foobar`, or `Hebrew day out of valid range 1-29 for Kislev 5749`.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "unsupportedCfg": {"summary": "Unsupported output format", "value": {"error": "This API does not support cfg=fc"}},
+          "badGregDay": {"summary": "Impossible Gregorian day", "value": {"error": "Gregorian day 30 out of valid range for 2/1983"}}
+        }}}
+      },
       "NotFound": {
-        "description": "Geographic identifier not found.",
-        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}
+        "description": "Geographic identifier not found — e.g. `Sorry, can't find geonameid: 99999999` or `Sorry, can't find ZIP code: 00000`.",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}, "examples": {
+          "geonameid": {"summary": "Unknown geonameid", "value": {"error": "Sorry, can't find geonameid: 99999999"}},
+          "zip": {"summary": "Unknown ZIP code", "value": {"error": "Sorry, can't find ZIP code: 00000"}}
+        }}}
       }
     }
   }
