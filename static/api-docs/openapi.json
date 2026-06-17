@@ -35,16 +35,16 @@
         "description": "Returns Jewish holidays, candle lighting times, Parashat ha-Shavua, daily learning schedules and more.\n\nDate range may be specified by `year` (with optional `month`, `ny`, `yt`) **or** by both `start` and `end`.",
         "operationId": "getJewishCalendar",
         "parameters": [
-          {"name": "v", "in": "query", "required": true, "schema": {"type": "string", "enum": ["1"]}, "description": "API version. Must be `1`."},
-          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "fc", "rss", "ics", "csv"]}, "description": "Output format: `json` (default REST), `fc` (FullCalendar.io JSON), `rss`, `ics` (iCalendar), or `csv`."},
-          {"name": "year", "in": "query", "schema": {"oneOf": [{"type": "integer"}, {"type": "string", "enum": ["now"]}]}, "description": "Gregorian or Hebrew year (4-digit). Use `now` for the current year."},
+          {"name": "v", "in": "query", "required": true, "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "API version. Must be `1`."},
+          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "fc", "rss", "ics", "csv"], "default": "json"}, "description": "Output format: `json` (default REST), `fc` (FullCalendar.io JSON), `rss`, `ics` (iCalendar), or `csv`."},
+          {"name": "year", "in": "query", "example": "now", "schema": {"oneOf": [{"type": "integer"}, {"type": "string", "enum": ["now"]}]}, "description": "Gregorian or Hebrew year (4-digit). Use `now` for the current year. Interpreted as Gregorian unless `yt=H`."},
           {"name": "yt", "in": "query", "schema": {"type": "string", "enum": ["G", "H"], "default": "G"}, "description": "Year type: `G` for Gregorian (default) or `H` for Hebrew."},
-          {"name": "month", "in": "query", "schema": {"oneOf": [{"type": "integer", "minimum": 1, "maximum": 12}, {"type": "string", "enum": ["x"]}]}, "description": "Single Gregorian month 1–12, or `x` for entire year (default)."},
-          {"name": "ny", "in": "query", "schema": {"type": "integer", "minimum": 1, "default": 1}, "description": "Number of years to render (default 1)."},
+          {"name": "month", "in": "query", "example": "x", "schema": {"oneOf": [{"type": "integer", "minimum": 1, "maximum": 12}, {"type": "string", "enum": ["x"]}]}, "description": "Single Gregorian month 1–12, or `x` for entire year (default)."},
+          {"name": "ny", "in": "query", "schema": {"type": "integer", "minimum": 1, "default": 1}, "description": "Number of years to render (default 1). Only honored together with `year`."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Gregorian start date (YYYY-MM-DD). Use with `end` instead of `year`."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Gregorian end date (YYYY-MM-DD)."},
 
-          {"name": "maj", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Major holidays."},
+          {"name": "maj", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "example": "on", "description": "Major holidays (Rosh Hashana, Yom Kippur, Pesach, etc.)."},
           {"name": "min", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Minor holidays (Tu BiShvat, Lag B'Omer, etc.)."},
           {"name": "mod", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Modern holidays (Yom HaAtzmaut, Yom HaShoah, etc.)."},
           {"name": "nx", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Rosh Chodesh."},
@@ -100,7 +100,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Calendar events",
+            "description": "Calendar feed. For `cfg=json` the body is an object containing the requested date `range`, the resolved `location` (when candle lighting is enabled), and an `items` array of calendar events — holidays, Torah portions, candle-lighting/Havdalah times, Rosh Chodesh, Omer count, daily-learning entries and Hebrew dates. For `cfg=ics`/`csv`/`rss`/`fc` the body is iCalendar text, CSV text, RSS XML, or FullCalendar JSON respectively.",
             "content": {
               "application/json": {"schema": {"$ref": "#/components/schemas/HebcalResponse"}, "examples": {
                 "may2015LosAngeles": {"summary": "Major holidays for May 2015 in Los Angeles", "externalValue": "https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&year=2015&month=5&geonameid=3448439"},
@@ -124,17 +124,17 @@
         "description": "Four modes are supported:\n\n1. **Gregorian → Hebrew (single date):** pass `g2h=1` with `date=YYYY-MM-DD` (or `gy`/`gm`/`gd`).\n2. **Gregorian → Hebrew (range):** pass `g2h=1` with `start` and `end` (max 180 days; `cfg=json` only).\n3. **Hebrew → Gregorian (single date):** pass `h2g=1` with `hy`, `hm`, `hd`.\n4. **Hebrew → Gregorian (range):** pass `h2g=1` with `hy`, `hm`, `hd`, `ndays` (2–180; `cfg=json` only).\n\nMonth name (`hm`) accepts: `Nisan`, `Iyyar`/`Iyar`, `Sivan`, `Tamuz`/`Tammuz`, `Av`, `Elul`, `Tishrei`, `Cheshvan`, `Kislev`, `Tevet`/`Teves`, `Sh'vat`/`Shvat`, `Adar`/`Adar1`/`Adar I`/`Adar2`/`Adar II`. Hebrew UTF-8 names are also accepted. In a leap year `Adar` is `Adar2`; in a non-leap year all three Adars are equivalent.",
         "operationId": "convertHebrewDate",
         "parameters": [
-          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "xml"]}, "description": "Output format. Range queries require `json`."},
-          {"name": "g2h", "in": "query", "schema": {"type": "string", "enum": ["1"]}, "description": "Set to `1` for Gregorian→Hebrew conversion. Mutually exclusive with `h2g`."},
+          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "xml"], "default": "json"}, "description": "Output format. Range queries require `json`."},
+          {"name": "g2h", "in": "query", "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "Set to `1` for Gregorian→Hebrew conversion. Mutually exclusive with `h2g`."},
           {"name": "h2g", "in": "query", "schema": {"type": "string", "enum": ["1"]}, "description": "Set to `1` for Hebrew→Gregorian conversion. Mutually exclusive with `g2h`."},
           {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Gregorian date (YYYY-MM-DD). Used in single-date g2h mode as an alternative to `gy`/`gm`/`gd`."},
-          {"name": "gy", "in": "query", "schema": {"type": "integer"}, "description": "Gregorian year (g2h)."},
-          {"name": "gm", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 12}, "description": "Gregorian month 1–12 (g2h). Leading zero optional."},
-          {"name": "gd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 31}, "description": "Gregorian day 1–31 (g2h). Leading zero optional."},
+          {"name": "gy", "in": "query", "schema": {"type": "integer", "example": 2026}, "description": "Gregorian year (g2h)."},
+          {"name": "gm", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 12, "example": 6}, "description": "Gregorian month 1–12 (g2h). Leading zero optional."},
+          {"name": "gd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 31, "example": 17}, "description": "Gregorian day 1–31 (g2h). Leading zero optional."},
           {"name": "gs", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "After-sunset designation. When `on`, returns the Hebrew date of the next day (sunset starts the new Hebrew day)."},
-          {"name": "hy", "in": "query", "schema": {"type": "integer"}, "description": "Hebrew year (h2g)."},
-          {"name": "hm", "in": "query", "schema": {"type": "string"}, "description": "Hebrew month name (h2g)."},
-          {"name": "hd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 30}, "description": "Hebrew day 1–30 (h2g)."},
+          {"name": "hy", "in": "query", "schema": {"type": "integer", "example": 5786}, "description": "Hebrew year (h2g)."},
+          {"name": "hm", "in": "query", "schema": {"type": "string", "example": "Kislev"}, "description": "Hebrew month name (h2g)."},
+          {"name": "hd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 30, "example": 25}, "description": "Hebrew day 1–30 (h2g)."},
           {"name": "ndays", "in": "query", "schema": {"type": "integer", "minimum": 2, "maximum": 180}, "description": "Number of days to convert in h2g range mode (2–180)."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD (g2h range mode)."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD (g2h range mode). Truncated to 180 days from `start`."},
@@ -145,7 +145,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Converted date(s).",
+            "description": "Converted date(s). Single-date queries return a `ConverterSingleResponse` with the Gregorian fields (`gy`/`gm`/`gd`), the equivalent Hebrew date (`hy`/`hm`/`hd`), a formatted `hebrew` string, and any holiday/parsha `events` falling on that Hebrew date. Range queries (`start`/`end` or `h2g` + `ndays`) return a `ConverterRangeResponse` whose `hdates` object maps each Gregorian date to its conversion.",
             "content": {
               "application/json": {
                 "schema": {"oneOf": [{"$ref": "#/components/schemas/ConverterSingleResponse"}, {"$ref": "#/components/schemas/ConverterRangeResponse"}]},
@@ -171,7 +171,7 @@
         "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°.\n\nA location is required (see location parameters).",
         "operationId": "getZmanim",
         "parameters": [
-          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"]}, "description": "Output format. Must be `json`."},
+          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
           {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Single Gregorian date YYYY-MM-DD. If neither `date` nor `start/end` are specified, defaults to today at the location."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD. Capped at 180 days from `start`."},
@@ -189,7 +189,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Zmanim or Assur Melacha status.",
+            "description": "In zmanim mode, a `ZmanimResponse` containing the resolved `location` and a `times` object of ISO 8601 halachic times (dawn, sunrise, sof zman Shema/Tfilla, chatzot, mincha, plag, sunset, the various tzeit/nightfall opinions, etc.); for a range, each time becomes an object keyed by date. In Assur Melacha mode (`im=1`), an `AssurMelachaResponse` whose `status.isAssurBemlacha` boolean indicates whether the moment falls within a work-forbidden (Shabbat/Yom Tov) period.",
             "content": {
               "application/json": {
                 "schema": {"oneOf": [{"$ref": "#/components/schemas/ZmanimResponse"}, {"$ref": "#/components/schemas/AssurMelachaResponse"}]},
@@ -214,8 +214,8 @@
         "description": "Returns full kriyah aliyot, haftarah, and (optionally) triennial cycle readings. Use either a single `date` or both `start` and `end` (capped at 180 days).",
         "operationId": "getLeyning",
         "parameters": [
-          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"]}, "description": "Output format. Must be `json`."},
-          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Single Gregorian date YYYY-MM-DD. Equivalent to `start=date&end=date`."},
+          {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
+          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date", "example": "2026-06-20"}, "description": "Single Gregorian date YYYY-MM-DD. Equivalent to `start=date&end=date`."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD. Capped at 180 days from `start`."},
           {"name": "i", "in": "query", "schema": {"type": "string", "enum": ["on", "off"], "default": "off"}, "description": "Diaspora (`off`, default) or Israel (`on`) Torah reading schedule."},
@@ -223,9 +223,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Torah reading details.",
+            "description": "A `LeyningResponse` containing the requested `range` and an `items` array, one entry per Torah-reading occasion (Shabbat parsha, holiday reading, Rosh Chodesh, weekday Monday/Thursday reading, etc.). Each item gives the reading `name` (English/Hebrew), a `summary` verse range, the `fullkriyah` aliyot (keyed `1`–`7` plus `M` for maftir, each with book and beginning/ending verse), the `haftarah` (text plus structured `haft`), any `weekday` reading, and — when `triennial=on` — the `triennial` aliyot with the corresponding `triYear` and `triHaftara`.",
             "content": {
               "application/json": {"schema": {"$ref": "#/components/schemas/LeyningResponse"}, "examples": {
+                "singleDate": {"summary": "Single Shabbat (Parashat Korach)", "externalValue": "https://www.hebcal.com/leyning?cfg=json&date=2026-06-20"},
                 "rangeExample": {"summary": "Sukkot week 5783", "externalValue": "https://www.hebcal.com/leyning?cfg=json&start=2022-09-21&end=2022-09-26"}
               }}
             }
@@ -252,7 +253,7 @@
         },
         "responses": {
           "200": {
-            "description": "Computed yahrzeit / anniversary events.",
+            "description": "A `YahrzeitResponse` containing the computed `range` of Hebrew years and an `items` array. Each item is one observance — the Hebrew anniversary (yahrzeit/birthday/anniversary) or a Yizkor date — with its Gregorian `date`, Hebrew date (`hdate`), `category`, the source record `name`, and which `anniversary` (1st, 2nd, …) it represents.",
             "content": {
               "application/json": {"schema": {"$ref": "#/components/schemas/YahrzeitResponse"}}
             }
@@ -268,7 +269,7 @@
       "Geonameid": {
         "name": "geonameid",
         "in": "query",
-        "schema": {"type": "integer"},
+        "schema": {"type": "integer", "example": 5128581},
         "description": "GeoNames.org numeric city identifier. The Hebcal database supports approximately 150,000 world cities with population ≥ 1,000 (refreshed annually from the [`cities1000.zip`](https://download.geonames.org/export/dump/) feed).\n\n**Examples:**\n- `3448439` — São Paulo, BR\n- `5128581` — New York, US\n- `5368361` — Los Angeles, US\n- `281184` — Jerusalem, IL"
       },
       "Zip": {
@@ -379,7 +380,7 @@
           "hebrew": {"type": "string"},
           "memo": {"type": "string"},
           "link": {"type": "string", "format": "uri"},
-          "leyning": {"type": "object", "additionalProperties": true, "description": "Torah-reading detail (when applicable)."},
+          "leyning": {"type": "object", "additionalProperties": true, "description": "Torah-reading detail for this event (parsha summary, aliyot, haftarah) when `leyning=on`. See the Leyning API for the full shape."},
           "yomtov": {"type": "boolean"},
           "heDateParts": {"$ref": "#/components/schemas/HeDateParts"}
         }
@@ -521,14 +522,27 @@
             "properties": {"en": {"type": "string"}, "he": {"type": "string"}}
           },
           "summary": {"type": "string", "description": "Verse range summary, e.g. `Genesis 1:1-6:8`."},
-          "fullkriyah": {"type": "object", "additionalProperties": true, "description": "Full kriyah aliyot keyed by aliyah number / `M` for Maftir."},
-          "haft": {"type": "array", "items": {"type": "object"}, "description": "Haftarah reading details."},
-          "haftara": {"type": "string", "description": "Haftarah reference text."},
-          "weekday": {"type": "object", "additionalProperties": true, "description": "Weekday Torah reading (Mondays/Thursdays)."},
-          "triennial": {"type": "object", "additionalProperties": true, "description": "Triennial cycle aliyot (when `triennial` is on and Hebrew year ≥ 5745)."},
+          "fullkriyah": {"type": "object", "additionalProperties": {"$ref": "#/components/schemas/Aliyah"}, "description": "Full kriyah aliyot keyed by aliyah number (`1`–`7`) and `M` for Maftir."},
+          "haft": {"type": "array", "items": {"$ref": "#/components/schemas/Aliyah"}, "description": "Structured haftarah reading (one or more verse ranges)."},
+          "haftara": {"type": "string", "description": "Haftarah reference as plain text, e.g. `Isaiah 66:1 - 66:24`."},
+          "weekday": {"type": "object", "additionalProperties": {"$ref": "#/components/schemas/Aliyah"}, "description": "Weekday Torah reading aliyot (Mondays/Thursdays), keyed `1`–`3`."},
+          "triennial": {"type": "object", "additionalProperties": {"$ref": "#/components/schemas/Aliyah"}, "description": "Triennial cycle aliyot (when `triennial` is on and Hebrew year ≥ 5745), keyed `1`–`7` and `M`."},
           "triYear": {"type": "integer", "minimum": 1, "maximum": 3, "description": "Year (1, 2, or 3) within the triennial cycle."},
-          "triHaftara": {"type": "string"},
-          "triHaft": {"type": "array", "items": {"type": "object"}}
+          "triHaftara": {"type": "string", "description": "Triennial haftarah reference as plain text."},
+          "triHaft": {"type": "array", "items": {"$ref": "#/components/schemas/Aliyah"}, "description": "Structured triennial haftarah reading."}
+        }
+      },
+
+      "Aliyah": {
+        "type": "object",
+        "description": "A single Torah (or haftarah) reading segment.",
+        "properties": {
+          "k": {"type": "string", "description": "Book of the Bible, e.g. `Numbers`."},
+          "b": {"type": "string", "description": "Beginning chapter:verse, e.g. `16:1`."},
+          "e": {"type": "string", "description": "Ending chapter:verse, e.g. `18:32`."},
+          "v": {"type": "integer", "description": "Number of verses in this segment."},
+          "p": {"type": "integer", "minimum": 1, "maximum": 54, "description": "Parsha number (1–54) for the regular annual reading, when applicable."},
+          "reason": {"type": "string", "description": "Explanation when this reading differs from the regular schedule (e.g. a special Shabbat or holiday)."}
         }
       },
 
@@ -538,25 +552,36 @@
         "properties": {
           "cfg": {"type": "string", "enum": ["json"]},
           "v": {"type": "string", "enum": ["yahrzeit"]},
-          "years": {"type": "integer", "default": 20, "description": "Number of Hebrew years to compute (default 20). Use `years=1` for a single year."},
-          "start": {"type": "integer", "description": "Starting Hebrew year (defaults to current Hebrew year)."},
+          "years": {"type": "integer", "default": 20, "example": 20, "description": "Number of Hebrew years to compute (default 20). Use `years=1` for a single year."},
+          "start": {"type": "integer", "example": 5786, "description": "Starting Hebrew year (defaults to the current Hebrew year, e.g. 5786)."},
           "end": {"type": "integer", "description": "Ending Hebrew year (inclusive). Defaults to `start + years`."},
           "hebdate": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Append Hebrew date to event titles."},
           "yizkor": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Include Yizkor dates."},
           "i": {"type": "string", "enum": ["on", "off"], "description": "Yizkor schedule: `off` for Diaspora, `on` for Israel."},
           "hdp": {"type": "integer", "enum": [0, 1], "description": "If `1`, include `heDateParts` field on all-day items."},
-          "y1": {"type": "integer", "description": "Gregorian year for record #1 (4-digit)."},
-          "m1": {"type": "integer", "minimum": 1, "maximum": 12, "description": "Gregorian month 1–12 for record #1."},
-          "d1": {"type": "integer", "minimum": 1, "maximum": 31, "description": "Gregorian day-of-month for record #1."},
-          "s1": {"type": "string", "enum": ["on", "off"], "description": "Whether record #1 occurred after sunset."},
-          "t1": {"type": "string", "enum": ["Yahrzeit", "Birthday", "Anniversary", "Other"], "description": "Type of anniversary for record #1 (case-sensitive)."},
-          "n1": {"type": "string", "description": "Person/event name for record #1."},
+          "y1": {"type": "integer", "example": 1948, "description": "Gregorian year for record #1 (4-digit)."},
+          "m1": {"type": "integer", "minimum": 1, "maximum": 12, "example": 4, "description": "Gregorian month 1–12 for record #1."},
+          "d1": {"type": "integer", "minimum": 1, "maximum": 31, "example": 15, "description": "Gregorian day-of-month for record #1."},
+          "s1": {"type": "string", "enum": ["on", "off"], "example": "on", "description": "Whether record #1 occurred after sunset."},
+          "t1": {"type": "string", "enum": ["Yahrzeit", "Birthday", "Anniversary", "Other"], "example": "Yahrzeit", "description": "Type of anniversary for record #1 (case-sensitive)."},
+          "n1": {"type": "string", "example": "Sarah Cohen", "description": "Person/event name for record #1."},
           "hy1": {"type": "integer", "description": "Hebrew year for record #1 (alternative to Gregorian)."},
           "hm1": {"type": "string", "description": "Hebrew month for record #1 (Hebrew UTF-8 or transliterated)."},
           "hd1": {"type": "integer", "minimum": 1, "maximum": 30, "description": "Hebrew day-of-month for record #1."}
         },
         "additionalProperties": {
           "description": "For multiple records, repeat the per-record fields with incrementing suffixes (e.g. `y2`, `m2`, `d2`, `t2`, `n2`, `s2`, or `hy2`, `hm2`, `hd2`) for record #2, and so on."
+        },
+        "example": {
+          "cfg": "json",
+          "v": "yahrzeit",
+          "n1": "Sarah Cohen",
+          "t1": "Yahrzeit",
+          "d1": 15,
+          "m1": 4,
+          "y1": 1948,
+          "s1": "on",
+          "years": 20
         }
       },
 
