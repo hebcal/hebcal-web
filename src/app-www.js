@@ -32,15 +32,19 @@ const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;
 const cspriteHref = '/i/' + pkg.config.csprite;
 const clientAppHref = '/i/' + pkg.config.clientapp;
+const holidayFcAppHref = '/i/' + pkg.config.holidayFcApp;
 const mainCssHref = '/i/' + pkg.config.mainCss;
 
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
   ctx.state.lang = 'en'; // used by some ejs templates
-  ctx.state.spriteHref = spriteHref;
-  ctx.state.cspriteHref = cspriteHref;
-  ctx.state.clientAppHref = clientAppHref;
-  ctx.state.mainCssHref = mainCssHref;
+  Object.assign(ctx.state, {
+    spriteHref,
+    cspriteHref,
+    clientAppHref,
+    holidayFcAppHref,
+    mainCssHref,
+  });
   ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
   // accept-encoding header implies 'accept-encoding: *'
@@ -210,6 +214,9 @@ app.use(async function handleStatic404(ctx, next) {
     }
     if (rpath.startsWith('/i/hebcal-app-5') && rpath.endsWith('.js')) {
       httpRedirect(ctx, clientAppHref);
+    }
+    if (rpath.startsWith('/i/fc-6') && rpath.endsWith('.js')) {
+      httpRedirect(ctx, holidayFcAppHref);
     }
     if (rpath.startsWith('/i/sprite') && rpath.endsWith('.svg')) {
       httpRedirect(ctx, spriteHref);

@@ -3,10 +3,10 @@ const commonjs = require('@rollup/plugin-commonjs');
 const terser = require('@rollup/plugin-terser');
 const pkg = require('./package.json');
 
-const stripHdateComment = {
-  name: 'strip-hdate-comment',
+const stripHebcalBanner = {
+  name: 'strip-hebcal-banner',
   transform(code, id) {
-    const replaced = code.replace(/^\/\*! @hebcal\/hdate .* \*\//, '');
+    const replaced = code.replace(/^\/\*! @hebcal\/.* \*\//, '');
     return replaced === code ? null : {code: replaced, map: null};
   },
 };
@@ -42,7 +42,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
-      stripHdateComment,
+      stripHebcalBanner,
     ],
   },
   {
@@ -58,7 +58,7 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      stripHdateComment,
+      stripHebcalBanner,
     ],
   },
   {
@@ -74,7 +74,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
-      stripHdateComment,
+      stripHebcalBanner,
     ],
   },
   {
@@ -90,7 +90,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
-      stripHdateComment,
+      stripHebcalBanner,
     ],
   },
   {
@@ -106,7 +106,7 @@ module.exports = [
       terser(),
       nodeResolve(),
       commonjs(),
-      stripHdateComment,
+      stripHebcalBanner,
     ],
   },
   {
@@ -133,6 +133,23 @@ module.exports = [
     ],
     plugins: [
       terser(),
+    ],
+  },
+  {
+    input: 'src/client-fullcalendar.js',
+    output: [
+      {
+        file: 'static/i/' + pkg.config.holidayFcApp,
+        format: 'iife',
+        name: 'HolidayFullCalendar',
+        banner: '/*! ' + pkg.config.holidayFcApp + ' */',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve(),
+      commonjs(),
+      stripHebcalBanner,
     ],
   },
 ];

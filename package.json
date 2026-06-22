@@ -14,6 +14,7 @@
     "sprite": "sprite14.svg",
     "csprite": "color-icons4.svg",
     "mainCss": "style-5.3.8k.css",
+    "holidayFcApp": "fc-6.1.21a.min.js",
     "clientapp": "hebcal-app-5.2.2.min.js"
   },
   "type": "module",
@@ -43,6 +44,8 @@
   "license": "BSD-2-Clause",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@fullcalendar/core": "^6.1.21",
+    "@fullcalendar/daygrid": "^6.1.21",
     "@fullhuman/postcss-purgecss": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "@rollup/plugin-commonjs": "^29.0.3",
@@ -67,7 +70,7 @@
   "dependencies": {
     "@echo-health/koa-prometheus-exporter": "^1.0.4",
     "@hebcal/core": "^6.6.0",
-    "@hebcal/geo-sqlite": "^5.10.5",
+    "@hebcal/geo-sqlite": "^5.11.0",
     "@hebcal/hdate": "^0.22.4",
     "@hebcal/icalendar": "^6.3.8",
     "@hebcal/learning": "^6.9.5",
