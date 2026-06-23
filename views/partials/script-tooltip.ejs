@@ -1,6 +1,6 @@
 <script nonce="<%=nonce%>">
-const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-const tooltipList = tooltipTriggerList.map(function (el) {
-  return new bootstrap.Tooltip(el);
+document.addEventListener('DOMContentLoaded', function() {
+  const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+  tooltipTriggerList.forEach(function(el) { new bootstrap.Tooltip(el); });
 });
 </script>
