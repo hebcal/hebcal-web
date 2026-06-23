@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
 const grabBtnList = document.querySelectorAll('.btn.grabBtn');
 grabBtnList.forEach(function(el) {
   const tooltipBtn = new bootstrap.Tooltip(el, {
@@ -36,3 +37,4 @@ if (grabLink) {
     }, 100);
   });
 }
+});
