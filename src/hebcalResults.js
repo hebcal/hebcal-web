@@ -792,7 +792,23 @@ function renderPagination(months) {
   window.hebcal.paginationRendered = true;
 }
 
+/**
+ * Reads the calendar data serialized in the
+ * `<script type="application/json" id="hebcalData">` tag and merges it into
+ * `window.hebcal`, returning the populated config object.
+ * @return {object}
+ */
+function loadData() {
+  window.hebcal = window.hebcal || {};
+  const el = document.getElementById('hebcalData');
+  if (el) {
+    Object.assign(window.hebcal, JSON.parse(el.textContent));
+  }
+  return window.hebcal;
+}
+
 const hebcalResults = {
+  loadData,
   makeMonthDivs,
   renderMonthTables,
   makeMonthHtml,
