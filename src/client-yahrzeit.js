@@ -1,11 +1,14 @@
-<script nonce="<%=nonce%>">
+import Papa from 'papaparse';
+
+/*! hebcal client-yahrzeit.js */
 document.addEventListener('DOMContentLoaded', function() {
-let count=<%=count%>;
+const mainFormEl = document.getElementById('f3');
+let count=mainFormEl.dataset.count;
 function getCurrentCount() {
   return count;
 }
-window.getCurrentCount = getCurrentCount;
 
+const spriteHref = mainFormEl.dataset.spriteHref;
 function yahrzeitRow(n) {
   return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">'+
   '<div class="col-auto">'+n+'.</div>' +
@@ -41,7 +44,7 @@ function yahrzeitRow(n) {
   '</div>' +
   '<div class="col-auto ms-2">' +
   '<button type="button" class="btn btn-sm btn-outline-danger del" id="del-'+n+'">'+
-  '<svg class="icon"><use href="<%=spriteHref%>#bi-trash"></use></svg>'+
+  '<svg class="icon"><use href="' + spriteHref + '#bi-trash"></use></svg>'+
   ' Delete</button></div>'+
   '</div>';
 }
@@ -58,7 +61,6 @@ function addNewRow() {
   clickToDelete(delBtn);
   return n;
 }
-window.addNewRow = addNewRow;
 
 document.getElementById('newrow').addEventListener('click', function() {
   addNewRow();
@@ -95,7 +97,6 @@ if (tzoEl) {
   feb15.setMonth(1);
   tzoEl.value = feb15.getTimezoneOffset();
 }
-const mainFormEl = document.getElementById('f3');
 mainFormEl.addEventListener('submit', function(event) {
   mainFormEl.classList.remove('was-validated');
   var _paq = window._paq = window._paq || [];
@@ -150,12 +151,7 @@ mainFormEl.addEventListener('submit', function(event) {
   }
 }, false);
 
-});
-</script>
-<script defer nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/papaparse@5.4.0/papaparse.min.js"></script>
-<script nonce="<%=nonce%>">
-document.addEventListener('DOMContentLoaded', function() {
-  function processRow(row) {
+function processRow(row) {
   const parts = row[0].trim().split('/');
   const mm = parseInt(parts[0], 10);
   const dd = parseInt(parts[1], 10);
@@ -251,4 +247,3 @@ formEl.addEventListener('submit', function(event) {
   }
 });
 });
-</script>

@@ -134,7 +134,8 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
 Add another name</span> button at the bottom of the page to add
 additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
-<form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit">
+<form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit"
+data-count="<%=count%>" data-sprite-href="<%=spriteHref%>">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
 <% if (typeof q['t'+num] === 'string') { -%>
@@ -295,7 +296,7 @@ instructions</a>.</p>
 }) -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
+<script nonce="<%=nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, clipboard: tables !== null && showDownload},
-  xtra_html: await include('partials/script-yahrzeit-form.ejs'),
 }) _%>
