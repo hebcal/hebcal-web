@@ -174,7 +174,17 @@ data-ad-slot="1867606375"></ins>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <script nonce="<%=nonce%>"><%- await include('partials/hebcalResults.min.js') %></script>
 <%- await include('partials/print-iframe.ejs') -%>
-<script type="application/json" id="hebcalData"><%- JSON.stringify({lang: q.lg || "s", locale: locale, cconfig: cconfig, localeConfig: localeConfig, events: items, memos: memos, opts: opts, shortTitle: shortTitle, locationName: locationName}) %></script>
+<script type="application/json" id="hebcalData"><%- JSON.stringify({
+  lang: q.lg || "s",
+  locale,
+  cconfig,
+  localeConfig,
+  events: items,
+  memos,
+  opts,
+  shortTitle,
+  locationName,
+}) %></script>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 </script>
