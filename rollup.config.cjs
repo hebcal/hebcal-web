@@ -25,7 +25,6 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      commonjs(),
     ],
   },
   {
@@ -131,9 +130,28 @@ module.exports = [
     ],
     plugins: [
       terser(),
-      nodeResolve(),
-      commonjs(),
+      nodeResolve({
+        browser: true,
+        preferBuiltins: false,
+      }),
       stripHebcalBanner,
+    ],
+  },
+  {
+    input: 'src/client-yahrzeit.js',
+    output: [
+      {
+        file: 'views/partials/client-yahrzeit.min.js',
+        format: 'iife',
+      },
+    ],
+    plugins: [
+      terser(),
+      nodeResolve({
+        browser: true,
+        preferBuiltins: false,
+      }),
+      commonjs(),
     ],
   },
 ];
