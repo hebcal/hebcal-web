@@ -807,8 +807,62 @@ function loadData() {
   return window.hebcal;
 }
 
+/**
+ * `DOMContentLoaded` handler for the hebcal results page: loads the serialized
+ * data, renders the calendar/list views, and wires up the view toggles.
+ */
+function renderResultsPage() {
+  const conf = loadData();
+  const d = document;
+  function show(el) {
+    if (el) {
+      el.style.display = 'block';
+    }
+  }
+  function hide(el) {
+    if (el) {
+      el.style.display = 'none';
+    }
+  }
+
+  const months = splitByMonth(conf.events);
+  renderPagination(months);
+  makeMonthDivs(months);
+
+  const toggleMonth = d.getElementById('toggle-month');
+  toggleMonth.onchange = function() {
+    d.querySelectorAll('div.agenda').forEach(hide);
+    renderCalendarGrids(months);
+    d.querySelectorAll('div.cal').forEach(show);
+  };
+  const toggleList = d.getElementById('toggle-list');
+  toggleList.onchange = function() {
+    d.querySelectorAll('div.cal').forEach(hide);
+    renderMonthTables(months);
+    d.querySelectorAll('div.agenda').forEach(show);
+  };
+  if (window.innerWidth >= 768) {
+    renderCalendarGrids(months);
+    toggleMonth.checked = true;
+    toggleList.checked = false;
+  } else {
+    renderMonthTables(months);
+    toggleList.checked = true;
+    toggleMonth.checked = false;
+  }
+  const loadingEl = d.getElementById('hebcal-loading');
+  loadingEl.style.display = 'none';
+  const offcanvasEl = d.getElementById('offcanvas-settings');
+  offcanvasEl.addEventListener('show.bs.offcanvas', function() {
+    const _paq = window._paq = window._paq || [];
+    _paq.push(['trackEvent', 'Interaction', 'settings',
+      conf.shortTitle + ' ' + conf.locationName]);
+  });
+}
+
 const hebcalResults = {
   loadData,
+  renderResultsPage,
   makeMonthDivs,
   renderMonthTables,
   makeMonthHtml,
