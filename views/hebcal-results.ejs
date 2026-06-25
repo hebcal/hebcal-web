@@ -157,6 +157,23 @@ data-ad-slot="1867606375"></ins>
 </div><!-- #hebcal-loading -->
 <div id="hebcal-results">
 </div><!-- #hebcal-results -->
+<script type="application/json" id="hebcalData">
+<%- JSON.stringify({
+  lang: q.lg || "s",
+  locale,
+  cconfig,
+  localeConfig,
+  events: items,
+  memos,
+  opts,
+  shortTitle,
+  locationName,
+}) %>
+</script>
+<script nonce="<%=nonce%>">
+<%- await include('partials/hebcalResults.min.js') -%>
+document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
+</script>
 <%- await include('partials/pagination.ejs') -%>
 <div class="offcanvas offcanvas-start" style="width:auto" tabindex="-1" id="offcanvas-settings" aria-labelledby="settings-label" role="dialog" aria-modal="true">
 <div class="offcanvas-header">
@@ -172,22 +189,7 @@ data-ad-slot="1867606375"></ins>
 <% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
-<script nonce="<%=nonce%>"><%- await include('partials/hebcalResults.min.js') %></script>
 <%- await include('partials/print-iframe.ejs') -%>
-<script type="application/json" id="hebcalData"><%- JSON.stringify({
-  lang: q.lg || "s",
-  locale,
-  cconfig,
-  localeConfig,
-  events: items,
-  memos,
-  opts,
-  shortTitle,
-  locationName,
-}) %></script>
-<script nonce="<%=nonce%>">
-document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
-</script>
 <% const typeaheadScript = await include('partials/script-typeahead.ejs'); -%>
 <% const hebcalFormScript = await include('partials/script-hebcal-form.ejs'); -%>
 <%- await include('partials/footer.ejs', {

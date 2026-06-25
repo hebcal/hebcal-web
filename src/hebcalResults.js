@@ -780,7 +780,7 @@ function renderPagination(months) {
         title = localeData.months[mm - 1] + ' ' + yearStr;
         innerHTML = localeData.monthsShort[mm - 1];
       }
-      const newNode = hebcalResults.paginationListItem({
+      const newNode = paginationListItem({
         href: '#cal-' + yearMonth,
         title: title,
         innerHTML: innerHTML,
@@ -861,16 +861,8 @@ function renderResultsPage() {
 }
 
 const hebcalResults = {
-  loadData,
   renderResultsPage,
-  makeMonthDivs,
-  renderMonthTables,
-  makeMonthHtml,
-  renderCalendarGrids,
-  paginationListItem,
-  splitByMonth,
   myPrint,
-  renderPagination,
 };
 
 export default hebcalResults;
