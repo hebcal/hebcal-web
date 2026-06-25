@@ -174,47 +174,9 @@ data-ad-slot="1867606375"></ins>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <script nonce="<%=nonce%>"><%- await include('partials/hebcalResults.min.js') %></script>
 <%- await include('partials/print-iframe.ejs') -%>
-<script type="application/json" id="hebcalData"><%- JSON.stringify({lang: q.lg || "s", locale: locale, cconfig: cconfig, localeConfig: localeConfig, events: items, memos: memos, opts: opts}) %></script>
+<script type="application/json" id="hebcalData"><%- JSON.stringify({lang: q.lg || "s", locale: locale, cconfig: cconfig, localeConfig: localeConfig, events: items, memos: memos, opts: opts, shortTitle: shortTitle, locationName: locationName}) %></script>
 <script nonce="<%=nonce%>">
-document.addEventListener('DOMContentLoaded', function() {
-  hebcalResults.loadData();
-  const d = document;
-  function show(el) { if (el) { el.style.display = 'block' } }
-  function hide(el) { if (el) { el.style.display = 'none' } }
-
-  const months = hebcalResults.splitByMonth(window.hebcal.events);
-  hebcalResults.renderPagination(months);
-  hebcalResults.makeMonthDivs(months);
-
-  const toggleMonth = d.getElementById('toggle-month');
-  toggleMonth.onchange = function() {
-    d.querySelectorAll('div.agenda').forEach(hide);
-    hebcalResults.renderCalendarGrids(months);
-    d.querySelectorAll('div.cal').forEach(show);
-  };
-  const toggleList = d.getElementById('toggle-list');
-  toggleList.onchange = function() {
-    d.querySelectorAll('div.cal').forEach(hide);
-    hebcalResults.renderMonthTables(months);
-    d.querySelectorAll('div.agenda').forEach(show);
-  };
-  if (window.innerWidth >= 768) {
-    hebcalResults.renderCalendarGrids(months);
-    toggleMonth.checked = true;
-    toggleList.checked = false;
-  } else {
-    hebcalResults.renderMonthTables(months);
-    toggleList.checked = true;
-    toggleMonth.checked = false;
-  }
-  const loadingEl = d.getElementById('hebcal-loading');
-  loadingEl.style.display = 'none';
-  const offcanvasEl = document.getElementById('offcanvas-settings');
-  offcanvasEl.addEventListener('show.bs.offcanvas', function () {
-    var _paq = window._paq = window._paq || [];
-    _paq.push(['trackEvent', 'Interaction', 'settings', '<%=shortTitle+" "+locationName%>']);
-  });
-});
+document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 </script>
 <% const typeaheadScript = await include('partials/script-typeahead.ejs'); -%>
 <% const hebcalFormScript = await include('partials/script-hebcal-form.ejs'); -%>
