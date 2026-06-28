@@ -461,6 +461,10 @@ export async function zmanimIcalendar(ctx) {
     dt: today.format('YYYY-MM-DD'),
     icalv: IcalEvent.version(),
   };
+  if (events.length === 0) {
+    // e.g. polar latitudes where sunrise/sunset don't occur on some dates
+    ctx.throw(400, `No zmanim available for ${location.getName()}`);
+  }
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   if (checkFreshETag(ctx, options, attrs)) {
     return;

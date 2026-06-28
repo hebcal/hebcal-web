@@ -31,6 +31,13 @@ describe('Converter Routes', () => {
     expect(response.type).toContain('json');
   });
 
+  it('should report a clear error for h2g missing the hm param', async () => {
+    const response = await request(app.callback())
+        .get('/converter?cfg=json&hd=12&hy=5801&h2g=1');
+    expect(response.status).toBe(400);
+    expect(response.body.error).toBe('Hebrew month is required');
+  });
+
   it('should handle GET /converter with XML config', async () => {
     const response = await request(app.callback())
         .get('/converter/?cfg=xml&gy=2025&gm=12&gd=24&g2h=1');
@@ -72,5 +79,33 @@ describe('Converter CSV Route', () => {
         .post('/converter/csv');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
+  });
+
+  it('should return 400 (not 500) for /converter/csv with a date range', async () => {
+    const response = await request(app.callback())
+        .get('/converter/csv?start=2024-01-01&end=2024-01-05');
+    expect(response.status).toBe(400);
+  });
+
+  it('should return 400 (not 500) for /converter/csv with ndays', async () => {
+    const response = await request(app.callback())
+        .get('/converter/csv?h2g=1&ndays=2');
+    expect(response.status).toBe(400);
+  });
+});
+
+describe('Converter h2g ndays', () => {
+  it('should convert a Hebrew date plus ndays into a range', async () => {
+    const response = await request(app.callback())
+        .get('/converter?cfg=json&h2g=1&ndays=3&hy=5785&hm=Av&hd=1');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    expect(Object.keys(response.body.hdates).length).toBe(3);
+  });
+
+  it('should return 400 for ndays with a non-numeric Hebrew date', async () => {
+    const response = await request(app.callback())
+        .get('/converter?cfg=json&h2g=1&ndays=3&hy=abc&hm=Av&hd=1');
+    expect(response.status).toBe(400);
   });
 });

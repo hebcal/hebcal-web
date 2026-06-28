@@ -1,9 +1,16 @@
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
+import createError from 'http-errors';
 import {empty, off} from './empty.js';
 import {urlArgsObj, dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
+
+// Protocol Buffer int32 fields (year, geonameid, month, etc.) assert their
+// argument fits in a signed 32-bit integer; anything larger throws deep inside
+// the serializer. Reject out-of-range values up front as a 400 instead.
+const INT32_MAX = 2147483647;
+const INT32_MIN = -2147483648;
 
 const dlPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
@@ -16,6 +23,9 @@ function getInt(str) {
   const n = Number.parseInt(str, 10);
   if (Number.isNaN(n)) {
     return null;
+  }
+  if (n < INT32_MIN || n > INT32_MAX) {
+    throw createError(400, `Numeric value out of range: ${str}`);
   }
   return n;
 }

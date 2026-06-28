@@ -103,6 +103,9 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
   } else if (hy > 32000) {
     throw createError(400, `Hebrew year is too large: ${hy}`);
   }
+  if (empty(hmStr)) {
+    throw createError(400, 'Hebrew month is required');
+  }
   let hm;
   try {
     hm = HDate.monthFromName(hmStr);

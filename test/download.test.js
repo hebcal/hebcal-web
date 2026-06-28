@@ -322,3 +322,18 @@ describe('limitIcsFeedLength truncation notice', () => {
     expect(limited).toBe(events);
   });
 });
+
+describe('Zmanim ICS bad-parameter hardening', () => {
+  it('returns 400 (not 500) for a polar latitude with no events', async () => {
+    const res = await request(app.callback())
+        .get('/zmanim?cfg=ics&geo=pos&latitude=90&longitude=0&tzid=UTC');
+    expect(res.status).toBe(400);
+  });
+
+  it('still serves normal zmanim ICS', async () => {
+    const res = await request(app.callback())
+        .get('/zmanim?geo=pos&latitude=40.7&longitude=-74&tzid=America/New_York');
+    expect(res.status).toBe(200);
+    expect(res.type).toContain('calendar');
+  });
+});

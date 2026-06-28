@@ -22,6 +22,9 @@ export async function dafYomiRss(ctx) {
   const isDafYomi = bn.startsWith('dafyomi');
   const calendarName = isDafYomi ? 'dafYomi' : 'mishnaYomi';
   const event = DailyLearning.lookup(calendarName, hd);
+  if (!event) {
+    ctx.throw(400, `No ${calendarName} reading for ${dt.toISOString().substring(0, 10)}`);
+  }
   ctx.type = RSS_CONTENT_TYPE;
   ctx.body = await ctx.render('dafyomi-rss', {
     writeResp: false,

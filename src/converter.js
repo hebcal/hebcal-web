@@ -505,6 +505,16 @@ function parseConverterQuery(ctx) {
     }
   }
   if (isset(query.h2g)) {
+    if (empty(query.ndays) && empty(query.hy) && empty(query.hm) && empty(query.hd)) {
+      return g2h(ctx.state.now, false, true);
+    }
+    // in either mode, this will throw if the params are invalid
+    const hdate = makeHebDate(query.hy, query.hm, query.hd);
+    const dt = hdate.greg();
+    const gy = dt.getFullYear();
+    if (gy > 9999) {
+      ctx.throw(400, `Gregorian year cannot be greater than 9999: ${gy}`);
+    }
     if (!empty(query.ndays)) {
       const ndays = Number.parseInt(query.ndays, 10);
       if (Number.isNaN(ndays) || ndays < 1) {
@@ -514,16 +524,6 @@ function parseConverterQuery(ctx) {
       const numDays = Math.min(ndays - 1, 179);
       const endD = startD.add(numDays, 'days');
       return convertDateRange(ctx, startD, endD);
-    }
-    if (empty(query.hy) && empty(query.hm) && empty(query.hd)) {
-      return g2h(ctx.state.now, false, true);
-    }
-    // in either mode, this will throw if the params are invalid
-    const hdate = makeHebDate(query.hy, query.hm, query.hd);
-    const dt = hdate.greg();
-    const gy = dt.getFullYear();
-    if (gy > 9999) {
-      ctx.throw(400, `Gregorian year cannot be greater than 9999: ${gy}`);
     }
     return {type: 'h2g', dt, hdate, gs: false};
   }
@@ -613,6 +613,9 @@ function g2h(dt, gs, noCache) {
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
+  if (typeof p.hdates === 'object') {
+    ctx.throw(400, 'Date range conversion is not supported for CSV download');
+  }
   if (!p.noCache && ctx.request.querystring.length !== 0) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   }

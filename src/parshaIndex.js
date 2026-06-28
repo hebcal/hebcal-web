@@ -28,6 +28,10 @@ export async function parshaIndex(ctx) {
   const hd = afterSunset ? hd0.next() : hd0;
   const saturday = hd.onOrAfter(6);
   const hyear = saturday.getFullYear();
+  // Triennial.getCycleStartYear() throws a RangeError before Hebrew year 5744
+  if (hyear < 5744) {
+    ctx.throw(400, `Parashat haShavua is not available before Hebrew year 5744`);
+  }
   const il = q.i === 'on';
   const todayEv = getTodayHolidayEvent(hd, il);
   if (checkFreshETag(ctx, q, {hd, saturday, todayEv})) {
