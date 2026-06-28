@@ -42,6 +42,74 @@ describe('Yahrzeit Email Routes', () => {
   });
 });
 
+describe('Email subscribe CSRF protection', () => {
+  // Browsers attach an Origin header to cross-site POSTs; a forged subscribe
+  // from another origin must be rejected so it can't be used to email-bomb a
+  // victim with confirmation messages.
+  it('rejects POST /yahrzeit/email from a cross-site Origin', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/email')
+        .set('Origin', 'https://evil.example.com')
+        .type('form')
+        .send({em: 'victim@example.com', ulid: CALENDAR_ID, type: 'Yahrzeit'});
+    expect(response.status).toBe(403);
+  });
+
+  it('rejects POST /email/ from a cross-site Origin', async () => {
+    const response = await request(app.callback())
+        .post('/email/')
+        .set('Origin', 'https://evil.example.com')
+        .type('form')
+        .send({v: '1', cfg: 'json', em: 'victim@example.com'});
+    expect(response.status).toBe(403);
+  });
+
+  it('rejects POST /yahrzeit/search from a cross-site Origin', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/search')
+        .set('Origin', 'https://evil.example.com')
+        .type('form')
+        .send({em: 'victim@example.com'});
+    expect(response.status).toBe(403);
+  });
+
+  it('rejects a look-alike Origin (suffix attack)', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/email')
+        .set('Origin', 'https://www.hebcal.com.evil.example.com')
+        .type('form')
+        .send({});
+    expect(response.status).toBe(403);
+  });
+
+  it('rejects an opaque "null" Origin', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/email')
+        .set('Origin', 'null')
+        .type('form')
+        .send({});
+    expect(response.status).toBe(403);
+  });
+
+  it('allows POST /yahrzeit/email from the hebcal.com Origin', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/email')
+        .set('Origin', 'https://www.hebcal.com')
+        .type('form')
+        .send({});
+    // passes the CSRF gate; 400 here is the normal missing-field response
+    expect(response.status).not.toBe(403);
+  });
+
+  it('allows POST with no Origin (RFC 8058 one-click unsubscribe, non-browser)', async () => {
+    const response = await request(app.callback())
+        .post('/yahrzeit/email')
+        .type('form')
+        .send({});
+    expect(response.status).not.toBe(403);
+  });
+});
+
 describe('Shabbat Email Verification Routes', () => {
   it('should handle /email/verify.php with token', async () => {
     const response = await request(app.callback())

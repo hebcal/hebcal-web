@@ -14,6 +14,7 @@ import {basename} from 'node:path';
 import {matomoTrack} from './matomoTrack.js';
 import {makeLogInfo} from './logger.js';
 import {xmlEsc} from './sanitize.js';
+import {rejectForgedCrossOriginPost} from './common.js';
 
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
@@ -113,6 +114,7 @@ function makeUlid(ctx) {
 }
 
 export async function yahrzeitEmailSearch(ctx) {
+  rejectForgedCrossOriginPost(ctx);
   const q = {...ctx.request.body, ...ctx.request.query};
   if (empty(q.em)) {
     return ctx.render('yahrzeit-search-notfound', {q});
@@ -192,6 +194,7 @@ ${BLANK}
 }
 
 export async function yahrzeitEmailSub(ctx) {
+  rejectForgedCrossOriginPost(ctx);
   ctx.set('Cache-Control', 'private, max-age=0');
   const q = {...ctx.request.body, ...ctx.request.query};
   if (q.cfg !== 'html') {

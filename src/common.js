@@ -101,6 +101,55 @@ export function utmSourceFromRef(ctx) {
 }
 
 /**
+ * Hostnames permitted to make state-changing cross-origin requests.
+ * @private
+ * @param {string} hostname
+ * @return {boolean}
+ */
+function isTrustedHostname(hostname) {
+  hostname = hostname.toLowerCase();
+  return hostname === 'hebcal.com' || hostname.endsWith('.hebcal.com') ||
+    hostname === 'localhost' || hostname === '127.0.0.1';
+}
+
+/**
+ * CSRF mitigation for state-changing POST endpoints (e.g. email subscribe).
+ *
+ * Browsers always attach an `Origin` header to cross-site POST requests, so a
+ * forged cross-site POST can be rejected by inspecting it. Requests with no
+ * `Origin` header are allowed through, because those are not browser-driven
+ * cross-site requests: server-to-server callers, RFC 8058 `List-Unsubscribe`
+ * one-click POSTs (sent by Gmail/Apple Mail with no Origin), and non-browser
+ * API clients. This blocks the email-bombing vector (a page on another origin
+ * silently POSTing a victim's address to trigger a confirmation email) without
+ * breaking legitimate same-origin or non-browser traffic.
+ *
+ * No-ops for non-POST requests, so it is safe to call at the top of a handler
+ * that serves both GET (render form) and POST (submit).
+ *
+ * @param {import('koa').Context} ctx
+ */
+export function rejectForgedCrossOriginPost(ctx) {
+  if (ctx.method !== 'POST') {
+    return;
+  }
+  const origin = ctx.get('origin');
+  if (!origin) {
+    // No Origin header: not a browser cross-site request. Allow.
+    return;
+  }
+  let hostname;
+  try {
+    hostname = new URL(origin).hostname;
+  } catch {
+    ctx.throw(403, 'Forbidden: malformed Origin header');
+  }
+  if (!isTrustedHostname(hostname)) {
+    ctx.throw(403, 'Forbidden: cross-origin request not allowed');
+  }
+}
+
+/**
  * @param {import('koa').Context} ctx
  * @return {string}
  */

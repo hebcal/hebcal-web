@@ -7,6 +7,7 @@ import {getImgOpenHtml, validateEmail, sendMailLogErr, makeMessageId,
   makeVerificationEmailHtml, BLANK} from './emailCommon.js';
 import {matomoTrack} from './matomoTrack.js';
 import {xmlEsc} from './sanitize.js';
+import {rejectForgedCrossOriginPost} from './common.js';
 
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
 
@@ -131,6 +132,7 @@ function getSubscriptionId(ctx, q) {
 }
 
 export async function emailForm(ctx) {
+  rejectForgedCrossOriginPost(ctx);
   ctx.set('Cache-Control', 'private');
   let q = {...ctx.request.body, ...ctx.request.query};
   let defaultUnsubscribe = false;
