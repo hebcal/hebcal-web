@@ -9,7 +9,13 @@ import zlib from 'node:zlib';
 import {join} from 'node:path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {MysqlDb} from './db.js';
-import prometheus from '@echo-health/koa-prometheus-exporter';
+import promClient from 'prom-client';
+
+// Collect Node.js default metrics (event-loop lag percentiles, the
+// nodejs_gc_duration_seconds histogram, heap usage, etc.) into the default
+// registry. Done once at module load: this module is cached, and in production
+// www and download run as separate processes so each gets its own collector.
+promClient.collectDefaultMetrics();
 
 /**
  * Directory for log files (and the koa.pid file) in production.
@@ -49,7 +55,6 @@ export function useObservability(app) {
   app.use(accessLogger(logger));
   app.on('error', errorLogger(logger));
 
-  const promClient = prometheus.client;
   const httpRequestsTotal = new promClient.Counter({
     name: 'http_requests_total',
     help: 'Total number of HTTP requests',
@@ -61,7 +66,14 @@ export function useObservability(app) {
         .labels(ctx.request.method, ctx.response.status)
         .inc();
   });
-  app.use(prometheus.middleware({}));
+  app.use(async function metricsEndpoint(ctx, next) {
+    if (ctx.path === '/metrics' && ctx.method === 'GET') {
+      ctx.set('Content-Type', promClient.register.contentType);
+      ctx.body = await promClient.register.metrics();
+      return;
+    }
+    await next();
+  });
 }
 
 /**
