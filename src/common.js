@@ -6,10 +6,9 @@ export const DOCUMENT_ROOT = process.env.NODE_ENV === 'production' ? '/var/www/h
 const HEBCAL_HOSTNAME = 'www.hebcal.com';
 
 function getHostname(ctx) {
-  const hostStr = ctx.get('host') || HEBCAL_HOSTNAME;
+  const hostStr = ctx.get('host') || '';
   const [host] = hostStr.split(':');
-  if (host === 'hebcal.com' || host.endsWith('.hebcal.com') ||
-      host === '127.0.0.1' || host === 'localhost') {
+  if (isTrustedHostname(host)) {
     return hostStr;
   }
   return HEBCAL_HOSTNAME;
@@ -84,8 +83,7 @@ export function utmSourceFromRef(ctx) {
     try {
       const refUrl = new URL(ref);
       const hostname = refUrl.hostname.toLowerCase();
-      if (hostname === 'hebcal.com' || hostname.endsWith('.hebcal.com') ||
-          hostname === '127.0.0.1') {
+      if (isTrustedHostname(hostname)) {
         return undefined;
       }
       if (hostname.startsWith('www.')) {
