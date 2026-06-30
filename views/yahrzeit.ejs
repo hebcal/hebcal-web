@@ -247,7 +247,10 @@ instructions</a>.</p>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
-<form id="f2" class="needs-validation" novalidate>
+<form id="f2" class="needs-validation" novalidate
+ data-resource="/yahrzeit/email"
+ data-action="<%= q.em ? 'yahrzeit-reminder' : 'yahrzeit-save' %>"
+ data-email-subscribe-label="<%= q.em ? 'Subscribe' : 'Save' %>">
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="cfg" value="json">
 <input type="hidden" name="type" value="<%=anniversaryType%>">
@@ -289,11 +292,7 @@ instructions</a>.</p>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
-<%- await include('partials/email-modal-script.ejs', {
-  resource: '/yahrzeit/email',
-  action: q.em ? 'yahrzeit-reminder' : 'yahrzeit-save',
-  emailSubscribeLabel: q.em ? 'Subscribe' : 'Save',
-}) -%>
+<%- await include('partials/email-modal-script.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
 <script nonce="<%=nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>

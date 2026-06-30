@@ -119,12 +119,20 @@ module.exports = [
     ],
   },
   {
+    input: 'src/client-email-subscribe.js',
+    output: {
+      file: 'views/partials/client-email-subscribe.min.js',
+      format: 'iife',
+      banner: '/*! client-email-subscribe ' + pkg.version + ' */',
+    },
+    plugins: [terser()],
+  },
+  {
     input: 'src/client-fullcalendar.js',
     output: [
       {
         file: 'static/i/' + pkg.config.holidayFcApp,
         format: 'iife',
-        name: 'HolidayFullCalendar',
         banner: '/*! ' + pkg.config.holidayFcApp + ' */',
       },
     ],

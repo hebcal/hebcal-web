@@ -1,7 +1,10 @@
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
-<form id="f2" class="needs-validation" novalidate>
+<form id="f2" class="needs-validation" novalidate
+ data-resource="/email/"
+ data-action="shabbat-weekly"
+ data-email-subscribe-label="Subscribe">
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="cfg" value="json">
 <input type="hidden" name="modify" value="1">
@@ -46,8 +49,4 @@
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->  
-<%- await include('email-modal-script.ejs', {
-  resource: '/email/',
-  action: 'shabbat-weekly',
-  emailSubscribeLabel: 'Subscribe',
-}) -%>
+<%- await include('email-modal-script.ejs') -%>
