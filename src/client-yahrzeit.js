@@ -1,5 +1,7 @@
+/* eslint-disable indent */
 import Papa from 'papaparse';
 
+// eslint-disable-next-line spaced-comment
 /*! hebcal client-yahrzeit.js */
 document.addEventListener('DOMContentLoaded', function() {
 const mainFormEl = document.getElementById('f3');
@@ -19,7 +21,8 @@ function yahrzeitRow(n) {
   '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option><option>Other</option></select>'+
   '<label class="form-label" for="t'+n+'">Type</label></div>'+
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" inputmode="numeric" name="d'+n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
+  '<input class="form-control" type="text" inputmode="numeric" name="d'+
+    n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
   '<label class="form-label" for="d'+n+'">Day</label>'+
   '<div class="invalid-feedback">Please enter a valid day of month.</div>'+
   '</div>'+
@@ -31,7 +34,8 @@ function yahrzeitRow(n) {
   '</select>'+
   '<label class="form-label" for="m'+n+'">Month</label></div>'+
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" inputmode="numeric" name="y'+n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year">'+
+  '<input class="form-control" type="text" inputmode="numeric" name="y'+
+    n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year">'+
   '<label class="form-label" for="y'+n+'">Year</label>'+
   '<div class="invalid-feedback">Please enter a valid Gregorian year.</div>'+
   '</div>'+
@@ -70,9 +74,9 @@ document.getElementById('newrow').addEventListener('click', function() {
 const checkbox = document.getElementById('yizkor');
 const radio0 = document.getElementById('i0');
 const radio1 = document.getElementById('i1');
-checkbox.addEventListener('change', function() {
-  radio0.disabled = !this.checked;
-  radio1.disabled = !this.checked;
+checkbox.addEventListener('change', () => {
+  radio0.disabled = !checkbox.checked;
+  radio1.disabled = !checkbox.checked;
 });
 
 function clickToDelete(el) {
@@ -99,7 +103,7 @@ if (tzoEl) {
 }
 mainFormEl.addEventListener('submit', function(event) {
   mainFormEl.classList.remove('was-validated');
-  var _paq = window._paq = window._paq || [];
+  const _paq = window._paq = window._paq || [];
   let formInvalid = false;
   function checkNumber(el, event, min, max) {
     const value = el.value.trim();
@@ -107,9 +111,9 @@ mainFormEl.addEventListener('submit', function(event) {
       el.classList.remove('is-invalid');
       return true;
     }
-    const num = parseInt(value, 10);
-    if (isNaN(num) || num < min || num > max) {
-      event.preventDefault()
+    const num = Number.parseInt(value, 10);
+    if (Number.isNaN(num) || num < min || num > max) {
+      event.preventDefault();
       event.stopPropagation();
       el.classList.add('is-invalid');
       formInvalid = true;
@@ -127,13 +131,13 @@ mainFormEl.addEventListener('submit', function(event) {
   yearInputs.forEach((el) => checkNumber(el, event, 1, maxYear));
   dayNumberInputs.forEach((el) => {
     const num = el.id.substring(1);
-    const dd = parseInt(el.value, 10);
-    const mm = parseInt(mainFormEl.querySelector('#m' + num).value, 10);
-    const yy = parseInt(mainFormEl.querySelector('#y' + num).value, 10);
-    if (!isNaN(dd) && !isNaN(mm) && !isNaN(yy)) {
+    const dd = Number.parseInt(el.value, 10);
+    const mm = Number.parseInt(mainFormEl.querySelector('#m' + num).value, 10);
+    const yy = Number.parseInt(mainFormEl.querySelector('#y' + num).value, 10);
+    if (!Number.isNaN(dd) && !Number.isNaN(mm) && !Number.isNaN(yy)) {
       const daysInMonth = new Date(yy, mm, 0).getDate();
       if (dd > daysInMonth) {
-        event.preventDefault()
+        event.preventDefault();
         event.stopPropagation();
         el.classList.add('is-invalid');
         formInvalid = true;
@@ -141,7 +145,7 @@ mainFormEl.addEventListener('submit', function(event) {
     }
   });
   if (!mainFormEl.checkValidity()) {
-    event.preventDefault()
+    event.preventDefault();
     event.stopPropagation();
     _paq.push(['trackEvent', 'Interaction', 'form-invalid', 'yahrzeit']);
     return;
@@ -153,17 +157,19 @@ mainFormEl.addEventListener('submit', function(event) {
 
 function processRow(row) {
   const parts = row[0].trim().split('/');
-  const mm = parseInt(parts[0], 10);
-  const dd = parseInt(parts[1], 10);
-  const yy = parseInt(parts[2], 10);
-  if (isNaN(mm) || isNaN(dd) || isNaN(yy)) {
+  const mm = Number.parseInt(parts[0], 10);
+  const dd = Number.parseInt(parts[1], 10);
+  const yy = Number.parseInt(parts[2], 10);
+  if (Number.isNaN(mm) || Number.isNaN(dd) || Number.isNaN(yy)) {
     return false;
   }
   let n = getCurrentCount();
   if (!document.getElementById('y'+n) || !document.getElementById('m'+n) || !document.getElementById('d'+n)) {
     n = addNewRow();
   }
-  if (document.getElementById('y'+n).value && document.getElementById('m'+n).value && document.getElementById('d'+n).value) {
+  if (document.getElementById('y'+n).value &&
+      document.getElementById('m'+n).value &&
+      document.getElementById('d'+n).value) {
     n = addNewRow();
   }
   document.getElementById('d'+n).value = ''+dd;
@@ -206,7 +212,7 @@ formEl.addEventListener('submit', function(event) {
   const nofileAlertEl = document.getElementById('nofile-alert');
   const badimportAlertEl = document.getElementById('badimport-alert');
   const successAlertEl = document.getElementById('success-alert');
-  var _paq = window._paq = window._paq || [];
+  const _paq = window._paq = window._paq || [];
   if (formFileEl.files.length == 0) {
     nofileAlertEl.hidden = false;
     badimportAlertEl.hidden = true;
@@ -224,8 +230,7 @@ formEl.addEventListener('submit', function(event) {
       },
       complete: function(results) {
         let numOK = 0;
-        for (let i = 0; i < results.data.length; i++) {
-          const row = results.data[i];
+        for (const row of results.data) {
           if (typeof row[0] === 'string') {
             const ok = processRow(row);
             if (ok) {
