@@ -16,10 +16,8 @@ import {xmlEsc} from './sanitize.js';
  * @param {number} maxAccuracyRadius
  */
 export function getLocationFromGeoIp(ctx, maxAccuracyRadius = 500) {
-  if (!ctx.geoipCity) {
-    return {geo: 'none'};
-  }
-  if (isRobot(ctx.get('user-agent'))) {
+  const userAgent = ctx.get('user-agent');
+  if (!userAgent || isRobot(userAgent) || !ctx.geoipCity) {
     return {geo: 'none'};
   }
   const ip = getIpAddress(ctx);

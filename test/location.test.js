@@ -14,7 +14,7 @@ function makeCtx(userAgent, geoipResult) {
     get(name) {
       return headers[name.toLowerCase()] || '';
     },
-    request: {ip: '127.0.0.1'},
+    request: {ip: '198.51.100.123'},
   };
 }
 
@@ -27,6 +27,14 @@ test('getLocationFromGeoIp returns none for bot-like user-agent', () => {
   const ctx = makeCtx('Mozilla/5.0 (compatible; Googlebot/2.1)', {country: {iso_code: 'US'}});
   expect(getLocationFromGeoIp(ctx)).toEqual({geo: 'none'});
 });
+
+test('getLocationFromGeoIp returns none for blank or undefined user-agent', () => {
+  const ctx = makeCtx('', {country: {iso_code: 'MX'}});
+  expect(getLocationFromGeoIp(ctx)).toEqual({geo: 'none'});
+  const ctx2 = makeCtx(undefined, {country: {iso_code: 'MX'}});
+  expect(getLocationFromGeoIp(ctx2)).toEqual({geo: 'none'});
+});
+
 
 test('getLocationFromGeoIp does not short-circuit for human user-agent', () => {
   const ua = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36';
