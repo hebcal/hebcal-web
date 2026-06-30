@@ -9,7 +9,7 @@ import {nearestCity} from './nearestCity.js';
 import {xmlEsc} from './sanitize.js';
 
 /**
- * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * MaxMind geoIP lookup GeoLite2-City.mmdb
  * @return {any}
  * @param {import('koa').Context} ctx
  * @param {number} maxAccuracyRadius

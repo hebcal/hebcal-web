@@ -1,11 +1,10 @@
 import {cleanQuery} from './cleanQuery.js';
-import {getIpAddress} from './getIpAddress.js';
 import {pickLanguage, localeMap, langTzDefaults} from './lang.js';
 import {getLocationFromQueryOrGeoIp} from './location.js';
 import {processCookieAndQuery} from './urlArgs.js';
 
 /**
- * MaxMind geoIP lookup GeoLite2-Country.mmdb
+ * MaxMind geoIP lookup GeoLite2-City.mmdb
  * @return {any}
  * @param {import('koa').Context} ctx
  */
@@ -24,10 +23,9 @@ export function setDefautLangTz(ctx) {
     if (location.getIsrael()) {
       q.i = 'on';
     }
-  } else if (ctx.geoipCountry) {
-    const ip = getIpAddress(ctx);
-    cc = ctx.geoipCountry.get(ip);
   }
+  // Otherwise cc/tzid fall back to ctx.state.geoip, which is populated from
+  // the GeoLite2-City database (geoip.country.iso_code) by getLocationFromGeoIp().
   const lg = ctx.state.lg = q.lg = pickLanguage(ctx, q, cc);
   ctx.state.lang = ctx.state.locale = localeMap[lg] || 'en';
   cc = cc || 'US';

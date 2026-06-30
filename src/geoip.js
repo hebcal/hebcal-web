@@ -12,16 +12,8 @@ export function openGeoIpDbs(app) {
   // but on macOS, they are installed by Homebrew in /opt/homebrew/var/GeoIP
   // Allow the location to be overridden by the ini file
   const geoipDir = iniConfig['hebcal.geoip.dir'] || '/var/lib/GeoIP';
-  setImmediate(async () => {
-    const geoipCountryMmdbPath = `${geoipDir}/GeoLite2-Country.mmdb`;
-    logger.info(`Opening ${geoipCountryMmdbPath}`);
-    try {
-      app.context.geoipCountry = await maxmind.open(geoipCountryMmdbPath, openOpts);
-    } catch (err) {
-      logger.error(err, `while opening ${geoipCountryMmdbPath}`);
-    }
-  });
-
+  // The City database is a superset of the Country database (it includes
+  // country.iso_code), so we only load the City database to reduce memory.
   setImmediate(async () => {
     const geoipCityMmdbPath = `${geoipDir}/GeoLite2-City.mmdb`;
     logger.info(`Opening ${geoipCityMmdbPath}`);
