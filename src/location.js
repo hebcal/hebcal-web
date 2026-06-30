@@ -5,6 +5,7 @@ import {empty} from './empty.js';
 import {geoposLegacy} from './urlArgs.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {getIpAddress} from './getIpAddress.js';
+import {isRobot} from './isRobot.js';
 import {nearestCity} from './nearestCity.js';
 import {xmlEsc} from './sanitize.js';
 
@@ -16,6 +17,9 @@ import {xmlEsc} from './sanitize.js';
  */
 export function getLocationFromGeoIp(ctx, maxAccuracyRadius = 500) {
   if (!ctx.geoipCity) {
+    return {geo: 'none'};
+  }
+  if (isRobot(ctx.get('user-agent'))) {
     return {geo: 'none'};
   }
   const ip = getIpAddress(ctx);
