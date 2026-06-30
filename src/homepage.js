@@ -20,7 +20,7 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export async function homepage(ctx) {
-  const q0 = setDefautLangTz(ctx);
+  const q0 = await setDefautLangTz(ctx);
   const cookie = ctx.cookies.get('C');
   const il = ctx.state.il;
   const defaults = {

@@ -36,7 +36,7 @@ dayjs.extend(timezone);
 const BASE_URL = 'https://www.hebcal.com/shabbat';
 
 export async function shabbatApp(ctx) {
-  const isRedir = geoIpRedirect(ctx);
+  const isRedir = await geoIpRedirect(ctx);
   if (isRedir) {
     return;
   }
@@ -112,7 +112,7 @@ export async function shabbatApp(ctx) {
   }
 }
 
-function geoIpRedirect(ctx) {
+async function geoIpRedirect(ctx) {
   if (ctx.request.querystring.length !== 0) {
     return false;
   }
@@ -127,7 +127,7 @@ function geoIpRedirect(ctx) {
     }
   }
 
-  const geoip = ctx.state.geoip = getLocationFromGeoIp(ctx);
+  const geoip = ctx.state.geoip = await getLocationFromGeoIp(ctx);
   if (geoip.zip) {
     const dest = `/shabbat?zip=${geoip.zip}&ue=off&b=18&M=on&td=8.5&lg=s&geoip=zip`;
     redir(ctx, dest);

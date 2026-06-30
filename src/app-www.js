@@ -3,7 +3,7 @@ import bodyParser from 'koa-bodyparser';
 import error from 'koa-error';
 import render from '@koa/ejs';
 import serve from 'koa-static';
-import {openGeoIpDbs} from './geoip.js';
+import {setupGeoIp} from './geoip.js';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
@@ -20,7 +20,7 @@ const __dirname = path.dirname(__filename);
 
 const app = createBaseApp();
 
-openGeoIpDbs(app);
+setupGeoIp(app);
 
 useObservability(app);
 

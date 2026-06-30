@@ -19,7 +19,7 @@ const CACHE_CONTROL_3DAYS = cacheControl(3);
 
 export async function fridgeShabbat(ctx) {
   if (ctx.request.path.startsWith('/fridge')) {
-    return fridgeIndex(ctx);
+    return await fridgeIndex(ctx);
   }
   const q = ctx.request.query;
   if (empty(q.year)) {
@@ -62,8 +62,8 @@ export async function fridgeShabbat(ctx) {
   return ctx.render('fridge', p);
 }
 
-function fridgeIndex(ctx) {
-  const q = setDefautLangTz(ctx);
+async function fridgeIndex(ctx) {
+  const q = await setDefautLangTz(ctx);
   const location = ctx.state.location;
   q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
   return ctx.render('fridge-index', {
