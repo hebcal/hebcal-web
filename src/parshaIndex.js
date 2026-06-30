@@ -22,7 +22,7 @@ delete myLangNames.a;
 delete myLangNames['he-x-NoNikud'];
 
 export async function parshaIndex(ctx) {
-  const q = setDefautLangTz(ctx);
+  const q = await setDefautLangTz(ctx);
   const {dt, afterSunset} = getSunsetAwareDate(q, ctx.state.location);
   const hd0 = new HDate(dt);
   const hd = afterSunset ? hd0.next() : hd0;

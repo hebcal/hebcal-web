@@ -33,7 +33,7 @@ const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end
 export async function hebrewDateConverter(ctx) {
   const now = ctx.state.now = new Date();
   if (ctx.method === 'GET' && ctx.request.querystring.length === 0) {
-    setDefautLangTz(ctx);
+    await setDefautLangTz(ctx);
   }
   const q = ctx.request.query;
   ctx.state.lg = q.lg || 's';

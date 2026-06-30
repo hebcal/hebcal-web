@@ -5,15 +5,15 @@ import {processCookieAndQuery} from './urlArgs.js';
 
 /**
  * MaxMind geoIP lookup GeoLite2-City.mmdb
- * @return {any}
+ * @return {Promise<any>}
  * @param {import('koa').Context} ctx
  */
-export function setDefautLangTz(ctx) {
+export async function setDefautLangTz(ctx) {
   ctx.set('Cache-Control', 'private'); // personalize by cookie or GeoIP
   const prevCookie = ctx.cookies.get('C');
   const q = processCookieAndQuery(prevCookie, {}, ctx.request.query);
   cleanQuery(q);
-  const location = getLocationFromQueryOrGeoIp(ctx, q);
+  const location = await getLocationFromQueryOrGeoIp(ctx, q);
   const geoip = ctx.state.geoip;
   let cc = geoip?.cc;
   let tzid = geoip?.tzid;

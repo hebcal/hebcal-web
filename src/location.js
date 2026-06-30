@@ -10,18 +10,20 @@ import {nearestCity} from './nearestCity.js';
 import {xmlEsc} from './sanitize.js';
 
 /**
- * MaxMind geoIP lookup GeoLite2-City.mmdb
- * @return {any}
+ * MaxMind geoIP lookup GeoLite2-City.mmdb, via the hebcal-geoip2 microservice.
+ * Returns {geo:'none'} if the lookup yields nothing or the service is
+ * unreachable (see src/geoipClient.js).
+ * @return {Promise<any>}
  * @param {import('koa').Context} ctx
  * @param {number} maxAccuracyRadius
  */
-export function getLocationFromGeoIp(ctx, maxAccuracyRadius = 500) {
+export async function getLocationFromGeoIp(ctx, maxAccuracyRadius = 500) {
   const userAgent = ctx.get('user-agent');
-  if (!userAgent || isRobot(userAgent) || !ctx.geoipCity) {
+  if (!userAgent || isRobot(userAgent) || !ctx.geoipClient) {
     return {geo: 'none'};
   }
   const ip = getIpAddress(ctx);
-  const geoip = ctx.geoipCity.get(ip);
+  const geoip = await ctx.geoipClient.lookup(ip);
   if (!geoip) {
     return {geo: 'none'};
   }
@@ -270,15 +272,15 @@ export function getLocationFromQuery(db, query) {
 /**
  * @param {import('koa').Context} ctx
  * @param {any} q
- * @return {any}
+ * @return {Promise<any>}
  */
-export function getLocationFromQueryOrGeoIp(ctx, q) {
+export async function getLocationFromQueryOrGeoIp(ctx, q) {
   const location = getLocationFromQuery(ctx.db, q);
   if (location !== null) {
     return location;
   }
   // try to infer location from GeoIP
-  const gloc = ctx.state.geoip = getLocationFromGeoIp(ctx, 1000);
+  const gloc = ctx.state.geoip = await getLocationFromGeoIp(ctx, 1000);
   if (gloc.zip || gloc.geonameid) {
     const geoip = {};
     for (const [key, val] of Object.entries(gloc)) {

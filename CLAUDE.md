@@ -78,13 +78,26 @@ Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashken
 ### Databases
 - **MySQL**: user accounts, yahrzeit subscriptions, email lists — requires `hebcal-dot-com.ini` config
 - **SQLite** (`geonames.sqlite3`, `zips.sqlite3`): geolocation lookup via `@hebcal/geo-sqlite`
-- **MaxMind GeoIP**: `GeoLite2-Country.mmdb`, `GeoLite2-City.mmdb` for IP-based city detection
+- **MaxMind GeoIP**: IP-based city detection (`GeoLite2-City.mmdb`). The database
+  is **not** loaded in-process; lookups go to the standalone
+  [hebcal-geoip2](https://github.com/hebcal/hebcal-geoip2) Go microservice over a
+  Unix domain socket (see `src/geoipClient.js` / `src/geoip.js`). If the service
+  is unreachable, `getLocationFromGeoIp()` falls back to `{geo:'none'}`.
 
 ## Testing Notes
 
 Before first test run, create test SQLite databases:
 ```bash
 node_modules/@hebcal/geo-sqlite/bin/make-test-dbs
+```
+
+You must also run the **full** build before the tests will pass — not just
+`po2json`. Many tests boot the Koa app and render EJS templates, which require
+the compiled translations (`src/*.po.js`), the SASS/CSS output, and the rollup
+client bundles (`views/partials/*.min.js`, `static/i/*`). Without these, route
+tests fail with HTTP 500s that look unrelated to your change:
+```bash
+npm run build   # po2json + css-compile + css-rename + rollup
 ```
 
 Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock.js`. All tests must pass before committing or pushing.
