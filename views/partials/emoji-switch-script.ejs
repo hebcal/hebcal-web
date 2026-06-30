@@ -1,6 +1,9 @@
+<script type="application/json" id="dlURLs">
+<%- JSON.stringify(url) %>
+</script>
 <script nonce="<%=nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
-  const dlURLs = <%- JSON.stringify(url) %>;
+  const dlURLs = JSON.parse(document.getElementById('dlURLs').textContent);
   let calColor = '';
   let emojiChecked = true;
   let yahrzeitReminderChecked = true;
