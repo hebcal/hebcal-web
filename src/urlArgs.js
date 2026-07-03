@@ -163,6 +163,7 @@ export function locationDefaultCandleMins(location) {
     if (typeof offset === 'number') {
       return offset;
     }
+    return 20;
   }
   return DEFAULT_CANDLE_MINS;
 }
