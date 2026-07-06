@@ -528,7 +528,7 @@
 },
 "Bamidbar":{
  "asin":"0827614195",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-bamidbar",
+ "ej":"bamidbar/bamidbar",
  "rabbisacks.org":"bamidbar",
  "ajr.edu":{"target":"bemidbar"},
  "aju.edu":151,
@@ -544,7 +544,7 @@
 },
 "Nasso":{
  "asin":"0827614209",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-naso",
+ "ej":"bamidbar/naso",
  "rabbisacks.org":"naso",
  "ajr.edu":{"target":"nasso"},
  "aju.edu":124,
@@ -560,7 +560,7 @@
 },
 "Beha'alotcha":{
  "asin":"0827614217",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-behaalotcha",
+ "ej":"bamidbar/behaalotcha",
  "rabbisacks.org":"behaalotcha",
  "ajr.edu":{"target":"behaalotekha"},
  "aju.edu":111,
@@ -576,7 +576,7 @@
 },
 "Sh'lach":{
  "asin":"0827614225",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-shlach",
+ "ej":"bamidbar/shlach",
  "rabbisacks.org":"shelach-lecha",
  "ajr.edu":{"target":"shelah"},
  "aju.edu":130,
@@ -592,7 +592,7 @@
 },
 "Korach":{
  "asin":"0827614233",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-korach",
+ "ej":"bamidbar/korach",
  "rabbisacks.org":"korach",
  "ajr.edu":{"target":"korah"},
  "aju.edu":120,
@@ -608,7 +608,7 @@
 },
 "Chukat":{
  "asin":"0827614241",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-chukat",
+ "ej":"bamidbar/chukat",
  "rabbisacks.org":"chukat",
  "ajr.edu":{"target":"hukkat"},
  "aju.edu":114,
@@ -624,7 +624,7 @@
 },
 "Balak":{
  "asin":"0827614500",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-balak",
+ "ej":"bamidbar/balak",
  "rabbisacks.org":"balak",
  "ajr.edu":{"target":"balak"},
  "aju.edu":114,
@@ -640,7 +640,7 @@
 },
 "Pinchas":{
  "asin":"0827614519",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-pinchas",
+ "ej":"bamidbar/pinchas",
  "rabbisacks.org":"pinchas",
  "ajr.edu":{"target":"pinhas"},
  "aju.edu":127,
@@ -656,7 +656,7 @@
 },
 "Matot":{
  "asin":"0827614527",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-matot",
+ "ej":"bamidbar/matot",
  "rabbisacks.org":"matot",
  "ajr.edu":{"target":"mattot"},
  "aju.edu":122,
@@ -672,7 +672,7 @@
 },
 "Masei":{
  "asin":"0827614535",
- "ej":"sefer-bamidbar-book-of-numbers/parashat-masei",
+ "ej":"bamidbar/masei",
  "rabbisacks.org":"masei",
  "ajr.edu":{"target":"massei"},
  "aju.edu":122,
@@ -688,7 +688,7 @@
 },
 "Devarim":{
  "asin":"0827614543",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-devarim",
+ "ej":"devarim/devarim",
  "rabbisacks.org":"devarim",
  "ajr.edu":{"target":"devarim"},
  "aju.edu":157,
@@ -704,7 +704,7 @@
 },
 "Vaetchanan":{
  "asin":"0827614551",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-vaetchanan",
+ "ej":"devarim/vaetchanan",
  "rabbisacks.org":"vaetchanan",
  "ajr.edu":{"target":"vaethanan-sefer-devarim"},
  "aju.edu":139,
@@ -720,7 +720,7 @@
 },
 "Eikev":{
  "asin":"082761456X",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-eikev",
+ "ej":"devarim/eikev",
  "rabbisacks.org":"eikev",
  "ajr.edu":{"target":"eikev"},
  "aju.edu":116,
@@ -736,7 +736,7 @@
 },
 "Re'eh":{
  "asin":"0827614578",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-reeh",
+ "ej":"devarim/reeh",
  "rabbisacks.org":"reeh",
  "ajr.edu":{"target":"reeh"},
  "aju.edu":128,
@@ -752,7 +752,7 @@
 },
 "Shoftim":{
  "asin":"0827614586",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-shoftim",
+ "ej":"devarim/shoftim",
  "rabbisacks.org":"shoftim",
  "ajr.edu":{"target":"shoftim"},
  "aju.edu":131,
@@ -768,7 +768,7 @@
 },
 "Ki Teitzei":{
  "asin":"0827614594",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-ki-teitzei",
+ "ej":"devarim/ki-teitzei",
  "rabbisacks.org":"ki-teitse",
  "ajr.edu":{"target":"ki-teitzei"},
  "aju.edu":119,
@@ -784,7 +784,7 @@
 },
 "Ki Tavo":{
  "asin":"0827614608",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-ki-tavo",
+ "ej":"devarim/ki-tavo",
  "rabbisacks.org":"ki-tavo",
  "ajr.edu":{"target":"ki-tavo"},
  "aju.edu":118,
@@ -800,7 +800,7 @@
 },
 "Nitzavim":{
  "asin":"0827614616",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-nitzavim",
+ "ej":"devarim/nitzavim",
  "rabbisacks.org":"nitzavim",
  "ajr.edu":{"target":"nitzavim"},
  "aju.edu":125,
@@ -816,7 +816,7 @@
 },
 "Vayeilech":{
  "asin":"0827614624",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-vayelech",
+ "ej":"devarim/vayelech",
  "rabbisacks.org":"vayelech",
  "ajr.edu":{"target":"vayeilekh"},
  "aju.edu":125,
@@ -832,7 +832,7 @@
 },
 "Ha'azinu":{
  "asin":"0827614632",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-haazinu",
+ "ej":"devarim/haazinu",
  "rabbisacks.org":"haazinu",
  "ajr.edu":{"target":"haazinu"},
  "aju.edu":117,
@@ -848,7 +848,7 @@
 },
 "Vezot Haberakhah":{
  "asin":"0827614640",
- "ej":"sefer-devarim-book-of-deuteronomy/parashat-vzot-haberachah",
+ "ej":"devarim/vzot-haberachah",
  "rabbisacks.org":"vezot-habracha",
  "aju.edu":null,
  "jtsa.edu":"vezot-haberakhah",
