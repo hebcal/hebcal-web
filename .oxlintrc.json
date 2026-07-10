@@ -23,7 +23,6 @@
     "guard-for-in": "error",
     "new-cap": "error",
     "no-array-constructor": "error",
-    "no-caller": "error",
     "no-extend-native": "error",
     "no-extra-bind": "error",
     "no-multi-str": "error",
