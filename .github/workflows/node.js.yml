@@ -19,6 +19,7 @@ jobs:
         cache: 'npm'
         cache-dependency-path: './package.json'
     - run: npm install
+    - run: npm run lint
     - run: npm run build --if-present
     - run: npx --no-install --package=@hebcal/geo-sqlite make-test-dbs
     - run: npm test

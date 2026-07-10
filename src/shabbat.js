@@ -91,7 +91,7 @@ export async function shabbatApp(ctx) {
       ctx.state.options.heDateParts = true;
     }
     let obj = myEventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w\.]/g, '');
+    const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
     if (cb) {
       obj = cb + '(' + JSON.stringify(obj) + ')\n';
     }

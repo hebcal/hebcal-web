@@ -36,10 +36,6 @@ const MINIMAL_AVIF = Buffer.from(
 );
 
 const imgSizes = ['16x9-768', '800', '640', '400'];
-const imageDir640 = path.join(DOCUMENT_ROOT, 'i', 'is', '640');
-const webpPath = path.join(imageDir640, PHOTO_WEBP);
-const avifPath = path.join(imageDir640, PHOTO_AVIF);
-
 beforeAll(() => {
   for (const sz of imgSizes) {
     const imageDir = path.join(DOCUMENT_ROOT, 'i', 'is', sz);
