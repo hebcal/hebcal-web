@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       events: function(info, successCallback, failureCallback) {
         const result = [];
-        for (let dt = info.start; dt < info.end; dt.setDate(dt.getDate() + 1)) {
+        for (const dt = info.start; dt < info.end; dt.setDate(dt.getDate() + 1)) {
           const holidays = makeFullCalendarHolidaysForDate(dt, il);
           result.push(...holidays);
         }

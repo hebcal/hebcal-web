@@ -86,7 +86,7 @@ export async function hebrewDateConverter(ctx) {
     } else if (typeof p.hdates === 'object') {
       ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       let result = p;
-      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w\.]/g, '');
+      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
       if (cb) {
         result = cb + '(' + JSON.stringify(result) + ')\n';
       }
@@ -116,7 +116,7 @@ export async function hebrewDateConverter(ctx) {
           result.il = p.il;
         }
       }
-      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w\.]/g, '');
+      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
       if (cb) {
         result = cb + '(' + JSON.stringify(result) + ')\n';
       }

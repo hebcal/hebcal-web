@@ -33,6 +33,7 @@
     "css-compile": "sass --style compressed --no-source-map --no-error-css --load-path=node_modules --load-path=views/partials scss/:css/ && postcss css/*.css --dir css/ --no-map",
     "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
     "pretest": "touch hebcal-dot-com.ini",
+    "lint": "oxlint",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest"
@@ -43,7 +44,6 @@
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
     "@fullhuman/postcss-purgecss": "^8.0.0",
@@ -56,10 +56,8 @@
     "bootstrap5-autocomplete": "^1.1.42",
     "critical": "^8.0.0",
     "csv-parse": "^7.0.1",
-    "eslint": "^10.6.0",
-    "eslint-plugin-n": "^18.2.1",
     "gettext-parser": "^9.1.1",
-    "globals": "^17.7.0",
+    "oxlint": "^1.73.0",
     "papaparse": "^5.5.4",
     "postcss": "^8.5.16",
     "postcss-cli": "^11.0.1",
