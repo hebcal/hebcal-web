@@ -1,4 +1,5 @@
 import {Locale} from '@hebcal/core/dist/esm/locale';
+import poEn from './en.po.js';
 import poHe from './he.po.js';
 import poEs from './es.po.js';
 import poFr from './fr.po.js';
@@ -6,6 +7,7 @@ import poNl from './nl.po.js';
 import poPt from './pt.po.js';
 import poAshkenazi from './ashkenazi.po.js';
 
+Locale.addTranslations('en', poEn);
 Locale.addTranslations('es', poEs);
 Locale.addTranslations('fr', poFr);
 Locale.addTranslations('nl', poNl);

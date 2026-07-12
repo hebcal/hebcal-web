@@ -1,0 +1,231 @@
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "TITLE:chatzotNight"
+msgstr "Chatzot HaLailah"
+
+msgid "MEMO:chatzotNight"
+msgstr "Sunset plus 6 halachic hours"
+
+msgid "TITLE:alotHaShachar"
+msgstr "Alot haShachar"
+
+msgid "MEMO:alotHaShachar"
+msgstr "Sun is 16.1° below the horizon in the morning"
+
+msgid "TITLE:misheyakir"
+msgstr "Misheyakir"
+
+msgid "MEMO:misheyakir"
+msgstr "Earliest talis & tefillin. Sun is 11.5° below the horizon in the morning"
+
+msgid "TITLE:misheyakirMachmir"
+msgstr "Misheyakir Machmir"
+
+msgid "MEMO:misheyakirMachmir"
+msgstr "Earliest talis & tefillin. Sun is 10.2° below the horizon in the morning"
+
+msgid "TITLE:dawn"
+msgstr "Dawn"
+
+msgid "MEMO:dawn"
+msgstr "Civil dawn. Sun is 6° below the horizon in the morning"
+
+msgid "TITLE:sunrise"
+msgstr "Sunrise"
+
+msgid "MEMO:sunrise"
+msgstr "Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)"
+
+msgid "TITLE:seaLevelSunrise"
+msgstr "Sunrise (Sea Level)"
+
+msgid "MEMO:seaLevelSunrise"
+msgstr "Upper edge of the Sun appears over the eastern horizon in the morning (0.833° above horizon)"
+
+msgid "TITLE:sofZmanShma"
+msgstr "Kriat Shema, sof zeman (Gra)"
+
+msgid "MEMO:sofZmanShma"
+msgstr "Latest Shema (Gra). Sunrise plus 3 halachic hours, according to the Gra"
+
+msgid "TITLE:sofZmanTfilla"
+msgstr "Tefilah, sof zeman (Gra)"
+
+msgid "MEMO:sofZmanTfilla"
+msgstr "Latest Shacharit (Gra). Sunrise plus 4 halachic hours, according to the Gra"
+
+msgid "TITLE:sofZmanShmaMGA"
+msgstr "Kriat Shema, sof zeman (MGA) 72 min"
+
+msgid "MEMO:sofZmanShmaMGA"
+msgstr "Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. Based on the opinion of the MGA that the day is calculated from dawn being fixed 72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset"
+
+msgid "TITLE:sofZmanShmaMGA16Point1"
+msgstr "Kriat Shema, sof zeman (MGA) 16.1°"
+
+msgid "MEMO:sofZmanShmaMGA16Point1"
+msgstr "Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. Based on the opinion of the MGA that the day is calculated from dawn to nightfall with both being 16.1° below the horizon"
+
+msgid "TITLE:sofZmanShmaMGA19Point8"
+msgstr "Kriat Shema, sof zeman (MGA) 19.8°"
+
+msgid "MEMO:sofZmanShmaMGA19Point8"
+msgstr "Latest Shema (MGA). Sunrise plus 3 halachic hours, according to Magen Avraham. Based on the opinion of the MGA that the day is calculated from dawn to nightfall with both being 19.8° below the horizon"
+
+msgid "TITLE:sofZmanTfillaMGA"
+msgstr "Tefilah, sof zeman (MGA) 72 min"
+
+msgid "MEMO:sofZmanTfillaMGA"
+msgstr "Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. Based on the opinion of the MGA that the day is calculated from dawn being fixed 72 minutes before sea-level sunrise, and nightfall is fixed 72 minutes after sea-level sunset"
+
+msgid "TITLE:sofZmanTfillaMGA16Point1"
+msgstr "Tefilah, sof zeman (MGA) 16.1°"
+
+msgid "MEMO:sofZmanTfillaMGA16Point1"
+msgstr "Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. "
+
+msgid "TITLE:sofZmanTfillaMGA19Point8"
+msgstr "Tefilah, sof zeman (MGA) 19.8°"
+
+msgid "MEMO:sofZmanTfillaMGA19Point8"
+msgstr "Latest Shacharit (MGA). Sunrise plus 4 halachic hours, according to Magen Avraham. "
+
+msgid "TITLE:chatzot"
+msgstr "Chatzot hayom"
+
+msgid "MEMO:chatzot"
+msgstr "Midday. Sunrise plus 6 halachic hours"
+
+msgid "TITLE:minchaGedola"
+msgstr "Mincha Gedolah (Gra)"
+
+msgid "MEMO:minchaGedola"
+msgstr "Earliest Mincha. Sunrise plus 6.5 halachic hours"
+
+msgid "TITLE:minchaGedolaMGA"
+msgstr "Mincha Gedolah (MGA)"
+
+msgid "MEMO:minchaGedolaMGA"
+msgstr "Earliest Mincha. Sunrise plus 6.5 halachic hours, according to Magen Avraham"
+
+msgid "TITLE:minchaKetana"
+msgstr "Mincha Ketanah (Gra)"
+
+msgid "MEMO:minchaKetana"
+msgstr "Preferable earliest time to recite Minchah. Sunrise plus 9.5 halachic hours"
+
+msgid "TITLE:minchaKetanaMGA"
+msgstr "Mincha Ketanah (MGA)"
+
+msgid "MEMO:minchaKetanaMGA"
+msgstr "Preferable earliest time to recite Minchah. Sunrise plus 9.5 halachic hours, according to Magen Avraham"
+
+msgid "TITLE:plagHaMincha"
+msgstr "Plag HaMincha"
+
+msgid "MEMO:plagHaMincha"
+msgstr "Sunrise plus 10.75 halachic hours"
+
+msgid "TITLE:seaLevelSunset"
+msgstr "Sunset (Sea Level)"
+
+msgid "MEMO:seaLevelSunset"
+msgstr "Upper edge of the Sun disappears below the western horizon in the evening (0.833° below horizon)"
+
+msgid "TITLE:sunset"
+msgstr "Sunset"
+
+msgid "MEMO:sunset"
+msgstr "Upper edge of the Sun disappears below the western horizon in the evening (0.833° below horizon)"
+
+msgid "TITLE:dusk"
+msgstr "Dusk"
+
+msgid "MEMO:dusk"
+msgstr "Civil dusk. Sun is 6° below the horizon in the evening"
+
+msgid "TITLE:beinHaShmashos"
+msgstr "Bein Hashemashot"
+
+msgid "MEMO:beinHaShmashos"
+msgstr "Twilight. 13.5 minutes prior to tzeit (nightfall) when the sun is 7.083° below horizon"
+
+msgid "TITLE:tzeit7083deg"
+msgstr "Tzeit 7.083°"
+
+msgid "MEMO:tzeit7083deg"
+msgstr "Nightfall. When 3 medium stars are observable in the night sky with the naked eye (sun 7.083° below the horizon)"
+
+msgid "TITLE:tzeit85deg"
+msgstr "Tzeit 8.5°"
+
+msgid "MEMO:tzeit85deg"
+msgstr "Nightfall. When 3 small stars are observable in the night sky with the naked eye (sun 8.5° below the horizon)"
+
+msgid "TITLE:tzeit42min"
+msgstr "Tzeit 42 min"
+
+msgid "MEMO:tzeit42min"
+msgstr "Nightfall. When 3 medium stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)"
+
+msgid "TITLE:tzeit50min"
+msgstr "Tzeit 50 min"
+
+msgid "MEMO:tzeit50min"
+msgstr "Nightfall. When 3 small stars are observable in the night sky with the naked eye (fixed 42 minutes after sunset)"
+
+msgid "TITLE:tzeit72min"
+msgstr "Tzeit 72 min (Rabbeinu Tam)"
+
+msgid "MEMO:tzeit72min"
+msgstr "Nightfall. When 3 small stars are observable in the night sky with the naked eye (fixed 72 minutes after sunset)"
+
+msgid "TITLE:alosBaalHatanya"
+msgstr "Alot HaShachar (Baal Hatanya)"
+
+msgid "MEMO:alosBaalHatanya"
+msgstr "Dawn. Sun is 16.9° below the horizon in the morning, based on the time of 72 minutes before netz amiti (sunrise) in Jerusalem around the equinox"
+
+msgid "TITLE:sofZmanShmaBaalHatanya"
+msgstr "Kriat Shema, sof zeman (Baal Hatanya)"
+
+msgid "MEMO:sofZmanShmaBaalHatanya"
+msgstr "Latest Shema (Baal Hatanya). 3 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from sunrise to sunset"
+
+msgid "TITLE:sofZmanTfilaBaalHatanya"
+msgstr "Tefilah, sof zeman (Baal Hatanya)"
+
+msgid "MEMO:sofZmanTfilaBaalHatanya"
+msgstr "Latest Shacharit (Baal Hatanya). 4 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from sunrise to sunset"
+
+msgid "TITLE:minchaGedolaBaalHatanya"
+msgstr "Mincha Gedolah (Baal Hatanya)"
+
+msgid "MEMO:minchaGedolaBaalHatanya"
+msgstr "Earliest Mincha (Baal Hatanya). 6.5 shaos zmaniyos (sea level solar hours) after netz amiti (sunrise), calculated from sunrise to sunset"
+
+msgid "TITLE:minchaKetanaBaalHatanya"
+msgstr "Mincha Ketanah (Baal Hatanya)"
+
+msgid "MEMO:minchaKetanaBaalHatanya"
+msgstr "Preferable earliest time to recite Minchah (Baal Hatanya). 9.5 shaos zmaniyos (sea level solar hours) after netz amiti (sunrise), calculated from sunrise to sunset"
+
+msgid "TITLE:plagHaminchaBaalHatanya"
+msgstr "Plag HaMincha (Baal Hatanya)"
+
+msgid "MEMO:plagHaminchaBaalHatanya"
+msgstr "Plag HaMincha (Baal Hatanya). 10.75 shaos zmaniyos (solar hours) after netz amiti (sunrise), calculated from sunrise to sunset"
+
+msgid "TITLE:tzaisBaalHatanya"
+msgstr "Tzeit (Baal Hatanya)"
+
+msgid "MEMO:tzaisBaalHatanya"
+msgstr "Nightfall (Baal Hatanya). Sun is 6° below the western geometric horizon after sunset"
+

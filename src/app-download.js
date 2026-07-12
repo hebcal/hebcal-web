@@ -8,7 +8,7 @@ import {cacheControl,
   CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeitDownload.js';
-import {zmanimIcalendar} from './zmanim.js';
+import {zmanimIcalendar} from './zmanimDownload.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
