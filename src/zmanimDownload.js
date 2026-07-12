@@ -1,16 +1,15 @@
-import { HebrewCalendar, HebrewDateEvent, Zmanim, TimedEvent, flags } from '@hebcal/core';
+import { HebrewCalendar, HebrewDateEvent, TimedEvent, Zmanim, flags } from '@hebcal/core';
 import { HDate, Locale } from '@hebcal/hdate';
 import { IcalEvent, eventsToIcalendar } from '@hebcal/icalendar';
 import { makeAnchor } from '@hebcal/rest-api';
-import createError from 'http-errors';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import { CACHE_CONTROL_7DAYS } from './cacheControl.js';
 import { nowInTimezone } from './dateUtil.js';
 import { checkFreshETag } from './etag.js';
 import { lgToLocale } from './lang.js';
 import { getLocationFromQuery } from './location.js';
 import { ALL_TIMES, getTimesForRange } from './zmanimCommon.js';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 
 dayjs.extend(isSameOrBefore);
 
@@ -25,7 +24,7 @@ export async function zmanimIcalendar(ctx) {
   const query = ctx.request.query;
   const location = getLocationFromQuery(ctx.db, query);
   if (location === null) {
-    throw createError(400, 'Location is required');
+    ctx.throw(400, 'Location is required');
   }
   const today = nowInTimezone(location.getTzid());
   const riseSetOnly = ctx.request.path.startsWith('/sunrs');
