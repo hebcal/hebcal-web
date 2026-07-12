@@ -6,7 +6,6 @@ import {pkg} from './pkg.js';
 import {getLocationFromQuery} from './location.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {getStartAndEnd} from './dateUtil.js';
-import createError from 'http-errors';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
@@ -26,11 +25,11 @@ export async function getZmanim(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
   const q = ctx.request.query;
   if (q.cfg !== 'json') {
-    throw createError(400, 'Parameter cfg=json is required');
+    ctx.throw(400, 'Parameter cfg=json is required');
   }
   const loc = ctx.state.location = getLocationFromQuery(ctx.db, q);
   if (loc === null) {
-    throw createError(400, 'Location is required');
+    ctx.throw(400, 'Location is required');
   }
   const locObj = locationToPlainObj(loc);
   const useElevation = q.ue === 'on' || q.ue === '1';
@@ -83,7 +82,7 @@ function checkMelacha(ctx, q, loc, locObj, useElevation) {
     dateStr = dateStr.trim();
     dt = new Date(dateStr);
     if (Number.isNaN(dt.getTime())) {
-      throw createError(400, `Invalid Date: ${dateStr}`);
+      ctx.throw(400, `Invalid Date: ${dateStr}`);
     }
     if (!dateStr.endsWith('Z')) {
       const ch = dateStr.charAt(dateStr.length - 6);
