@@ -101,7 +101,6 @@ export async function shabbatApp(ctx) {
     if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
-    p.queryDefaultCandleMins = queryDefaultCandleMins;
     makeDownloadProps(ctx, q, options);
     ctx.state.numYears = 4;
     const year = ctx.state.currentYear = new Date().getFullYear();
@@ -134,7 +133,7 @@ async function geoIpRedirect(ctx) {
     return true;
   } else if (geoip.geonameid) {
     const mode = geoip.nn ? 'nn' : 'geonameid';
-    const candleMins = queryDefaultCandleMins(geoip);
+    const candleMins = queryDefaultCandleMins(ctx, geoip, geoip.cc);
     const dest = `/shabbat?geonameid=${geoip.geonameid}&ue=off&b=${candleMins}&M=on&td=8.5&lg=s&geoip=${mode}`;
     redir(ctx, dest);
     return true;

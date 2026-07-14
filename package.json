@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "3.8.3",
+  "version": "3.8.4",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -43,6 +43,9 @@
   ],
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
+  "allowScripts": {
+    "murmurhash3": true
+  },
   "devDependencies": {
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
@@ -59,7 +62,7 @@
     "gettext-parser": "^9.1.1",
     "oxlint": "^1.73.0",
     "papaparse": "^5.5.4",
-    "postcss": "^8.5.16",
+    "postcss": "^8.5.19",
     "postcss-cli": "^11.0.1",
     "rollup": "^4.62.2",
     "sass": "^1.101.0",
@@ -74,14 +77,14 @@
     "@hebcal/learning": "^6.9.5",
     "@hebcal/leyning": "^9.5.5",
     "@hebcal/locales": "^6.5.1",
-    "@hebcal/rest-api": "^6.4.9",
+    "@hebcal/rest-api": "^6.5.1",
     "@hebcal/triennial": "^6.3.0",
     "@koa/ejs": "^5.1.0",
     "@koa/send": "^6.0.0",
     "dayjs": "^1.11.21",
     "ejs": "^6.0.1",
     "fastest-levenshtein": "^1.0.16",
-    "geo-tz": "^8.1.7",
+    "geo-tz": "^8.1.8",
     "google-protobuf": "^4.0.2",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.1",
@@ -96,7 +99,7 @@
     "koa-timeout-v2": "^1.0.0",
     "minimist": "^1.2.8",
     "murmurhash3": "^0.5.0",
-    "mysql2": "^3.22.5",
+    "mysql2": "^3.22.6",
     "nodemailer": "^9.0.3",
     "nodemailer-html-to-text": "^3.2.0",
     "pdfkit": "^0.19.1",

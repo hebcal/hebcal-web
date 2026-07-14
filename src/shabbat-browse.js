@@ -125,8 +125,8 @@ async function renderBrowseCountryXml(props, ctx) {
   ctx.body = await ctx.render('shabbat-browse-country-xml', props);
 }
 
-function addHref(r, countryCode) {
-  const b = queryDefaultCandleMins(r);
+function addHref(ctx, r, countryCode) {
+  const b = queryDefaultCandleMins(ctx, r, countryCode);
   const ccDefaults = langTzDefaults[countryCode] || langTzDefaults['US'];
   const lg = ccDefaults[0] || 's';
   r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}&set=off`;
@@ -193,7 +193,7 @@ async function countryAdmin1Page(ctx, countryA1) {
   if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
     return;
   }
-  results.forEach((r) => addHref(r, countryCode));
+  results.forEach((r) => addHref(ctx, r, countryCode));
   const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
   const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
   const props = {
@@ -215,7 +215,7 @@ async function countryPage(ctx, countryCode) {
   const stmt = db.prepare(COUNTRY_SQL);
   const results = stmt.all(countryCode);
   db.close();
-  results.forEach((r) => addHref(r, countryCode));
+  results.forEach((r) => addHref(ctx, r, countryCode));
   const admin1 = results.reduce((map, val) => {
     if (val.admin1ascii !== null) {
       map.set(val.admin1ascii, val.admin1);

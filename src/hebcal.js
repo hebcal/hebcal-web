@@ -212,12 +212,13 @@ async function renderForm(ctx, error) {
   const today = dayjs();
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
   const defaultYearHeb = getDefaultHebrewYear(new HDate(today.toDate()));
+  const q = ctx.state.q;
+  q.b = q.b || queryDefaultCandleMins(ctx, q);
   return ctx.render('hebcal-form-page', {
     message,
     langNames,
     defaultYear,
     defaultYearHeb,
-    queryDefaultCandleMins,
     dailyLearningOpts,
     queryToName,
     queryLongDescr,
@@ -379,6 +380,7 @@ function renderHtml(ctx) {
   const mm = q.mm || '0';
   opts.hebrewMonths = (mm === '1' || mm === '2');
   opts.gematriyaNumerals = (mm === '2');
+  q.b = q.b || queryDefaultCandleMins(ctx, q);
   return ctx.render('hebcal-results', {
     items,
     memos,
@@ -399,7 +401,6 @@ function renderHtml(ctx) {
     langNames,
     defaultYear,
     defaultYearHeb,
-    queryDefaultCandleMins,
     dailyLearningOpts,
     queryToName,
     queryLongDescr,

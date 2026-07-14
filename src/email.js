@@ -368,7 +368,7 @@ async function writeSubInfo(ctx, db, q) {
     getUseElevation(q),
     mins,
     degs,
-    getCandleMins(q),
+    getCandleMins(ctx, q),
     getIpAddress(ctx),
     ctx.state.subscriptionId,
   ]);
@@ -387,8 +387,8 @@ function getHavdalahDegrees(q) {
   return null;
 }
 
-function getCandleMins(q) {
-  const minDefault = queryDefaultCandleMins(q);
+function getCandleMins(ctx, q) {
+  const minDefault = queryDefaultCandleMins(ctx, q);
   return Number.parseInt(q.b, 10) || minDefault;
 }
 
@@ -427,7 +427,7 @@ async function writeStagingInfo(ctx, db, q) {
     getUseElevation(q),
     mins,
     degs,
-    getCandleMins(q),
+    getCandleMins(ctx, q),
     locationValue,
     ip,
   ]);

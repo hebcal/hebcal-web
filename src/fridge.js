@@ -58,7 +58,7 @@ export async function fridgeShabbat(ctx) {
     ctx.body = csv;
     return;
   }
-  formatForHtml(p);
+  formatForHtml(ctx, p);
   return ctx.render('fridge', p);
 }
 
@@ -110,12 +110,12 @@ function makeProperties(ctx) {
   };
 }
 
-function formatForHtml(p) {
+function formatForHtml(ctx, p) {
   p.itemsRows = formatItemsAsTable(p.items, p.options);
   p.url = '/shabbat/fridge.cgi?' + makeGeoUrlArgs(p.q, p.location, p.options);
   p.htmlDir = p.lang === 'he' ? 'rtl' : 'ltr';
   p.candleLightingStr = Locale.gettext('Candle lighting', p.locale);
-  p.queryDefaultCandleMins = queryDefaultCandleMins;
+  p.q.b = p.q.b || queryDefaultCandleMins(ctx, p.q);
   p.today = dayjs();
 }
 

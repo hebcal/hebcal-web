@@ -109,7 +109,7 @@ function makeCookie(ctx, query, uid) {
   // so strings will match numbers
   if (ck.b &&
     ((ck.zip && ck.b == DEFAULT_CANDLE_MINS) ||
-      (ck.geonameid && ck.b == queryDefaultCandleMins(ck)))) {
+      (ck.geonameid && ck.b == queryDefaultCandleMins(ctx, ck)))) {
     delete ck.b;
   }
   if (Object.keys(ck).length === 0) {

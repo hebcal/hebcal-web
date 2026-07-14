@@ -68,7 +68,7 @@ ul.hebcal-results li {
 <h6 class="mt-3 mb-2"><%= Locale.gettext("Shabbat", locale) %> times for world cities</h6>
 <ul class="bullet-list-inline">
 <% const worldCities = [
-[295629, "Ashdod"],
+[295629, "Ashdod", 20],
 [4180439, "Atlanta"],
 [4347778, "Baltimore"],
 [2950159, "Berlin"],
@@ -80,8 +80,8 @@ ul.hebcal-results li {
 [4684888, "Dallas"],
 [5419384, "Denver"],
 [4990729, "Detroit"],
-[294801, "Haifa"],
-[281184, "Jerusalem"],
+[294801, "Haifa", 30],
+[281184, "Jerusalem", 40],
 [993800, "Johannesburg"],
 [5100280, "Lakewood, NJ"],
 [2643743, "London"],
@@ -93,20 +93,20 @@ ul.hebcal-results li {
 [5128581, "New York"],
 [4167505, "Palm Beach"],
 [2988507, "Paris"],
-[293918, "Petach Tikva"],
+[293918, "Petach Tikva", 20],
 [4560349, "Philadelphia"],
 [5391959, "San Francisco"],
 [3448439, "São Paulo"],
 [5809844, "Seattle"],
 [2147714, "Sydney"],
-[293397, "Tel Aviv"],
+[293397, "Tel Aviv", 20],
 [6167865, "Toronto"],
 [6173331, "Vancouver"],
 [4140963, "Washington, DC"],
 [2657896, "Zürich"],
 ];
 for (const [geonameid, city, min] of worldCities) { -%>
-<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;ue=off&amp;b=<%= queryDefaultCandleMins({geonameid}) %>&amp;M=on&amp;td=<%=q.td||8.5%>&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
+<li><a href="/shabbat?geonameid=<%=geonameid%>&amp;ue=off&amp;b=<%= min || 18 %>&amp;M=on&amp;td=<%=q.td||8.5%>&amp;lg=<%=q.lg||'s'%>"><%=city%></a></li>
 <% } -%>
 <li><a href="/shabbat/browse/">More ...</a></li>
 </ul>

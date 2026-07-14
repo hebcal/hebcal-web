@@ -138,15 +138,26 @@ const geonameIdCandleOffset = {
 };
 
 /**
+ * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} query
+ * @param {string} [countryCode]
  * @return {number}
  */
-export function queryDefaultCandleMins(query) {
+export function queryDefaultCandleMins(ctx, query, countryCode) {
   const geonameid = query.geonameid;
   if (geonameid) {
     const offset = geonameIdCandleOffset[geonameid];
     if (typeof offset === 'number') {
       return offset;
+    }
+    if (countryCode === 'IL') {
+      return 20;
+    }
+    if (ctx?.db) {
+      const location = ctx.db.lookupGeoname(geonameid);
+      if (location?.getIsrael()) {
+        return 20;
+      }
     }
   }
   return DEFAULT_CANDLE_MINS;
