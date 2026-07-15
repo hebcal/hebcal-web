@@ -336,7 +336,8 @@ async function unsub(ctx, q) {
   if (q.cfg === 'json') {
     ctx.body = {ok: true};
     return;
-  } else if (q.num === 'all') {
+  }
+  if (q.num === 'all') {
     const {calendarId, emailAddress} = await lookupSubscription(ctx, q.id);
     const info = {calendarId};
     return ctx.render('yahrzeit-optout', {
@@ -344,14 +345,13 @@ async function unsub(ctx, q) {
       emailAddress,
       info,
     });
-  } else {
-    const {info, emailAddress} = await lookupSubNum(ctx, q);
-    return ctx.render('yahrzeit-optout', {
-      title: `${info.typeStr} Email Unsubscribe - Hebcal`,
-      emailAddress,
-      info,
-    });
   }
+  const {info, emailAddress} = await lookupSubNum(ctx, q);
+  return ctx.render('yahrzeit-optout', {
+    title: `${info.typeStr} Email Unsubscribe - Hebcal`,
+    emailAddress,
+    info,
+  });
 }
 
 function makeFooter(emailAddress, typeStr, editUrl, unsubUrl) {
