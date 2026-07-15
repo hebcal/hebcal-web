@@ -11,9 +11,9 @@ const isProduction = process.env.NODE_ENV === 'production';
  * @param {string} action
  * @param {string} [name]
  */
-export function matomoTrack(ctx, category, action, name=null) {
+export function matomoTrack(ctx, category, action, name=null, includeRobots=false) {
   const userAgent = ctx.get('user-agent');
-  if (isRobot(userAgent)) {
+  if (!includeRobots && isRobot(userAgent)) {
     return;
   }
   const params = {};
@@ -35,10 +35,18 @@ export function matomoTrack(ctx, category, action, name=null) {
   const idsite = ctx.request.hostname === 'download.hebcal.com' ? '3' : '1';
   args.set('idsite', idsite);
   args.set('send_image', '0'); // prefer HTTP 204 instead of a GIF image
-  args.set('e_c', category);
-  args.set('e_a', action);
-  if (name) {
-    args.set('e_n', name);
+  if (category && action) {
+    args.set('e_c', category);
+    args.set('e_a', action);
+    if (name) {
+      args.set('e_n', name);
+    }
+  } else {
+    if (name) {
+      args.set('action_name', name);
+    }
+    const duration = Date.now() - ctx.state.startTime;
+    args.set('pf_srv', duration);
   }
   args.set('ua', userAgent);
   const lang = ctx.get('accept-language');
@@ -96,6 +104,9 @@ export function matomoTrack(ctx, category, action, name=null) {
     ctx.logger.info(`matomo: ${postData}&clientIp=${ipAddress}`);
   }
   const req = http.request(options);
+  req.on('response', (res) => {
+    res.resume(); // drain the response so the keep-alive socket is released back to the pool
+  });
   req.on('error', (err) => {
     ctx.logger.error(err);
   });

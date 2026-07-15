@@ -146,3 +146,18 @@ export function errorLogger(logger) {
     }
   };
 }
+
+const aiChatbotUaRegex = /(?:ChatGPT-User|MistralAI-User|Gemini-Deep-Research|Claude-User|Perplexity-User|Google-NotebookLM)/i;
+
+/**
+ * Middleware for logging Chatbot requests via Matomo
+ * @param {import('koa').Context} ctx
+ * @param {function(): Promise<void>} next
+ */
+export async function aiChatbotLogger(ctx, next) {
+  await next();
+  const ua = ctx.get('user-agent');
+  if (ua && aiChatbotUaRegex.test(ua)) {
+    matomoTrack(ctx, null, null, 'AI Chatbot', true);
+  }
+}

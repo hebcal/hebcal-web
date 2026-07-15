@@ -13,6 +13,7 @@ import {pkg} from './pkg.js';
 import {empty} from './empty.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
   useResponseLength, startServer, stopIfTimedOut} from './app-common.js';
+import {aiChatbotLogger} from './logger.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,6 +24,8 @@ const app = createBaseApp();
 setupGeoIp(app);
 
 useObservability(app);
+
+app.use(aiChatbotLogger);
 
 useTimeout(app);
 
