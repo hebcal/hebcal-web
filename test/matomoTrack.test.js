@@ -101,12 +101,12 @@ describe('matomoTrack', () => {
     expect(args.get('idsite')).toBe('3');
   });
 
-  it('sets action_name and pf_srv when no category/action (chatbot pageview)', () => {
+  it('sets http_status and pf_srv when includeRobots is true', () => {
     const spy = vi.spyOn(http, 'request').mockImplementation(makeFakeReq);
     const ctx = makeCtx();
     matomoTrack(ctx, null, null, 'AI Chatbot', true);
     const args = parseArgs(spy.mock.calls[0][0]);
-    expect(args.get('action_name')).toBe('AI Chatbot');
+    expect(args.has('http_status')).toBe(true);
     expect(args.has('pf_srv')).toBe(true);
     expect(args.has('e_c')).toBe(false);
   });

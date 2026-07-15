@@ -157,7 +157,7 @@ const aiChatbotUaRegex = /(?:ChatGPT-User|MistralAI-User|Gemini-Deep-Research|Cl
 export async function aiChatbotLogger(ctx, next) {
   await next();
   const ua = ctx.get('user-agent');
-  if (ctx.status === 200 && ua && aiChatbotUaRegex.test(ua)) {
+  if (ua && aiChatbotUaRegex.test(ua)) {
     matomoTrack(ctx, null, null, 'AI Chatbot', true);
   }
 }

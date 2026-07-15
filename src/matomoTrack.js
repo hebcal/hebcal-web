@@ -41,12 +41,17 @@ export function matomoTrack(ctx, category, action, name=null, includeRobots=fals
     if (name) {
       args.set('e_n', name);
     }
-  } else {
-    if (name) {
-      args.set('action_name', name);
-    }
+  }
+  if (includeRobots) {
+    // bot tracking only; non-bots are discarded
+    args.set('recMode', '1');
+    args.set('http_status', ctx.status);
     const duration = Date.now() - ctx.state.startTime;
     args.set('pf_srv', duration);
+    const bytes = ctx.length || ctx.state.responseLength;
+    if (bytes) {
+      args.set('bw_bytes', bytes);
+    }
   }
   args.set('ua', userAgent);
   const lang = ctx.get('accept-language');
