@@ -3,17 +3,20 @@ import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 describe('Zmanim and Omer Routes', () => {
   it('should return 200 for /zmanim', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/zmanim?cfg=json&geonameid=293397&date=2025-12-24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
   it('should return Assur Melacha status with im=1 parameter', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
@@ -37,7 +40,7 @@ describe('Zmanim and Omer Routes', () => {
   });
 
   it('should return 200 for /omer with date', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/omer/6473/32');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -46,14 +49,14 @@ describe('Zmanim and Omer Routes', () => {
 
 describe('Autocomplete Routes', () => {
   it('should return 200 for /complete with query', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/complete?q=Whyalla');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
   it('should handle /complete with empty query', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/complete?q=');
     expect(response.status).toBe(404);
     expect(response.type).toContain('json');
@@ -61,7 +64,7 @@ describe('Autocomplete Routes', () => {
 
   it('should handle /complete with international characters', async () => {
     // Néa Alikarnassós (Greece) exercises non-ASCII / accented input.
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/complete?q=N%C3%A9a%20Alikarnass%C3%B3s');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
@@ -70,7 +73,7 @@ describe('Autocomplete Routes', () => {
   it('should not include admin1 in value for an Israeli city', async () => {
     // Israeli cities carry an admin1 (district) but it is intentionally
     // omitted from the displayed value (e.g. "Mevo Shivta, Israel").
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/complete?q=Mevo+Shivta');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
@@ -93,7 +96,7 @@ describe('Autocomplete Routes', () => {
 
 describe('Daily Learning Routes', () => {
   it('should return redirect /learning', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/learning')
         .redirects(0);
     expect(response.status).toBe(302);
@@ -101,7 +104,7 @@ describe('Daily Learning Routes', () => {
   });
 
   it('should return 200 for /learning with date', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/learning/2025-12-24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -110,7 +113,7 @@ describe('Daily Learning Routes', () => {
 
 describe('Geo Location Routes', () => {
   it('should return 200 for /geo with valid geonameid', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/geo?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
@@ -119,14 +122,14 @@ describe('Geo Location Routes', () => {
 
 describe('Leyning Routes', () => {
   it('should handle /leyning with cfg=json', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/leyning?cfg=json&date=2025-12-27');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
   it('should reject POST method on /leyning with 405', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/leyning');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
@@ -135,14 +138,14 @@ describe('Leyning Routes', () => {
 
 describe('Delete Cookie Route', () => {
   it('should return 200 for /hebcal/del_cookie', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/hebcal/del_cookie');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should reject POST method on /hebcal/del_cookie with 405', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/hebcal/del_cookie');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
@@ -151,14 +154,14 @@ describe('Delete Cookie Route', () => {
 
 describe('Link Routes', () => {
   it('should handle /link route', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/link?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should handle POST /link route', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/link?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -173,7 +176,7 @@ describe('Zmanim Routes with ZIP code mock', () => {
   afterAll(() => teardown());
 
   it('should return tzeit7083deg in JSON body for /zmanim?zip=90210', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/zmanim?cfg=json&zip=90210&date=2025-12-24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
@@ -190,7 +193,7 @@ describe('Sitemap Routes', () => {
   afterAll(() => teardown());
 
   it('should return 200 for /sitemap_zips.txt and include zip 90210', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/sitemap_zips.txt');
     expect(response.status).toBe(200);
     expect(response.type).toContain('text');
@@ -198,7 +201,7 @@ describe('Sitemap Routes', () => {
   });
 
   it('should reject POST on /sitemap_zips.txt with 405', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/sitemap_zips.txt');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
@@ -207,27 +210,27 @@ describe('Sitemap Routes', () => {
 
 describe('Analytics Routes', () => {
   it('should return 200 for /ma/ma.js', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/ma/ma.js');
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
   });
 
   it('should return 200 for /matomo/matomo.js', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/matomo/matomo.js');
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
   });
 
   it('should return 204 for /ma/ma.php with send_image=0', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/ma/ma.php?send_image=0');
     expect(response.status).toBe(204);
   });
 
   it('should return 204 for /matomo/matomo.php with send_image=0', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/matomo/matomo.php?send_image=0');
     expect(response.status).toBe(204);
   });
@@ -235,6 +238,6 @@ describe('Analytics Routes', () => {
 
 describe('geo autocomplete 304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for /complete', async () => {
-    await expectConditionalEtag(app, '/complete?q=Bos');
+    await expectConditionalEtag(server, '/complete?q=Bos');
   });
 });

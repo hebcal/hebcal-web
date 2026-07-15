@@ -4,6 +4,9 @@ import path from 'node:path';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {DOCUMENT_ROOT} from '../src/common.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 // Pesach has photo.fn = "112151899.webp" with 640 and 800 dimensions
 const PHOTO_STEM = '112151899';
@@ -82,7 +85,7 @@ describe('Holiday detail page image formats without AVIF', () => {
   });
 
   it('should not include AVIF in <picture> or <source> when AVIF file does not exist', async () => {
-    const res = await request(app.callback()).get('/holidays/chanukah');
+    const res = await request(server).get('/holidays/chanukah');
     expect(res.status).toBe(200);
     expect(res.type).toContain('html');
     expect(res.text).toContain(CHANUKAH_WEBP);
@@ -92,28 +95,28 @@ describe('Holiday detail page image formats without AVIF', () => {
 
 describe('Holiday detail page image formats', () => {
   it('should include an <img> with webp srcset for pesach', async () => {
-    const res = await request(app.callback()).get('/holidays/pesach');
+    const res = await request(server).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.type).toContain('html');
     expect(res.text).toContain(PHOTO_WEBP);
   });
 
   it('should include a <source type="image/avif"> for pesach when avif file exists', async () => {
-    const res = await request(app.callback()).get('/holidays/pesach');
+    const res = await request(server).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.text).toContain('type="image/avif"');
     expect(res.text).toContain(PHOTO_AVIF);
   });
 
   it('should wrap images in a <picture> element for pesach', async () => {
-    const res = await request(app.callback()).get('/holidays/pesach');
+    const res = await request(server).get('/holidays/pesach');
     expect(res.status).toBe(200);
     expect(res.text).toContain('<picture>');
     expect(res.text).toContain('</picture>');
   });
 
   it('avif source should list multiple widths in srcset for pesach', async () => {
-    const res = await request(app.callback()).get('/holidays/pesach');
+    const res = await request(server).get('/holidays/pesach');
     expect(res.status).toBe(200);
     // srcset should contain 800w, 640w, and 400w variants
     const avifSrcset = res.text.match(

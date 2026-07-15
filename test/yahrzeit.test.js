@@ -3,6 +3,9 @@ import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {MockMysqlDb} from './mock-mysql.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 // Install the DB mock so DB-dependent routes work without a real MySQL server
 beforeAll(() => {
@@ -11,14 +14,14 @@ beforeAll(() => {
 
 describe('Yahrzeit Routes', () => {
   it('should handle POST /yahrzeit with JSON config', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit?cfg=json&v=yahrzeit&hebdate=on&years=8&y1=2003&m1=12&d1=14&s1=after&t1=Yahrzeit&start=5785&n1=test');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
   it('should handle POST /yahrzeit with form data and multiple anniversaries', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .send('cfg=json&v=yahrzeit&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on&n2=Person2&t2=Yahrzeit&d2=13&m2=11&y2=2008&s2=off&hebdate=on&years=3');
@@ -44,7 +47,7 @@ describe('Yahrzeit Routes', () => {
   });
 
   it('should handle POST /yahrzeit/search', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit/search');
     // May return various codes depending on input
     expect(response.status).toBeDefined();
@@ -74,7 +77,7 @@ describe('Yahrzeit big test', () => {
       q[`y${i}`] = dt.getFullYear();
       q[`s${i}`] = 'off';
     }
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form') // Sets Content-Type: application/x-www-form-urlencoded
         .send(q); // Object data
@@ -105,7 +108,7 @@ describe('Yahrzeit big test', () => {
 
 describe('Yahrzeit JSON output structure', () => {
   it('returns expected fields for a single Yahrzeit entry', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form')
         .send('cfg=json&v=yahrzeit&n1=Golda+Meir&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&start=5785&years=2');
@@ -124,7 +127,7 @@ describe('Yahrzeit JSON output structure', () => {
   });
 
   it('returns Anniversary type for "Other" entries', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form')
         .send('cfg=json&v=yahrzeit&n1=My+Event&t1=Other&d1=1&m1=1&y1=2000&s1=off&start=5785&years=1');
@@ -145,7 +148,7 @@ describe('Yahrzeit JSON output structure', () => {
   });
 
   it('returns hdp=1 heDateParts in JSON output', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form')
         .send('cfg=json&v=yahrzeit&n1=Test&t1=Birthday&d1=5&m1=6&y1=1990&s1=off&start=5785&years=1&hdp=1');
@@ -161,14 +164,14 @@ describe('Yahrzeit JSON output structure', () => {
 
 describe('Yahrzeit calendar picker (GET with no query)', () => {
   it('renders calpicker with no calendars when no Y cookie is set', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/yahrzeit');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('renders calpicker and lists calendar when Y cookie contains known id', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/yahrzeit')
         .set('Cookie', 'Y=01jthv2t5k88yermamssn96pzf');
     expect(response.status).toBe(200);
@@ -180,7 +183,7 @@ describe('Yahrzeit calendar picker (GET with no query)', () => {
 
 describe('Yahrzeit GET /yahrzeit/new', () => {
   it('renders the empty yahrzeit form', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/yahrzeit/new');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -191,7 +194,7 @@ describe('Yahrzeit edit page (DB-dependent)', () => {
   const calendarId = '01jthv2t5k88yermamssn96pzf';
 
   it('GET /yahrzeit/edit/:id renders edit page for known calendar', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get(`/yahrzeit/edit/${calendarId}`);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -199,7 +202,7 @@ describe('Yahrzeit edit page (DB-dependent)', () => {
   });
 
   it('GET /yahrzeit?id=:id renders edit page for known calendar', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get(`/yahrzeit?id=${calendarId}`);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -207,7 +210,7 @@ describe('Yahrzeit edit page (DB-dependent)', () => {
   });
 
   it('GET /yahrzeit/edit/:id returns 404 for unknown calendar', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/yahrzeit/edit/01jthv2t5k88yermamsunknown1');
     expect(response.status).toBe(404);
   });
@@ -215,7 +218,7 @@ describe('Yahrzeit edit page (DB-dependent)', () => {
 
 describe('Yahrzeit with yizkor option', () => {
   it('returns yizkor events in addition to yahrzeit events', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form')
         .send('cfg=json&v=yahrzeit&n1=Test&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&yizkor=on&start=5785&years=2');
@@ -228,7 +231,7 @@ describe('Yahrzeit with yizkor option', () => {
 
 describe('Yahrzeit Hebrew name handling', () => {
   it('generates Hebrew subject line for Hebrew names', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .post('/yahrzeit')
         .type('form')
         .send('cfg=json&v=yahrzeit&n1=%D7%92%D7%95%D7%9C%D7%93%D7%94&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&start=5785&years=1');

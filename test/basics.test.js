@@ -3,16 +3,19 @@ import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {pkg} from '../src/pkg.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 describe('Homepage and Basic Routes', () => {
   it('should return 200 for homepage', async () => {
-    const response = await request(app.callback()).get('/');
+    const response = await request(server).get('/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return robots.txt', async () => {
-    const response = await request(app.callback()).get('/robots.txt');
+    const response = await request(server).get('/robots.txt');
     expect(response.status).toBe(200);
     expect(response.type).toContain('text');
     expect(response.text).toContain('User-agent:');
@@ -23,21 +26,21 @@ describe('Homepage and Basic Routes', () => {
 
 describe('Static and Special Routes', () => {
   it('should return 200 for /ical/', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/ical/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for hdate JS files', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/etc/hdate-en.js');
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
   });
 
   it('should return 200 for hdate Hebrew JS files', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/etc/hdate-he.js');
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
@@ -46,7 +49,7 @@ describe('Static and Special Routes', () => {
 
 describe('Static File Serving', () => {
   it('should serve SVG sprite file with correct content type', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/i/sprite13.svg');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/svg/);
@@ -58,28 +61,28 @@ describe('Static File Serving', () => {
   });
 
   it('should serve favicon with correct content type', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/favicon.ico');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/icon|octet-stream/);
   });
 
   it('should serve favicon.svg with correct content type', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/favicon.svg');
     expect(response.status).toBe(200);
     expect(response.type).toBe('image/svg+xml');
   });
 
   it('should serve WOFF2 font file with correct content type', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/i/adobehebrew-regular.woff2');
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/woff2|font|octet-stream/);
   });
 
   it('should serve minified JavaScript file with correct content type', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/i/' + pkg.config.clientapp);
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
@@ -91,7 +94,7 @@ describe('Static File Serving', () => {
 
 describe('Security.txt', () => {
   it('should return 200 for /.well-known/security.txt', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/.well-known/security.txt');
     expect(response.status).toBe(200);
     expect(response.type).toContain('text');
@@ -100,28 +103,28 @@ describe('Security.txt', () => {
 
 describe('Hidden Directory Routes', () => {
   it('should return 200 for /i hidden directory', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/i');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /i/ with trailing slash', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/i/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /etc hidden directory', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/etc');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /etc/ with trailing slash', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/etc/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -130,6 +133,6 @@ describe('Hidden Directory Routes', () => {
 
 describe('security.txt 304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for /.well-known/security.txt', async () => {
-    await expectConditionalEtag(app, '/.well-known/security.txt');
+    await expectConditionalEtag(server, '/.well-known/security.txt');
   });
 });

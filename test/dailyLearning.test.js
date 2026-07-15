@@ -2,16 +2,19 @@
 import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 describe('Daily Learning redirect', () => {
   it('should redirect /learning/ to today\'s date', async () => {
-    const response = await request(app.callback()).get('/learning/');
+    const response = await request(server).get('/learning/');
     expect(response.status).toBe(302);
     expect(response.headers.location).toMatch(/\/learning\/\d{4}-\d{2}-\d{2}/);
   });
 
   it('should redirect /learning (no trailing slash) to today\'s date', async () => {
-    const response = await request(app.callback()).get('/learning');
+    const response = await request(server).get('/learning');
     expect(response.status).toBe(302);
     expect(response.headers.location).toMatch(/\/learning\/\d{4}-\d{2}-\d{2}/);
   });
@@ -19,7 +22,7 @@ describe('Daily Learning redirect', () => {
 
 describe('Daily Learning sitemap', () => {
   it('should return sitemap with list of URLs', async () => {
-    const response = await request(app.callback()).get('/learning/sitemap.txt');
+    const response = await request(server).get('/learning/sitemap.txt');
     expect(response.status).toBe(200);
     expect(response.type).toContain('text');
     expect(response.text).toContain('https://www.hebcal.com/learning/');
@@ -29,14 +32,14 @@ describe('Daily Learning sitemap', () => {
 
 describe('Daily Learning page', () => {
   it('should return 200 HTML for a specific date (Sunday)', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('2026-03-01');
   });
 
   it('should include Daf Yomi and other learning items', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     // Page should list learning categories
     expect(response.text).toContain('Daf Yomi');
@@ -44,7 +47,7 @@ describe('Daily Learning page', () => {
 
   it('should include weekday Torah reading on Monday', async () => {
     // 2026-03-09 is a Monday
-    const response = await request(app.callback()).get('/learning/2026-03-09');
+    const response = await request(server).get('/learning/2026-03-09');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Weekday Torah reading');
@@ -52,14 +55,14 @@ describe('Daily Learning page', () => {
 
   it('should include Shabbat Torah reading on Saturday', async () => {
     // 2026-03-07 is a Saturday
-    const response = await request(app.callback()).get('/learning/2026-03-07');
+    const response = await request(server).get('/learning/2026-03-07');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Shabbat Torah reading');
   });
 
   it('should return learning page for Israel mode (i=on)', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01?i=on');
+    const response = await request(server).get('/learning/2026-03-01?i=on');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Daf Yomi');
@@ -67,7 +70,7 @@ describe('Daily Learning page', () => {
 
   it('should include Omer count during Omer period', async () => {
     // 2026-04-20 is during the Omer (between Pesach and Shavuot in 5786)
-    const response = await request(app.callback()).get('/learning/2026-04-20');
+    const response = await request(server).get('/learning/2026-04-20');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Omer');
@@ -75,7 +78,7 @@ describe('Daily Learning page', () => {
 
   it('should include Pirkei Avot on a Shabbat during Omer', async () => {
     // 2026-04-25 is a Saturday during the Omer (Pirkei Avot is read on Shabbat during Omer)
-    const response = await request(app.callback()).get('/learning/2026-04-25');
+    const response = await request(server).get('/learning/2026-04-25');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     // Should contain Shabbat Torah reading and learning items
@@ -83,7 +86,7 @@ describe('Daily Learning page', () => {
   });
 
   it('should include prev/next day navigation links', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     // Should have links to adjacent days
     expect(response.text).toContain('2026-02-28');
@@ -91,34 +94,34 @@ describe('Daily Learning page', () => {
   });
 
   it('should return learning with Hebrew locale (lg=he)', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01?lg=he');
+    const response = await request(server).get('/learning/2026-03-01?lg=he');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should include holiday info when date is a holiday', async () => {
     // 2026-03-03 is Purim (14 Adar in 5786)
-    const response = await request(app.callback()).get('/learning/2026-03-03');
+    const response = await request(server).get('/learning/2026-03-03');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
     expect(response.text).toContain('Purim');
   });
 
   it('should set Cache-Control header for date pages', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.headers['cache-control']).toBeDefined();
   });
 
   it('should include Amud HaYomi (Dirshu) on a date after program start', async () => {
     // Program started 2023-10-16 (1 Cheshvan 5784), so any date after should have it
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
 
   it('should include Amud HaYomi (Dirshu) with Sefaria link', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.text).toContain('sefaria.org');
     expect(response.text).toContain('Amud HaYomi (Dirshu)');
@@ -126,28 +129,28 @@ describe('Daily Learning page', () => {
 
   it('should not include Amud HaYomi (Dirshu) before program start', async () => {
     // 2023-10-15 is one day before the program started
-    const response = await request(app.callback()).get('/learning/2023-10-15');
+    const response = await request(server).get('/learning/2023-10-15');
     expect(response.status).toBe(200);
     expect(response.text).not.toContain('Amud HaYomi (Dirshu)');
   });
 
   it('should include Amud HaYomi (Dirshu) on first day of program', async () => {
     // 2023-10-16 is the first day of the Amud HaYomi (Dirshu) program
-    const response = await request(app.callback()).get('/learning/2023-10-16');
+    const response = await request(server).get('/learning/2023-10-16');
     expect(response.status).toBe(200);
     expect(response.text).toContain('Amud HaYomi (Dirshu)');
     expect(response.text).toContain('Berakhot');
   });
 
   it('should include Amud HaYomi (Dirshu) in Israel mode', async () => {
-    const response = await request(app.callback()).get('/learning/2026-03-01?i=on');
+    const response = await request(server).get('/learning/2026-03-01?i=on');
     expect(response.status).toBe(200);
     expect(response.text).toContain('Amud HaYomi (Dirshu)');
   });
 
   it('should include 929 on a weekday (Sun-Thu)', async () => {
     // 2026-03-01 is a Sunday
-    const response = await request(app.callback()).get('/learning/2026-03-01');
+    const response = await request(server).get('/learning/2026-03-01');
     expect(response.status).toBe(200);
     expect(response.text).toContain('929');
     expect(response.text).toContain('Numbers 14');
@@ -155,14 +158,14 @@ describe('Daily Learning page', () => {
 
   it('should not include 929 on Shabbat', async () => {
     // 2026-03-07 is a Saturday
-    const response = await request(app.callback()).get('/learning/2026-03-07');
+    const response = await request(server).get('/learning/2026-03-07');
     expect(response.status).toBe(200);
     expect(response.text).not.toContain('929:');
   });
 
   it('should not include 929 on Friday', async () => {
     // 2026-03-06 is a Friday; 929 runs Sun-Thu only
-    const response = await request(app.callback()).get('/learning/2026-03-06');
+    const response = await request(server).get('/learning/2026-03-06');
     expect(response.status).toBe(200);
     expect(response.text).not.toContain('929:');
   });

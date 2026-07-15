@@ -4,10 +4,13 @@ import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
+import {makeServer} from './testServer.js';
+
+const server = makeServer(app);
 
 describe('Shabbat Routes', () => {
   it('should handle semicolon-separated query parameters', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/?geo=city;city=Toronto;m=42;cfg=j;tgt=_top');
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
@@ -20,55 +23,55 @@ describe('Shabbat Routes', () => {
   });
 
   it('should return 200 for /shabbat with geonameid', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should handle /shabbat with JSON config', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat?cfg=json&geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
   });
 
   it('should return 200 for /shabbat/', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/?geonameid=5128581');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /shabbat/browse/', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/browse/italy-calabria');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should return 200 for /shabbat/browse/sitemap.xml', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/browse/sitemap.xml');
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
   });
 
   it('should return 200 for /shabbat/browse/australia.xml', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/browse/australia.xml');
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
   });
 
   it('should return 404 for /shabbat/browse/bogus.xml', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/browse/bogus.xml');
     expect(response.status).toBe(404);
   });
 
   it.skip('should redirect when X-Client-IP header is set with no query params', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat')
         .set('X-Client-IP', '108.35.203.40')
         .redirects(0);
@@ -78,7 +81,7 @@ describe('Shabbat Routes', () => {
   });
 
   it('should redirect when Cookie header is set with no query params', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat')
         .set('Cookie', 'C=uid=2f5aec00-999c-4003-8e26-153ee1ad3b75&maj=on&min=on&nx=on&mod=on&mf=on&ss=on&c=on&i=off&s=on&M=on&geonameid=5128581&lg=es&td=7.083333')
         .redirects(0);
@@ -89,14 +92,14 @@ describe('Shabbat Routes', () => {
 
 describe('Fridge Routes', () => {
   it('should handle /fridge route', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/fridge?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
 
   it('should handle /shabbat/fridge.cgi route', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat/fridge.cgi?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -111,7 +114,7 @@ describe('ZIP code lookup with mock database', () => {
   afterAll(() => teardown());
 
   it('returns 200 HTML for /shabbat?zip=90210 (Beverly Hills)', async () => {
-    const response = await request(app.callback())
+    const response = await request(server)
         .get('/shabbat?zip=90210');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
@@ -121,26 +124,26 @@ describe('ZIP code lookup with mock database', () => {
 
 describe('Shabbat 304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for HTML', async () => {
-    await expectConditionalEtag(app, '/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
+    await expectConditionalEtag(server, '/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
   });
 
   it('handles conditional requests for cfg=json', async () => {
-    await expectConditionalEtag(app, '/shabbat?cfg=json&geonameid=293397&gy=2025&gm=12&gd=24');
+    await expectConditionalEtag(server, '/shabbat?cfg=json&geonameid=293397&gy=2025&gm=12&gd=24');
   });
 
   // /shabbat/browse uses a local isFresh() wrapper around checkFreshETag().
   it('handles conditional requests for /shabbat/browse/', async () => {
-    await expectConditionalEtag(app, '/shabbat/browse/');
+    await expectConditionalEtag(server, '/shabbat/browse/');
   });
 
   // The country page pre-sets a Saturday-aware ETag before calling isFresh(),
   // exercising checkFreshETag()'s "don't overwrite an existing ETag" guard.
   it('handles conditional requests for a browse country feed', async () => {
-    await expectConditionalEtag(app, '/shabbat/browse/australia.xml');
+    await expectConditionalEtag(server, '/shabbat/browse/australia.xml');
   });
 
   // Small admin1-region page (e.g. Calabria, Italy).
   it('handles conditional requests for a browse small-region page', async () => {
-    await expectConditionalEtag(app, '/shabbat/browse/italy-calabria');
+    await expectConditionalEtag(server, '/shabbat/browse/italy-calabria');
   });
 });
