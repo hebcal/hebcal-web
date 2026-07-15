@@ -2,16 +2,12 @@ import { HebrewCalendar, HebrewDateEvent, TimedEvent, Zmanim, flags } from '@heb
 import { HDate, Locale } from '@hebcal/hdate';
 import { IcalEvent, eventsToIcalendar } from '@hebcal/icalendar';
 import { makeAnchor } from '@hebcal/rest-api';
-import dayjs from 'dayjs';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
 import { CACHE_CONTROL_7DAYS } from './cacheControl.js';
 import { nowInTimezone } from './dateUtil.js';
 import { checkFreshETag } from './etag.js';
 import { lgToLocale } from './lang.js';
 import { getLocationFromQuery } from './location.js';
 import { ALL_TIMES, getTimesForRange } from './zmanimCommon.js';
-
-dayjs.extend(isSameOrBefore);
 
 const TITLE_PREFIX = 'TITLE:';
 const MEMO_PREFIX = 'MEMO:';

@@ -1,5 +1,9 @@
 import { Zmanim } from '@hebcal/core';
 import createError from 'http-errors';
+import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
+
+dayjs.extend(isSameOrBefore);
 
 const TIMES = {
   chatzotNight: 1,

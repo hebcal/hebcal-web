@@ -16,6 +16,9 @@ import {makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
 import {gematriyaDate} from './gematriyaDate.js';
 import {xmlEsc} from './sanitize.js';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
+
+dayjs.extend(isSameOrBefore);
 
 /**
  * @param {string} val
