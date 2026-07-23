@@ -148,7 +148,7 @@ if (typeof year !== 'string' || year.length === 0) {
 </div>
 <div class="row gx-2 mb-3">
   <div class="col-auto">
-    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b %>" size="2" maxlength="2" id="b1" pattern="\d*" title="Enter a number between 0 and 99">
+    <input class="form-control" inputmode="numeric" type="text" name="b" value="<%= q.b %>" size="2" maxlength="2" min="0" max="99" id="b1" pattern="\d*" title="Enter a number between 0 and 99">
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
@@ -161,7 +161,7 @@ if (typeof year !== 'string' || year.length === 0) {
 </div><!-- .form-check -->
 </div><!-- .col-auto -->
 <div class="col-auto">
-  <input class="form-control" inputmode="decimal" type="text" name="td" value="<%=q.td||''%>" size="4" maxlength="8" id="td" pattern="\d{1,2}(\.\d+)?" title="Enter degrees below the horizon, for example 8.5">
+  <input class="form-control" inputmode="decimal" type="text" name="td" value="<%=q.td||''%>" size="4" maxlength="8" min="0" max="30" id="td" pattern="\d{1,2}(\.\d+)?" title="Enter degrees below the horizon, for example 8.5">
 </div>
 <div class="col-auto" style="margin: auto 0">
   <span title="Use 7.083 degrees below the horizon for three medium-sized stars, 8.5 for three small stars, 16.1 for Rabbeinu Tam" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
@@ -175,7 +175,7 @@ if (typeof year !== 'string' || year.length === 0) {
 </div><!-- .form-check -->
 </div><!-- .col-auto -->
 <div class="col-auto">
-  <input class="form-control" inputmode="numeric" type="text" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" id="m" pattern="\d*" title="Enter a number between 0 and 99">
+  <input class="form-control" inputmode="numeric" type="text" name="m" value="<%= q.m || '' %>" size="2" maxlength="2" min="0" max="99" id="m" pattern="\d*" title="Enter a number between 0 and 99">
 </div>
 <div class="col-auto" style="margin: auto 0">
   <span title="Use 42 min for three medium-sized stars, 50 min for three small stars, 72 min for Rabbeinu Tam, or 0 to suppress Havdalah times" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
