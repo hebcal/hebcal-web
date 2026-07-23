@@ -10,7 +10,7 @@
  <option <%= (q['t'+num] === 'Other') ? 'selected' : '' %>>Other</option>
 </select>
 <label class="form-label" for="t<%=num%>">Type</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31">
 <label class="form-label" for="d<%=num%>">Day</label>
 <div class="invalid-feedback">Please enter a valid day of month.</div>
 </div>
@@ -29,7 +29,7 @@
  <option <%= q['m'+num] == 12 ? 'selected' : '' %> value="12">12-Dec</option>
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year" title="Enter a year, for example 1970">
 <label class="form-label" for="y<%=num%>">Year</label>
 <div class="invalid-feedback">Please enter a valid Gregorian year.</div>
 </div>
