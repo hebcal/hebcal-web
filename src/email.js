@@ -363,8 +363,8 @@ async function writeSubInfo(ctx, db, q) {
     degs = 8.5;
   }
   await db.query(sql, [
-    q.zip || null,
-    Number.parseInt(q.geonameid, 10) || null,
+    getZip(q),
+    getGeonameId(q),
     getUseElevation(q),
     mins,
     degs,
@@ -374,6 +374,14 @@ async function writeSubInfo(ctx, db, q) {
   ]);
 }
 
+// Range limits for values persisted to hebcal_shabbat_email. Values outside
+// these ranges overflow their MySQL columns (e.g. email_sundown_candles is a
+// signed tinyint), so reject them with a 400 rather than let the INSERT fail.
+const MAX_CANDLE_MINS = 99; // email_sundown_candles tinyint (two-digit max)
+const MAX_HAVDALAH_MINS = 99; // email_candles_havdalah tinyint
+const MAX_HAVDALAH_DEGREES = 90; // email_havdalah_degrees float
+const MAX_GEONAMEID = 2147483647; // email_candles_geonameid int (signed 32-bit)
+
 function getUseElevation(q) {
   return q.ue === 'on' ? 1 : 0;
 }
@@ -381,7 +389,13 @@ function getUseElevation(q) {
 function getHavdalahDegrees(q) {
   if (q.M !== 'on') return null;
   const deg = Number.parseFloat(q.td);
-  if (deg) return deg;
+  if (deg) {
+    if (deg < 0 || deg > MAX_HAVDALAH_DEGREES) {
+      throw new RangeError(
+        `Havdalah degrees below horizon must be between 0 and ${MAX_HAVDALAH_DEGREES}`);
+    }
+    return deg;
+  }
   const mins = getHavdalahMins(q);
   if (mins === null || Number.isNaN(mins)) return 8.5;
   return null;
@@ -389,13 +403,52 @@ function getHavdalahDegrees(q) {
 
 function getCandleMins(ctx, q) {
   const minDefault = queryDefaultCandleMins(ctx, q);
-  return Number.parseInt(q.b, 10) || minDefault;
+  const mins = Number.parseInt(q.b, 10);
+  if (Number.isNaN(mins)) {
+    return minDefault;
+  }
+  if (mins < 0 || mins > MAX_CANDLE_MINS) {
+    throw new RangeError(
+      `Candle-lighting minutes before sundown must be between 0 and ${MAX_CANDLE_MINS}`);
+  }
+  return mins || minDefault;
 }
 
 // allow zero as a valid Havdalah minutes past sundown
 function getHavdalahMins(q) {
   const havdalahMins = Number.parseInt(q.m, 10);
-  return Number.isNaN(havdalahMins) ? null : havdalahMins;
+  if (Number.isNaN(havdalahMins)) {
+    return null;
+  }
+  if (havdalahMins < 0 || havdalahMins > MAX_HAVDALAH_MINS) {
+    throw new RangeError(
+      `Havdalah minutes past sundown must be between 0 and ${MAX_HAVDALAH_MINS}`);
+  }
+  return havdalahMins;
+}
+
+// email_candles_geonameid is a signed 32-bit int column
+function getGeonameId(q) {
+  const geonameid = Number.parseInt(q.geonameid, 10);
+  if (Number.isNaN(geonameid)) {
+    return null;
+  }
+  if (geonameid < 1 || geonameid > MAX_GEONAMEID) {
+    throw new RangeError(`Invalid geonameid ${q.geonameid}`);
+  }
+  return geonameid;
+}
+
+// email_candles_zipcode is a varchar(5) column
+function getZip(q) {
+  if (!q.zip) {
+    return null;
+  }
+  const zip = String(q.zip);
+  if (!/^\d{5}$/.test(zip)) {
+    throw new RangeError(`Invalid ZIP code ${q.zip}`);
+  }
+  return zip;
 }
 
 function makeSubscriptionId(ctx) {
@@ -408,8 +461,10 @@ function makeSubscriptionId(ctx) {
 async function writeStagingInfo(ctx, db, q) {
   const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId = makeSubscriptionId(ctx);
-  const locationColumn = q.zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
-  const locationValue = q.zip ? q.zip : Number.parseInt(q.geonameid, 10);
+  const zip = getZip(q);
+  const geonameid = getGeonameId(q);
+  const locationColumn = zip ? 'email_candles_zipcode' : 'email_candles_geonameid';
+  const locationValue = zip || geonameid;
   const sql = `REPLACE INTO hebcal_shabbat_email
   (email_id, email_address, email_status, email_created,
    email_use_elevation,
