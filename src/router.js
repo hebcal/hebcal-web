@@ -37,7 +37,6 @@ import {shortUrlRedir} from './shortUrlRedir.js';
 import {yahrzeitApp} from './yahrzeit.js';
 import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch} from './yahrzeit-email.js';
 import {getZmanim} from './zmanim.js';
-import {hebrewDateCalc} from './calc.js';
 import {omerApp} from './omerApp.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
@@ -223,8 +222,6 @@ export function wwwRouter() {
       } else {
         return parshaDetail(ctx);
       }
-    } else if (rpath.startsWith('/calc')) {
-      return hebrewDateCalc(ctx);
     } else if (rpath.startsWith('/omer')) {
       onlyGetAndHead(ctx);
       return omerApp(rpath, ctx);
