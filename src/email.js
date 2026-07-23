@@ -379,8 +379,8 @@ async function writeSubInfo(ctx, db, q) {
 // signed tinyint), so reject them with a 400 rather than let the INSERT fail.
 const MAX_CANDLE_MINS = 99; // email_sundown_candles tinyint (two-digit max)
 const MAX_HAVDALAH_MINS = 99; // email_candles_havdalah tinyint
-const MAX_HAVDALAH_DEGREES = 90; // email_havdalah_degrees float
-const MAX_GEONAMEID = 2147483647; // email_candles_geonameid int (signed 32-bit)
+const MAX_HAVDALAH_DEGREES = 30; // email_havdalah_degrees float
+const MAX_GEONAMEID = 99999999; // email_candles_geonameid int (signed 32-bit)
 
 function getUseElevation(q) {
   return q.ue === 'on' ? 1 : 0;
