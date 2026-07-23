@@ -1,5 +1,5 @@
 <div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="hd<%=suffix%>" placeholder="day" value="<%= hd %>" size="2" maxlength="2" id="hd<%=suffix%>" pattern="\d*" title="Enter a day of the month between 1 and 30">
+<input type="text" inputmode="numeric" class="form-control" required name="hd<%=suffix%>" placeholder="day" value="<%= hd %>" size="2" maxlength="2" min="1" max="30" id="hd<%=suffix%>" pattern="\d*" title="Enter a day of the month between 1 and 30">
 <label for="hd<%=suffix%>">Day</label>
 </div><!-- /hd<%=suffix%> -->
 <div class="form-floating col-auto mb-2">
