@@ -1,0 +1,53 @@
+<script nonce="<%=nonce%>">
+document.addEventListener("DOMContentLoaded", function() {
+  function checkRange(el) {
+    el.setCustomValidity("");
+    if (el.value === "") {
+      return;
+    }
+    const num = Number(el.value);
+    if (Number.isNaN(num)) {
+      return;
+    }
+    const min = el.min === "" ? null : Number(el.min);
+    const max = el.max === "" ? null : Number(el.max);
+    if ((min !== null && num < min) || (max !== null && num > max)) {
+      el.setCustomValidity(el.title || "Please enter a value in the valid range");
+    }
+  }
+  const forms = document.querySelectorAll("form[data-range-validate]");
+  forms.forEach(function(form) {
+    const ranged = [].slice.call(form.querySelectorAll("input[min], input[max]"));
+    // Clear any custom range error as soon as the form is edited, so a
+    // corrected value can be resubmitted (setCustomValidity persists otherwise).
+    form.addEventListener("input", function() {
+      ranged.forEach(function(el) {
+        el.setCustomValidity("");
+      });
+    });
+    form.addEventListener("submit", function(event) {
+      ranged.forEach(checkRange);
+      // When the form has a Gregorian day/month/year, also reject days that
+      // don't exist in the selected month/year (e.g. 30 February).
+      const gd = form.querySelector("#gd");
+      const gm = form.querySelector("#gm");
+      const gy = form.querySelector("#gy");
+      if (gd && gm && gy && gd.validity.valid) {
+        const dd = Number(gd.value);
+        const mm = Number(gm.value);
+        const yy = Number(gy.value);
+        if (yy >= 100 && !Number.isNaN(dd) && !Number.isNaN(mm)) {
+          const maxDay = new Date(yy, mm, 0).getDate();
+          if (dd > maxDay) {
+            gd.setCustomValidity("Day " + dd + " is out of range for the selected month");
+          }
+        }
+      }
+      if (!form.reportValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+  });
+});
+</script>

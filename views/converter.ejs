@@ -88,7 +88,7 @@ const isPast = hy < todayHebYear;
 <div id="converter-form" class="d-print-none mt-4">
 <div class="row">
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top" data-range-validate>
 <h5>Convert from Gregorian to Hebrew</h5>
 <div class="form-floating col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" required name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" min="1" max="31" id="gd" pattern="\d*" title="Enter a day of the month between 1 and 31">
@@ -132,7 +132,7 @@ const isPast = hy < todayHebYear;
 </div><!-- .col-md -->
 
 <div class="col-md">
-<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top">
+<form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top" data-range-validate>
 <h5>Convert from Hebrew to Gregorian</h5>
 <%- await include('partials/hebdate-picker.ejs', {
   hd: hd,
@@ -152,63 +152,7 @@ const isPast = hy < todayHebYear;
 </div><!-- .col-md -->
 </div><!-- .row -->
 </div><!-- #converter-form -->
-<script nonce="<%=nonce%>">
-document.addEventListener("DOMContentLoaded", function() {
-  const forms = document.querySelectorAll("#converter-form form");
-  function checkRange(el) {
-    if (!el) {
-      return;
-    }
-    el.setCustomValidity("");
-    if (el.value === "") {
-      return;
-    }
-    const num = Number(el.value);
-    if (Number.isNaN(num)) {
-      return;
-    }
-    const min = el.min === "" ? null : Number(el.min);
-    const max = el.max === "" ? null : Number(el.max);
-    if ((min !== null && num < min) || (max !== null && num > max)) {
-      el.setCustomValidity(el.title || "Please enter a value in the valid range");
-    }
-  }
-  forms.forEach(function(form) {
-    const gd = form.querySelector("#gd");
-    const gy = form.querySelector("#gy");
-    const hd = form.querySelector("#hd");
-    const hy = form.querySelector("#hy");
-    const nums = [gd, gy, hd, hy].filter(Boolean);
-    // Clear any custom range error as soon as the form is edited, so a
-    // corrected value can be resubmitted (setCustomValidity persists otherwise).
-    form.addEventListener("input", function() {
-      nums.forEach(function(el) {
-        el.setCustomValidity("");
-      });
-    });
-    form.addEventListener("submit", function(event) {
-      nums.forEach(checkRange);
-      // Gregorian: reject days that don't exist in the selected month/year
-      if (gd && gd.validity.valid) {
-        const gm = form.querySelector("#gm");
-        const dd = Number(gd.value);
-        const mm = gm ? Number(gm.value) : NaN;
-        const yy = gy ? Number(gy.value) : NaN;
-        if (yy >= 100 && !Number.isNaN(dd) && !Number.isNaN(mm)) {
-          const maxDay = new Date(yy, mm, 0).getDate();
-          if (dd > maxDay) {
-            gd.setCustomValidity("Day " + dd + " is out of range for the selected month");
-          }
-        }
-      }
-      if (!form.reportValidity()) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    });
-  });
-});
-</script>
+<%- await include('partials/form-range-validation.ejs') -%>
 
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>

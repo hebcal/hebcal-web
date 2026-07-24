@@ -126,7 +126,7 @@ is forbidden.</p>
 </table>
 </div>
 <% if (holiday !== 'Asara B\'Tevet') { %>
-<form method="GET" action="/holidays/<%=holidayAnchor%>" target="_top">
+<form method="GET" action="/holidays/<%=holidayAnchor%>" target="_top" data-range-validate>
 <label for="gy">Look up the date of <%=holiday%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
@@ -137,6 +137,7 @@ is forbidden.</p>
 </div><!-- .col -->
 </div>
 </form>
+<%- await include('partials/form-range-validation.ejs') -%>
 <% } %>
 
 <div class="d-flex justify-content-center d-print-none">
