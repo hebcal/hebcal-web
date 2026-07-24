@@ -18,7 +18,7 @@
   <input type="hidden" name="zip" id="zip">
   <label class="visually-hidden" for="city-typeahead">City</label>
   <div>
-    <input type="text" id="city-typeahead" class="form-control form-control-lg" placeholder="Search for city or ZIP code" enterkeyhint="search">
+    <input type="text" id="city-typeahead" class="form-control form-control-lg" placeholder="Search for city or ZIP code" enterkeyhint="search" autocomplete="off" <%- locals.pmIgnore || '' %>>
   </div>
 </form>
 </div><!-- .col-sm-10 -->

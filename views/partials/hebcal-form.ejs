@@ -14,7 +14,7 @@ if (typeof year !== 'string' || year.length === 0) {
     year = q.yt === 'H' || defaultYearInfo.isHebrewYear ? defaultYearInfo.hy : defaultYearInfo.gregRange;
   }
 } %>
-<input type="text" inputmode="numeric" name="year" value="<%= year %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year" title="Enter a Gregorian or Hebrew year, for example 2026 or 5786">
+<input type="text" inputmode="numeric" name="year" value="<%= year %>" size="4" maxlength="4" class="form-control" id="year" pattern="-?\d*" placeholder="Year" title="Enter a Gregorian or Hebrew year, for example 2026 or 5786" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label for="year">Year</label>
 </div><!-- .form-floating -->
 <div class="col-auto">
@@ -142,7 +142,7 @@ if (typeof year !== 'string' || year.length === 0) {
 <input type="hidden" name="zip" value="<%= q.zip || '' %>" id="zip">
 <input type="hidden" name="geonameid" value="<%= q.geonameid || '' %>" id="geonameid">
   <div class="input-clear-wrapper">
-    <input type="text" value="<%= q['city-typeahead'] || '' %>" class="form-control" id="city-typeahead" autocomplete="off" placeholder="Search for city or ZIP code">
+    <input type="text" value="<%= q['city-typeahead'] || '' %>" class="form-control" id="city-typeahead" autocomplete="off" <%- locals.pmIgnore || '' %> placeholder="Search for city or ZIP code">
     <button type="button" class="btn-close" aria-label="Clear" id="clear-btn"></button>
   </div>
 </div>

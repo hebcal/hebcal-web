@@ -37,6 +37,11 @@ const cspriteHref = '/i/' + pkg.config.csprite;
 const clientAppHref = '/i/' + pkg.config.clientapp;
 const holidayFcAppHref = '/i/' + pkg.config.holidayFcApp;
 const mainCssHref = '/i/' + pkg.config.mainCss;
+// Attributes that ask third-party password managers to ignore a field so
+// they don't offer an autofill widget on inputs like names, dates or years.
+// Pair with autocomplete="off" in the template. See EJS partials for usage.
+const pmIgnore = 'data-1p-ignore data-bwignore data-lpignore="true" ' +
+  'data-protonpass-ignore="true" data-form-type="other"';
 
 app.use(async function fixup0(ctx, next) {
   ctx.state.rpath = ctx.request.path; // used by some ejs templates
@@ -47,6 +52,7 @@ app.use(async function fixup0(ctx, next) {
     clientAppHref,
     holidayFcAppHref,
     mainCssHref,
+    pmIgnore,
   });
   ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
