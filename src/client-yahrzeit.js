@@ -11,18 +11,23 @@ function getCurrentCount() {
 }
 
 const spriteHref = mainFormEl.dataset.spriteHref;
+// Keep in sync with the `pmIgnore` local in src/app-www.js: ask third-party
+// password managers to ignore these fields so they don't offer an autofill
+// widget. Paired with autocomplete="off" on names and years below.
+const pmIgnore = 'data-1p-ignore data-bwignore data-lpignore="true" '+
+  'data-protonpass-ignore="true" data-form-type="other"';
 function yahrzeitRow(n) {
   return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">'+
   '<div class="col-auto">'+n+'.</div>' +
   '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name">'+
+  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name" autocomplete="off" '+pmIgnore+'>'+
   '<label class="form-label" for="n'+n+'">Name</label></div>'+
   '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
   '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option><option>Other</option></select>'+
   '<label class="form-label" for="t'+n+'">Type</label></div>'+
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="d'+
-    n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day">'+
+    n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day" autocomplete="off">'+
   '<label class="form-label" for="d'+n+'">Day</label>'+
   '<div class="invalid-feedback">Please enter a valid day of month.</div>'+
   '</div>'+
@@ -35,7 +40,7 @@ function yahrzeitRow(n) {
   '<label class="form-label" for="m'+n+'">Month</label></div>'+
   '<div class="col-auto form-floating">'+
   '<input class="form-control" type="text" inputmode="numeric" name="y'+
-    n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year">'+
+    n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year" autocomplete="off" '+pmIgnore+'>'+
   '<label class="form-label" for="y'+n+'">Year</label>'+
   '<div class="invalid-feedback">Please enter a valid Gregorian year.</div>'+
   '</div>'+
