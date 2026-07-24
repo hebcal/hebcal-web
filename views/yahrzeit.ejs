@@ -135,7 +135,7 @@ Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;
 Add another name</span> button at the bottom of the page to add
 additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit"
-data-count="<%=count%>" data-sprite-href="<%=spriteHref%>">
+data-count="<%=count%>">
 <div id="rows">
 <% for (let num = 1; num <= count; num++) { -%>
 <% if (typeof q['t'+num] === 'string') { -%>
@@ -147,6 +147,10 @@ data-count="<%=count%>" data-sprite-href="<%=spriteHref%>">
 <%- await include('partials/yahrzeit-row.ejs', {num: 1}) -%>
 <% } -%>
 </div><!-- #rows -->
+<%# Blank row cloned by client-yahrzeit.js when adding a name or importing CSV.
+    Rendered once from the same partial as the rows above, with __IDX__ as a
+    placeholder index that the client replaces with the new row number. -%>
+<template id="yahrzeit-row-tmpl"><%- await include('partials/yahrzeit-row.ejs', {num: '__IDX__'}) %></template>
 <div class="clearfix">
 <p class="text-end float-sm-end">
  <button type="button" class="btn btn-success mt-2" id="newrow">

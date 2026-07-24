@@ -10,60 +10,20 @@ function getCurrentCount() {
   return count;
 }
 
-const spriteHref = mainFormEl.dataset.spriteHref;
-// Keep in sync with the `pmIgnore` local in src/app-www.js: ask third-party
-// password managers to ignore these fields so they don't offer an autofill
-// widget. Paired with autocomplete="off" on names and years below.
-const pmIgnore = 'data-1p-ignore data-bwignore data-lpignore="true" '+
-  'data-protonpass-ignore="true" data-form-type="other"';
-function yahrzeitRow(n) {
-  return '<div class="row gy-1 gx-2 mb-3 align-items-center mt-1">'+
-  '<div class="col-auto">'+n+'.</div>' +
-  '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" name="n'+n+'" id="n'+n+'" placeholder="Name" autocomplete="off" '+pmIgnore+'>'+
-  '<label class="form-label" for="n'+n+'">Name</label></div>'+
-  '<div class="col-auto form-floating"><select name="t'+n+'" id="t'+n+'" class="form-select">'+
-  '<option>Yahrzeit</option><option>Birthday</option><option>Anniversary</option><option>Other</option></select>'+
-  '<label class="form-label" for="t'+n+'">Type</label></div>'+
-  '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" inputmode="numeric" name="d'+
-    n+'" id="d'+n+'" size="2" maxlength="2" max="31" min="1" pattern="\\d*" placeholder="Day" autocomplete="off">'+
-  '<label class="form-label" for="d'+n+'">Day</label>'+
-  '<div class="invalid-feedback">Please enter a valid day of month.</div>'+
-  '</div>'+
-  '<div class="col-auto form-floating"><select name="m'+n+'" id="m'+n+'" class="form-select">'+
-  '<option value="1">01-Jan</option><option value="2">02-Feb</option><option value="3">03-Mar</option>'+
-  '<option value="4">04-Apr</option><option value="5">05-May</option><option value="6">06-Jun</option>'+
-  '<option value="7">07-Jul</option><option value="8">08-Aug</option><option value="9">09-Sep</option>'+
-  '<option value="10">10-Oct</option><option value="11">11-Nov</option><option value="12">12-Dec</option>'+
-  '</select>'+
-  '<label class="form-label" for="m'+n+'">Month</label></div>'+
-  '<div class="col-auto form-floating">'+
-  '<input class="form-control" type="text" inputmode="numeric" name="y'+
-    n+'" id="y'+n+'" size="4" maxlength="4" pattern="\\d*" placeholder="Year" autocomplete="off" '+pmIgnore+'>'+
-  '<label class="form-label" for="y'+n+'">Year</label>'+
-  '<div class="invalid-feedback">Please enter a valid Gregorian year.</div>'+
-  '</div>'+
-  '<div class="col-auto m-2"><div class="form-check">'+
-  '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-0" checked="" value="off">'+
-  '<label class="form-check-label small" for="s'+n+'-0">Before sunset</label></div>'+
-  '<div class="form-check">'+
-  '<input class="form-check-input" type="radio" name="s'+n+'" id="s'+n+'-1" value="on">'+
-  '<label class="form-check-label small" for="s'+n+'-1">After sunset</label></div>'+
-  '</div>' +
-  '<div class="col-auto ms-2">' +
-  '<button type="button" class="btn btn-sm btn-outline-danger del" id="del-'+n+'">'+
-  '<svg class="icon"><use href="' + spriteHref + '#bi-trash"></use></svg>'+
-  ' Delete</button></div>'+
-  '</div>';
-}
+// The blank-row markup lives in a single place: views/partials/yahrzeit-row.ejs.
+// The server renders it once into <template id="yahrzeit-row-tmpl"> with the
+// literal token __IDX__ standing in for the row number (see views/yahrzeit.ejs).
+// To add a row we take that markup and swap __IDX__ for the new row number.
+// A token replace (rather than cloning and walking attributes) is used because
+// the index appears in both attributes and a text node (the "N." row label),
+// and the ids are irregular (del-N, sN-0), so one string pass is simplest.
+const rowTmpl = document.getElementById('yahrzeit-row-tmpl');
 
 function addNewRow() {
   const n = ++count;
-  const newNode = document.createElement('div');
-  newNode.className = 'yahrzeit-row';
-  newNode.id = 'row' + n;
-  newNode.innerHTML = yahrzeitRow(n);
+  const holder = document.createElement('div');
+  holder.innerHTML = rowTmpl.innerHTML.replace(/__IDX__/g, n);
+  const newNode = holder.firstElementChild;
   const parentDiv = document.getElementById('rows');
   parentDiv.insertBefore(newNode, null);
   const delBtn = document.getElementById('del-'+n);
