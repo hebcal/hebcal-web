@@ -1,7 +1,7 @@
 <div class="yahrzeit-row" id="row<%=num%>">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
 <div class="col-auto"><%=num%>.</div>
-<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name">
+<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label class="form-label" for="n<%=num%>">Name</label></div>
 <div class="col-auto form-floating"><select name="t<%=num%>" id="t<%=num%>" class="form-select">
  <option <%= (q['t'+num] === 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
@@ -10,7 +10,7 @@
  <option <%= (q['t'+num] === 'Other') ? 'selected' : '' %>>Other</option>
 </select>
 <label class="form-label" for="t<%=num%>">Type</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31" autocomplete="off">
 <label class="form-label" for="d<%=num%>">Day</label>
 <div class="invalid-feedback">Please enter a valid day of month.</div>
 </div>
@@ -29,7 +29,7 @@
  <option <%= q['m'+num] == 12 ? 'selected' : '' %> value="12">12-Dec</option>
 </select>
 <label class="form-label" for="m<%=num%>">Month</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year" title="Enter a year, for example 1970">
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year" title="Enter a year, for example 1970" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label class="form-label" for="y<%=num%>">Year</label>
 <div class="invalid-feedback">Please enter a valid Gregorian year.</div>
 </div>
