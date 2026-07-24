@@ -247,7 +247,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <% } // items.length -%>
 <div class="row d-print-none">
 <div class="col">
-<form method="GET" action="/sedrot/<%=parsha.anchor%>">
+<form method="GET" action="/sedrot/<%=parsha.anchor%>" data-range-validate>
 <label for="gy">Look up the date of Parashat <%=parshaName%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
@@ -259,6 +259,7 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 </div><!-- .col -->
 </div>
 </form>
+<%- await include('partials/form-range-validation.ejs') -%>
 </div><!-- .col -->
 </div><!-- .d-print-none -->
 <div class="row">
