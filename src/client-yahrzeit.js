@@ -22,7 +22,7 @@ const rowTmpl = document.getElementById('yahrzeit-row-tmpl');
 function addNewRow() {
   const n = ++count;
   const holder = document.createElement('div');
-  holder.innerHTML = rowTmpl.innerHTML.replace(/__IDX__/g, n);
+  holder.innerHTML = rowTmpl.innerHTML.replaceAll('__IDX__', n);
   const newNode = holder.firstElementChild;
   const parentDiv = document.getElementById('rows');
   parentDiv.insertBefore(newNode, null);
