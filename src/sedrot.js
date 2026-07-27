@@ -11,8 +11,8 @@ import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
   VEZOT_HABERAKHAH,
-  lookupParshaMeta, lookupParshaAlias, parshaNum,
-  formatHaftarahTheme} from './parshaCommon.js';
+  lookupParshaMeta, lookupParshaAlias, parshaNum} from './parshaCommon.js';
+import {formatHaftarahTheme} from './haftarahTheme.js';
 import {getParshaMultiYearItems} from './parshaMultiYearItems.js';
 import dayjs from 'dayjs';
 

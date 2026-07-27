@@ -1,6 +1,7 @@
 import {flags} from '@hebcal/core';
 import {getLeyningForParshaHaShavua, getLeyningForHoliday} from '@hebcal/leyning';
 import {LEARNING_MASK, getHolidayDescription} from '@hebcal/rest-api';
+import {formatHaftarahTheme} from './haftarahTheme.js';
 
 /**
  * Bitmask of event types that never have a Torah reading of their own
@@ -39,6 +40,11 @@ export function makeTorahMemoText(ev, il) {
       memo += 'Haftarah: ' + reading.haftara;
       if (reading.reason?.haftara) {
         memo += ' | ' + reading.reason.haftara;
+      }
+      // one of the Haftarot of Admonition or Consolation around Tish'a B'Av
+      const haftThemeStr = formatHaftarahTheme(reading);
+      if (haftThemeStr) {
+        memo += ' | ' + haftThemeStr;
       }
     }
   }
