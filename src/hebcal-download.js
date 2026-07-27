@@ -11,6 +11,7 @@ import {cleanQuery} from './cleanQuery.js';
 import {localeMap} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
+import {applyIcalMemos} from './icalMemo.js';
 import {murmur128HexSync} from 'murmurhash3';
 
 export const maxEventsIcsSub = 2399;
@@ -117,7 +118,7 @@ export async function hebcalDownload(ctx) {
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
     }
-    const icals = events2.map((ev) => new IcalEvent(ev, icalOpt));
+    const icals = applyIcalMemos(events2, icalOpt).map((ev) => new IcalEvent(ev, icalOpt));
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (csv) {
     if (options.sedrot) {

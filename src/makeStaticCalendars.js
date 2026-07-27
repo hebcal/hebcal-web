@@ -5,6 +5,7 @@ import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/
 import {localeMap} from './lang.js';
 import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
+import {applyIcalMemos} from './icalMemo.js';
 import {readJSON} from './readJSON.js';
 import {exec} from 'node:child_process';
 import util from 'node:util';
@@ -218,7 +219,7 @@ async function writeEventsToFile(events, icalOpt, file) {
   icalOpt.utmMedium = UTM_MED;
   icalOpt.utmCampaign = 'ical-' + file;
   icalOpt.publishedTTL = 'P7D';
-  const icals = events.map((ev) => new IcalEvent(ev, icalOpt));
+  const icals = applyIcalMemos(events, icalOpt).map((ev) => new IcalEvent(ev, icalOpt));
   const icalFilename = makeFilename(file, 'ics');
   const icalStream = fs.createWriteStream(icalFilename);
   icalStream.on('close', () => {

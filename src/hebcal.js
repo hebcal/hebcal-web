@@ -35,9 +35,11 @@ import {
   getCalendarTitle,
   getDownloadFilename,
   eventsToCsv,
-  eventsToRss2,
 } from '@hebcal/rest-api';
 import {eventsToIcalendar} from '@hebcal/icalendar';
+import {eventsToRss2} from './rss.js';
+import {applyIcalMemos} from './icalMemo.js';
+import {applyTorahMemos} from './torahMemo.js';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
@@ -167,7 +169,7 @@ async function renderIcal(ctx) {
   icalOpt.utmSource = 'api';
   icalOpt.utmMedium = 'icalendar';
   const events1 = events.length > maxEventsIcsSub ? events.slice(0, maxEventsIcsSub) : events;
-  ctx.body = await eventsToIcalendar(events1, icalOpt);
+  ctx.body = await eventsToIcalendar(applyIcalMemos(events1, icalOpt), icalOpt);
 }
 
 function renderRss(ctx) {
@@ -479,7 +481,7 @@ function renderFullCalendar(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
-  ctx.body = events.map((ev) => {
+  ctx.body = applyTorahMemos(events, Boolean(options.il)).map((ev) => {
     const item = eventToFullCalendar(ev, tzid, options);
     const emoji = ev.getEmoji();
     if (emoji) {

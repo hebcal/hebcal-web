@@ -1,6 +1,7 @@
 import {Event, flags, HDate} from '@hebcal/core';
 import {IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
+import {applyIcalMemos} from './icalMemo.js';
 import fs from 'node:fs';
 import {readJSON} from './readJSON.js';
 
@@ -28,7 +29,7 @@ icalStream.write('\r\n');
 const gyear = new Date().getFullYear();
 for (const [monthDay, arr] of Object.entries(kindness)) {
   const {ev, month} = makeEvent(gyear, monthDay, arr);
-  const ical = new IcalEvent(ev, {});
+  const ical = new IcalEvent(applyIcalMemos([ev], {})[0], {});
   const lines = ical.getLongLines();
   const triggerIdx = lines.findIndex((line) => line.startsWith('TRIGGER'));
   lines[triggerIdx] = 'TRIGGER:P0DT9H0M0S';

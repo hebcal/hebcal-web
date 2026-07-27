@@ -23,7 +23,8 @@ import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, shouldRenderBrief, makeAnchor,
-  eventsToRss2, appendIsraelAndTracking} from '@hebcal/rest-api';
+  appendIsraelAndTracking} from '@hebcal/rest-api';
+import {eventsToRss2} from './rss.js';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import './dayjs-locales.js';
