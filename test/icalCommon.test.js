@@ -12,7 +12,7 @@ import {
   OmerEvent,
 } from '@hebcal/core';
 import {DafYomiEvent} from '@hebcal/learning';
-import {createMemo, makeIcalEvents, makeIcalendar} from '../src/icalMemo.js';
+import {createMemo, makeIcalEvents, makeIcalendar} from '../src/icalCommon.js';
 
 describe('createMemo', () => {
   it('makes a Torah reading memo for Parashat ha-Shavua', () => {

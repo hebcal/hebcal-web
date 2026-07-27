@@ -5,7 +5,7 @@ import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/
 import {localeMap} from './lang.js';
 import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
-import {makeIcalEvents} from './icalMemo.js';
+import {makeIcalEvents} from './icalCommon.js';
 import {readJSON} from './readJSON.js';
 import '@hebcal/learning';
 

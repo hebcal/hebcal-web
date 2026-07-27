@@ -1,7 +1,7 @@
 import {Event, HDate, Location, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import {makeIcalEvents} from './icalMemo.js';
+import {makeIcalEvents} from './icalCommon.js';
 import {basename} from 'node:path';
 import {murmur128HexSync} from 'murmurhash3';
 import {checkFreshETag} from './etag.js';

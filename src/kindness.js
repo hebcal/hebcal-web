@@ -1,7 +1,7 @@
 import {Event, flags, HDate} from '@hebcal/core';
 import {IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import {createMemo} from './icalMemo.js';
+import {createMemo} from './icalCommon.js';
 import fs from 'node:fs';
 import {readJSON} from './readJSON.js';
 

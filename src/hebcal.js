@@ -29,16 +29,15 @@ import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
 import '@hebcal/learning';
 import {
-  eventToFullCalendar,
   eventToClassicApiObject,
   locationToPlainObj,
   getCalendarTitle,
   getDownloadFilename,
   eventsToCsv,
 } from '@hebcal/rest-api';
+import {eventToFullCalendar} from './fullcalendar.js';
 import {eventsToRss2} from './rss.js';
-import {makeIcalendar} from './icalMemo.js';
-import {makeMemo} from './torahMemo.js';
+import {makeIcalendar} from './icalCommon.js';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData.js';
 import './dayjs-locales.js';
@@ -480,9 +479,8 @@ function renderFullCalendar(ctx) {
   const events = makeHebrewCalendar(ctx, options);
   const location = options.location;
   const tzid = location ? location.getTzid() : 'UTC';
-  const il = Boolean(options.il);
   ctx.body = events.map((ev) => {
-    const item = eventToFullCalendar(ev, tzid, options, makeMemo(ev, il));
+    const item = eventToFullCalendar(ev, tzid, options);
     const emoji = ev.getEmoji();
     if (emoji) {
       item.emoji = emoji;

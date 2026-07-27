@@ -354,7 +354,7 @@ function findVevent(ics, summary) {
       ?.replaceAll(/DTSTAMP:\d{8}T\d{6}Z\r\n/g, '');
 }
 
-// The iCalendar DESCRIPTION is now assembled in this repo (src/icalMemo.js)
+// The iCalendar DESCRIPTION is now assembled in this repo (src/icalCommon.js)
 // instead of @hebcal/icalendar. The expectations below are verbatim copies of
 // what /export/hebcal.ics emitted before the move.
 describe('ICS DESCRIPTION contents', () => {

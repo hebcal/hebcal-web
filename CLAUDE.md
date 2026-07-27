@@ -59,7 +59,9 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`
 - **Downloads/export**: `hebcal-download.js`, `pdf.js`, `makeDownloadProps.js`, `deserializeDownload.js`
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
-- **Event memos**: `torahMemo.js` (Torah & Haftarah summaries), `icalMemo.js`
+- **FullCalendar**: `fullcalendar.js` (`/hebcal?cfg=fc` server-side JSON);
+  `client-fullcalendar.js` is the separate browser bundle
+- **Event memos**: `torahMemo.js` (Torah & Haftarah summaries), `icalCommon.js`
   (assembles the iCalendar `DESCRIPTION`). `@hebcal/icalendar` no longer builds
   the `DESCRIPTION` itself, so routes construct their events with
   `makeIcalEvents()` / `makeIcalendar()`, which pass the memo through the
