@@ -60,11 +60,12 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Downloads/export**: `hebcal-download.js`, `pdf.js`, `makeDownloadProps.js`, `deserializeDownload.js`
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
 - **Event memos**: `torahMemo.js` (Torah & Haftarah summaries), `icalMemo.js`
-  (assembles the iCalendar `DESCRIPTION`). `@hebcal/icalendar` only emits a
-  `DESCRIPTION` when `ev.memo` is non-empty, so every route that builds an
-  `IcalEvent` must first run its events through `applyIcalMemos()`. That helper
-  shallow-clones rather than mutates, because `@hebcal/core` caches and shares
-  holiday event instances across requests.
+  (assembles the iCalendar `DESCRIPTION`). `@hebcal/icalendar` no longer builds
+  the `DESCRIPTION` itself, so routes construct their events with
+  `makeIcalEvents()` / `makeIcalendar()`, which pass the memo through the
+  per-event `IcalEvent` option. Never write the generated memo back onto the
+  event — `@hebcal/core` caches and shares holiday event instances across
+  requests, so a memo set here would leak into later calendars.
 - **Torah/Parsha**: `sedrot.js`, `parshaYear.js`
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`

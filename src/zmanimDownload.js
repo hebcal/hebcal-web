@@ -1,12 +1,12 @@
 import { HebrewCalendar, HebrewDateEvent, TimedEvent, Zmanim, flags } from '@hebcal/core';
 import { HDate, Locale } from '@hebcal/hdate';
-import { IcalEvent, eventsToIcalendar } from '@hebcal/icalendar';
+import { IcalEvent } from '@hebcal/icalendar';
 import { makeAnchor } from '@hebcal/rest-api';
 import { CACHE_CONTROL_7DAYS } from './cacheControl.js';
 import { nowInTimezone } from './dateUtil.js';
 import { checkFreshETag } from './etag.js';
 import { lgToLocale } from './lang.js';
-import { applyIcalMemos } from './icalMemo.js';
+import { makeIcalendar } from './icalMemo.js';
 import { getLocationFromQuery } from './location.js';
 import { ALL_TIMES, getTimesForRange } from './zmanimCommon.js';
 
@@ -58,7 +58,7 @@ export async function zmanimIcalendar(ctx) {
     return;
   }
   ctx.response.type = 'text/calendar; charset=utf-8';
-  ctx.body = await eventsToIcalendar(applyIcalMemos(events, options), options);
+  ctx.body = await makeIcalendar(events, options);
 }
 
 /**

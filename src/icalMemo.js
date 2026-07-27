@@ -1,7 +1,11 @@
 import {flags} from '@hebcal/core';
-import {appendIsraelAndTracking, getHolidayDescription} from '@hebcal/rest-api';
+import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
+import {
+  appendIsraelAndTracking,
+  getCalendarTitle,
+  getHolidayDescription,
+} from '@hebcal/rest-api';
 import QuickLRU from 'quick-lru';
-import {cloneEventWithMemo} from './cloneEvent.js';
 import {HOLIDAY_IGNORE_MASK, makeTorahMemoText} from './torahMemo.js';
 
 /**
@@ -106,15 +110,38 @@ export function createMemo(ev, options) {
 }
 
 /**
- * Returns a copy of `events` where every event carries the `memo` that should
- * become the iCalendar `DESCRIPTION`
+ * Builds the `IcalEvent` for each event, handing `@hebcal/icalendar` the
+ * `DESCRIPTION` text through the per-event `memo` option.
+ *
+ * The memo goes in the options rather than on the event itself because
+ * `@hebcal/core` caches (and therefore shares) holiday event instances between
+ * calendars: setting `ev.memo` here would leak this calendar's Israel/locale/
+ * tracking-specific memo into later requests.
  * @param {Event[]} events
  * @param {any} options iCalendar options (`il`, `locale`, `utmSource`, ...)
- * @return {Event[]}
+ * @return {IcalEvent[]}
  */
-export function applyIcalMemos(events, options) {
-  return events.map((ev) => {
-    const memo = createMemo(ev, options);
-    return memo === (ev.memo || '') ? ev : cloneEventWithMemo(ev, memo);
-  });
+export function makeIcalEvents(events, options) {
+  return events.map(
+      (ev) => new IcalEvent(ev, {...options, memo: createMemo(ev, options)}),
+  );
+}
+
+/**
+ * Like `eventsToIcalendar()` from `@hebcal/icalendar`, but builds each event's
+ * `DESCRIPTION` first
+ * @param {Event[]} events
+ * @param {any} options
+ * @return {Promise<string>}
+ */
+export function makeIcalendar(events, options) {
+  if (!events.length) {
+    throw new RangeError('Events can not be empty');
+  }
+  const opts = {...options};
+  opts.dtstamp = opts.dtstamp || IcalEvent.makeDtstamp(new Date());
+  if (!opts.title) {
+    opts.title = getCalendarTitle(events, opts);
+  }
+  return icalEventsToString(makeIcalEvents(events, opts), opts);
 }

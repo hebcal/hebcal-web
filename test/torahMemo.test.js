@@ -1,6 +1,6 @@
 import {describe, it, expect} from 'vitest';
 import {HebrewCalendar, Location, HDate, Event, flags} from '@hebcal/core';
-import {makeTorahMemoText, makeMemo, applyTorahMemos} from '../src/torahMemo.js';
+import {makeTorahMemoText, makeMemo} from '../src/torahMemo.js';
 
 describe('makeTorahMemoText', () => {
   it('summarizes Torah, Haftarah and Sephardic Haftarah', () => {
@@ -68,32 +68,5 @@ describe('makeMemo', () => {
       end: new Date(2020, 11, 11),
     })[0];
     expect(makeMemo(chanukah, false)).toContain('the Jewish festival of rededication');
-  });
-});
-
-describe('applyTorahMemos', () => {
-  it('sets ev.memo on Parsha events without mutating the original', () => {
-    const events = HebrewCalendar.calendar({
-      noHolidays: true,
-      sedrot: true,
-      start: new Date(2020, 10, 28),
-      end: new Date(2020, 10, 28),
-    });
-    const [orig] = events;
-    const [copy] = applyTorahMemos(events, false);
-    expect(copy).not.toBe(orig);
-    expect(orig.memo).toBe(undefined);
-    expect(copy.memo).toBe(
-        'Torah: Genesis 28:10-32:3\n' +
-        'Haftarah: Hosea 12:13-14:10\n' +
-        'Haftarah for Sephardim: Hosea 11:7-12:12');
-    expect(copy.getDesc()).toBe(orig.getDesc());
-    expect(copy.url()).toBe(orig.url());
-  });
-
-  it('leaves non-Parsha events and pre-set memos alone', () => {
-    const hd = new HDate(new Date(2021, 1, 13));
-    const ev = new Event(hd, 'Holiday Event', 0);
-    expect(applyTorahMemos([ev], false)[0]).toBe(ev);
   });
 });

@@ -1,7 +1,6 @@
 import {flags} from '@hebcal/core';
 import {getLeyningForParshaHaShavua, getLeyningForHoliday} from '@hebcal/leyning';
 import {LEARNING_MASK, getHolidayDescription} from '@hebcal/rest-api';
-import {cloneEventWithMemo} from './cloneEvent.js';
 
 /**
  * Bitmask of event types that never have a Torah reading of their own
@@ -73,25 +72,3 @@ export function makeMemo(ev, il) {
   return getHolidayDescription(ev, false, 'en');
 }
 
-/**
- * Returns a copy of `events` where Parashat ha-Shavua events carry the
- * Torah & Haftarah summary as their `memo`. Used by consumers such as
- * `eventToFullCalendar()` that render `ev.memo` as-is.
- * @param {Event[]} events
- * @param {boolean} il
- * @return {Event[]}
- */
-export function applyTorahMemos(events, il) {
-  return events.map((ev) => {
-    if (!(ev.getFlags() & flags.PARSHA_HASHAVUA) || ev.memo) {
-      return ev;
-    }
-    let memo;
-    try {
-      memo = makeTorahMemoText(ev, il);
-    } catch {
-      return ev;
-    }
-    return memo ? cloneEventWithMemo(ev, memo) : ev;
-  });
-}

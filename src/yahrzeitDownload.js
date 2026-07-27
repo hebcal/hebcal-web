@@ -1,7 +1,7 @@
 import {Event, HDate, Location, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
-import {applyIcalMemos} from './icalMemo.js';
+import {makeIcalEvents} from './icalMemo.js';
 import {basename} from 'node:path';
 import {murmur128HexSync} from 'murmurhash3';
 import {checkFreshETag} from './etag.js';
@@ -108,7 +108,7 @@ export async function yahrzeitDownload(ctx) {
     if (zeroEvents) {
       icalOpt.publishedTTL = false;
     }
-    const icals = applyIcalMemos(events2, icalOpt).map((ev) => new IcalEvent(ev, icalOpt));
+    const icals = makeIcalEvents(events2, icalOpt);
     if (doLocation) {
       for (const icalEv of icals) {
         icalEv.locationName = undefined;
