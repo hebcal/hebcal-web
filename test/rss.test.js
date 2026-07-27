@@ -173,7 +173,7 @@ describe('RSS feed contents', () => {
         .get('/shabbat?cfg=r&geonameid=5128581&b=18&M=on&gy=2026&gm=4&gd=15');
     expect(response.status).toBe(200);
     const xml = normalizeFeed(response.text);
-    expect(xml).toContain('<title>Shabbat Times for New York, USA - Hebcal</title>');
+    expect(xml).toContain('<title>Shabbat Times for New York City, New York, USA - Hebcal</title>');
     expect(xml).toContain(`<item>
 <title>Havdalah: 8:22pm</title>
 <link>https://www.hebcal.com/shabbat?geonameid=5128581&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-18&amp;utm_source=shabbat1c&amp;utm_medium=rss#20260418-havdalah</link>
