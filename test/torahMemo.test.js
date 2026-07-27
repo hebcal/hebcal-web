@@ -18,6 +18,42 @@ describe('makeTorahMemoText', () => {
     ]);
   });
 
+  it('includes the Haftarah of Admonition or Consolation', () => {
+    const memoForDate = (y, m, d) => {
+      const events = HebrewCalendar.calendar({
+        noHolidays: true,
+        sedrot: true,
+        start: new Date(y, m, d),
+        end: new Date(y, m, d),
+      });
+      return makeTorahMemoText(events[0], false).split('\n');
+    };
+    // Parashat Devarim: 3rd Haftarah of Admonition
+    expect(memoForDate(2025, 7, 2)).toEqual([
+      'Torah: Deuteronomy 1:1-3:22',
+      'Haftarah: Isaiah 1:1-27 | Third Haftarah of Admonition',
+    ]);
+    // Parashat Vaetchanan: 1st Haftarah of Consolation
+    expect(memoForDate(2025, 7, 9)).toEqual([
+      'Torah: Deuteronomy 3:23-7:11',
+      'Haftarah: Isaiah 40:1-26 | First Haftarah of Consolation',
+    ]);
+    // Parashat Matot-Masei: theme appears after the reason for a special Haftarah
+    expect(memoForDate(2025, 6, 26)).toEqual([
+      'Torah: Numbers 30:2-36:13, 28:9-15',
+      'Haftarah: Jeremiah 2:4-28, 3:4 | Matot-Masei on Shabbat Rosh Chodesh' +
+        ' | Second Haftarah of Admonition',
+      'Haftarah for Sephardim: Jeremiah 2:4-28, 4:1-2; Isaiah 66:1, 66:23',
+    ]);
+    // Parashat Ki Teitzei: the displaced 3rd Haftarah of Consolation
+    // chanted along with the 5th
+    expect(memoForDate(2022, 8, 10)).toEqual([
+      'Torah: Deuteronomy 21:10-25:19',
+      'Haftarah: Isaiah 54:1-10, 54:11-55:5 | Ki Teitzei with 3rd Haftarah of' +
+        ' Consolation | Third and Fifth Haftarah of Consolation',
+    ]);
+  });
+
   it('ignores user events but not holidays', () => {
     const hd = new HDate(new Date(2021, 1, 13));
     const userEvent = new Event(hd, 'User Event', flags.USER_EVENT);
