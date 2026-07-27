@@ -66,6 +66,11 @@ Each feature is typically one or a few files handling routing, business logic, a
   per-event `IcalEvent` option. Never write the generated memo back onto the
   event — `@hebcal/core` caches and shares holiday event instances across
   requests, so a memo set here would leak into later calendars.
+- **Static feeds**: `staticCalendars.js` builds the multi-year .ics/.csv feeds
+  served from download.hebcal.com/ical/ as a pure function of `today`, so they
+  can be regression-tested (`test/staticCalendars.test.js`);
+  `makeStaticCalendars.js` is the weekly cron wrapper that writes and compresses
+  them.
 - **Torah/Parsha**: `sedrot.js`, `parshaYear.js`
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
