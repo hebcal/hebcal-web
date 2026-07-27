@@ -6,7 +6,7 @@ import { CACHE_CONTROL_7DAYS } from './cacheControl.js';
 import { nowInTimezone } from './dateUtil.js';
 import { checkFreshETag } from './etag.js';
 import { lgToLocale } from './lang.js';
-import { makeIcalendar } from './icalMemo.js';
+import { makeIcalendar } from './icalCommon.js';
 import { getLocationFromQuery } from './location.js';
 import { ALL_TIMES, getTimesForRange } from './zmanimCommon.js';
 

@@ -11,7 +11,7 @@ import {cleanQuery} from './cleanQuery.js';
 import {localeMap} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
-import {makeIcalEvents} from './icalMemo.js';
+import {makeIcalEvents} from './icalCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
 export const maxEventsIcsSub = 2399;
