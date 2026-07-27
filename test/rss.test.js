@@ -170,19 +170,29 @@ describe('RSS feed contents', () => {
 
   it('renders Shabbat candle lighting times and holiday descriptions', async () => {
     const response = await request(server)
-        .get('/shabbat?cfg=r&geonameid=5128581&b=18&M=on&gy=2026&gm=4&gd=15');
+        .get('/shabbat?cfg=r&geonameid=4930956&b=18&M=on&gy=2026&gm=4&gd=15');
     expect(response.status).toBe(200);
     const xml = normalizeFeed(response.text);
-    expect(xml).toContain('<title>Shabbat Times for New York City, New York, USA - Hebcal</title>');
+    expect(xml).toContain('<title>Shabbat Times for Boston, Massachusetts, USA - Hebcal</title>');
     expect(xml).toContain(`<item>
-<title>Havdalah: 8:22pm</title>
-<link>https://www.hebcal.com/shabbat?geonameid=5128581&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-18&amp;utm_source=shabbat1c&amp;utm_medium=rss#20260418-havdalah</link>
-<guid isPermaLink="false">https://www.hebcal.com/shabbat?geonameid=5128581&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-18#20260418-havdalah</guid>
+<title>Candle lighting: 7:10pm</title>
+<link>https://www.hebcal.com/shabbat?geonameid=4930956&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-17&amp;utm_source=shabbat1c&amp;utm_medium=rss#20260417-candle-lighting</link>
+<guid isPermaLink="false">https://www.hebcal.com/shabbat?geonameid=4930956&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-17#20260417-candle-lighting</guid>
+<description>Friday, April 17, 2026</description>
+<category>candles</category>
+<pubDate>-</pubDate>
+<geo:lat>42.35843</geo:lat>
+<geo:long>-71.05977</geo:long>
+</item>`);
+    expect(xml).toContain(`<item>
+<title>Havdalah: 8:14pm</title>
+<link>https://www.hebcal.com/shabbat?geonameid=4930956&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-18&amp;utm_source=shabbat1c&amp;utm_medium=rss#20260418-havdalah</link>
+<guid isPermaLink="false">https://www.hebcal.com/shabbat?geonameid=4930956&amp;ue=off&amp;b=18&amp;td=8.5&amp;lg=s&amp;dt=2026-04-18#20260418-havdalah</guid>
 <description>Saturday, April 18, 2026</description>
 <category>havdalah</category>
 <pubDate>-</pubDate>
 </item>`);
-    expect(xml).toContain('<geo:lat>40.71427</geo:lat>');
+    expect(xml).toContain('<geo:lat>42.35843</geo:lat>');
   });
 
   it('renders the custom calendar feed with holiday memos', async () => {
