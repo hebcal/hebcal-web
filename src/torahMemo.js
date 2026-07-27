@@ -1,0 +1,97 @@
+import {flags} from '@hebcal/core';
+import {getLeyningForParshaHaShavua, getLeyningForHoliday} from '@hebcal/leyning';
+import {LEARNING_MASK, getHolidayDescription} from '@hebcal/rest-api';
+import {cloneEventWithMemo} from './cloneEvent.js';
+
+/**
+ * Bitmask of event types that never have a Torah reading of their own
+ */
+export const HOLIDAY_IGNORE_MASK =
+  flags.OMER_COUNT |
+  flags.SHABBAT_MEVARCHIM |
+  flags.MOLAD |
+  flags.USER_EVENT |
+  flags.HEBREW_DATE |
+  LEARNING_MASK;
+
+/**
+ * Makes multi-line text that summarizes Torah & Haftarah
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {string}
+ */
+export function makeTorahMemoText(ev, il) {
+  const mask = ev.getFlags();
+  if (mask & HOLIDAY_IGNORE_MASK || ev.eventTime !== undefined) {
+    return '';
+  }
+  const reading = mask & flags.PARSHA_HASHAVUA ?
+    getLeyningForParshaHaShavua(ev, il) :
+    getLeyningForHoliday(ev, il);
+  let memo = '';
+  if (reading && (reading.summary || reading.haftara)) {
+    if (reading.summary) {
+      memo += `Torah: ${reading.summary}`;
+    }
+    if (reading.summary && reading.haftara) {
+      memo += '\n';
+    }
+    if (reading.haftara) {
+      memo += 'Haftarah: ' + reading.haftara;
+      if (reading.reason?.haftara) {
+        memo += ' | ' + reading.reason.haftara;
+      }
+    }
+  }
+  if (reading?.sephardic) {
+    memo += '\nHaftarah for Sephardim: ' + reading.sephardic;
+  }
+  return memo;
+}
+
+/**
+ * Returns the memo to use for an event: Torah reading for a Parsha
+ * ha-Shavua, otherwise `ev.memo` or the holiday description.
+ * @param {Event} ev
+ * @param {boolean} il
+ * @return {string}
+ */
+export function makeMemo(ev, il) {
+  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+    try {
+      const memo = makeTorahMemoText(ev, il);
+      if (memo) {
+        return memo;
+      }
+    } catch {
+      // fallthru
+    }
+  }
+  if (ev.memo) {
+    return ev.memo;
+  }
+  return getHolidayDescription(ev, false, 'en');
+}
+
+/**
+ * Returns a copy of `events` where Parashat ha-Shavua events carry the
+ * Torah & Haftarah summary as their `memo`. Used by consumers such as
+ * `eventToFullCalendar()` that render `ev.memo` as-is.
+ * @param {Event[]} events
+ * @param {boolean} il
+ * @return {Event[]}
+ */
+export function applyTorahMemos(events, il) {
+  return events.map((ev) => {
+    if (!(ev.getFlags() & flags.PARSHA_HASHAVUA) || ev.memo) {
+      return ev;
+    }
+    let memo;
+    try {
+      memo = makeTorahMemoText(ev, il);
+    } catch {
+      return ev;
+    }
+    return memo ? cloneEventWithMemo(ev, memo) : ev;
+  });
+}
