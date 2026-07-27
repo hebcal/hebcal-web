@@ -75,7 +75,7 @@
     "@hebcal/hdate": "^0.22.5",
     "@hebcal/icalendar": "^6.3.8",
     "@hebcal/learning": "^6.9.5",
-    "@hebcal/leyning": "^9.5.5",
+    "@hebcal/leyning": "^9.6.0",
     "@hebcal/locales": "^6.5.1",
     "@hebcal/rest-api": "^6.5.1",
     "@hebcal/triennial": "^6.3.0",

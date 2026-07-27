@@ -319,6 +319,67 @@ describe('Sedrot with Dates - Content Verification', () => {
   });
 });
 
+describe('Sedrot Haftarot of Admonition and Consolation', () => {
+  it('should show ordinal Haftarah of Admonition for Devarim', async () => {
+    const response = await request(server)
+        .get('/sedrot/devarim-20260718');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Third Haftarah of Admonition');
+  });
+
+  it('should show ordinal Haftarah of Consolation for Vaetchanan', async () => {
+    const response = await request(server)
+        .get('/sedrot/vaetchanan-20260725');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('First Haftarah of Consolation');
+  });
+
+  it('should show Second Haftarah of Admonition for combined Matot-Masei (dated)', async () => {
+    const response = await request(server)
+        .get('/sedrot/matot-masei-20260711');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Second Haftarah of Admonition');
+  });
+
+  it('should show Second Haftarah of Admonition for combined Matot-Masei (undated)', async () => {
+    const response = await request(server)
+        .get('/sedrot/matot-masei');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Second Haftarah of Admonition');
+  });
+
+  it('should show Seventh Haftarah of Consolation for combined Nitzavim-Vayeilech (dated)', async () => {
+    const response = await request(server)
+        .get('/sedrot/nitzavim-vayeilech-20260905');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Seventh Haftarah of Consolation');
+  });
+
+  it('should show Seventh Haftarah of Consolation for combined Nitzavim-Vayeilech (undated)', async () => {
+    const response = await request(server)
+        .get('/sedrot/nitzavim-vayeilech');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Seventh Haftarah of Consolation');
+  });
+
+  it('should not show a Haftarah theme for a parsha unrelated to Tisha B\'Av', async () => {
+    const response = await request(server)
+        .get('/sedrot/bereshit-20241026');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('Haftarah of Admonition');
+    expect(response.text).not.toContain('Haftarah of Consolation');
+  });
+
+  it('should render "Third and Fifth" for the rare Ki Teitzei consolation 3,5 special case', async () => {
+    // In 2029, Parashat Re'eh coincides with Shabbat Rosh Chodesh Elul, displacing
+    // the 3rd Haftarah of Consolation onto Ki Teitzei alongside the usual 5th.
+    const response = await request(server)
+        .get('/sedrot/ki-teitzei-20290825');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('Third and Fifth Haftarah of Consolation');
+  });
+});
+
 describe('Sedrot Hebrew Year Pages', () => {
   it('should return 200 for Hebrew year 5785', async () => {
     const response = await request(server)

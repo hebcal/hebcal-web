@@ -3,6 +3,7 @@
 <%- reading.haftaraHtml %>
 <%- await include('numverses.ejs', {v: reading.haftaraNumV}) -%>
 <% if (reading?.reason?.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
+<% if (reading.haftThemeStr) { %><br><small class="text-body-secondary"><%= reading.haftThemeStr %></small><% } %>
 </p>
 <% } // reading.haftara %>
 <% if (reading.sephardic) { %>

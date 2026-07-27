@@ -11,7 +11,8 @@ import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
   VEZOT_HABERAKHAH,
-  lookupParshaMeta, lookupParshaAlias, parshaNum} from './parshaCommon.js';
+  lookupParshaMeta, lookupParshaAlias, parshaNum,
+  formatHaftarahTheme} from './parshaCommon.js';
 import {getParshaMultiYearItems} from './parshaMultiYearItems.js';
 import dayjs from 'dayjs';
 
@@ -187,6 +188,8 @@ function makeReading(date, parshaEv, il, parsha) {
     }
   }
   reading.haftaraHtml = makeLeyningHtmlFromParts(reading.haft);
+  const haftTheme = (reading.admonition || reading.consolation) ? reading : parsha.haftTheme;
+  reading.haftThemeStr = formatHaftarahTheme(haftTheme);
   if (reading.seph) {
     reading.sephardicHtml = makeLeyningHtmlFromParts(reading.seph);
   }
