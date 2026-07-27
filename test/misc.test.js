@@ -134,6 +134,39 @@ describe('Leyning Routes', () => {
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
   });
+
+  it('should include admonition in JSON for a Haftarah of Admonition', async () => {
+    // Parashat Devarim 2026-07-18 is the 3rd Haftarah of Admonition
+    const response = await request(server)
+        .get('/leyning?cfg=json&date=2026-07-18');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    const item = response.body.items[0];
+    expect(item.admonition).toBe(3);
+    expect(item.consolation).toBeUndefined();
+  });
+
+  it('should include consolation in JSON for a Haftarah of Consolation', async () => {
+    // Parashat Vaetchanan 2026-07-25 is the 1st Haftarah of Consolation
+    const response = await request(server)
+        .get('/leyning?cfg=json&date=2026-07-25');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    const item = response.body.items[0];
+    expect(item.consolation).toBe(1);
+    expect(item.admonition).toBeUndefined();
+  });
+
+  it('should include the special "3,5" consolation value in JSON for Ki Teitzei', async () => {
+    // In 2029, Parashat Re'eh coincides with Shabbat Rosh Chodesh Elul, displacing
+    // the 3rd Haftarah of Consolation onto Ki Teitzei alongside the usual 5th.
+    const response = await request(server)
+        .get('/leyning?cfg=json&date=2029-08-25');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    const item = response.body.items[0];
+    expect(item.consolation).toBe('3,5');
+  });
 });
 
 describe('Delete Cookie Route', () => {

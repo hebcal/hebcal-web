@@ -165,13 +165,16 @@ export function lookupParshaMeta(parshaName) {
     parsha.p1anchor = makeAnchor(p1);
     parsha.p2anchor = makeAnchor(p2);
     const haftKey = p1 === 'Nitzavim' ? p1 : p2;
-    parsha.haft = lookupParsha(haftKey).haft;
+    const haftMeta = lookupParsha(haftKey);
+    parsha.haft = haftMeta.haft;
+    parsha.haftTheme = haftMeta.haftTheme;
     const p1meta = lookupParsha(p1);
     parsha.p1verses = parshaVerses(p1meta);
   } else {
     parsha.ordinal = Locale.ordinal(parsha.num, 'en');
   }
   parsha.haftara = makeSummaryFromParts(parsha.haft);
+  parsha.haftThemeStr = formatHaftarahTheme(parsha.haftTheme);
   const chapVerse = parsha.fullkriyah['1'][0];
   const [chapter, verse] = chapVerse.split(':');
   const book = parsha.book;
@@ -185,6 +188,35 @@ export function lookupParshaMeta(parshaName) {
 function parshaVerses(parshaMeta) {
   const fk = parshaMeta.fullkriyah;
   return fk['1'][0] + '-' + fk['7'][1];
+}
+
+const ORDINAL_WORDS = [
+  null, 'First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh',
+];
+
+/**
+ * Formats a HaftTheme (admonition/consolation) as a human-readable string
+ * like `"Fifth Haftarah of Consolation"`. The rare `consolation: "3,5"` case
+ * (Parashat Re'eh coincides with Rosh Chodesh, displacing the 3rd Haftarah of
+ * Consolation onto Ki Teitzei alongside the 5th) is rendered as
+ * `"Third and Fifth Haftarah of Consolation"`.
+ * @param {{admonition?: number, consolation?: number|string}} [theme]
+ * @return {string|undefined}
+ */
+export function formatHaftarahTheme(theme) {
+  if (!theme) {
+    return undefined;
+  }
+  if (typeof theme.admonition === 'number') {
+    return `${ORDINAL_WORDS[theme.admonition]} Haftarah of Admonition`;
+  }
+  if (typeof theme.consolation !== 'undefined') {
+    const ordinals = String(theme.consolation).split(',')
+        .map((num) => ORDINAL_WORDS[Number(num)])
+        .join(' and ');
+    return `${ordinals} Haftarah of Consolation`;
+  }
+  return undefined;
 }
 
 /**
