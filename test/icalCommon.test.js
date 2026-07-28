@@ -227,7 +227,7 @@ describe('parsha summary', () => {
     expect(createMemo(ev, options)).toContain('In Tzav (\u201cCommand\u201d)');
     // the summary must not be written back onto the event: the .csv wants the
     // special-Shabbat name there instead
-    expect(ev.memo).toBe(undefined);
+    expect(ev.memo).toBeUndefined();
   });
 
   it('lets an explicit ev.memo win', () => {
@@ -250,7 +250,7 @@ describe('parsha summary', () => {
 
   it('is absent for non-parsha events', () => {
     const [ev] = HebrewCalendar.calendar({year: 2026, month: 4});
-    expect(getParshaSummary(ev)).toBe(undefined);
+    expect(getParshaSummary(ev)).toBeUndefined();
   });
 });
 
