@@ -62,17 +62,17 @@ function makeEvents(dt, il, lang) {
       const d = dayjs(hd.greg());
       const dateStr = d.locale(lang).format('D MMMM YYYY');
       const desc = ev.render(lang) + ' - ' + dateStr;
-      arr.push(new WrappedEvent(hd, desc, ev, il, d));
+      arr.push(new WrappedEvent(hd, desc, ev, il, d, lang));
     }
   }
   return arr;
 }
 
 class WrappedEvent extends Event {
-  constructor(date, desc, ev, il, d) {
+  constructor(date, desc, ev, il, d, lang) {
     super(date, desc, flags.USER_EVENT);
     this.ev = ev;
-    this.memo = createMemo(ev, il);
+    this.memo = createMemo(ev, il, lang);
     this.eventTime = new Date(Date.UTC(d.year(), d.month(), d.date(), 12, 0, 0));
   }
   url() {
@@ -83,13 +83,13 @@ class WrappedEvent extends Event {
   }
 }
 
-function createMemo(ev, il) {
+function createMemo(ev, il, lang) {
   const memoText = makeTorahMemoText(ev, il);
   const memoHtml = memoText ? '<p>' + memoText.replaceAll('\n', '</p>\n<p>') + '</p>' : '';
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
     // lead with the Sefaria prose summary, the way the .ics DESCRIPTION does.
     // Holiday items below already open with a prose description.
-    const summary = getParshaSummary(ev);
+    const summary = getParshaSummary(ev, lang);
     const parts = [];
     if (summary) {
       // a doubled parsha joins two summaries with a newline

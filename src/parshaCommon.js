@@ -181,7 +181,8 @@ export function lookupParshaMeta(parshaName) {
   const book = parsha.book;
   const portion = parsha.combined ? parsha.num1 : parsha.num;
   parsha.ids = {portion, book, chapter, verse};
-  parsha.summaryHtml = makeSummaryHtml(parsha);
+  parsha.summaryHtml = makeSummaryHtml(parsha, 'en');
+  parsha.summaryHtmlHe = makeSummaryHtml(parsha, 'he');
   parshaMetaCache.set(parshaName, parsha);
   return parsha;
 }
@@ -192,16 +193,22 @@ function parshaVerses(parshaMeta) {
 }
 
 /**
+ * Sefaria publishes each parasha topic in both English and Hebrew; `drash.json`
+ * carries the English prose in `summary` and the Hebrew prose in `summaryHe`.
+ * @private
  * @param {any} parsha
+ * @param {string} lang `en` or `he`
  * @return {any}
  */
-function makeSummaryHtml(parsha) {
+function makeSummaryHtml(parsha, lang) {
+  const hebrew = lang === 'he';
+  const key = hebrew ? 'summaryHe' : 'summary';
   let summary;
   let target;
   if (parsha.combined) {
     const [p1, p2] = parsha.name.split('-');
-    const s1 = drash[p1]?.sefaria?.summary;
-    const s2 = drash[p2]?.sefaria?.summary;
+    const s1 = drash[p1]?.sefaria?.[key];
+    const s2 = drash[p2]?.sefaria?.[key];
     if (s1 && s2) {
       summary = s1 + '\n ' + s2;
       target = drash[p1].sefaria.target;
@@ -210,16 +217,20 @@ function makeSummaryHtml(parsha) {
     }
   } else {
     const sefaria = drash[parsha.name].sefaria;
-    if (sefaria?.summary) {
-      summary = sefaria.summary;
+    if (sefaria?.[key]) {
+      summary = sefaria[key];
       target = sefaria.target;
     } else {
       return null;
     }
   }
+  const host = hebrew ? 'www.sefaria.org.il' : 'www.sefaria.org';
+  const title = hebrew ?
+    'פרשת ' + parsha.hebrew + ' מתוך ספריא' :
+    'Parashat ' + parsha.name + ' from Sefaria';
   return {
-    link: `https://www.sefaria.org/topics/parashat-${target}?tab=sources`,
-    title: 'Parashat ' + parsha.name + ' from Sefaria',
+    link: `https://${host}/topics/parashat-${target}?tab=sources`,
+    title,
     html: summary,
   };
 }
@@ -273,16 +284,26 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
 
 /**
  * Returns the Sefaria prose summary for a Parsha Hashavua event, or
- * `undefined` for any other event or a parsha we have no summary for
+ * `undefined` for any other event or a parsha we have no summary for.
+ *
+ * Hebrew locales (with or without nikud) get Sefaria's Hebrew prose, falling
+ * back to the English summary if we don't have a Hebrew one.
  * @param {Event} ev
+ * @param {string} [locale]
  * @return {string|undefined}
  */
-export function getParshaSummary(ev) {
+export function getParshaSummary(ev, locale) {
   if (!(ev.getFlags() & flags.PARSHA_HASHAVUA)) {
     return undefined;
   }
   const parshaName = ev.getDesc().substring(9);
   const meta = lookupParshaMeta(parshaName);
+  if (Locale.isHebrewLocale(locale)) {
+    const he = meta.summaryHtmlHe?.html;
+    if (he) {
+      return he;
+    }
+  }
   return meta.summaryHtml?.html;
 }
 

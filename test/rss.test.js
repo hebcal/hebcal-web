@@ -176,6 +176,49 @@ describe('RSS feed contents', () => {
     expect(response.text).toMatch(/<description><!\[CDATA\[<p>[A-Z][^<]{80,}<\/p>\n<p>Torah: /);
   });
 
+  it('renders Parashat ha-Shavua in Hebrew with the Hebrew summary', async () => {
+    const response = await request(server)
+        .get('/sedrot/index-he.xml?dt=2026-08-01');
+    expect(response.status).toBe(200);
+    const xml = normalizeFeed(response.text);
+    expect(xml).toContain('<language>he</language>');
+    expect(xml).toContain(`<item>
+<title>פָּרָשַׁת עֵקֶב - 1 אוגוסט 2026</title>
+<link>https://hebcal.com/s/5786/46?us=sedrot-diaspora&amp;um=rss</link>
+<guid isPermaLink="false">https://www.hebcal.com/sedrot/eikev-20260801#20260801-1-2026</guid>
+<description><![CDATA[<p>בפרשת עקב משה מבטיח ששמירת המצוות תגרור אחריה שגשוג והצלחה צבאית. משה מזכיר לעם את המן שאכלו במדבר ואת החטאים והתלונות וכן מתאר במפורט את חטא העגל. משה מדגיש את הייחודיות של הארץ המובטחת ושונה את פרשת 'והיה אם שמוע', המתארת את שכר קיום המצוות ועונש הגלות על עבודה זרה.</p>
+<p>Torah: Deuteronomy 7:12-11:25</p>
+<p>Haftarah: Isaiah 49:14-51:3 | Second Haftarah of Consolation</p>]]></description>
+<category>parashat</category>
+<pubDate>-</pubDate>
+</item>`);
+  });
+
+  it('renders Parashat ha-Shavua in Hebrew without nikud', async () => {
+    const response = await request(server)
+        .get('/sedrot/index-he-x-NoNikud.xml?dt=2026-08-01');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<language>he-x-NoNikud</language>');
+    expect(response.text).toContain('<title>פרשת עקב - 1 אוגוסט 2026</title>');
+    expect(response.text).toContain('<description><![CDATA[<p>בפרשת עקב משה מבטיח');
+  });
+
+  it('gives a doubled parsha one Hebrew paragraph per portion', async () => {
+    const response = await request(server)
+        .get('/sedrot/index-he.xml?dt=2026-04-15');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<p>בפרשת תזריע מפורטים דיני היולדת');
+    expect(response.text).toContain('צרעת הבגד ודיניה.</p>\n<p>בפרשת מצורע מתואר');
+  });
+
+  it('leads the Hebrew Shabbat feed parsha item with the Hebrew summary', async () => {
+    const response = await request(server)
+        .get('/shabbat?cfg=r&geonameid=5128581&b=18&M=on&gy=2026&gm=4&gd=15&lg=h');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain(
+        '<description>בפרשת תזריע מפורטים דיני היולדת');
+  });
+
   it('renders Parashat ha-Shavua for Israel', async () => {
     const response = await request(server)
         .get('/sedrot/israel-en.xml?dt=2026-04-15');

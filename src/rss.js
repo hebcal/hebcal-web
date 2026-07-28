@@ -167,7 +167,7 @@ export function eventToRssItem2(ev, options) {
     // the /sedrot feeds do. `makeMemo()` is deliberately left alone: it is
     // shared with eventToFullCalendar(), whose `description` is a non-standard
     // FullCalendar field that nothing renders by default.
-    const summary = getParshaSummary(ev);
+    const summary = getParshaSummary(ev, options.locale || options.lang);
     if (summary) {
       memo = memo ? summary + '\n\n' + memo : summary;
     }
