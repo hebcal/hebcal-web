@@ -83,11 +83,11 @@ describe('Torah readings feed', () => {
         'X-MICROSOFT-CDO-ALLDAYEVENT:TRUE\r\n' +
         'CLASS:PUBLIC\r\n' +
         'DESCRIPTION:Emor (“Say”) opens with laws regulating priestly behavior\\\r\n' +
-        ' , working in the Mishkan (Tabernacle)\\, and consuming sacrifices and pries\r\n' +
-        ' tly food. It describes the biblical holidays of Passover\\, Shavuot\\, Rosh \r\n' +
-        ' Hashanah\\, Yom Kippur\\, and Sukkot\\, and ends with a story about a blasphe\r\n' +
-        ' mer and his punishment.\\n\\nTorah: Leviticus 21:1-24:23\\nHaftarah: Ezekiel \r\n' +
-        ' 44:15-31\\n\\nhttps://hebcal.com/s/5786/31?uc=ical-torah-readings-diaspora\r\n');
+        ' , working in the Tabernacle\\, and consuming sacrifices and priestly food. \r\n' +
+        ' It describes the biblical holidays of Passover\\, Shavuot\\, Rosh Hashanah\\,\r\n' +
+        '  Yom Kippur\\, and Sukkot\\, and ends with a story about a blasphemer and hi\r\n' +
+        ' s punishment.\\n\\nTorah: Leviticus 21:1-24:23\\nHaftarah: Ezekiel 44:15-31\\n\r\n' +
+        ' \\nhttps://hebcal.com/s/5786/31?uc=ical-torah-readings-diaspora\r\n');
   });
 
   it('swaps the parsha memo for the special Shabbat name in the CSV', async () => {
