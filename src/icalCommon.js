@@ -3,10 +3,9 @@ import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {
   appendIsraelAndTracking,
   getCalendarTitle,
-  getHolidayDescription,
 } from '@hebcal/rest-api';
 import {getParshaSummary} from './parshaCommon.js';
-import {makeTorahMemoText} from './torahMemo.js';
+import {localizedHolidayDescription, makeTorahMemoText} from './torahMemo.js';
 
 /**
  * Appends utm_source, utm_medium and utm_campaign to an event URL,
@@ -62,7 +61,7 @@ export function createMemo(ev, options) {
     memo = getParshaSummary(ev, options.locale) || '';
   }
   if (!memo) {
-    memo = getHolidayDescription(ev);
+    memo = localizedHolidayDescription(ev, options.locale);
   }
   if (!memo) {
     const linkEv = ev.linkedEvent;

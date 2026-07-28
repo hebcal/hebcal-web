@@ -1,7 +1,6 @@
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
-import {getHolidayDescription} from '@hebcal/rest-api';
 import {getParshaSummary} from './parshaCommon.js';
-import {makeTorahMemoText} from './torahMemo.js';
+import {localizedHolidayDescription, makeTorahMemoText} from './torahMemo.js';
 import {eventsToRss2} from './rss.js';
 import {getTodayDate, shabbatWeekRange} from './dateUtil.js';
 import {basename} from 'node:path';
@@ -101,7 +100,7 @@ function createMemo(ev, il, lang) {
     }
     return parts.join('\n');
   } else {
-    let memo = '<p>' + getHolidayDescription(ev) + '</p>';
+    let memo = '<p>' + localizedHolidayDescription(ev, lang) + '</p>';
     if (memoHtml) {
       memo += '\n' + memoHtml;
     }

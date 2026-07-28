@@ -92,6 +92,25 @@ describe('createMemo', () => {
         'https://hebcal.com/h/chanukah-2020?us=ical&um=icalendar');
   });
 
+  it('uses the Hebrew holiday description for a Hebrew locale', () => {
+    const options = {
+      start: new Date(2020, 11, 11),
+      end: new Date(2020, 11, 11),
+      location: Location.lookup('Boston'),
+      candlelighting: true,
+    };
+    const events = HebrewCalendar.calendar(options);
+    expect(createMemo(events[0], {...options, locale: 'he'})).toBe(
+        'חנוכה, חג החנוכה מחדש היהודי. ידוע גם כחג האורים; החג נחגג במשך שמונה ' +
+        'ימים על ידי הדלקת נרות בחנוכייה\n\n' +
+        'https://hebcal.com/h/chanukah-2020?us=ical&um=icalendar');
+    // non-Hebrew locales keep the English description
+    for (const locale of [undefined, 'en', 's', 'fr']) {
+      expect(createMemo(events[0], {...options, locale})).toContain(
+          'Hanukkah, the Jewish festival of rededication');
+    }
+  });
+
   it('adds i=on to Israel URLs', () => {
     const options = {
       start: new Date(2021, 8, 28),

@@ -11,7 +11,7 @@
  "reformjudaism.org":{"target":"breishit"},
  "chabad.org":7781,
  "learntefillah.com":"bereshit",
- "sefaria":{"target":"bereshit","summary":"Bereshit (“In the Beginning”) is the first parashah in the annual Torah reading cycle, which restarts at the beginning of the book of Genesis. The reading begins with God’s creation of the world. The first people, Adam and Eve, eat from the Tree of Knowledge and are then banished from the Garden of Eden. Their elder son, Cain, kills their younger son, Abel, and Cain is destined to a life of wandering.","summaryHe":"פרשת בראשית, הפרשה הראשונה בתורה, מתארת את ראשיתו של העולם. אלוהים בורא את העולם בשישה ימים ונח ביום השביעי. הוא מניח את האדם בגן עדן ומצווה עליו ליהנות מפירות הגן מלבד מפרי עץ הדעת. בעצת הנחש חוה ואדם אוכלים מעץ הדעת, ולכן מגורשים מגן עדן. בנם הבכור קין הורג את אחיו הצעיר הבל, וקין נידון להיות נע ונד בארץ."},
+ "sefaria":{"target":"bereshit","summaryEn":"Bereshit (“In the Beginning”) is the first parashah in the annual Torah reading cycle, which restarts at the beginning of the book of Genesis. The reading begins with God’s creation of the world. The first people, Adam and Eve, eat from the Tree of Knowledge and are then banished from the Garden of Eden. Their elder son, Cain, kills their younger son, Abel, and Cain is destined to a life of wandering.","summaryHe":"פרשת בראשית, הפרשה הראשונה בתורה, מתארת את ראשיתו של העולם. אלוהים בורא את העולם בשישה ימים ונח ביום השביעי. הוא מניח את האדם בגן עדן ומצווה עליו ליהנות מפירות הגן מלבד מפרי עץ הדעת. בעצת הנחש חוה ואדם אוכלים מעץ הדעת, ולכן מגורשים מגן עדן. בנם הבכור קין הורג את אחיו הצעיר הבל, וקין נידון להיות נע ונד בארץ."},
  "wikipedia":{"target":"Bereshit_(parashah)","summary":"In the parashah, God creates the heavens, the world, Adam and Eve, and Sabbath. A serpent convinces Eve, who then invites Adam, to eat the fruit of tree of the knowledge of good and evil, which God had forbidden to them. So God curses them and expels them from the Garden of Eden. One of their sons, Cain, becomes the first murderer, killing his brother Abel out of jealousy. Adam and Eve have other children, whose descendants populate the Earth. Each generation becomes more and more degenerate until God, despairing, decides to destroy humanity. Only one man, Noah, finds God's favor."},
  "uscj.org":{"target":"Bereshit"}
 },
@@ -27,7 +27,7 @@
  "reformjudaism.org":{"target":"noach"},
  "chabad.org":9168,
  "learntefillah.com":"noach",
- "sefaria":{"target":"noach","summary":"Noach (“Noah”) begins as God decides to destroy mankind with a flood. At God’s command, the righteous Noah builds an ark, where Noah, his family, and select animals survive the flood. Noah’s children bear children, and several generations develop. God confounds the speech of people building the Tower of Babel.","summaryHe":"פרשת נח עוסקת בהחלטה של האל להשמיד את האנושות במבול. אלוהים מצווה את נח לבנות תיבה כדי להציל את נח, את בני משפחתו ובעלי חיים. עם שוך המבול נח ומשפחתו יוצאים מן התיבה, וילדיו של נח מולידים דורות של צאצאים. אלוהים בולל את שפת האדם לאחר הניסיון לבנות את מגדל בבל. תרח עוזב את ביתו ויוצא למסע עם משפחתו, ובהם בנו אברם וכלתו שרי."},
+ "sefaria":{"target":"noach","summaryEn":"Noach (“Noah”) begins as God decides to destroy mankind with a flood. At God’s command, the righteous Noah builds an ark, where Noah, his family, and select animals survive the flood. Noah’s children bear children, and several generations develop. God confounds the speech of people building the Tower of Babel.","summaryHe":"פרשת נח עוסקת בהחלטה של האל להשמיד את האנושות במבול. אלוהים מצווה את נח לבנות תיבה כדי להציל את נח, את בני משפחתו ובעלי חיים. עם שוך המבול נח ומשפחתו יוצאים מן התיבה, וילדיו של נח מולידים דורות של צאצאים. אלוהים בולל את שפת האדם לאחר הניסיון לבנות את מגדל בבל. תרח עוזב את ביתו ויוצא למסע עם משפחתו, ובהם בנו אברם וכלתו שרי."},
  "wikipedia":{"target":"Noach_(parashah)","summary":"The parashah tells the stories of the Flood and Noah's Ark, of Noah's subsequent drunkenness and cursing of Canaan, and of the Tower of Babel."},
  "uscj.org":{"target":"Noah"}
 },
@@ -43,7 +43,7 @@
  "reformjudaism.org":{"target":"lech-lcha"},
  "chabad.org":9169,
  "learntefillah.com":"lech-lecha",
- "sefaria":{"target":"lech-lecha","summary":"Lech Lecha (“Go Forth”) recounts Abraham’s (here known as Abram) first encounter with God, his journey to Canaan, the birth of his son Ishmael, the covenant between him, his descendants, and God, and God’s commandment to circumcise the males of his household.","summaryHe":"בפרשת לך-לך מתוארת ההתגלות הראשונה של אלוהים לאברם. אברם יוצא עם אשתו שרי ובן אחיו לוט למסע במצוות אלוהים ומגיע לארץ כנען. שרי העקרה נותנת לאברם את שפחתה הגר. הגר יולדת את ישמעאל. אלוהים מצווה את אברם למול את עצמו ואת בני ביתו וכורת ברית עם אברם ועם זרעו. במסגרת הברית אלוהים משנה את שמו של אברם לאברהם ואת שמה של שרי לשרה."},
+ "sefaria":{"target":"lech-lecha","summaryEn":"Lech Lecha (“Go Forth”) recounts Abraham’s (here known as Abram) first encounter with God, his journey to Canaan, the birth of his son Ishmael, the covenant between him, his descendants, and God, and God’s commandment to circumcise the males of his household.","summaryHe":"בפרשת לך-לך מתוארת ההתגלות הראשונה של אלוהים לאברם. אברם יוצא עם אשתו שרי ובן אחיו לוט למסע במצוות אלוהים ומגיע לארץ כנען. שרי העקרה נותנת לאברם את שפחתה הגר. הגר יולדת את ישמעאל. אלוהים מצווה את אברם למול את עצמו ואת בני ביתו וכורת ברית עם אברם ועם זרעו. במסגרת הברית אלוהים משנה את שמו של אברם לאברהם ואת שמה של שרי לשרה."},
  "wikipedia":{"target":"Lech-Lecha","summary":"The parashah tells the stories of God's calling of Abram (who would become Abraham), Abram's passing off his wife Sarai as his sister, Abram's dividing the land with his nephew Lot, the war between the four kings and the five, the covenant between the pieces, Sarai's tensions with her maid Hagar and Hagar's son Ishmael, and the covenant of circumcision (brit milah)."},
  "uscj.org":{"target":"LekhLekha"}
 },
@@ -59,7 +59,7 @@
  "reformjudaism.org":{"target":"vayeira"},
  "chabad.org":9170,
  "learntefillah.com":"vayera",
- "sefaria":{"target":"vayera","summary":"Vayera (“He Appeared”) opens as guests inform Abraham that Sarah will give birth. Despite Abraham’s attempts to convince God otherwise, God destroys the cities of Sodom and Gomorrah. Sarah gives birth to Isaac, and Abraham sends away Hagar and Ishmael. At God’s command, Abraham prepares to sacrifice Isaac, but an angel of God tells Abraham to offer a ram instead.","summaryHe":"בפרשת וירא מגיעים אורחים לאוהלו של אברהם להודיע לו ששרה עתידה ללדת בן. על אף מאמציו של אברהם לשכנע את אלוהים שלא להחריב את ערי החטאים סדום ועמורה, אלוהים מחריב את הערים ועוד שתי ערים הסמוכות להן. לוט ומשפחתו ניצלים מתוך ההפכה. שרה יולדת את יצחק, ואברהם משלח מביתו את הגר וישמעאל. אלוהים מצווה את אברהם להקריב את יצחק בנו, אך מלאך אלוהים עוצר את אברהם בשעת מעשה."},
+ "sefaria":{"target":"vayera","summaryEn":"Vayera (“He Appeared”) opens as guests inform Abraham that Sarah will give birth. Despite Abraham’s attempts to convince God otherwise, God destroys the cities of Sodom and Gomorrah. Sarah gives birth to Isaac, and Abraham sends away Hagar and Ishmael. At God’s command, Abraham prepares to sacrifice Isaac, but an angel of God tells Abraham to offer a ram instead.","summaryHe":"בפרשת וירא מגיעים אורחים לאוהלו של אברהם להודיע לו ששרה עתידה ללדת בן. על אף מאמציו של אברהם לשכנע את אלוהים שלא להחריב את ערי החטאים סדום ועמורה, אלוהים מחריב את הערים ועוד שתי ערים הסמוכות להן. לוט ומשפחתו ניצלים מתוך ההפכה. שרה יולדת את יצחק, ואברהם משלח מביתו את הגר וישמעאל. אלוהים מצווה את אברהם להקריב את יצחק בנו, אך מלאך אלוהים עוצר את אברהם בשעת מעשה."},
  "wikipedia":{"target":"Vayeira","summary":"The parashah tells the stories of Abraham's three visitors, Abraham's bargaining with God over Sodom and Gomorrah, Lot's two visitors, Lot's bargaining with the Sodomites, the flight of Lot, the destruction of Sodom and Gomorrah, how Lot's daughters became pregnant by their father, how Abraham once again passed off his wife Sarah as his sister, the birth of Isaac, the expulsion of Hagar, disputes over wells, and the binding of Isaac (הָעֲקֵידָה, the Akedah)."},
  "uscj.org":{"target":"Vayera"}
 },
@@ -75,7 +75,7 @@
  "reformjudaism.org":{"target":"chayei-sarah"},
  "chabad.org":9171,
  "learntefillah.com":"chaye-sarah",
- "sefaria":{"target":"chayei-sarah","summary":"Chayyei Sarah (“The Life of Sarah”) opens as Sarah dies and Abraham buys the Cave of Machpelah to bury her. Abraham sends his servant to find a wife for Isaac. The servant meets Rebecca at a well, and Rebecca returns with the servant to marry Isaac. Abraham remarries, has more children, and dies at age 175.","summaryHe":"פרשת חיי שרה נפתחת במות שרה. אברהם קונה את מערת המכפלה וקובר בה את אשתו. אברהם שולח את עבדו למולדתו חרן למצוא אישה לבנו יצחק. העבד פוגש את רבקה על יד הבאר, והיא מציעה לדלות מים לו ולגמליו. לאחר משא ומתן עם משפחת רבקה העבד מביא את רבקה לארץ כנען, ויצחק לוקח אותה לאישה. אברהם לוקח אישה נוספת, מוליד ילדים ומת בן 175."},
+ "sefaria":{"target":"chayei-sarah","summaryEn":"Chayyei Sarah (“The Life of Sarah”) opens as Sarah dies and Abraham buys the Cave of Machpelah to bury her. Abraham sends his servant to find a wife for Isaac. The servant meets Rebecca at a well, and Rebecca returns with the servant to marry Isaac. Abraham remarries, has more children, and dies at age 175.","summaryHe":"פרשת חיי שרה נפתחת במות שרה. אברהם קונה את מערת המכפלה וקובר בה את אשתו. אברהם שולח את עבדו למולדתו חרן למצוא אישה לבנו יצחק. העבד פוגש את רבקה על יד הבאר, והיא מציעה לדלות מים לו ולגמליו. לאחר משא ומתן עם משפחת רבקה העבד מביא את רבקה לארץ כנען, ויצחק לוקח אותה לאישה. אברהם לוקח אישה נוספת, מוליד ילדים ומת בן 175."},
  "wikipedia":{"target":"Chayei_Sarah","summary":"The parashah tells the stories of Abraham's negotiations to purchase a burial place for his wife Sarah and his servant's mission to find a wife for Abraham's son Isaac."},
  "uscj.org":{"target":"HayeSarah"}
 },
@@ -91,7 +91,7 @@
  "reformjudaism.org":{"target":"toldot"},
  "chabad.org":9172,
  "learntefillah.com":"toledot",
- "sefaria":{"target":"toldot","summary":"Toldot (“Generations”) opens with the births of Isaac and Rebecca’s twins, Jacob and Esau. Esau sells his birthright to Jacob in exchange for soup. Isaac and Rebecca travel to Gerar, where Isaac makes a peace treaty with King Abimelech. Isaac gives Jacob the blessing meant for Esau, and Jacob runs away to his uncle Laban.","summaryHe":"פרשת תולדות פותחת בלידת התאומים עשו ויעקב ליצחק ורבקה. עשו מוכר את בכורתו ליעקב בתמורה לנזיד עדשים. יצחק ורבקה נוסעים לגרר, ושם יצחק כורת ברית עם אבימלך מלך גרר. בעצת רבקה יעקב לובש בגדים העשויים מעורו של שעיר עיזים כדי להידמות לעשו ומבקש מאביו במרמה את ברכת הבכורה. יצחק כהה העינים נותן לו את ברכת הבכורה, ואחר כך מברך גם את עשו. יעקב בורח לבית דודו לבן מפני כעסו של אחיו עשו."},
+ "sefaria":{"target":"toldot","summaryEn":"Toldot (“Generations”) opens with the births of Isaac and Rebecca’s twins, Jacob and Esau. Esau sells his birthright to Jacob in exchange for soup. Isaac and Rebecca travel to Gerar, where Isaac makes a peace treaty with King Abimelech. Isaac gives Jacob the blessing meant for Esau, and Jacob runs away to his uncle Laban.","summaryHe":"פרשת תולדות פותחת בלידת התאומים עשו ויעקב ליצחק ורבקה. עשו מוכר את בכורתו ליעקב בתמורה לנזיד עדשים. יצחק ורבקה נוסעים לגרר, ושם יצחק כורת ברית עם אבימלך מלך גרר. בעצת רבקה יעקב לובש בגדים העשויים מעורו של שעיר עיזים כדי להידמות לעשו ומבקש מאביו במרמה את ברכת הבכורה. יצחק כהה העינים נותן לו את ברכת הבכורה, ואחר כך מברך גם את עשו. יעקב בורח לבית דודו לבן מפני כעסו של אחיו עשו."},
  "wikipedia":{"target":"Toledot","summary":"The parashah tells of the conflict between Jacob and Esau, Isaac's passing off his wife Rebekah as his sister, and Isaac's blessing of his sons."},
  "uscj.org":{"target":"Toldot"}
 },
@@ -107,7 +107,7 @@
  "reformjudaism.org":{"target":"vayeitzei"},
  "chabad.org":9173,
  "learntefillah.com":"vayetse",
- "sefaria":{"target":"vayetzei","summary":"Vayeitzei (“He Went Out”) opens as Jacob dreams about angels going up and down a ladder, and then continues on his journey toward the home of his uncle Laban. During years of indentured servitude, Jacob marries Laban’s daughters Leah and Rachel, bearing children with them and with their maidservants, Bilhah and Zilpah.","summaryHe":"בפרשת ויצא מתואר חלום יעקב, ובו מלאכים עולים בסולם ויורדים בו. יעקב ממשיך בדרכו לבית לבן אחי אימו, ושם הוא מכיר את בת דודו רחל ומבקש להתחתן איתה. לבן מסכים בתנאי שיעקב יעבוד אצלו. אחרי שבע שנים לבן מרמה את יעקב ונותן לו את בתו הבכירה לאה במקום את רחל, אך לאחר משא ומתן מסכים לתת לו לאישה גם את רחל. לאה ורחל ושפחותיהן בלהה וזלפה יולדות ליעקב ילדים."},
+ "sefaria":{"target":"vayetzei","summaryEn":"Vayeitzei (“He Went Out”) opens as Jacob dreams about angels going up and down a ladder, and then continues on his journey toward the home of his uncle Laban. During years of indentured servitude, Jacob marries Laban’s daughters Leah and Rachel, bearing children with them and with their maidservants, Bilhah and Zilpah.","summaryHe":"בפרשת ויצא מתואר חלום יעקב, ובו מלאכים עולים בסולם ויורדים בו. יעקב ממשיך בדרכו לבית לבן אחי אימו, ושם הוא מכיר את בת דודו רחל ומבקש להתחתן איתה. לבן מסכים בתנאי שיעקב יעבוד אצלו. אחרי שבע שנים לבן מרמה את יעקב ונותן לו את בתו הבכירה לאה במקום את רחל, אך לאחר משא ומתן מסכים לתת לו לאישה גם את רחל. לאה ורחל ושפחותיהן בלהה וזלפה יולדות ליעקב ילדים."},
  "wikipedia":{"target":"Vayetze","summary":"The parashah tells of Jacob's travels to, life in, and return from Haran. The parashah recounts Jacob's dream of a ladder to heaven, Jacob's meeting of Rachel at the well, Jacob's time working for Laban and living with Rachel and Leah, the birth of Jacob's children, and the departure of Jacob's family from Laban."},
  "uscj.org":{"target":"Vayetze"}
 },
@@ -123,7 +123,7 @@
  "reformjudaism.org":{"target":"vayishlach"},
  "chabad.org":15554,
  "learntefillah.com":"vayishlach",
- "sefaria":{"target":"vayishlach","summary":"Vayishlach (“He Sent”) follows Jacob and his family as Jacob wrestles with a man (commonly understood as an angel), is renamed Israel, and reconciles with his brother, Esau. Jacob’s daughter, Dina, is raped by a Hivite prince, and her brothers sack a city in response. Rachel dies as she gives birth to Jacob’s youngest child, Benjamin.","summaryHe":"פרשת וישלח ממשיכה לעקוב אחרי יעקב ומשפחתו. יעקב נאבק עם איש (שלפי הפרשנות המקובלת הוא מלאך אלוהים), ובסיום המאבק האיש מעניק לו את השם ישראל. יעקב מתפייס עם אחיו עשו. דינה, בתו של יעקב, נאנסת ונשבית בידי נסיך חיווי, ואחיה הורגים את כל הזכרים בעיר ומשיבים אליהם את דינה. רחל מתה בשעת לידתו של בנימין, הצעיר בבני יעקב."},
+ "sefaria":{"target":"vayishlach","summaryEn":"Vayishlach (“He Sent”) follows Jacob and his family as Jacob wrestles with a man (commonly understood as an angel), is renamed Israel, and reconciles with his brother, Esau. Jacob’s daughter, Dina, is raped by a Hivite prince, and her brothers sack a city in response. Rachel dies as she gives birth to Jacob’s youngest child, Benjamin.","summaryHe":"פרשת וישלח ממשיכה לעקוב אחרי יעקב ומשפחתו. יעקב נאבק עם איש (שלפי הפרשנות המקובלת הוא מלאך אלוהים), ובסיום המאבק האיש מעניק לו את השם ישראל. יעקב מתפייס עם אחיו עשו. דינה, בתו של יעקב, נאנסת ונשבית בידי נסיך חיווי, ואחיה הורגים את כל הזכרים בעיר ומשיבים אליהם את דינה. רחל מתה בשעת לידתו של בנימין, הצעיר בבני יעקב."},
  "wikipedia":{"target":"Vayishlach","summary":"In the parashah, Jacob reconciles with Esau after wrestling with a \"man\". The prince Shechem rapes Dinah, whose brothers sack the city of Shechem in revenge. In the family's subsequent flight, Rachel gives birth to Benjamin and dies in childbirth."},
  "uscj.org":{"target":"Vayishlah"}
 },
@@ -139,7 +139,7 @@
  "reformjudaism.org":{"target":"vayeishev"},
  "chabad.org":15555,
  "learntefillah.com":"vayeshev",
- "sefaria":{"target":"vayeshev","summary":"Vayeshev (“He Settled”) begins the story of Joseph, describing his rivalry with his brothers, slavery in Egypt, and imprisonment after his master’s wife frames him in response to Joseph’s refusal of her advances. It also contains the story of Tamar, her husbands, and her father-in-law, Judah.","summaryHe":"פרשת וישב מספרת את סיפור יוסף ואחיו ומתארת את המתיחות ביניהם, שמובילה למכירתו ולעבדותו במצרים. אשת פוטיפר מנסה לפתות את יוסף, ומאחר שהוא אינו נענה לה היא טופלת עליו עלילת שווא, ויוסף נשלח לבית הסוהר. הפרשה מספרת גם על מעשה תמר ויהודה: תמר נישאת לשני בניו של יהודה, ושניהם מתים. תמר נותרת אלמנה ודורשת מיהודה שבנו הקטן ייבם אותה."},
+ "sefaria":{"target":"vayeshev","summaryEn":"Vayeshev (“He Settled”) begins the story of Joseph, describing his rivalry with his brothers, slavery in Egypt, and imprisonment after his master’s wife frames him in response to Joseph’s refusal of her advances. It also contains the story of Tamar, her husbands, and her father-in-law, Judah.","summaryHe":"פרשת וישב מספרת את סיפור יוסף ואחיו ומתארת את המתיחות ביניהם, שמובילה למכירתו ולעבדותו במצרים. אשת פוטיפר מנסה לפתות את יוסף, ומאחר שהוא אינו נענה לה היא טופלת עליו עלילת שווא, ויוסף נשלח לבית הסוהר. הפרשה מספרת גם על מעשה תמר ויהודה: תמר נישאת לשני בניו של יהודה, ושניהם מתים. תמר נותרת אלמנה ודורשת מיהודה שבנו הקטן ייבם אותה."},
  "wikipedia":{"target":"Vayeshev","summary":"The parashah tells the stories of how Jacob's other sons sold Joseph into captivity in Egypt, how Judah wronged his daughter-in-law Tamar who then tricked him into fulfilling his oath, and how Joseph served Potiphar and was imprisoned when falsely accused of assaulting Potiphar's wife."},
  "uscj.org":{"target":"Vayeshev"}
 },
@@ -155,7 +155,7 @@
  "reformjudaism.org":{"target":"mikeitz"},
  "chabad.org":15556,
  "learntefillah.com":"mikets",
- "sefaria":{"target":"miketz","summary":"Mikketz (“After”) follows Joseph as he interprets Pharaoh’s dreams and rises to become second-in-command to Pharaoh. When Joseph’s brothers come to Egypt seeking food during a famine, Joseph accuses them of spying. He insists that they return with their youngest brother, Benjamin, and later plants a goblet in Benjamin’s bag.","summaryHe":"בפרשת מקץ יוסף פותר את חלומותיו של פרעה ועולה לגדולה בתפקיד המשנה למלך. אחי יוסף מגיעים למצרים לקנות אוכל בשל הרעב הכבד השורר בארץ כנען, ויוסף מאשים אותם בריגול. הוא דורש שישובו למצרים עם אחיהם הצעיר בנימין. יוסף נותן להם אוכל ושולח אותם בשלום, אך מסתיר גביע כסף באמתחת בנימין ומאשים אותו בגנבה."},
+ "sefaria":{"target":"miketz","summaryEn":"Mikketz (“After”) follows Joseph as he interprets Pharaoh’s dreams and rises to become second-in-command to Pharaoh. When Joseph’s brothers come to Egypt seeking food during a famine, Joseph accuses them of spying. He insists that they return with their youngest brother, Benjamin, and later plants a goblet in Benjamin’s bag.","summaryHe":"בפרשת מקץ יוסף פותר את חלומותיו של פרעה ועולה לגדולה בתפקיד המשנה למלך. אחי יוסף מגיעים למצרים לקנות אוכל בשל הרעב הכבד השורר בארץ כנען, ויוסף מאשים אותם בריגול. הוא דורש שישובו למצרים עם אחיהם הצעיר בנימין. יוסף נותן להם אוכל ושולח אותם בשלום, אך מסתיר גביע כסף באמתחת בנימין ומאשים אותו בגנבה."},
  "wikipedia":{"target":"Miketz","summary":"The parashah tells of Joseph's interpretation of Pharaoh's dreams, Joseph's rise to power in Egypt, and Joseph's testing of his brothers."},
  "uscj.org":{"target":"Miketz"}
 },
@@ -171,7 +171,7 @@
  "reformjudaism.org":{"target":"vayigash"},
  "chabad.org":15557,
  "learntefillah.com":"vayigash",
- "sefaria":{"target":"vayigash","summary":"Vayiggash (“He Approached”) opens as Judah pleads with Joseph not to keep Benjamin as a prisoner. Joseph reveals his true identity to his brothers, crying and kissing them. The brothers bring Jacob from Canaan to Egypt, and Jacob and his children settle in Goshen. The portion ends as Joseph buys most of Egypt’s land in exchange for food.","summaryHe":"בפרשת ויגש יהודה מתחנן לפני יוסף שישחרר את בנימין ממאסר. יוסף מגלה לאחיו את זהותו, והם בוכים ומתפייסים. אחי יוסף מביאים את יעקב אביהם מכנען למצרים, ויעקב ובניו מתיישבים בגושן. יוסף קונה את רוב אדמות מצרים תמורת מזון שאגר בשנות השובע."},
+ "sefaria":{"target":"vayigash","summaryEn":"Vayiggash (“He Approached”) opens as Judah pleads with Joseph not to keep Benjamin as a prisoner. Joseph reveals his true identity to his brothers, crying and kissing them. The brothers bring Jacob from Canaan to Egypt, and Jacob and his children settle in Goshen. The portion ends as Joseph buys most of Egypt’s land in exchange for food.","summaryHe":"בפרשת ויגש יהודה מתחנן לפני יוסף שישחרר את בנימין ממאסר. יוסף מגלה לאחיו את זהותו, והם בוכים ומתפייסים. אחי יוסף מביאים את יעקב אביהם מכנען למצרים, ויעקב ובניו מתיישבים בגושן. יוסף קונה את רוב אדמות מצרים תמורת מזון שאגר בשנות השובע."},
  "wikipedia":{"target":"Vayigash","summary":"In the parashah, Judah pleads on behalf of his brother Benjamin, Joseph reveals himself to his brothers, Jacob comes down to Egypt, and Joseph's administration of Egypt saves lives but transforms all the Egyptians into bondmen."},
  "uscj.org":{"target":"Vayigash"}
 },
@@ -187,7 +187,7 @@
  "reformjudaism.org":{"target":"va-ychi"},
  "chabad.org":15558,
  "learntefillah.com":"vayechi",
- "sefaria":{"target":"vayechi","summary":"Vayechi (“He Lived”) is the final Torah portion in the Book of Genesis. It opens as Jacob prepares for his death, making his son Joseph swear to bury him in the Cave of Machpelah. Jacob blesses Joseph’s two sons and his own 12 sons and then dies. Jacob’s sons bury him. The portion ends with Joseph’s death.","summaryHe":"פרשת ויחי היא הפרשה האחרונה בספר בראשית. יעקב מתכונן למותו ומשביע את יוסף שיקבור אותו עם אבותיו במערת המכפלה. יעקב מברך את שני בני יוסף ואת 12 בניו, ומת. בני יעקב קוברים אותו בארץ כנען. אחי יוסף חוששים שאחרי מות יעקב יתנקם בהם יוסף על כל מה שעשו לו. יוסף סולח לאחיו ומשביע אותם שיקברו אותו בארץ כנען. הפרשה מסתיימת בתיאור מותו של יוסף."},
+ "sefaria":{"target":"vayechi","summaryEn":"Vayechi (“He Lived”) is the final Torah portion in the Book of Genesis. It opens as Jacob prepares for his death, making his son Joseph swear to bury him in the Cave of Machpelah. Jacob blesses Joseph’s two sons and his own 12 sons and then dies. Jacob’s sons bury him. The portion ends with Joseph’s death.","summaryHe":"פרשת ויחי היא הפרשה האחרונה בספר בראשית. יעקב מתכונן למותו ומשביע את יוסף שיקבור אותו עם אבותיו במערת המכפלה. יעקב מברך את שני בני יוסף ואת 12 בניו, ומת. בני יעקב קוברים אותו בארץ כנען. אחי יוסף חוששים שאחרי מות יעקב יתנקם בהם יוסף על כל מה שעשו לו. יוסף סולח לאחיו ומשביע אותם שיקברו אותו בארץ כנען. הפרשה מסתיימת בתיאור מותו של יוסף."},
  "wikipedia":{"target":"Vaychi","summary":"The parashah tells of Jacob's request for burial in Canaan, Jacob's blessing of Joseph's sons Ephraim and Manasseh, Jacob's blessing of his sons, Jacob's death and burial, and Joseph's death."},
  "uscj.org":{"target":"Vayehi"}
 },
@@ -203,7 +203,7 @@
  "reformjudaism.org":{"target":"shmot"},
  "chabad.org":15559,
  "learntefillah.com":"shemot",
- "sefaria":{"target":"shemot","summary":"Shemot (“Names”) is the first Torah reading in the book of Exodus. It opens describing the enslavement of the Israelites in Egypt. Moses is born, placed in a basket on the Nile, and adopted into Pharaoh’s household. He later encounters God at a burning bush and begins his mission of demanding that Pharaoh let the Israelites go.","summaryHe":"בפרשת שמות מתואר שיעבוד בני ישראל במצרים. משה נולד, ואימו מסתירה אותו בתיבה על היאור בשל גזרת פרעה להטביע את בני העברים ביאור. משה נלקח לבית פרעה וגדל שם, אך בורח ממצרים לאחר שהוא הורג מצרי. אלהים מתגלה אליו בסנה בוער באש ושולח אותו לבקש מפרעה לשחרר את בני ישראל."},
+ "sefaria":{"target":"shemot","summaryEn":"Shemot (“Names”) is the first Torah reading in the book of Exodus. It opens describing the enslavement of the Israelites in Egypt. Moses is born, placed in a basket on the Nile, and adopted into Pharaoh’s household. He later encounters God at a burning bush and begins his mission of demanding that Pharaoh let the Israelites go.","summaryHe":"בפרשת שמות מתואר שיעבוד בני ישראל במצרים. משה נולד, ואימו מסתירה אותו בתיבה על היאור בשל גזרת פרעה להטביע את בני העברים ביאור. משה נלקח לבית פרעה וגדל שם, אך בורח ממצרים לאחר שהוא הורג מצרי. אלהים מתגלה אליו בסנה בוער באש ושולח אותו לבקש מפרעה לשחרר את בני ישראל."},
  "wikipedia":{"target":"Shemot_(parsha)","summary":"The parashah tells of the Israelites' affliction in Egypt, the hiding and rescuing of the infant Moses, Moses in Midian, the calling of Moses, circumcision on the way, meeting the elders, and Moses before Pharaoh."},
  "uscj.org":{"target":"Shemot"}
 },
@@ -219,7 +219,7 @@
  "reformjudaism.org":{"target":"va-eira"},
  "chabad.org":15560,
  "learntefillah.com":"vaera",
- "sefaria":{"target":"vaera","summary":"Vaera (“I Appeared”) opens as God promises to redeem the enslaved Israelites and bring them to the Promised Land. When Pharaoh repeatedly refuses to let the Israelites go, God sends a series of plagues: water turning to blood, frogs, lice, wild animals, death of livestock, boils, and hail.","summaryHe":"פרשת וארא נפתחת בהבטחת האל להוציא את בני ישראל ממצרים ולהביאם לארץ זבת חלב ודבש. משה דורש מפרעה לשלוח את בני ישראל ממצרים, אך פרעה מסרב שוב ושוב. אלוהים מביא מכות על מצרים בכל פעם שפרעה מסרב: מים הופכים לדם, מכת צפרדעים, כינים, ערוב, דבר, שחין וברד."},
+ "sefaria":{"target":"vaera","summaryEn":"Vaera (“I Appeared”) opens as God promises to redeem the enslaved Israelites and bring them to the Promised Land. When Pharaoh repeatedly refuses to let the Israelites go, God sends a series of plagues: water turning to blood, frogs, lice, wild animals, death of livestock, boils, and hail.","summaryHe":"פרשת וארא נפתחת בהבטחת האל להוציא את בני ישראל ממצרים ולהביאם לארץ זבת חלב ודבש. משה דורש מפרעה לשלוח את בני ישראל ממצרים, אך פרעה מסרב שוב ושוב. אלוהים מביא מכות על מצרים בכל פעם שפרעה מסרב: מים הופכים לדם, מכת צפרדעים, כינים, ערוב, דבר, שחין וברד."},
  "wikipedia":{"target":"Va%27eira","summary":"The parashah tells of the first seven Plagues of Egypt."},
  "uscj.org":{"target":"Vaera"}
 },
@@ -235,7 +235,7 @@
  "reformjudaism.org":{"target":"bo"},
  "chabad.org":15561,
  "learntefillah.com":"bo",
- "sefaria":{"target":"bo","summary":"Bo (“Come”) recounts the last three plagues that God inflicts on the Egyptians: locusts, darkness, and death of firstborns. God commands the Israelites to offer a Passover lamb sacrifice. After the last plague, Pharaoh and the Egyptians demand that the Israelites leave.","summaryHe":"בפרשת בא מסופר על שלוש המכות האחרונות שהאל מביא על מצרים. אחרי מכת הארבה נופל חושך כבד על מצרים במשך שלושה ימים. אלוהים מצווה את בני ישראל להקריב את קורבן הפסח, למרוח דם על מזוזות הבית, ולא לצאת מפתח הבית כדי להינצל ממוות. באותו לילה המשחית הורג את כל בכורות מצרים במכה האחרונה, מכת בכורות. פרעה והמצרים מגרשים את בני ישראל ממצרים."},
+ "sefaria":{"target":"bo","summaryEn":"Bo (“Come”) recounts the last three plagues that God inflicts on the Egyptians: locusts, darkness, and death of firstborns. God commands the Israelites to offer a Passover lamb sacrifice. After the last plague, Pharaoh and the Egyptians demand that the Israelites leave.","summaryHe":"בפרשת בא מסופר על שלוש המכות האחרונות שהאל מביא על מצרים. אחרי מכת הארבה נופל חושך כבד על מצרים במשך שלושה ימים. אלוהים מצווה את בני ישראל להקריב את קורבן הפסח, למרוח דם על מזוזות הבית, ולא לצאת מפתח הבית כדי להינצל ממוות. באותו לילה המשחית הורג את כל בכורות מצרים במכה האחרונה, מכת בכורות. פרעה והמצרים מגרשים את בני ישראל ממצרים."},
  "wikipedia":{"target":"Bo_(parsha)","summary":"The parashah tells of the last three plagues on Egypt and the first Passover."},
  "uscj.org":{"target":"Bo"}
 },
@@ -251,7 +251,7 @@
  "reformjudaism.org":{"target":"bshalach"},
  "chabad.org":15562,
  "learntefillah.com":"beshalach",
- "sefaria":{"target":"beshalach","summary":"Beshalach (“When He Let Go”) describes the splitting of the Red Sea and the song the Israelites sing upon crossing through. In the desert, God sweetens bitter water and provides manna and quail. The portion ends recounting the victory of the Israelites against an attack by the Amalekites.","summaryHe":"בפרשת בשלח מתוארות קריעת ים סוף, טביעת חיל מצרים, הצלת בני ישראל ושירת הים ששרו משה ובני ישראל על ים סוף, וכן שירת מרים. בני ישראל מגיעים למדבר ומתלוננים, ואלוהים ממתיק להם מים מרים ומספק להם מן ושליו לאכול. משה מכה בצור ברפידים ומוציא ממנו מים, ויהושע מנהיג שם את העם במלחמה נגד עמלק."},
+ "sefaria":{"target":"beshalach","summaryEn":"Beshalach (“When He Let Go”) describes the splitting of the Red Sea and the song the Israelites sing upon crossing through. In the desert, God sweetens bitter water and provides manna and quail. The portion ends recounting the victory of the Israelites against an attack by the Amalekites.","summaryHe":"בפרשת בשלח מתוארות קריעת ים סוף, טביעת חיל מצרים, הצלת בני ישראל ושירת הים ששרו משה ובני ישראל על ים סוף, וכן שירת מרים. בני ישראל מגיעים למדבר ומתלוננים, ואלוהים ממתיק להם מים מרים ומספק להם מן ושליו לאכול. משה מכה בצור ברפידים ומוציא ממנו מים, ויהושע מנהיג שם את העם במלחמה נגד עמלק."},
  "wikipedia":{"target":"Beshalach","summary":"In this parashah, Pharaoh changes his mind and chases after the Israelite people with his army, trapping them at the Sea of Reeds. God commands Moses to split the sea, allowing them to pass, then closes the sea back upon the Egyptian army. There are the miracles of manna and clean water. The nation of Amalek attacks and the Israelite people are victorious."},
  "uscj.org":{"target":"Beshalah"}
 },
@@ -267,7 +267,7 @@
  "reformjudaism.org":{"target":"yitro"},
  "chabad.org":15563,
  "learntefillah.com":"yitro",
- "sefaria":{"target":"yitro","summary":"Yitro (“Jethro”) begins as Moses reunites with his father-in-law Yitro and accepts his advice to appoint judges who will help govern the Israelites. The Israelites prepare to encounter God at Mount Sinai. God descends amidst fire, smoke, thunder, and the blast of a shofar and gives the Ten Commandments.","summaryHe":"יתרו חותן משה מופיע במחנה ישראל עם ציפורה בתו ושני בניה לאחר ששמע על הניסים שחולל אלוהים לישראל ביציאת מצרים. יתרו נחשף להנהגתו של משה ומציע לו להקים מערכת משפט יעילה יותר. משה מכין את העם לקבלת התורה בהר סיני ומרחיק את בני ישראל מההר. אלוהים מתגלה לעיני העם בעשן ואש על ראש ההר במעמד עוצמתי המלווה בקולות וברקים וקול שופר ונותן לעם את עשרת הדיברות."},
+ "sefaria":{"target":"yitro","summaryEn":"Yitro (“Jethro”) begins as Moses reunites with his father-in-law Yitro and accepts his advice to appoint judges who will help govern the Israelites. The Israelites prepare to encounter God at Mount Sinai. God descends amidst fire, smoke, thunder, and the blast of a shofar and gives the Ten Commandments.","summaryHe":"יתרו חותן משה מופיע במחנה ישראל עם ציפורה בתו ושני בניה לאחר ששמע על הניסים שחולל אלוהים לישראל ביציאת מצרים. יתרו נחשף להנהגתו של משה ומציע לו להקים מערכת משפט יעילה יותר. משה מכין את העם לקבלת התורה בהר סיני ומרחיק את בני ישראל מההר. אלוהים מתגלה לעיני העם בעשן ואש על ראש ההר במעמד עוצמתי המלווה בקולות וברקים וקול שופר ונותן לעם את עשרת הדיברות."},
  "wikipedia":{"target":"Yitro_(parsha)","summary":"The parashah tells of Jethro's organizational counsel to Moses and God's revelation of the Ten Commandments to the Israelites at Mount Sinai."},
  "uscj.org":{"target":"Yitro"}
 },
@@ -283,7 +283,7 @@
  "reformjudaism.org":{"target":"mishpatim"},
  "chabad.org":15564,
  "learntefillah.com":"mishpatim",
- "sefaria":{"target":"mishpatim","summary":"Mishpatim (“Laws”) recounts a series of God’s laws that Moses gives to the Israelites. These include laws about treatment of slaves, damages, loans, returning lost property, the Sabbath, the sabbatical year, holidays, and destroying idolatry. The portion ends as Moses ascends Mount Sinai for 40 days.","summaryHe":"פרשת משפטים כוללת מספר גדול של דינים ומצוות שאלוהים מצווה את בני ישראל באמצעות משה. הדינים עוסקים בתחומים רבים, כגון עבדות, נזיקין, השבת אבדה, שבת, שמיטה, חגים, איסור עבודה זרה ועוד. בסוף הפרשה מתוארים מעמד כריתת הברית בין אלוהים לעם ועליית משה להר סיני ל40 יום ו40 לילה."},
+ "sefaria":{"target":"mishpatim","summaryEn":"Mishpatim (“Laws”) recounts a series of God’s laws that Moses gives to the Israelites. These include laws about treatment of slaves, damages, loans, returning lost property, the Sabbath, the sabbatical year, holidays, and destroying idolatry. The portion ends as Moses ascends Mount Sinai for 40 days.","summaryHe":"פרשת משפטים כוללת מספר גדול של דינים ומצוות שאלוהים מצווה את בני ישראל באמצעות משה. הדינים עוסקים בתחומים רבים, כגון עבדות, נזיקין, השבת אבדה, שבת, שמיטה, חגים, איסור עבודה זרה ועוד. בסוף הפרשה מתוארים מעמד כריתת הברית בין אלוהים לעם ועליית משה להר סיני ל40 יום ו40 לילה."},
  "wikipedia":{"target":"Mishpatim","summary":"The parashah sets out a series of laws, which some scholars call the Covenant Code. It reports the people's acceptance of the covenant with God."},
  "uscj.org":{"target":"Mishpatim"}
 },
@@ -299,7 +299,7 @@
  "reformjudaism.org":{"target":"trumah"},
  "chabad.org":15565,
  "learntefillah.com":"teruma",
- "sefaria":{"target":"terumah","summary":"Terumah (“Donation”) opens as God tells Moses to collect donated materials in order to build a dwelling place for God called the Mishkan (Tabernacle). God describes how to build the vessels that will fill the Mishkan – including the ark, table, menorah, and sacrificial altar – as well as the Mishkan’s walls and curtains.","summaryHe":"פרשת תרומה פותחת בפנייה לבני ישראל לתרום חומרים לבניית משכן להשראת השכינה בתוך בני ישראל. מבנה המשכן וכליו מתוארים בפירוט רב. המשכן עשוי עצי שיטים המכוסים באריגים ובעורות ממגוון מקורות. מתוארים ארבעה כלים שניצבים בתוך המשכן: ארון, כפורת, שולחן ומנורה. מבנה המשכן מוקף בחצר, ובחצר עומד הכלי המרכזי להקרבת קורבנות – מזבח הנחושת."},
+ "sefaria":{"target":"terumah","summaryEn":"Terumah (“Donation”) opens as God tells Moses to collect donated materials in order to build a dwelling place for God called the Mishkan (Tabernacle). God describes how to build the vessels that will fill the Mishkan – including the ark, table, menorah, and sacrificial altar – as well as the Mishkan’s walls and curtains.","summaryHe":"פרשת תרומה פותחת בפנייה לבני ישראל לתרום חומרים לבניית משכן להשראת השכינה בתוך בני ישראל. מבנה המשכן וכליו מתוארים בפירוט רב. המשכן עשוי עצי שיטים המכוסים באריגים ובעורות ממגוון מקורות. מתוארים ארבעה כלים שניצבים בתוך המשכן: ארון, כפורת, שולחן ומנורה. מבנה המשכן מוקף בחצר, ובחצר עומד הכלי המרכזי להקרבת קורבנות – מזבח הנחושת."},
  "wikipedia":{"target":"Terumah_(parsha)","summary":"The parashah tells of God's instructions to make the Tabernacle and its furnishings."},
  "uscj.org":{"target":"Terumah"}
 },
@@ -315,7 +315,7 @@
  "reformjudaism.org":{"target":"ttzaveh"},
  "chabad.org":15566,
  "learntefillah.com":"tetsave",
- "sefaria":{"target":"tetzaveh","summary":"Tetzaveh (“You Shall Command”) opens as God instructs Moses to appoint Aaron and his sons as priests. God details how to make the priestly clothing, how to sanctify the priests and offer sacrifices during the seven days of inauguration in the Mishkan (Tabernacle), and how to build the golden altar.","summaryHe":"פרשת תצוה עוסקת בבגדי הכהונה לאהרן, הכהן הגדול, ולבניו הכהנים, שישמשו במשכן. הכהנים יוקדשו לעבודה במשכן על ידי סדרה של קורבנות שיוקרבו בשבעת ימי המילואים. משה מצווה על קורבן התמיד, הקרב בכל יום על המזבח בפתח המשכן. כמו כן מתואר מזבח הזהב שמוצב בתוך המשכן, ועליו מקטירים את קטורת הסמים."},
+ "sefaria":{"target":"tetzaveh","summaryEn":"Tetzaveh (“You Shall Command”) opens as God instructs Moses to appoint Aaron and his sons as priests. God details how to make the priestly clothing, how to sanctify the priests and offer sacrifices during the seven days of inauguration in the Mishkan (Tabernacle), and how to build the golden altar.","summaryHe":"פרשת תצוה עוסקת בבגדי הכהונה לאהרן, הכהן הגדול, ולבניו הכהנים, שישמשו במשכן. הכהנים יוקדשו לעבודה במשכן על ידי סדרה של קורבנות שיוקרבו בשבעת ימי המילואים. משה מצווה על קורבן התמיד, הקרב בכל יום על המזבח בפתח המשכן. כמו כן מתואר מזבח הזהב שמוצב בתוך המשכן, ועליו מקטירים את קטורת הסמים."},
  "wikipedia":{"target":"Tetzaveh","summary":"The parashah reports God's commands to bring olive oil for the lamp, make sacred garments for the priests, conduct an ordination ceremony, and make an incense altar."},
  "uscj.org":{"target":"Tetzavah"}
 },
@@ -331,7 +331,7 @@
  "reformjudaism.org":{"target":"ki-tisa"},
  "chabad.org":15567,
  "learntefillah.com":"ki-tissa",
- "sefaria":{"target":"ki-tisa","summary":"Ki-Tisa (“When You Elevate”) opens as God tells Moses to collect a half-shekel donation from all Israelite adult males and to anoint the Mishkan (Tabernacle), its vessels, and the priests. The Israelites worship the golden calf, and Moses breaks the tablets. Moses beseeches God to forgive, returning with a second set of tablets.","summaryHe":"בפרשת כי תשא אלוהים מצווה את משה לפקוד את העם על ידי תרומה של מחצית השקל לכל אדם. משה מצטווה לעשות את הכיור ואת כנו, את שמן המשחה ואת סממני קטורת הסמים. בני ישראל מקריבים קורבנות לעגל זהב; אלוהים מאיים להשמיד את העם, ומשה מתפלל להצלתם. משה יורד מההר ושובר את לוחות הברית ומעניש עם בני לוי את עובדי העגל. משה עולה להר ומקבל את הלוחות השניים. אלוהים כורת ברית חדשה עם בני ישראל."},
+ "sefaria":{"target":"ki-tisa","summaryEn":"Ki-Tisa (“When You Elevate”) opens as God tells Moses to collect a half-shekel donation from all Israelite adult males and to anoint the Mishkan (Tabernacle), its vessels, and the priests. The Israelites worship the golden calf, and Moses breaks the tablets. Moses beseeches God to forgive, returning with a second set of tablets.","summaryHe":"בפרשת כי תשא אלוהים מצווה את משה לפקוד את העם על ידי תרומה של מחצית השקל לכל אדם. משה מצטווה לעשות את הכיור ואת כנו, את שמן המשחה ואת סממני קטורת הסמים. בני ישראל מקריבים קורבנות לעגל זהב; אלוהים מאיים להשמיד את העם, ומשה מתפלל להצלתם. משה יורד מההר ושובר את לוחות הברית ומעניש עם בני לוי את עובדי העגל. משה עולה להר ומקבל את הלוחות השניים. אלוהים כורת ברית חדשה עם בני ישראל."},
  "wikipedia":{"target":"Ki_Tissa","summary":"The parashah tells of building the Tabernacle, the incident of the Golden calf, the request of Moses for God to reveal God's Attributes, and how Moses became radiant."},
  "uscj.org":{"target":"KiTissa"}
 },
@@ -347,7 +347,7 @@
  "reformjudaism.org":{"target":"vayakheil"},
  "chabad.org":15568,
  "learntefillah.com":"vaykhel",
- "sefaria":{"target":"vayakhel","summary":"Vayakhel (“He Assembled”) opens as God commands the Israelites to observe the Sabbath. Moses asks for material donations for the building of the Mishkan (Tabernacle), and the people donate. A group of artisans designated by God begin building the Mishkan and its vessels.","summaryHe":"בפרשת ויקהל בני ישראל מצווים לשמור את השבת. בני ישראל מתבקשים לתרום חומרים לבניית המשכן; הם נענים לבקשה בנדיבות ומתבקשים להפסיק לתרום. בצלאל ואהליאב מתחילים לנהל את בניית מבנה המשכן, כלי המשכן והחצר. כל פרט מבוצע כפי שציווה אלוהים את משה."},
+ "sefaria":{"target":"vayakhel","summaryEn":"Vayakhel (“He Assembled”) opens as God commands the Israelites to observe the Sabbath. Moses asks for material donations for the building of the Mishkan (Tabernacle), and the people donate. A group of artisans designated by God begin building the Mishkan and its vessels.","summaryHe":"בפרשת ויקהל בני ישראל מצווים לשמור את השבת. בני ישראל מתבקשים לתרום חומרים לבניית המשכן; הם נענים לבקשה בנדיבות ומתבקשים להפסיק לתרום. בצלאל ואהליאב מתחילים לנהל את בניית מבנה המשכן, כלי המשכן והחצר. כל פרט מבוצע כפי שציווה אלוהים את משה."},
  "wikipedia":{"target":"Vayakhel","summary":"The parashah tells of the making of the Tabernacle and its sacred vessels."},
  "uscj.org":{"target":"Vayakhel"}
 },
@@ -363,7 +363,7 @@
  "reformjudaism.org":{"target":"pkudei"},
  "chabad.org":15570,
  "learntefillah.com":"pekude",
- "sefaria":{"target":"pekudei","summary":"Pekudei (“Accountings Of”) is the final Torah reading in the book of Exodus. It describes the making of priestly garments worn in the Mishkan (Tabernacle) and the completion of its construction. At God’s command, Moses erects the Mishkan and puts its vessels in place, and God’s presence fills the Mishkan.","summaryHe":"פרשת פקודי, האחרונה בספר שמות, מסכמת את תרומות החומרים השונים למשכן, ואת עשיית בגדי הכהונה. בפרשה מתואר אירוע הקמת המשכן והכנסת הכלים לתוכו. משהושלמה בניית המשכן הענן מכסה את אוהל מועד, והשכינה שורה במשכן. ענן שוכן על המשכן ביום, ובלילה נראית בו אש, לעיני בני ישראל."},
+ "sefaria":{"target":"pekudei","summaryEn":"Pekudei (“Accountings Of”) is the final Torah reading in the book of Exodus. It describes the making of priestly garments worn in the Mishkan (Tabernacle) and the completion of its construction. At God’s command, Moses erects the Mishkan and puts its vessels in place, and God’s presence fills the Mishkan.","summaryHe":"פרשת פקודי, האחרונה בספר שמות, מסכמת את תרומות החומרים השונים למשכן, ואת עשיית בגדי הכהונה. בפרשה מתואר אירוע הקמת המשכן והכנסת הכלים לתוכו. משהושלמה בניית המשכן הענן מכסה את אוהל מועד, והשכינה שורה במשכן. ענן שוכן על המשכן ביום, ובלילה נראית בו אש, לעיני בני ישראל."},
  "wikipedia":{"target":"Pekudei","summary":"The parashah tells of the setting up of the Tabernacle."},
  "uscj.org":{"target":"Pekudei"}
 },
@@ -379,7 +379,7 @@
  "reformjudaism.org":{"target":"vayikra"},
  "chabad.org":15574,
  "learntefillah.com":"vayicra",
- "sefaria":{"target":"vayikra","summary":"In Vayikra (“He Called”), the first Torah portion in the book of Leviticus, God tells Moses about the sacrifices offered in the Mishkan (Tabernacle). Among these are sacrifices entirely burnt on the altar, meal offerings made of flour and oil, peace offerings, and sacrifices brought for sinning inadvertently.","summaryHe":"בפרשת ויקרא אלוהים קורא למשה ומצווה אותו על עבודת הקורבנות. הפרשה פותחת בתיאור קורבנות העולה, המנחה (שאיננה קורבן מן הבהמה אלא מן הצומח) והשלמים, בפירוט כמה אפשרויות להקרבת כל סוג קורבן. לאחר מכן מתוארים קורבנות חטאת ואשם ומפורטים המצבים שבהם מובא כל אחד מן הקורבנות."},
+ "sefaria":{"target":"vayikra","summaryEn":"In Vayikra (“He Called”), the first Torah portion in the book of Leviticus, God tells Moses about the sacrifices offered in the Mishkan (Tabernacle). Among these are sacrifices entirely burnt on the altar, meal offerings made of flour and oil, peace offerings, and sacrifices brought for sinning inadvertently.","summaryHe":"בפרשת ויקרא אלוהים קורא למשה ומצווה אותו על עבודת הקורבנות. הפרשה פותחת בתיאור קורבנות העולה, המנחה (שאיננה קורבן מן הבהמה אלא מן הצומח) והשלמים, בפירוט כמה אפשרויות להקרבת כל סוג קורבן. לאחר מכן מתוארים קורבנות חטאת ואשם ומפורטים המצבים שבהם מובא כל אחד מן הקורבנות."},
  "wikipedia":{"target":"Vayikra_(parsha)","summary":"The parashah lays out the laws of sacrifices (קָרְבָּנוֹת, korbanot)."},
  "uscj.org":{"target":"Vayikra"}
 },
@@ -395,7 +395,7 @@
  "reformjudaism.org":{"target":"tzav"},
  "chabad.org":15575,
  "learntefillah.com":"tsav",
- "sefaria":{"target":"tzav","summary":"In Tzav (“Command”), God tells Moses about the sacrifices offered in the Tabernacle (portable sanctuary), including a meal offering brought by the high priest, guilt offerings, and offerings of thanks. Moses initiates Aaron and Aaron’s sons for priestly service in the Tabernacle.","summaryHe":"בפרשת צו מתוארים קורבן עולה, שכל חלקיו (מלבד העור) נשרפים כליל על המזבח; קורבן מנחה, שהוא קורבן מן הצומח; וכן קורבנות חטאת, אשם, שלמים ותודה. נאסר על בני ישראל לאכול דם וחלב – חלקים מן הבהמה המוקרבים תמיד על המזבח. משה מקדיש את אהרן ובניו לכהונה בסדרת קורבנות המובאים בשבעת ימי המילואים."},
+ "sefaria":{"target":"tzav","summaryEn":"In Tzav (“Command”), God tells Moses about the sacrifices offered in the Tabernacle (portable sanctuary), including a meal offering brought by the high priest, guilt offerings, and offerings of thanks. Moses initiates Aaron and Aaron’s sons for priestly service in the Tabernacle.","summaryHe":"בפרשת צו מתוארים קורבן עולה, שכל חלקיו (מלבד העור) נשרפים כליל על המזבח; קורבן מנחה, שהוא קורבן מן הצומח; וכן קורבנות חטאת, אשם, שלמים ותודה. נאסר על בני ישראל לאכול דם וחלב – חלקים מן הבהמה המוקרבים תמיד על המזבח. משה מקדיש את אהרן ובניו לכהונה בסדרת קורבנות המובאים בשבעת ימי המילואים."},
  "wikipedia":{"target":"Tzav","summary":"The parashah teaches how the priests performed the sacrifices and describes the ordination of Aaron and his sons."},
  "uscj.org":{"target":"Tzav"}
 },
@@ -411,7 +411,7 @@
  "reformjudaism.org":{"target":"shmini"},
  "chabad.org":15576,
  "learntefillah.com":"shemini",
- "sefaria":{"target":"shemini","summary":"Shemini (“Eighth”) opens with the consecration of the Tabernacle (portable sanctuary). Two of Aaron’s sons are consumed by a fire sent from God when they attempt to offer an “alien fire.” God describes the animals, birds, and fish that are permissible and prohibited for consumption, as well as some laws of ritual purity.","summaryHe":"פרשת שמיני עוסקת ביום השמיני שלאחר שבעת ימי המילואים. ביום זה מובאים קורבנות ייחודיים, הכנה לגילוי השכינה. אש יוצאת מהמשכן ואוכלת את הקורבנות שעל המזבח. בני אהרון נדב ואביהוא מקריבים אש זרה שלא נצטוו בה, ואש יוצאת מהמשכן ואוכלת אותם. התורה מצווה על בעלי החיים המותרים והאסורים באכילה ועל דיני טומאה וטהרה."},
+ "sefaria":{"target":"shemini","summaryEn":"Shemini (“Eighth”) opens with the consecration of the Tabernacle (portable sanctuary). Two of Aaron’s sons are consumed by a fire sent from God when they attempt to offer an “alien fire.” God describes the animals, birds, and fish that are permissible and prohibited for consumption, as well as some laws of ritual purity.","summaryHe":"פרשת שמיני עוסקת ביום השמיני שלאחר שבעת ימי המילואים. ביום זה מובאים קורבנות ייחודיים, הכנה לגילוי השכינה. אש יוצאת מהמשכן ואוכלת את הקורבנות שעל המזבח. בני אהרון נדב ואביהוא מקריבים אש זרה שלא נצטוו בה, ואש יוצאת מהמשכן ואוכלת אותם. התורה מצווה על בעלי החיים המותרים והאסורים באכילה ועל דיני טומאה וטהרה."},
  "wikipedia":{"target":"Shemini_(parsha)","summary":"Parashah Shemini tells of the consecration of the Tabernacle, the deaths of Nadab and Abihu, and the dietary laws of kashrut (כַּשְׁרוּת)."},
  "uscj.org":{"target":"Shemini"}
 },
@@ -427,7 +427,7 @@
  "reformjudaism.org":{"target":"tazria"},
  "chabad.org":15577,
  "learntefillah.com":"tazria",
- "sefaria":{"target":"tazria","summary":"Tazria (“She Bears Seed”) opens by describing the purification process for a woman after childbirth. It then describes different forms of tzara’at, a discoloration condition on skin or clothing, and the requirement of an infected person to dwell alone outside the camp and be inspected by a priest.","summaryHe":"בפרשת תזריע מפורטים דיני היולדת – טומאתה, טהרתה והקורבנות שהיא מביאה למשכן. רוב הפרשה עוסקת בטומאת צרעת: זיהוי סוגי צרעת בגוף האדם ודיני המצורע הטמא. את הצרעת מאבחן כהן, שנדרש לראות את הנגע ולקבוע את דינו. הפרשה מסתיימת בזיהוי סוגי טומאת צרעת הבגד ודיניה."},
+ "sefaria":{"target":"tazria","summaryEn":"Tazria (“She Bears Seed”) opens by describing the purification process for a woman after childbirth. It then describes different forms of tzara’at, a discoloration condition on skin or clothing, and the requirement of an infected person to dwell alone outside the camp and be inspected by a priest.","summaryHe":"בפרשת תזריע מפורטים דיני היולדת – טומאתה, טהרתה והקורבנות שהיא מביאה למשכן. רוב הפרשה עוסקת בטומאת צרעת: זיהוי סוגי צרעת בגוף האדם ודיני המצורע הטמא. את הצרעת מאבחן כהן, שנדרש לראות את הנגע ולקבוע את דינו. הפרשה מסתיימת בזיהוי סוגי טומאת צרעת הבגד ודיניה."},
  "wikipedia":{"target":"Tazria","summary":"The parashah deals with ritual impurity."},
  "uscj.org":{"target":"Tazria"}
 },
@@ -442,7 +442,7 @@
  "reformjudaism.org":{"target":"mtzora"},
  "chabad.org":15579,
  "learntefillah.com":"metsora",
- "sefaria":{"target":"metzora","summary":"Metzora opens by describing the purification process and accompanying sacrifices for one infected with tzara’at, a discoloration condition on the skin, clothing, or house. It then describes the process of treating a house infected with tzara’at and the ritual impurity generated by certain bodily discharges.","summaryHe":"בפרשת מצורע מתואר תהליך טהרת המצורע, כולל גילוח כל שערות הגוף, טבילה במים חיים, הזאת דם ציפור והקרבת קורבנות עולה, אשם וחטאת. מפורטים דיני צרעת הבית נוסף על צרעת העור והבגד שתוארו בפרשה הקודמת. מובאים גם דיני הטומאה וההיטהרות של הזבה והזב, של הנטמא בשכבת זרע, ושל הנידה."},
+ "sefaria":{"target":"metzora","summaryEn":"Metzora opens by describing the purification process and accompanying sacrifices for one infected with tzara’at, a discoloration condition on the skin, clothing, or house. It then describes the process of treating a house infected with tzara’at and the ritual impurity generated by certain bodily discharges.","summaryHe":"בפרשת מצורע מתואר תהליך טהרת המצורע, כולל גילוח כל שערות הגוף, טבילה במים חיים, הזאת דם ציפור והקרבת קורבנות עולה, אשם וחטאת. מפורטים דיני צרעת הבית נוסף על צרעת העור והבגד שתוארו בפרשה הקודמת. מובאים גם דיני הטומאה וההיטהרות של הזבה והזב, של הנטמא בשכבת זרע, ושל הנידה."},
  "wikipedia":{"target":"Metzora_(parsha)","summary":"The parashah deals with ritual impurity. It addresses cleansing from skin disease (צָּרַעַת, tzara'at), houses with an eruptive plague, male genital discharges, and menstruation."},
  "uscj.org":{"target":"Metzora"}
 },
@@ -458,7 +458,7 @@
  "reformjudaism.org":{"target":"acharei-mot"},
  "chabad.org":15580,
  "learntefillah.com":"achare-mot",
- "sefaria":{"target":"achrei-mot","summary":"Acharei Mot (“After The Death”) opens by describing the ritual service of Yom Kippur, the Day of Atonement. It then details the prohibitions of offering sacrifices outside of the Tabernacle and of eating animal blood and ends with a list of forbidden sexual relations.","summaryHe":"פרשת אחרי מות פותחת בפירוט סדר עבודת יום הכיפורים במשכן: נוסף על קורבנות מיוחדים ועל עבודת הקטורת, עבודת הכהן הגדול כוללת הטלת גורלות לשני שעירי החטאת: אחד מהם מוקרב על גבי המזבח, והאחר - השעיר לעזאזל - נושא את עוונות בני ישראל ונשלח למדבר. הפרשה ממשיכה באיסור לשחוט מחוץ למשכן, באיסור להקריב קורבנות מחוץ למשכן, באיסור אכילת דם, בחובת כיסוי הדם בעוף ובחיה ובטומאת נבלה וטרפה. הפרשה מסתיימת ברשימת איסורי עריות."},
+ "sefaria":{"target":"achrei-mot","summaryEn":"Acharei Mot (“After The Death”) opens by describing the ritual service of Yom Kippur, the Day of Atonement. It then details the prohibitions of offering sacrifices outside of the Tabernacle and of eating animal blood and ends with a list of forbidden sexual relations.","summaryHe":"פרשת אחרי מות פותחת בפירוט סדר עבודת יום הכיפורים במשכן: נוסף על קורבנות מיוחדים ועל עבודת הקטורת, עבודת הכהן הגדול כוללת הטלת גורלות לשני שעירי החטאת: אחד מהם מוקרב על גבי המזבח, והאחר - השעיר לעזאזל - נושא את עוונות בני ישראל ונשלח למדבר. הפרשה ממשיכה באיסור לשחוט מחוץ למשכן, באיסור להקריב קורבנות מחוץ למשכן, באיסור אכילת דם, בחובת כיסוי הדם בעוף ובחיה ובטומאת נבלה וטרפה. הפרשה מסתיימת ברשימת איסורי עריות."},
  "wikipedia":{"target":"Acharei_Mot","summary":"The parashah sets forth the law of the Yom Kippur ritual, centralized offerings, blood, and sexual practices."},
  "uscj.org":{"target":"AhareiMot"}
 },
@@ -474,7 +474,7 @@
  "reformjudaism.org":{"target":"kdoshim"},
  "chabad.org":15582,
  "learntefillah.com":"kedoshim",
- "sefaria":{"target":"kedoshim","summary":"Kedoshim (“Holy”) opens by instructing the Israelites to be holy. It details dozens of laws regulating all aspects of life, including observing Shabbat, loving one’s neighbor, and leaving portions of a field for the poor. It ends by detailing punishments for certain types of idolatry and sexual misconduct.","summaryHe":"פרשת קדושים פותחת בציווי לבני ישראל שיהיו קדושים ומפרטת עשרות דינים בתחומי פולחן וחברה, כגון שבת וקורבנות, איסור כלאיים, מצוות ואהבת לרעך כמוך, החובה להלוות לעניים ואיסור נקמה. בסוף הפרשה מפורטים עונשים בתחום איסורי עריות ועבודה זרה."},
+ "sefaria":{"target":"kedoshim","summaryEn":"Kedoshim (“Holy”) opens by instructing the Israelites to be holy. It details dozens of laws regulating all aspects of life, including observing Shabbat, loving one’s neighbor, and leaving portions of a field for the poor. It ends by detailing punishments for certain types of idolatry and sexual misconduct.","summaryHe":"פרשת קדושים פותחת בציווי לבני ישראל שיהיו קדושים ומפרטת עשרות דינים בתחומי פולחן וחברה, כגון שבת וקורבנות, איסור כלאיים, מצוות ואהבת לרעך כמוך, החובה להלוות לעניים ואיסור נקמה. בסוף הפרשה מפורטים עונשים בתחום איסורי עריות ועבודה זרה."},
  "wikipedia":{"target":"Kedoshim","summary":"The parashah tells of the laws of holiness and ethical behavior, repeats the ten commandments, and describes penalties for sexual transgressions."},
  "uscj.org":{"target":"Kedoshim"}
 },
@@ -490,7 +490,7 @@
  "reformjudaism.org":{"target":"emor"},
  "chabad.org":15583,
  "learntefillah.com":"emor",
- "sefaria":{"target":"emor","summary":"Emor (“Say”) opens with laws regulating priestly behavior, working in the Tabernacle, and consuming sacrifices and priestly food. It describes the biblical holidays of Passover, Shavuot, Rosh Hashanah, Yom Kippur, and Sukkot, and ends with a story about a blasphemer and his punishment.","summaryHe":"פרשת אמור מפרטת חוקים הנוגעים לעבודת הכהנים במשכן, להתנהלותם מחוץ למשכן ולאכילת קודשים. במרכז הפרשה ניצבים דיני המועדים: שבת, חג המצות, ספירת העומר, חג השבועות, ראש השנה (יום זיכרון תרועה), יום הכיפורים וחג הסוכות. בסוף הפרשה מסופר סיפור על אדם המקלל את אלוהים."},
+ "sefaria":{"target":"emor","summaryEn":"Emor (“Say”) opens with laws regulating priestly behavior, working in the Tabernacle, and consuming sacrifices and priestly food. It describes the biblical holidays of Passover, Shavuot, Rosh Hashanah, Yom Kippur, and Sukkot, and ends with a story about a blasphemer and his punishment.","summaryHe":"פרשת אמור מפרטת חוקים הנוגעים לעבודת הכהנים במשכן, להתנהלותם מחוץ למשכן ולאכילת קודשים. במרכז הפרשה ניצבים דיני המועדים: שבת, חג המצות, ספירת העומר, חג השבועות, ראש השנה (יום זיכרון תרועה), יום הכיפורים וחג הסוכות. בסוף הפרשה מסופר סיפור על אדם המקלל את אלוהים."},
  "wikipedia":{"target":"Emor","summary":"The parashah describes purity rules for priests (כֹּהֲנִים, Kohanim), recounts the holy days, describes the preparations for the lights and bread in the sanctuary, and tells the story of a blasphemer and his punishment."},
  "uscj.org":{"target":"Emor"}
 },
@@ -506,7 +506,7 @@
  "reformjudaism.org":{"target":"bhar"},
  "chabad.org":15584,
  "learntefillah.com":"behar",
- "sefaria":{"target":"behar","summary":"Behar (“On The Mountain”) details the laws of the sabbatical year (shemittah), when working the land is prohibited and debts are forgiven. It also sets out laws of indentured servitude and of the jubilee year (yovel), when property reverts to its original ownership.","summaryHe":"בפרשת בהר מובאים דיני שבת הארץ (שמיטה), החלה בכל שבע שנים ואסורה בה עבודת האדמה. בשנת החמישים, היא שנת היובל, נוסף על שביתה מעבודת האדמה יש לשחרר את העבדים, והקרקעות חוזרות לבעליהן המקוריים. מפורטים גם דיני מכירת קרקעות, דיני מכירת עבדים, דיני אונאת ממון ואונאת דברים, איסור ריבית ואיסורים הקשורים לעבודה זרה."},
+ "sefaria":{"target":"behar","summaryEn":"Behar (“On The Mountain”) details the laws of the sabbatical year (shemittah), when working the land is prohibited and debts are forgiven. It also sets out laws of indentured servitude and of the jubilee year (yovel), when property reverts to its original ownership.","summaryHe":"בפרשת בהר מובאים דיני שבת הארץ (שמיטה), החלה בכל שבע שנים ואסורה בה עבודת האדמה. בשנת החמישים, היא שנת היובל, נוסף על שביתה מעבודת האדמה יש לשחרר את העבדים, והקרקעות חוזרות לבעליהן המקוריים. מפורטים גם דיני מכירת קרקעות, דיני מכירת עבדים, דיני אונאת ממון ואונאת דברים, איסור ריבית ואיסורים הקשורים לעבודה זרה."},
  "wikipedia":{"target":"Behar","summary":"The parashah tells the laws of the Sabbatical year (שמיטה, Shmita) and limits on debt servitude."},
  "uscj.org":{"target":"Behar"}
 },
@@ -522,7 +522,7 @@
  "reformjudaism.org":{"target":"bchukotai"},
  "chabad.org":15586,
  "learntefillah.com":"bechucotai",
- "sefaria":{"target":"bechukotai","summary":"Bechukotai (“In My Laws”), the final Torah portion in the book of Leviticus, describes blessings that follow obedience to God’s laws and curses that come with desecration of them. It ends with the laws of vows and consecration of people and property.","summaryHe":"בפרשת בְּחֻקֹּתַי, הפרשה האחרונה בספר ויקרא, מתואר השכר המובטח לבני ישראל אם ישמרו את דיני התורה: שגשוג כלכלי וחקלאי, שלום והצלחה צבאית והשראת שכינה. הפרשה מאריכה בתיאור העונשים והקללות שיבואו על בני ישראל אם לא ישמרו את דיני התורה: שפל כלכלי, רעב, מחלות, תבוסה במלחמות וגלות. אלוהים מבטיח שיזכור את בריתו עם האבות והארץ, והפרשה מסתיימת בדיני ערכין באדם ובקרקעות."},
+ "sefaria":{"target":"bechukotai","summaryEn":"Bechukotai (“In My Laws”), the final Torah portion in the book of Leviticus, describes blessings that follow obedience to God’s laws and curses that come with desecration of them. It ends with the laws of vows and consecration of people and property.","summaryHe":"בפרשת בְּחֻקֹּתַי, הפרשה האחרונה בספר ויקרא, מתואר השכר המובטח לבני ישראל אם ישמרו את דיני התורה: שגשוג כלכלי וחקלאי, שלום והצלחה צבאית והשראת שכינה. הפרשה מאריכה בתיאור העונשים והקללות שיבואו על בני ישראל אם לא ישמרו את דיני התורה: שפל כלכלי, רעב, מחלות, תבוסה במלחמות וגלות. אלוהים מבטיח שיזכור את בריתו עם האבות והארץ, והפרשה מסתיימת בדיני ערכין באדם ובקרקעות."},
  "wikipedia":{"target":"Bechukotai","summary":"The parashah addresses blessings for obeying the law, curses for disobeying it, and vows."},
  "uscj.org":{"target":"Behukotai"}
 },
@@ -538,7 +538,7 @@
  "reformjudaism.org":{"target":"bmidbar"},
  "chabad.org":36466,
  "learntefillah.com":"bamidbar",
- "sefaria":{"target":"bamidbar","summary":"Bamidbar (“In The Desert”) is the first Torah portion in the book of Numbers. It describes God’s command to take a census and details the camping formation of the people of Israel in the desert. It also begins to enumerate the responsibilities of the Levites when transporting the Tabernacle.","summaryHe":"בפרשת במדבר מתואר מפקד בני ישראל וסידור המחנה לפי שבטים מסביב למשכן. שבט לוי ממונה על נשיאת המשכן וכליו במהלך המסע במדבר, ולכל משפחה משלוש המשפחות בשבט - גרשון, קהת, ומררי - יש תפקיד מסוים."},
+ "sefaria":{"target":"bamidbar","summaryEn":"Bamidbar (“In The Desert”) is the first Torah portion in the book of Numbers. It describes God’s command to take a census and details the camping formation of the people of Israel in the desert. It also begins to enumerate the responsibilities of the Levites when transporting the Tabernacle.","summaryHe":"בפרשת במדבר מתואר מפקד בני ישראל וסידור המחנה לפי שבטים מסביב למשכן. שבט לוי ממונה על נשיאת המשכן וכליו במהלך המסע במדבר, ולכל משפחה משלוש המשפחות בשבט - גרשון, קהת, ומררי - יש תפקיד מסוים."},
  "wikipedia":{"target":"Bemidbar_(parsha)","summary":"The parashah tells of the census and the priests' duties."},
  "uscj.org":{"target":"Bamidbar"}
 },
@@ -554,7 +554,7 @@
  "reformjudaism.org":{"target":"naso"},
  "chabad.org":39589,
  "learntefillah.com":"nasso",
- "sefaria":{"target":"naso","summary":"Naso (“Take A Census”), the longest portion in the Torah, opens by detailing the responsibilities of the Levites. It also describes the laws of a woman suspected of adultery (sotah), the Nazirite, and the priestly blessing. The portion ends by listing the gifts that heads of tribes bring to the Tabernacle.","summaryHe":"בפרשת נשא מתוארים תפקידי משפחות גרשון ומררי משבט לוי בנשיאת כלי המשכן. בני ישראל מצטווים לשלח טמאים אל מחוץ למחנה. מפורטים דיני האישה הסוטה (החשודה שבגדה בבעלה), דיני הנזיר וקורבנותיו וברכת כהנים. בסוף הפרשה מסופר על קורבנות הנשיאים של כל שבט ושבט בחנוכת המשכן והמזבח."},
+ "sefaria":{"target":"naso","summaryEn":"Naso (“Take A Census”), the longest portion in the Torah, opens by detailing the responsibilities of the Levites. It also describes the laws of a woman suspected of adultery (sotah), the Nazirite, and the priestly blessing. The portion ends by listing the gifts that heads of tribes bring to the Tabernacle.","summaryHe":"בפרשת נשא מתוארים תפקידי משפחות גרשון ומררי משבט לוי בנשיאת כלי המשכן. בני ישראל מצטווים לשלח טמאים אל מחוץ למחנה. מפורטים דיני האישה הסוטה (החשודה שבגדה בבעלה), דיני הנזיר וקורבנותיו וברכת כהנים. בסוף הפרשה מסופר על קורבנות הנשיאים של כל שבט ושבט בחנוכת המשכן והמזבח."},
  "wikipedia":{"target":"Naso_(parsha)","summary":"The parashah addresses priestly duties, camp purification, restitution for wrongs committed, the wife accused of unfaithfulness (סוטה, sotah), the nazirite, the Priestly Blessing, and consecration of the Tabernacle."},
  "uscj.org":{"target":"Naso"}
 },
@@ -570,7 +570,7 @@
  "reformjudaism.org":{"target":"bhaalotcha"},
  "chabad.org":36744,
  "learntefillah.com":"behaalotecha",
- "sefaria":{"target":"behaalotcha","summary":"Beha’alotekha (“When You Raise”) opens with God instructing Moses to inaugurate the Levites for service in the Tabernacle. It also recounts the stories of people who request a second chance to offer the Passover sacrifice, the people of Israel’s complaints and punishments, and a disease that affects Miriam.","summaryHe":"בפרשת בהעלותך אהרן מצטווה להדליק את הנרות במנורה, ושבט לוי מוקדש לעבודת המשכן. בעקבות פנייה של קבוצה של טמאים לנפש אדם שאינם יכולים להקריב את קורבן הפסח בזמנו, מתחדש דין פסח שני, שמעניק לאדם טמא או נמצא בדרך רחוקה הזדמנות שנייה להביא את הקורבן. משה מצטווה לעשות חצוצרות למסע העדה, לכינוס העם ולתקיעה במועדים ובשעת מלחמה. במסגרת פירוט מסעות בני ישראל במדבר מסופר על תלונות העם ותאוותיו ועל צרעת מרים."},
+ "sefaria":{"target":"behaalotcha","summaryEn":"Beha’alotekha (“When You Raise”) opens with God instructing Moses to inaugurate the Levites for service in the Tabernacle. It also recounts the stories of people who request a second chance to offer the Passover sacrifice, the people of Israel’s complaints and punishments, and a disease that affects Miriam.","summaryHe":"בפרשת בהעלותך אהרן מצטווה להדליק את הנרות במנורה, ושבט לוי מוקדש לעבודת המשכן. בעקבות פנייה של קבוצה של טמאים לנפש אדם שאינם יכולים להקריב את קורבן הפסח בזמנו, מתחדש דין פסח שני, שמעניק לאדם טמא או נמצא בדרך רחוקה הזדמנות שנייה להביא את הקורבן. משה מצטווה לעשות חצוצרות למסע העדה, לכינוס העם ולתקיעה במועדים ובשעת מלחמה. במסגרת פירוט מסעות בני ישראל במדבר מסופר על תלונות העם ותאוותיו ועל צרעת מרים."},
  "wikipedia":{"target":"Behaalotecha","summary":"The parashah tells of the Menorah in the Tabernacle, the consecration of the Levites, the Second Passover, how a cloud and fire led the Israelites, the silver trumpets, how the Israelites set out on their journeys, the complaints of the Israelites, and how Miriam and Aaron questioned Moses."},
  "uscj.org":{"target":"Behaalotekha"}
 },
@@ -586,7 +586,7 @@
  "reformjudaism.org":{"target":"shlach-lcha"},
  "chabad.org":45586,
  "learntefillah.com":"shelach",
- "sefaria":{"target":"shelach","summary":"Shelach (“Send”) tells the story of Israelite spies journeying into Canaan, the negative report they bring back, and the resulting punishment decreed upon the Israelites: to wander and die in the desert over forty years. It ends with laws about sacrifices, the story of a man who desecrates Shabbat, and the commandment to wear ritual fringes.","summaryHe":"בפרשת שלח לך אלוהים מצווה לשלוח נציגים מכל שבט לתור את ארץ כנען. עשרה מהשליחים מספרים כי הארץ טובה אבל אי אפשר לכבוש אותה כי היא מבוצרת ותושביה חזקים. רק כלב ויהושע מתנגדים לדברי חבריהם. בני ישראל בוכים ומתלוננים שהם אמורים להיכנס לארץ כנען, ואלוהים מענישם על התלונה וגוזר עליהם מוות במדבר במהלך ארבעים שנות נדודים. בסיום הפרשה מובאים דיני קורבנות והפרשת חלה, סיפור על אדם שקושש עצים בשבת ומצוות ציצית."},
+ "sefaria":{"target":"shelach","summaryEn":"Shelach (“Send”) tells the story of Israelite spies journeying into Canaan, the negative report they bring back, and the resulting punishment decreed upon the Israelites: to wander and die in the desert over forty years. It ends with laws about sacrifices, the story of a man who desecrates Shabbat, and the commandment to wear ritual fringes.","summaryHe":"בפרשת שלח לך אלוהים מצווה לשלוח נציגים מכל שבט לתור את ארץ כנען. עשרה מהשליחים מספרים כי הארץ טובה אבל אי אפשר לכבוש אותה כי היא מבוצרת ותושביה חזקים. רק כלב ויהושע מתנגדים לדברי חבריהם. בני ישראל בוכים ומתלוננים שהם אמורים להיכנס לארץ כנען, ואלוהים מענישם על התלונה וגוזר עליהם מוות במדבר במהלך ארבעים שנות נדודים. בסיום הפרשה מובאים דיני קורבנות והפרשת חלה, סיפור על אדם שקושש עצים בשבת ומצוות ציצית."},
  "wikipedia":{"target":"Shlach","summary":"The parashah tells the story of the twelve spies sent to assess the promised land, commandments about offerings, the story of the Sabbath violator, and the commandment of the fringes (צִיצִת, tzitzit)."},
  "uscj.org":{"target":"ShelachLekha"}
 },
@@ -602,7 +602,7 @@
  "reformjudaism.org":{"target":"korach"},
  "chabad.org":45591,
  "learntefillah.com":"corach",
- "sefaria":{"target":"korach","summary":"Parashat Korach recounts the rebellion of Korach (a cousin of Moses and Aaron), Dathan, Abiram, and 250 of their followers. Some rebels are swallowed by the ground, while others are consumed by a fire from God and others die in a plague. The portion ends by describing gifts given to priests and Levites.","summaryHe":"בפרשת קרח מתואר כיצד קרח, דתן ואבירם ו-250 מנהיגים נוספים מערערים על מנהיגות משה ועל כהונת אהרן ומובילים נגדם מרד. אלוהים מעניש את המורדים: חלקם נשרפים באש וחלקם נבלעים באדמה בדרך נס. העימות מסתיים בפריחת מטה אהרן, המוכיחה את בחירתו על ידי האל, ובסוף הפרשה מובא ציווי על מתנות כהונה ולווייה."},
+ "sefaria":{"target":"korach","summaryEn":"Parashat Korach recounts the rebellion of Korach (a cousin of Moses and Aaron), Dathan, Abiram, and 250 of their followers. Some rebels are swallowed by the ground, while others are consumed by a fire from God and others die in a plague. The portion ends by describing gifts given to priests and Levites.","summaryHe":"בפרשת קרח מתואר כיצד קרח, דתן ואבירם ו-250 מנהיגים נוספים מערערים על מנהיגות משה ועל כהונת אהרן ומובילים נגדם מרד. אלוהים מעניש את המורדים: חלקם נשרפים באש וחלקם נבלעים באדמה בדרך נס. העימות מסתיים בפריחת מטה אהרן, המוכיחה את בחירתו על ידי האל, ובסוף הפרשה מובא ציווי על מתנות כהונה ולווייה."},
  "wikipedia":{"target":"Korach_(parsha)","summary":"It tells of Korah's failed attempt to overthrow Moses."},
  "uscj.org":{"target":"Korach"}
 },
@@ -618,7 +618,7 @@
  "reformjudaism.org":{"target":"chukat"},
  "chabad.org":45612,
  "learntefillah.com":"chukat",
- "sefaria":{"target":"chukat","summary":"Chukat (“Law Of”) opens by describing the process of burning the red heifer and using its ashes for purification. It also tells the stories of the deaths of Miriam and Aaron, Moses’ striking of a rock to bring forth water, a plague of venomous snakes, and battles against the Emorite kings Sihon and Og.","summaryHe":"בפרשת חקת מפורט תהליך טהרת האדם מטומאת מת באפר פרה אדומה. מרים מתה, והעם מתלונן שהוא צמא למים. אלוהים מצווה את משה לדבר אל הסלע, ומשה מכה בסלע להוציא ממנו מים. משה ואהרן נענשים שלא יזכו להיכנס לארץ, ואהרן מת בהר ההר. העם מתלונן על האוכל במדבר ונענש במתקפת נחשים. העם מנצח במלחמה נגד סיחון ועוג שני מלכי האמורי בעבר הירדן המזרחי."},
+ "sefaria":{"target":"chukat","summaryEn":"Chukat (“Law Of”) opens by describing the process of burning the red heifer and using its ashes for purification. It also tells the stories of the deaths of Miriam and Aaron, Moses’ striking of a rock to bring forth water, a plague of venomous snakes, and battles against the Emorite kings Sihon and Og.","summaryHe":"בפרשת חקת מפורט תהליך טהרת האדם מטומאת מת באפר פרה אדומה. מרים מתה, והעם מתלונן שהוא צמא למים. אלוהים מצווה את משה לדבר אל הסלע, ומשה מכה בסלע להוציא ממנו מים. משה ואהרן נענשים שלא יזכו להיכנס לארץ, ואהרן מת בהר ההר. העם מתלונן על האוכל במדבר ונענש במתקפת נחשים. העם מנצח במלחמה נגד סיחון ועוג שני מלכי האמורי בעבר הירדן המזרחי."},
  "wikipedia":{"target":"Chukat","summary":"The parashah sets out the laws of corpse contamination (tumat hamet) and purification with the water of lustration prepared with the Red Cow (פָרָה אֲדֻמָּה, parah adumah, also called the “Red Heifer”). It also reports the deaths of Miriam and Aaron, the failure of Moses at the Waters of Meribah, and the conquest of Arad, the Amorites, and Bashan."},
  "uscj.org":{"target":"Hukkat"}
 },
@@ -634,7 +634,7 @@
  "reformjudaism.org":{"target":"balak"},
  "chabad.org":45614,
  "learntefillah.com":"balac",
- "sefaria":{"target":"balak","summary":"Balak tells the story of the Moabite king Balak, who hires Balaam to curse the Israelites. Balaam’s donkey speaks along the way, and Balaam ends up blessing the people of Israel. The portion ends with a story about Israelite men sinning with Moabite women and the stabbing of an Israelite and a Midianite.","summaryHe":"בפרשת בלק מסופר על בלק מלך מואב הפונה לבלעם ומבקש ממנו לקלל את בני ישראל. אלוהים מרשה לבלעם ללכת לקללם בתנאי שישמע בקול אלוהים. בדרך האתון של בלעם פותחת את פיה ומדברת. בלעם מנסה לקלל את בני ישראל שלוש פעמים, ובכל פעם קללתו הופכת לברכה בפיו. כאשר ישראל מתחילים לזנות עם בנות מואב ולזבוח לאלוהיהן אלוהים שולח מגפה בעם, ונהרגים בה עשרות אלפים. המגפה מסתיימת אחרי מעשה הקנאות של פינחס."},
+ "sefaria":{"target":"balak","summaryEn":"Balak tells the story of the Moabite king Balak, who hires Balaam to curse the Israelites. Balaam’s donkey speaks along the way, and Balaam ends up blessing the people of Israel. The portion ends with a story about Israelite men sinning with Moabite women and the stabbing of an Israelite and a Midianite.","summaryHe":"בפרשת בלק מסופר על בלק מלך מואב הפונה לבלעם ומבקש ממנו לקלל את בני ישראל. אלוהים מרשה לבלעם ללכת לקללם בתנאי שישמע בקול אלוהים. בדרך האתון של בלעם פותחת את פיה ומדברת. בלעם מנסה לקלל את בני ישראל שלוש פעמים, ובכל פעם קללתו הופכת לברכה בפיו. כאשר ישראל מתחילים לזנות עם בנות מואב ולזבוח לאלוהיהן אלוהים שולח מגפה בעם, ונהרגים בה עשרות אלפים. המגפה מסתיימת אחרי מעשה הקנאות של פינחס."},
  "wikipedia":{"target":"Balak_(parsha)","summary":"In the parashah, Balak son of Zippor, king of Moab, tries to hire Balaam to curse Israel, Balaam's donkey speaks to Balaam, and Balaam blesses Israel instead."},
  "uscj.org":{"target":"Balak"}
 },
@@ -650,7 +650,7 @@
  "reformjudaism.org":{"target":"pinchas"},
  "chabad.org":45615,
  "learntefillah.com":"pinechas",
- "sefaria":{"target":"pinchas","summary":"Pinchas opens with God’s promise of a “covenant of peace” for the zealot Pinchas, followed by a census. The daughters of Tzelofchad request and receive new laws regarding inheritance. God instructs Moses to prepare Joshua for leadership, and God describes sacrifices brought daily and on special occasions.","summaryHe":"פרשת פינחס פותחת בהבטחת האל להביא ברית שלום לפינחס לאחר מעשה הקנאות שלו. משה ואלעזר עורכים מפקד חדש. בנות צלפחד מבקשות לקבל את נחלת אביהן בארץ, מאחר שלא היו לו בנים. לקראת מותו משה דואג לעתידו של העם, ואלוהים ממנה את יהושע בן נון למנהיג תחת משה. בסוף הפרשה מפורטים קורבן התמיד וקורבנות המוספים של שבת, ראש חודש ומועדי השנה."},
+ "sefaria":{"target":"pinchas","summaryEn":"Pinchas opens with God’s promise of a “covenant of peace” for the zealot Pinchas, followed by a census. The daughters of Tzelofchad request and receive new laws regarding inheritance. God instructs Moses to prepare Joshua for leadership, and God describes sacrifices brought daily and on special occasions.","summaryHe":"פרשת פינחס פותחת בהבטחת האל להביא ברית שלום לפינחס לאחר מעשה הקנאות שלו. משה ואלעזר עורכים מפקד חדש. בנות צלפחד מבקשות לקבל את נחלת אביהן בארץ, מאחר שלא היו לו בנים. לקראת מותו משה דואג לעתידו של העם, ואלוהים ממנה את יהושע בן נון למנהיג תחת משה. בסוף הפרשה מפורטים קורבן התמיד וקורבנות המוספים של שבת, ראש חודש ומועדי השנה."},
  "wikipedia":{"target":"Pinechas_(parsha)","summary":"It tells of Phinehas's killing of a couple, ending a plague, and of the daughters of Zelophehad's successful plea for land rights."},
  "uscj.org":{"target":"Pinhas"}
 },
@@ -666,7 +666,7 @@
  "reformjudaism.org":{"target":"matot"},
  "chabad.org":52598,
  "learntefillah.com":"matot",
- "sefaria":{"target":"matot","summary":"Matot (“Tribes”) opens with laws about vows, and continues to describe the Israelites’ war against the Midianites and the allocation of spoils. The tribes of Reuben and Gad request to dwell outside of the Land of Israel, and Moses acquiesces on the condition that they help conquer it.","summaryHe":"פרשת מטות פותחת בדיני נדרים ושבועות. משה מצווה את בני ישראל להילחם במדיין, ולאחר הניצחון העם מחלק את השלל. בני גד ובני ראובן מבקשים לנחול מחוץ לארץ כנען, בעבר הירדן המזרחי, משום שיש להם מקנה רב. משה מתנגד בתחילה, אך לבסוף מגיע להסדר שלפיו ינחלו השבטים בעבר הירדן המזרחי בתנאי שיעברו חלוצים במלחמה על כיבוש הארץ."},
+ "sefaria":{"target":"matot","summaryEn":"Matot (“Tribes”) opens with laws about vows, and continues to describe the Israelites’ war against the Midianites and the allocation of spoils. The tribes of Reuben and Gad request to dwell outside of the Land of Israel, and Moses acquiesces on the condition that they help conquer it.","summaryHe":"פרשת מטות פותחת בדיני נדרים ושבועות. משה מצווה את בני ישראל להילחם במדיין, ולאחר הניצחון העם מחלק את השלל. בני גד ובני ראובן מבקשים לנחול מחוץ לארץ כנען, בעבר הירדן המזרחי, משום שיש להם מקנה רב. משה מתנגד בתחילה, אך לבסוף מגיע להסדר שלפיו ינחלו השבטים בעבר הירדן המזרחי בתנאי שיעברו חלוצים במלחמה על כיבוש הארץ."},
  "wikipedia":{"target":"Matot","summary":"It discusses laws of vows, the destruction of Midianite towns, and negotiations of the Reubanites and Gadites to settle land outside of Israel."},
  "uscj.org":{"target":"Mattot"}
 },
@@ -682,7 +682,7 @@
  "reformjudaism.org":{"target":"mas-ei"},
  "chabad.org":52600,
  "learntefillah.com":"masse",
- "sefaria":{"target":"masei","summary":"Masei (“Travels”), the final Torah portion in the book of Numbers, opens with a list of places that the Israelites traveled in the desert. God commands the Israelites to destroy idolatry in the Land of Israel, outlines Israel’s boundaries, and details the laws of cities of refuge for accidental killers.","summaryHe":"פרשת מסעי מתעדת את מסעות בני ישראל בארבעים שנות נדודיהם במדבר. אלוהים מצווה להשמיד את העבודה הזרה ועובדיה בארץ כנען. מתוארים גבולות הארץ בעבר הירדן המערבי עם רשימת נשיאים מכל שבט שיחלקו את הארץ עם יהושע ואלעזר. מפורטים ערי הלוויים וערי המקלט. נאסר על בנות צלפחד ויורשות אחרות של קרקעות להתחתן מחוץ לשבט כדי שלא תעבור נחלה משבט לשבט."},
+ "sefaria":{"target":"masei","summaryEn":"Masei (“Travels”), the final Torah portion in the book of Numbers, opens with a list of places that the Israelites traveled in the desert. God commands the Israelites to destroy idolatry in the Land of Israel, outlines Israel’s boundaries, and details the laws of cities of refuge for accidental killers.","summaryHe":"פרשת מסעי מתעדת את מסעות בני ישראל בארבעים שנות נדודיהם במדבר. אלוהים מצווה להשמיד את העבודה הזרה ועובדיה בארץ כנען. מתוארים גבולות הארץ בעבר הירדן המערבי עם רשימת נשיאים מכל שבט שיחלקו את הארץ עם יהושע ואלעזר. מפורטים ערי הלוויים וערי המקלט. נאסר על בנות צלפחד ויורשות אחרות של קרקעות להתחתן מחוץ לשבט כדי שלא תעבור נחלה משבט לשבט."},
  "wikipedia":{"target":"Masei","summary":"The parashah discusses the stations of the Israelites' journeys, instructions for taking the land of Israel, cities for the Levites and refuge, and the daughters of Zelophehad."},
  "uscj.org":{"target":"Massey"}
 },
@@ -698,7 +698,7 @@
  "reformjudaism.org":{"target":"dvarim"},
  "chabad.org":36232,
  "learntefillah.com":"devarim",
- "sefaria":{"target":"devarim","summary":"Devarim (“Words”) is the first Torah portion in the Book of Deuteronomy, the final book of the Torah. In it, Moses recounts events from the Israelites’ travels in the desert, like the appointment of judges, the sin of the spies, and the wars with the Emorite kings Sihon and Og.","summaryHe":"דברים היא הפרשה הראשונה בספר דברים, החומש החמישי והאחרון בתורה. בספר מובאים נאומי משה, שבהם הוא מזכיר אירועים מהעבר, סוקר מצוות שכבר ניתנו ומצווה מצוות חדשות. בפרשה משה מספר על הצורך במינוי שופטים להנהגת העם. הוא גם מזכיר את חטא המרגלים, שבו התלונן העם על הכניסה העתידית לארץ כנען, את העונש שהוטל על העם לנדוד במדבר ארבעים שנה ואת מלחמות ישראל במדבר."},
+ "sefaria":{"target":"devarim","summaryEn":"Devarim (“Words”) is the first Torah portion in the Book of Deuteronomy, the final book of the Torah. In it, Moses recounts events from the Israelites’ travels in the desert, like the appointment of judges, the sin of the spies, and the wars with the Emorite kings Sihon and Og.","summaryHe":"דברים היא הפרשה הראשונה בספר דברים, החומש החמישי והאחרון בתורה. בספר מובאים נאומי משה, שבהם הוא מזכיר אירועים מהעבר, סוקר מצוות שכבר ניתנו ומצווה מצוות חדשות. בפרשה משה מספר על הצורך במינוי שופטים להנהגת העם. הוא גם מזכיר את חטא המרגלים, שבו התלונן העם על הכניסה העתידית לארץ כנען, את העונש שהוטל על העם לנדוד במדבר ארבעים שנה ואת מלחמות ישראל במדבר."},
  "wikipedia":{"target":"Devarim_(parsha)","summary":"The parashah recounts how Moses appointed chiefs, the episode of the Twelve Spies, encounters with the Edomites and Ammonites, the conquest of Sihon and Og, and the assignment of land for the tribes of Reuben, Gad, and Manasseh."},
  "uscj.org":{"target":"Devarim"}
 },
@@ -714,7 +714,7 @@
  "reformjudaism.org":{"target":"va-etchanan"},
  "chabad.org":36233,
  "learntefillah.com":"vaetchanan",
- "sefaria":{"target":"vaetchanan","summary":"Vaetchanan (“I Pleaded”) opens as Moses describes his pleading with God to be allowed into the Land of Israel. Moses warns the Israelites not to pursue idolatry and recounts the giving of the Ten Commandments. The portion also contains the Shema, a declaration of faith and a central text in Jewish prayer.","summaryHe":"בפרשת ואתחנן מתוארים תחנוני משה להיכנס לארץ. משה מזהיר את העם מפני עבודה זרה ומבדיל שלוש ערי מקלט בעבר הירדן המזרחי. הוא מזכיר גם את מעמד הר סיני, את עשרת הדברים ואת כתיבת לוחות הברית. בסוף הפרשה כתובה פרשת 'שמע ישראל', שהיא הצהרת אמונים מסורתית לאלוהי ישראל ושולבה לימים כחלק מרכזי בתפילה."},
+ "sefaria":{"target":"vaetchanan","summaryEn":"Vaetchanan (“I Pleaded”) opens as Moses describes his pleading with God to be allowed into the Land of Israel. Moses warns the Israelites not to pursue idolatry and recounts the giving of the Ten Commandments. The portion also contains the Shema, a declaration of faith and a central text in Jewish prayer.","summaryHe":"בפרשת ואתחנן מתוארים תחנוני משה להיכנס לארץ. משה מזהיר את העם מפני עבודה זרה ומבדיל שלוש ערי מקלט בעבר הירדן המזרחי. הוא מזכיר גם את מעמד הר סיני, את עשרת הדברים ואת כתיבת לוחות הברית. בסוף הפרשה כתובה פרשת 'שמע ישראל', שהיא הצהרת אמונים מסורתית לאלוהי ישראל ושולבה לימים כחלק מרכזי בתפילה."},
  "wikipedia":{"target":"Va%27etchanan","summary":"The parashah tells how Moses asked to see the Land of Israel, made arguments to obey the law, recounted setting up the Cities of Refuge, recited the Ten Commandments and the Shema, and gave instructions for the Israelites' conquest of the Land."},
  "uscj.org":{"target":"Vaethanan"}
 },
@@ -730,7 +730,7 @@
  "reformjudaism.org":{"target":"eikev"},
  "chabad.org":36234,
  "learntefillah.com":"ekev",
- "sefaria":{"target":"eikev","summary":"In Eikev (“As a Result”), Moses recounts events that happened in the desert, including the manna, the golden calf, and Aaron’s death. Moses describes the blessings God will bestow upon the Israelites if they follow God’s law and the punishments they will encounter if they disobey.","summaryHe":"בפרשת עקב משה מבטיח ששמירת המצוות תגרור אחריה שגשוג והצלחה צבאית. משה מזכיר לעם את המן שאכלו במדבר ואת החטאים והתלונות וכן מתאר במפורט את חטא העגל. משה מדגיש את הייחודיות של הארץ המובטחת ושונה את פרשת 'והיה אם שמוע', המתארת את שכר קיום המצוות ועונש הגלות על עבודה זרה."},
+ "sefaria":{"target":"eikev","summaryEn":"In Eikev (“As a Result”), Moses recounts events that happened in the desert, including the manna, the golden calf, and Aaron’s death. Moses describes the blessings God will bestow upon the Israelites if they follow God’s law and the punishments they will encounter if they disobey.","summaryHe":"בפרשת עקב משה מבטיח ששמירת המצוות תגרור אחריה שגשוג והצלחה צבאית. משה מזכיר לעם את המן שאכלו במדבר ואת החטאים והתלונות וכן מתאר במפורט את חטא העגל. משה מדגיש את הייחודיות של הארץ המובטחת ושונה את פרשת 'והיה אם שמוע', המתארת את שכר קיום המצוות ועונש הגלות על עבודה זרה."},
  "wikipedia":{"target":"Eikev","summary":"The parashah tells of the blessings of obedience to God, the dangers of forgetting God, and directions for taking the Land of Israel. Moses recalls the making and re-making of the Tablets of Stone, the incident of the Golden Calf, Aaron's death, the Levites' duties, and exhortations to serve God."},
  "uscj.org":{"target":"Ekev"}
 },
@@ -746,7 +746,7 @@
  "reformjudaism.org":{"target":"reih"},
  "chabad.org":36235,
  "learntefillah.com":"ree",
- "sefaria":{"target":"reeh","summary":"Re’eh (“See”) details a series of laws in advance of the Israelites’ entrance into the Land of Israel. These include the obligation to destroy idolatry, laws of tithing and charity, dietary laws, holiday laws, and the prohibition of offering sacrifices outside of the place designated by God.","summaryHe":"בפרשת ראה משה מציב את העם בפני בחירה בין הטוב והברכה לבין הרע והקללה. מפורטים דיני מקום הקרבת הקורבנות ואכילתם,  ונאסרת הסתה לעבודה זרה בכל מיני דרכים. מפורטת רשימה של בעלי חיים האסורים באכילה ומותרים בה. מובאים דיני מעשר, מעשר עני, צדקה ומענק שחרור לעבד."},
+ "sefaria":{"target":"reeh","summaryEn":"Re’eh (“See”) details a series of laws in advance of the Israelites’ entrance into the Land of Israel. These include the obligation to destroy idolatry, laws of tithing and charity, dietary laws, holiday laws, and the prohibition of offering sacrifices outside of the place designated by God.","summaryHe":"בפרשת ראה משה מציב את העם בפני בחירה בין הטוב והברכה לבין הרע והקללה. מפורטים דיני מקום הקרבת הקורבנות ואכילתם,  ונאסרת הסתה לעבודה זרה בכל מיני דרכים. מפורטת רשימה של בעלי חיים האסורים באכילה ומותרים בה. מובאים דיני מעשר, מעשר עני, צדקה ומענק שחרור לעבד."},
  "wikipedia":{"target":"Re%27eh","summary":"In the parashah, Moses set before the Israelites the choice between blessing and curse. Moses instructed the Israelites in the laws that they were to observe, including the law of a single centralized place of worship. Moses warned against following other gods and their prophets and set forth the laws of kashrut, tithes, the Sabbatical year, the Hebrew slave, firstborn animals, and the three pilgrim festivals."},
  "uscj.org":{"target":"Reeh"}
 },
@@ -762,7 +762,7 @@
  "reformjudaism.org":{"target":"shoftim"},
  "chabad.org":36236,
  "learntefillah.com":"shofetim",
- "sefaria":{"target":"shoftim","summary":"Shoftim (“Judges”) discusses guidelines of leadership, opening with a command to appoint judges and continuing to detail laws of kings, priests, and prophets. It also describes laws relating to cities of refuge for accidental killers, false witnesses, warfare, and the rite performed in a case of unsolved murder.","summaryHe":"פרשת שופטים עוסקת בתפקידי ההנהגה ומערכת המשפט: הציווי למנות שופטים ושוטרים; מיקום השופטים במקום מרכזי (\"המקום אשר יבחר ה'\"); דיני המלך; תפקיד הנביא והאיסור להישמע לנביאי שקר; דין ערי מקלט לרוצח בשגגה ודיני עדות שקר. נוסף על כך מפורטים דיני היציאה למלחמה ודין עגלה ערופה, שחל במקרה שנמצא הרוג בשטח הפקר ולא נודע מי הרגו."},
+ "sefaria":{"target":"shoftim","summaryEn":"Shoftim (“Judges”) discusses guidelines of leadership, opening with a command to appoint judges and continuing to detail laws of kings, priests, and prophets. It also describes laws relating to cities of refuge for accidental killers, false witnesses, warfare, and the rite performed in a case of unsolved murder.","summaryHe":"פרשת שופטים עוסקת בתפקידי ההנהגה ומערכת המשפט: הציווי למנות שופטים ושוטרים; מיקום השופטים במקום מרכזי (\"המקום אשר יבחר ה'\"); דיני המלך; תפקיד הנביא והאיסור להישמע לנביאי שקר; דין ערי מקלט לרוצח בשגגה ודיני עדות שקר. נוסף על כך מפורטים דיני היציאה למלחמה ודין עגלה ערופה, שחל במקרה שנמצא הרוג בשטח הפקר ולא נודע מי הרגו."},
  "wikipedia":{"target":"Shofetim_(parsha)","summary":"The parashah provides a constitution — a basic societal structure — for the Israelites. The parashah sets out rules for judges, kings, Levites, prophets, cities of refuge, witnesses, war, and unsolved murders."},
  "uscj.org":{"target":"Shoftim"}
 },
@@ -778,7 +778,7 @@
  "reformjudaism.org":{"target":"ki-teitzei"},
  "chabad.org":36237,
  "learntefillah.com":"ki-tetse",
- "sefaria":{"target":"ki-teitzei","summary":"Ki Teitzei (“When You Go Out”) contains numerous laws, more than appear in any other Torah portion. These include laws about the treatment of a captive woman, returning lost objects, forbidden mixtures, the erection of a rooftop fence, rape, collateral, and workers’ wages.","summaryHe":"בפרשת כי תצא מספר הדינים הגדול ביותר בהשוואה לכל פרשה אחרת בתורה. במצוות מפורטים דיני ירושה ודיני קבורת המת, מצוות השבת אבדה ודינים אחרים להתנהלות חברתית מוסרית, כמו מתנות עניים, איסור ריבית ואיסור הלנת שכר. מתוארים גם דיני משפחה כמו דיני נישואין, גירושין, אישות, ייבום וחליצה."},
+ "sefaria":{"target":"ki-teitzei","summaryEn":"Ki Teitzei (“When You Go Out”) contains numerous laws, more than appear in any other Torah portion. These include laws about the treatment of a captive woman, returning lost objects, forbidden mixtures, the erection of a rooftop fence, rape, collateral, and workers’ wages.","summaryHe":"בפרשת כי תצא מספר הדינים הגדול ביותר בהשוואה לכל פרשה אחרת בתורה. במצוות מפורטים דיני ירושה ודיני קבורת המת, מצוות השבת אבדה ודינים אחרים להתנהלות חברתית מוסרית, כמו מתנות עניים, איסור ריבית ואיסור הלנת שכר. מתוארים גם דיני משפחה כמו דיני נישואין, גירושין, אישות, ייבום וחליצה."},
  "wikipedia":{"target":"Ki_Teitzei","summary":"The parashah sets out a series of miscellaneous laws, mostly governing civil and domestic life, including ordinances regarding a beautiful captive of war, inheritance among the sons of two wives, a wayward son, the corpse of an executed person, found property, coming upon another in distress, rooftop safety, prohibited mixtures, sexual offenses, membership in the congregation, camp hygiene, runaway slaves, prostitution, usury, vows, gleaning, kidnapping, repossession, prompt payment of wages, vicarious liability, flogging, treatment of domestic animals, levirate marriage (יִבּוּם, yibbum), weights and measures, and wiping out the memory of Amalek."},
  "uscj.org":{"target":"KiTetze"}
 },
@@ -794,7 +794,7 @@
  "reformjudaism.org":{"target":"ki-tavo"},
  "chabad.org":36238,
  "learntefillah.com":"ki-tavo",
- "sefaria":{"target":"ki-tavo","summary":"Ki Tavo (“When You Come”) opens by describing the ceremony of the first fruit offering (bikkurim) and the declaration made upon the completion of tithing. It concludes with a detailed description of blessings that follow obedience to God’s laws and curses that come with their desecration.","summaryHe":"בפרשת כי תבוא מובאות מצוות מקרא ביכורים, טקסט הודיה שנאמר בשעת הבאת הביכורים, ומצוות וידוי מעשרות, נוסח שנאמר לאחר השלמת חובת הבאת המעשרות. משה מצווה על מעמד הברכה והקללה על הר גריזים והר עיבל אחרי הכניסה לארץ ומתאר את הברכות הרבות שיחולו על בני ישראל אם ישמרו את מצוות התורה ואת הקללות והעונשים שיבואו על העם אם לא ישמרו את המצוות."},
+ "sefaria":{"target":"ki-tavo","summaryEn":"Ki Tavo (“When You Come”) opens by describing the ceremony of the first fruit offering (bikkurim) and the declaration made upon the completion of tithing. It concludes with a detailed description of blessings that follow obedience to God’s laws and curses that come with their desecration.","summaryHe":"בפרשת כי תבוא מובאות מצוות מקרא ביכורים, טקסט הודיה שנאמר בשעת הבאת הביכורים, ומצוות וידוי מעשרות, נוסח שנאמר לאחר השלמת חובת הבאת המעשרות. משה מצווה על מעמד הברכה והקללה על הר גריזים והר עיבל אחרי הכניסה לארץ ומתאר את הברכות הרבות שיחולו על בני ישראל אם ישמרו את מצוות התורה ואת הקללות והעונשים שיבואו על העם אם לא ישמרו את המצוות."},
  "wikipedia":{"target":"Ki_Tavo","summary":"The parashah tells of the ceremony of the first fruits (בִּכּוּרִים, bikkurim), tithes, and the blessings from observance and curses (תוֹכֵחָה, tocheichah) from violation of the law."},
  "uscj.org":{"target":"KiTavo"}
 },
@@ -810,7 +810,7 @@
  "reformjudaism.org":{"target":"nitzavim"},
  "chabad.org":36239,
  "learntefillah.com":"nitsavim",
- "sefaria":{"target":"nitzavim","summary":"In Nitzavim (“Standing”), Moses addresses the Israelites, emphasizing the importance of following God’s covenant and of not worshiping other gods. He describes the process of repentance and returning to God, and stresses that God’s commandments are achievable and “not in the heavens.”","summaryHe":"בפרשת נצבים משה פונה לכל חלקי העם, ממנהיגי העם ועד חוטבי העצים ושואבי המים, וכולל אותם בברית עם אלוהים. משה מדגיש את העונשים הצפויים לעוברים על הברית. הוא מתאר את תהליך התשובה הצפוי לעם ישראל בגלות ומתאר את שמירת מצוות האל כדבר אפשרי ובהישג יד: \"לא בשמים היא.\""},
+ "sefaria":{"target":"nitzavim","summaryEn":"In Nitzavim (“Standing”), Moses addresses the Israelites, emphasizing the importance of following God’s covenant and of not worshiping other gods. He describes the process of repentance and returning to God, and stresses that God’s commandments are achievable and “not in the heavens.”","summaryHe":"בפרשת נצבים משה פונה לכל חלקי העם, ממנהיגי העם ועד חוטבי העצים ושואבי המים, וכולל אותם בברית עם אלוהים. משה מדגיש את העונשים הצפויים לעוברים על הברית. הוא מתאר את תהליך התשובה הצפוי לעם ישראל בגלות ומתאר את שמירת מצוות האל כדבר אפשרי ובהישג יד: \"לא בשמים היא.\""},
  "wikipedia":{"target":"Nitzavim","summary":"In the parashah, Moses told the Israelites that all the people stood before God to enter into the covenant, violation of which would bring on curses, but if they returned to God and heeded God's commandments, then God would take them back in love and bring them together again from the ends of the world. Moses taught that this Instruction was not beyond reach, and Moses put before the Israelites life and death, blessing and curse, and exhorted them to choose life by loving God and heeding the commandments."},
  "uscj.org":{"target":"Nitzavim"}
 },
@@ -826,7 +826,7 @@
  "reformjudaism.org":{"target":"vayeilech"},
  "chabad.org":36240,
  "learntefillah.com":"vayelech",
- "sefaria":{"target":"vayeilech","summary":"Vayelekh (“He Went”) opens as Moses tells the people of Israel that he will not lead them into the land of Israel and that Joshua will take over. He instructs the people to gather and read Torah publicly every seven years. At God’s command, Moses writes a poem bearing witness to God’s covenant with the people of Israel.","summaryHe":"בפרשת וילך משה מסכם את תקופת הנהגתו ומעביר את ההנהגה ליהושע. מתוארת מצוות הקהל, שהתורה נקראת בה במעמד מיוחד של כל העם שמתקיים בחג הסוכות שבמוצאי שנת השמיטה \"במקום אשר יבחר ה'.\" משה מתאר כיצד בני ישראל ייחטאו בעבודה זרה וייענשו. אלוהים מצווה את משה לכתוב שירה, עדות לבני ישראל."},
+ "sefaria":{"target":"vayeilech","summaryEn":"Vayelekh (“He Went”) opens as Moses tells the people of Israel that he will not lead them into the land of Israel and that Joshua will take over. He instructs the people to gather and read Torah publicly every seven years. At God’s command, Moses writes a poem bearing witness to God’s covenant with the people of Israel.","summaryHe":"בפרשת וילך משה מסכם את תקופת הנהגתו ומעביר את ההנהגה ליהושע. מתוארת מצוות הקהל, שהתורה נקראת בה במעמד מיוחד של כל העם שמתקיים בחג הסוכות שבמוצאי שנת השמיטה \"במקום אשר יבחר ה'.\" משה מתאר כיצד בני ישראל ייחטאו בעבודה זרה וייענשו. אלוהים מצווה את משה לכתוב שירה, עדות לבני ישראל."},
  "wikipedia":{"target":"Vayelech","summary":"In the parashah, Moses told the Israelites to be strong and courageous, as God and Joshua would soon lead them into the Promised Land. Moses commanded the Israelites to read the law to all the people every seven years. God told Moses that his death was approaching, that the people would break the covenant, and that God would thus hide God's face from them, so Moses should therefore write a song to serve as a witness for God against them."},
  "uscj.org":{"target":"Vayelekh"}
 },
@@ -842,7 +842,7 @@
  "reformjudaism.org":{"target":"haazinu"},
  "chabad.org":36241,
  "learntefillah.com":"haazinu",
- "sefaria":{"target":"haazinu","summary":"In Ha’azinu (“Listen”) , Moses recites a poem praising God and criticizing the sins of the Israelites. He describes the misfortunes that the Israelites will face and the damage God will ultimately wreak on their oppressors. The portion ends as God commands Moses to ascend Mount Nebo, where he is to die.","summaryHe":"בפרשת האזינו מובאת שירה שמשבחת את אלוהים ומבקרת את העבירות העתידיות של בני ישראל. בשירה מתוארים הסבל והצרות שיבואו על העם וכן העונשים העתידים לבוא על אויבי עם ישראל. הפרשה מסתיימת בציווי על משה לעלות להר נבו, שבו ימות."},
+ "sefaria":{"target":"haazinu","summaryEn":"In Ha’azinu (“Listen”) , Moses recites a poem praising God and criticizing the sins of the Israelites. He describes the misfortunes that the Israelites will face and the damage God will ultimately wreak on their oppressors. The portion ends as God commands Moses to ascend Mount Nebo, where he is to die.","summaryHe":"בפרשת האזינו מובאת שירה שמשבחת את אלוהים ומבקרת את העבירות העתידיות של בני ישראל. בשירה מתוארים הסבל והצרות שיבואו על העם וכן העונשים העתידים לבוא על אויבי עם ישראל. הפרשה מסתיימת בציווי על משה לעלות להר נבו, שבו ימות."},
  "wikipedia":{"target":"Haazinu","summary":"The parashah sets out the Song of Moses — an indictment of the Israelites' sins, a prophecy of their punishment, and a promise of God's ultimate redemption of them."},
  "uscj.org":{"target":"Haazinu"}
 },
@@ -856,7 +856,7 @@
  "ou.org":{"target":"V'zot Habracha","cid":"1428"},
  "reformjudaism.org":{"target":"vzot-habrachah"},
  "learntefillah.com":"vezot-haberacha",
- "sefaria":{"target":"vzot-haberachah","summary":"VeZot HaBerakhah is the final portion in the annual cycle of Torah reading. In it, Moses blesses each of the tribes, excluding the tribe of Simeon. He then ascends Mount Nebo, sees the land of Israel, and dies at the age of 120. The Israelites mourn, and the portion ends highlighting Moses’ unparalleled greatness.","summaryHe":"בפרשת וזאת הברכה, הפרשה האחרונה בחמשת חומשי התורה, משה מברך את כל שבטי ישראל חוץ משבט שמעון. משה עולה להר נבו, רואה את הארץ המובטחת ומת בן מאה ועשרים שנה. בני ישראל בוכים על מיתת משה שלושים יום, ויהושע מנהיג את העם מכאן והלאה. משה מתואר כנביא שלא קם עוד כמוהו בישראל."},
+ "sefaria":{"target":"vzot-haberachah","summaryEn":"VeZot HaBerakhah is the final portion in the annual cycle of Torah reading. In it, Moses blesses each of the tribes, excluding the tribe of Simeon. He then ascends Mount Nebo, sees the land of Israel, and dies at the age of 120. The Israelites mourn, and the portion ends highlighting Moses’ unparalleled greatness.","summaryHe":"בפרשת וזאת הברכה, הפרשה האחרונה בחמשת חומשי התורה, משה מברך את כל שבטי ישראל חוץ משבט שמעון. משה עולה להר נבו, רואה את הארץ המובטחת ומת בן מאה ועשרים שנה. בני ישראל בוכים על מיתת משה שלושים יום, ויהושע מנהיג את העם מכאן והלאה. משה מתואר כנביא שלא קם עוד כמוהו בישראל."},
  "wikipedia":{"target":"V%27Zot_HaBerachah","summary":"The parashah sets out the farewell Blessing of Moses for the 12 Tribes of Israel and concludes with the death of Moses."},
  "chabad.org":36242
 },

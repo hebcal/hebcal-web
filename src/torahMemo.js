@@ -70,13 +70,27 @@ export function makeTorahMemoText(ev, il) {
 }
 
 /**
+ * Returns the holiday description in `locale`. `@hebcal/rest-api` carries
+ * Hebrew translations for every holiday it describes in English, but falls
+ * back to English rather than nothing if one is ever missing.
+ * @param {Event} ev
+ * @param {string} [locale]
+ * @return {string}
+ */
+export function localizedHolidayDescription(ev, locale) {
+  return getHolidayDescription(ev, false, locale) ||
+    getHolidayDescription(ev, false, 'en');
+}
+
+/**
  * Returns the memo to use for an event: Torah reading for a Parsha
  * ha-Shavua, otherwise `ev.memo` or the holiday description.
  * @param {Event} ev
  * @param {boolean} il
+ * @param {string} [locale] language for the holiday description
  * @return {string}
  */
-export function makeMemo(ev, il) {
+export function makeMemo(ev, il, locale) {
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
     try {
       const memo = makeTorahMemoText(ev, il);
@@ -90,6 +104,6 @@ export function makeMemo(ev, il) {
   if (ev.memo) {
     return ev.memo;
   }
-  return getHolidayDescription(ev, false, 'en');
+  return localizedHolidayDescription(ev, locale);
 }
 

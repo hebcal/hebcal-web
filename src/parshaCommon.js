@@ -194,7 +194,7 @@ function parshaVerses(parshaMeta) {
 
 /**
  * Sefaria publishes each parasha topic in both English and Hebrew; `drash.json`
- * carries the English prose in `summary` and the Hebrew prose in `summaryHe`.
+ * carries the prose in `summaryEn` and `summaryHe`.
  * @private
  * @param {any} parsha
  * @param {string} lang `en` or `he`
@@ -202,7 +202,7 @@ function parshaVerses(parshaMeta) {
  */
 function makeSummaryHtml(parsha, lang) {
   const hebrew = lang === 'he';
-  const key = hebrew ? 'summaryHe' : 'summary';
+  const key = hebrew ? 'summaryHe' : 'summaryEn';
   let summary;
   let target;
   if (parsha.combined) {
