@@ -348,7 +348,7 @@ describe('every published feed', () => {
       // every line must be folded to 75 octets or less
       const tooLong = ics.split('\r\n').find(
           (line) => Buffer.byteLength(line, 'utf-8') > 75);
-      expect(tooLong, file).toBe(undefined);
+      expect(tooLong, file).toBeUndefined();
       expect(csv, file).toContain('"Subject","Start Date"');
       expect(csv.split('\r\n').filter((l) => l.length).length - 1, file)
           .toBe(events.length);

@@ -183,36 +183,17 @@ describe('Hebcal output formats', () => {
     expect(response.text).toContain('"Start Date"');
   });
 
-  it('should return RSS XML with cfg=rss', async () => {
+  it.each([
+    {cfg: 'rss', type: 'xml', text: '<rss', what: 'RSS XML'},
+    {cfg: 'ics', type: 'calendar', text: 'BEGIN:VCALENDAR', what: 'iCalendar'},
+    {cfg: 'e', type: 'javascript', text: 'DefineEvent(', what: 'DefineEvent JavaScript'},
+    {cfg: 'e2', type: 'javascript', text: 'HEBCAL.eraw2', what: 'HEBCAL.eraw2 JavaScript'},
+  ])('should return $what with cfg=$cfg', async ({cfg, type, text}) => {
     const response = await request(server)
-        .get('/hebcal?v=1&cfg=rss&maj=on&year=2026&month=3');
+        .get(`/hebcal?v=1&cfg=${cfg}&maj=on&year=2026&month=3`);
     expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<rss');
-  });
-
-  it('should return iCalendar with cfg=ics', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=ics&maj=on&year=2026&month=3');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('calendar');
-    expect(response.text).toContain('BEGIN:VCALENDAR');
-  });
-
-  it('should return DefineEvent JavaScript with cfg=e', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=e&maj=on&year=2026&month=3');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
-    expect(response.text).toContain('DefineEvent(');
-  });
-
-  it('should return HEBCAL.eraw2 JavaScript with cfg=e2', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=e2&maj=on&year=2026&month=3');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
-    expect(response.text).toContain('HEBCAL.eraw2');
+    expect(response.type).toContain(type);
+    expect(response.text).toContain(text);
   });
 
   it('should wrap JSON in JSONP callback when callback param is given', async () => {
@@ -220,6 +201,43 @@ describe('Hebcal output formats', () => {
         .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&callback=myCallback');
     expect(response.status).toBe(200);
     expect(response.text).toMatch(/^myCallback\(/);
+    // JSONP is a script, not JSON, and must say so
+    expect(response.headers['content-type']).toMatch(/^text\/javascript/);
+  });
+
+  it('should allow a dotted callback name', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&callback=window.hebcal._cb$1');
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/^window\.hebcal\._cb\$1\(/);
+  });
+
+  it('should ignore a callback containing script meta-characters', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&callback=' +
+          encodeURIComponent('</script><img src=x onerror=alert(1)>'));
+    expect(response.status).toBe(200);
+    // falls back to plain JSON rather than emitting a scrubbed callback name
+    expect(response.headers['content-type']).toMatch(/^application\/json/);
+    expect(response.text).toMatch(/^\{/);
+    expect(response.text).not.toContain('onerror');
+    expect(Array.isArray(response.body.items)).toBe(true);
+  });
+
+  it('should ignore a callback that is not a valid identifier', async () => {
+    for (const bad of ['1bad', 'foo bar', 'foo()', '.foo', 'foo..bar', 'a'.repeat(129)]) {
+      const response = await request(server)
+          .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3&callback=' +
+            encodeURIComponent(bad));
+      expect(response.status).toBe(200);
+      expect(response.headers['content-type']).toMatch(/^application\/json/);
+    }
+  });
+
+  it('should send X-Content-Type-Options: nosniff', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&maj=on&year=2026&month=3');
+    expect(response.headers['x-content-type-options']).toBe('nosniff');
   });
 
   it('should omit leyning data from parasha items when leyning=off', async () => {
@@ -251,23 +269,12 @@ describe('Hebcal error handling', () => {
     expect(response.status).toBe(400);
   });
 
-  it('should return 400 HTML form for Gregorian year > 9999', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&maj=on&year=10000');
-    expect(response.status).toBe(400);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 400 HTML form for Hebrew year > 13760', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&maj=on&yt=H&year=13761');
-    expect(response.status).toBe(400);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 400 with HTML error form for invalid year with v=1', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&maj=on&year=INVALID');
+  it.each([
+    ['Gregorian year > 9999', '/hebcal?v=1&maj=on&year=10000'],
+    ['Hebrew year > 13760', '/hebcal?v=1&maj=on&yt=H&year=13761'],
+    ['invalid year with v=1', '/hebcal?v=1&maj=on&year=INVALID'],
+  ])('should return a 400 HTML form for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(400);
     expect(response.type).toContain('html');
   });
@@ -343,78 +350,31 @@ function uniqueYears(items) {
 }
 
 describe('Hebcal ny (number of years) parameter', () => {
-  it('should return 1 year when ny=1', async () => {
+  it.each([
+    {ny: '1', years: 1, why: ''},
+    {ny: '0', years: 1, why: ' (below minimum)'},
+    {ny: '-5', years: 1, why: ' (negative)'},
+    {ny: '3', years: 3, why: ''},
+    {ny: '5', years: 5, why: ''},
+    {ny: '10', years: 10, why: ''},
+    {ny: '15', years: 10, why: ' (capped at maximum)'},
+  ])('should return $years year(s) when ny=$ny$why', async ({ny, years}) => {
     const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=1');
+        .get(`/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=${ny}`);
     expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(1);
-  });
-
-  it('should return 1 year when ny=0 (below minimum)', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=0');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(1);
-  });
-
-  it('should return 1 year when ny=-5 (negative)', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=-5');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(1);
-  });
-
-  it('should return 3 years when ny=3', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=3');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(3);
-  });
-
-  it('should return 5 years when ny=5', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=5');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(5);
-  });
-
-  it('should return 10 years when ny=10', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=10');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(10);
-  });
-
-  it('should cap to 10 years when ny=15 (above maximum)', async () => {
-    const response = await request(server)
-        .get('/hebcal?v=1&cfg=json&maj=on&year=2023&month=x&ny=15');
-    expect(response.status).toBe(200);
-    expect(uniqueYears(response.body.items)).toBe(10);
+    expect(uniqueYears(response.body.items)).toBe(years);
   });
 });
 
 describe('304 Not Modified (ETag / If-None-Match)', () => {
-  it('handles conditional requests for cfg=json', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&cfg=json&maj=on&year=2026&month=3');
-  });
-
-  it('handles conditional requests for cfg=ics', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&cfg=ics&maj=on&year=2026&month=3');
-  });
-
-  it('handles conditional requests for cfg=fc', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&cfg=fc&start=2026-03-01&end=2026-04-12&maj=on&min=on&nx=on');
-  });
-
-  it('handles conditional requests for cfg=csv', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&cfg=csv&maj=on&year=2026&month=3');
-  });
-
-  it('handles conditional requests for cfg=rss', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&cfg=rss&maj=on&year=2026&month=3');
-  });
-
-  it('handles conditional requests for HTML calendar (no cfg)', async () => {
-    await expectConditionalEtag(server, '/hebcal?v=1&maj=on&year=2026&month=3&set=off');
+  it.each([
+    ['cfg=json', '/hebcal?v=1&cfg=json&maj=on&year=2026&month=3'],
+    ['cfg=ics', '/hebcal?v=1&cfg=ics&maj=on&year=2026&month=3'],
+    ['cfg=fc', '/hebcal?v=1&cfg=fc&start=2026-03-01&end=2026-04-12&maj=on&min=on&nx=on'],
+    ['cfg=csv', '/hebcal?v=1&cfg=csv&maj=on&year=2026&month=3'],
+    ['cfg=rss', '/hebcal?v=1&cfg=rss&maj=on&year=2026&month=3'],
+    ['HTML calendar (no cfg)', '/hebcal?v=1&maj=on&year=2026&month=3&set=off'],
+  ])('handles conditional requests for %s', async (what, url) => {
+    await expectConditionalEtag(server, url);
   });
 });

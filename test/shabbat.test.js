@@ -22,46 +22,17 @@ describe('Shabbat Routes', () => {
     expect(response.text).toMatch(/Candle lighting|Havdalah/);
   });
 
-  it('should return 200 for /shabbat with geonameid', async () => {
-    const response = await request(server)
-        .get('/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
+  it.each([
+    ['/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24', 'html'],
+    ['/shabbat?cfg=json&geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24', 'json'],
+    ['/shabbat/?geonameid=5128581', 'html'],
+    ['/shabbat/browse/italy-calabria', 'html'],
+    ['/shabbat/browse/sitemap.xml', 'xml'],
+    ['/shabbat/browse/australia.xml', 'xml'],
+  ])('should return 200 %s (%s)', async (url, type) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should handle /shabbat with JSON config', async () => {
-    const response = await request(server)
-        .get('/shabbat?cfg=json&geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-  });
-
-  it('should return 200 for /shabbat/', async () => {
-    const response = await request(server)
-        .get('/shabbat/?geonameid=5128581');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for /shabbat/browse/', async () => {
-    const response = await request(server)
-        .get('/shabbat/browse/italy-calabria');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for /shabbat/browse/sitemap.xml', async () => {
-    const response = await request(server)
-        .get('/shabbat/browse/sitemap.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-  });
-
-  it('should return 200 for /shabbat/browse/australia.xml', async () => {
-    const response = await request(server)
-        .get('/shabbat/browse/australia.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
+    expect(response.type).toContain(type);
   });
 
   it('should return 404 for /shabbat/browse/bogus.xml', async () => {

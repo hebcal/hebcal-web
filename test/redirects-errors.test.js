@@ -6,89 +6,41 @@ import {makeServer} from './testServer.js';
 const server = makeServer(app);
 
 describe('301 Redirects', () => {
-  it('should redirect /privacy to external URL with 301', async () => {
+  it.each([
+    ['/privacy', 'https://www.hebcal.com/home/about/privacy-policy'],
+    ['/help', 'https://www.hebcal.com/home/help'],
+    ['/converter/converter.cgi', 'https://www.hebcal.com/converter'],
+  ])('should redirect %s with 301', async (path, location) => {
     const response = await request(server)
-        .get('/privacy')
+        .get(path)
         .redirects(0);
     expect(response.status).toBe(301);
-    expect(response.headers.location).toBe('https://www.hebcal.com/home/about/privacy-policy');
+    expect(response.headers.location).toBe(location);
   });
 
-  it('should redirect /help to external URL with 301', async () => {
+  it.each([
+    '/shabbat/browse',
+    '/holidays',
+    '/sedrot',
+  ])('should add trailing slash to %s with 301', async (path) => {
     const response = await request(server)
-        .get('/help')
+        .get(path)
         .redirects(0);
     expect(response.status).toBe(301);
-    expect(response.headers.location).toBe('https://www.hebcal.com/home/help');
-  });
-
-  it('should redirect /converter/converter.cgi with 301', async () => {
-    const response = await request(server)
-        .get('/converter/converter.cgi')
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toBe('https://www.hebcal.com/converter');
-  });
-
-  it('should add trailing slash to /shabbat/browse with 301', async () => {
-    const response = await request(server)
-        .get('/shabbat/browse')
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toMatch(/\/shabbat\/browse\/$/);
-  });
-
-  it('should add trailing slash to /holidays with 301', async () => {
-    const response = await request(server)
-        .get('/holidays')
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toMatch(/\/holidays\/$/);
-  });
-
-  it('should add trailing slash to /sedrot with 301', async () => {
-    const response = await request(server)
-        .get('/sedrot')
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toMatch(/\/sedrot\/$/);
+    expect(response.headers.location).toMatch(new RegExp(`${path}/$`));
   });
 });
 
 describe('410 Gone Responses', () => {
-  it('should return 410 for /dist/', async () => {
-    const response = await request(server)
-        .get('/dist/');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for /dist/hebcal.pl', async () => {
-    const response = await request(server)
-        .get('/dist/hebcal.pl');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for /dist/calc_triennial.pl', async () => {
-    const response = await request(server)
-        .get('/dist/calc_triennial.pl');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for /holidays after year 2999 (Yom HaAtzmaut)', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-haatzmaut-4493');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for /sedrot after year 2999', async () => {
-    const response = await request(server)
-        .get('/sedrot/tazria-metzora-82230517');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for /holidays after year 2999 (Chanukah)', async () => {
-    const response = await request(server)
-        .get('/holidays/chanukah-10069');
+  it.each([
+    ['/dist/', 'retired Perl distribution index'],
+    ['/dist/hebcal.pl', 'retired Perl script'],
+    ['/dist/calc_triennial.pl', 'retired Perl script'],
+    ['/holidays/yom-haatzmaut-4493', 'holiday after year 2999'],
+    ['/sedrot/tazria-metzora-82230517', 'parsha after year 2999'],
+    ['/holidays/chanukah-10069', 'holiday after year 2999'],
+  ])('should return 410 for %s (%s)', async (path) => {
+    const response = await request(server).get(path);
     expect(response.status).toBe(410);
   });
 });
@@ -131,23 +83,12 @@ describe('HTTP Method Restrictions', () => {
 });
 
 describe('Error Handling', () => {
-  it('should return 404 for non-existent route', async () => {
-    const response = await request(server)
-        .get('/this-does-not-exist-12345');
-    expect(response.status).toBe(404);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 404 for extra slash in holidays path', async () => {
-    const response = await request(server)
-        .get('/holidays/foo/bar/baz');
-    expect(response.status).toBe(404);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 404 for extra slash in sedrot path', async () => {
-    const response = await request(server)
-        .get('/sedrot/foo/bar');
+  it.each([
+    ['non-existent route', '/this-does-not-exist-12345'],
+    ['extra slash in holidays path', '/holidays/foo/bar/baz'],
+    ['extra slash in sedrot path', '/sedrot/foo/bar'],
+  ])('should return 404 for %s', async (why, path) => {
+    const response = await request(server).get(path);
     expect(response.status).toBe(404);
     expect(response.type).toContain('html');
   });

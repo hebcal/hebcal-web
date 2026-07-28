@@ -67,23 +67,15 @@ describe('v4 CSV downloads', () => {
 });
 
 describe('v4 PDF downloads', () => {
-  it('returns 200 PDF for /v4/.../hebcal_2020_new_york.pdf', async () => {
-    const response = await request(server)
-        .get('/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf');
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch(/pdf/);
-  });
-
-  it('returns 200 PDF for /v4/.../hebcal_2021_toronto.pdf', async () => {
-    const response = await request(server)
-        .get('/v4/CAEYAUABWLm6-AJg5Q9qAXN4EogBAQ/hebcal_2021_toronto.pdf');
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch(/pdf/);
-  });
-
-  it('returns 200 PDF for mm=2 (Hebrew months & Hebrew numerals)', async () => {
-    const response = await request(server)
-        .get('/v4/CAEQARgBIAEoATABQAFg6w9qAmVziAEBgAQC/hebcal_2027.pdf');
+  it.each([
+    ['/v4/.../hebcal_2020_new_york.pdf',
+      '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf'],
+    ['/v4/.../hebcal_2021_toronto.pdf',
+      '/v4/CAEYAUABWLm6-AJg5Q9qAXN4EogBAQ/hebcal_2021_toronto.pdf'],
+    ['mm=2 (Hebrew months & Hebrew numerals)',
+      '/v4/CAEQARgBIAEoATABQAFg6w9qAmVziAEBgAQC/hebcal_2027.pdf'],
+  ])('returns 200 PDF for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/pdf/);
   });
@@ -307,7 +299,7 @@ describe('limitIcsFeedLength truncation notice', () => {
     expect(events.length).toBeGreaterThan(maxEventsIcsSub);
     const today = new HDate(new Date(year, 0, 1));
     const limited = limitIcsFeedLength(events, true, today);
-    expect(limited.length).toBe(maxEventsIcsSub + 1);
+    expect(limited).toHaveLength(maxEventsIcsSub + 1);
     const lastEvent = limited.at(-1);
     const prevEvent = limited.at(-2);
     expect(lastEvent.render()).toContain('truncated');

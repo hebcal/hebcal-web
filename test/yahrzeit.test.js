@@ -92,7 +92,7 @@ describe('Yahrzeit big test', () => {
     expect(body).toHaveProperty('range');
     expect(body).toHaveProperty('items');
     expect(Array.isArray(body.items)).toBe(true);
-    expect(body.items.length).toBe(1000);
+    expect(body.items).toHaveLength(1000);
     expect(body.items).toContainEqual({
       'title': 'FirstName500 LastName500’s 44th Hebrew Birthday (10th of Iyyar)',
       'date': '2025-05-08',
@@ -117,7 +117,7 @@ describe('Yahrzeit JSON output structure', () => {
     expect(body).toHaveProperty('title');
     expect(body.title).toContain('Golda Meir');
     expect(body).toHaveProperty('items');
-    expect(body.items.length).toBe(2);
+    expect(body.items).toHaveLength(2);
     const item = body.items[0];
     expect(item.category).toBe('yahrzeit');
     expect(item.name).toBe('Golda Meir');
@@ -225,7 +225,7 @@ describe('Yahrzeit with yizkor option', () => {
     expect(response.status).toBe(200);
     const body = response.body;
     const yizkorItems = body.items.filter((i) => i.title.startsWith('Yizkor'));
-    expect(yizkorItems.length).toBe(8); // Pesach, Shavuot, Yom Kippur, Shmini Atzeret
+    expect(yizkorItems).toHaveLength(8); // Pesach, Shavuot, Yom Kippur, Shmini Atzeret
   });
 });
 

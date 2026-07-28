@@ -13,33 +13,19 @@ const server = makeServer(wwwApp);
 // metrics.)
 
 describe('www server: bad-parameter hardening', () => {
-  it('400 for download-link year beyond int32 range (shabbat)', async () => {
-    const res = await request(server)
-        .get('/shabbat?year=999999999999999999999');
-    expect(res.status).toBe(400);
-  });
-
-  it('400 for download-link geonameid beyond int32 range (holidays)', async () => {
-    const res = await request(server)
-        .get('/holidays/?geo=geoname&geonameid=999999999999');
-    expect(res.status).toBe(400);
-  });
-
-  it('400 for Daf Yomi RSS before the cycle began', async () => {
-    const res = await request(server)
-        .get('/etc/dafyomi-en.xml?gy=1&gm=1&gd=1');
-    expect(res.status).toBe(400);
-  });
-
-  it('400 for parsha index in a year before triennial support', async () => {
-    const res = await request(server)
-        .get('/sedrot/?gy=1&gm=1&gd=1');
-    expect(res.status).toBe(400);
-  });
-
-  it('400 for zmanim ICS at a polar latitude with no events', async () => {
-    const res = await request(server)
-        .get('/zmanim?cfg=ics&geo=pos&latitude=90&longitude=0&tzid=UTC');
+  it.each([
+    ['download-link year beyond int32 range (shabbat)',
+      '/shabbat?year=999999999999999999999'],
+    ['download-link geonameid beyond int32 range (holidays)',
+      '/holidays/?geo=geoname&geonameid=999999999999'],
+    ['Daf Yomi RSS before the cycle began',
+      '/etc/dafyomi-en.xml?gy=1&gm=1&gd=1'],
+    ['parsha index in a year before triennial support',
+      '/sedrot/?gy=1&gm=1&gd=1'],
+    ['zmanim ICS at a polar latitude with no events',
+      '/zmanim?cfg=ics&geo=pos&latitude=90&longitude=0&tzid=UTC'],
+  ])('400 for %s', async (why, url) => {
+    const res = await request(server).get(url);
     expect(res.status).toBe(400);
   });
 });

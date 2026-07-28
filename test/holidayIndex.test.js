@@ -39,19 +39,16 @@ describe('Holiday Main Index', () => {
     expect(response.text).toContain('5786');
   });
 
-  it('should redirect out-of-range Hebrew year (too small) to main holidays page', async () => {
-    const response = await request(server).get('/holidays/?year=1000');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/');
-    expect(response.headers.location).toContain('redir=year');
-  });
-
-  it('should redirect out-of-range Hebrew year (too large) to main holidays page', async () => {
-    const response = await request(server).get('/holidays/?year=9999');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/');
-    expect(response.headers.location).toContain('redir=year');
-  });
+  it.each([
+    ['too small', '/holidays/?year=1000'],
+    ['too large', '/holidays/?year=9999'],
+  ])('should redirect out-of-range Hebrew year (%s) to main holidays page',
+      async (why, url) => {
+        const response = await request(server).get(url);
+        expect(response.status).toBe(302);
+        expect(response.headers.location).toContain('/holidays/');
+        expect(response.headers.location).toContain('redir=year');
+      });
 
   it('should return 200 for /holidays/ with Israel mode (i=on)', async () => {
     const response = await request(server).get('/holidays/?i=on');

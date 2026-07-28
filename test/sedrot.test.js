@@ -91,69 +91,38 @@ describe('Sedrot Error Handling', () => {
     expect(response.status).toBe(400);
   });
 
-  it('should return 410 for gy year greater than 2999', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit?gy=3500');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for gy year less than 100', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit?gy=50');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for date string with year out of range', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-30001010');
+  it.each([
+    ['gy year greater than 2999', '/sedrot/bereshit?gy=3500'],
+    ['gy year less than 100', '/sedrot/bereshit?gy=50'],
+    ['date string with year out of range', '/sedrot/bereshit-30001010'],
+  ])('should return 410 for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(410);
   });
 });
 
 describe('Sedrot Redirects', () => {
-  it('should redirect uppercase parsha name to lowercase', async () => {
-    const response = await request(server)
-        .get('/sedrot/Bereshit');
+  // "bereshitt" has edit distance 1 from "bereshit" → triggers alias redirect
+  it.each([
+    {why: 'uppercase parsha name to lowercase',
+      url: '/sedrot/Bereshit', to: '/sedrot/bereshit', notTo: '?'},
+    {why: 'uppercase parsha name preserving Israel suffix',
+      url: '/sedrot/Bereshit?i=on', to: '/sedrot/bereshit?i=on'},
+    {why: 'parsha typo with redir=spelling query param',
+      url: '/sedrot/bereshitt', to: '/sedrot/bereshit?redir=spelling'},
+    {why: 'parsha typo with date and redir=spelling',
+      url: '/sedrot/bereshitt-20241026', to: '/sedrot/bereshit-20241026?redir=spelling'},
+    {why: 'date with fewer than 8 digits',
+      url: '/sedrot/bereshit-202512', to: '/sedrot/bereshit', notTo: '-202512'},
+    {why: 'date with fewer than 8 digits with Israel mode',
+      url: '/sedrot/bereshit-202512?i=on', to: '/sedrot/bereshit?i=on'},
+  ])('should redirect $why', async ({url, to, notTo}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit');
-    expect(response.headers.location).not.toContain('?');
-  });
-
-  it('should redirect uppercase parsha name preserving Israel suffix', async () => {
-    const response = await request(server)
-        .get('/sedrot/Bereshit?i=on');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit?i=on');
-  });
-
-  it('should redirect parsha typo with redir=spelling query param', async () => {
-    // "bereshitt" has edit distance 1 from "bereshit" → triggers alias redirect
-    const response = await request(server)
-        .get('/sedrot/bereshitt');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit?redir=spelling');
-  });
-
-  it('should redirect parsha typo with date and redir=spelling', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshitt-20241026');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit-20241026?redir=spelling');
-  });
-
-  it('should redirect when date has fewer than 8 digits', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-202512');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit');
-    expect(response.headers.location).not.toContain('-202512');
-  });
-
-  it('should redirect when date has fewer than 8 digits with Israel mode', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-202512?i=on');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/sedrot/bereshit?i=on');
+    expect(response.headers.location).toContain(to);
+    if (notTo) {
+      expect(response.headers.location).not.toContain(notTo);
+    }
   });
 
   it('should return 410 Gone when date year is before 1000', async () => {
@@ -210,81 +179,44 @@ describe('Sedrot Israel Mode', () => {
 });
 
 describe('Sedrot Special Parshiyot', () => {
-  it('should return 200 for Vezot Haberakhah without date', async () => {
-    const response = await request(server)
-        .get('/sedrot/vezot-haberakhah');
+  // Simchat Torah 5785 in the Diaspora: October 24, 2024
+  it.each([
+    {why: 'Vezot Haberakhah without date',
+      url: '/sedrot/vezot-haberakhah', text: 'Vezot Haberakhah'},
+    {why: 'Vezot Haberakhah with specific date',
+      url: '/sedrot/vezot-haberakhah-20241024', text: 'Vezot Haberakhah'},
+    {why: 'combined parsha Vayakhel-Pekudei',
+      url: '/sedrot/vayakhel-pekudei', text: 'Vayakhel'},
+    {why: 'Lech-Lecha (hyphenated non-doubled parsha)',
+      url: '/sedrot/lech-lecha', text: 'Lech-Lecha'},
+    {why: 'combined parsha Nitzavim-Vayeilech',
+      url: '/sedrot/nitzavim-vayeilech'},
+    {why: 'combined parsha Tazria-Metzora',
+      url: '/sedrot/tazria-metzora'},
+    {why: 'Matot-Masei',
+      url: '/sedrot/matot-masei'},
+  ])('should return 200 for $why', async ({url, text}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
-    expect(response.text).toContain('Vezot Haberakhah');
-  });
-
-  it('should return 200 for Vezot Haberakhah with specific date', async () => {
-    // Simchat Torah 5785 in the Diaspora: October 24, 2024
-    const response = await request(server)
-        .get('/sedrot/vezot-haberakhah-20241024');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('Vezot Haberakhah');
-  });
-
-  it('should return 200 for combined parsha Vayakhel-Pekudei', async () => {
-    const response = await request(server)
-        .get('/sedrot/vayakhel-pekudei');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('Vayakhel');
-  });
-
-  it('should return 200 for Lech-Lecha (hyphenated non-doubled parsha)', async () => {
-    const response = await request(server)
-        .get('/sedrot/lech-lecha');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('Lech-Lecha');
-  });
-
-  it('should return 200 for combined parsha Nitzavim-Vayeilech', async () => {
-    const response = await request(server)
-        .get('/sedrot/nitzavim-vayeilech');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for combined parsha Tazria-Metzora', async () => {
-    const response = await request(server)
-        .get('/sedrot/tazria-metzora');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Matot-Masei', async () => {
-    const response = await request(server)
-        .get('/sedrot/matot-masei');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
+    if (text) {
+      expect(response.text).toContain(text);
+    }
   });
 });
 
 describe('Sedrot with Dates - Content Verification', () => {
-  it('should include Hebrew year in title for parsha with date', async () => {
+  // Triennial section heading appears as "Triennial year N"
+  it.each([
+    ['Hebrew year in the title', /<title>Bereshit 5785 - Torah Portion - Hebcal<\/title>/],
+    ['Sefaria links', 'sefaria.org'],
+    ['Genesis references', 'Genesis'],
+    ['the triennial year number', /Triennial.*year [123]/],
+  ])('should include %s for a parsha with a date', async (what, expected) => {
     const response = await request(server)
         .get('/sedrot/bereshit-20241026');
     expect(response.status).toBe(200);
-    expect(response.text).toMatch(/<title>Bereshit 5785 - Torah Portion - Hebcal<\/title>/);
-  });
-
-  it('should include Sefaria links for parsha with date', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-20241026');
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('sefaria.org');
-  });
-
-  it('should include Genesis references for Bereshit', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-20241026');
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('Genesis');
+    expect(response.text).toMatch(expected);
   });
 
   it('should return 200 for Noach with specific date', async () => {
@@ -310,42 +242,22 @@ describe('Sedrot with Dates - Content Verification', () => {
     expect(response.text).toContain('Diaspora');
   });
 
-  it('should include triennial year number for parsha with date', async () => {
-    const response = await request(server)
-        .get('/sedrot/bereshit-20241026');
-    expect(response.status).toBe(200);
-    // Triennial section heading appears as "Triennial year N"
-    expect(response.text).toMatch(/Triennial.*year [123]/);
-  });
 });
 
 describe('Sedrot Haftarot of Admonition and Consolation', () => {
-  it('should show ordinal Haftarah of Admonition for Devarim', async () => {
-    const response = await request(server)
-        .get('/sedrot/devarim-20260718');
+  it.each([
+    {why: 'Devarim', url: '/sedrot/devarim-20260718',
+      text: 'Third Haftarah of Admonition'},
+    {why: 'Vaetchanan', url: '/sedrot/vaetchanan-20260725',
+      text: 'First Haftarah of Consolation'},
+    {why: 'combined Matot-Masei (dated)', url: '/sedrot/matot-masei-20260711',
+      text: 'Second Haftarah of Admonition'},
+    {why: 'combined Matot-Masei (undated)', url: '/sedrot/matot-masei',
+      text: 'Second Haftarah of Admonition'},
+  ])('should show "$text" for $why', async ({url, text}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
-    expect(response.text).toContain('Third Haftarah of Admonition');
-  });
-
-  it('should show ordinal Haftarah of Consolation for Vaetchanan', async () => {
-    const response = await request(server)
-        .get('/sedrot/vaetchanan-20260725');
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('First Haftarah of Consolation');
-  });
-
-  it('should show Second Haftarah of Admonition for combined Matot-Masei (dated)', async () => {
-    const response = await request(server)
-        .get('/sedrot/matot-masei-20260711');
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('Second Haftarah of Admonition');
-  });
-
-  it('should show Second Haftarah of Admonition for combined Matot-Masei (undated)', async () => {
-    const response = await request(server)
-        .get('/sedrot/matot-masei');
-    expect(response.status).toBe(200);
-    expect(response.text).toContain('Second Haftarah of Admonition');
+    expect(response.text).toContain(text);
   });
 
   it('should show Seventh Haftarah of Consolation for combined Nitzavim-Vayeilech (dated)', async () => {

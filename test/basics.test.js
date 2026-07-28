@@ -25,25 +25,14 @@ describe('Homepage and Basic Routes', () => {
 });
 
 describe('Static and Special Routes', () => {
-  it('should return 200 for /ical/', async () => {
-    const response = await request(server)
-        .get('/ical/');
+  it.each([
+    ['/ical/', 'html'],
+    ['/etc/hdate-en.js', 'javascript'],
+    ['/etc/hdate-he.js', 'javascript'],
+  ])('should return 200 %s (%s)', async (url, type) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for hdate JS files', async () => {
-    const response = await request(server)
-        .get('/etc/hdate-en.js');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
-  });
-
-  it('should return 200 for hdate Hebrew JS files', async () => {
-    const response = await request(server)
-        .get('/etc/hdate-he.js');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
+    expect(response.type).toContain(type);
   });
 });
 
@@ -102,23 +91,12 @@ describe('Security.txt', () => {
 });
 
 describe('Hidden Directory Routes', () => {
-  it('should return 200 for /i hidden directory', async () => {
-    const response = await request(server)
-        .get('/i');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for /i/ with trailing slash', async () => {
-    const response = await request(server)
-        .get('/i/');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for /etc hidden directory', async () => {
-    const response = await request(server)
-        .get('/etc');
+  it.each([
+    ['/i hidden directory', '/i'],
+    ['/i/ with trailing slash', '/i/'],
+    ['/etc hidden directory', '/etc'],
+  ])('should return 200 HTML for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });

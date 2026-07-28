@@ -48,25 +48,15 @@ describe('Zmanim and Omer Routes', () => {
 });
 
 describe('Autocomplete Routes', () => {
-  it('should return 200 for /complete with query', async () => {
-    const response = await request(server)
-        .get('/complete?q=Whyalla');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-  });
-
-  it('should handle /complete with empty query', async () => {
-    const response = await request(server)
-        .get('/complete?q=');
-    expect(response.status).toBe(404);
-    expect(response.type).toContain('json');
-  });
-
-  it('should handle /complete with international characters', async () => {
-    // Néa Alikarnassós (Greece) exercises non-ASCII / accented input.
-    const response = await request(server)
-        .get('/complete?q=N%C3%A9a%20Alikarnass%C3%B3s');
-    expect(response.status).toBe(200);
+  // Néa Alikarnassós (Greece) exercises non-ASCII / accented input.
+  it.each([
+    {why: 'a query', url: '/complete?q=Whyalla', status: 200},
+    {why: 'an empty query', url: '/complete?q=', status: 404},
+    {why: 'international characters',
+      url: '/complete?q=N%C3%A9a%20Alikarnass%C3%B3s', status: 200},
+  ])('should return $status JSON from /complete with $why', async ({url, status}) => {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(status);
     expect(response.type).toContain('json');
   });
 

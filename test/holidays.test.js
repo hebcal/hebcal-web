@@ -6,30 +6,13 @@ import {makeServer} from './testServer.js';
 const server = makeServer(app);
 
 describe('Holidays Routes', () => {
-  it('should return 200 for /holidays with year range', async () => {
-    const response = await request(server)
-        .get('/holidays/1993-1994');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for /holidays with single year', async () => {
-    const response = await request(server)
-        .get('/holidays/2007');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for specific holiday + year', async () => {
-    const response = await request(server)
-        .get('/holidays/rosh-chodesh-adar-i-2022');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for specific holiday without year', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur');
+  it.each([
+    ['/holidays with year range', '/holidays/1993-1994'],
+    ['/holidays with single year', '/holidays/2007'],
+    ['specific holiday + year', '/holidays/rosh-chodesh-adar-i-2022'],
+    ['specific holiday without year', '/holidays/yom-kippur'],
+  ])('should return 200 HTML for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
