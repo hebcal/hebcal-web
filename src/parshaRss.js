@@ -1,5 +1,6 @@
 import {HebrewCalendar, flags, Event} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
+import {getParshaSummary} from './parshaCommon.js';
 import {makeTorahMemoText} from './torahMemo.js';
 import {eventsToRss2} from './rss.js';
 import {getTodayDate, shabbatWeekRange} from './dateUtil.js';
@@ -86,7 +87,19 @@ function createMemo(ev, il) {
   const memoText = makeTorahMemoText(ev, il);
   const memoHtml = memoText ? '<p>' + memoText.replaceAll('\n', '</p>\n<p>') + '</p>' : '';
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-    return memoHtml;
+    // lead with the Sefaria prose summary, the way the .ics DESCRIPTION does.
+    // Holiday items below already open with a prose description.
+    const summary = getParshaSummary(ev);
+    const parts = [];
+    if (summary) {
+      // a doubled parsha joins two summaries with a newline
+      parts.push(summary.split('\n')
+          .map((para) => '<p>' + para.trim() + '</p>').join('\n'));
+    }
+    if (memoHtml) {
+      parts.push(memoHtml);
+    }
+    return parts.join('\n');
   } else {
     let memo = '<p>' + getHolidayDescription(ev) + '</p>';
     if (memoHtml) {
