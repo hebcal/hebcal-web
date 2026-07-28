@@ -159,7 +159,13 @@ describe('eventToRssItem2', () => {
       '<title>Parashat Vayetzei</title>\n' +
       '<link>https://hebcal.com/s/5781/7?us=shabbat1c&amp;um=rss</link>\n' +
       '<guid isPermaLink="false">https://www.hebcal.com/sedrot/vayetzei-20201128#20201128-parashat-vayetzei</guid>\n' +
-      '<description>Torah: Genesis 28:10-32:3\n' +
+      '<description>' +
+        'Vayetzei (“He Went Out”) opens as Jacob dreams about angels going up ' +
+        'and down a ladder, and then continues on his journey toward the home of ' +
+        'his uncle Laban. During years of indentured servitude, Jacob marries ' +
+        'Laban’s daughters Leah and Rachel, bearing children with them and with ' +
+        'their maidservants, Bilhah and Zilpah.\n\n' +
+      'Torah: Genesis 28:10-32:3\n' +
         'Haftarah: Hosea 12:13-14:10\n' +
         'Haftarah for Sephardim: Hosea 11:7-12:12</description>\n' +
       '<category>parashat</category>\n' +
@@ -187,7 +193,13 @@ describe('eventToRssItem2', () => {
       '<title>Parashat Vayetzei</title>\n' +
       '<link>https://hebcal.com/s/5781i/7?us=shabbat1c&amp;um=rss</link>\n' +
       '<guid isPermaLink="false">https://www.hebcal.com/sedrot/vayetzei-20201128#20201128-parashat-vayetzei</guid>\n' +
-      '<description>Torah: Genesis 28:10-32:3\n' +
+      '<description>' +
+        'Vayetzei (“He Went Out”) opens as Jacob dreams about angels going up ' +
+        'and down a ladder, and then continues on his journey toward the home of ' +
+        'his uncle Laban. During years of indentured servitude, Jacob marries ' +
+        'Laban’s daughters Leah and Rachel, bearing children with them and with ' +
+        'their maidservants, Bilhah and Zilpah.\n\n' +
+      'Torah: Genesis 28:10-32:3\n' +
         'Haftarah: Hosea 12:13-14:10\n' +
         'Haftarah for Sephardim: Hosea 11:7-12:12</description>\n' +
       '<category>parashat</category>\n' +

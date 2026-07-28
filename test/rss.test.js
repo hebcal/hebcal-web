@@ -212,13 +212,24 @@ describe('RSS feed contents', () => {
     expect(xml).toContain('<geo:lat>42.35843</geo:lat>');
   });
 
+  it('leads the Shabbat feed parsha item with the summary', async () => {
+    const response = await request(server)
+        .get('/shabbat?cfg=r&geonameid=5128581&b=18&M=on&gy=2026&gm=4&gd=15');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain(
+        '<description>Tazria (“She Bears Seed”) opens by describing');
+    expect(response.text).toContain(
+        'bodily discharges.\n\nTorah: Leviticus 12:1-15:33; Numbers 28:9-15');
+  });
+
   it('renders the custom calendar feed with holiday memos', async () => {
     const response = await request(server)
         .get('/hebcal?v=1&cfg=rss&maj=on&s=on&year=2026&month=4');
     expect(response.status).toBe(200);
     const xml = normalizeFeed(response.text);
     expect(xml).toContain('<title>Hebcal Diaspora April 2026</title>');
-    expect(xml).toContain('<description>Torah: Leviticus 12:1-15:33; Numbers 28:9-15\n' +
+    expect(xml).toContain('<description>Tazria (“She Bears Seed”) opens by describing');
+    expect(xml).toContain('Torah: Leviticus 12:1-15:33; Numbers 28:9-15\n' +
       'Haftarah: Isaiah 66:1-24 | Shabbat Rosh Chodesh</description>');
   });
 });

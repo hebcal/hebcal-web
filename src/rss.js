@@ -5,6 +5,7 @@ import {
   appendIsraelAndTracking,
   makeAnchor,
 } from '@hebcal/rest-api';
+import {getParshaSummary} from './parshaCommon.js';
 import {makeMemo} from './torahMemo.js';
 
 /**
@@ -162,6 +163,14 @@ export function eventToRssItem2(ev, options) {
     }
   } else {
     memo = makeMemo(ev, il);
+    // lead a Parasha with its prose summary, the way the .ics DESCRIPTION and
+    // the /sedrot feeds do. `makeMemo()` is deliberately left alone: it is
+    // shared with eventToFullCalendar(), whose `description` is a non-standard
+    // FullCalendar field that nothing renders by default.
+    const summary = getParshaSummary(ev);
+    if (summary) {
+      memo = memo ? summary + '\n\n' + memo : summary;
+    }
   }
   const dayFormat = options.dayFormat;
   const tmp = memo || dayFormat.format(evDate);
