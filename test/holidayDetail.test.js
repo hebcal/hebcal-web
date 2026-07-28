@@ -18,82 +18,46 @@ describe('Holiday Detail Error Handling', () => {
     expect(response.status).toBe(400);
   });
 
-  it('should return 410 for gy year greater than 2999', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur?gy=3500');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for gy year less than 100', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur?gy=50');
-    expect(response.status).toBe(410);
-  });
-
-  it('should return 410 for year in URL that is out of range', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur-3500');
+  it.each([
+    ['gy year greater than 2999', '/holidays/yom-kippur?gy=3500'],
+    ['gy year less than 100', '/holidays/yom-kippur?gy=50'],
+    ['year in URL that is out of range', '/holidays/yom-kippur-3500'],
+  ])('should return 410 for %s', async (why, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(410);
   });
 });
 
 describe('Holiday Detail Redirects', () => {
-  it('should redirect uppercase holiday name to lowercase', async () => {
-    const response = await request(server)
-        .get('/holidays/Yom-Kippur');
+  // "hanukkah" is the Wikipedia article name; canonical is "chanukah".
+  // "yom-kippurr" is 1 edit away from "yom-kippur".
+  // Birkat HaChamah occurs every 28 years, so 2025 has no occurrence.
+  it.each([
+    {why: 'uppercase holiday name to lowercase', url: '/holidays/Yom-Kippur',
+      to: '/holidays/yom-kippur', notTo: 'redir'},
+    {why: 'Wikipedia alias with redir=spelling', url: '/holidays/hanukkah',
+      to: '/holidays/chanukah', also: 'redir=spelling'},
+    {why: 'Wikipedia alias with year and redir=spelling', url: '/holidays/hanukkah-2025',
+      to: '/holidays/chanukah-2025', also: 'redir=spelling'},
+    {why: 'typo (edit distance 1) with redir=spelling', url: '/holidays/yom-kippurr',
+      to: '/holidays/yom-kippur', also: 'redir=spelling'},
+    {why: 'typo with year and redir=spelling', url: '/holidays/yom-kippurr-2024',
+      to: '/holidays/yom-kippur-2024', also: 'redir=spelling'},
+    {why: 'gy parameter to year-specific URL', url: '/holidays/yom-kippur?gy=2024',
+      to: '/holidays/yom-kippur-2024'},
+    {why: 'holiday year with no occurrence back to holiday page',
+      url: '/holidays/birkat-hachamah-2025',
+      to: '/holidays/birkat-hachamah', notTo: '-2025'},
+  ])('should redirect $why', async ({url, to, also, notTo}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/yom-kippur');
-    expect(response.headers.location).not.toContain('redir');
-  });
-
-  it('should redirect Wikipedia alias with redir=spelling', async () => {
-    // "hanukkah" is the Wikipedia article name; canonical is "chanukah"
-    const response = await request(server)
-        .get('/holidays/hanukkah');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/chanukah');
-    expect(response.headers.location).toContain('redir=spelling');
-  });
-
-  it('should redirect Wikipedia alias with year and redir=spelling', async () => {
-    const response = await request(server)
-        .get('/holidays/hanukkah-2025');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/chanukah-2025');
-    expect(response.headers.location).toContain('redir=spelling');
-  });
-
-  it('should redirect typo (edit distance 1) with redir=spelling', async () => {
-    // "yom-kippurr" is 1 edit away from "yom-kippur"
-    const response = await request(server)
-        .get('/holidays/yom-kippurr');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/yom-kippur');
-    expect(response.headers.location).toContain('redir=spelling');
-  });
-
-  it('should redirect typo with year and redir=spelling', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippurr-2024');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/yom-kippur-2024');
-    expect(response.headers.location).toContain('redir=spelling');
-  });
-
-  it('should redirect gy parameter to year-specific URL', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur?gy=2024');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/yom-kippur-2024');
-  });
-
-  it('should redirect holiday year with no occurrence back to holiday page', async () => {
-    // Birkat HaChamah occurs every 28 years; 2025 is not a match year
-    const response = await request(server)
-        .get('/holidays/birkat-hachamah-2025');
-    expect(response.status).toBe(302);
-    expect(response.headers.location).toContain('/holidays/birkat-hachamah');
-    expect(response.headers.location).not.toContain('-2025');
+    expect(response.headers.location).toContain(to);
+    if (also) {
+      expect(response.headers.location).toContain(also);
+    }
+    if (notTo) {
+      expect(response.headers.location).not.toContain(notTo);
+    }
   });
 });
 
@@ -129,120 +93,58 @@ describe('Holiday Detail Israel-Only Holidays', () => {
 });
 
 describe('Holiday Detail Shalosh Regalim (Pilgrim Festivals)', () => {
-  it('should return 200 for Pesach with i=on (Israel)', async () => {
-    const response = await request(server)
-        .get('/holidays/pesach?i=on');
+  it.each([
+    {why: 'Pesach with i=on (Israel)', url: '/holidays/pesach?i=on', text: '(Israel)'},
+    {why: 'Pesach with i=off (Diaspora)', url: '/holidays/pesach?i=off', text: '(Diaspora)'},
+    {why: 'Shavuot with i=on (Israel)', url: '/holidays/shavuot?i=on'},
+    {why: 'Sukkot with i=on', url: '/holidays/sukkot?i=on'},
+    {why: 'Pesach with specific year and i=on', url: '/holidays/pesach-2025?i=on', text: '2025'},
+    {why: 'Sukkot with year in Diaspora', url: '/holidays/sukkot-2025?i=off'},
+  ])('should return 200 for $why', async ({url, text}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
-    expect(response.text).toContain('(Israel)');
-  });
-
-  it('should return 200 for Pesach with i=off (Diaspora)', async () => {
-    const response = await request(server)
-        .get('/holidays/pesach?i=off');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('(Diaspora)');
-  });
-
-  it('should return 200 for Shavuot with i=on (Israel)', async () => {
-    const response = await request(server)
-        .get('/holidays/shavuot?i=on');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Sukkot with i=on', async () => {
-    const response = await request(server)
-        .get('/holidays/sukkot?i=on');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Pesach with specific year and i=on', async () => {
-    const response = await request(server)
-        .get('/holidays/pesach-2025?i=on');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('2025');
-  });
-
-  it('should return 200 for Sukkot with year in Diaspora', async () => {
-    const response = await request(server)
-        .get('/holidays/sukkot-2025?i=off');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
+    if (text) {
+      expect(response.text).toContain(text);
+    }
   });
 });
 
 describe('Holiday Detail Special Types', () => {
-  it('should return 200 for Chanukah with candle-lighting info', async () => {
-    const response = await request(server)
-        .get('/holidays/chanukah');
+  it.each([
+    {why: 'Chanukah with candle-lighting info', url: '/holidays/chanukah', text: 'Chanukah'},
+    {why: 'Days of the Omer', url: '/holidays/days-of-the-omer', text: 'Omer'},
+    {why: 'Purim', url: '/holidays/purim', text: 'Purim'},
+    {why: 'Tu BiShvat', url: '/holidays/tu-bishvat'},
+    {why: 'Tisha BAv', url: '/holidays/tisha-bav'},
+    {why: 'Lag BaOmer', url: '/holidays/lag-baomer'},
+    {why: 'Rosh Hashana', url: '/holidays/rosh-hashana'},
+    {why: 'Rosh Chodesh Elul (minor holiday)', url: '/holidays/rosh-chodesh-elul'},
+  ])('should return 200 for $why', async ({url, text}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
-    expect(response.text).toContain('Chanukah');
-  });
-
-  it('should return 200 for Days of the Omer', async () => {
-    const response = await request(server)
-        .get('/holidays/days-of-the-omer');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('Omer');
-  });
-
-  it('should return 200 for Purim', async () => {
-    const response = await request(server)
-        .get('/holidays/purim');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('Purim');
-  });
-
-  it('should return 200 for Tu BiShvat', async () => {
-    const response = await request(server)
-        .get('/holidays/tu-bishvat');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Tisha BAv', async () => {
-    const response = await request(server)
-        .get('/holidays/tisha-bav');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Lag BaOmer', async () => {
-    const response = await request(server)
-        .get('/holidays/lag-baomer');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Rosh Hashana', async () => {
-    const response = await request(server)
-        .get('/holidays/rosh-hashana');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('should return 200 for Rosh Chodesh Elul (minor holiday)', async () => {
-    const response = await request(server)
-        .get('/holidays/rosh-chodesh-elul');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
+    if (text) {
+      expect(response.text).toContain(text);
+    }
   });
 });
 
 describe('Holiday Detail with Gregorian Year', () => {
-  it('should return 200 for Yom Kippur with specific year', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur-2024');
+  it.each([
+    {why: 'Yom Kippur with specific year', url: '/holidays/yom-kippur-2024', text: '2024'},
+    {why: 'Chanukah with year', url: '/holidays/chanukah-2025', text: '2025'},
+    {why: 'historical year just after the 1752 threshold', url: '/holidays/yom-kippur-1753'},
+    // Years <= 1752 get noindex=true flag
+    {why: 'historical year at 1752 (noindex)', url: '/holidays/yom-kippur-1752', text: 'noindex'},
+    {why: 'Rosh Hashanah with specific year', url: '/holidays/rosh-hashana-2024', text: '2024'},
+  ])('should return 200 for $why', async ({url, text}) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
-    expect(response.text).toContain('2024');
+    if (text) {
+      expect(response.text).toContain(text);
+    }
   });
 
   it('should include prev/next navigation for holiday with year', async () => {
@@ -253,29 +155,8 @@ describe('Holiday Detail with Gregorian Year', () => {
     expect(response.text).toMatch(/yom-kippur-202\d/);
   });
 
-  it('should return 200 for Chanukah with year', async () => {
-    const response = await request(server)
-        .get('/holidays/chanukah-2025');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('2025');
-  });
 
-  it('should return 200 for historical year just after 1752 threshold', async () => {
-    const response = await request(server)
-        .get('/holidays/yom-kippur-1753');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
 
-  it('should return 200 for historical year at 1752 (noindex)', async () => {
-    // Years <= 1752 get noindex=true flag
-    const response = await request(server)
-        .get('/holidays/yom-kippur-1752');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('noindex');
-  });
 
   it('should include warning for pre-1752 dates', async () => {
     const response = await request(server)
@@ -285,13 +166,6 @@ describe('Holiday Detail with Gregorian Year', () => {
     expect(response.text).toContain('1700');
   });
 
-  it('should return 200 for Rosh Hashanah with specific year', async () => {
-    const response = await request(server)
-        .get('/holidays/rosh-hashana-2024');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-    expect(response.text).toContain('2024');
-  });
 });
 
 describe('Holiday Detail Content Verification', () => {

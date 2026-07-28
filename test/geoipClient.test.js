@@ -40,24 +40,20 @@ test('returns parsed record for a known IP', async () => {
   expect(rec).toEqual({country: {iso_code: 'US'}, location: {time_zone: 'America/Chicago'}});
 });
 
-test('returns null for a 204 not-found response', async () => {
+// socketPath is only assigned in beforeAll, so the table holds the lookup
+// input and the client is built inside the test body.
+test.each([
+  {why: 'a 204 not-found response', ip: '0.0.0.0'},
+  {why: 'a non-200 response', ip: 'not-an-ip'},
+  {why: 'empty input, without contacting the service', ip: ''},
+])('returns null for $why', async ({ip}) => {
   const client = makeGeoipClient({socketPath});
-  expect(await client.lookup('0.0.0.0')).toBe(null);
-});
-
-test('returns null for a non-200 response', async () => {
-  const client = makeGeoipClient({socketPath});
-  expect(await client.lookup('not-an-ip')).toBe(null);
-});
-
-test('returns null for empty input without contacting the service', async () => {
-  const client = makeGeoipClient({socketPath});
-  expect(await client.lookup('')).toBe(null);
+  expect(await client.lookup(ip)).toBeNull();
 });
 
 test('falls back to null when the service is down (no socket)', async () => {
   const client = makeGeoipClient({socketPath: path.join(sockDir, 'does-not-exist.sock')});
-  expect(await client.lookup('8.8.8.8')).toBe(null);
+  expect(await client.lookup('8.8.8.8')).toBeNull();
 });
 
 test('reuses keep-alive connections across lookups', async () => {

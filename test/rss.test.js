@@ -6,29 +6,12 @@ import {makeServer} from './testServer.js';
 const server = makeServer(app);
 
 describe('Hebrew Date RSS Feeds', () => {
-  it('should return Today\'s Hebrew Date in English', async () => {
-    const response = await request(server)
-        .get('/etc/hdate-en.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<?xml');
-    expect(response.text).toContain('<rss');
-    expect(response.text).toContain('<channel>');
-  });
-
-  it('should return Today\'s Hebrew Date in Hebrew', async () => {
-    const response = await request(server)
-        .get('/etc/hdate-he.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<?xml');
-    expect(response.text).toContain('<rss');
-    expect(response.text).toContain('<channel>');
-  });
-
-  it('should return Today\'s Hebrew Date in German', async () => {
-    const response = await request(server)
-        .get('/etc/hdate-de.xml');
+  it.each([
+    ['English', '/etc/hdate-en.xml'],
+    ['Hebrew', '/etc/hdate-he.xml'],
+    ['German', '/etc/hdate-de.xml'],
+  ])('should return Today\'s Hebrew Date in %s', async (lang, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
     expect(response.text).toContain('<?xml');
@@ -45,31 +28,12 @@ describe('Hebrew Date RSS Feeds', () => {
 });
 
 describe('Parashat ha-Shavua RSS Feeds', () => {
-  it('should return Torah reading RSS in English', async () => {
-    const response = await request(server)
-        .get('/sedrot/index-en.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<?xml');
-    expect(response.text).toContain('<rss');
-    expect(response.text).toContain('<channel>');
-    expect(response.text).toContain('<item>');
-  });
-
-  it('should return Torah reading RSS for Israel in English', async () => {
-    const response = await request(server)
-        .get('/sedrot/israel-en.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<?xml');
-    expect(response.text).toContain('<rss');
-    expect(response.text).toContain('<channel>');
-    expect(response.text).toContain('<item>');
-  });
-
-  it('should return Torah reading RSS in French', async () => {
-    const response = await request(server)
-        .get('/sedrot/index-fr.xml');
+  it.each([
+    ['in English', '/sedrot/index-en.xml'],
+    ['for Israel in English', '/sedrot/israel-en.xml'],
+    ['in French', '/sedrot/index-fr.xml'],
+  ])('should return Torah reading RSS %s', async (what, url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
     expect(response.text).toContain('<?xml');
@@ -80,18 +44,11 @@ describe('Parashat ha-Shavua RSS Feeds', () => {
 });
 
 describe('Daily Learning RSS Feeds', () => {
-  it('should return 200 for /etc/dafyomi RSS feed', async () => {
-    const response = await request(server)
-        .get('/etc/dafyomi-en.xml');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-    expect(response.text).toContain('<?xml');
-    expect(response.text).toContain('<rss');
-  });
-
-  it('should return 200 for /etc/myomi RSS feed', async () => {
-    const response = await request(server)
-        .get('/etc/myomi-en.xml');
+  it.each([
+    '/etc/dafyomi-en.xml',
+    '/etc/myomi-en.xml',
+  ])('should return 200 for %s RSS feed', async (url) => {
+    const response = await request(server).get(url);
     expect(response.status).toBe(200);
     expect(response.type).toContain('xml');
     expect(response.text).toContain('<?xml');
