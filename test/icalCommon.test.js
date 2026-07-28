@@ -252,6 +252,49 @@ describe('parsha summary', () => {
     const [ev] = HebrewCalendar.calendar({year: 2026, month: 4});
     expect(getParshaSummary(ev)).toBeUndefined();
   });
+
+  it('uses the Hebrew parsha summary for a Hebrew locale', () => {
+    const options = {year: 2026, month: 8, sedrot: true, noHolidays: true};
+    const events = HebrewCalendar.calendar(options);
+    const ev = events[0];
+    expect(ev.getDesc()).toBe('Parashat Eikev');
+    const summary = 'בפרשת עקב משה מבטיח ששמירת המצוות תגרור אחריה שגשוג והצלחה ' +
+      'צבאית. משה מזכיר לעם את המן שאכלו במדבר ואת החטאים והתלונות וכן מתאר במפורט ' +
+      'את חטא העגל. משה מדגיש את הייחודיות של הארץ המובטחת ושונה את פרשת \'והיה אם ' +
+      'שמוע\', המתארת את שכר קיום המצוות ועונש הגלות על עבודה זרה.';
+    for (const locale of ['h', 'he', 'he-x-NoNikud']) {
+      expect(createMemo(ev, {...options, locale})).toBe(
+          summary + '\n\n' +
+          'Torah: Deuteronomy 7:12-11:25\n' +
+          'Haftarah: Isaiah 49:14-51:3 | Second Haftarah of Consolation\n\n' +
+          'https://hebcal.com/s/5786/46?us=ical&um=icalendar');
+    }
+    // non-Hebrew locales keep the English summary
+    for (const locale of [undefined, 'en', 's', 'a', 'fr']) {
+      expect(createMemo(ev, {...options, locale})).toContain('In Eikev (“As a Result”)');
+    }
+  });
+
+  it('joins both Hebrew summaries for a doubled parsha', () => {
+    const ev = new ParshaEvent({
+      hdate: new HDate(new Date(2026, 3, 18)),
+      parsha: ['Tazria', 'Metzora'],
+      il: false,
+      chag: false,
+      num: [27, 28],
+    });
+    const memo = createMemo(ev, {locale: 'he'});
+    expect(memo).toContain('בפרשת תזריע מפורטים דיני היולדת');
+    expect(memo).toContain('בפרשת מצורע מתואר תהליך טהרת המצורע');
+  });
+
+  it('getParshaSummary falls back to English for unknown locales', () => {
+    const [ev] = HebrewCalendar.calendar(
+        {year: 2026, month: 8, sedrot: true, noHolidays: true});
+    expect(getParshaSummary(ev, 'he')).toMatch(/^בפרשת עקב/);
+    expect(getParshaSummary(ev, 'ru')).toMatch(/^In Eikev/);
+    expect(getParshaSummary(ev)).toMatch(/^In Eikev/);
+  });
 });
 
 describe('makeIcalEvents', () => {

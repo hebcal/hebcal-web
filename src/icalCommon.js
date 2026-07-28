@@ -59,7 +59,7 @@ export function createMemo(ev, options) {
     return ev.getTodayIs('en') + '\n\n' + ev.getTodayIs('he') + '\n\n' + sefira;
   }
   if (!memo) {
-    memo = getParshaSummary(ev) || '';
+    memo = getParshaSummary(ev, options.locale) || '';
   }
   if (!memo) {
     memo = getHolidayDescription(ev);

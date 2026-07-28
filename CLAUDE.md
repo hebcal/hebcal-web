@@ -76,7 +76,12 @@ Each feature is typically one or a few files handling routing, business logic, a
   can be regression-tested (`test/staticCalendars.test.js`);
   `makeStaticCalendars.js` is the weekly cron wrapper that writes and compresses
   them.
-- **Torah/Parsha**: `sedrot.js`, `parshaYear.js`
+- **Torah/Parsha**: `sedrot.js`, `parshaYear.js`, `parshaCommon.js`.
+  Each parsha's Sefaria prose summary lives in `drash.json` under
+  `sefaria.summary` (English) and `sefaria.summaryHe` (Hebrew, scraped from
+  sefaria.org.il). `getParshaSummary(ev, locale)` picks between them, so the
+  Hebrew RSS feeds (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and
+  the Hebrew iCalendar downloads carry Hebrew prose instead of English.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`
