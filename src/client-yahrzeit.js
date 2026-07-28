@@ -204,8 +204,8 @@ formEl.addEventListener('submit', function(event) {
           }
         }
         if (numOK) {
-          document.getElementById('success-numrecords').innerHTML = numOK;
-          document.getElementById('success-filename').innerHTML = file.name;
+          document.getElementById('success-numrecords').textContent = numOK;
+          document.getElementById('success-filename').textContent = file.name;
           successAlertEl.hidden = false;
           _paq.push(['trackEvent', 'Upload', 'csv-import', file.name, numOK]);
         } else {

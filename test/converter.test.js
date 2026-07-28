@@ -49,6 +49,46 @@ describe('Converter Routes', () => {
   });
 });
 
+describe('Converter JSONP', () => {
+  it('should wrap a single date in a JSONP callback', async () => {
+    const response = await request(server)
+        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1&callback=cb');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('javascript');
+    expect(response.text).toMatch(/^cb\(\{/);
+  });
+
+  it('should wrap a date range in a JSONP callback', async () => {
+    const response = await request(server)
+        .get('/converter?cfg=json&start=2025-01-01&end=2025-01-07&callback=cb');
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('javascript');
+    expect(response.text).toMatch(/^cb\(\{/);
+  });
+
+  it('should ignore a hostile callback and return plain JSON', async () => {
+    const response = await request(server)
+        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1&callback=' +
+          encodeURIComponent('</script><svg onload=alert(1)>'));
+    expect(response.status).toBe(200);
+    expect(response.type).toContain('json');
+    expect(response.text).not.toContain('onload');
+    expect(response.text).not.toContain('<');
+    expect(response.body.hy).toBe(5786);
+  });
+
+  it('should not reflect an error message as executable script', async () => {
+    // the error path echoes err.message, which can quote the bad input back
+    const evil = '<script>alert(1)</script>';
+    const response = await request(server)
+        .get('/converter?cfg=json&h2g=1&hy=5801&hd=12&hm=' + encodeURIComponent(evil));
+    expect(response.type).toContain('json');
+    expect(response.headers['x-content-type-options']).toBe('nosniff');
+    // any echo of the input must be JSON-encoded, never raw markup in a script body
+    expect(response.text).not.toMatch(/^[^{]/);
+  });
+});
+
 describe('Converter compression', () => {
   it('should compress a large batch date range response', async () => {
     const response = await request(server)
@@ -103,7 +143,7 @@ describe('Converter h2g ndays', () => {
         .get('/converter?cfg=json&h2g=1&ndays=3&hy=5785&hm=Av&hd=1');
     expect(response.status).toBe(200);
     expect(response.type).toContain('json');
-    expect(Object.keys(response.body.hdates).length).toBe(3);
+    expect(Object.keys(response.body.hdates)).toHaveLength(3);
   });
 
   it('should return 400 for ndays with a non-numeric Hebrew date', async () => {

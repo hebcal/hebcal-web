@@ -21,6 +21,13 @@ const app = createBaseApp();
 
 useObservability(app);
 
+// The error handler below echoes err.message straight into the body, so keep
+// browsers from sniffing an error string as HTML.
+app.use(async function noSniff(ctx, next) {
+  await next();
+  ctx.set('X-Content-Type-Options', 'nosniff');
+});
+
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {

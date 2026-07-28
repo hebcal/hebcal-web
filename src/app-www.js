@@ -113,6 +113,17 @@ app.use(async function fixup1(ctx, next) {
 
 const CSP_HEADER_NAME = 'Content-Security-Policy';
 
+// Several endpoints echo user input back inside an error message (see the
+// `props.message = err.message` path in converter.js). Those responses are
+// JSON or XML, but without this header a browser is free to sniff the body,
+// decide it looks like HTML, and execute the echoed markup. The cfg= API
+// responses are served with Access-Control-Allow-Origin: *, so keep this on
+// every response rather than only the HTML ones.
+app.use(async function noSniff(ctx, next) {
+  await next();
+  ctx.set('X-Content-Type-Options', 'nosniff');
+});
+
 app.use(async function errorCsp(ctx, next) {
   await next();
   if (ctx.status !== 200 && ctx.type === 'text/html' && !ctx.response.has(CSP_HEADER_NAME)) {

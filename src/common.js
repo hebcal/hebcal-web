@@ -159,6 +159,38 @@ export function getBaseFromPath(ctx) {
   }
 }
 
+// A JSONP callback is emitted verbatim into a JavaScript response body, so it
+// must be a dotted chain of plain JS identifiers and nothing else. This is an
+// allowlist test rather than a strip-the-bad-characters replace: a replace
+// silently turns hostile input into some other callable name, whereas a
+// caller who sends garbage should simply get plain JSON back.
+const JSONP_CALLBACK_RE = /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*$/;
+const JSONP_CALLBACK_MAXLEN = 128;
+
+/**
+ * Serialize `obj` as JSON, wrapping it in a JSONP callback when the request
+ * carries a well-formed `callback=` parameter.
+ *
+ * Sets the response content type as a side effect: `text/javascript` for
+ * JSONP (the body is a script, not JSON) and `application/json` otherwise.
+ *
+ * @param {import('koa').Context} ctx
+ * @param {any} obj
+ * @return {string|any} JSONP string, or `obj` unchanged for plain JSON
+ */
+export function jsonpBody(ctx, obj) {
+  const callback = ctx.request.query.callback;
+  if (typeof callback === 'string' &&
+      callback.length !== 0 &&
+      callback.length <= JSONP_CALLBACK_MAXLEN &&
+      JSONP_CALLBACK_RE.test(callback)) {
+    ctx.type = 'text/javascript';
+    return callback + '(' + JSON.stringify(obj) + ')\n';
+  }
+  ctx.type = 'json';
+  return obj;
+}
+
 /**
  * Return candle lighting time description based on day of week
  * @param {number} dow day of week
