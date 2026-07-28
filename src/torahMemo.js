@@ -1,18 +1,23 @@
 import {flags} from '@hebcal/core';
 import {getLeyningForParshaHaShavua, getLeyningForHoliday} from '@hebcal/leyning';
 import {LEARNING_MASK, getHolidayDescription} from '@hebcal/rest-api';
+import QuickLRU from 'quick-lru';
 import {formatHaftarahTheme} from './haftarahTheme.js';
 
 /**
  * Bitmask of event types that never have a Torah reading of their own
  */
-export const HOLIDAY_IGNORE_MASK =
+const HOLIDAY_IGNORE_MASK =
   flags.OMER_COUNT |
   flags.SHABBAT_MEVARCHIM |
   flags.MOLAD |
   flags.USER_EVENT |
   flags.HEBREW_DATE |
   LEARNING_MASK;
+
+// Looking up a reading is the expensive part of building a memo, and a
+// multi-year feed asks for the same date/desc repeatedly.
+const cache = new QuickLRU({maxSize: 5000});
 
 /**
  * Makes multi-line text that summarizes Torah & Haftarah
@@ -24,6 +29,15 @@ export function makeTorahMemoText(ev, il) {
   const mask = ev.getFlags();
   if (mask & HOLIDAY_IGNORE_MASK || ev.eventTime !== undefined) {
     return '';
+  }
+  const hd = ev.getDate();
+  const key = [
+    hd.getFullYear(), hd.getMonth(), hd.getDate(),
+    il ? '1' : '0', ev.getDesc(),
+  ].join('-');
+  const cached = cache.get(key);
+  if (typeof cached === 'string') {
+    return cached;
   }
   const reading = mask & flags.PARSHA_HASHAVUA ?
     getLeyningForParshaHaShavua(ev, il) :
@@ -51,6 +65,7 @@ export function makeTorahMemoText(ev, il) {
   if (reading?.sephardic) {
     memo += '\nHaftarah for Sephardim: ' + reading.sephardic;
   }
+  cache.set(key, memo);
   return memo;
 }
 

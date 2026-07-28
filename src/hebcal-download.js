@@ -10,7 +10,7 @@ import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
 import {localeMap} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
-import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
+import {addCsvParshaMemo} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
@@ -92,9 +92,6 @@ export async function hebcalDownload(ctx) {
     const isAttachment = !query.subscribe;
     if (isAttachment) {
       ctx.response.attachment(basename(path));
-    }
-    if (options.sedrot) {
-      events.forEach(addIcalParshaMemo);
     }
     if (options.omer && options.location) {
       addLocationOmerAlarms(options, events);

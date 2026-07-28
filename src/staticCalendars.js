@@ -4,7 +4,7 @@ import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
 import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {localeMap} from './lang.js';
 import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
-import {addIcalParshaMemo, addCsvParshaMemo} from './parshaCommon.js';
+import {addCsvParshaMemo} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {readJSON} from './readJSON.js';
 import '@hebcal/learning';
@@ -198,9 +198,6 @@ export function* buildAllCalendars(today) {
  * @return {Promise<{ics: string, csv: string}>}
  */
 export async function renderCalendar({file, events, icalOpt}, dtstamp) {
-  if (icalOpt.sedrot) {
-    events.forEach(addIcalParshaMemo);
-  }
   icalOpt.dtstamp = dtstamp;
   icalOpt.utmSource = UTM_SRC;
   icalOpt.utmMedium = UTM_MED;
@@ -212,7 +209,6 @@ export async function renderCalendar({file, events, icalOpt}, dtstamp) {
     const il = icalOpt.il;
     const locale = icalOpt.locale;
     for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
-      delete ev.memo;
       addCsvParshaMemo(ev, il, locale);
     }
   }
