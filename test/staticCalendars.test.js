@@ -38,17 +38,25 @@ function vevent(ics, summary) {
 }
 
 /**
+ * Undoes RFC 5545 line folding. Folding happens at 75 octets, which for
+ * Hebrew lands mid-word and makes a literal expectation unreadable.
+ * @param {string} ics
+ * @return {string}
+ */
+function unfold(ics) {
+  return ics.replaceAll('\r\n ', '');
+}
+
+/**
  * Returns the DESCRIPTION of the matching VEVENT, unfolded back into one
- * string. RFC 5545 folds at 75 octets, which for Hebrew lands mid-word and
- * makes a literal expectation unreadable.
+ * string.
  * @param {string} ics
  * @param {string} summary
  * @return {string|undefined}
  */
 function description(ics, summary) {
   return /\r\nDESCRIPTION:([\s\S]*?)\r\n(?![ \t])/
-      .exec(vevent(ics, summary) ?? '')?.[1]
-      .replaceAll('\r\n ', '');
+      .exec(unfold(vevent(ics, summary) ?? ''))?.[1];
 }
 
 describe('getStartAndEnd', () => {
@@ -274,6 +282,56 @@ describe('every published feed', () => {
       'daf-weekly', 'pirkei-avot', 'ahs-yomi', 'ksa-yomi',
     ]);
     expect(new Set(slugs).size).toBe(slugs.length);
+  });
+
+  // A feed built in a Hebrew locale carries Hebrew event titles, so the
+  // calendar name a subscriber sees in their app should be Hebrew too.
+  it('names every Hebrew-locale feed in Hebrew', async () => {
+    const hebrew = /[֐-׿]/;
+    const seen = [];
+    for (const cfg of staticCalendarConfig) {
+      if (!/^he/i.test(cfg.locale ?? '')) {
+        continue;
+      }
+      seen.push(cfg.downloadSlug);
+      expect(cfg.title, cfg.downloadSlug).toMatch(hebrew);
+      expect(cfg.caldesc, cfg.downloadSlug).toMatch(hebrew);
+    }
+    expect(seen).toEqual([
+      'hdate-he', 'hdate-he-v2', 'torah-readings-israel-he', 'yizkor-il',
+    ]);
+  });
+
+  // Commas are escaped as `\,` in the .ics per RFC 5545.
+  it('carries the Hebrew name through to X-WR-CALNAME', async () => {
+    const expected = {
+      'hdate-he': ['תאריך עברי (עם ניקוד)',
+        'מציג את התאריך העברי בכל יום מימות השבוע\\, עם ניקוד'],
+      'hdate-he-v2': ['תאריך עברי',
+        'מציג את התאריך העברי בכל יום מימות השבוע\\, ללא ניקוד'],
+      'torah-readings-israel-he': ['פרשת השבוע בישראל',
+        'פרשת השבוע - קריאת התורה השבועית מאתר Hebcal.com'],
+      'yizkor-il': ['יזכור (ישראל)',
+        'תפילת אזכרה אשכנזית לזכר הנפטרים\\, הנאמרת בבית הכנסת בארבעה מועדים בשנה'],
+    };
+    for (const [slug, [name, desc]] of Object.entries(expected)) {
+      const {ics} = await renderCalendar(regular(slug), DTSTAMP);
+      expect(unfold(ics), slug).toContain(`X-WR-CALNAME:${name}\r\n`);
+      expect(unfold(ics), slug).toContain(`X-WR-CALDESC:${desc}\r\n`);
+    }
+  });
+
+  // The English siblings must not drift along with them.
+  it('leaves the English feeds named in English', async () => {
+    for (const [slug, name] of Object.entries({
+      'torah-readings-israel': 'Torah Readings (Israel English)',
+      'torah-readings-diaspora': 'Torah Readings (Diaspora)',
+      'hdate-en': 'Hebrew calendar dates (en)',
+      'yizkor-diaspora': 'Yizkor (Diaspora)',
+    })) {
+      const {ics} = await renderCalendar(regular(slug), DTSTAMP);
+      expect(unfold(ics), slug).toContain(`X-WR-CALNAME:${name}\r\n`);
+    }
   });
 
   it('renders a well-formed .ics and .csv', async () => {
