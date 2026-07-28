@@ -37,6 +37,20 @@ function vevent(ics, summary) {
       ?.split('END:VEVENT')[0];
 }
 
+/**
+ * Returns the DESCRIPTION of the matching VEVENT, unfolded back into one
+ * string. RFC 5545 folds at 75 octets, which for Hebrew lands mid-word and
+ * makes a literal expectation unreadable.
+ * @param {string} ics
+ * @param {string} summary
+ * @return {string|undefined}
+ */
+function description(ics, summary) {
+  return /\r\nDESCRIPTION:([\s\S]*?)\r\n(?![ \t])/
+      .exec(vevent(ics, summary) ?? '')?.[1]
+      .replaceAll('\r\n ', '');
+}
+
 describe('getStartAndEnd', () => {
   it('spans 90 days back to `years` forward less 60 days', () => {
     const {start, end} = getStartAndEnd(TODAY, 5);
@@ -88,6 +102,45 @@ describe('Torah readings feed', () => {
         '  Yom Kippur\\, and Sukkot\\, and ends with a story about a blasphemer and hi\r\n' +
         ' s punishment.\\n\\nTorah: Leviticus 21:1-24:23\\nHaftarah: Ezekiel 44:15-31\\n\r\n' +
         ' \\nhttps://hebcal.com/s/5786/31?uc=ical-torah-readings-diaspora\r\n');
+  });
+
+  // torah-readings-israel-he and torah-readings-israel cover the same dates
+  // and differ only by `locale`, so they are the sharpest check that the
+  // Hebrew prose reaches the published .ics and that English is unaffected.
+  it('uses Hebrew prose in the Israel Hebrew feed', async () => {
+    const {ics} = await renderCalendar(regular('torah-readings-israel-he'), DTSTAMP);
+    expect(description(ics, 'פָּרָשַׁת בֹּא')).toBe(
+        'בפרשת בא מסופר על שלוש המכות האחרונות שהאל מביא על מצרים. אחרי מכת ' +
+        'הארבה נופל חושך כבד על מצרים במשך שלושה ימים. אלוהים מצווה את בני ישראל ' +
+        'להקריב את קורבן הפסח\\, למרוח דם על מזוזות הבית\\, ולא לצאת מפתח הבית ' +
+        'כדי להינצל ממוות. באותו לילה המשחית הורג את כל בכורות מצרים במכה ' +
+        'האחרונה\\, מכת בכורות. פרעה והמצרים מגרשים את בני ישראל ממצרים.' +
+        '\\n\\nTorah: Exodus 10:1-13:16\\nHaftarah: Jeremiah 46:13-28' +
+        '\\n\\nhttps://hebcal.com/s/5786i/15?uc=ical-torah-readings-israel-he');
+  });
+
+  it('keeps English prose in the Israel English feed', async () => {
+    const {ics} = await renderCalendar(regular('torah-readings-israel'), DTSTAMP);
+    expect(description(ics, 'Parashat Bo')).toBe(
+        'Bo (“Come”) recounts the last three plagues that God inflicts on the ' +
+        'Egyptians: locusts\\, darkness\\, and death of firstborns. God commands ' +
+        'the Israelites to offer a Passover lamb sacrifice. After the last ' +
+        'plague\\, Pharaoh and the Egyptians demand that the Israelites leave.' +
+        '\\n\\nTorah: Exodus 10:1-13:16\\nHaftarah: Jeremiah 46:13-28' +
+        '\\n\\nhttps://hebcal.com/s/5786i/15?uc=ical-torah-readings-israel');
+  });
+
+  // makeStaticCalendars.js renders every feed in one process, and
+  // renderCalendar() writes ev.memo for the .csv. Israel and Israel Hebrew
+  // must not pick up each other's prose.
+  it('renders the two Israel feeds independently of each other', async () => {
+    const hebrew = regular('torah-readings-israel-he');
+    const english = regular('torah-readings-israel');
+    expect(hebrew.events[0]).not.toBe(english.events[0]);
+    await renderCalendar(hebrew, DTSTAMP);
+    const {ics} = await renderCalendar(english, DTSTAMP);
+    expect(description(ics, 'Parashat Bo')).toMatch(/^Bo \(“Come”\) recounts/);
+    expect(description(ics, 'Parashat Tzav')).toMatch(/^In Tzav \(“Command”\)/);
   });
 
   it('swaps the parsha memo for the special Shabbat name in the CSV', async () => {
