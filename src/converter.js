@@ -2,7 +2,7 @@ import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
   OmerEvent, gematriya, greg} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
-import {httpRedirect, hebrewFontPreload} from './common.js';
+import {httpRedirect, hebrewFontPreload, jsonpBody} from './common.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
 import {lgToLocale, localeMap} from './lang.js';
@@ -88,17 +88,12 @@ export async function hebrewDateConverter(ctx) {
       ctx.body = {error: p.message};
     } else if (typeof p.hdates === 'object') {
       ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-      let result = p;
-      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
-      if (cb) {
-        result = cb + '(' + JSON.stringify(result) + ')\n';
-      }
-      ctx.body = result;
+      ctx.body = jsonpBody(ctx, p);
     } else {
       if (!p.noCache) {
         ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
       }
-      let result = {
+      const result = {
         gy: p.gy,
         gm: p.gm,
         gd: p.gd,
@@ -119,11 +114,7 @@ export async function hebrewDateConverter(ctx) {
           result.il = p.il;
         }
       }
-      const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
-      if (cb) {
-        result = cb + '(' + JSON.stringify(result) + ')\n';
-      }
-      ctx.body = result;
+      ctx.body = jsonpBody(ctx, result);
     }
   } else if (q.cfg === 'xml') {
     ctx.type = 'text/xml';

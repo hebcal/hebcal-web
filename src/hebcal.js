@@ -1,7 +1,7 @@
 import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
-import {shortenUrl} from './common.js';
+import {jsonpBody, shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
 import {langNames, localeMap} from './lang.js';
@@ -503,12 +503,8 @@ function renderJson(ctx) {
   if (q.hdp === '1') {
     options.heDateParts = true;
   }
-  let obj = myEventsToClassicApi(events, options, !leyningOff);
-  const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
-  if (cb) {
-    obj = cb + '(' + JSON.stringify(obj) + ')\n';
-  }
-  ctx.body = obj;
+  const obj = myEventsToClassicApi(events, options, !leyningOff);
+  ctx.body = jsonpBody(ctx, obj);
 }
 
 function renderLegacyJavascript(ctx) {

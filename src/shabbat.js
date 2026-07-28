@@ -4,6 +4,7 @@ import {checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {
   httpRedirect,
+  jsonpBody,
   shortenUrl,
   utmSourceFromRef,
 } from './common.js';
@@ -91,12 +92,8 @@ export async function shabbatApp(ctx) {
     if (q.hdp === '1') {
       ctx.state.options.heDateParts = true;
     }
-    let obj = myEventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
-    const cb = empty(q.callback) ? false : q.callback.replaceAll(/[^\w.]/g, '');
-    if (cb) {
-      obj = cb + '(' + JSON.stringify(obj) + ')\n';
-    }
-    ctx.body = obj;
+    const obj = myEventsToClassicApi(ctx.state.events, ctx.state.options, !leyningOff);
+    ctx.body = jsonpBody(ctx, obj);
   } else {
     const p = makePropsForFullHtml(ctx);
     if (q.set !== 'off') {
