@@ -5,8 +5,8 @@ import {
   getCalendarTitle,
   getHolidayDescription,
 } from '@hebcal/rest-api';
-import QuickLRU from 'quick-lru';
-import {HOLIDAY_IGNORE_MASK, makeTorahMemoText} from './torahMemo.js';
+import {getParshaSummary} from './parshaCommon.js';
+import {makeTorahMemoText} from './torahMemo.js';
 
 /**
  * Appends utm_source, utm_medium and utm_campaign to an event URL,
@@ -32,35 +32,10 @@ function appendTrackingToUrl(url, options) {
   return appendIsraelAndTracking(url, options.il, utmSource, utmMedium, utmCampaign);
 }
 
-const torahMemoCache = new QuickLRU({maxSize: 5000});
-
 /**
- * @private
- * @param {Event} ev
- * @param {boolean} il
- * @return {string}
- */
-function makeTorahMemo(ev, il) {
-  if (ev.getFlags() & HOLIDAY_IGNORE_MASK || ev.eventTime) {
-    return '';
-  }
-  const hd = ev.getDate();
-  const key = [
-    hd.getFullYear(), hd.getMonth(), hd.getDate(),
-    il ? '1' : '0', ev.getDesc(),
-  ].join('-');
-  const cached = torahMemoCache.get(key);
-  if (typeof cached === 'string') {
-    return cached;
-  }
-  const memo = makeTorahMemoText(ev, il);
-  torahMemoCache.set(key, memo);
-  return memo;
-}
-
-/**
- * Builds the iCalendar `DESCRIPTION` text for an event: holiday description,
- * Omer count, Torah reading, and a link back to hebcal.com.
+ * Builds the iCalendar `DESCRIPTION` text for an event: parsha summary or
+ * holiday description, Omer count, Torah reading, and a link back to
+ * hebcal.com.
  *
  * Newlines are ordinary `\n` characters; `@hebcal/icalendar` takes care of
  * escaping them for RFC 5545.
@@ -84,6 +59,9 @@ export function createMemo(ev, options) {
     return ev.getTodayIs('en') + '\n\n' + ev.getTodayIs('he') + '\n\n' + sefira;
   }
   if (!memo) {
+    memo = getParshaSummary(ev) || '';
+  }
+  if (!memo) {
     memo = getHolidayDescription(ev);
   }
   if (!memo) {
@@ -92,7 +70,7 @@ export function createMemo(ev, options) {
       memo = linkEv.render(options.locale);
     }
   }
-  const torahMemo = makeTorahMemo(ev, options.il);
+  const torahMemo = makeTorahMemoText(ev, options.il);
   if (torahMemo) {
     if (memo.length) {
       memo += '\n\n';

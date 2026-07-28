@@ -272,18 +272,18 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
 }
 
 /**
- * Sets ev.memo if the event is a Parsha Hashavua
+ * Returns the Sefaria prose summary for a Parsha Hashavua event, or
+ * `undefined` for any other event or a parsha we have no summary for
  * @param {Event} ev
+ * @return {string|undefined}
  */
-export function addIcalParshaMemo(ev) {
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-    const parshaName = ev.getDesc().substring(9);
-    const meta = lookupParshaMeta(parshaName);
-    const memo = meta.summaryHtml?.html;
-    if (memo) {
-      ev.memo = memo;
-    }
+export function getParshaSummary(ev) {
+  if (!(ev.getFlags() & flags.PARSHA_HASHAVUA)) {
+    return undefined;
   }
+  const parshaName = ev.getDesc().substring(9);
+  const meta = lookupParshaMeta(parshaName);
+  return meta.summaryHtml?.html;
 }
 
 const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
