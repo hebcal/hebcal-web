@@ -1,6 +1,7 @@
 import {describe, it, expect} from 'vitest';
 import {HebrewCalendar, Location, HDate, Event, flags} from '@hebcal/core';
-import {makeTorahMemoText, makeMemo} from '../src/torahMemo.js';
+import {makeTorahMemoText} from '../src/torahMemo.js';
+import {makeEventMemo} from '../src/eventMemo.js';
 
 describe('makeTorahMemoText', () => {
   it('summarizes Torah, Haftarah and Sephardic Haftarah', () => {
@@ -79,7 +80,7 @@ describe('makeTorahMemoText', () => {
   });
 });
 
-describe('makeMemo', () => {
+describe('makeEventMemo', () => {
   it('prefers the Torah reading for Parashat ha-Shavua', () => {
     const ev = HebrewCalendar.calendar({
       noHolidays: true,
@@ -87,7 +88,7 @@ describe('makeMemo', () => {
       start: new Date(2020, 10, 28),
       end: new Date(2020, 10, 28),
     })[0];
-    expect(makeMemo(ev, false)).toBe(
+    expect(makeEventMemo(ev, false)).toBe(
         'Torah: Genesis 28:10-32:3\n' +
         'Haftarah: Hosea 12:13-14:10\n' +
         'Haftarah for Sephardim: Hosea 11:7-12:12');
@@ -97,12 +98,12 @@ describe('makeMemo', () => {
     const hd = new HDate(new Date(2021, 1, 13));
     const ev = new Event(hd, 'Whatever', flags.USER_EVENT);
     ev.memo = 'Foo Bar';
-    expect(makeMemo(ev, false)).toBe('Foo Bar');
+    expect(makeEventMemo(ev, false)).toBe('Foo Bar');
 
     const chanukah = HebrewCalendar.calendar({
       start: new Date(2020, 11, 11),
       end: new Date(2020, 11, 11),
     })[0];
-    expect(makeMemo(chanukah, false)).toContain('the Jewish festival of rededication');
+    expect(makeEventMemo(chanukah, false)).toContain('the Jewish festival of rededication');
   });
 });

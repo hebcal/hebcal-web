@@ -20,7 +20,7 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   compactJsonToSave,
   getCalendarNames, makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
-import {makeYahrzeitEvents} from './makeYahrzeitEvents.js';
+import {makeYahrzeitEvents} from './yahrzeitEvents.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 

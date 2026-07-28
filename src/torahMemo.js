@@ -21,6 +21,7 @@ const cache = new QuickLRU({maxSize: 5000});
 
 /**
  * Makes multi-line text that summarizes Torah & Haftarah
+ * for Shabbat (ParshaEvent) or holiday (HolidayEvent)
  * @param {Event} ev
  * @param {boolean} il
  * @return {string}
@@ -81,29 +82,3 @@ export function localizedHolidayDescription(ev, locale) {
   return getHolidayDescription(ev, false, locale) ||
     getHolidayDescription(ev, false, 'en');
 }
-
-/**
- * Returns the memo to use for an event: Torah reading for a Parsha
- * ha-Shavua, otherwise `ev.memo` or the holiday description.
- * @param {Event} ev
- * @param {boolean} il
- * @param {string} [locale] language for the holiday description
- * @return {string}
- */
-export function makeMemo(ev, il, locale) {
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
-    try {
-      const memo = makeTorahMemoText(ev, il);
-      if (memo) {
-        return memo;
-      }
-    } catch {
-      // fallthru
-    }
-  }
-  if (ev.memo) {
-    return ev.memo;
-  }
-  return localizedHolidayDescription(ev, locale);
-}
-

@@ -6,7 +6,7 @@ import {
   makeAnchor,
 } from '@hebcal/rest-api';
 import {getParshaSummary} from './parshaCommon.js';
-import {makeMemo} from './torahMemo.js';
+import {makeEventMemo} from './eventMemo.js';
 
 /**
  * @private
@@ -163,7 +163,7 @@ export function eventToRssItem2(ev, options) {
     }
   } else {
     const locale = options.locale || options.lang;
-    memo = makeMemo(ev, il, locale);
+    memo = makeEventMemo(ev, il, locale);
     // lead a Parasha with its prose summary, the way the .ics DESCRIPTION and
     // the /sedrot feeds do.
     const summary = getParshaSummary(ev, locale);

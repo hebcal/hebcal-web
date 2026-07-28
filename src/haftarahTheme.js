@@ -18,7 +18,7 @@ export function formatHaftarahTheme(theme) {
   if (typeof theme.admonition === 'number') {
     return `${ORDINAL_WORDS[theme.admonition]} Haftarah of Admonition`;
   }
-  if (typeof theme.consolation !== 'undefined') {
+  if (theme.consolation !== undefined) {
     const ordinals = String(theme.consolation).split(',')
         .map((num) => ORDINAL_WORDS[Number(num)])
         .join(' and ');

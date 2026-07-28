@@ -6,7 +6,7 @@ import {
   shouldRenderBrief,
   appendIsraelAndTracking,
 } from '@hebcal/rest-api';
-import {makeMemo} from './torahMemo.js';
+import {makeEventMemo} from './eventMemo.js';
 
 /**
  * Converts a Hebcal event to a FullCalendar.io object
@@ -53,7 +53,7 @@ export function eventToFullCalendar(ev, tzid, options) {
   const desc = ev.getDesc();
   const candles = desc === hdesc.HAVDALAH || desc === hdesc.CANDLE_LIGHTING;
   if (!candles) {
-    const memo = makeMemo(ev, il);
+    const memo = makeEventMemo(ev, il);
     if (memo) {
       result.description = memo;
     } else if (ev.linkedEvent !== undefined) {

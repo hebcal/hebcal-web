@@ -11,7 +11,7 @@ import {getMaxYahrzeitId,
   YAHRZEIT,
   makeCalendarTitle,
   getYahrzeitDetailsFromDb} from './yahrzeitCommon.js';
-import {makeYahrzeitEvents, getDateRange, makeEditMemo} from './makeYahrzeitEvents.js';
+import {makeYahrzeitEvents, getDateRange, makeEditMemo} from './yahrzeitEvents.js';
 
 /**
  * @param {import('koa').Context} ctx

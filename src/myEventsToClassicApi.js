@@ -6,6 +6,14 @@ import {
 import {getTriennialForParshaHaShavua} from '@hebcal/triennial';
 import {pkg} from './pkg.js';
 
+/**
+ * Similar to eventsToClassicApi; appends the hebcal-web version
+ * number and adds triennial reading if leyning is enabled.
+ * @param {Event[]} events 
+ * @param {import('@hebcal/rest-api').RestApiOptions} options 
+ * @param {boolean} leyning 
+ * @return {import('@hebcal/rest-api').ClassicApiResult}
+ */
 export function myEventsToClassicApi(events, options, leyning) {
   const obj = eventsToClassicApiHeader(events, options);
   if (typeof obj.version === 'string') {
