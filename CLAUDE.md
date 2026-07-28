@@ -67,7 +67,9 @@ Each feature is typically one or a few files handling routing, business logic, a
   `makeIcalEvents()` / `makeIcalendar()`, which pass the memo through the
   per-event `IcalEvent` option. `createMemo()` gathers every piece itself —
   parsha summary, holiday description, Omer count, Torah reading, tracking URL
-  — so callers never pre-populate anything. Never write the generated memo back
+  — so callers never pre-populate anything. Prose follows `options.locale`:
+  Hebrew locales get Hebrew parsha summaries and holiday descriptions
+  (`localizedHolidayDescription()`), everything else English. Never write the generated memo back
   onto the event: `@hebcal/core` caches and shares holiday event instances
   across requests, so a memo set here would leak into later calendars, and the
   .csv export wants a different memo on the same event anyway.
@@ -78,10 +80,13 @@ Each feature is typically one or a few files handling routing, business logic, a
   them.
 - **Torah/Parsha**: `sedrot.js`, `parshaYear.js`, `parshaCommon.js`.
   Each parsha's Sefaria prose summary lives in `drash.json` under
-  `sefaria.summary` (English) and `sefaria.summaryHe` (Hebrew, scraped from
-  sefaria.org.il). `getParshaSummary(ev, locale)` picks between them, so the
-  Hebrew RSS feeds (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and
-  the Hebrew iCalendar downloads carry Hebrew prose instead of English.
+  `sefaria.summaryEn` and `sefaria.summaryHe`, both scraped from sefaria.org.il.
+  `getParshaSummary(ev, locale)` picks between them, so the Hebrew RSS feeds
+  (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and the Hebrew
+  iCalendar downloads carry Hebrew prose instead of English. Sefaria edits these
+  descriptions over time and now embeds Markdown in some of them; drash.json
+  holds plain text, so re-scraping means flattening `[text](url)` and
+  `*emphasis*` first.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`

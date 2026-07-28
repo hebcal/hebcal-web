@@ -203,6 +203,23 @@ describe('RSS feed contents', () => {
     expect(response.text).toContain('<description><![CDATA[<p>בפרשת עקב משה מבטיח');
   });
 
+  it('describes holidays in Hebrew in the Hebrew feed', async () => {
+    const response = await request(server)
+        .get('/sedrot/index-he.xml?dt=2026-04-15');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<p>תחילת חודש אייר בלוח העברי.');
+    expect(response.text).not.toContain('Start of month of Iyyar');
+  });
+
+  it('keeps holiday descriptions in English for non-Hebrew feeds', async () => {
+    for (const path of ['/sedrot/index-en.xml?dt=2026-04-15',
+      '/sedrot/index-fr.xml?dt=2026-04-15']) {
+      const response = await request(server).get(path);
+      expect(response.status).toBe(200);
+      expect(response.text).toContain('<p>Start of month of Iyyar on the Hebrew calendar.');
+    }
+  });
+
   it('gives a doubled parsha one Hebrew paragraph per portion', async () => {
     const response = await request(server)
         .get('/sedrot/index-he.xml?dt=2026-04-15');

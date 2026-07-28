@@ -162,12 +162,11 @@ export function eventToRssItem2(ev, options) {
       subj = subj.substring(0, colon) + ': ' + time;
     }
   } else {
-    memo = makeMemo(ev, il);
+    const locale = options.locale || options.lang;
+    memo = makeMemo(ev, il, locale);
     // lead a Parasha with its prose summary, the way the .ics DESCRIPTION and
-    // the /sedrot feeds do. `makeMemo()` is deliberately left alone: it is
-    // shared with eventToFullCalendar(), whose `description` is a non-standard
-    // FullCalendar field that nothing renders by default.
-    const summary = getParshaSummary(ev, options.locale || options.lang);
+    // the /sedrot feeds do.
+    const summary = getParshaSummary(ev, locale);
     if (summary) {
       memo = memo ? summary + '\n\n' + memo : summary;
     }
