@@ -1,4 +1,5 @@
-import {HebrewCalendar, Locale, HDate, flags, months, greg} from '@hebcal/core';
+import {HebrewCalendar, Locale, HDate, flags, months, greg,
+  holidayDesc as hdesc} from '@hebcal/core';
 import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
 import {setDefautLangTz} from './defaultLangTz.js';
@@ -158,14 +159,14 @@ function makeContents(events, options) {
   for (let i = 0; i < events.length; i++) {
     const ev = events[i];
     const desc = ev.getDesc();
-    if (desc === 'Havdalah') {
+    if (desc === hdesc.HAVDALAH) {
       if (objs.length) {
         objs.at(-1).havdalah =
           HebrewCalendar.reformatTimeStr(ev.eventTimeStr, '', options);
       }
       continue;
     }
-    if (desc !== 'Candle lighting') {
+    if (desc !== hdesc.CANDLE_LIGHTING) {
       continue;
     }
     const hd = ev.getDate();

@@ -1,5 +1,5 @@
 import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale, DailyLearning,
-  ChanukahEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
+  ChanukahEvent, getHolidaysOnDate, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import '@hebcal/learning';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz} from './defaultLangTz.js';
@@ -241,16 +241,16 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   }
 
   const holidays = getHolidaysOnDate(hd, il) || [];
-  if (holidays.some((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
+  if (holidays.some((ev) => ev.getDesc() === hdesc.EREV_TISHA_BAV)) {
     return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
  begins tonight at sundown. We wish you an easy fast`];
   }
-  if (holidays.some((ev) => ev.getDesc() === 'Yom HaShoah')) {
+  if (holidays.some((ev) => ev.getDesc() === hdesc.YOM_HASHOAH)) {
     return ['✡️ We remember ✡️',
       `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>,
  Holocaust and Heroism Remembrance Day`];
   }
-  if (holidays.some((ev) => ev.getDesc() === 'Yom HaZikaron')) {
+  if (holidays.some((ev) => ev.getDesc() === hdesc.YOM_HAZIKARON)) {
     return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
       `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
  Israeli Memorial Day`];
@@ -281,7 +281,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
     const erevHd = new HDate(24, months.KISLEV, yy);
     const erevEv = new ChanukahEvent(erevHd,
-        'Chanukah: 1 Candle', flags.CHANUKAH_CANDLES, undefined);
+        hdesc.CHANUKAH_1_CANDLE, flags.CHANUKAH_CANDLES, undefined);
     const d = dayjs(erevHd.greg()).locale(locale);
     const [, longText] = getChanukahGreeting(d, erevEv);
     return ['🕎&nbsp;<span lang="he" dir="rtl">חֲנוּכָּה שָׂמֵחַ</span>&nbsp;🕎',

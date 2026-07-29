@@ -1,4 +1,4 @@
-import {flags} from '@hebcal/core';
+import {flags, holidayDesc as hdesc} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {
   appendIsraelAndTracking,
@@ -45,7 +45,7 @@ function appendTrackingToUrl(url, options) {
 export function createMemo(ev, options) {
   let memo = ev.memo || '';
   const desc = ev.getDesc();
-  if (desc === 'Havdalah' || desc === 'Candle lighting') {
+  if (desc === hdesc.HAVDALAH || desc === hdesc.CANDLE_LIGHTING) {
     return memo;
   }
   const mask = ev.getFlags();
