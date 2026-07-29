@@ -183,6 +183,16 @@ describe('Hebcal output formats', () => {
     expect(response.text).toContain('"Start Date"');
   });
 
+  // Same treatment as download.hebcal.com: a Torah reading's CSV description
+  // is the special Shabbat it falls on, not its (much too long) prose summary.
+  it('describes a parsha by its special Shabbat with cfg=csv', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=csv&s=on&year=2026&month=3&i=off');
+    expect(response.status).toBe(200);
+    const rows = response.text.split('\r\n');
+    expect(rows).toContain('"Parashat Tzav","3/28/2026",,,,"true","Shabbat HaGadol","3","Torah Reading"');
+  });
+
   it.each([
     {cfg: 'rss', type: 'xml', text: '<rss', what: 'RSS XML'},
     {cfg: 'ics', type: 'calendar', text: 'BEGIN:VCALENDAR', what: 'iCalendar'},

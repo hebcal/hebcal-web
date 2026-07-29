@@ -1,6 +1,6 @@
 import {HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
-import {makeAnchor} from '@hebcal/rest-api';
+import {makeAnchor, eventToCsv, CSV_HEADER} from '@hebcal/rest-api';
 import {langNames} from './lang.js';
 import {formatHaftarahTheme} from './haftarahTheme.js';
 import {transliterate} from 'transliteration';
@@ -326,9 +326,33 @@ function getCsvParshaMemo(ev, il, locale) {
   return undefined;
 }
 
-export function addCsvParshaMemo(ev, il, locale) {
-  const memo = getCsvParshaMemo(ev, il, locale);
-  if (memo) {
-    ev.memo = memo;
-  }
+/**
+ * Renders events as an Outlook-compatible CSV document, substituting the
+ * special-Shabbat name (or `Machar Chodesh`) for the description of each
+ * Parsha event.
+ *
+ * Use this instead of `eventsToCsv()` for any calendar that might contain
+ * Torah readings. The .ics description of a Parsha event is its Sefaria prose
+ * summary, which is far too long for a spreadsheet cell, so the .csv wants a
+ * different memo on the very same event. That memo is passed per-event to
+ * `eventToCsv()` rather than assigned to `ev.memo`, because `@hebcal/core`
+ * caches and shares event instances across calendars and requests — writing
+ * to the event would leak this memo into the next calendar rendered.
+ *
+ * Safe to call on any event list: events that aren't Torah readings simply
+ * keep their own memo.
+ *
+ * @param {Event[]} events
+ * @param {any} options same options as `eventsToCsv()`; `il` and `locale`
+ *   additionally select which holidays count as special and how they render
+ * @return {string} the full CSV document, using CRLF line endings
+ */
+export function eventsWithParshaToCsv(events, options) {
+  const il = options.il;
+  const locale = options.locale;
+  const lines = events.map((ev) => {
+    const memo = getCsvParshaMemo(ev, il, locale);
+    return eventToCsv(ev, memo ? {...options, memo} : options);
+  });
+  return [CSV_HEADER, ...lines].join('\r\n') + '\r\n';
 }
