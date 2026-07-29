@@ -1,5 +1,5 @@
 import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent,
-  HolidayEvent, getSedra} from '@hebcal/core';
+  HolidayEvent, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
 import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon.js';
@@ -535,7 +535,7 @@ const SAT_OVERLAY_FLAGS = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH |
 function getReadingForHoliday(ev, il) {
   const hd = ev.getDate();
   const desc = ev.getDesc();
-  if (desc === 'Chanukah: 1 Candle') {
+  if (desc === hdesc.CHANUKAH_1_CANDLE) {
     return undefined;
   } else if (hd.getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
     const sedra = getSedra(hd.getFullYear(), il);

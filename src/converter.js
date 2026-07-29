@@ -1,5 +1,5 @@
 import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya,
-  greg, getHolidaysOnDate, getSedra} from '@hebcal/core';
+  greg, getHolidaysOnDate, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
 import {httpRedirect, hebrewFontPreload, jsonpBody} from './common.js';
@@ -414,7 +414,7 @@ function getEvents(hdate, il) {
     shabbatMevarchim: true,
     molad: true,
   });
-  events = events.filter((ev) => ev.getDesc() !== 'Chanukah: 1 Candle');
+  events = events.filter((ev) => ev.getDesc() !== hdesc.CHANUKAH_1_CANDLE);
   events = events.concat(getParshaEvents(hdate, il));
   events = events.concat(makeOmer(hdate));
   return events;
