@@ -180,7 +180,9 @@ describe('Torah readings feed', () => {
     const {csv} = await renderCalendar(regular('torah-readings-israel-he'), DTSTAMP);
     const rows = csv.split('\r\n');
     expect(rows).toContain('"פָּרָשַׁת בְּשַׁלַּח","1/31/2026",,,,"true","שַׁבַּת שִׁירָה","3","Torah Reading"');
+    expect(rows).toContain('"פָּרָשַׁת בְּמִדְבַּר","5/16/2026",,,,"true","מָחָר חוֹדֶשׁ","3","Torah Reading"');
     expect(csv).not.toContain('"Parashat ');
+    expect(csv).not.toContain('Machar Chodesh');
   });
 });
 
