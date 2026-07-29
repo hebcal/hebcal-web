@@ -1,4 +1,4 @@
-import {murmur128Sync} from 'murmurhash3';
+import {murmur128Sync} from '@hebcal/murmurhash3';
 import {version as coreVersion} from '@hebcal/core';
 import {pkg} from './pkg.js';
 

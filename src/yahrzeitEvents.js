@@ -1,7 +1,7 @@
 import { Event, flags } from '@hebcal/core';
 import { HDate, Locale, birthdayOrAnniversary, gematriya, months, yahrzeit } from '@hebcal/hdate';
 import dayjs from 'dayjs';
-import {murmur32HexSync} from 'murmurhash3';
+import {murmur32HexSync} from '@hebcal/murmurhash3';
 import {lightCandlesWhen} from './common.js';
 import {
   BIRTHDAY,

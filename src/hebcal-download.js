@@ -12,7 +12,7 @@ import {byteOrderMark} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
-import {murmur128HexSync} from 'murmurhash3';
+import {murmur128HexSync} from '@hebcal/murmurhash3';
 
 export const maxEventsIcsSub = 2399;
 

@@ -3,7 +3,7 @@ import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {eventsToCsv} from '@hebcal/rest-api';
 import {makeIcalEvents} from './icalCommon.js';
 import {basename} from 'node:path';
-import {murmur128HexSync} from 'murmurhash3';
+import {murmur128HexSync} from '@hebcal/murmurhash3';
 import {checkFreshETag} from './etag.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {getMaxYahrzeitId,
