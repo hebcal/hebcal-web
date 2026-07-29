@@ -74,7 +74,7 @@ if (typeof year !== 'string' || year.length === 0) {
 <input class="form-check-input" type="checkbox" name="s" value="on" <%= q.s === 'on' ? 'checked' : '' %> id="s">
 <label class="form-check-label" for="s">Weekly Torah portion on Saturdays</label>
 </div></fieldset>
-</div><!-- .col-sm-6 -->
+</div><!-- .col -->
 <div class="col-sm-auto mb-2">
 <fieldset class="mb-2">
 <div class="form-check mb-1">
@@ -122,7 +122,7 @@ if (typeof year !== 'string' || year.length === 0) {
 </div>
 <details <%= Object.keys(q).filter((key) => q[key] === 'on' && dailyLearningOpts[key]).length > 0 ? 'open' : ''%> class="mb-3">
 <summary class="fw-bold mb-2">Daily Learning</summary>
-<div>
+<fieldset>
 <% for (const key of Object.keys(dailyLearningOpts)) { %>
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="<%=key%>" value="on" <%= q[key] === 'on' ? 'checked' : '' %> id="<%=key%>">
@@ -131,7 +131,7 @@ if (typeof year !== 'string' || year.length === 0) {
  data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span><% } %>
 </div>
 <% } %>
-</div><!-- .collapse -->
+</fieldset>
 </details>
 <details <%= q['city-typeahead'] ? 'open' : ''%> class="mb-2">
 <summary class="fw-bold mb-3">Candle-lighting &amp; Fast times</summary>
@@ -194,7 +194,7 @@ if (typeof year !== 'string' || year.length === 0) {
   </div>
 </fieldset>
 </details>
-</div><!-- .col-sm-6 -->
+</div><!-- .col -->
 </div><!-- .row -->
 <button type="submit" class="btn btn-primary">Create Calendar</button>
 </form>
