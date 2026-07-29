@@ -1,11 +1,15 @@
-import {Event, HDate, HebrewCalendar, Locale,
-  flags, gematriya, months} from '@hebcal/core';
+import { Event, flags } from '@hebcal/core';
+import { HDate, Locale, birthdayOrAnniversary, gematriya, months, yahrzeit } from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import {murmur32HexSync} from 'murmurhash3';
 import {lightCandlesWhen} from './common.js';
-import {YAHRZEIT, BIRTHDAY,
+import {
+  BIRTHDAY,
+  YAHRZEIT,
   getNumYears,
-  getYahrzeitDetailForId} from './yahrzeitCommon.js';
+  getYahrzeitDetailForId
+} from './yahrzeitCommon.js';
+
 
 const hebrewRe = /[א-ת]/;
 
@@ -179,8 +183,8 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   const isBirthday = type === BIRTHDAY;
   const origDt = info.day.toDate();
   const hd = isYahrzeit ?
-    HebrewCalendar.getYahrzeit(hyear, origDt) :
-    HebrewCalendar.getBirthdayOrAnniversary(hyear, origDt);
+    yahrzeit(hyear, origDt) :
+    birthdayOrAnniversary(hyear, origDt);
   if (!hd) {
     return null;
   }
