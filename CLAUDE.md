@@ -72,7 +72,12 @@ Each feature is typically one or a few files handling routing, business logic, a
   (`localizedHolidayDescription()`), everything else English. Never write the generated memo back
   onto the event: `@hebcal/core` caches and shares holiday event instances
   across requests, so a memo set here would leak into later calendars, and the
-  .csv export wants a different memo on the same event anyway.
+  .csv export wants a different memo on the same event anyway. The .csv side
+  follows the same rule: `eventsWithParshaToCsv()` (in `parshaCommon.js`) passes
+  the special-Shabbat name to `eventToCsv()` via its per-call `memo` option, so
+  every CSV route uses it in place of `eventsToCsv()` and rendering a calendar
+  twice yields identical bytes. `kindness.js` and `yahrzeitDownload.js` are the
+  exceptions — they never see `flags.PARSHA_HASHAVUA`.
 - **Static feeds**: `staticCalendars.js` builds the multi-year .ics/.csv feeds
   served from download.hebcal.com/ical/ as a pure function of `today`, so they
   can be regression-tested (`test/staticCalendars.test.js`);

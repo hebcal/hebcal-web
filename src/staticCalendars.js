@@ -1,10 +1,10 @@
 import {greg2abs} from '@hebcal/hdate';
 import {HDate, HebrewCalendar, flags, Event, DailyLearning} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
-import {eventsToCsv, getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
+import {getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {localeMap} from './lang.js';
 import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
-import {addCsvParshaMemo} from './parshaCommon.js';
+import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {readJSON} from './readJSON.js';
 import '@hebcal/learning';
@@ -190,9 +190,10 @@ export function* buildAllCalendars(today) {
 /**
  * Renders one calendar to the two file bodies we publish.
  *
- * CAUTION: for a calendar with Torah readings this replaces `ev.memo` on the
- * Parsha events — the .ics carries the parsha summary while the .csv carries
- * the special-Shabbat name — so a calendar can only be rendered once.
+ * The .ics and .csv describe the same events differently — a Torah reading
+ * gets its Sefaria prose summary in the .ics and the special-Shabbat name in
+ * the .csv — but neither memo is written back onto the events, so a calendar
+ * can be rendered as many times as you like.
  * @param {{file: string, events: Event[], icalOpt: any}} calendar
  * @param {string} dtstamp
  * @return {Promise<{ics: string, csv: string}>}
@@ -205,16 +206,9 @@ export async function renderCalendar({file, events, icalOpt}, dtstamp) {
   icalOpt.publishedTTL = 'P7D';
   const ics = await icalEventsToString(makeIcalEvents(events, icalOpt), icalOpt);
 
-  if (icalOpt.sedrot) {
-    const il = icalOpt.il;
-    const locale = icalOpt.locale;
-    for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
-      addCsvParshaMemo(ev, il, locale);
-    }
-  }
   const locale = localeMap[icalOpt.locale] || 'en';
   // Write BOM for UTF-8
   const byteOrderMark = locale === 'en' ? '' : '\uFEFF';
-  const csv = byteOrderMark + eventsToCsv(events, {});
+  const csv = byteOrderMark + eventsWithParshaToCsv(events, icalOpt);
   return {ics, csv};
 }

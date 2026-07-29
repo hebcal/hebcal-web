@@ -33,8 +33,8 @@ import {
   locationToPlainObj,
   getCalendarTitle,
   getDownloadFilename,
-  eventsToCsv,
 } from '@hebcal/rest-api';
+import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {eventToFullCalendar} from './fullcalendar.js';
 import {eventsToRss2} from './rss.js';
 import {makeIcalendar} from './icalCommon.js';
@@ -194,7 +194,7 @@ function renderCsv(ctx) {
   }
   const options = ctx.state.options;
   const events = makeHebrewCalendar(ctx, options);
-  const csv = eventsToCsv(events, options);
+  const csv = eventsWithParshaToCsv(events, options);
   ctx.response.attachment(getDownloadFilename(options) + '.csv');
   ctx.response.type = 'text/x-csv; charset=utf-8';
   const locale = localeMap[options.locale] || 'en';

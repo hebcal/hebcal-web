@@ -138,9 +138,10 @@ describe('Torah readings feed', () => {
         '\\n\\nhttps://hebcal.com/s/5786i/15?uc=ical-torah-readings-israel');
   });
 
-  // makeStaticCalendars.js renders every feed in one process, and
-  // renderCalendar() writes ev.memo for the .csv. Israel and Israel Hebrew
-  // must not pick up each other's prose.
+  // makeStaticCalendars.js renders every feed in one process, and the .ics and
+  // .csv want different memos on the same Torah reading. Neither may be written
+  // back onto the events, so Israel and Israel Hebrew must not pick up each
+  // other's prose and re-rendering a feed must produce identical bytes.
   it('renders the two Israel feeds independently of each other', async () => {
     const hebrew = regular('torah-readings-israel-he');
     const english = regular('torah-readings-israel');
@@ -149,6 +150,14 @@ describe('Torah readings feed', () => {
     const {ics} = await renderCalendar(english, DTSTAMP);
     expect(description(ics, 'Parashat Bo')).toMatch(/^Bo \(“Come”\) recounts/);
     expect(description(ics, 'Parashat Tzav')).toMatch(/^In Tzav \(“Command”\)/);
+  });
+
+  it('renders the same feed identically twice', async () => {
+    const calendar = regular('torah-readings-diaspora');
+    const first = await renderCalendar(calendar, DTSTAMP);
+    const second = await renderCalendar(calendar, DTSTAMP);
+    expect(second.csv).toBe(first.csv);
+    expect(second.ics).toBe(first.ics);
   });
 
   it('swaps the parsha memo for the special Shabbat name in the CSV', async () => {
@@ -162,6 +171,16 @@ describe('Torah readings feed', () => {
     expect(rows).toContain('"Parashat Tzav","3/28/2026",,,,"true","Shabbat HaGadol","3","Torah Reading"');
     expect(rows).toContain('"Parashat Bamidbar","5/16/2026",,,,"true","Machar Chodesh","3","Torah Reading"');
     expect(rows).toContain('"Parashat Tazria-Metzora","4/18/2026",,,,"true","Rosh Chodesh Iyyar","3","Torah Reading"');
+  });
+
+  // The .csv used to render every feed in English no matter its locale, even
+  // though the matching .ics was Hebrew and the .csv already carried a UTF-8
+  // BOM for it. Subject and description both follow `locale` now.
+  it('names the parsha and the special Shabbat in Hebrew in the Hebrew CSV', async () => {
+    const {csv} = await renderCalendar(regular('torah-readings-israel-he'), DTSTAMP);
+    const rows = csv.split('\r\n');
+    expect(rows).toContain('"פָּרָשַׁת בְּשַׁלַּח","1/31/2026",,,,"true","שַׁבַּת שִׁירָה","3","Torah Reading"');
+    expect(csv).not.toContain('"Parashat ');
   });
 });
 

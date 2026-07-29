@@ -1,6 +1,6 @@
 import {HDate, Event, Zmanim, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
-import {eventsToCsv, getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
+import {getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
 import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'node:path';
@@ -10,7 +10,7 @@ import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
 import {localeMap} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
-import {addCsvParshaMemo} from './parshaCommon.js';
+import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {murmur128HexSync} from 'murmurhash3';
 
@@ -118,10 +118,7 @@ export async function hebcalDownload(ctx) {
     const icals = makeIcalEvents(events2, icalOpt);
     ctx.body = await icalEventsToString(icals, icalOpt);
   } else if (csv) {
-    if (options.sedrot) {
-      addCsvParshaMemos(events, options);
-    }
-    const csv = eventsToCsv(events, options);
+    const csv = eventsWithParshaToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
     const locale = localeMap[options.locale] || 'en';
@@ -164,14 +161,6 @@ function makeDummyEvent(ctx) {
   ctx.set('Cache-Control', 'max-age=86400');
   ctx.remove('ETag');
   return [ev];
-}
-
-function addCsvParshaMemos(events, options) {
-  const il = options.il;
-  const locale = options.locale;
-  for (const ev of events.filter((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA)) {
-    addCsvParshaMemo(ev, il, locale);
-  }
 }
 
 function addLocationOmerAlarms(options, events) {
