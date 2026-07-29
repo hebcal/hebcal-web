@@ -4,7 +4,7 @@ import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear, yearIsOutsideHebRange} from './dateUtil.js';
 import {basename, dirname} from 'node:path';
-import {HDate, months, OmerEvent, HebrewCalendar, Locale} from '@hebcal/core';
+import {HDate, months, OmerEvent, Locale, getHolidaysOnDate} from '@hebcal/core';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
 
@@ -91,7 +91,7 @@ export async function omerApp(rpath, ctx) {
   const beginOmer = HDate.hebrew2abs(hyear, months.NISAN, 16);
   const hd = new HDate(beginOmer + omerDay - 1);
   const ev = new OmerEvent(hd, omerDay);
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd, false) || [];
+  const holidays = getHolidaysOnDate(hd, false) || [];
   const prev = omerDay === 1 ? 49 : omerDay - 1;
   const next = omerDay === 49 ? 1 : omerDay + 1;
   return ctx.render('omer', {

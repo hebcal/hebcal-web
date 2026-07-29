@@ -1,5 +1,5 @@
 import {murmur128Sync} from 'murmurhash3';
-import {HebrewCalendar} from '@hebcal/core';
+import {version as coreVersion} from '@hebcal/core';
 import {pkg} from './pkg.js';
 
 function murmur128SyncBase64(str) {
@@ -19,7 +19,7 @@ function murmur128SyncBase64(str) {
  */
 
 export function makeETag(ctx, options, attrs) {
-  const vers = {core: HebrewCalendar.version(), web: pkg.version};
+  const vers = {core: coreVersion, web: pkg.version};
   const etagObj = {...vers, ...options, ...attrs, path: ctx.request.path};
   const utm = Object.keys(etagObj).filter((k) => k.startsWith('utm_'));
   for (const key of utm) {

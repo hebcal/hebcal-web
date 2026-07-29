@@ -1,4 +1,4 @@
-import {HebrewCalendar, Locale, parshiot, flags} from '@hebcal/core';
+import {Locale, parshiot, flags, getHolidaysOnDate} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor, eventToCsv, CSV_HEADER} from '@hebcal/rest-api';
 import {langNames} from './lang.js';
@@ -312,7 +312,7 @@ const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
 function getCsvParshaMemo(ev, il, locale) {
   if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
     const hd = ev.getDate();
-    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const holidays0 = getHolidaysOnDate(hd, il) || [];
     const holidays1 = holidays0.filter((ev) => Boolean(ev.getFlags() & PARSHA_SPECIAL_MASK));
     if (holidays1.length) {
       return holidays1.map((ev) => ev.render(locale)).join(' + ');

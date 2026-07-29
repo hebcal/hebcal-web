@@ -1,4 +1,5 @@
-import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent, HolidayEvent} from '@hebcal/core';
+import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent,
+  HolidayEvent, getSedra} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
 import {addLinksToLeyning, makeLeyningHtmlFromParts} from './parshaCommon.js';
@@ -515,7 +516,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   }
   if (ev?.getDate().getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
     const hd = ev.getDate();
-    const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+    const sedra = getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
       itemReading.parsha = parsha.parsha;
@@ -537,7 +538,7 @@ function getReadingForHoliday(ev, il) {
   if (desc === 'Chanukah: 1 Candle') {
     return undefined;
   } else if (hd.getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
-    const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+    const sedra = getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {
       const pe = new ParshaEvent(parsha);

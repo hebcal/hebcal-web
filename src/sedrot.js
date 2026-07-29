@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot} from '@hebcal/core';
+import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot, getSedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
@@ -267,7 +267,7 @@ function doIsraelDiasporaDiffer(parsha, il, hd, triennial) {
     }
     return [false, '', ''];
   }
-  const otherSedra = HebrewCalendar.getSedra(hyear, !il);
+  const otherSedra = getSedra(hyear, !il);
   const otherParsha = otherSedra.lookup(hd);
   const otherParshaName = parshaToString(otherParsha.parsha);
   if (parshaName !== otherParshaName) {

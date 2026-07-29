@@ -1,5 +1,5 @@
-import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months,
-  OmerEvent, gematriya, greg} from '@hebcal/core';
+import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya,
+  greg, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
 import {httpRedirect, hebrewFontPreload, jsonpBody} from './common.js';
@@ -423,7 +423,7 @@ function getEvents(hdate, il) {
 function getParshaEvents(hdate, il) {
   const saturday = hdate.onOrAfter(6);
   const hy = saturday.getFullYear();
-  const sedra = HebrewCalendar.getSedra(hy, il);
+  const sedra = getSedra(hy, il);
   const parsha = sedra.lookup(saturday);
   if (!parsha.chag) {
     const pe = new ParshaEvent(parsha);
@@ -449,7 +449,7 @@ function getParshaEvents(hdate, il) {
       });
       events = events.concat(pe);
     } else {
-      const satHolidays = HebrewCalendar.getHolidaysOnDate(saturday, il) || [];
+      const satHolidays = getHolidaysOnDate(saturday, il) || [];
       for (const ev of satHolidays) {
         const pe = new PseudoParshaEvent(ev);
         events = events.concat(pe);
