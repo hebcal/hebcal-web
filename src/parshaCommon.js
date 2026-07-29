@@ -319,7 +319,9 @@ function getCsvParshaMemo(ev, il, locale) {
     } else {
       const tommorow = hd.next().getDate();
       if (tommorow === 30 || tommorow === 1) {
-        return 'Machar Chodesh';
+        const str = Locale.gettext('Shabbat Machar Chodesh', locale);
+        const space = str.indexOf(' ');
+        return str.substring(space + 1);
       }
     }
   }

@@ -137,6 +137,25 @@ export const localeMap = {
   'uk': 'uk',
 };
 
+/**
+ * Returns the UTF-8 byte order mark to prefix onto a .csv download, or the
+ * empty string when the file will be pure ASCII.
+ *
+ * Excel on Windows still assumes the legacy ANSI code page for a .csv unless
+ * the file opens with a BOM, so Hebrew or Cyrillic subjects arrive as mojibake
+ * without one. Transliterated locales (`s`, `ashkenazi`) are not in `localeMap`
+ * and fall through to `en`, which is what we want: their output is ASCII, and
+ * a BOM on ASCII only risks confusing simpler CSV parsers.
+ *
+ * @param {string} [locale] a locale name, either raw (`he-x-NoNikud`) or
+ *   already mapped through `localeMap`
+ * @return {string} `\uFEFF` or the empty string
+ */
+export function byteOrderMark(locale) {
+  const lang = localeMap[locale] || 'en';
+  return lang === 'en' ? '' : '\uFEFF';
+}
+
 export const lgToLocale = {
   h: 'he',
   a: 'ashkenazi',
