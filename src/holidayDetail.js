@@ -1,4 +1,4 @@
-import {flags, greg, HDate, HebrewCalendar, Locale, months, Event, ParshaEvent,
+import {flags, greg, HDate, calendar, Locale, months, Event, ParshaEvent,
   HolidayEvent, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForHolidayKey, getLeyningForHoliday,
   getLeyningForParshaHaShavua, hasFestival} from '@hebcal/leyning';
@@ -250,7 +250,7 @@ function getHolidayBegin(holiday, year, il) {
   const range = holidayYearRange[holiday] || [2, 8];
   const startYear = year - range[0];
   const numYears = range[1];
-  const events0 = HebrewCalendar.calendar({
+  const events0 = calendar({
     year: startYear,
     isHebrewYear: false,
     numYears,
@@ -336,7 +336,7 @@ const KEYCAP_DIGITS = [
 function makeMultiDayHolidayItems(holiday, hyear, il) {
   const nowHd = new HDate();
   const nowAbs = nowHd.abs();
-  const events = HebrewCalendar.calendar({year: hyear, isHebrewYear: true, il});
+  const events = calendar({year: hyear, isHebrewYear: true, il});
   const items = events
       .filter((ev) => ev.basename() === holiday)
       .map((ev) => {
@@ -392,7 +392,7 @@ function makeChanukahItems(hyear) {
 function makeHolidayReadings(meta, holiday, year, il, next) {
   meta.reading = meta.reading || {};
   if (year) {
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       year: next.event.getDate().getFullYear(),
       isHebrewYear: true,
       il,

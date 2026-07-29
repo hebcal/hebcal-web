@@ -1,11 +1,11 @@
 import {describe, it, expect} from 'vitest';
-import {HebrewCalendar, Location, HDate, Event, flags} from '@hebcal/core';
+import {calendar, Location, HDate, Event, flags} from '@hebcal/core';
 import {makeTorahMemoText} from '../src/torahMemo.js';
 import {makeEventMemo} from '../src/eventMemo.js';
 
 describe('makeTorahMemoText', () => {
   it('summarizes Torah, Haftarah and Sephardic Haftarah', () => {
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       noHolidays: true,
       sedrot: true,
       start: new Date(2021, 1, 13),
@@ -21,7 +21,7 @@ describe('makeTorahMemoText', () => {
 
   it('includes the Haftarah of Admonition or Consolation', () => {
     const memoForDate = (y, m, d) => {
-      const events = HebrewCalendar.calendar({
+      const events = calendar({
         noHolidays: true,
         sedrot: true,
         start: new Date(y, m, d),
@@ -65,12 +65,12 @@ describe('makeTorahMemoText', () => {
   });
 
   it('ignores timed events', () => {
-    const ev1 = HebrewCalendar.calendar({
+    const ev1 = calendar({
       start: new Date(2020, 11, 14),
       end: new Date(2020, 11, 14),
     })[0];
     expect(makeTorahMemoText(ev1, false)).toBe('Torah: Numbers 7:30-41');
-    const ev2 = HebrewCalendar.calendar({
+    const ev2 = calendar({
       start: new Date(2020, 11, 14),
       end: new Date(2020, 11, 14),
       location: Location.lookup('Boston'),
@@ -82,7 +82,7 @@ describe('makeTorahMemoText', () => {
 
 describe('makeEventMemo', () => {
   it('prefers the Torah reading for Parashat ha-Shavua', () => {
-    const ev = HebrewCalendar.calendar({
+    const ev = calendar({
       noHolidays: true,
       sedrot: true,
       start: new Date(2020, 10, 28),
@@ -100,7 +100,7 @@ describe('makeEventMemo', () => {
     ev.memo = 'Foo Bar';
     expect(makeEventMemo(ev, false)).toBe('Foo Bar');
 
-    const chanukah = HebrewCalendar.calendar({
+    const chanukah = calendar({
       start: new Date(2020, 11, 11),
       end: new Date(2020, 11, 11),
     })[0];

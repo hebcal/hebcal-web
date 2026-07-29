@@ -1,4 +1,5 @@
-import {HDate, HebrewCalendar, Location, Zmanim, getHolidaysOnDate, getSedra} from '@hebcal/core';
+import {HDate, reformatTimeStr, Location, Zmanim, calendar, getHolidaysOnDate,
+  getSedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 import {DatabaseSync} from 'node:sqlite';
@@ -334,7 +335,7 @@ function addCandleTime(friday, city) {
   const location = new Location(city.latitude, city.longitude, city.countryCode === 'IL',
       city.timezone, city.name, city.countryCode, city.geonameid, elevation);
   const dt = new Date(friday.year(), friday.month(), friday.date());
-  const events = HebrewCalendar.calendar({
+  const events = calendar({
     noHolidays: true,
     candlelighting: true,
     location,
@@ -345,7 +346,7 @@ function addCandleTime(friday, city) {
   if (events.length && typeof events[0].eventTimeStr === 'string') {
     const timeStr = events[0].eventTimeStr;
     city.isoDate = friday.format('YYYY-MM-DD');
-    city.fmtTime = HebrewCalendar.reformatTimeStr(timeStr, 'pm', {location});
+    city.fmtTime = reformatTimeStr(timeStr, 'pm', {location});
     const tzid = location.getTzid();
     city.isoDateTime = Zmanim.formatISOWithTimeZone(tzid, events[0].eventTime);
   }

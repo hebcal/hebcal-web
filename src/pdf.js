@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import {greg, flags, HebrewCalendar, Locale, gematriya, HDate, HebrewDateEvent} from '@hebcal/core';
+import {greg, flags, reformatTimeStr, Locale, gematriya, HDate, HebrewDateEvent} from '@hebcal/core';
 import PDFDocument from 'pdfkit';
 import dayjs from 'dayjs';
 import './dayjs-locales.js';
@@ -315,7 +315,7 @@ function renderPdfEvent(doc, evt, x, y, rtl, options) {
   const timed = Boolean(evt.eventTime);
   let timeStr = '';
   if (timed) {
-    timeStr = HebrewCalendar.reformatTimeStr(evt.eventTimeStr, 'p', options);
+    timeStr = reformatTimeStr(evt.eventTimeStr, 'p', options);
     // Calculate time width with bold font at 10pt
     doc.font('bold').fontSize(TIME_FONT_SIZE);
     timedWidth = doc.widthOfString(timeStr + ' ');

@@ -1,4 +1,4 @@
-import {HebrewCalendar, Locale, Zmanim, HDate} from '@hebcal/core';
+import {reformatTimeStr, Locale, Zmanim, HDate} from '@hebcal/core';
 import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
@@ -415,7 +415,7 @@ function eventToItem(ev, options, lang, cfg, utmSource) {
   };
   const timed = Boolean(ev.eventTime);
   if (timed) {
-    obj.fmtTime = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', options);
+    obj.fmtTime = reformatTimeStr(ev.eventTimeStr, 'pm', options);
     const tzid = ev.location.getTzid();
     obj.isoDateTime = Zmanim.formatISOWithTimeZone(tzid, ev.eventTime);
   }

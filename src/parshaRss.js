@@ -1,4 +1,4 @@
-import {HebrewCalendar, flags, Event} from '@hebcal/core';
+import {calendar, flags, Event} from '@hebcal/core';
 import {getParshaSummary} from './parshaCommon.js';
 import {localizedHolidayDescription, makeTorahMemoText} from './torahMemo.js';
 import {eventsToRss2} from './rss.js';
@@ -47,7 +47,7 @@ export async function parshaRss(ctx) {
 
 function makeEvents(dt, il, lang) {
   const [start, endOfWeek] = shabbatWeekRange(dayjs(dt));
-  const events0 = HebrewCalendar.calendar({
+  const events0 = calendar({
     start: new Date(start.year(), start.month(), start.date()),
     end: new Date(endOfWeek.year(), endOfWeek.month(), endOfWeek.date()),
     il,

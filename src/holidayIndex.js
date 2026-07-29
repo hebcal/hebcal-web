@@ -1,4 +1,4 @@
-import {flags, HDate, months, HebrewCalendar, Event} from '@hebcal/core';
+import {flags, HDate, months, calendar, Event} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import createError from 'http-errors';
@@ -199,13 +199,13 @@ export async function holidayMainIndex(ctx) {
   rchNames.forEach((month) => rch[`Rosh Chodesh ${month}`] = new Array(NUM_YEARS));
   const il = ctx.state.il;
   for (let i = 0; i < NUM_YEARS; i++) {
-    let events0 = HebrewCalendar.calendar({
+    let events0 = calendar({
       year: hyear + i - 1,
       isHebrewYear: true,
       il,
     });
     if (!il) {
-      const eventsIlModern = HebrewCalendar.calendar({
+      const eventsIlModern = calendar({
         il: true,
         year: hyear + i - 1,
         isHebrewYear: true,

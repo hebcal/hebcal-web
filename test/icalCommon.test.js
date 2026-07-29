@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import {describe, it, expect} from 'vitest';
 import {
-  HebrewCalendar,
+  calendar,
   Location,
   HDate,
   Event,
@@ -18,7 +18,7 @@ import {getParshaSummary} from '../src/parshaCommon.js';
 describe('createMemo', () => {
   it('makes a Torah reading memo for Parashat ha-Shavua', () => {
     const options = {year: 1993, month: 4, sedrot: true, noHolidays: true};
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     expect(createMemo(events[0], options)).toBe(
         'In Tzav (“Command”), God tells Moses about the sacrifices offered in the ' +
         'Tabernacle (portable sanctuary), including a meal offering brought by the ' +
@@ -29,7 +29,7 @@ describe('createMemo', () => {
         'https://hebcal.com/s/5753/25?us=ical&um=icalendar');
 
     const options2 = {year: 1993, month: 6, sedrot: true, noHolidays: true};
-    const events2 = HebrewCalendar.calendar(options2);
+    const events2 = calendar(options2);
     expect(createMemo(events2[2], options2)).toBe(
         'Parashat Korach recounts the rebellion of Korach (a cousin of Moses and ' +
         'Aaron), Dathan, Abiram, and 250 of their followers. Some rebels are ' +
@@ -49,7 +49,7 @@ describe('createMemo', () => {
       noRoshChodesh: true,
       noSpecialShabbat: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const memo = 'Passover, the Feast of Unleavened Bread';
     const erevPesach = new HolidayEvent(
         events[0].getDate(), events[0].getDesc(), events[0].getFlags(), {memo});
@@ -66,7 +66,7 @@ describe('createMemo', () => {
       noRoshChodesh: true,
       noSpecialShabbat: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const pesachII = new HolidayEvent(
         events[2].getDate(), events[2].getDesc(), events[2].getFlags(),
         {memo: 'Passover, the Feast of Unleavened Bread'});
@@ -84,7 +84,7 @@ describe('createMemo', () => {
       location: Location.lookup('Boston'),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     expect(createMemo(events[0], options)).toBe(
         'Hanukkah, the Jewish festival of rededication. Also known as the Festival ' +
         'of Lights, the eight-day festival is observed by lighting the candles of a ' +
@@ -99,7 +99,7 @@ describe('createMemo', () => {
       location: Location.lookup('Boston'),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     expect(createMemo(events[0], {...options, locale: 'he'})).toBe(
         'חנוכה, חג החנוכה מחדש היהודי. ידוע גם כחג האורים; החג נחגג במשך שמונה ' +
         'ימים על ידי הדלקת נרות בחנוכייה\n\n' +
@@ -117,7 +117,7 @@ describe('createMemo', () => {
       end: new Date(2021, 8, 28),
       il: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     expect(createMemo(events[0], options)).toBe(
         'Eighth Day of Assembly. Immediately following Sukkot, it is observed as a ' +
         'separate holiday in the Diaspora and is combined with Simchat Torah in Israel\n\n' +
@@ -134,7 +134,7 @@ describe('createMemo', () => {
       dailyLearning: {dafYomi: true},
       locale: 'he',
     };
-    const ev = HebrewCalendar.calendar(options)[0];
+    const ev = calendar(options)[0];
     expect(ev.getDesc()).toBe('Nedarim 14');
     expect(createMemo(ev, options)).toBe(
         'https://www.sefaria.org/Nedarim.14a?lang=bi&utm_source=hebcal.com&utm_medium=icalendar');
@@ -147,7 +147,7 @@ describe('createMemo', () => {
       location: Location.lookup('Providence'),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const memos = events.map((ev) => createMemo(ev, options));
     expect(events.map((ev) => ev.getDesc())).toEqual([
       'Fast begins', 'Tzom Tammuz', 'Fast ends',
@@ -183,7 +183,7 @@ describe('createMemo', () => {
       candlelighting: true,
       noHolidays: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     expect(events.map((ev) => ev.getDesc())).toEqual(['Candle lighting', 'Havdalah']);
     expect(events.map((ev) => createMemo(ev, options))).toEqual(['', '']);
   });
@@ -241,7 +241,7 @@ describe('createMemo', () => {
 describe('parsha summary', () => {
   it('is folded in by createMemo without touching the event', () => {
     const options = {year: 1993, month: 4, sedrot: true, noHolidays: true};
-    const [ev] = HebrewCalendar.calendar(options);
+    const [ev] = calendar(options);
     expect(ev.getDesc()).toBe('Parashat Tzav');
     expect(createMemo(ev, options)).toContain('In Tzav (\u201cCommand\u201d)');
     // the summary must not be written back onto the event: the .csv wants the
@@ -268,13 +268,13 @@ describe('parsha summary', () => {
   });
 
   it('is absent for non-parsha events', () => {
-    const [ev] = HebrewCalendar.calendar({year: 2026, month: 4});
+    const [ev] = calendar({year: 2026, month: 4});
     expect(getParshaSummary(ev)).toBeUndefined();
   });
 
   it('uses the Hebrew parsha summary for a Hebrew locale', () => {
     const options = {year: 2026, month: 8, sedrot: true, noHolidays: true};
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const ev = events[0];
     expect(ev.getDesc()).toBe('Parashat Eikev');
     const summary = 'בפרשת עקב משה מבטיח ששמירת המצוות תגרור אחריה שגשוג והצלחה ' +
@@ -308,7 +308,7 @@ describe('parsha summary', () => {
   });
 
   it('getParshaSummary falls back to English for unknown locales', () => {
-    const [ev] = HebrewCalendar.calendar(
+    const [ev] = calendar(
         {year: 2026, month: 8, sedrot: true, noHolidays: true});
     expect(getParshaSummary(ev, 'he')).toMatch(/^בפרשת עקב/);
     expect(getParshaSummary(ev, 'ru')).toMatch(/^In Eikev/);
@@ -323,20 +323,20 @@ describe('makeIcalEvents', () => {
       end: new Date(2021, 8, 28),
       il: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const [ical] = makeIcalEvents(events, options);
     expect(ical.ev).toBe(events[0]);
     expect(events[0].memo).toBeUndefined();
     expect(ical.options.memo).toContain('Eighth Day of Assembly');
 
     // a second calendar for the same dates must not inherit the first memo
-    const events2 = HebrewCalendar.calendar(options);
+    const events2 = calendar(options);
     expect(events2[0].memo).toBeUndefined();
   });
 
   it('leaves the caller\'s options object alone', () => {
     const options = {year: 1993, month: 4, sedrot: true, noHolidays: true};
-    makeIcalEvents(HebrewCalendar.calendar(options), options);
+    makeIcalEvents(calendar(options), options);
     expect(options.memo).toBeUndefined();
   });
 });
@@ -344,7 +344,7 @@ describe('makeIcalEvents', () => {
 describe('DESCRIPTION generated by @hebcal/icalendar', () => {
   it('escapes newlines and folds long lines', () => {
     const options = {year: 1993, month: 4, sedrot: true, noHolidays: true};
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const [ical] = makeIcalEvents(events, {...options, dtstamp: 'X'});
     const lines = ical.toString().split('\r\n');
     expect(lines).toEqual([
@@ -380,7 +380,7 @@ describe('DESCRIPTION generated by @hebcal/icalendar', () => {
 
   it('makeIcalendar() wraps the events in a VCALENDAR', async () => {
     const options = {year: 1993, month: 4, sedrot: true, noHolidays: true};
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const ics = await makeIcalendar(events, {...options, prodid: 'X', dtstamp: 'X'});
     expect(ics.split('\r\n').slice(0, 9)).toEqual([
       'BEGIN:VCALENDAR',

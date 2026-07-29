@@ -1,4 +1,4 @@
-import {Event, flags, HDate, HebrewCalendar, months} from '@hebcal/core';
+import {Event, flags, HDate, calendar, months} from '@hebcal/core';
 import {getHolidayDescription} from '@hebcal/rest-api';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
@@ -145,9 +145,9 @@ export async function holidayYearIndex(ctx) {
     il,
     // shabbatMevarchim: true,
   };
-  let events0 = HebrewCalendar.calendar(options);
+  let events0 = calendar(options);
   if (!il) {
-    const eventsIlModern = HebrewCalendar.calendar({
+    const eventsIlModern = calendar({
       il: true,
       year: calendarYear,
       isHebrewYear,

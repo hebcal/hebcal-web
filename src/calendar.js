@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, flags} from '@hebcal/core';
+import {HDate, calendar, flags} from '@hebcal/core';
 import '@hebcal/learning';
 import {getEventCategories} from '@hebcal/rest-api';
 import createError from 'http-errors';
@@ -285,7 +285,7 @@ export function makeHebrewCalendar(ctx, options) {
     opts.addHebrewDates = options.addAlternateDates;
   }
   try {
-    events = HebrewCalendar.calendar(opts);
+    events = calendar(opts);
 
     // When using Hebrew months with Hebrew year mode, splitByHebrewMonth()
     // intentionally includes Tishrei of the next year for printed calendars
@@ -304,7 +304,7 @@ export function makeHebrewCalendar(ctx, options) {
         end: tishreiEnd.greg(),
         isHebrewYear: false, // Using Gregorian date range
       };
-      events = events.concat(HebrewCalendar.calendar(optsNextTishrei));
+      events = events.concat(calendar(optsNextTishrei));
     }
   } catch (err) {
     const status = err.status || 400;

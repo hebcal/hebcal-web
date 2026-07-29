@@ -6,7 +6,7 @@ import {localeMap} from './lang.js';
 import {queryLongDescr, dailyLearningConfig} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import {basename} from 'node:path';
-import {HDate, HebrewCalendar, months, OmerEvent, Locale, getHolidaysOnDate} from '@hebcal/core';
+import {HDate, calendar, months, OmerEvent, Locale, getHolidaysOnDate} from '@hebcal/core';
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {makeAnchor} from '@hebcal/rest-api';
@@ -47,7 +47,7 @@ export function dailyLearningApp(ctx) {
       dlOpts[key] = true;
     }
   }
-  const events = HebrewCalendar.calendar({
+  const events = calendar({
     start: dt,
     end: dt,
     il,

@@ -1,4 +1,4 @@
-import {HebrewCalendar, Zmanim, holidayDesc as hdesc} from '@hebcal/core';
+import {reformatTimeStr, Zmanim, holidayDesc as hdesc} from '@hebcal/core';
 import {
   getCalendarTitle,
   getEventCategories,
@@ -153,7 +153,7 @@ export function eventToRssItem2(ev, options) {
     if (colon !== -1) {
       const locale = options.locale || 'en';
       const opts = {location, il, locale};
-      const time = HebrewCalendar.reformatTimeStr(ev.eventTimeStr, 'pm', opts);
+      const time = reformatTimeStr(ev.eventTimeStr, 'pm', opts);
       subj = subj.substring(0, colon) + ': ' + time;
     }
   } else {

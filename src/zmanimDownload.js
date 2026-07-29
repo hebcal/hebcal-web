@@ -1,4 +1,4 @@
-import { HebrewCalendar, HebrewDateEvent, TimedEvent, Zmanim, flags } from '@hebcal/core';
+import { reformatTimeStr, HebrewDateEvent, TimedEvent, Zmanim, flags } from '@hebcal/core';
 import { HDate, Locale } from '@hebcal/hdate';
 import { IcalEvent } from '@hebcal/icalendar';
 import { makeAnchor } from '@hebcal/rest-api';
@@ -93,7 +93,7 @@ function makeAllDayEvents(times, location, locale) {
     for (const [dt, zman] of arr) {
       const desc = Locale.lookupTranslation(TITLE_PREFIX + zman, 'en');
       const time = Zmanim.formatTime(dt, timeFormat);
-      const str = HebrewCalendar.reformatTimeStr(time, 'pm', options);
+      const str = reformatTimeStr(time, 'pm', options);
       const hourMin = str.split(':');
       const prefix = hourMin[0].length === 2 ? '' : ' ';
       lines.push(prefix + str + ' ' + Locale.gettext(desc, locale));

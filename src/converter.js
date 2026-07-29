@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya,
+import {HDate, calendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya,
   greg, getHolidaysOnDate, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
@@ -406,7 +406,7 @@ function getEvents(hdate, il) {
   if (hdate.abs() < -479441) {
     return [];
   }
-  let events = HebrewCalendar.calendar({
+  let events = calendar({
     start: hdate,
     end: hdate,
     il,

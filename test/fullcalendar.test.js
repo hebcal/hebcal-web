@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {describe, it, expect} from 'vitest';
-import {HebrewCalendar, Location, HDate, HebrewDateEvent} from '@hebcal/core';
+import {calendar, Location, HDate, HebrewDateEvent} from '@hebcal/core';
 import {DafYomiEvent} from '@hebcal/learning';
 import {eventToFullCalendar} from '../src/fullcalendar.js';
 
@@ -16,7 +16,7 @@ describe('eventToFullCalendar', () => {
       havdalahMins: 50,
       location: new Location(41.85003, -87.65005, false, 'America/Chicago', 'Chicago', 'US', 4887398),
     };
-    const events = HebrewCalendar.calendar(options).slice(0, 11);
+    const events = calendar(options).slice(0, 11);
     const tzid = options.location.getTzid();
     const fc = events.map((ev) => eventToFullCalendar(ev, tzid, options));
     const pesachMemo = 'Passover, the Feast of Unleavened Bread. Also called Chag HaMatzot (the Festival of Matzah),' +
@@ -122,7 +122,7 @@ describe('eventToFullCalendar', () => {
       location: Location.lookup('Boston'),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const tzid = options.location.getTzid();
     const fc = events.map((ev) => eventToFullCalendar(ev, tzid, options));
     for (const item of fc) {
@@ -161,7 +161,7 @@ describe('eventToFullCalendar', () => {
       start: new Date(2020, 11, 10),
       end: new Date(2020, 11, 11),
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const fc = events.map((ev) => eventToFullCalendar(ev, 'UTC', options));
     for (const item of fc) {
       delete item.description;
@@ -195,7 +195,7 @@ describe('eventToFullCalendar', () => {
       location: Location.lookup('Providence'),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const tzid = options.location.getTzid();
     const fc = events.map((ev) => eventToFullCalendar(ev, tzid, options));
     const expected = [
@@ -234,7 +234,7 @@ describe('eventToFullCalendar', () => {
       end: new Date(-1, 4, 6),
       il: false,
     };
-    const ev = HebrewCalendar.calendar(options)[0];
+    const ev = calendar(options)[0];
     const fc = eventToFullCalendar(ev, null, options);
     const expected = {
       title: 'Erev Shavuot',

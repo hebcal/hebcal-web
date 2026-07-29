@@ -1,4 +1,4 @@
-import {HebrewCalendar} from '@hebcal/core';
+import {calendar} from '@hebcal/core';
 import {getCalendarTitle} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import {createPdfDoc, renderPdf} from './pdf.js';
@@ -48,7 +48,7 @@ export async function holidayPdf(ctx) {
   if (checkFreshETag(ctx, options, {outputType: '.pdf'})) {
     return;
   }
-  const events = HebrewCalendar.calendar(options);
+  const events = calendar(options);
   const title = getCalendarTitle(events, options);
   const doc = ctx.body = createPdfDoc(title, options);
   renderPdf(doc, events, options, query);

@@ -1,5 +1,5 @@
 import {greg2abs} from '@hebcal/hdate';
-import {HDate, HebrewCalendar, flags, Event, DailyLearning} from '@hebcal/core';
+import {HDate, calendar, flags, Event, DailyLearning} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
 import {getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
 import {byteOrderMark} from './lang.js';
@@ -104,7 +104,7 @@ export function buildChofetzChaimCalendar(cfg, today) {
 }
 
 // Avoid "Ignoring unrecognized HebrewCalendar option: caldesc"
-// warnings from HebrewCalendar.calendar()
+// warnings from calendar()
 const ignoreOpts = ['downloadSlug', 'years', 'noMajor', 'noMinorHolidays',
   'emoji', 'title', 'caldesc', 'relcalid', 'color', 'calendarColor',
   'ordinal', 'emojiStr', 'titleName', 'name', 'summary', 'he',
@@ -123,7 +123,7 @@ export function buildRegularCalendar(cfg, today) {
   for (const opt of ignoreOpts) {
     delete options[opt];
   }
-  let events = HebrewCalendar.calendar(options);
+  let events = calendar(options);
   if (cfg.noMinorHolidays) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
@@ -150,7 +150,7 @@ export function buildLearningCalendar(cfg, today) {
     noHolidays: true,
     dailyLearning: dlOpts,
   };
-  const events = HebrewCalendar.calendar(options);
+  const events = calendar(options);
   const query = {
     title: cfg.shortName,
     caldesc: cfg.descMedium,

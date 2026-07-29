@@ -1,6 +1,6 @@
 import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
-import {HDate, HebrewCalendar} from '@hebcal/core';
+import {HDate, calendar} from '@hebcal/core';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
@@ -274,7 +274,7 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
 describe('limitIcsFeedLength truncation notice', () => {
   it('appends a synthetic truncation notice when feed exceeds the limit', () => {
     const year = 2024;
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       year,
       isHebrewYear: false,
       noHolidays: true,
@@ -307,7 +307,7 @@ describe('limitIcsFeedLength truncation notice', () => {
   });
 
   it('returns events unchanged when below the limit', () => {
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       year: 2024,
       isHebrewYear: false,
     });

@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, ParshaEvent, Locale, parshiot, getSedra} from '@hebcal/core';
+import {calendar, HDate, ParshaEvent, Locale, parshiot, getSedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 import {getLeyningForParshaHaShavua, getLeyningForParsha, parshaToString} from '@hebcal/leyning';
 import {Triennial, getTriennial, getTriennialForParshaHaShavua} from '@hebcal/triennial';
@@ -51,7 +51,7 @@ export async function parshaDetail(ctx) {
     } else if (yearIsOutsideGregRange(year)) {
       ctx.throw(410, 'Gone');
     }
-    const events = HebrewCalendar.calendar({year, il, sedrot: true, noHolidays: true});
+    const events = calendar({year, il, sedrot: true, noHolidays: true});
     const parshaEv = findParshaEvent(events, parshaName0, il);
     if (parshaEv) {
       const dateStr = dayjs(parshaEv.greg()).format('YYYYMMDD');
@@ -324,7 +324,7 @@ function makePrevNext(parsha, date, hd, il) {
   const nextName = parshiot[nextNum];
   if (date) {
     const abs = hd.abs();
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       start: abs - 40,
       end: abs + 40,
       noHolidays: true,
@@ -495,7 +495,7 @@ function makeYearEvents(il, date, parshaName) {
     options.start = dt;
     options.end = new Date(dt.getTime() + (386 * 24 * 60 * 60 * 1000));
   }
-  const events = HebrewCalendar.calendar(options);
+  const events = calendar(options);
   return events;
 }
 

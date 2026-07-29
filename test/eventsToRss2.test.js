@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import {describe, it, expect} from 'vitest';
-import {HebrewCalendar, Location, HDate, Event, flags} from '@hebcal/core';
+import {calendar, Location, HDate, Event, flags} from '@hebcal/core';
 import {eventToRssItem2, eventsToRss2} from '../src/rss.js';
 import '@hebcal/locales';
 
@@ -24,7 +24,7 @@ describe('eventsToRss2', () => {
       havdalahMins: 50,
       location: location,
     };
-    const events = HebrewCalendar.calendar(options).slice(0, 2);
+    const events = calendar(options).slice(0, 2);
     options.mainUrl = 'https://www.hebcal.com/shabbat?geonameid=4887398&m=50&lg=s';
     options.selfUrl = 'https://www.hebcal.com/shabbat?cfg=r&geonameid=4887398&m=50&lg=s&pubDate=1';
     options.buildDate = new Date(Date.UTC(2021, 11, 15, 12, 34, 56));
@@ -86,7 +86,7 @@ describe('eventToRssItem2', () => {
       havdalahMins: 50,
       location: location,
     };
-    const events = HebrewCalendar.calendar(options).slice(0, 5);
+    const events = calendar(options).slice(0, 5);
     options.evPubDate = true;
     options.lastBuildDate = 'Mon, 22 Jun 2020 20:03:18 GMT';
     options.mainUrl = 'https://www.hebcal.com/shabbat?city=Eilat';
@@ -140,7 +140,7 @@ describe('eventToRssItem2', () => {
   });
 
   it('renders the Torah reading for a Parsha (Diaspora)', () => {
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       start: new Date(2020, 10, 28),
       end: new Date(2020, 10, 28),
       sedrot: true,
@@ -174,7 +174,7 @@ describe('eventToRssItem2', () => {
   });
 
   it('renders the Torah reading for a Parsha (Israel)', () => {
-    const events = HebrewCalendar.calendar({
+    const events = calendar({
       start: new Date(2020, 10, 28),
       end: new Date(2020, 10, 28),
       sedrot: true,
@@ -216,7 +216,7 @@ describe('eventToRssItem2', () => {
       il: location.getIsrael(),
       candlelighting: true,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     options.evPubDate = true;
     options.dayFormat = dayFormat;
     options.lastBuildDate = 'Mon, 22 Jun 2020 20:03:18 GMT';
@@ -311,7 +311,7 @@ describe('eventToRssItem2', () => {
       evPubDate: true,
       dayFormat,
     };
-    const events = HebrewCalendar.calendar(options);
+    const events = calendar(options);
     const item = eventToRssItem2(events[0], options);
     expect(item).toEqual(`<item>
 <title>Зажигание свечей: 16:33</title>

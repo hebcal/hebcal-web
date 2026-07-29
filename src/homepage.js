@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale, DailyLearning,
+import {HDate, calendar, months, ParshaEvent, flags, Locale, DailyLearning,
   ChanukahEvent, getHolidaysOnDate, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import '@hebcal/learning';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
@@ -125,7 +125,7 @@ function mastheadCandles(ctx, dt, il) {
     candlelighting: true,
     locale: lg,
   };
-  const events = HebrewCalendar.calendar(options);
+  const events = calendar(options);
   const items = ctx.state.items;
   for (const ev of events.filter((ev) => ev.fmtTime && Boolean(ev.getFlags() & MASK_CANDLES))) {
     items.push(location.getShortName() + ' ' + ev.renderBrief(lg) + ': ' + ev.fmtTime);
@@ -149,7 +149,7 @@ function mastheadParsha(ctx, hd, il) {
 
 function mastheadHolidays(ctx, hd, il) {
   const items = ctx.state.items;
-  const holidays = HebrewCalendar.calendar({
+  const holidays = calendar({
     start: hd,
     end: hd,
     il,
