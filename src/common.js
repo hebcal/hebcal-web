@@ -159,6 +159,41 @@ export function getBaseFromPath(ctx) {
   }
 }
 
+// JSON.stringify leaves these characters raw, and each is a hazard once the
+// result sits inside something an HTML or JavaScript parser will read:
+//   <  >  &    can terminate an enclosing <script> block or open a tag when the
+//              payload is read by an HTML parser rather than a JS parser. Note
+//              that <script type="application/json"> is *not* executed but is
+//              still parsed as markup, so a bare </script> inside the data ends
+//              the block and everything after it becomes live HTML.
+//   U+2028/9   were line terminators in JavaScript before ES2019, so they could
+//              split a string literal and change what the surrounding script does.
+// Escaping them as \uXXXX is semantically invisible -- any JSON or JS parser
+// decodes the escape back to the identical character -- but it makes the bytes
+// on the wire inert. A global replace is safe because none of these characters
+// can appear as JSON structure; they only ever occur inside string literals.
+const UNSAFE_FOR_SCRIPT_RE = /[<>&\u2028\u2029]/g;
+
+function escapeForScript(json) {
+  return json.replaceAll(UNSAFE_FOR_SCRIPT_RE,
+      (ch) => '\\u' + ch.codePointAt(0).toString(16).padStart(4, '0'));
+}
+
+/**
+ * Serialize `obj` for embedding inside a `<script>` element or a JavaScript
+ * response body. Use this instead of a bare `JSON.stringify()` anywhere the
+ * result lands in markup -- notably the `<%- %>` blocks in the EJS templates,
+ * where an unescaped `</script>` in the data would break out of the element.
+ *
+ * Exposed to every template as a local by `app-www.js`.
+ *
+ * @param {any} obj
+ * @return {string}
+ */
+export function jsonForScript(obj) {
+  return escapeForScript(JSON.stringify(obj));
+}
+
 // A JSONP callback is emitted verbatim into a JavaScript response body, so it
 // must be a dotted chain of plain JS identifiers and nothing else. This is an
 // allowlist test rather than a strip-the-bad-characters replace: a replace
@@ -185,7 +220,7 @@ export function jsonpBody(ctx, obj) {
       callback.length <= JSONP_CALLBACK_MAXLEN &&
       JSONP_CALLBACK_RE.test(callback)) {
     ctx.type = 'text/javascript';
-    return callback + '(' + JSON.stringify(obj) + ')\n';
+    return callback + '(' + jsonForScript(obj) + ')\n';
   }
   ctx.type = 'json';
   return obj;

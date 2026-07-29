@@ -284,6 +284,6 @@ Thank you for supporting Hebcal.</p>
 <% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name.replaceAll("'", '’')%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
-<% if (!noindex && !currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script><% } %>
+<% if (!noindex && !currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- jsonForScript(jsonLD) %></script><% } %>
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <%- await include('partials/footer.ejs') _%>
