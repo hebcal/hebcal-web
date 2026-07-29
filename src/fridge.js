@@ -5,7 +5,7 @@ import {setDefautLangTz} from './defaultLangTz.js';
 import {makeHebcalOptions, makeHebrewCalendar} from './calendar.js';
 import {cacheControl} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
-import {langNames, localeMap} from './lang.js';
+import {langNames, localeMap, byteOrderMark} from './lang.js';
 import {queryDefaultCandleMins,
   makeGeoUrlArgs,
 } from './urlArgs.js';
@@ -36,11 +36,7 @@ export async function fridgeShabbat(ctx) {
   }
   const p = makeProperties(ctx);
   if (q.cfg === 'csv') {
-    let csv = '';
-    if (p.lang !== 'en') {
-      // Write BOM for UTF-8
-      csv += '\uFEFF';
-    }
+    let csv = byteOrderMark(p.lang);
     csv += 'Date,Parsha,Candles,Havdalah\r\n';
     for (const item of p.items) {
       const isoDate = item.date.format('YYYY-MM-DD');

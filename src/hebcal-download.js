@@ -8,7 +8,7 @@ import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
-import {localeMap} from './lang.js';
+import {byteOrderMark} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
@@ -121,9 +121,7 @@ export async function hebcalDownload(ctx) {
     const csv = eventsWithParshaToCsv(events, options);
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
-    const locale = localeMap[options.locale] || 'en';
-    const byteOrderMark = locale === 'en' ? '' : '\uFEFF';
-    ctx.body = byteOrderMark + csv;
+    ctx.body = byteOrderMark(options.locale) + csv;
   } else if (extension === '.pdf') {
     if (!events.length) {
       ctx.remove('Cache-Control');

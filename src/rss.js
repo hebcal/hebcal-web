@@ -5,6 +5,7 @@ import {
   appendIsraelAndTracking,
   makeAnchor,
 } from '@hebcal/rest-api';
+import {localeMap} from './lang.js';
 import {getParshaSummary} from './parshaCommon.js';
 import {makeEventMemo} from './eventMemo.js';
 
@@ -41,15 +42,6 @@ function getLinkAndGuid(ev, il, tzid, mainUrl, utmSource, utmMedium) {
   return [link, guid];
 }
 
-const localeToLg = {
-  s: 'en',
-  a: 'en',
-  'he-x-NoNikud': 'he',
-  h: 'he',
-  ah: 'en',
-  sh: 'en',
-};
-
 /**
  * Generates an RSS 2.0 feed from an array of events
  * @param {Event[]} events
@@ -82,7 +74,10 @@ export function eventsToRss2(events, options) {
       options.utmCampaign,
   ).replaceAll('&', '&amp;');
   const selfUrlEsc = options.selfUrl.replaceAll('&', '&amp;');
-  const lang = options.lang || localeToLg[options.locale] || options.locale || 'en-US';
+  // `options.lang` is the feed's own declared language (parshaRss.js sets it
+  // from the filename, e.g. `he-x-NoNikud`); otherwise map the locale down to
+  // an ISO code, since transliteration locales like `s` are English content.
+  const lang = options.lang || localeMap[options.locale] || 'en-US';
   let str = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>

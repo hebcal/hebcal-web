@@ -4,7 +4,7 @@ import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js'
 import {jsonpBody, shortenUrl} from './common.js';
 import {cacheControl, CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {cleanQuery} from './cleanQuery.js';
-import {langNames, localeMap} from './lang.js';
+import {langNames, localeMap, byteOrderMark} from './lang.js';
 import {
   hebcalFormDefaults,
   queryToName,
@@ -197,9 +197,7 @@ function renderCsv(ctx) {
   const csv = eventsWithParshaToCsv(events, options);
   ctx.response.attachment(getDownloadFilename(options) + '.csv');
   ctx.response.type = 'text/x-csv; charset=utf-8';
-  const locale = localeMap[options.locale] || 'en';
-  const byteOrderMark = locale === 'en' ? '' : '\uFEFF';
-  return byteOrderMark + csv;
+  return byteOrderMark(options.locale) + csv;
 }
 
 async function renderForm(ctx, error) {

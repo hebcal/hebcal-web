@@ -80,6 +80,22 @@ describe('Shabbat Times RSS Feeds', () => {
     expect(response.text).toContain('<channel>');
     expect(response.text).toContain('<item>');
   });
+
+  // <language> must be an RFC-1766 code, so a transliteration locale has to be
+  // mapped down to the language it is actually written in. `lg=a` used to leak
+  // its raw locale name and emit <language>ashkenazi</language>.
+  it.each([
+    {lg: 's', lang: 'en-US', what: 'Sephardic transliteration'},
+    {lg: 'a', lang: 'en-US', what: 'Ashkenazi transliteration'},
+    {lg: 'ashkenazi_romanian', lang: 'ro', what: 'Romanian Ashkenazi'},
+    {lg: 'h', lang: 'he', what: 'Hebrew'},
+    {lg: 'de', lang: 'de', what: 'German'},
+  ])('declares $lang for $what ($lg)', async ({lg, lang}) => {
+    const response = await request(server)
+        .get(`/shabbat?cfg=r&geonameid=4887398&lg=${lg}`);
+    expect(response.status).toBe(200);
+    expect(response.text).toContain(`<language>${lang}</language>`);
+  });
 });
 
 /**
