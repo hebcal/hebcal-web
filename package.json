@@ -43,9 +43,6 @@
   ],
   "author": "Michael J. Radwin (https://github.com/mjradwin)",
   "license": "BSD-2-Clause",
-  "allowScripts": {
-    "murmurhash3": true
-  },
   "devDependencies": {
     "@fullcalendar/core": "^6.1.21",
     "@fullcalendar/daygrid": "^6.1.21",
@@ -73,7 +70,7 @@
     "@hebcal/core": "^6.9.0",
     "@hebcal/geo-sqlite": "^5.12.0",
     "@hebcal/hdate": "^0.22.7",
-    "@hebcal/icalendar": "^7.0.0",
+    "@hebcal/icalendar": "^7.0.1",
     "@hebcal/learning": "^6.9.5",
     "@hebcal/leyning": "^9.6.0",
     "@hebcal/locales": "^6.5.1",
