@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, ParshaEvent} from '@hebcal/core';
+import {HDate, ParshaEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import {Triennial} from '@hebcal/triennial';
 import {getSunsetAwareDate, expiresSaturdayNight} from './dateUtil.js';
 import {checkFreshETag} from './etag.js';
@@ -81,7 +81,7 @@ function getTodayHolidayEvent(hd, il) {
   if (hd.getDay() === 6) {
     return undefined;
   }
-  const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  const events = getHolidaysOnDate(hd, il) || [];
   for (const ev of events) {
     const reading = getLeyningForHoliday(ev, il);
     const url = shortenUrl(ev.url());
@@ -95,11 +95,11 @@ function getTodayHolidayEvent(hd, il) {
 }
 
 function getParsha(hd, il) {
-  const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+  const sedra = getSedra(hd.getFullYear(), il);
   const parsha0 = sedra.lookup(hd);
   const parsha = parsha0.parsha.join('-');
   if (parsha0.chag) {
-    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const events = getHolidaysOnDate(hd, il) || [];
     if (events.length > 0) {
       const ev = events[0];
       const href = shortenUrl(ev.url());

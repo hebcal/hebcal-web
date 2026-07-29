@@ -1,4 +1,4 @@
-import {HDate, HebrewCalendar, Location, Zmanim} from '@hebcal/core';
+import {HDate, HebrewCalendar, Location, Zmanim, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 import {DatabaseSync} from 'node:sqlite';
@@ -301,11 +301,11 @@ function makeCandleLighting(ctx, results, countryCode) {
 function getParsha(saturday, il) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
-  const sedra = HebrewCalendar.getSedra(hyear, il);
+  const sedra = getSedra(hyear, il);
   const parsha0 = sedra.lookup(hd);
   let parsha = null;
   if (parsha0.chag) {
-    const events = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const events = getHolidaysOnDate(hd, il) || [];
     if (events.length > 0) {
       parsha = events[0].basename();
     }

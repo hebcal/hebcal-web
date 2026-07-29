@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {flags, HDate, HebrewCalendar} from '@hebcal/core';
+import {flags, HDate, getSedra} from '@hebcal/core';
 import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
 import {holidayMeta} from './holidayMeta.js';
 import {getNumYears} from './calendar.js';
@@ -205,7 +205,7 @@ export function eventToHolidayItem(ev, il) {
     categories: getEventCategories(ev),
   });
   if ((mask & flags.SPECIAL_SHABBAT) && !staticSpecial.has(item.name)) {
-    const sedra = HebrewCalendar.getSedra(hd.getFullYear(), il);
+    const sedra = getSedra(hd.getFullYear(), il);
     const parsha0 = sedra.lookup(hd);
     if (!parsha0.chag) {
       item.parsha = parsha0.parsha;

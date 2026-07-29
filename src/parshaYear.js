@@ -1,4 +1,4 @@
-import {HebrewCalendar, HDate, flags, months, ParshaEvent} from '@hebcal/core';
+import {HDate, flags, months, ParshaEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
   getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
@@ -30,14 +30,14 @@ export async function parshaYearApp(ctx) {
   const il = q.i === 'on';
   const lang = lgToLocale[q.lg || 's'] || q.lg;
   const locale = localeMap[lang] || 'en';
-  const sedra = HebrewCalendar.getSedra(hyear, il);
+  const sedra = getSedra(hyear, il);
   const startAbs = sedra.getFirstSaturday();
   const endAbs = HDate.hebrew2abs(hyear + 1, months.TISHREI, 1);
   const events = [];
   for (let abs = startAbs; abs < endAbs; abs += 7) {
     const parsha = sedra.lookup(abs);
     if (parsha.chag) {
-      const holidays = HebrewCalendar.getHolidaysOnDate(abs, il) || [];
+      const holidays = getHolidaysOnDate(abs, il) || [];
       events.push(...holidays);
     } else {
       const ev = new ParshaEvent(parsha);
@@ -111,7 +111,7 @@ function makeItem(ev, locale, il, lang) {
     item.torahHtml = makeLeyningHtmlFromParts(parts);
   }
   if (isParsha) {
-    const holidays0 = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const holidays0 = getHolidaysOnDate(hd, il) || [];
     const mask = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
     const holidays1 = holidays0.filter((ev) => (ev.getFlags() & mask) || ev.chanukahDay);
     item.holidays = holidays1.map((ev) => holidayEvToItem(ev, il, lang));

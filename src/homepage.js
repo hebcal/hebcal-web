@@ -1,5 +1,5 @@
-import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale,
-  DailyLearning, ChanukahEvent} from '@hebcal/core';
+import {HDate, HebrewCalendar, months, ParshaEvent, flags, Locale, DailyLearning,
+  ChanukahEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import '@hebcal/learning';
 import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz} from './defaultLangTz.js';
@@ -135,7 +135,7 @@ function mastheadCandles(ctx, dt, il) {
 function mastheadParsha(ctx, hd, il) {
   const items = ctx.state.items;
   const saturday = hd.onOrAfter(6);
-  const sedra = HebrewCalendar.getSedra(saturday.getFullYear(), il);
+  const sedra = getSedra(saturday.getFullYear(), il);
   const parsha = sedra.lookup(saturday);
   if (!parsha.chag) {
     const pe = new ParshaEvent(parsha);
@@ -240,7 +240,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return [blurb, longText];
   }
 
-  const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+  const holidays = getHolidaysOnDate(hd, il) || [];
   if (holidays.some((ev) => ev.getDesc() === 'Erev Tish\'a B\'Av')) {
     return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
  begins tonight at sundown. We wish you an easy fast`];
@@ -293,7 +293,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return getHolidayGreeting(ctx, chagToday, il, true, dateOverride);
   }
 
-  const tomorrow = HebrewCalendar.getHolidaysOnDate(hd.next(), il) || [];
+  const tomorrow = getHolidaysOnDate(hd.next(), il) || [];
   const chagTomorrow = tomorrow.find((ev) => !(ev.getFlags() & flags.EREV) && chagSameach[ev.basename()]);
   if (chagTomorrow) {
     return getHolidayGreeting(ctx, chagTomorrow, il, false);
@@ -406,7 +406,7 @@ function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
-    const holidays = HebrewCalendar.getHolidaysOnDate(hd, il) || [];
+    const holidays = getHolidaysOnDate(hd, il) || [];
     const ev2 = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
     if (ev2) {
       return getChanukahGreeting(d, ev2);
