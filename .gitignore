@@ -122,3 +122,6 @@ views/partials/*.min.js
 static/i/*.br
 static/i/*.gz
 static/i/*.min.js
+static/*.br
+static/*.gz
+ical/

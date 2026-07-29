@@ -145,11 +145,8 @@ d.getElementById("td").addEventListener("focus",function(){
 });
 </script>
 <% if (jsonLD) { -%>
-<script type="application/ld+json"><%- JSON.stringify(jsonLD) %></script>
+<script type="application/ld+json"><%- jsonForScript(jsonLD) %></script>
 <% } -%>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, typeahead: true, clipboard: true},
 }) _%>
-<% if (typeof geoip === 'object') { -%>
-<!-- <%- JSON.stringify(geoip) %> -->
-<% } -%>

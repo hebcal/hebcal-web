@@ -8,7 +8,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import os from 'node:os';
 import {wwwRouter} from './router.js';
-import {DOCUMENT_ROOT, httpRedirect} from './common.js';
+import {DOCUMENT_ROOT, httpRedirect, jsonForScript} from './common.js';
 import {pkg} from './pkg.js';
 import {empty} from './empty.js';
 import {createBaseApp, useObservability, useTimeout, useCompression,
@@ -53,6 +53,9 @@ app.use(async function fixup0(ctx, next) {
     holidayFcAppHref,
     mainCssHref,
     pmIgnore,
+    // templates embed JSON inside <script> blocks; see common.js for why a
+    // bare JSON.stringify() is not safe there
+    jsonForScript,
   });
   ctx.state.hostname = HOSTNAME; // used by some ejs templates
   // don't allow compress middleware to assume that a missing
