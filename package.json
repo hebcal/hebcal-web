@@ -66,13 +66,18 @@
     "supertest": "^7.2.2",
     "vitest": "^4.1.10"
   },
+  "allowScripts": {
+    "puppeteer": true,
+    "fsevents": true,
+    "@parcel/watcher": true
+  },
   "dependencies": {
-    "@hebcal/core": "^6.9.0",
+    "@hebcal/core": "^6.9.1",
     "@hebcal/geo-sqlite": "^5.12.0",
     "@hebcal/hdate": "^0.22.7",
     "@hebcal/icalendar": "^7.0.1",
     "@hebcal/learning": "^6.9.5",
-    "@hebcal/leyning": "^9.6.0",
+    "@hebcal/leyning": "^10.0.0",
     "@hebcal/locales": "^6.5.1",
     "@hebcal/murmurhash3": "^1.0.0",
     "@hebcal/rest-api": "^7.1.1",
