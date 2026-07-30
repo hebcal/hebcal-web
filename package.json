@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^6.9.1",
-    "@hebcal/geo-sqlite": "^5.12.0",
+    "@hebcal/geo-sqlite": "^5.12.1",
     "@hebcal/hdate": "^0.22.7",
     "@hebcal/icalendar": "^7.0.1",
     "@hebcal/learning": "^6.9.5",
