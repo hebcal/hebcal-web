@@ -2,7 +2,14 @@ import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
 import {checkFreshETag} from './etag.js';
 
-const sql = 'SELECT ZipCode FROM ZIPCodes_Primary WHERE NOT (Latitude = 0 AND Longitude = 0) ORDER BY population DESC';
+// Exclude sparsely-populated ZIP codes so we don't encourage crawlers to
+// index a location that might disappear from a future version of the database
+const MIN_POPULATION = 500;
+
+const sql = `SELECT ZipCode FROM ZIPCodes_Primary
+WHERE NOT (Latitude = 0 AND Longitude = 0)
+AND population >= ${MIN_POPULATION}
+ORDER BY population DESC`;
 
 export async function sitemapZips(ctx) {
   const db = ctx.db.zipsDb;

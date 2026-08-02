@@ -21,23 +21,36 @@ dayjs.extend(timezone);
 
 const geonamesFilename = 'geonames.sqlite3';
 
+/**
+ * Cities smaller than this are excluded from the browse pages and sitemaps.
+ * We don't want to encourage crawlers to index a city that might disappear
+ * from a future version of the geonames database.
+ */
+const MIN_POPULATION = 1000;
+
 const CONTINENT_SQL = `SELECT Continent, ISO, Country FROM country
 WHERE Continent <> 'AN'
 AND ISO NOT IN ('', 'AN', 'AQ', 'BV', 'CS', 'HM', 'IO', 'PS', 'UM')
 ORDER BY Continent, Country`;
+
+const POPULOUS_COUNTRY_SQL = `SELECT DISTINCT country FROM geoname
+WHERE population >= ${MIN_POPULATION}`;
+
+const POPULOUS_ADMIN1_SQL = `SELECT DISTINCT country, admin1 FROM geoname
+WHERE population >= ${MIN_POPULATION}`;
 
 const COUNTRY_SQL = `SELECT g.geonameid, g.name, g.asciiname,
 a.name as admin1, a.asciiname as admin1ascii,
 g.latitude, g.longitude, g.gtopo30 as elevation, g.timezone
 FROM geoname g
 LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
-WHERE g.country = ?
+WHERE g.country = ? AND g.population >= ${MIN_POPULATION}
 ORDER BY g.name`;
 
 const COUNTRY_ADMIN_SQL = `SELECT g.geonameid, g.name, g.asciiname, g.latitude, g.longitude,
 g.gtopo30 as elevation, g.timezone
 FROM geoname g
-WHERE g.country = ? AND g.admin1 = ?
+WHERE g.country = ? AND g.admin1 = ? AND g.population >= ${MIN_POPULATION}
 ORDER BY g.name`;
 
 const CONTINENTS = {
@@ -61,6 +74,8 @@ function init() {
     return;
   }
   const geonamesDb = new DatabaseSync(geonamesFilename, {readOnly: true});
+  const populous = new Set(geonamesDb.prepare(POPULOUS_COUNTRY_SQL)
+      .all().map((r) => r.country));
   const geonamesStmt = geonamesDb.prepare(CONTINENT_SQL);
   const results = geonamesStmt.all();
   for (const [iso, name] of Object.entries(CONTINENTS)) {
@@ -69,7 +84,7 @@ function init() {
   for (const result of results) {
     const country = result.Country;
     const continent = result.Continent;
-    if (!country || !continents[continent]) {
+    if (!country || !continents[continent] || !populous.has(result.ISO)) {
       continue;
     }
     const id = makeAnchor(country);
@@ -78,13 +93,15 @@ function init() {
     countryIdToIso[id] = iso;
     isoToCountry[iso] = result.Country;
   }
-  numCountries = results.length;
+  numCountries = Object.keys(countryIdToIso).length;
+  const populousA1 = new Set(geonamesDb.prepare(POPULOUS_ADMIN1_SQL)
+      .all().map((r) => r.country + '.' + r.admin1));
   const stmt2 = geonamesDb.prepare('SELECT key,name,asciiname FROM admin1');
   const results2 = stmt2.all();
   for (const result of results2) {
     const [cc, a1id] = result.key.split('.');
     const country = isoToCountry[cc];
-    if (!country) {
+    if (!country || !populousA1.has(result.key)) {
       continue;
     }
     const countryAnchor = makeAnchor(country);
