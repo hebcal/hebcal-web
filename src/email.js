@@ -11,8 +11,12 @@ import {rejectForgedCrossOriginPost} from './common.js';
 
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=shabbat-txn';
 
-export async function emailVerify(ctx) {
+function cacheControlPrivate(ctx) {
   ctx.set('Cache-Control', 'private');
+}
+
+export async function emailVerify(ctx) {
+  cacheControlPrivate(ctx);
   const query = {...ctx.request.body, ...ctx.request.query};
   cleanQuery(query);
   const subscriptionId = ctx.state.subscriptionId = getSubscriptionId(ctx, query);
@@ -133,7 +137,6 @@ function getSubscriptionId(ctx, q) {
 
 export async function emailForm(ctx) {
   rejectForgedCrossOriginPost(ctx);
-  ctx.set('Cache-Control', 'private');
   let q = {...ctx.request.body, ...ctx.request.query};
   let defaultUnsubscribe = false;
   if (typeof q.e === 'string') {
@@ -145,8 +148,13 @@ export async function emailForm(ctx) {
       q = {...subInfo, ...q};
     }
     defaultUnsubscribe = q.unsubscribe === '1';
+    cacheControlPrivate(ctx);
   } else {
-    q = processCookieAndQuery(ctx.cookies.get('C'), {}, q);
+    const cookieString = ctx.cookies.get('C');
+    if (cookieString) {
+      cacheControlPrivate(ctx);
+      q = processCookieAndQuery(cookieString, {}, q);
+    }
   }
   cleanQuery(q);
   const isJSON = q.cfg === 'json';

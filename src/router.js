@@ -99,8 +99,13 @@ export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
+      onlyGetAndHead(ctx);
       ctx.set('Cache-Control', CACHE_CONTROL_2DAYS);
-      ctx.body = 'User-agent: *\nDisallow: /shabbat/fridge.cgi\nDisallow: /converter/csv\n';
+      ctx.body = `User-agent: *
+Disallow: /shabbat/fridge.cgi
+Disallow: /converter/csv
+Disallow: /email
+`;
       return;
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
@@ -138,6 +143,7 @@ export function wwwRouter() {
       onlyGetAndHead(ctx);
       return getLeyning(ctx);
     } else if (rpath.startsWith('/learning')) {
+      onlyGetAndHead(ctx);
       return dailyLearningApp(ctx);
     } else if (rpath.startsWith('/geo')) {
     // it's fine if this throws a Not Found exception
