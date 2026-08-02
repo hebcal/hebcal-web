@@ -26,7 +26,7 @@ describe('Shabbat Routes', () => {
     ['/shabbat?geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24', 'html'],
     ['/shabbat?cfg=json&geonameid=293397&M=on&lg=h&gy=2025&gm=12&gd=24', 'json'],
     ['/shabbat/?geonameid=5128581', 'html'],
-    ['/shabbat/browse/italy-calabria', 'html'],
+    ['/shabbat/browse/italy-lombardy', 'html'],
     ['/shabbat/browse/sitemap.xml', 'xml'],
     ['/shabbat/browse/australia.xml', 'xml'],
   ])('should return 200 %s (%s)', async (url, type) => {
@@ -113,8 +113,8 @@ describe('Shabbat 304 Not Modified (ETag / If-None-Match)', () => {
     await expectConditionalEtag(server, '/shabbat/browse/australia.xml');
   });
 
-  // Small admin1-region page (e.g. Calabria, Italy).
+  // Small admin1-region page (e.g. Lombardy, Italy).
   it('handles conditional requests for a browse small-region page', async () => {
-    await expectConditionalEtag(server, '/shabbat/browse/italy-calabria');
+    await expectConditionalEtag(server, '/shabbat/browse/italy-lombardy');
   });
 });
