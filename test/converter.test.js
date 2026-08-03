@@ -152,3 +152,32 @@ describe('Converter h2g ndays', () => {
     expect(response.status).toBe(400);
   });
 });
+
+describe('Converter language', () => {
+  const url = '/converter?cfg=json&gy=2026&gm=11&gd=7&g2h=1';
+
+  it('should render events in the requested language', async () => {
+    const cases = {
+      's': 'Parashat Chayei Sara',
+      'a': 'Parshas Chayei Sara',
+      'sh': 'Parashat Chayei Sara',
+      // ah is Ashkenazi transliteration plus Hebrew in email subject lines;
+      // @hebcal/hdate's own alias table does not know it, so lgToLocale has
+      // to resolve it before anything renders
+      'ah': 'Parshas Chayei Sara',
+      'h': 'פָּרָשַׁת חַיֵּי שָֹרָה',
+      'fr': 'Parachah H̲ayé Sarah',
+    };
+    for (const [lg, parsha] of Object.entries(cases)) {
+      const response = await request(server).get(`${url}&lg=${lg}`);
+      expect(response.status).toBe(200);
+      expect(response.body.events, `lg=${lg}`).toContain(parsha);
+    }
+  });
+
+  it('should default to Sephardic transliteration', async () => {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(200);
+    expect(response.body.events).toContain('Parashat Chayei Sara');
+  });
+});

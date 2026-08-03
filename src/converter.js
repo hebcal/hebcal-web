@@ -39,9 +39,14 @@ export async function hebrewDateConverter(ctx) {
     await setDefautLangTz(ctx);
   }
   const q = ctx.request.query;
-  ctx.state.lg = q.lg || 's';
-  const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-  ctx.state.locale = localeMap[lg] || 'en';
+  // Resolve lg through lgToLocale before rendering anything, the way
+  // makeHebcalOptions() does for /shabbat and /hebcal. Everything downstream
+  // renders from ctx.state.lg, and @hebcal/hdate's own alias table knows only
+  // a/h/s, so without this the "+ Hebrew" spellings ah and sh fell through to
+  // English instead of Ashkenazi and Sephardic transliteration. The language
+  // menus read q.lg rather than ctx.state.lg, so they still round-trip.
+  ctx.state.lg = lgToLocale[q.lg] || q.lg || 's';
+  ctx.state.locale = localeMap[ctx.state.lg] || 'en';
   let props;
   try {
     props = parseConverterQuery(ctx);
