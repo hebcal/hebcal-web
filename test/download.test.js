@@ -48,6 +48,7 @@ describe('HTTP methods other than GET and HEAD', () => {
     const response = await request(server)[method]('/robots.txt');
     expect(response.status).toBe(405);
     expect(response.text).toContain('not allowed; use GET instead');
+    expect(response.headers['allow']).toBe('GET, HEAD');
   });
 
   it('allows HEAD', async () => {

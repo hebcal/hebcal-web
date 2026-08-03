@@ -157,6 +157,9 @@ app.use(async function checkHttpMethod(ctx, next) {
     case 'OPTIONS':
       break; // all good!
     default:
+      // koa-error() catches this before Koa's own handler can, and it never
+      // strips response headers, so ctx.set() is what carries Allow here.
+      ctx.set('Allow', 'GET, POST, HEAD, OPTIONS');
       ctx.throw(405, `Method ${method} not allowed`);
   }
   await next();

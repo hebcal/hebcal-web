@@ -72,6 +72,7 @@ describe('HTTP Method Restrictions', () => {
         .put('/');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
+    expect(response.headers['allow']).toBe('GET, POST, HEAD, OPTIONS');
   });
 
   it('should reject DELETE method with 405', async () => {
@@ -79,6 +80,7 @@ describe('HTTP Method Restrictions', () => {
         .delete('/');
     expect(response.status).toBe(405);
     expect(response.type).toContain('html');
+    expect(response.headers['allow']).toBe('GET, POST, HEAD, OPTIONS');
   });
 });
 

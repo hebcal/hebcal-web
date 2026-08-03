@@ -34,8 +34,12 @@ app.use(async function noSniff(ctx, next) {
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {
-    ctx.set('Allow', 'GET');
-    ctx.throw(405, `${method} not allowed; use GET instead`);
+    // Pass Allow as an error header rather than ctx.set(): this throws above
+    // the catch-all in fixup0(), so Koa's own error handler writes the
+    // response, and that strips every header already on ctx before
+    // re-applying err.headers.
+    ctx.throw(405, `${method} not allowed; use GET instead`,
+        {headers: {'Allow': 'GET, HEAD'}});
   }
   await next();
 });
