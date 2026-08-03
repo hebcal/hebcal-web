@@ -135,7 +135,13 @@ export function errorLogger(logger) {
     if (status === 200 || status === 404 || !ctx) {
       return;
     }
-    const obj = Object.assign(err, makeLogInfo(ctx));
+    const logInfo = makeLogInfo(ctx);
+    // Koa's ctx.onerror() reads err.status *after* emitting this event, so
+    // whatever we leave on `err` becomes the response status. makeLogInfo()
+    // reports ctx.response.status, which on an uncaught error is still the
+    // default 404 — merging that in used to turn a thrown 405 into a 404.
+    logInfo.status = status;
+    const obj = Object.assign(err, logInfo);
     if (status < 500) {
       logger.warn(obj);
     } else {
