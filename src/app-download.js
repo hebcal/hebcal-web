@@ -11,13 +11,16 @@ import {yahrzeitDownload} from './yahrzeitDownload.js';
 import {zmanimIcalendar} from './zmanimDownload.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
-import {createBaseApp, useObservability, useTimeout, useCompression,
-  useResponseLength, startServer, stopIfTimedOut} from './app-common.js';
+import {createBaseApp, useBackendHostname, useObservability, useTimeout,
+  useCompression, useResponseLength, startServer,
+  stopIfTimedOut} from './app-common.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
 
 const app = createBaseApp();
+
+useBackendHostname(app);
 
 useObservability(app);
 

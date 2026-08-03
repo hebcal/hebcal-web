@@ -1,5 +1,6 @@
 import {describe, it, expect} from 'vitest';
 import request from 'supertest';
+import os from 'node:os';
 import {app} from '../src/app-www.js';
 import {pkg} from '../src/pkg.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
@@ -106,6 +107,24 @@ describe('Hidden Directory Routes', () => {
         .get('/etc/');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
+  });
+});
+
+describe('X-Backend header', () => {
+  it.each([
+    ['homepage', '/', 200],
+    ['static file', '/i/sprite13.svg', 200],
+    ['not found', '/bogus-page-does-not-exist', 404],
+  ])('exposes the server hostname on %s', async (why, url, status) => {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(status);
+    expect(response.headers['x-backend']).toBe(os.hostname());
+  });
+
+  it('exposes the server hostname on a 405 error response', async () => {
+    const response = await request(server).put('/');
+    expect(response.status).toBe(405);
+    expect(response.headers['x-backend']).toBe(os.hostname());
   });
 });
 
