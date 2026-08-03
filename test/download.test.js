@@ -38,8 +38,21 @@ describe('X-Backend header', () => {
     // Rejected by onlyGetAndHead(), which throws above the catch-all in
     // fixup0(), so Koa's default error handler writes this response.
     const response = await request(server).put('/robots.txt');
-    expect(response.status).toBeGreaterThanOrEqual(400);
+    expect(response.status).toBe(405);
     expect(response.headers['x-backend']).toBe(os.hostname());
+  });
+});
+
+describe('HTTP methods other than GET and HEAD', () => {
+  it.each(['put', 'post', 'delete'])('rejects %s with 405', async (method) => {
+    const response = await request(server)[method]('/robots.txt');
+    expect(response.status).toBe(405);
+    expect(response.text).toContain('not allowed; use GET instead');
+  });
+
+  it('allows HEAD', async () => {
+    const response = await request(server).head('/robots.txt');
+    expect(response.status).toBe(200);
   });
 });
 
