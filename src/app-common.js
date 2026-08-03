@@ -6,6 +6,7 @@ import compress from 'koa-compress';
 import timeout from 'koa-timeout-v2';
 import xResponseTime from 'koa-better-response-time';
 import zlib from 'node:zlib';
+import os from 'node:os';
 import {join} from 'node:path';
 import {makeLogger, errorLogger, accessLogger, makeLogInfo} from './logger.js';
 import {MysqlDb} from './db.js';
@@ -42,6 +43,30 @@ export function createBaseApp() {
   app.context.mysql = new MysqlDb(logger, app.context.iniConfig);
 
   return app;
+}
+
+const HOSTNAME = os.hostname();
+
+/**
+ * Sets an `X-Backend` response header naming the host that served the
+ * request, so a response can be traced back to a specific backend server.
+ * Register this first so the header is present even on responses that
+ * short-circuit later middleware (errors, redirects, /metrics).
+ * @param {Koa} app
+ */
+export function useBackendHostname(app) {
+  app.use(async function backendHostname(ctx, next) {
+    ctx.set('X-Backend', HOSTNAME);
+    try {
+      await next();
+    } catch (err) {
+      // Koa's default error handler removes every response header before it
+      // writes the error body, then re-applies `err.headers`. Stash the
+      // hostname there so it survives on uncaught-error responses too.
+      err.headers = {...err.headers, 'X-Backend': HOSTNAME};
+      throw err;
+    }
+  });
 }
 
 /**

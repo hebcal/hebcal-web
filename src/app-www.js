@@ -11,8 +11,9 @@ import {wwwRouter} from './router.js';
 import {DOCUMENT_ROOT, httpRedirect, jsonForScript} from './common.js';
 import {pkg} from './pkg.js';
 import {empty} from './empty.js';
-import {createBaseApp, useObservability, useTimeout, useCompression,
-  useResponseLength, startServer, stopIfTimedOut} from './app-common.js';
+import {createBaseApp, useBackendHostname, useObservability, useTimeout,
+  useCompression, useResponseLength, startServer,
+  stopIfTimedOut} from './app-common.js';
 import {aiChatbotLogger} from './logger.js';
 import './locale.js';
 
@@ -22,6 +23,8 @@ const __dirname = path.dirname(__filename);
 const app = createBaseApp();
 
 setupGeoIp(app);
+
+useBackendHostname(app);
 
 useObservability(app);
 

@@ -1,5 +1,6 @@
 import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
+import os from 'node:os';
 import {HDate, calendar} from '@hebcal/core';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
@@ -14,6 +15,32 @@ const server = makeServer(app);
 
 beforeAll(() => {
   app.context.mysql = new MockMysqlDb();
+});
+
+describe('X-Backend header', () => {
+  it.each([
+    ['robots.txt', '/robots.txt', 200],
+    ['redirect to www', '/', 302],
+    ['not found', '/ical/bogus.ics', 404],
+  ])('exposes the server hostname on %s', async (why, url, status) => {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(status);
+    expect(response.headers['x-backend']).toBe(os.hostname());
+  });
+
+  it('exposes the server hostname on a caught error response', async () => {
+    const response = await request(server).get('/export/hebcal.ics?v=2');
+    expect(response.status).toBe(400);
+    expect(response.headers['x-backend']).toBe(os.hostname());
+  });
+
+  it('exposes the server hostname on an uncaught error response', async () => {
+    // Rejected by onlyGetAndHead(), which throws above the catch-all in
+    // fixup0(), so Koa's default error handler writes this response.
+    const response = await request(server).put('/robots.txt');
+    expect(response.status).toBeGreaterThanOrEqual(400);
+    expect(response.headers['x-backend']).toBe(os.hostname());
+  });
 });
 
 describe('Static ICS files', () => {
