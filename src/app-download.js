@@ -31,6 +31,18 @@ app.use(async function noSniff(ctx, next) {
   ctx.set('X-Content-Type-Options', 'nosniff');
 });
 
+// Several handlers set a long-lived Cache-Control on the way in — see
+// sendStatic() and the /export dispatcher below — and then throw. fixup0()
+// turns the error into a response without touching the headers already on
+// ctx, so a 400 or 404 would go out asking a CDN to keep it for two weeks.
+// Registered above fixup0() so this runs after it has settled the status.
+app.use(async function noCacheOnError(ctx, next) {
+  await next();
+  if (ctx.status >= 400) {
+    ctx.remove('Cache-Control');
+  }
+});
+
 app.use(async function onlyGetAndHead(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {

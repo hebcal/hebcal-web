@@ -57,6 +57,31 @@ describe('HTTP methods other than GET and HEAD', () => {
   });
 });
 
+describe('Cache-Control on error responses', () => {
+  it.each([
+    ['a 400 from the /export dispatcher', '/export/hebcal.ics?v=1&cfg=json&year=bogus', 400],
+    ['a 404 for a missing static .ics', '/ical/bogus.ics', 404],
+    ['a 400 for an undecodable /v4 URL', '/v4/bogus', 400],
+  ])('is removed on %s', async (why, url, status) => {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(status);
+    expect(response.headers['cache-control']).toBeUndefined();
+  });
+
+  it('is left alone on a successful download', async () => {
+    const response = await request(server)
+        .get('/export/hebcal.ics?v=1&maj=on&year=2026&yt=G');
+    expect(response.status).toBe(200);
+    expect(response.headers['cache-control']).toMatch(/max-age=\d+/);
+  });
+
+  it('is left alone on a redirect', async () => {
+    const response = await request(server).get('/ical/hebcal.ics/');
+    expect(response.status).toBe(301);
+    expect(response.headers['cache-control']).toMatch(/immutable/);
+  });
+});
+
 describe('Static ICS files', () => {
   it('returns 404 for /ical/bogus.ics when file does not exist', async () => {
     const response = await request(server)
