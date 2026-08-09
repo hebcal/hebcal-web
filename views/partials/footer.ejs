@@ -2,8 +2,7 @@
 <div class="row">
 <div class="col">
 <ul class="bullet-list-inline">
-<li><time datetime="<%= new Date().toISOString() %>"><%= new Intl.DateTimeFormat('en-US', {
-  year: 'numeric', month: 'long', day: 'numeric' }).format(new Date())%></time></li>
+<li><time datetime="<%= new Date().toISOString() %>"><%= footerDateFmt.format(new Date()) %></time></li>
 <li><a href="/home/about">About</a></li>
 <li><a href="/home/privacy-policy">Privacy</a></li>
 <li><a href="/home/help">Help</a></li>
