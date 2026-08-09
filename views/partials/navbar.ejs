@@ -25,6 +25,10 @@ function htmlMenu(selected) {
 }
 const logoImage = '<svg width="77" height="21"><use href="' + spriteHref + '#hebcal-logo"></use></svg>';
 const logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
+// Without `let` this assignment lands on globalThis: the compiled template
+// body is not in strict mode, so an undeclared assignment creates a global
+// that is shared by every request the process serves.
+let logoHtml;
 if (rpath === '/') {
     logoHtml = '<span ' + logoIdClassTitle + '>' + logoImage + '</span>';
 } else {
