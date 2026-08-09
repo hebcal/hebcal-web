@@ -150,3 +150,127 @@ Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock
 ### Testing Before Commit/Push
 
 Always run unit tests to confirm everything works without breakage before committing or pushing code.
+
+## Performance Profiling
+
+The harness lives in `tools/perf/` — see `tools/perf/README.md` for the
+commands. It drives either app (`node tools/perf/server.js www|download`).
+What follows is why it works the way it does.
+
+### Method
+
+Production Pino logs (one JSON object per request, with `duration`, `status`,
+`url`) replay directly, which is the only realistic way to profile this app —
+synthetic URLs badly misrepresent the work mix. The approach that worked:
+
+1. Aggregate a production logfile by route family × extension × status,
+   weighting by **total** `duration` rather than request count. Request counts
+   are dominated by 304s and `/ping`; time is dominated by a few `.pdf` routes.
+2. Sample URLs per family into flat lists (`.ics`/`.csv`/`.pdf` behave nothing
+   alike, so profile them separately as well as mixed).
+3. Boot the app via a wrapper that imports `{app}` from `src/app-download.js`
+   (it only self-starts when run directly) and drives
+   `inspector` `Profiler.start`/`stop` from a second admin port, so the profile
+   covers just the replay window and not module loading. **Run the wrapper with
+   cwd = repo root** — `createBaseApp()` reads `hebcal-dot-com.ini` relative to
+   cwd and the process exits if it is missing.
+4. Replay sequentially (concurrency 1) so per-request wall time is meaningful,
+   after a warm-up pass — JIT warm-up is worth ~2x on the first few hundred.
+5. Analyze the `.cpuprofile` two ways: **self** time by package/file/function to
+   find hot leaves, and **inclusive** time for named frames to attribute cost to
+   a phase. Inclusive attribution needs care — match the outermost frame per
+   sample or nested patterns double-count.
+
+Varnish sits in front, so the log's distinct-URL ratio is ~1.0. There is no
+app-level response-caching win available; only per-render cost matters.
+
+### Where the time goes on download.hebcal.com (Aug 2026 baseline)
+
+`.pdf` was ~51% of total server time, `.ics` ~30%, `.csv` ~10%.
+
+- **PDF — pdfkit re-parses fonts and discards its layout cache every request.**
+  `PDFFontFactory.open()` does `readFileSync` + `fontkit.create` per document,
+  and pdfkit's word-level `layoutCache` lives on `EmbeddedFont`, which is
+  per-document. fontkit decodes GSUB/GPOS lazily, so the re-parse cost surfaces
+  under `layout` (57% of PDF CPU), not under `open` (5%) — don't be misled by
+  the self-time profile alone. Across 253 real PDFs there were only ~2,000
+  unique (font, word) pairs, i.e. ~97% of shaping is redundant across requests.
+  `src/pdfFontCache.js` now shares the shaped-word cache process-wide (63 → 32
+  ms/request, output unchanged). It deliberately does **not** share the parsed
+  fontkit font, which would be ~1.5x more: see the header comment there for why
+  that corrupts the ToUnicode CMap. Any future attempt to cache fonts across
+  documents has to reckon with fontkit caching `Glyph` objects by id along with
+  the code points from whichever call created them first.
+- **iCalendar — `foldLine` was ~29% of `.ics` CPU** and ~57% of `/v3` yahrzeit
+  CPU, essentially all of it `Intl.Segmenter`. Fixed upstream in
+  `@hebcal/icalendar` by folding on code-point boundaries and consulting the
+  Segmenter only at candidate break offsets via `Segments.containing()`.
+- **`@hebcal/noaa` `getDateFromTime`** is ~11% of `.csv` CPU: a
+  `PlainTime`→`toZonedDateTime`→`withTimeZone` round-trip whose result
+  `@hebcal/core`'s `zdtToDate` immediately reduces to `epochMilliseconds`.
+  `withTimeZone` does not change the instant, so that leg is dead weight.
+  Node 26 has **native** Temporal, so this cost shows as self time in the
+  calling frame rather than in `temporal-polyfill`.
+
+### Where the time goes on www.hebcal.com (Aug 2026 baseline)
+
+By share of total request time: `/hebcal` ~38%, `/converter` ~20%,
+`/shabbat` ~17%, `/holidays` ~14%. `/holidays/*.pdf` is only ~1%, so the PDF
+work above is a download-side concern only.
+
+The profile is **not** template-bound, despite first appearances. A CPU
+profile shows a large `(vm)` bucket that is tempting to read as compiled EJS;
+it is mostly `(idle)`, GC and V8 internals. Instrumenting `ejs.compile`
+directly puts template execution at ~8% of wall time. The real weight is in
+`@hebcal/hdate` primitives (~16%: `abs2greg`, `hebrew2abs`, `getPseudoISO`,
+`fixMonth`), `@hebcal/core` `calendar()` (~7%), and dayjs (~6%, mostly
+`isValid` from constructing many dayjs objects). Those are the places worth
+looking next; the template layer has already been picked over.
+
+Two traps specific to www:
+
+- **There are two copies of `ejs` installed, deliberately.** `@koa/ejs`
+  declares `ejs@^3.1.8` and gets a nested `node_modules/ejs` (3.1.10) that
+  renders every normal page; the top-level `ejs` (6.x) is reached by
+  `koa-error` → `consolidate`, which lazily `require('ejs')`, and renders
+  `error.ejs`. Patch or profile the wrong one and you will see nothing. An
+  `overrides` entry forcing everything to 6.x works and is byte-identical,
+  but is *slower*: ejs 6 shallow-copies the locals object on every render
+  (and every include) as prototype-pollution mitigation, and this app passes
+  ~15 locals through `ctx.state`.
+- **`fs.existsSync()` runs once per `include()` per request** from ejs's
+  `getIncludePath`, ahead of the compiled-template cache. It looks alarming
+  in a self-time profile but memoizing it end-to-end is worth ~0.3%; the
+  dentry cache is warm and it is ~0.7us a call. Not worth the fragility.
+
+### A slow request blocks every other request on that process
+
+Node is single-threaded, so a synchronous handler stalls the whole event
+loop. This is not theoretical here: one scanner sending
+`/hebcal?year=5787&yt=G` with every daily-learning option enabled blocked
+w46 for 10.2 seconds, and the matching 10206ms entry is in the access log.
+
+Three consequences worth remembering:
+
+- `useTimeout()` **cannot** fire during that window — it is a `setTimeout`
+  macrotask. See its JSDoc in `app-common.js`; it bounds slow I/O only.
+- Varnish `first_byte_timeout` (10s for www and api, 15s for dl) is what
+  actually served the 503s. The node.js logs show none.
+- The fix is to bound the input, not to add a timeout. Daily-learning
+  calendars walk forward from a cycle epoch, so their cost grew linearly
+  with distance from it; `dropDailyLearningOutsideRange()` in `calendar.js`
+  drops them outside the supported year range. `@hebcal/learning` later made
+  the walk O(1), which removes the cliff at the root — the bound is now
+  belt-and-braces rather than load-bearing.
+
+`prom-client`'s `nodejs_eventloop_lag_max_seconds` is the metric that
+surfaces this; `hebcal-devops` has `NodeEventLoopStalled` (>2s) and
+`NodeEventLoopLagHigh` (p99 >250ms for 10m) alerting on it.
+
+### Verifying an optimization did not change output
+
+These routes are cached by ETag, so byte-identical output is the bar. Compare
+normalized response bodies before/after (strip `DTSTAMP`/`LAST-MODIFIED`, which
+vary per request). For PDFs, compare **inflated content streams**, not whole
+files: pdfkit writes a random `/ID` in the trailer via `crypto.getRandomValues`,
+so two runs of unmodified code never produce identical bytes.
