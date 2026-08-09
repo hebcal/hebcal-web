@@ -4,10 +4,12 @@ import {pkg} from './pkg.js';
 
 function murmur128SyncBase64(str) {
   const arr4 = murmur128Sync(str);
-  const int32Array = new Uint32Array(arr4);
-  const buffer = Buffer.from(int32Array.buffer);
-  const base64String = buffer.toString('base64url');
-  return base64String;
+  const buf = Buffer.allocUnsafe(16);
+  buf.writeUInt32LE(arr4[0], 0);
+  buf.writeUInt32LE(arr4[1], 4);
+  buf.writeUInt32LE(arr4[2], 8);
+  buf.writeUInt32LE(arr4[3], 12);
+  return buf.toString('base64url');
 }
 
 /**
