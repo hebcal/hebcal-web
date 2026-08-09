@@ -195,12 +195,31 @@ app-level response-caching win available; only per-render cost matters.
   under `layout` (57% of PDF CPU), not under `open` (5%) — don't be misled by
   the self-time profile alone. Across 253 real PDFs there were only ~2,000
   unique (font, word) pairs, i.e. ~97% of shaping is redundant across requests.
-  `src/pdfFontCache.js` now shares the shaped-word cache process-wide (63 → 32
-  ms/request, output unchanged). It deliberately does **not** share the parsed
-  fontkit font, which would be ~1.5x more: see the header comment there for why
-  that corrupts the ToUnicode CMap. Any future attempt to cache fonts across
-  documents has to reckon with fontkit caching `Glyph` objects by id along with
-  the code points from whichever call created them first.
+  **Do not try to fix this by sharing the shaped-word cache across documents.**
+  `src/pdfFontCache.js` did exactly that (63 → 32 ms/request, byte-identical
+  output) and was reverted on 2026-08-09 after it exhausted memory in
+  production: every `download.hebcal.com` worker was OOM-killed after ~189 PDFs,
+  restarting every ~20 minutes on a 990 MB box.
+
+  The cache was bounded at 20,000 entries per font, which bounds *entries* but
+  not *bytes*. Its values are fontkit `GlyphRun`s, and every `Glyph` in a run
+  holds `_font` — the whole parsed font, with its cmap processor, layout engine
+  and glyph cache. So each entry pins the entire font of whichever document
+  first shaped that word, and entries are only ever written on a miss, never
+  overwritten. Rendered text is *not* fixed vocabulary — the calendar subtitle
+  carries city names, ZIP codes and years — so nearly every request contributed
+  a new word, and with it a new pinned font: 60 documents pinned 60 distinct
+  fonts, and a local replay of real production URLs retained ~2.8 MB per PDF
+  with the heap climbing linearly and no plateau. Reverting made the same
+  replay flat at ~40 MB across 400 PDFs.
+
+  Any future attempt here has to keep cached values free of references back
+  into per-document state, and cannot simply share the parsed font either: that
+  is ~1.5x on its own, but fontkit caches `Glyph` objects by id along with the
+  code points from whichever call created them first, and pdfkit copies
+  `glyph.codePoints` into the PDF's ToUnicode CMap — which measurably changed
+  the CMap in ~4% of a 250-PDF sample, silently degrading copy/paste, search
+  and accessibility.
 - **iCalendar — `foldLine` was ~29% of `.ics` CPU** and ~57% of `/v3` yahrzeit
   CPU, essentially all of it `Intl.Segmenter`. Fixed upstream in
   `@hebcal/icalendar` by folding on code-point boundaries and consulting the

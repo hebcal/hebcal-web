@@ -8,7 +8,6 @@ import {locationDefaultCandleMins, makeCalendarSubtitleFromOpts} from './urlArgs
 import {GregorianDateEvent} from './GregorianDateEvent.js';
 import {appendIsraelAndTracking, shouldRenderBrief} from '@hebcal/rest-api';
 import {pad2, pad4} from '@hebcal/hdate';
-import {FONT_FILES, installSharedFonts} from './pdfFontCache.js';
 
 const PDF_WIDTH = 792;
 const PDF_HEIGHT = 612;
@@ -482,12 +481,11 @@ export function createPdfDoc(title, options) {
   doc.info['Keywords'] = keywords;
   doc.info['Author'] = 'Hebcal Jewish Calendar (hebcal.com)';
 
-  for (const [name, path] of Object.entries(FONT_FILES)) {
-    doc.registerFont(name, path);
-  }
-  // Reuse the parsed fonts and shaped words from earlier documents; pdfkit
-  // otherwise re-parses every font file and re-shapes every word per request.
-  installSharedFonts(doc);
+  doc.registerFont('plain', './fonts/Source_Sans_Pro/SourceSansPro-Regular.ttf');
+  doc.registerFont('semi', './fonts/Source_Sans_Pro/SourceSansPro-SemiBold.ttf');
+  doc.registerFont('bold', './fonts/Source_Sans_Pro/SourceSansPro-Bold.ttf');
+  doc.registerFont('hebrew', './fonts/Adobe_Hebrew/adobehebrew-regular.otf');
+  doc.registerFont('hebrew-bold', './fonts/Adobe_Hebrew/adobehebrew-bold.otf');
 
   return doc;
 }
