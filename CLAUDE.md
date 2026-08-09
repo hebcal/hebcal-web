@@ -267,10 +267,14 @@ client offers it** and disabling it falls through to brotli. Measure with
   | `.csv` | 0.15 ms / 14.08% | 1.44 ms / 11.06% | 3.62 ms / 10.60% |
   | www HTML | 0.09 ms / 26.50% | 0.62 ms / 24.30% | 1.23 ms / 24.23% |
 
-  www runs `zstdLevel: 12`, which costs 2x the CPU of level 10 for 0.07
-  percentage points of size — pure waste. Brotli, by contrast, is tuned about
-  right: `br:6` on www is within 0.6pp of `br:9`, and `br:3` on download is a
-  reasonable speed pick.
+  Both servers now run `zstdLevel: 6`, down from 12 on www and 10 on download.
+  Level 12 cost 2x the CPU of level 10 for 0.07 percentage points of size.
+  Charging every logged 200 at the level actually used, compression was 26.9%
+  of total request time on www and 12.3% on download; the retune cuts 14.4% of
+  total www request time for +1.1% bytes on the wire, and 2.3% of download for
+  +0.8%. Do not raise these again without re-running the sweep. Brotli, by
+  contrast, is tuned about right: `br:6` on www is within 0.6pp of `br:9`, and
+  `br:3` on download is a reasonable speed pick.
 - **On `.ics`, zstd at level 3 strictly dominates brotli at quality 3** — 0.04 ms
   vs 0.14 ms *and* 7.06% vs 7.28%. `.ics` is repetitive enough that zstd's
   cheap levels give brotli-quality ratios, which is not true of HTML.
