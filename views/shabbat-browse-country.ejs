@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs') -%>
-<link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<link rel="canonical" href="https://www.hebcal.com<%=locals.rpath%>">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -8,16 +8,16 @@
 
 <div class="row mt-3">
 <div class="col">
-<h2><%=countryName%> <%=flag%><br><span class="h3 small text-body-secondary">Shabbat Candle-lighting Times</span></h2>
-<p class="lead"><time datetime="<%= friday.format('YYYY-MM-DD') %>"><%= friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= parsha %></a></p>
+<h2><%=locals.countryName%> <%=locals.flag%><br><span class="h3 small text-body-secondary">Shabbat Candle-lighting Times</span></h2>
+<p class="lead"><time datetime="<%= locals.friday.format('YYYY-MM-DD') %>"><%= locals.friday.format('dddd, D MMMM YYYY') %></time> - Parashat <%= locals.parsha %></a></p>
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row">
-<% for (const a1 of admin1) { -%>
+<% for (const a1 of locals.admin1) { -%>
 <div id="<%=a1.id%>" class="col-md-4">
 <h3><%=a1.name%></h3>
 <ul class="list-unstyled lh-lg">
-<% for (const r of results.filter((r) => r.admin1 === a1.name)) { -%>
+<% for (const r of locals.results.filter((r) => r.admin1 === a1.name)) { -%>
 <li><a href="<%= r.href %>"><%= r.name %></a> <time datetime="<%= r.isoDateTime %>"><%= r.fmtTime %></time></li>
 <% } -%>
 </ul>

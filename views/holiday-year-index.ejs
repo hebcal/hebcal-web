@@ -1,11 +1,11 @@
 <%- await include('partials/header.ejs', {
   criticalCss: 'critical-holiday-year.css',
 }) -%>
-<% if (greg1 <= 1752 || greg1 > today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<% if (isHebrewYear) { %>
-<link rel="canonical" href="https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>">
+<% if (locals.greg1 <= 1752 || locals.greg1 > locals.today.year() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (locals.isHebrewYear) { %>
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%=locals.calendarYear-3761%>-<%=locals.calendarYear-3760%><%=locals.iSuffix%>">
 <% } else { %>
-<link rel="canonical" href="https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>">
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%=locals.year%><%=locals.iSuffix%>">
 <% } %>
 <%- await include('partials/style-fullcalendar.ejs') -%>
 <style>
@@ -25,23 +25,23 @@
   color: rgba(var(--bs-secondary-rgb),1);
 }
 </style>
-<% if (greg1 > 1752) { %><link rel="prev" href="/holidays/<%=prev%><%=iSuffix%>"><%}%>
-<% if (greg1 < today.year() + 100) { %><link rel="next" href="/holidays/<%=next%><%=iSuffix%>"><%}%>
-<meta name="description" content="Dates of major and minor Jewish holidays for <%=year%>, observances and customs, holiday Torah readings.">
+<% if (locals.greg1 > 1752) { %><link rel="prev" href="/holidays/<%=locals.prev%><%=locals.iSuffix%>"><%}%>
+<% if (locals.greg1 < locals.today.year() + 100) { %><link rel="next" href="/holidays/<%=locals.next%><%=locals.iSuffix%>"><%}%>
+<meta name="description" content="Dates of major and minor Jewish holidays for <%=locals.year%>, observances and customs, holiday Torah readings.">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container">
 <div class="row">
 <div class="col-md-9 mt-2">
-<h2>Jewish Holidays <%=year%>
-<% if (isHebrewYear && year.includes('-')) { -%>
-<span class="small text-body-secondary text-nowrap">(Hebrew year <%=calendarYear%>)</span>
+<h2>Jewish Holidays <%=locals.year%>
+<% if (locals.isHebrewYear && locals.year.includes('-')) { -%>
+<span class="small text-body-secondary text-nowrap">(Hebrew year <%=locals.calendarYear%>)</span>
 <% } -%>
 </h2>
-<% if (greg1 <= 1178) { -%>
+<% if (locals.greg1 <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (greg1 <= 1752) { -%>
+<% } else if (locals.greg1 <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <p class="small">Dates of major and minor Jewish holidays, observances and customs, holiday Torah readings.</p>
@@ -50,8 +50,8 @@
     <div class="d-none d-sm-inline small">Calendar year</div>
     <nav>
       <ul class="pagination pagination-sm">
-      <% for (let i = greg1-1; i <= greg1+2; i++) { %>
-      <li class="page-item<%= i === greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=iSuffix%>"<%- (i > today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+      <% for (let i = locals.greg1-1; i <= locals.greg1+2; i++) { %>
+      <li class="page-item<%= i === locals.greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=locals.iSuffix%>"<%- (i > locals.today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
       <% } %>
       </ul>
     </nav>
@@ -60,8 +60,8 @@
     <div class="d-none d-sm-inline small">Show dates for</div>
     <nav>
       <ul class="pagination pagination-sm">
-      <li class="page-item<%= il ? '' : ' active' %>"><a class="page-link" href="<%=rpath%>">Diaspora</a>
-      <li class="page-item<%= il ? ' active' : '' %>"><a class="page-link" href="<%=rpath%>?i=on">Israel</a>
+      <li class="page-item<%= locals.il ? '' : ' active' %>"><a class="page-link" href="<%=locals.rpath%>">Diaspora</a>
+      <li class="page-item<%= locals.il ? ' active' : '' %>"><a class="page-link" href="<%=locals.rpath%>?i=on">Israel</a>
       </ul>
     </nav>
   </div>
@@ -70,9 +70,9 @@
 </div><!-- .row -->
 <div class="row">
 <div class="col-md-9">
-<div id="calendar" data-year="<%=year%>" data-initial-date="<%=isoDateStart%>"></div>
+<div id="calendar" data-year="<%=locals.year%>" data-initial-date="<%=locals.isoDateStart%>"></div>
 <div id="list-view">
-<% for (const item of items) { %>
+<% for (const item of locals.items) { %>
 <div class="card mb-4" id="<%=item.id%>">
 <div class="row g-0">
 <% if (typeof item?.meta?.photo === 'object') { -%>
@@ -81,7 +81,7 @@
 <% if (item.meta.photo.avif) { -%>
 <source type="image/avif" srcset="/i/is/16x9-768/<%=item.meta.photo.avif%>">
 <% } -%>
-<img alt="<%=item.meta.photo.caption||holiday%>"
+<img alt="<%=item.meta.photo.caption||locals.holiday%>"
 src="/i/is/16x9-768/<%=item.meta.photo.fn%>"
 width="240"
 class="card-img img-fluid">
@@ -94,9 +94,9 @@ class="card-img img-fluid">
 <% if (item.emoji) { %>&nbsp;<span class="text-nowrap"><%=item.emoji%></span><% } %></h4>
 <p><%- await include('partials/holiday-index-dates.ejs', {item}) -%>
 <% if (item.name === 'Pesach' || item.name === 'Shmini Atzeret & Simchat Torah' || item.name === 'Shavuot') { -%>
-<br><small>Dates listed are for <%= il ? 'Israel 🇮🇱' : 'Diaspora (outside of Israel)' %></small>
+<br><small>Dates listed are for <%= locals.il ? 'Israel 🇮🇱' : 'Diaspora (outside of Israel)' %></small>
 <% } -%>
-<br><small class="text-burgundy"><%=isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
+<br><small class="text-burgundy"><%=locals.isHebrewYear ? item.hdRangeNoYear : item.hdRange%></small>
 </p>
 <div class="card-text"><%=item.descrMedium%></div>
 <% if (item.related) { %>
@@ -123,7 +123,7 @@ class="card-img img-fluid">
 <tr><th>Holiday</th><th>Starts</th><th>Ends</th><th>Hebrew Date</th></tr>
 </thead>
 <tbody class="table-group-divider">
-<% for (const item of modernHolidays) { %>
+<% for (const item of locals.modernHolidays) { %>
 <tr>
 <td><a href="<%=item.href%>"><%=item.name%></a>
 </td>
@@ -150,7 +150,7 @@ precedence over what would be a minor holiday.</p>
 <tr><th>Rosh Chodesh</th><th>Starts</th><th>Ends</th></tr>
 </thead>
 <tbody class="table-group-divider">
-<% for (const item of roshChodesh) { %>
+<% for (const item of locals.roshChodesh) { %>
 <tr>
 <td><a href="<%=item.href%>"><%=item.name.substring(13)%> <% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 </td>
@@ -164,31 +164,31 @@ precedence over what would be a minor holiday.</p>
 </div><!-- #list-view -->
 </div><!-- .col-md-9 -->
 <div class="col-md-3 d-print-none">
-<% if (greg1 > 1752) { %>
+<% if (locals.greg1 > 1752) { %>
 <div class="mb-4">
 <div class="form-check form-switch">
 <input class="form-check-input" type="checkbox" role="switch" id="toggle-month">
 <label class="form-check-label" for="toggle-month">
   Month view
-  <svg class="icon"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <svg class="icon"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
 </label>
 </div><!-- .form-switch -->
 </div>
 <% } -%>
 <div class="mb-4">
-<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 <p class="small">Perpetual calendar feed for Apple, Google, Microsoft Outlook,
   or to any desktop program that supports iCalendar (.ics) files</p>
 </div>
 <div class="mb-4">
-<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=isHebrewYear?calendarYear:year%>&amp;yt=<%=isHebrewYear?'H':'G'%><%=il?'&i=on':''%>"><svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
+<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=locals.isHebrewYear?locals.calendarYear:locals.year%>&amp;yt=<%=locals.isHebrewYear?'H':'G'%><%=locals.il?'&i=on':''%>"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 <p class="small">Create and download a custom calendar with event titles in different languages,
 candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p>
 </div>
-<% if ((isHebrewYear && calendarYear >= 5000 && calendarYear <= 6759) ||
-       (!isHebrewYear && year >= 1900 && year < 3000)) { -%>
+<% if ((locals.isHebrewYear && locals.calendarYear >= 5000 && locals.calendarYear <= 6759) ||
+       (!locals.isHebrewYear && locals.year >= 1900 && locals.year < 3000)) { -%>
 <div class="mb-4">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=isHebrewYear?calendarYear:year%>.pdf<%=iSuffix%>"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=locals.isHebrewYear?locals.calendarYear:locals.year%>.pdf<%=locals.iSuffix%>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 <p class="small">Printable PDF, one page per month, in landscape</p>
 </div>
 <% } -%>
@@ -196,7 +196,7 @@ candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p
 </div><!-- .row -->
 <%- await include('partials/download-modal.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
-<% if (greg1 > 1752) { %><%- await include('partials/script-fullcalendar.ejs') %><% } -%>
+<% if (locals.greg1 > 1752) { %><%- await include('partials/script-fullcalendar.ejs') %><% } -%>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -205,18 +205,18 @@ candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p
   "@type": "ListItem",
   "position": 1,
   "name": "Holidays",
-  "item": "https://www.hebcal.com/holidays/<%=iSuffix%>"
+  "item": "https://www.hebcal.com/holidays/<%=locals.iSuffix%>"
  },{
-<% if (isHebrewYear) { -%>
+<% if (locals.isHebrewYear) { -%>
   "@type": "ListItem",
   "position": 2,
-  "name": "<%=calendarYear%>",
-  "item": "https://www.hebcal.com/holidays/<%=calendarYear-3761%>-<%=calendarYear-3760%><%=iSuffix%>"
+  "name": "<%=locals.calendarYear%>",
+  "item": "https://www.hebcal.com/holidays/<%=locals.calendarYear-3761%>-<%=locals.calendarYear-3760%><%=locals.iSuffix%>"
 <% } else { -%>
   "@type": "ListItem",
   "position": 2,
-  "name": "<%=year%>",
-  "item": "https://www.hebcal.com/holidays/<%=year%><%=iSuffix%>"
+  "name": "<%=locals.year%>",
+  "item": "https://www.hebcal.com/holidays/<%=locals.year%><%=locals.iSuffix%>"
 <% } -%>
  }]
 }

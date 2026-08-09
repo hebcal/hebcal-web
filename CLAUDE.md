@@ -227,21 +227,49 @@ directly puts template execution at ~8% of wall time. The real weight is in
 `isValid` from constructing many dayjs objects). Those are the places worth
 looking next; the template layer has already been picked over.
 
-Two traps specific to www:
+Template execution is ~23% of server time on the HTML routes, measured by
+wrapping the compiled function (`tools/perf/bench-ejs.js`) rather than by
+reading the profile, because compiled templates are `new Function` bodies
+whose samples land in that same `(vm)` bucket.
 
+Traps specific to www:
+
+- **Templates say `locals.foo`, not `foo`, and must keep saying it.**
+  `render()` in `app-www.js` passes `_with: false`, so ejs does not wrap the
+  compiled body in `with (locals || {})`. Inside a `with`, every identifier
+  resolves dynamically — V8 probes the locals object first even for ejs's own
+  `__append` — which cost ~23% of template execution, ~7% of server time.
+  A bare identifier now throws ReferenceError at render time instead of
+  silently resolving, so the tests catch a regression immediately.
+  `tools/codemod/ejs-locals.mjs` converts a batch of new templates;
+  `tools/codemod/template-locals-audit.mjs` catches the case it cannot see,
+  where a name is both a passed-in local and a loop variable in the same file.
+- **`strict: true` buys nothing on top of that** — measured identical — and
+  `@koa/ejs` does not forward the option anyway (it passes a fixed subset of
+  compile options: no `strict`, `root`, `destructuredLocals`, `includer` or
+  `unsafePrototypeLocals`). It is still worth compiling with it once by hand
+  as a lint: it is what found `logoHtml` in `navbar.ejs` being assigned
+  without a declaration, i.e. leaking onto `globalThis` on every request.
 - **There are two copies of `ejs` installed, deliberately.** `@koa/ejs`
   declares `ejs@^3.1.8` and gets a nested `node_modules/ejs` (3.1.10) that
   renders every normal page; the top-level `ejs` (6.x) is reached by
   `koa-error` → `consolidate`, which lazily `require('ejs')`, and renders
   `error.ejs`. Patch or profile the wrong one and you will see nothing. An
-  `overrides` entry forcing everything to 6.x works and is byte-identical,
-  but is *slower*: ejs 6 shallow-copies the locals object on every render
-  (and every include) as prototype-pollution mitigation, and this app passes
-  ~15 locals through `ctx.state`.
+  `overrides` entry forcing everything to 6.x dedupes cleanly and is
+  byte-identical, but costs ~20% of template execution: ejs 6 shallow-copies
+  the locals into a null-prototype object on every render as
+  prototype-pollution mitigation, and since every `include()` then copies
+  *from* a dictionary-mode object, the cost compounds down a tree that is
+  ~34 template calls deep per request.
 - **`fs.existsSync()` runs once per `include()` per request** from ejs's
-  `getIncludePath`, ahead of the compiled-template cache. It looks alarming
-  in a self-time profile but memoizing it end-to-end is worth ~0.3%; the
-  dentry cache is warm and it is ~0.7us a call. Not worth the fragility.
+  `getIncludePath`, ahead of the compiled-template cache. Setting
+  `options.includer` does **not** avoid it — ejs calls the includer *after*
+  `getIncludePath` has already resolved and stat-ed the path. What does avoid
+  it is an absolute include path (`/partials/footer.ejs`), which takes the
+  `options.root` branch and resolves with `path.resolve` alone — but
+  `@koa/ejs` never passes `root` down to ejs, so that needs the ~40 lines of
+  `@koa/ejs` replaced with a local render helper first. Worth ~2% of server
+  time (`MODE=noexists node tools/perf/bench-ejs.js` for the ceiling).
 
 ### A slow request blocks every other request on that process
 

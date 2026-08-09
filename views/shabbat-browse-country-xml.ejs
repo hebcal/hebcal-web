@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<% for (const r of results) { -%>
+<% for (const r of locals.results) { -%>
 <url><loc>https://www.hebcal.com<%= r.href %></loc>
-<lastmod><%=lastmod%></lastmod><changefreq>weekly</changefreq></url>
+<lastmod><%=locals.lastmod%></lastmod><changefreq>weekly</changefreq></url>
 <% } -%>
 </urlset>

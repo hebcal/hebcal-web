@@ -2,7 +2,7 @@
 <div class="row">
 <div class="col">
 <ul class="bullet-list-inline">
-<li><time datetime="<%= new Date().toISOString() %>"><%= footerDateFmt.format(new Date()) %></time></li>
+<li><time datetime="<%= new Date().toISOString() %>"><%= locals.footerDateFmt.format(new Date()) %></time></li>
 <li><a href="/home/about">About</a></li>
 <li><a href="/home/privacy-policy">Privacy</a></li>
 <li><a href="/home/help">Help</a></li>
@@ -18,15 +18,15 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 </div><!-- .row -->
 </footer>
 </div><!-- .container -->
-<script defer nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-<% if (typeof footerScripts === 'object') { -%>
-<%   if (footerScripts.tooltip) { %><%- await include('script-tooltip.ejs') %><% } -%>
-<%   if (footerScripts.clipboard) { %><script nonce="<%=nonce%>"><%- await include('client-clipboard.min.js') %></script><% } -%>
-<%   if (footerScripts.typeahead) { %><%- await include('script-typeahead.ejs') %><% } -%>
+<script defer nonce="<%=locals.nonce%>" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+<% if (typeof locals.footerScripts === 'object') { -%>
+<%   if (locals.footerScripts.tooltip) { %><%- await include('script-tooltip.ejs') %><% } -%>
+<%   if (locals.footerScripts.clipboard) { %><script nonce="<%=locals.nonce%>"><%- await include('client-clipboard.min.js') %></script><% } -%>
+<%   if (locals.footerScripts.typeahead) { %><%- await include('script-typeahead.ejs') %><% } -%>
 <% } -%>
-<% if (typeof xtra_html !== 'undefined') { %><%- xtra_html %><% } -%>
-<script nonce="<%=nonce%>"><%- await include('analytics.min.js') %></script>
-<% if (typeof cookieBanner === 'boolean' && cookieBanner) { -%>
+<% if (typeof locals.xtra_html !== 'undefined') { %><%- locals.xtra_html %><% } -%>
+<script nonce="<%=locals.nonce%>"><%- await include('analytics.min.js') %></script>
+<% if (typeof locals.cookieBanner === 'boolean' && locals.cookieBanner) { -%>
 <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom mb-2">
  <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
   <div class="toast-header">
@@ -43,7 +43,7 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
   </div>
  </div>
 </div>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const toastEl = document.getElementById('cookie-toast')
   const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastEl);
@@ -53,4 +53,4 @@ document.addEventListener('DOMContentLoaded', function() {
 <% } -%>
 </body>
 </html>
-<!-- <%= hostname %> <%= new Date().toISOString() %> -->
+<!-- <%= locals.hostname %> <%= new Date().toISOString() %> -->

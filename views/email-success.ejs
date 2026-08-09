@@ -1,18 +1,18 @@
 <%- await include('partials/header-and-navbar.ejs') -%>
 <div class="row mt-2">
 <div class="col">
-<% if (updated) { %>
+<% if (locals.updated) { %>
 <div class="alert alert-success">
-<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 <strong>Success!</strong> Your subsciption information has been updated.
-<p>Email: <strong><%= emailAddress %></strong>
-<br>Location: <%= locationName %></p>
+<p>Email: <strong><%= locals.emailAddress %></strong>
+<br>Location: <%= locals.locationName %></p>
 </div><!-- .alert -->
 <% } else { %>
 <div class="alert alert-success">
-<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> A confirmation message has been sent to
-<strong><%= emailAddress %></strong> for <%= locationName %>.
+<strong><%= locals.emailAddress %></strong> for <%= locals.locationName %>.
 <br>Click the link within that message to confirm your subscription.
 </div><!-- .alert -->
 <p>If you do not receive this message within a few minutes, then

@@ -1,5 +1,5 @@
-<% if (typeof numYears === 'number') { -%>
-<p class="small">This subscription is a <%= numYears %>-year perpetual
-calendar feed with events for the current year (<%= currentYear %>) plus
-<%= numYears - 1 %> future year<%= numYears === 2 ? '' : 's'%>.</p>
+<% if (typeof locals.numYears === 'number') { -%>
+<p class="small">This subscription is a <%= locals.numYears %>-year perpetual
+calendar feed with events for the current year (<%= locals.currentYear %>) plus
+<%= locals.numYears - 1 %> future year<%= locals.numYears === 2 ? '' : 's'%>.</p>
 <% } -%>

@@ -1,4 +1,4 @@
-<span class="text-nowrap"><time class="fw-bolder" datetime="<%=item.startIsoDate%>"><%= item.d.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small></span> -
-<span class="text-nowrap"><% if (item.duration > 0) { -%>
- <time class="fw-bolder" datetime="<%=item.startIsoDate%>"><%= item.endD.format(isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time>
+<span class="text-nowrap"><time class="fw-bolder" datetime="<%=locals.item.startIsoDate%>"><%= locals.item.d.format(locals.isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time> <small><%=locals.item.beginsWhen.replace(/^at /, '').replace('sundown', 'sunset')%></small></span> -
+<span class="text-nowrap"><% if (locals.item.duration > 0) { -%>
+ <time class="fw-bolder" datetime="<%=locals.item.startIsoDate%>"><%= locals.item.endD.format(locals.isHebrewYear ? 'ddd, D MMM YYYY' : 'ddd, D MMMM') %></time>
 <% } %> <small>nightfall</small></span>

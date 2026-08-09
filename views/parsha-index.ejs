@@ -1,7 +1,7 @@
 <%- await include('partials/header.ejs') -%>
-<link rel="canonical" href="https://www.hebcal.com/sedrot/<%=il?'?i=on':''%>">
+<link rel="canonical" href="https://www.hebcal.com/sedrot/<%=locals.il?'?i=on':''%>">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="index.xml">
-<meta name="description" content="Weekly Torah reading for <%=saturday.format('MMMM D')%>: <%= israelDiasporaDiffer ? `${parshaDia} in the Diaspora, ${parshaIsrael} in Israel` : parsha %>. Full kriyah, triennial cycle, weekday readings. Calendar, spreadsheets, feeds and downloads">
+<meta name="description" content="Weekly Torah reading for <%=locals.saturday.format('MMMM D')%>: <%= locals.israelDiasporaDiffer ? `${locals.parshaDia} in the Diaspora, ${locals.parshaIsrael} in Israel` : locals.parsha %>. Full kriyah, triennial cycle, weekday readings. Calendar, spreadsheets, feeds and downloads">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -9,33 +9,33 @@
 <div class="row mt-3">
 <div class="col">
 <div class="float-start">
-  <svg width="72" height="72" class="me-3 mb-3"><use href="<%=cspriteHref%>#torah-235339"></use></svg>
+  <svg width="72" height="72" class="me-3 mb-3"><use href="<%=locals.cspriteHref%>#torah-235339"></use></svg>
 </div>
-<% if (todayEv) { %>
+<% if (locals.todayEv) { %>
 <h2>Today’s holiday Torah reading</h2>
-<p class="lead"><time class="text-body-secondary" datetime="<%=d.format('YYYY-MM-DD')%>"><%=d.format('dddd')%>, <span class="text-nowrap"><%=d.format('D MMMM YYYY')%></span> ·
- <span class="text-nowrap"><%=hd.render('en')%></span></time> ·
- <a href="<%= todayEv.url %>#reading"><%= todayEv.ev.render('en') %></a></p>
-<p>Torah reading: <%- todayEv.torahHtml %></p>
+<p class="lead"><time class="text-body-secondary" datetime="<%=locals.d.format('YYYY-MM-DD')%>"><%=locals.d.format('dddd')%>, <span class="text-nowrap"><%=locals.d.format('D MMMM YYYY')%></span> ·
+ <span class="text-nowrap"><%=locals.hd.render('en')%></span></time> ·
+ <a href="<%= locals.todayEv.url %>#reading"><%= locals.todayEv.ev.render('en') %></a></p>
+<p>Torah reading: <%- locals.todayEv.torahHtml %></p>
 <% } %>
-<h2><span class="d-none d-sm-inline">Parashat</span> <%=parsha.replaceAll("'", '’')%>
-<% if (israelDiasporaDiffer) { %><small class="text-body-secondary">· <%=il ? 'Israel' : 'Diaspora' %></small><% } %>
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=locals.parsha.replaceAll("'", '’')%>
+<% if (locals.israelDiasporaDiffer) { %><small class="text-body-secondary">· <%=locals.il ? 'Israel' : 'Diaspora' %></small><% } %>
 </h2>
-<% if (israelDiasporaDiffer) { %>
+<% if (locals.israelDiasporaDiffer) { %>
 <p class="lead">
- This week’s Torah portion (<time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>) is
- <span class="text-nowrap"><a href="<%=parshaDiaHref%>"><%=parshaDia.replaceAll("'", '’')%></a> in the Diaspora</span>
- · <span class="text-nowrap"><a href="<%=parshaIsraelHref%>"><%=parshaIsrael.replaceAll("'", '’')%></a> in Israel 🇮🇱</span>
+ This week’s Torah portion (<time datetime="<%=locals.saturday.format('YYYY-MM-DD')%>"><%=locals.saturday.format('D MMMM YYYY')%></time>) is
+ <span class="text-nowrap"><a href="<%=locals.parshaDiaHref%>"><%=locals.parshaDia.replaceAll("'", '’')%></a> in the Diaspora</span>
+ · <span class="text-nowrap"><a href="<%=locals.parshaIsraelHref%>"><%=locals.parshaIsrael.replaceAll("'", '’')%></a> in Israel 🇮🇱</span>
 </p>
 <% } else { %>
-<p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=parshaHref%>">Parashat <%=parsha.replaceAll("'", '’')%></a>
- (read on <time datetime="<%=saturday.format('YYYY-MM-DD')%>"><%=saturday.format('D MMMM YYYY')%></time>).</p>
+<p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=locals.parshaHref%>">Parashat <%=locals.parsha.replaceAll("'", '’')%></a>
+ (read on <time datetime="<%=locals.saturday.format('YYYY-MM-DD')%>"><%=locals.saturday.format('D MMMM YYYY')%></time>).</p>
 <% } %>
-<% if (typeof meta === 'object') { %>
-<p><%- meta.summaryHtml.html %>&nbsp;<sup><a title="<%= meta.summaryHtml.title %>" href="<%- meta.summaryHtml.link %>">[1]</a></sup></p>
+<% if (typeof locals.meta === 'object') { %>
+<p><%- locals.meta.summaryHtml.html %>&nbsp;<sup><a title="<%= locals.meta.summaryHtml.title %>" href="<%- locals.meta.summaryHtml.link %>">[1]</a></sup></p>
 <ul class="bullet-list-inline">
-  <li>Torah reading: <a href="<%=parshaHref%>#torah"><%=meta.bookName%> <%=meta.verses%></a></li>
-  <li><a href="<%=parshaHref%>#drash">Commentary and Divrei Torah</a></li>
+  <li>Torah reading: <a href="<%=locals.parshaHref%>#torah"><%=locals.meta.bookName%> <%=locals.meta.verses%></a></li>
+  <li><a href="<%=locals.parshaHref%>#drash">Commentary and Divrei Torah</a></li>
 </ul>
 <% } %>
 <h2 class="mt-3" id="all">Torah Readings</h2>
@@ -43,8 +43,8 @@
 Each section (called a <em>parsha</em>, also transliterated <em>parashah</em> or <em>parasha</em>)
 is read during a particular week (<em>parashat ha-shavua</em>).
 The full cycle is read over the course of one Hebrew calendar year.
-<a class="text-nowrap" href="<%=hyear%>?i=<%= il ? 'on' : 'off'%>">Readings for <%= hyear %></a>
-&middot; <a class="text-nowrap" href="grid<%= il ? '?i=on' : ''%>">6-year summary</a>
+<a class="text-nowrap" href="<%=locals.hyear%>?i=<%= locals.il ? 'on' : 'off'%>">Readings for <%= locals.hyear %></a>
+&middot; <a class="text-nowrap" href="grid<%= locals.il ? '?i=on' : ''%>">6-year summary</a>
 </p>
 <p>Each page displays a summary of the parsha, the
 verses read for each aliyah (traditional full <em>kriyah</em>, <a
@@ -56,12 +56,12 @@ English-language commentary from a range of Jewish traditions.</p>
 </div><!-- .row -->
 
 <div class="row">
-<% for (const book of torahBookNames) { %>
+<% for (const book of locals.torahBookNames) { %>
 <div class="col">
 <h4 id="<%=book%>"><%= book === 'DoubledParshiyot' ? 'Doubled Parshiyot' : book %></h4>
 <ol class="list-unstyled lh-lg">
-<%   for (const [anchor, parshaName] of parshaByBook.get(book)) { %>
-<li><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replaceAll("'", '’') %></a></li>
+<%   for (const [anchor, parshaName] of locals.parshaByBook.get(book)) { %>
+<li><a href="<%=anchor%><%= locals.il ? '?i=on' : ''%>"><%= parshaName.replaceAll("'", '’') %></a></li>
 <%   } %>
 </ol>
 </div><!-- .col -->
@@ -71,7 +71,7 @@ English-language commentary from a range of Jewish traditions.</p>
 <div class="row mt-3">
 <div class="col">
 <div id="download" class="float-start">
-  <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg width="60" height="60" class="me-3 mb-2 text-success" fill="currentColor"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
 </div>
 <h3>Downloads</h3>
 <p>We offer three kinds of Torah and Haftarah downloads:</p>
@@ -86,7 +86,7 @@ English-language commentary from a range of Jewish traditions.</p>
 <div class="row mt-4">
 <div class="col">
 <div id="download-cal" class="float-start">
-  <svg width="52" height="52" class="me-3 mb-2 text-body-secondary" fill="currentColor"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
+  <svg width="52" height="52" class="me-3 mb-2 text-body-secondary" fill="currentColor"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
 </div>
 
 <h4>Parsha calendar feeds
@@ -99,11 +99,11 @@ English-language commentary from a range of Jewish traditions.</p>
 <div class="col">
 <h5>Parashat ha-Shavua - Diaspora</h5>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="webcal://download.hebcal.com/ical/torah-readings-diaspora.ics">
-<svg class="icon icon-sm mb-1"><use href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<svg class="icon icon-sm mb-1"><use href="<%=locals.spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-diaspora.ics">
-<svg class="icon icon-sm mb-1"><use href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
+<svg class="icon icon-sm mb-1"><use href="<%=locals.spriteHref%>#icon-google"></use></svg> Google Calendar</a>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/torah-readings-diaspora.ics&name=Torah%20Readings%20(Diaspora)&mkt=en-001">
-<svg class="icon"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+<svg class="icon"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -111,39 +111,39 @@ English-language commentary from a range of Jewish traditions.</p>
 <div class="col">
 <h5><span dir="rtl" lang="he">פרשת השבוע - ישראל</span></h5>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="webcal://download.hebcal.com/ical/torah-readings-israel-he.ics">
-<svg class="icon icon-sm mb-1"><use href="<%=spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
+<svg class="icon icon-sm mb-1"><use href="<%=locals.spriteHref%>#icon-appleinc"></use></svg> iPhone, iPad, macOS</a>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2Ftorah-readings-israel-he.ics">
-<svg class="icon icon-sm mb-1"><use href="<%=spriteHref%>#icon-google"></use></svg> Google Calendar</a>
+<svg class="icon icon-sm mb-1"><use href="<%=locals.spriteHref%>#icon-google"></use></svg> Google Calendar</a>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/torah-readings-israel-he.ics&name=%D7%A4%D7%A8%D7%A9%D7%AA%20%D7%94%D7%A9%D7%91%D7%95%D7%A2%20-%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C&mkt=en-001">
-<svg class="icon"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+<svg class="icon"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
 </div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row mt-3">
 <div class="col">
 <div id="rss" class="float-start">
-<svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+<svg width="52" height="52" class="me-3 mb-2" fill="#fd7e14"><use href="<%=locals.spriteHref%>#bi-rss-fill"></use></svg>
 </div>
 <h4>RSS feeds</h4>
 <p>Torah reading of the week for Shabbat and holidays, updated on Sunday at midnight Eastern Standard Time.</p>
 <div class="btn-group me-2 mb-2">
 <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-rss-fill"></use></svg>
   Diaspora RSS feeds <span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
 <li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
 <% } -%>
 </ul>
 </div><!-- .btn-group -->
 <div class="btn-group me-2 mb-2">
 <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-  <svg class="icon align-top"><use href="<%=spriteHref%>#bi-rss-fill"></use></svg>
+  <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-rss-fill"></use></svg>
   Israel RSS feeds <span class="caret"></span>
 </button>
 <ul class="dropdown-menu" role="menu">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
+<% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
 <li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
 <% } -%>
 </ul>
@@ -154,7 +154,7 @@ English-language commentary from a range of Jewish traditions.</p>
 <div class="row mt-4">
 <div class="col">
 <div id="download-leyning" class="float-start">
-  <svg width="60" height="60" class="me-3 mb-2 text-burgundy" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  <svg width="60" height="60" class="me-3 mb-2 text-burgundy" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg>
 </div>
 <h4>Leyning spreadsheet downloads</h4>
 <p>The following downloadable files contain the aliyah-by-aliyah
@@ -177,13 +177,13 @@ spreadsheet program.</p>
 <div class="row">
 <div class="col-md">
 <p>Diaspora Full Kriyah
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = hyear - 2; yr <= hyear + 12; yr++) { %>
+<% for (let yr = locals.hyear - 2; yr <= locals.hyear + 12; yr++) { %>
 <li><a class="download" id="leyning-fullkriyah-<%=yr%>" href="fullkriyah-<%=yr%>.csv" rel="nofollow" download="fullkriyah-<%=yr%>.csv">
-<% if (yr === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear) { %><mark><% } -%>
 Full Kriyah <%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
@@ -191,13 +191,13 @@ Full Kriyah <%=yr-%>
 
 <div class="col-md">
 <p>Diaspora Triennial
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = triCycleStartYear - 3; yr <= triCycleStartYear + 12; yr += 3) { %>
+<% for (let yr = locals.triCycleStartYear - 3; yr <= locals.triCycleStartYear + 12; yr += 3) { %>
 <li><a class="download" id="leyning-triennial-<%=yr%>" href="triennial-<%=yr%>-<%=yr+2%>.csv" rel="nofollow" download="triennial-<%=yr%>-<%=yr+2%>.csv">
-<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear || yr+1 === locals.hyear || yr+2 === locals.hyear) { %><mark><% } -%>
 Triennial <%=yr%>-<%=yr+2-%>
-<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear || yr+1 === locals.hyear || yr+2 === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
@@ -205,13 +205,13 @@ Triennial <%=yr%>-<%=yr+2-%>
 
 <div class="col-md">
 <p>Diaspora Weekday
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = hyear - 2; yr <= hyear + 6; yr++) { %>
+<% for (let yr = locals.hyear - 2; yr <= locals.hyear + 6; yr++) { %>
 <li><a class="download" id="weekday-diaspora-<%=yr%>" href="weekday-diaspora-<%=yr%>.csv" rel="nofollow" download="weekday-diaspora-<%=yr%>.csv">
-<% if (yr === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear) { %><mark><% } -%>
 Weekday <%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
@@ -222,13 +222,13 @@ Weekday <%=yr-%>
 <div class="row">
 <div class="col-md">
 <p>Israel Full Kriyah
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = hyear - 2; yr <= hyear + 12; yr++) { %>
+<% for (let yr = locals.hyear - 2; yr <= locals.hyear + 12; yr++) { %>
 <li><a class="download" id="leyning-fullkriyah-il-<%=yr%>" href="fullkriyah-il-<%=yr%>.csv" rel="nofollow" download="fullkriyah-il-<%=yr%>.csv">
-<% if (yr === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear) { %><mark><% } -%>
 Full Kriyah <%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
@@ -236,13 +236,13 @@ Full Kriyah <%=yr-%>
 
 <div class="col-md">
 <p>Israel Triennial
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = triCycleStartYear - 3; yr <= triCycleStartYear + 12; yr += 3) { %>
+<% for (let yr = locals.triCycleStartYear - 3; yr <= locals.triCycleStartYear + 12; yr += 3) { %>
 <li><a class="download" id="leyning-triennial-il-<%=yr%>" href="triennial-il-<%=yr%>-<%=yr+2%>.csv" rel="nofollow" download="triennial-il-<%=yr%>-<%=yr+2%>.csv">
-<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear || yr+1 === locals.hyear || yr+2 === locals.hyear) { %><mark><% } -%>
 Triennial <%=yr%>-<%=yr+2-%>
-<% if (yr === hyear || yr+1 === hyear || yr+2 === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear || yr+1 === locals.hyear || yr+2 === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
@@ -250,18 +250,18 @@ Triennial <%=yr%>-<%=yr+2-%>
 
 <div class="col-md">
 <p>Israel Weekday
-  <svg class="icon me-1" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg></p>
+  <svg class="icon me-1" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg></p>
 <ul class="list-unstyled lh-lg" role="menu">
-<% for (let yr = hyear - 2; yr <= hyear + 6; yr++) { %>
+<% for (let yr = locals.hyear - 2; yr <= locals.hyear + 6; yr++) { %>
 <li><a class="download" id="weekday-il-<%=yr%>" href="weekday-il-<%=yr%>.csv" rel="nofollow" download="weekday-il-<%=yr%>.csv">
-<% if (yr === hyear) { %><mark><% } -%>
+<% if (yr === locals.hyear) { %><mark><% } -%>
 Weekday <%=yr-%>
-<% if (yr === hyear) { %></mark><% } -%>
+<% if (yr === locals.hyear) { %></mark><% } -%>
 </a></li>
 <% } %>
 </ul>
 </div><!-- .col-md -->
 </div><!-- .row -->
 
-<script type="application/ld+json"><%- jsonForScript(jsonLD) %></script>
+<script type="application/ld+json"><%- locals.jsonForScript(locals.jsonLD) %></script>
 <%- await include('partials/footer.ejs') -%>

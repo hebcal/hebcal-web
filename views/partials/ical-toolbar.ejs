@@ -1,30 +1,30 @@
 <div class="btn-toolbar">
-<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-ical-<%=basename%>"
-title="Subscribe to <%=name%> for Apple iPhone, iPad, macOS"
-href="webcal://download.hebcal.com/ical/<%=basename%>.ics">
-<svg class="icon"><use href="<%=spriteHref%>#icon-appleinc"></use></svg> Apple</a>
-<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-gcal-<%=basename%>"
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-ical-<%=locals.basename%>"
+title="Subscribe to <%=locals.name%> for Apple iPhone, iPad, macOS"
+href="webcal://download.hebcal.com/ical/<%=locals.basename%>.ics">
+<svg class="icon"><use href="<%=locals.spriteHref%>#icon-appleinc"></use></svg> Apple</a>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-gcal-<%=locals.basename%>"
 target="_blank"
-title="Add <%=name%> to Google Calendar"
-href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F<%=basename%>.ics">
-<svg class="icon"><use href="<%=spriteHref%>#icon-google"></use></svg> Google</a>
-<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-olcom-<%=basename%>"
+title="Add <%=locals.name%> to Google Calendar"
+href="https://www.google.com/calendar/render?cid=http%3A%2F%2Fdownload.hebcal.com%2Fical%2F<%=locals.basename%>.ics">
+<svg class="icon"><use href="<%=locals.spriteHref%>#icon-google"></use></svg> Google</a>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-olcom-<%=locals.basename%>"
 target="_blank"
-title="Subscribe to <%=name%> in Outlook.com"
-href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/<%=basename%>.ics&amp;name=<%=encodeURIComponent(name)%>&amp;mkt=en-001">
-<svg class="icon"><use href="<%=spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
-<% if (typeof noCSV === 'undefined') { %>
-<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-csv-<%=basename%>"
-title="Download <%=name%> legacy Comma Separated Values format"
-href="https://download.hebcal.com/ical/<%=basename%>.csv" download="<%=basename%>.csv">
-<svg class="icon"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg> CSV</a>
+title="Subscribe to <%=locals.name%> in Outlook.com"
+href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/<%=locals.basename%>.ics&amp;name=<%=encodeURIComponent(locals.name)%>&amp;mkt=en-001">
+<svg class="icon"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
+<% if (typeof locals.noCSV === 'undefined') { %>
+<a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-csv-<%=locals.basename%>"
+title="Download <%=locals.name%> legacy Comma Separated Values format"
+href="https://download.hebcal.com/ical/<%=locals.basename%>.csv" download="<%=locals.basename%>.csv">
+<svg class="icon"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg> CSV</a>
 <% } %>
 </div><!-- .btn-toolbar -->
 <div class="input-group input-group-sm mb-3">
-<input type="text" class="form-control" id="grab-<%=basename%>"
-value="https://download.hebcal.com/ical/<%=basename%>.ics">
-<button id="grabBtn-<%=basename%>" class="btn btn-outline-primary grabBtn" data-clipboard-target="#grab-<%=basename%>">
-<svg class="icon"><use href="<%=spriteHref%>#clippy"></use></svg>
+<input type="text" class="form-control" id="grab-<%=locals.basename%>"
+value="https://download.hebcal.com/ical/<%=locals.basename%>.ics">
+<button id="grabBtn-<%=locals.basename%>" class="btn btn-outline-primary grabBtn" data-clipboard-target="#grab-<%=locals.basename%>">
+<svg class="icon"><use href="<%=locals.spriteHref%>#clippy"></use></svg>
 Copy
 </button>
 </div>

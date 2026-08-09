@@ -6,23 +6,23 @@
   "@type": "ListItem",
   "position": 1,
   "name": "Holidays",
-  "item": "https://www.hebcal.com/holidays/<%=il?'?i=on':''%>"
+  "item": "https://www.hebcal.com/holidays/<%=locals.il?'?i=on':''%>"
  },{
-<% if (year) { -%>
+<% if (locals.year) { -%>
   "@type": "ListItem",
   "position": 2,
-  "name": "<%=upcomingHebrewYear%>",
-  "item": "https://www.hebcal.com/holidays/<%=upcomingHebrewYear-3761%>-<%=upcomingHebrewYear-3760%><%=il?'?i=on':''%>"
+  "name": "<%=locals.upcomingHebrewYear%>",
+  "item": "https://www.hebcal.com/holidays/<%=locals.upcomingHebrewYear-3761%>-<%=locals.upcomingHebrewYear-3760%><%=locals.il?'?i=on':''%>"
  },{
   "@type": "ListItem",
   "position": 3,
-  "name": "<%-holiday%>",
-  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%>-<%=year%><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>"
+  "name": "<%-locals.holiday%>",
+  "item": "https://www.hebcal.com/holidays/<%=locals.holidayAnchor%>-<%=locals.year%><%= (locals.il && (locals.holiday === 'Shavuot' || locals.holiday === 'Pesach')) ? '?i=on' : '' %>"
 <% } else { -%>
   "@type": "ListItem",
   "position": 2,
-  "name": "<%-holiday%>",
-  "item": "https://www.hebcal.com/holidays/<%=holidayAnchor%><%= (il && (holiday === 'Shavuot' || holiday === 'Pesach')) ? '?i=on' : '' %>"
+  "name": "<%-locals.holiday%>",
+  "item": "https://www.hebcal.com/holidays/<%=locals.holidayAnchor%><%= (locals.il && (locals.holiday === 'Shavuot' || locals.holiday === 'Pesach')) ? '?i=on' : '' %>"
 <% } -%>
  }]
 }

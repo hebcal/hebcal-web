@@ -23,13 +23,13 @@ function htmlMenu(selected) {
   str += '</ul>';
   return str;
 }
-const logoImage = '<svg width="77" height="21"><use href="' + spriteHref + '#hebcal-logo"></use></svg>';
+const logoImage = '<svg width="77" height="21"><use href="' + locals.spriteHref + '#hebcal-logo"></use></svg>';
 const logoIdClassTitle = 'class="navbar-brand" id="logo" title="Hebcal Jewish Calendar"';
 // Without `let` this assignment lands on globalThis: the compiled template
 // body is not in strict mode, so an undeclared assignment creates a global
 // that is shared by every request the process serves.
 let logoHtml;
-if (rpath === '/') {
+if (locals.rpath === '/') {
     logoHtml = '<span ' + logoIdClassTitle + '>' + logoImage + '</span>';
 } else {
     logoHtml = '<a href="/" ' + logoIdClassTitle + '>' + logoImage + '</a>';
@@ -41,7 +41,7 @@ if (rpath === '/') {
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse d-print-none" id="navbarSupportedContent">
-    <%- htmlMenu(rpath) %>
+    <%- htmlMenu(locals.rpath) %>
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search" enterkeyhint="search">
     </form>

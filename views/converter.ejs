@@ -1,12 +1,12 @@
 <%- await include('partials/header.ejs', {
-  title: `Hebrew Date Converter - ${gdateStr}${gs?' after sunset':''} / ${hdateStr}`,
+  title: `Hebrew Date Converter - ${locals.gdateStr}${locals.gs?' after sunset':''} / ${locals.hdateStr}`,
   criticalCss: 'critical-converter.css',
 }) -%>
-<% if (gy <= 1752 || gy > currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
-<link rel="canonical" href="https://www.hebcal.com/converter?<%=canonical%>">
-<% if (typeof prev === 'object' && prev !== null) { %><link rel="prev" href="<%=prev.url%>"><% } %>
-<% if (typeof next === 'object' && next !== null) { %><link rel="next" href="<%=next.url%>"><% } %>
-<meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= first %> = <%= second %>">
+<% if (locals.gy <= 1752 || locals.gy > locals.currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
+<link rel="canonical" href="https://www.hebcal.com/converter?<%=locals.canonical%>">
+<% if (typeof locals.prev === 'object' && locals.prev !== null) { %><link rel="prev" href="<%=locals.prev.url%>"><% } %>
+<% if (typeof locals.next === 'object' && locals.next !== null) { %><link rel="next" href="<%=locals.next.url%>"><% } %>
+<meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= locals.first %> = <%= locals.second %>">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <style>
 #converter-results {
@@ -35,32 +35,32 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<% if (typeof message !== 'undefined') { -%>
+<% if (typeof locals.message !== 'undefined') { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  <%= message %>
+  <%= locals.message %>
 </div><!-- .alert -->
-<% } else if (gy <= 1178) { -%>
+<% } else if (locals.gy <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (gy <= 1752) { -%>
+<% } else if (locals.gy <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <div id="converter-results" class="mt-4">
 <ul class="list-unstyled">
-<li class="big-list"<% if (locale === 'he') { %> lang="he" dir="rtl"<% } %>><span class="text-nowrap"><%- first.replace(/ after sunset/, '</span> <span class="smaller text-nowrap text-burgundy">after sunset') %></span> = <strong class="text-nowrap"><%= second %></strong></li>
-<li id="jumbo-hebdate" dir="rtl" lang="he" class="big-list jumbo"><%= hebrew %></li>
+<li class="big-list"<% if (locals.locale === 'he') { %> lang="he" dir="rtl"<% } %>><span class="text-nowrap"><%- locals.first.replace(/ after sunset/, '</span> <span class="smaller text-nowrap text-burgundy">after sunset') %></span> = <strong class="text-nowrap"><%= locals.second %></strong></li>
+<li id="jumbo-hebdate" dir="rtl" lang="he" class="big-list jumbo"><%= locals.hebrew %></li>
 <%- await include('partials/converter-inner.ejs', {
-  items: dateItems.both, location: false}) -%>
+  items: locals.dateItems.both, location: false}) -%>
 <%- await include('partials/converter-inner.ejs', {
-  items: dateItems.diasporaOnly, location: 'the Diaspora'}) -%>
+  items: locals.dateItems.diasporaOnly, location: 'the Diaspora'}) -%>
 <%- await include('partials/converter-inner.ejs', {
-  items: dateItems.israelOnly, location: 'Israel'}) -%>
+  items: locals.dateItems.israelOnly, location: 'Israel'}) -%>
 </ul>
-<% if (hmStr.startsWith('Adar')) {
-const todayHebYear = todayHd.getFullYear();
-const isPast = hy < todayHebYear;
+<% if (locals.hmStr.startsWith('Adar')) {
+const todayHebYear = locals.todayHd.getFullYear();
+const isPast = locals.hy < todayHebYear;
 -%>
-<p class="small text-body-secondary">Hebrew year <strong><%= hy %></strong> <%= isPast ? 'was' : 'is' %> <%= hleap ? '' : 'not ' %> a leap year (note month: <strong><%= hmStr %></strong>)</p>
+<p class="small text-body-secondary">Hebrew year <strong><%= locals.hy %></strong> <%= isPast ? 'was' : 'is' %> <%= locals.hleap ? '' : 'not ' %> a leap year (note month: <strong><%= locals.hmStr %></strong>)</p>
 <% } -%>
 </div><!-- #converter-results -->
 </div><!-- .col -->
@@ -72,14 +72,14 @@ const isPast = hy < todayHebYear;
 </div>
 </div><!-- .d-flex -->
 <div class="overflow-auto">
-<% if (typeof prev === 'object' && prev !== null) { -%>
+<% if (typeof locals.prev === 'object' && locals.prev !== null) { -%>
 <div class="float-start d-print-none me-2">
-<a class="btn btn-xs btn-outline-secondary" href="<%=prev.url%>" title="previous date"><span aria-hidden="true">←</span> <%=prev.title%></a>
+<a class="btn btn-xs btn-outline-secondary" href="<%=locals.prev.url%>" title="previous date"><span aria-hidden="true">←</span> <%=locals.prev.title%></a>
 </div>
 <% } -%>
-<% if (typeof next === 'object' && next !== null) { -%>
+<% if (typeof locals.next === 'object' && locals.next !== null) { -%>
 <div class="float-end d-print-none ms-2">
-<a class="btn btn-xs btn-outline-secondary" href="<%=next.url%>" title="next date"><%=next.title%> <span aria-hidden="true">→</span></a>
+<a class="btn btn-xs btn-outline-secondary" href="<%=locals.next.url%>" title="next date"><%=locals.next.title%> <span aria-hidden="true">→</span></a>
 </div>
 <% } -%>
 <div id="ctoday" class="d-flex justify-content-center d-print-none">
@@ -91,40 +91,40 @@ const isPast = hy < todayHebYear;
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top" data-range-validate>
 <h5>Convert from Gregorian to Hebrew</h5>
 <div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="gd" placeholder="day" value="<%= gd %>" size="2" maxlength="2" min="1" max="31" id="gd" pattern="\d*" title="Enter a day of the month between 1 and 31" autocomplete="off">
+<input type="text" inputmode="numeric" class="form-control" required name="gd" placeholder="day" value="<%= locals.gd %>" size="2" maxlength="2" min="1" max="31" id="gd" pattern="\d*" title="Enter a day of the month between 1 and 31" autocomplete="off">
 <label for="gd">Day</label>
 </div><!-- .col -->
 <div class="form-floating col-auto mb-2">
 <select name="gm" id="gm" class="form-select">
- <option <%= gm === 1 ? 'selected' : '' %> value="1">01-Jan</option>
- <option <%= gm === 2 ? 'selected' : '' %> value="2">02-Feb</option>
- <option <%= gm === 3 ? 'selected' : '' %> value="3">03-Mar</option>
- <option <%= gm === 4 ? 'selected' : '' %> value="4">04-Apr</option>
- <option <%= gm === 5 ? 'selected' : '' %> value="5">05-May</option>
- <option <%= gm === 6 ? 'selected' : '' %> value="6">06-Jun</option>
- <option <%= gm === 7 ? 'selected' : '' %> value="7">07-Jul</option>
- <option <%= gm === 8 ? 'selected' : '' %> value="8">08-Aug</option>
- <option <%= gm === 9 ? 'selected' : '' %> value="9">09-Sep</option>
- <option <%= gm === 10 ? 'selected' : '' %> value="10">10-Oct</option>
- <option <%= gm === 11 ? 'selected' : '' %> value="11">11-Nov</option>
- <option <%= gm === 12 ? 'selected' : '' %> value="12">12-Dec</option>
+ <option <%= locals.gm === 1 ? 'selected' : '' %> value="1">01-Jan</option>
+ <option <%= locals.gm === 2 ? 'selected' : '' %> value="2">02-Feb</option>
+ <option <%= locals.gm === 3 ? 'selected' : '' %> value="3">03-Mar</option>
+ <option <%= locals.gm === 4 ? 'selected' : '' %> value="4">04-Apr</option>
+ <option <%= locals.gm === 5 ? 'selected' : '' %> value="5">05-May</option>
+ <option <%= locals.gm === 6 ? 'selected' : '' %> value="6">06-Jun</option>
+ <option <%= locals.gm === 7 ? 'selected' : '' %> value="7">07-Jul</option>
+ <option <%= locals.gm === 8 ? 'selected' : '' %> value="8">08-Aug</option>
+ <option <%= locals.gm === 9 ? 'selected' : '' %> value="9">09-Sep</option>
+ <option <%= locals.gm === 10 ? 'selected' : '' %> value="10">10-Oct</option>
+ <option <%= locals.gm === 11 ? 'selected' : '' %> value="11">11-Nov</option>
+ <option <%= locals.gm === 12 ? 'selected' : '' %> value="12">12-Dec</option>
 </select>
 <label for="gm">Month</label>
 </div><!-- .col -->
 <div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="gy" placeholder="year" value="<%= gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*" title="Enter a year; use a leading minus sign for years BCE" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<input type="text" inputmode="numeric" class="form-control" required name="gy" placeholder="year" value="<%= locals.gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*" title="Enter a year; use a leading minus sign for years BCE" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label for="gy">Year</label>
 </div><!-- .col -->
 <div class="col-auto mb-2">
 <div class="form-check">
-  <input class="form-check-input" type="checkbox" name="gs" value="on" <%= gs ? ' checked' : '' %> id="gs">
+  <input class="form-check-input" type="checkbox" name="gs" value="on" <%= locals.gs ? ' checked' : '' %> id="gs">
   <label class="form-check-label" for="gs">After sunset</label>
 </div><!-- .form-check -->
 </div><!-- .col -->
-<% if (il) {%><input type="hidden" name="i" value="on"><%}%>
+<% if (locals.il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col-auto mb-3">
 <button type="submit" name="g2h" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#gi-refresh"></use></svg>
   Convert to Hebrew
 </button>
 </div><!-- .col -->
@@ -135,16 +135,16 @@ const isPast = hy < todayHebYear;
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top" data-range-validate>
 <h5>Convert from Hebrew to Gregorian</h5>
 <%- await include('partials/hebdate-picker.ejs', {
-  hd: hd,
-  hm: hm,
-  hy: hy,
-  hleap: hleap,
+  hd: locals.hd,
+  hm: locals.hm,
+  hy: locals.hy,
+  hleap: locals.hleap,
   suffix: '',
 }) -%>
-<% if (il) {%><input type="hidden" name="i" value="on"><%}%>
+<% if (locals.il) {%><input type="hidden" name="i" value="on"><%}%>
 <div class="col mb-3">
 <button type="submit" name="h2g" value="1" class="btn btn-primary text-nowrap">
-  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#gi-refresh"></use></svg>
   Convert to Gregorian
 </button>
 </div><!-- .col -->
@@ -158,7 +158,7 @@ const isPast = hy < todayHebYear;
 <h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
-<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=locals.nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
 style="display:block; text-align:center;"
@@ -166,7 +166,7 @@ data-ad-layout="in-article"
 data-ad-format="fluid"
 data-ad-client="ca-pub-7687563417622459"
 data-ad-slot="5342180883"></ins>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-print-none -->
@@ -182,46 +182,46 @@ represented using letters of the Hebrew <em>alef-bet</em> (alphabet).</p>
 </div><!-- .row -->
 <div class="row d-print-none mt-3">
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=locals.spriteHref%>#gi-user-parents"></use></svg>
  Yahrzeit + Anniversary Calendar</h5>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
 Hebrew Birthdays and Anniversaries for 20+ years.
 Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col -->
-<% if (gy > 1752 && gy < currentYear + 1000) { -%>
+<% if (locals.gy > 1752 && locals.gy < locals.currentYear + 1000) { -%>
 <div class="col-sm-6 mb-3">
-<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
+<h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
  Jewish Holidays</h5>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.</p>
-<div><a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>">
-  <svg class="icon"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
-  <%=hy%> Calendar &raquo;</a></div>
+<div><a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/holidays/<%=locals.hy-3761%>-<%=locals.hy-3760%><%=locals.il?'?i=on':''%>">
+  <svg class="icon"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
+  <%=locals.hy%> Calendar &raquo;</a></div>
 </div><!-- .col -->
 <% } -%>
 </div><!-- .row -->
-<% if (typeof futureYearsHeb === 'object' && futureYearsHeb.length > 0 &&
- hd === 30 && (hm === 8 || hm === 9 || (hleap && hm === 12))) { %>
+<% if (typeof locals.futureYearsHeb === 'object' && locals.futureYearsHeb.length > 0 &&
+ locals.hd === 30 && (locals.hm === 8 || locals.hm === 9 || (locals.hleap && locals.hm === 12))) { %>
 <div class="row">
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Attention!</strong>
-The table of dates below for <strong><%= hdate.render(locale, false) %></strong> uses a simple
+The table of dates below for <strong><%= locals.hdate.render(locals.locale, false) %></strong> uses a simple
 Hebrew date conversion and does not follow the more complicated rules for Yahrzeit anniversaries.
-<br><a href="/yahrzeit?y1=<%=gy%>&amp;m1=<%=gm%>&amp;d1=<%=gd%>&amp;s1=<%=gs?'on':'off'%>">Calculate Yahrzeit dates &raquo;</a>
+<br><a href="/yahrzeit?y1=<%=locals.gy%>&amp;m1=<%=locals.gm%>&amp;d1=<%=locals.gd%>&amp;s1=<%=locals.gs?'on':'off'%>">Calculate Yahrzeit dates &raquo;</a>
 </div><!-- .alert -->
 </div>
 <% } %>
-<% if (typeof message === 'undefined') { -%>
+<% if (typeof locals.message === 'undefined') { -%>
 <div id="future" class="row">
-<% if (typeof futureYearsHeb === 'object' && futureYearsHeb.length > 0) { -%>
+<% if (typeof locals.futureYearsHeb === 'object' && locals.futureYearsHeb.length > 0) { -%>
 <div class="col-md-6" id="future-heb">
 <div class="row">
- <div class="col-auto"><h4><%= hdate.render(locale, false) %></h4></div>
-<% if (gy > 1752 && gy < currentYear + 1000) { -%>
+ <div class="col-auto"><h4><%= locals.hdate.render(locals.locale, false) %></h4></div>
+<% if (locals.gy > 1752 && locals.gy < locals.currentYear + 1000) { -%>
  <div class="col-auto"><a
-  class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=h2gURL(hdate, false).url.replace('/converter', '/converter/csv')%>">
-  <svg class="icon" fill="currentColor"><use href="<%=spriteHref%>#noun_CSV_1658749"></use></svg>
+  class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=locals.h2gURL(locals.hdate, false).url.replace('/converter', '/converter/csv')%>">
+  <svg class="icon" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg>
   Download CSV</a>
  </div>
 <% } -%>
@@ -229,21 +229,21 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
-<% futureYearsHeb.forEach((item) => { -%>
-<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString().replaceAll("'", '’') %></a></td></tr>
+<% locals.futureYearsHeb.forEach((item) => { -%>
+<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=locals.h2gURL(item.hd, locals.il).url%>"><%= item.hd.toString().replaceAll("'", '’') %></a></td></tr>
 <% }); -%>
 </tbody>
 </table>
 </div><!-- .col -->
 <% } -%>
-<% if (futureYearsGreg.length > 0) { -%>
+<% if (locals.futureYearsGreg.length > 0) { -%>
 <div class="col-md-6" id="future-greg">
-<h4><%= d.format('D MMMM') %></h4>
+<h4><%= locals.d.format('D MMMM') %></h4>
 <table class="table table-condensed table-striped">
 <colgroup><col style="width:154px"><col></colgroup>
 <tbody>
-<% futureYearsGreg.forEach((item) => { -%>
-<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=h2gURL(item.hd, il).url%>"><%= item.hd.toString().replaceAll("'", '’') %></a></td></tr>
+<% locals.futureYearsGreg.forEach((item) => { -%>
+<tr><td><time datetime="<%= item.isoDate %>"><%= item.d.format('ddd, D MMM') %> <%= item.d.year() < 1 ? '' + -(item.d.year() - 1) + ' B.C.E.' : String(item.d.year()).padStart(4, '0') %></time></td><td><a href="<%=locals.h2gURL(item.hd, locals.il).url%>"><%= item.hd.toString().replaceAll("'", '’') %></a></td></tr>
 <% }); -%>
 </tbody>
 </table>
@@ -251,15 +251,15 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% } -%>
 </div><!-- .row -->
 <% } %>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const d = document;
   const switchEl = d.querySelector("#nikud-checkbox");
   const hebdateEl = d.querySelector("#jumbo-hebdate");
   switchEl.addEventListener('change', function(event) {
-    hebdateEl.innerHTML = event.target.checked ? '<%= hebrew %>' : '<%= hebrewNoNikkud %>';
+    hebdateEl.innerHTML = event.target.checked ? '<%= locals.hebrew %>' : '<%= locals.hebrewNoNikkud %>';
   });
-  const gy=<%=gy%>, gm=<%=gm%>, gd=<%=gd%>;
+  const gy=<%=locals.gy%>, gm=<%=locals.gm%>, gd=<%=locals.gd%>;
   const dt = new Date();
   if (dt.getFullYear() !== gy || dt.getMonth()+1 !== gm || dt.getDate() !== gd) {
     const el = d.querySelector("#ctoday");

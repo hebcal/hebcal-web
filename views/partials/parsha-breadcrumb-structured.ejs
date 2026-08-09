@@ -6,28 +6,28 @@
   "@type": "ListItem",
   "position": 1,
   "name": "Torah",
-  "item": "https://www.hebcal.com/sedrot/<%=iSuffix%>#all"
+  "item": "https://www.hebcal.com/sedrot/<%=locals.iSuffix%>#all"
  },{
   "@type": "ListItem",
   "position": 2,
-  "name": "<%=parsha.bookName%>",
-  "item": "https://www.hebcal.com/sedrot/<%=iSuffix%>#<%=parsha.bookName%>"
+  "name": "<%=locals.parsha.bookName%>",
+  "item": "https://www.hebcal.com/sedrot/<%=locals.iSuffix%>#<%=locals.parsha.bookName%>"
  },{
-<% if (date) { -%>
+<% if (locals.date) { -%>
   "@type": "ListItem",
   "position": 3,
-  "name": "<%=parsha.name%>",
-  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%><%=iSuffix%>"
+  "name": "<%=locals.parsha.name%>",
+  "item": "https://www.hebcal.com/sedrot/<%=locals.parsha.anchor%><%=locals.iSuffix%>"
  },{
   "@type": "ListItem",
   "position": 4,
-  "name": "<%=hd.getFullYear()%>",
-  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%>-<%=date%><%=iSuffix%>"
+  "name": "<%=locals.hd.getFullYear()%>",
+  "item": "https://www.hebcal.com/sedrot/<%=locals.parsha.anchor%>-<%=locals.date%><%=locals.iSuffix%>"
 <% } else { -%>
   "@type": "ListItem",
   "position": 3,
-  "name": "<%=parsha.name%>",
-  "item": "https://www.hebcal.com/sedrot/<%=parsha.anchor%><%=iSuffix%>"
+  "name": "<%=locals.parsha.name%>",
+  "item": "https://www.hebcal.com/sedrot/<%=locals.parsha.anchor%><%=locals.iSuffix%>"
 <% } -%>
  }]
 }

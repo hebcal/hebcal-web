@@ -2,13 +2,13 @@
 <div class="d-none d-sm-block">
 <nav>
 <ol class="breadcrumb">
-  <li class="breadcrumb-item"><a href="/sedrot/<%=iSuffix%>#all">Torah Readings</a></li>
-  <li class="breadcrumb-item"><a href="/sedrot/<%=iSuffix%>#<%=parsha.bookName%>"><%=parsha.bookName%></a></li>
-<% if (date) { %>
-  <li class="breadcrumb-item"><a href="<%=parsha.anchor%><%=iSuffix%>"><%=parshaName%></a></li>
-  <li class="breadcrumb-item active"><%=hd.getFullYear()%></li>
+  <li class="breadcrumb-item"><a href="/sedrot/<%=locals.iSuffix%>#all">Torah Readings</a></li>
+  <li class="breadcrumb-item"><a href="/sedrot/<%=locals.iSuffix%>#<%=locals.parsha.bookName%>"><%=locals.parsha.bookName%></a></li>
+<% if (locals.date) { %>
+  <li class="breadcrumb-item"><a href="<%=locals.parsha.anchor%><%=locals.iSuffix%>"><%=locals.parshaName%></a></li>
+  <li class="breadcrumb-item active"><%=locals.hd.getFullYear()%></li>
 <% } else { %>
-  <li class="breadcrumb-item active"><%=parshaName%></li>
+  <li class="breadcrumb-item active"><%=locals.parshaName%></li>
 <% } %>
 </ol>
 </nav>

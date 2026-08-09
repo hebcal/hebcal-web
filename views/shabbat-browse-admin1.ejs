@@ -1,5 +1,5 @@
 <%- await include('partials/header.ejs') -%>
-<link rel="canonical" href="https://www.hebcal.com<%=rpath%>">
+<link rel="canonical" href="https://www.hebcal.com<%=locals.rpath%>">
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -7,9 +7,9 @@
 <div class="row"><div class="col"><%- await include('partials/shabbat-browse-breadcrumb.ejs') %></div></div>
 <div class="row mt-3">
 <div class="col">
-<h2><%=countryName%> <%=flag%><br><span class="h3 small text-body-secondary">Shabbat Candle-lighting Times</span></h2>
+<h2><%=locals.countryName%> <%=locals.flag%><br><span class="h3 small text-body-secondary">Shabbat Candle-lighting Times</span></h2>
 <ul class="list-unstyled lh-lg">
-<% for (const a1 of admin1) { -%>
+<% for (const a1 of locals.admin1) { -%>
 <li><a href="<%=a1.href%>"><%=a1.name%></a></li>
 <% } -%>
 </ul>

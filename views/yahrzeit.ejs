@@ -3,7 +3,7 @@
 }) -%>
 <meta name="description" content="Generate a list of Yahrzeit memorial anniversary and Yizkor dates, annual email reminders, mutli-year calendar downloads">
 <meta name="keywords" content="yahzeit,yahrzeit,yohrzeit,yohrtzeit,yartzeit,yarzeit,yortzeit,yorzeit,yizkor,yiskor,kaddish">
-<link rel="canonical" href="https://www.hebcal.com<%= rpath === '/yahrzeit/' ? '/yahrzeit' : rpath %>">
+<link rel="canonical" href="https://www.hebcal.com<%= locals.rpath === '/yahrzeit/' ? '/yahrzeit' : locals.rpath %>">
 <style>
 div.yahrzeit-row {
   border-bottom:1px solid #dddddd;
@@ -19,38 +19,38 @@ div.yahrzeit-row {
 <div class="container">
 <div class="row">
 <div class="col">
-<% if (typeof q.ref_url === 'string') { -%>
-<% let ref_text = q.ref_text || q.ref_url; -%>
+<% if (typeof locals.q.ref_url === 'string') { -%>
+<% let ref_text = locals.q.ref_text || locals.q.ref_url; -%>
 <p class="lead">Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>
-<p>When you finish here, you can return to <a href="<%= q.ref_url %>"><%= ref_text %></a>.</p>
+<p>When you finish here, you can return to <a href="<%= locals.q.ref_url %>"><%= ref_text %></a>.</p>
 <% } -%>
-<% if (tables !== null) { %>
+<% if (locals.tables !== null) { %>
 <div class="btn-toolbar d-print-none mt-2">
-<% if (showDownload) { %>
+<% if (locals.showDownload) { %>
 <div class="me-2 mb-2">
   <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <% if (!q.em) { -%>
-    <svg class="icon"><use href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+  <% if (!locals.q.em) { -%>
+    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
   <% } else { -%>
-    <svg class="icon"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
   <% } -%>
   </a>
 </div>
 <div class="me-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
 <% } -%>
 <div class="me-2 mb-2">
-<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
+<a role="button" class="btn btn-secondary mb-2" href="#form"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg> Edit</a>
 </div>
 </div><!-- .btn-toolbar -->
-<% if (typesSet.has('Yahrzeit')) { %>
+<% if (locals.typesSet.has('Yahrzeit')) { %>
 <p>Yahrzeit candles should be lit the evening before the date specified.
 This is because the Jewish day actually begins at sundown on the previous night.</p>
 <% } else { %>
 <p>Anniversaries begin at sundown on the evening before the date specified.</p>
 <% } %>
-<% if (adarInfo) { %>
+<% if (locals.adarInfo) { %>
 <div class="alert alert-info alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Note:</strong> one or more anniversaries occur in the
@@ -59,28 +59,28 @@ Hebrew month of <strong>Adar</strong>.
 how Hebcal calculates Hebrew anniversaries occurring in Adar</a>.
 </div><!-- .alert -->
 <% } %>
-<% if (futureDate) { -%>
+<% if (locals.futureDate) { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
-The date entered for <strong><%=futureDate.name%></strong> is
-<time datetime="<%=futureDate.day.format('YYYY-MM-DD')%>"><%=futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
+The date entered for <strong><%=locals.futureDate.name%></strong> is
+<time datetime="<%=locals.futureDate.day.format('YYYY-MM-DD')%>"><%=locals.futureDate.day.format('ddd, D MMM YYYY')%></time>, which is in the future.
 <br>Please double-check the date to ensure you have entered it correctly.
 <br><a class="small" href="#form">Edit names and dates</a>
 </div><!-- .alert -->
 <% } -%>
-<% if (distantPastDate) { -%>
+<% if (locals.distantPastDate) { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Warning!</strong>
-The date entered for <strong><%=distantPastDate.name%></strong> is
-<time datetime="<%=distantPastDate.day.format('YYYY-MM-DD')%>"><%=distantPastDate.day.format('ddd, D MMM YYYY')%></time>, which is in the distant past.
+The date entered for <strong><%=locals.distantPastDate.name%></strong> is
+<time datetime="<%=locals.distantPastDate.day.format('YYYY-MM-DD')%>"><%=locals.distantPastDate.day.format('ddd, D MMM YYYY')%></time>, which is in the distant past.
 <br>Please double-check the date to ensure you have entered it correctly.
 <br>Be sure to use 4-digit years (e.g. 2015 instead of 15).
 <br><a class="small" href="#form">Edit names and dates</a>
 </div><!-- .alert -->
 <% } -%>
-<% tables.forEach((items, heading) => { -%>
+<% locals.tables.forEach((items, heading) => { -%>
 <% if (heading) { %><h5><%= heading %></h5><% } %>
 <table class="table table-condensed table-striped">
 <col style="width:174px"><col>
@@ -92,27 +92,27 @@ The date entered for <strong><%=distantPastDate.name%></strong> is
 </table>
 <% }); -%>
 <% } %>
-<% if (tables !== null && showDownload) { %>
+<% if (locals.tables !== null && locals.showDownload) { %>
 <div class="btn-toolbar d-print-none mt-3 mb-4">
 <div class="me-2 mb-2">
 <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <% if (!q.em) { -%>
-    <svg class="icon"><use href="<%=spriteHref%>#bi-floppy2-fill"></use></svg> Save
+  <% if (!locals.q.em) { -%>
+    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
   <% } else { -%>
-    <svg class="icon"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
+    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
   <% } -%>
 </a>
 </div>
 <div class="me-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
-  <svg class="icon"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg>
+  <svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
   Download</a>
 </div>
 </div><!-- .btn-toolbar -->
 <% } %>
 <div class="d-print-none mt-2">
 <div class="float-start">
-  <svg width="64" height="64" class="me-3 mb-2"><use href="<%=cspriteHref%>#couple"></use></svg>
+  <svg width="64" height="64" class="me-3 mb-2"><use href="<%=locals.cspriteHref%>#couple"></use></svg>
 </div>
 <p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 and Hebrew Anniversaries.</p>
@@ -131,18 +131,18 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 <div class="tab-content">
 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
 <p class="mt-3 d-print-none">In the form below, enter the date of death (or birth or anniversary).
-Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-person-plus-fill"></use></svg>
 Add another name</span> button at the bottom of the page to add
 additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit"
-data-count="<%=count%>">
+data-count="<%=locals.count%>">
 <div id="rows">
-<% for (let num = 1; num <= count; num++) { -%>
-<% if (typeof q['t'+num] === 'string') { -%>
+<% for (let num = 1; num <= locals.count; num++) { -%>
+<% if (typeof locals.q['t'+num] === 'string') { -%>
 <%- await include('partials/yahrzeit-row.ejs', {num}) -%>
 <% } -%>
 <% } %>
-<% if (count === 1 && typeof q.t1 !== 'string') { -%>
+<% if (locals.count === 1 && typeof locals.q.t1 !== 'string') { -%>
 <%# empty form %>
 <%- await include('partials/yahrzeit-row.ejs', {num: 1}) -%>
 <% } -%>
@@ -154,43 +154,43 @@ data-count="<%=count%>">
 <div class="clearfix">
 <p class="text-end float-sm-end">
  <button type="button" class="btn btn-success mt-2" id="newrow">
-  <svg class="icon align-top"><use href="<%=spriteHref%>#bi-person-plus-fill"></use></svg>
+  <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-person-plus-fill"></use></svg>
   Add another name</button>
 </p>
 <div class="form-check mt-3 mb-2">
-<input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= q.hebdate === 'on' ? ' checked' : '' %> id="hebdate">
+<input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= locals.q.hebdate === 'on' ? ' checked' : '' %> id="hebdate">
 <label class="form-check-label" for="hebdate">Include Hebrew dates</label>
-&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1’s Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+&nbsp;<span title="Appends Hebrew date to end of event title, e.g. &quot;Person1’s Yahrzeit (15th of Cheshvan)&quot;" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-info-circle-fill"></use></svg></span>
 </div>
 <div class="form-check mb-2">
-<input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= q.yizkor === 'on' ? ' checked' : '' %> id="yizkor" >
+<input class="form-check-input" type="checkbox" name="yizkor" value="on" <%= locals.q.yizkor === 'on' ? ' checked' : '' %> id="yizkor" >
 <label class="form-check-label" for="yizkor">Include Yizkor dates</label>
 </div>
 <div class="ms-3 mt-1">
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i0" <%= q.i !== 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="off">
+    <input class="form-check-input" type="radio" name="i" id="i0" <%= locals.q.i !== 'on' ? 'checked' : '' %> <%= locals.q.yizkor !== 'on' ? ' disabled' : '' %> value="off">
     <label class="form-check-label" for="i0">Diaspora Yizkor schedule</label>
-    &nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+    &nbsp;<span title="Pesach 8th day, Shavuot 2nd day, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
   <div class="form-check mb-1">
-    <input class="form-check-input" type="radio" name="i" id="i1" <%= q.i === 'on' ? 'checked' : '' %> <%= q.yizkor !== 'on' ? ' disabled' : '' %> value="on">
+    <input class="form-check-input" type="radio" name="i" id="i1" <%= locals.q.i === 'on' ? 'checked' : '' %> <%= locals.q.yizkor !== 'on' ? ' disabled' : '' %> value="on">
     <label class="form-check-label" for="i1">Israel Yizkor schedule</label>
-    &nbsp;<span title="Pesach 7th day, Shavuot, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bi-info-circle-fill"></use></svg></span>
+    &nbsp;<span title="Pesach 7th day, Shavuot, Yom Kippur and Shmini Atzeret" data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-info-circle-fill"></use></svg></span>
   </div>
 </div>
 <div class="row gx-2 mb-3 align-items-center">
   <label class="col-auto col-form-label" for="years">Number of years:</label>
   <div class="col-auto">
-    <input type="text" inputmode="numeric" name="years" value="<%= q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*" title="Enter a number between 1 and 99" autocomplete="off">
+    <input type="text" inputmode="numeric" name="years" value="<%= locals.q.years %>" size="2" maxlength="2" class="form-control" id="years" max="99" min="1" pattern="\d*" title="Enter a number between 1 and 99" autocomplete="off">
   </div>
 </div>
 </div><!-- .clearfix -->
 <input type="hidden" name="v" value="yahrzeit">
-<input type="hidden" name="ulid" value="<%=ulid%>">
-<input type="hidden" name="seq" value="<%=seq%>">
-<input type="hidden" name="em" value="<%=q.em || ''%>">
-<input type="hidden" name="tzo" id="tzo" value="<%=q.tzo || ''%>">
-<button type="submit" class="btn btn-primary"><%=isEditPage?'Update':'Create'%> Calendar</button>
+<input type="hidden" name="ulid" value="<%=locals.ulid%>">
+<input type="hidden" name="seq" value="<%=locals.seq%>">
+<input type="hidden" name="em" value="<%=locals.q.em || ''%>">
+<input type="hidden" name="tzo" id="tzo" value="<%=locals.q.tzo || ''%>">
+<button type="submit" class="btn btn-primary"><%=locals.isEditPage?'Update':'Create'%> Calendar</button>
 </form>
 </div><!-- #home -->
 <div class="tab-pane" id="import-csv" role="tabpanel" aria-labelledby="import-csv-tab" tabindex="0">
@@ -213,7 +213,7 @@ data-count="<%=count%>">
   Error: 0 records imported. Please check the CSV file format and try again.
 </div><!-- .alert -->
 <div id="success-alert" class="alert alert-success" role="alert" hidden>
-  <svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+  <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
   Successfully imported <span id="success-numrecords">?</span> records from <span id="success-filename">?</span>.
   <br>Please review the imported data.
   <br>Click the <strong>Form</strong> tab above to continue.
@@ -246,21 +246,21 @@ and then come back to this page.</p>
 instructions</a>.</p>
 </div><!-- .row -->
 
-<% if (tables !== null && showDownload) { -%>
+<% if (locals.tables !== null && locals.showDownload) { -%>
 <%- await include('partials/download-modal.ejs') -%>
 <div class="modal fade" id="email-modal" tabindex="-1" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
 <form id="f2" class="needs-validation" novalidate
  data-resource="/yahrzeit/email"
- data-action="<%= q.em ? 'yahrzeit-reminder' : 'yahrzeit-save' %>"
- data-email-subscribe-label="<%= q.em ? 'Subscribe' : 'Save' %>">
+ data-action="<%= locals.q.em ? 'yahrzeit-reminder' : 'yahrzeit-save' %>"
+ data-email-subscribe-label="<%= locals.q.em ? 'Subscribe' : 'Save' %>">
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="cfg" value="json">
-<input type="hidden" name="type" value="<%=anniversaryType%>">
-<input type="hidden" name="ulid" value="<%=ulid%>">
+<input type="hidden" name="type" value="<%=locals.anniversaryType%>">
+<input type="hidden" name="ulid" value="<%=locals.ulid%>">
 <div class="modal-header">
-<h5 class="modal-title"><%= q.em ? "Email reminders" : "Save personal calendar" %></h5>
+<h5 class="modal-title"><%= locals.q.em ? "Email reminders" : "Save personal calendar" %></h5>
 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
@@ -276,10 +276,10 @@ instructions</a>.</p>
   for this personal calendar are already active. No further action is required.
 </div><!-- .alert -->
 <div id="email-modal-entry">
-  <p><% if (!q.em) { %>Enter your email address to save your personal calendar.<% } %>
+  <p><% if (!locals.q.em) { %>Enter your email address to save your personal calendar.<% } %>
     Receive annual reminder emails one week before and one day before each anniversary.</p>
   <div class="form-floating mb-3">
-    <input class="form-control" type="email" name="em" id="em" value="<%=q.em || ''%>" placeholder="user@example.com" required>
+    <input class="form-control" type="email" name="em" id="em" value="<%=locals.q.em || ''%>" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
   </div>
@@ -290,7 +290,7 @@ instructions</a>.</p>
 </div><!-- .modal-body -->
 <div class="modal-footer">
   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-  <button type="button" class="btn btn-primary" id="email-subscribe"><%= q.em ? 'Subscribe' : 'Save' %></button>
+  <button type="button" class="btn btn-primary" id="email-subscribe"><%= locals.q.em ? 'Subscribe' : 'Save' %></button>
 </div>
 </form>
 </div><!-- .modal-content -->
@@ -299,7 +299,7 @@ instructions</a>.</p>
 <%- await include('partials/email-modal-script.ejs') -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
-<script nonce="<%=nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>
+<script nonce="<%=locals.nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>
 <%- await include('partials/footer.ejs', {
-  footerScripts: {tooltip: true, clipboard: tables !== null && showDownload},
+  footerScripts: {tooltip: true, clipboard: locals.tables !== null && locals.showDownload},
 }) _%>

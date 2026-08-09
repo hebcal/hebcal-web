@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title><%= title %></title>
+<title><%= locals.title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style><%- await include('partials/pre-unsub.css') %></style>
 </head>
@@ -15,15 +15,15 @@
   <p class="card-text">Enter your email address below if you wish to stop
     receiving weekly Shabbat candle-lighting times.</p>
 <div id="email-form">
-<form action="<%= rpath %>" method="post">
+<form action="<%= locals.rpath %>" method="post">
 <input type="hidden" name="v" value="1">
-<% if (q.status === 'active') { -%>
-<%   if (q.em) { %><input type="hidden" name="prev" value="<%= q.em %>"><% } -%>
-<%   if (q.k) { %><input type="hidden" name="k" value="<%= q.k %>"><% } -%>
+<% if (locals.q.status === 'active') { -%>
+<%   if (locals.q.em) { %><input type="hidden" name="prev" value="<%= locals.q.em %>"><% } -%>
+<%   if (locals.q.k) { %><input type="hidden" name="k" value="<%= locals.q.k %>"><% } -%>
 <% } -%>
 <div class="mt-4 mb-3">
 <label class="form-label" for="em">Email address</label>
-<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= locals.q.em || '' %>" required>
 </div>
 <button type="submit" class="btn btn-primary" name="unsubscribe" value="1">Unsubscribe</button>
 </form>
@@ -33,7 +33,7 @@
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- .container -->
-<script nonce="<%=nonce%>"><%- await include('partials/analytics.js') %></script>
+<script nonce="<%=locals.nonce%>"><%- await include('partials/analytics.js') %></script>
 </body>
 </html>
-<!-- <%= hostname %> <%= new Date().toISOString() %> -->
+<!-- <%= locals.hostname %> <%= new Date().toISOString() %> -->

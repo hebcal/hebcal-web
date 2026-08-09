@@ -1,12 +1,12 @@
 <%- await include('partials/header.ejs', {
   criticalCss: 'critical-holiday-detail.css',
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/holidays/<%= holidayAnchor %><%= year ? '-' + year : '' %><%= (il && isShaloshRegalim) ? '?i=on' : '' %>">
-<% if (noindex) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<% if (typeof prev !== 'undefined') { %><link rel="prev" href="<%=prev.href%>"><% } %>
-<% if (typeof next !== 'undefined') { %><link rel="next" href="<%=next.href%>"><% } %>
-<meta name="description" content="<%=descFirstTwo%> <%=holidayQ%> <%=nextObserved%>">
-<meta name="keywords" content="<%=translations.join(',')%>">
+<link rel="canonical" href="https://www.hebcal.com/holidays/<%= locals.holidayAnchor %><%= locals.year ? '-' + locals.year : '' %><%= (locals.il && locals.isShaloshRegalim) ? '?i=on' : '' %>">
+<% if (locals.noindex) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (typeof locals.prev !== 'undefined') { %><link rel="prev" href="<%=locals.prev.href%>"><% } %>
+<% if (typeof locals.next !== 'undefined') { %><link rel="next" href="<%=locals.next.href%>"><% } %>
+<meta name="description" content="<%=locals.descFirstTwo%> <%=locals.holidayQ%> <%=locals.nextObserved%>">
+<meta name="keywords" content="<%=locals.translations.join(',')%>">
 <style>
 .past {color: var(--bs-secondary-color) !important}
 </style>
@@ -19,48 +19,48 @@
 <div class="col-md-10">
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 
-<h2><%=holidayQ%> <%=year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=hebrew%> <% if (year) { %><%=upcomingHebrewYear%><% } %></span></h2>
-<% if (year && year <= 1178) { -%>
+<h2><%=locals.holidayQ%> <%=locals.year||''%> / <span lang="he" dir="rtl" class="text-nowrap"><%=locals.hebrew%> <% if (locals.year) { %><%=locals.upcomingHebrewYear%><% } %></span></h2>
+<% if (locals.year && locals.year <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (year && year <= 1752) { -%>
+<% } else if (locals.year && locals.year <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h4 class="text-body-secondary"><%=descrShort%>&nbsp;<%=emoji%></h4>
-<p class="lead mt-3"><%=holidayQ%> for Hebrew Year <%=upcomingHebrewYear%> <%-nextObservedHtml%>.
-<% if (currentItem.parsha) { %>
- This corresponds to Parashat <%= currentItem.parsha.join('-') %>.
+<h4 class="text-body-secondary"><%=locals.descrShort%>&nbsp;<%=locals.emoji%></h4>
+<p class="lead mt-3"><%=locals.holidayQ%> for Hebrew Year <%=locals.upcomingHebrewYear%> <%-locals.nextObservedHtml%>.
+<% if (locals.currentItem.parsha) { %>
+ This corresponds to Parashat <%= locals.currentItem.parsha.join('-') %>.
 <% } %>
 </p>
-<% if (typeof meta.photo === 'object') { -%>
+<% if (typeof locals.meta.photo === 'object') { -%>
 <div>
 <picture>
-<% if (meta.photo.avif) { -%>
+<% if (locals.meta.photo.avif) { -%>
 <source type="image/avif"
-srcset="/i/is/800/<%=meta.photo.avif%> 800w, /i/is/640/<%=meta.photo.avif%> 640w, /i/is/400/<%=meta.photo.avif%> 400w"
+srcset="/i/is/800/<%=locals.meta.photo.avif%> 800w, /i/is/640/<%=locals.meta.photo.avif%> 640w, /i/is/400/<%=locals.meta.photo.avif%> 400w"
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px">
 <% } -%>
-<img alt="<%=meta.photo.caption||holiday%>"
+<img alt="<%=locals.meta.photo.caption||locals.holiday%>"
 fetchpriority="high"
-src="/i/is/640/<%=meta.photo.fn%>"
-width="<%=meta.photo.dimensions[640].width%>"
-height="<%=meta.photo.dimensions[640].height%>"
-srcset="/i/is/800/<%=meta.photo.fn%> 800w, /i/is/640/<%=meta.photo.fn%> 640w, /i/is/400/<%=meta.photo.fn%> 400w"
+src="/i/is/640/<%=locals.meta.photo.fn%>"
+width="<%=locals.meta.photo.dimensions[640].width%>"
+height="<%=locals.meta.photo.dimensions[640].height%>"
+srcset="/i/is/800/<%=locals.meta.photo.fn%> 800w, /i/is/640/<%=locals.meta.photo.fn%> 640w, /i/is/400/<%=locals.meta.photo.fn%> 400w"
 sizes="(min-width: 960px) 800px, (min-width: 768px) 640px, 400px"
 class="img-fluid">
 </picture>
 </div>
 <% } -%>
-<p class="mt-3"><%-descrLong%></p>
+<p class="mt-3"><%-locals.descrLong%></p>
 <p><small class="d-print-none"><em>Read more from <a class="outbound"
-title="More about <%=holiday%> from <%=meta.about.name%>"
-href="<%=meta.about.href%>"><%=meta.about.name%></a>
-<% if (meta.about.name !== 'Wikipedia' && typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-or <a class="outbound" title="More about <%=holiday%> from Wikipedia"
-href="<%=meta.wikipedia.href%>">Wikipedia</a>
+title="More about <%=locals.holiday%> from <%=locals.meta.about.name%>"
+href="<%=locals.meta.about.href%>"><%=locals.meta.about.name%></a>
+<% if (locals.meta.about.name !== 'Wikipedia' && typeof locals.meta.wikipedia === 'object' && typeof locals.meta.wikipedia.href === 'string') { %>
+or <a class="outbound" title="More about <%=locals.holiday%> from Wikipedia"
+href="<%=locals.meta.wikipedia.href%>">Wikipedia</a>
 <% } // wikipedia %>
 </em></small></p>
 
-<% if (holiday === 'Chanukah' && chanukahItems !== null) { %>
+<% if (locals.holiday === 'Chanukah' && locals.chanukahItems !== null) { %>
 <div class="table-responsive" id="chanukah-candles">
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
@@ -68,9 +68,9 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 <tr><th>Date</th><th>🕎 <span class="d-none d-sm-inline">Chanukah</span> Candles</th></tr>
 </thead>
 <tbody class="table-group-divider">
-<% for (let i = 0; i < chanukahItems.length; i++) { const item = chanukahItems[i]; %>
+<% for (let i = 0; i < locals.chanukahItems.length; i++) { const item = locals.chanukahItems[i]; %>
 <tr>
-<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() !== chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
+<td><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0 || item.d.year() !== locals.chanukahItems[0].d.year()) { %>, <%= item.d.year() %><% } %></time></td>
 <%   if (item.day8) { %>
 <td>Chanukah: 8th day</td>
 <%   } else { %>
@@ -81,8 +81,8 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 </tbody>
 </table>
 </div><!-- #chanukah-candles -->
-<% } else if (pesachSukkotItems !== null) { %>
-<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: rpath + (il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
+<% } else if (locals.pesachSukkotItems !== null) { %>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.rpath + (locals.il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
 <div class="table-responsive" id="shalosh-regalim">
 <table class="table table-striped">
 <colgroup><col><col></colgroup>
@@ -90,7 +90,7 @@ href="<%=meta.wikipedia.href%>">Wikipedia</a>
 <tr><th>Date</th><th>Detail</th></tr>
 </thead>
 <tbody class="table-group-divider">
-<% for (let i = 0; i < pesachSukkotItems.length; i++) { const item = pesachSukkotItems[i]; %>
+<% for (let i = 0; i < locals.pesachSukkotItems.length; i++) { const item = locals.pesachSukkotItems[i]; %>
 <tr>
 <td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%= item.d.format('dddd') %>, <%- item.monthDayHtml %><% if (i === 0) { %>, <%= item.d.year() %><% } %></time></td>
 <td class="<%=item.yomtov ? 'fw-bold' : 'fw-normal'%>"><%=item.desc.replaceAll("'", '’')%></td>
@@ -104,17 +104,17 @@ obligations and restrictions to Shabbat in the sense that normal “work”
 is forbidden.</p>
 <% } %>
 
-<h4 id="dates">Dates for <%=holidayQ%><% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></h4>
+<h4 id="dates">Dates for <%=locals.holidayQ%><% if (locals.il && locals.isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></h4>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup><col><col><col><col></colgroup>
 <thead>
-<tr><th>Holiday</th><th>Starts</th><th>Ends<% if (il && isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></th><th>Hebrew Date<% if (occursOn[0].duration > 1) { %>s<% } %></th></tr>
+<tr><th>Holiday</th><th>Starts</th><th>Ends<% if (locals.il && locals.isShaloshRegalim) { %> in Israel&nbsp;🇮🇱<%}%></th><th>Hebrew Date<% if (locals.occursOn[0].duration > 1) { %>s<% } %></th></tr>
 </thead>
 <tbody class="table-group-divider">
-<% occursOn.forEach((item) => { %>
+<% locals.occursOn.forEach((item) => { %>
 <tr>
-<td><a href="<%=item.href%>"><%=holidayQ%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
+<td><a href="<%=item.href%>"><%=locals.holidayQ%> <%=item.d.year()%><% if (item.anchorDate.length === 8) {%> (<%=item.hd.getFullYear()%>)<%}%></a>
 <% if (item.parsha) { %><br><small>Parashat <%= item.parsha.join('-') %></small><% } %>
 </td>
 <td><time class="<%=item.ppf === 'current' ? 'text-burgundy' : item.ppf%>" datetime="<%=item.startIsoDate%>"><%- item.startDowHtml %>, <%- item.startMonDayHtml %></time></td>
@@ -125,9 +125,9 @@ is forbidden.</p>
 </tbody>
 </table>
 </div>
-<% if (holiday !== 'Asara B\'Tevet') { %>
-<form method="GET" action="/holidays/<%=holidayAnchor%>" target="_top" data-range-validate>
-<label for="gy">Look up the date of <%=holiday%> in a past or future year</label>
+<% if (locals.holiday !== 'Asara B\'Tevet') { %>
+<form method="GET" action="/holidays/<%=locals.holidayAnchor%>" target="_top" data-range-validate>
+<label for="gy">Look up the date of <%=locals.holiday%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" required name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d*" min="1000" max="2999" enterkeyhint="go" title="Enter any Gregorian year 1000-2999" autocomplete="off" <%- locals.pmIgnore || '' %>>
@@ -144,7 +144,7 @@ is forbidden.</p>
 <h6 class="text-body-secondary mb-1 mt-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-4">
-<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=locals.nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <ins class="adsbygoogle"
 style="display:block; text-align:center;"
@@ -152,21 +152,21 @@ data-ad-layout="in-article"
 data-ad-format="fluid"
 data-ad-client="ca-pub-7687563417622459"
 data-ad-slot="5342180883"></ins>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-print-none -->
 
-<% if (typeof meta.reading !== 'undefined') { %>
+<% if (typeof locals.meta.reading !== 'undefined') { %>
 <h3 id="reading" class="mt-4">Tanakh</h3>
-<% if (isShaloshRegalim) { %>
-<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: rpath + (il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
+<% if (locals.isShaloshRegalim) { %>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.rpath + (locals.il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
 <% } %>
-<% if (Object.keys(meta.reading).length >= 3) { %>
+<% if (Object.keys(locals.meta.reading).length >= 3) { %>
 <div class="d-print-none">
 <nav class="d-none d-lg-block">
 <ul class="pagination pagination-sm">
-<% for (const reading of Object.values(meta.reading)) { -%>
+<% for (const reading of Object.values(locals.meta.reading)) { -%>
 <li class="page-item"><a class="page-link" href="#reading-<%=reading.id%>"><%=reading.shortName%></a></li>
 <% } // ... for -%>
 </ul><!-- .pagination -->
@@ -174,7 +174,7 @@ data-ad-slot="5342180883"></ins>
 </div>
 <% } // meta.items %>
 
-<% for (const [item, reading] of Object.entries(meta.reading)) { %>
+<% for (const [item, reading] of Object.entries(locals.meta.reading)) { %>
 <% if (typeof reading.d !== 'undefined') { %><div id="r-<%=reading.d.format('YYYY-MM-DD')%><%= item.endsWith(" (Mincha)") ? '-mincha':''%>"></div><% } -%>
 <h4 id="reading-<%=reading.id%>"><%=item.replaceAll("'", '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
@@ -216,14 +216,14 @@ href="<%=reading.torahHref%>"><% } %><%=reading.summary%><%- reading.torahHref ?
 <% } // meta.reading %>
 <h3 id="ref" class="mt-4">References</h3>
 <dl>
-<% if (currentItem.categories.length < 2 || currentItem.categories[1] !== 'modern') { -%>
+<% if (locals.currentItem.categories.length < 2 || locals.currentItem.categories[1] !== 'modern') { -%>
 <dt><em><a rel="sponsored"
 href="https://www.amazon.com/o/ASIN/0062720082/hebcal-20">The
 Jewish Holidays: A Guide &amp; Commentary</a></em>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% } -%>
-<% if (typeof meta.reading !== 'undefined') { %>
+<% if (typeof locals.meta.reading !== 'undefined') { %>
 <dt><em><a rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827603665/hebcal-20">Tanakh:
@@ -234,17 +234,17 @@ The Holy Scriptures</a></em>
 href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dd>Sefaria.org
 <% } // meta.reading %>
-<% if (typeof meta.wikipedia === 'object' && typeof meta.wikipedia.href === 'string') { %>
-<dt><a href="<%=meta.wikipedia.href%>">“<%=meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
+<% if (typeof locals.meta.wikipedia === 'object' && typeof locals.meta.wikipedia.href === 'string') { %>
+<dt><a href="<%=locals.meta.wikipedia.href%>">“<%=locals.meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>
 </dl>
 </div><!-- .col-md-10 -->
-<% if (typeof meta.books !== 'undefined') { %>
+<% if (typeof locals.meta.books !== 'undefined') { %>
 <div class="col-md-2 mt-2">
 <h6 id="books">Books <small class="text-body-secondary">(paid links)</small></h6>
 <div class="row">
-<% meta.books.forEach((book) => { %>
+<% locals.meta.books.forEach((book) => { %>
 <div class="col">
 <div class="card mb-3" style="width: 8rem;">
 <a rel="sponsored" title="<%=book.text%>" href="https://www.amazon.com/o/ASIN/<%=book.ASIN%>/hebcal-20">
@@ -278,12 +278,12 @@ Thank you for supporting Hebcal.</p>
 <div class="row">
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 </div>
-<% if (typeof prev !== 'undefined' || typeof next !== 'undefined') { %>
+<% if (typeof locals.prev !== 'undefined' || typeof locals.next !== 'undefined') { %>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (typeof prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=prev.startIsoDate%>"><%-prev.d.format('D[&nbsp;]MMMM')%></time> · <%=prev.name.replaceAll("'", '’')%></a></div><% } %>
-<% if (typeof next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=next.href%>"><%=next.name.replaceAll("'", '’')%> · <time datetime="<%=next.startIsoDate%>"><%-next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
+<% if (typeof locals.prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=locals.prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=locals.prev.startIsoDate%>"><%-locals.prev.d.format('D[&nbsp;]MMMM')%></time> · <%=locals.prev.name.replaceAll("'", '’')%></a></div><% } %>
+<% if (typeof locals.next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=locals.next.href%>"><%=locals.next.name.replaceAll("'", '’')%> · <time datetime="<%=locals.next.startIsoDate%>"><%-locals.next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
-<% if (!noindex && !currentItem.d.isBefore(today) && jsonLD) { %><script type="application/ld+json"><%- jsonForScript(jsonLD) %></script><% } %>
+<% if (!locals.noindex && !locals.currentItem.d.isBefore(locals.today) && locals.jsonLD) { %><script type="application/ld+json"><%- locals.jsonForScript(locals.jsonLD) %></script><% } %>
 <%- await include('partials/holidayBreadcrumbStructured.ejs') -%>
 <%- await include('partials/footer.ejs') _%>

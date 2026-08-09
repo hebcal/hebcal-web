@@ -1,8 +1,8 @@
 <%- await include('partials/header-and-navbar.ejs') -%>
 <div class="row mt-2">
 <div class="col">
-<h1 class="mt-2"><%= title %></h1>
-<% if (optout) { %>
+<h1 class="mt-2"><%= locals.title %></h1>
+<% if (locals.optout) { %>
 <p class="lead">Opt-out completed successfully.</p>
 <p>Your <b>hebcal.com</b> cookie id is now set to opt_out.</p>
 <% } else { %>

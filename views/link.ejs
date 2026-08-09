@@ -1,6 +1,6 @@
 <%- await include('partials/header.ejs') -%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/default.min.css">
-<link rel="canonical" href="https://www.hebcal.com/link?<%=geoUrlArgs%>">
+<link rel="canonical" href="https://www.hebcal.com/link?<%=locals.geoUrlArgs%>">
 <meta name="robots" content="noindex, nofollow">
 <style>
 #change-city {
@@ -23,13 +23,13 @@ times and Torah portion directly on your synagogue’s website.</p>
 <p>Browse the <a href="/home/developer-apis">Hebcal web developer
 APIs</a> to display other information on your site (e.g. today's
 Hebrew date, a full Jewish Calendar, RSS feeds).</p>
-<h3><%= locationName %></h3>
+<h3><%= locals.locationName %></h3>
 <a href="#change">Change city</a>
 <p><b>Instructions:</b> Copy everything from this box and paste it into
 the appropriate place in your HTML.</p>
 <pre><code class="html">&lt;div id="hebcal-shabbat"&gt;&lt;/div&gt;
 &lt;script&gt;
-fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top')
+fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= locals.geoUrlArgs %>&amp;tgt=_top')
   .then(response =&gt; response.text())
   .then(data =&gt; document.getElementById('hebcal-shabbat').innerHTML = data);
 &lt;/script&gt;
@@ -40,8 +40,8 @@ fetch('https://www.hebcal.com/shabbat?cfg=i2&amp;<%= geoUrlArgs %>&amp;tgt=_top'
 <div class="card">
 <div class="card-body">
 <div id="hebcal-shabbat"></div>
-<script nonce="<%=nonce%>">
-fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>&tgt=_top')
+<script nonce="<%=locals.nonce%>">
+fetch('/shabbat?cfg=i2&<%- locals.geoUrlArgs %>&tgt=_top')
   .then(response => response.text())
   .then(data => document.getElementById('hebcal-shabbat').innerHTML = data);
 </script>
@@ -55,14 +55,14 @@ fetch('/shabbat?cfg=i2&<%- geoUrlArgs %>&tgt=_top')
 <form action="/link" autocomplete="off" method="get">
 <div class="row">
 <div class="col-sm-6">
-<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
-<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
-<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
+<input type="hidden" name="geo" id="geo" value="<%= locals.q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= locals.q.zip || '' %>">
+<input type="hidden" name="geonameid" id="geonameid" value="<%= locals.q.geonameid %>">
 <%- await include('partials/city-and-havdalah.ejs') -%>
 <label class="form-label" for="lg">Event titles</label>
 <select name="lg" class="form-select mb-2" id="lg">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<option <%= q.lg === langName ? 'selected' : '' %> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
+<option <%= locals.q.lg === langName ? 'selected' : '' %> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
 <% } -%>
 </select>
 </div>
@@ -104,8 +104,8 @@ href="https://www.w3.org/Style/CSS/">Cascading Style Sheets (CSS)</a> are
 very powerful and flexible.</p>
 </div><!-- .col-sm-12 -->
 </div><!-- .row -->
-<script defer nonce="<%=nonce%>" src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
-<script nonce="<%=nonce%>">
+<script defer nonce="<%=locals.nonce%>" src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js"></script>
+<script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('pre code').forEach(function(el) {
     hljs.highlightElement(el);

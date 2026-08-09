@@ -1,12 +1,12 @@
 <%- await include('partials/header.ejs') -%>
-<% if (date && (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100)) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<% if (locals.date && (locals.d.year() <= 1752 || locals.d.year() > new Date().getFullYear() + 100)) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <link rel="dns-prefetch" href="https://www.sefaria.org/">
 <link rel="dns-prefetch" href="https://tikkun.io/">
-<link rel="canonical" href="https://www.hebcal.com/sedrot/<%= parsha.anchor %><%= date ? ('-' + date) : '' %><%=iSuffix%>">
-<meta name="description" content="Parashat <%=parshaName%> (<%=parsha.bookName%> <%=parsha.verses%>). Read on <%= d.format('D MMMM YYYY') %> / <%= hd.toString().replaceAll("'", '’') %> in <%=locationName%>. Torah reading, Haftarah, links to audio and commentary.">
-<meta name="keywords" content="<%=translations.join(',')%>">
-<% if (parsha.prev) { %><link rel="prev" href="/sedrot/<%=parsha.prev.anchor%>"><%}%>
-<% if (parsha.next) { %><link rel="next" href="/sedrot/<%=parsha.next.anchor%>"><%}%>
+<link rel="canonical" href="https://www.hebcal.com/sedrot/<%= locals.parsha.anchor %><%= locals.date ? ('-' + locals.date) : '' %><%=locals.iSuffix%>">
+<meta name="description" content="Parashat <%=locals.parshaName%> (<%=locals.parsha.bookName%> <%=locals.parsha.verses%>). Read on <%= locals.d.format('D MMMM YYYY') %> / <%= locals.hd.toString().replaceAll("'", '’') %> in <%=locals.locationName%>. Torah reading, Haftarah, links to audio and commentary.">
+<meta name="keywords" content="<%=locals.translations.join(',')%>">
+<% if (locals.parsha.prev) { %><link rel="prev" href="/sedrot/<%=locals.parsha.prev.anchor%>"><%}%>
+<% if (locals.parsha.next) { %><link rel="next" href="/sedrot/<%=locals.parsha.next.anchor%>"><%}%>
 <style>
 ol.list-unstyled li {margin-bottom: 0.33em}
 </style>
@@ -17,112 +17,112 @@ ol.list-unstyled li {margin-bottom: 0.33em}
 <div class="row">
 <div class="col">
 <%- await include('partials/parsha-detail-breadcrumb.ejs') -%>
-<h2><span class="d-none d-sm-inline">Parashat</span> <%=parshaName%> <%= date ? hd.getFullYear() : '' %> /
-<bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=parsha.hebrew%></span></bdo></h2>
-<% if (date) { -%>
-<p class="lead"><time datetime="<%= d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= hd.toString().replaceAll("'", '’') %></span><% if (israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
+<h2><span class="d-none d-sm-inline">Parashat</span> <%=locals.parshaName%> <%= locals.date ? locals.hd.getFullYear() : '' %> /
+<bdo dir="rtl" class="text-nowrap"><span class="d-none d-sm-inline" lang="he" dir="rtl">פָּרָשַׁת</span> <span lang="he" dir="rtl"><%=locals.parsha.hebrew%></span></bdo></h2>
+<% if (locals.date) { -%>
+<p class="lead"><time datetime="<%= locals.d.format('YYYY-MM-DD') %>" class="text-nowrap fw-normal text-burgundy"><%= locals.d.format('D MMMM YYYY') %></time> / <span class="text-nowrap fw-normal text-burgundy"><%= locals.hd.toString().replaceAll("'", '’') %></span><% if (locals.israelDiasporaDiffer) { %> <span class="text-body-secondary">(<%=locals.il ? 'Israel' : 'Diaspora'%>)</span><% } %></p>
 <% } -%>
-<% if (date && d.year() <= 1178) { -%>
+<% if (locals.date && locals.d.year() <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (date && d.year() <= 1752) { -%>
+<% } else if (locals.date && locals.d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<p>Parashat <%=parshaName%> is the <%=parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
-<% if (!date && nextRead) { -%>
-Next read <% if (israelDiasporaDiffer) { %>in <%=locationName%><% } %> on 
-<a href="<%=nextRead.anchor%>-<%=nextRead.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=nextRead.d.format('YYYY-MM-DD')%>"><%=nextRead.d.format('D MMM YYYY')%></time>
- / <span class="text-nowrap"><%= nextRead.event.getDate().toString().replaceAll("'", '’') %></span></a>.
+<p>Parashat <%=locals.parshaName%> is the <%=locals.parsha.ordinal%> weekly Torah portion in the annual Jewish cycle of Torah reading.
+<% if (!locals.date && locals.nextRead) { -%>
+Next read <% if (locals.israelDiasporaDiffer) { %>in <%=locals.locationName%><% } %> on 
+<a href="<%=locals.nextRead.anchor%>-<%=locals.nextRead.d.format('YYYYMMDD')%><%=locals.iSuffix%>"><time datetime="<%=locals.nextRead.d.format('YYYY-MM-DD')%>"><%=locals.nextRead.d.format('D MMM YYYY')%></time>
+ / <span class="text-nowrap"><%= locals.nextRead.event.getDate().toString().replaceAll("'", '’') %></span></a>.
 <% } -%>
 </p>
-<% if (israelDiasporaDiffer) { -%>
-<p><small><%- await include('partials/israel-diaspora-note.ejs', {il, href: date ? otherLocationAnchor : parshaAnchor + (il ? '' : '?i=on'), subject: 'Torah reading for ' + parshaName + (date ? ' ' + hd.getFullYear() : '')}) -%></small></p>
+<% if (locals.israelDiasporaDiffer) { -%>
+<p><small><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.date ? locals.otherLocationAnchor : locals.parshaAnchor + (locals.il ? '' : '?i=on'), subject: 'Torah reading for ' + locals.parshaName + (locals.date ? ' ' + locals.hd.getFullYear() : '')}) -%></small></p>
 <% } -%>
 <h4 id="torah"><span class="d-none d-sm-inline">Torah Portion:</span>
-<% if (reading.torahHtml) { %><%- reading.torahHtml -%>
+<% if (locals.reading.torahHtml) { %><%- locals.reading.torahHtml -%>
 <% } else { -%>
-<a href="https://www.sefaria.org/<%=parsha.bookName%>.<%=parsha.verses.replaceAll(':', '.')%>?lang=bi&amp;aliyot=1"
-title="Parashat <%=parshaName%> from Sefaria"><%=parsha.bookName%> <%=parsha.verses%></a>
+<a href="https://www.sefaria.org/<%=locals.parsha.bookName%>.<%=locals.parsha.verses.replaceAll(':', '.')%>?lang=bi&amp;aliyot=1"
+title="Parashat <%=locals.parshaName%> from Sefaria"><%=locals.parsha.bookName%> <%=locals.parsha.verses%></a>
 <% } -%>
 </h4>
-<% if (typeof summary === 'object') { %><p><%- summary.html %>&nbsp;<sup><a title="<%= summary.title %>" href="<%- summary.link %>">[1]</a></sup></p><% } %>
+<% if (typeof locals.summary === 'object') { %><p><%- locals.summary.html %>&nbsp;<sup><a title="<%= locals.summary.title %>" href="<%- locals.summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
 <div class="row">
-<div class="<%= !hasTriennial ? 'col' : date ? 'col-12 col-sm-6' : 'col-12 col-lg-3'%>">
-<% if (reading.fullkriyah) { -%>
+<div class="<%= !locals.hasTriennial ? 'col' : locals.date ? 'col-12 col-sm-6' : 'col-12 col-lg-3'%>">
+<% if (locals.reading.fullkriyah) { -%>
 <h5>Full Kriyah</h5>
 <ol class="list-unstyled">
-<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.fullkriyah}) -%>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: locals.reading.fullkriyah}) -%>
 </ol>
 <% } // reading.fullkriyah %>
 <%
-const spMaftirItems = items.filter((item) => typeof item.maftir === 'object');
-if (!date && spMaftirItems.length !== 0) { -%>
+const spMaftirItems = locals.items.filter((item) => typeof item.maftir === 'object');
+if (!locals.date && spMaftirItems.length !== 0) { -%>
 <p class="small text-body-secondary">N.B. special maftir in years
 <% for (let i = 0; i < spMaftirItems.length; i++) {
   const item = spMaftirItems[i]; -%>
-<a class="text-success" title="<%=item.maftir.reason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spMaftirItems.length - 1 ? ', ' : ''%>
+<a class="text-success" title="<%=item.maftir.reason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=locals.iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spMaftirItems.length - 1 ? ', ' : ''%>
 <% } -%>
 </p>
 <% } -%>
 <%- await include('partials/haftara.ejs') -%>
 <%
-const spHaftItems = items.filter((item) => typeof item.haftara === 'string');
-if (!date && spHaftItems.length !== 0) { -%>
+const spHaftItems = locals.items.filter((item) => typeof item.haftara === 'string');
+if (!locals.date && spHaftItems.length !== 0) { -%>
 <p class="small text-body-secondary">N.B. special Haftarah in years
 <% for (let i = 0; i < spHaftItems.length; i++) {
   const item = spHaftItems[i]; -%>
-<a class="text-success" title="<%=item.haftaraReason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spHaftItems.length - 1 ? ', ' : ''%>
+<a class="text-success" title="<%=item.haftaraReason%>" href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=locals.iSuffix%>"><%=item.event.getDate().getFullYear()%></a><%= i !== spHaftItems.length - 1 ? ', ' : ''%>
 <% } -%>
 </p>
 <% } -%>
 </div><!-- fk -->
-<% if (hasTriennial) { %>
-<% if (date) { %>
+<% if (locals.hasTriennial) { %>
+<% if (locals.date) { %>
 <div class="col-sm-6">
-<h5>Triennial <small class="text-body-secondary">year <%=triennial.yearNum%></small></h5>
-<% if (date && israelDiasporaDiffer) { -%>
+<h5>Triennial <small class="text-body-secondary">year <%=locals.triennial.yearNum%></small></h5>
+<% if (locals.date && locals.israelDiasporaDiffer) { -%>
 <p class="small">N.B. the following is read in
-<strong><%=locationName%></strong> for <%=hd.getFullYear()%>.
-<br>See also <a href="<%=otherLocationAnchor%>"><%=otherLocationParsha%> <%=hd.getFullYear()%> <%=il?'Diaspora':'Israel'%></a></p>
+<strong><%=locals.locationName%></strong> for <%=locals.hd.getFullYear()%>.
+<br>See also <a href="<%=locals.otherLocationAnchor%>"><%=locals.otherLocationParsha%> <%=locals.hd.getFullYear()%> <%=locals.il?'Diaspora':'Israel'%></a></p>
 <% } -%>
-<% if (triennial.fullParsha) { %>
-<p><%=parshaName%> is read in its entirety in <%=triennial.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
+<% if (locals.triennial.fullParsha) { %>
+<p><%=locals.parshaName%> is read in its entirety in <%=locals.triennial.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
 <% } else { %>
-<%- await include('partials/aliyot-loop.ejs', {aliyot: triennial.reading}) -%>
-<% if (parshaName === 'Yitro') { %>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: locals.triennial.reading}) -%>
+<% if (locals.parshaName === 'Yitro') { %>
 <div class="small mb-3 text-body-secondary">Note: in the abbreviated triennal reading above,
 the congregation experiences <span lang="he" dir="rtl">עֲשֶׂרֶת הַדִבְּרוֹת</span>
 only in years 2 and 3 of the cycle.
 Some congregations read the entire parsha every year.</div>
 <% } %>
 <% } %>
-<% if (triennial.haftara) { -%>
+<% if (locals.triennial.haftara) { -%>
 <%- await include('partials/haftara.ejs') -%>
 <p class="haftara">Alternate Haftarah:
-<%- triennial.haftaraHtml %>
-<%- await include('partials/numverses.ejs', {v: triennial.haftaraNumV}) -%>
+<%- locals.triennial.haftaraHtml %>
+<%- await include('partials/numverses.ejs', {v: locals.triennial.haftaraNumV}) -%>
 </p>
 <% } -%>
 </div>
 <% } else { // date %>
 <% for (let yr = 1; yr <= 3; yr++) {
-  const triReading = triennial.readings[yr - 1]; %>
+  const triReading = locals.triennial.readings[yr - 1]; %>
 <div class="col-lg-3 col-sm-6">
 <h5><span class="text-nowrap">Triennial Year <%=yr%></span>
 <% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-body-secondary"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
-<p>Read separately <%= israelDiasporaDiffer ? 'in ' + locationName : '' %> in <%=triReading.hyear%></p>
+<p>Read separately <%= locals.israelDiasporaDiffer ? 'in ' + locals.locationName : '' %> in <%=triReading.hyear%></p>
 <ul class="list-unstyled">
-<li><a href="<%=parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p1%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
-<li><a href="<%=parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=iSuffix%>"><%=parsha.p2%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>
+<li><a href="<%=locals.parsha.p1anchor%>-<%=triReading.p1d.format('YYYYMMDD')%><%=locals.iSuffix%>"><%=locals.parsha.p1%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p1d.format('YYYY-MM-DD')%>"><%=triReading.p1d.format('D MMM YYYY')%></time>)</span>
+<li><a href="<%=locals.parsha.p2anchor%>-<%=triReading.p2d.format('YYYYMMDD')%><%=locals.iSuffix%>"><%=locals.parsha.p2%> <%=triReading.hyear%></a> <span class="text-body-secondary">(<time datetime="<%=triReading.p2d.format('YYYY-MM-DD')%>"><%=triReading.p2d.format('D MMM YYYY')%></time>)</span>
 </ul>
 <% } else if (triReading.readTogether) { %>
-<p class="small">See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></p>
+<p class="small">See <a href="<%=triReading.anchor%>-<%=triReading.d.format('YYYYMMDD')%><%=locals.iSuffix%>"><%=triReading.readTogether%> <%=triReading.hyear%></a></p>
 <% } else { %>
 <% if (triReading.fullParsha) { %>
-<p class="small"><%=parshaName%> is read in its entirety in <%=triReading.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
+<p class="small"><%=locals.parshaName%> is read in its entirety in <%=triReading.hyear%>. <span class="text-nowrap">See Full Kriyah.</span></p>
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
 <% } %>
@@ -141,7 +141,7 @@ Some congregations read the entire parsha every year.</div>
 <% } // ... else triReadings %>
 </div><!-- tri<%=yr%> -->
 <% } // ... for yr 1-3 %>
-<% if (parshaName === 'Yitro') { %>
+<% if (locals.parshaName === 'Yitro') { %>
 <div class="small mb-3 text-body-secondary">Note: in the abbreviated triennal readings above,
 the congregation experiences <span lang="he" dir="rtl">עֲשֶׂרֶת הַדִבְּרוֹת</span>
 only in years 2 and 3 of the cycle.
@@ -152,11 +152,11 @@ Some congregations read the entire parsha every year.</div>
 </div><!-- .row -->
 <div class="row">
 <div class="col">
-<% if (reading.weekday) { %>
+<% if (locals.reading.weekday) { %>
 <h5 id="weekday">Weekday
 <small class="text-body-secondary">for Shabbat afternoon, Monday &amp; Thursday</small>
 </h5>
-<%- await include('partials/aliyot-loop.ejs', {aliyot: reading.weekday}) -%>
+<%- await include('partials/aliyot-loop.ejs', {aliyot: locals.reading.weekday}) -%>
 <% } // reading.weekday %>
 </div><!-- .col -->
 </div><!-- .row -->
@@ -164,54 +164,54 @@ Some congregations read the entire parsha every year.</div>
 <div class="col">
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
-<% if (typeof commentary['sefaria'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=commentary['sefaria'].target%>?tab=sources">Sefaria</a></li>
+<% if (typeof locals.commentary['sefaria'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=locals.commentary['sefaria'].target%>?tab=sources">Sefaria</a></li>
 <% } -%>
-<% if (typeof commentary['wikipedia'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=commentary['wikipedia'].target%>">Wikipedia</a></li>
+<% if (typeof locals.commentary['wikipedia'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=locals.commentary['wikipedia'].target%>">Wikipedia</a></li>
 <% } -%>
-<% if (typeof commentary['ou.org'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(commentary['ou.org'].target)%>&amp;size=30">OU Torah</a></li>
+<% if (typeof locals.commentary['ou.org'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(locals.commentary['ou.org'].target)%>&amp;size=30">OU Torah</a></li>
 <% } -%>
-<% if (typeof commentary['torah.org'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=commentary['torah.org'].target%>/">Torah.org</a></li>
+<% if (typeof locals.commentary['torah.org'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=locals.commentary['torah.org'].target%>/">Torah.org</a></li>
 <% } -%>
-<% if (typeof commentary['chabad.org'] === 'number') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=commentary['chabad.org']%>">Chabad</a></li>
+<% if (typeof locals.commentary['chabad.org'] === 'number') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=locals.commentary['chabad.org']%>">Chabad</a></li>
 <% } -%>
-<% if (typeof commentary['rabbisacks.org'] === 'string' && commentary['rabbisacks.org'].length !== 0) { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a></li>
+<% if (typeof locals.commentary['rabbisacks.org'] === 'string' && locals.commentary['rabbisacks.org'].length !== 0) { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=locals.commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a></li>
 <% } -%>
-<% if (typeof commentary['reformjudaism.org'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=commentary['reformjudaism.org'].target%>">Reform Judaism</a></li>
+<% if (typeof locals.commentary['reformjudaism.org'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=locals.commentary['reformjudaism.org'].target%>">Reform Judaism</a></li>
 <% } -%>
-<% if (typeof commentary['ajr.edu'] === 'object') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=commentary['ajr.edu'].target%>">Academy for Jewish Religion</a></li>
+<% if (typeof locals.commentary['ajr.edu'] === 'object') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=locals.commentary['ajr.edu'].target%>">Academy for Jewish Religion</a></li>
 <% } -%>
-<% if (typeof commentary['jtsa.edu'] === 'string' && commentary['jtsa.edu'].length !== 0) { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=commentary['jtsa.edu']%>">Jewish Theological Seminary</a></li>
+<% if (typeof locals.commentary['jtsa.edu'] === 'string' && locals.commentary['jtsa.edu'].length !== 0) { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=locals.commentary['jtsa.edu']%>">Jewish Theological Seminary</a></li>
 <% } -%>
-<% if (typeof commentary['ej'] === 'string') { -%>
-<li><a title="Parashat <%=parshaName%> commentary from Exploring Judaism" href="https://exploringjudaism.org/learning/torah/<%=commentary['ej']%>/">Exploring Judaism</a></li>
+<% if (typeof locals.commentary['ej'] === 'string') { -%>
+<li><a title="Parashat <%=locals.parshaName%> commentary from Exploring Judaism" href="https://exploringjudaism.org/learning/torah/<%=locals.commentary['ej']%>/">Exploring Judaism</a></li>
 <% } -%>
-<% if (typeof commentary['learntefillah.com'] === 'string' && commentary['learntefillah.com'].length !== 0) { -%>
-<li><a title="Parashat <%=parshaName%> tikkun from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a></li>
+<% if (typeof locals.commentary['learntefillah.com'] === 'string' && locals.commentary['learntefillah.com'].length !== 0) { -%>
+<li><a title="Parashat <%=locals.parshaName%> tikkun from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=locals.commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a></li>
 <% } -%>
 </ul>
 </div><!-- .col -->
-<% if (commentary['asin']) {
-  const altText = (parsha.p1||parshaName) + ': The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)';
+<% if (locals.commentary['asin']) {
+  const altText = (locals.parsha.p1||locals.parshaName) + ': The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)';
 %><div class="col-lg-4 mb-3">
 <div class="card">
 <div class="row">
   <div class="col-8">
     <div class="card-body">
-      <p class="card-text"><a rel="sponsored" href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><%=parsha.p1||parshaName%>:
+      <p class="card-text"><a rel="sponsored" href="https://www.amazon.com/o/ASIN/<%=locals.commentary['asin']%>/hebcal-20"><%=locals.parsha.p1||locals.parshaName%>:
       The JPS B’nai Mitzvah Torah Commentary</a> <small>by Rabbi Jeffrey K. Salkin <span class="text-body-secondary text-nowrap">(paid link)</span></small></p>
     </div>
   </div>
   <div class="col-4">
-    <a rel="sponsored" title="<%=altText%>" href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><picture>
+    <a rel="sponsored" title="<%=altText%>" href="https://www.amazon.com/o/ASIN/<%=locals.commentary['asin']%>/hebcal-20"><picture>
      <source type="image/avif" srcset="/i/0827612524.01.MZZZZZZZ.avif">
      <img alt="<%=altText%>"
       src="/i/0827612524.01.MZZZZZZZ.webp" class="img-fluid" width="107" height="160">
@@ -223,21 +223,21 @@ Some congregations read the entire parsha every year.</div>
 <% } // books %>
 </div><!-- .d-print-none -->
 
-<% if (items.length) { -%>
+<% if (locals.items.length) { -%>
 <div class="row mb-2">
 <div class="col">
 <h4 id="dates">List of Dates</h4>
-Parashat <%=parshaName%> is read in <%=locationName%> on:
+Parashat <%=locals.parshaName%> is read in <%=locals.locationName%> on:
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="row mb-3">
-<% for (let i = 0; i < items.length; i += 6) { -%>
+<% for (let i = 0; i < locals.items.length; i += 6) { -%>
 <div class="col">
 <ul class="list-unstyled">
 <% for (let j = 0; j < 6; j++) { -%>
-<% const item = items[i + j]; if (item) { -%>
-<li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-body-secondary">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
-<% if (item.desc !== parsha.name) { %> · <small><%=item.desc%></small><% } %>
+<% const item = locals.items[i + j]; if (item) { -%>
+<li class="text-nowrap"><%=item.event.getDate().getFullYear()%> <span class="text-body-secondary">·</span> <a href="<%=item.anchor%>-<%=item.d.format('YYYYMMDD')%><%=locals.iSuffix%>"><time datetime="<%=item.d.format('YYYY-MM-DD')%>"><%=item.d.format('D MMM YYYY')%></time></a>
+<% if (item.desc !== locals.parsha.name) { %> · <small><%=item.desc%></small><% } %>
 <% } -%>
 <% } %>
 </ul>
@@ -247,13 +247,13 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <% } // items.length -%>
 <div class="row d-print-none">
 <div class="col">
-<form method="GET" action="/sedrot/<%=parsha.anchor%>" data-range-validate>
-<label for="gy">Look up the date of Parashat <%=parshaName%> in a past or future year</label>
+<form method="GET" action="/sedrot/<%=locals.parsha.anchor%>" data-range-validate>
+<label for="gy">Look up the date of Parashat <%=locals.parshaName%> in a past or future year</label>
 <div class="row gx-2 mb-3">
 <div class="col-auto mb-2">
 <input type="text" inputmode="numeric" class="form-control" required name="gy" id="gy" placeholder="1970" size="5" maxlength="4" pattern="\d*" min="1000" max="2999" enterkeyhint="go" title="Enter any Gregorian year 1000-2999" autocomplete="off" <%- locals.pmIgnore || '' %>>
 </div><!-- .col -->
-<% if (il) { %><input type="hidden" name="i" value="on"><%}%>
+<% if (locals.il) { %><input type="hidden" name="i" value="on"><%}%>
 <div class="col-auto mb-2">
 <button type="submit" class="btn btn-primary">Go</button>
 </div><!-- .col -->
@@ -266,14 +266,14 @@ Parashat <%=parshaName%> is read in <%=locationName%> on:
 <div class="col">
 <h4 id="ref">References</h4>
 <dl>
-<% if (typeof summary === 'object') { %>
-<dt><a href="<%- summary.link %>">Parashat <%=parsha.p1||parshaName%> from Sefaria.org</a>
+<% if (typeof locals.summary === 'object') { %>
+<dt><a href="<%- locals.summary.link %>">Parashat <%=locals.parsha.p1||locals.parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>
-<% if (commentary['asin']) { %>
+<% if (locals.commentary['asin']) { %>
 <dt><a rel="sponsored"
-href="https://www.amazon.com/o/ASIN/<%=commentary['asin']%>/hebcal-20"><em><%=parsha.p1||parshaName%>
-(<%=parsha.bookName%> <%=parsha.combined ? parsha.p1verses : parsha.verses%>) and Haftarah (<%=parsha.haftara%>):
+href="https://www.amazon.com/o/ASIN/<%=locals.commentary['asin']%>/hebcal-20"><em><%=locals.parsha.p1||locals.parshaName%>
+(<%=locals.parsha.bookName%> <%=locals.parsha.combined ? locals.parsha.p1verses : locals.parsha.verses%>) and Haftarah (<%=locals.parsha.haftara%>):
 The JPS B’nai Mitzvah Torah Commentary (JPS Study Bible)</em></a>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Jeffrey K. Salkin, Jewish Publication Society, 2017
@@ -283,18 +283,18 @@ href="https://www.amazon.com/o/ASIN/0899060145/hebcal-20"><em>The
 Chumash: The Stone Edition (Artscroll Series)</em></a>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Nosson Scherman, Mesorah Publications, 1993
-<% if (hasTriennial) { %>
+<% if (locals.hasTriennial) { %>
 <dt><a
 href="https://www.rabbinicalassembly.org/sites/default/files/2021-09/eisenberg_triennial_updated-1.pdf"><em>A
 Complete Triennial System for Reading the Torah</em></a>
 <dd>Committee on Jewish Law and Standards of the Rabbinical Assembly, 1988
-<% if (parsha.combined || doubled.get(parsha.name) || parsha.name === 'Miketz') { %>
+<% if (locals.parsha.combined || locals.doubled.get(locals.parsha.name) || locals.parsha.name === 'Miketz') { %>
 <dt><a
 href="https://www.rabbinicalassembly.org/story/modifications-triennial-cycle-torah-readings-combined-parshiyot-certain-years"><em>Modification
 of the Triennial Cycle Readings for Combined Parashot in Certain Years</em></a>
 <dd>Rabbi Miles B. Cohen, 2020
 <% } %>
-<% if (parsha.name === 'Vayakhel' || parsha.name === 'Pekudei') { %>
+<% if (locals.parsha.name === 'Vayakhel' || locals.parsha.name === 'Pekudei') { %>
 <dt><a
 href="https://www.rabbinicalassembly.org/sites/default/files/public/halakhah/teshuvot/2011-2020/heller-triennial-emendation.pdf"><em>An
 Emendation to Richard Eisenberg’s Complete Triennial System for Reading Torah,
@@ -311,11 +311,11 @@ href="http://www.rabbinicalassembly.org/sites/default/files/public/halakhah/tesh
  Thank you for supporting Hebcal.</small></p>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (parsha.prev) { %><div>
-<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (date) { %><time datetime="<%=parsha.prev.d.format('YYYY-MM-DD')%>"><%-parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=parsha.prev.name.replaceAll("'", '’')%></a>
+<% if (locals.parsha.prev) { %><div>
+<a class="btn btn-outline-secondary me-2" href="/sedrot/<%=locals.parsha.prev.anchor%>"><span aria-hidden="true">←&nbsp;</span><% if (locals.date) { %><time datetime="<%=locals.parsha.prev.d.format('YYYY-MM-DD')%>"><%-locals.parsha.prev.d.format('D[&nbsp;]MMMM')%></time> · <% } %><%=locals.parsha.prev.name.replaceAll("'", '’')%></a>
 </div><% } %>
-<% if (parsha.next) { %><div>
-<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=parsha.next.anchor%>"><%=parsha.next.name.replaceAll("'", '’')%><% if (date) { %> · <time datetime="<%=parsha.next.d.format('YYYY-MM-DD')%>"><%-parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
+<% if (locals.parsha.next) { %><div>
+<a class="btn btn-outline-secondary ms-2" href="/sedrot/<%=locals.parsha.next.anchor%>"><%=locals.parsha.next.name.replaceAll("'", '’')%><% if (locals.date) { %> · <time datetime="<%=locals.parsha.next.d.format('YYYY-MM-DD')%>"><%-locals.parsha.next.d.format('D[&nbsp;]MMMM')%></time><% } %><span aria-hidden="true">&nbsp;→</span></a>
 </div><% } %>
 </div>
 

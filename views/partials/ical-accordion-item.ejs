@@ -1,20 +1,20 @@
 <div class="accordion-item">
-<h2 class="accordion-header" id="heading-<%=id%>">
-<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#body-<%=id%>" aria-expanded="false" aria-controls="body-<%=id%>">
-<% if (typeof he === 'boolean' && he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=name%></span><% } else { %><%=typeof titleName === 'string' ? titleName : name%><% } %>
-<% if (typeof emoji === 'string') { %>&nbsp; <span class="text-nowrap"><%=emoji%></span><% } %>
+<h2 class="accordion-header" id="heading-<%=locals.id%>">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#body-<%=locals.id%>" aria-expanded="false" aria-controls="body-<%=locals.id%>">
+<% if (typeof locals.he === 'boolean' && locals.he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=locals.name%></span><% } else { %><%=typeof locals.titleName === 'string' ? locals.titleName : locals.name%><% } %>
+<% if (typeof locals.emoji === 'string') { %>&nbsp; <span class="text-nowrap"><%=locals.emoji%></span><% } %>
 </button>
 </h2>
-<div id="body-<%=id%>" class="accordion-collapse collapse" aria-labelledby="heading-<%=id%>" data-bs-parent="#<%=parent%>" role="region">
+<div id="body-<%=locals.id%>" class="accordion-collapse collapse" aria-labelledby="heading-<%=locals.id%>" data-bs-parent="#<%=locals.parent%>" role="region">
 <div class="accordion-body">
-<%-summary%>
-<% if (typeof feedLength !== 'undefined') { %><p class="text-body-secondary"><%=feedLength%> events per year · <span class="text-nowrap"><%=years%>-year perpetual feed</span></p><% } %>
-<% if (typeof noToolbar === 'undefined') { %><%- await include('ical-toolbar.ejs', {
-  name: name,
-  basename: id,
-  noCSV: (typeof noCSV === 'boolean' && noCSV) ? true : undefined,
+<%-locals.summary%>
+<% if (typeof locals.feedLength !== 'undefined') { %><p class="text-body-secondary"><%=locals.feedLength%> events per year · <span class="text-nowrap"><%=locals.years%>-year perpetual feed</span></p><% } %>
+<% if (typeof locals.noToolbar === 'undefined') { %><%- await include('ical-toolbar.ejs', {
+  name: locals.name,
+  basename: locals.id,
+  noCSV: (typeof locals.noCSV === 'boolean' && locals.noCSV) ? true : undefined,
 }) %><% } %>
-<% if (typeof moreInfo === 'string') { %><%-moreInfo%><% } %>
+<% if (typeof locals.moreInfo === 'string') { %><%-locals.moreInfo%><% } %>
 </div>
 </div>
 </div>

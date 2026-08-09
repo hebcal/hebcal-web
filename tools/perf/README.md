@@ -60,3 +60,25 @@ Both take `<urls-file> <limit> <out.json> [port]`. Capture before and after,
 then diff the JSON. Sanity-check the method first by capturing twice against
 unchanged code — that must come out 100% identical, otherwise the normalization
 is incomplete and any comparison built on it is meaningless.
+
+## www
+
+`bench-ejs.js` measures the share of a www request spent executing EJS
+templates. A CPU profile cannot answer that on its own: compiled templates are
+`new Function` bodies whose samples land in an anonymous `(vm)` bucket that
+also holds idle time, GC and V8 internals, so the number has to come from
+wrapping the compiled function.
+
+```bash
+URLS=$'/converter?gd=1&gm=1&gy=2000&g2h=1\n/holidays/2026-2027' \
+  node tools/perf/bench-ejs.js
+```
+
+`capture-www.mjs` is the www counterpart of `capture.js`: it hashes normalized
+HTML/XML responses so a before/after comparison can prove the rendered bytes
+did not change. Nonces, timestamps and the stack trace on an error page are the
+only parts it normalizes away.
+
+```bash
+URLS_FILE=urls.txt OUT=before.json node tools/perf/capture-www.mjs
+```

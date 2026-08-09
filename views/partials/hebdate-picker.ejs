@@ -1,27 +1,27 @@
 <div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="hd<%=suffix%>" placeholder="day" value="<%= hd %>" size="2" maxlength="2" min="1" max="30" id="hd<%=suffix%>" pattern="\d*" title="Enter a day of the month between 1 and 30" autocomplete="off">
-<label for="hd<%=suffix%>">Day</label>
-</div><!-- /hd<%=suffix%> -->
+<input type="text" inputmode="numeric" class="form-control" required name="hd<%=locals.suffix%>" placeholder="day" value="<%= locals.hd %>" size="2" maxlength="2" min="1" max="30" id="hd<%=locals.suffix%>" pattern="\d*" title="Enter a day of the month between 1 and 30" autocomplete="off">
+<label for="hd<%=locals.suffix%>">Day</label>
+</div><!-- /hd<%=locals.suffix%> -->
 <div class="form-floating col-auto mb-2">
-<select name="hm<%=suffix%>" id="hm<%=suffix%>" class="form-select">
-<option <%= hm === 1 ? 'selected' : '' %> value="Nisan">Nisan</option>
-<option <%= hm === 2 ? 'selected' : '' %> value="Iyyar">Iyyar</option>
-<option <%= hm === 3 ? 'selected' : '' %> value="Sivan">Sivan</option>
-<option <%= hm === 4 ? 'selected' : '' %> value="Tamuz">Tamuz</option>
-<option <%= hm === 5 ? 'selected' : '' %> value="Av">Av</option>
-<option <%= hm === 6 ? 'selected' : '' %> value="Elul">Elul</option>
-<option <%= hm === 7 ? 'selected' : '' %> value="Tishrei">Tishrei</option>
-<option <%= hm === 8 ? 'selected' : '' %> value="Cheshvan">Cheshvan</option>
-<option <%= hm === 9 ? 'selected' : '' %> value="Kislev">Kislev</option>
-<option <%= hm === 10 ? 'selected' : '' %> value="Tevet">Tevet</option>
-<option <%= hm === 11 ? 'selected' : '' %> value="Shvat">Sh'vat</option>
-<option <%= (hm === 12 && !hleap) ? 'selected' : '' %> value="Adar">Adar</option>
-<option <%= (hm === 12 && hleap) ? 'selected' : '' %> value="Adar1">Adar I</option>
-<option <%= hm === 13 ? 'selected' : '' %> value="Adar2">Adar II</option>
+<select name="hm<%=locals.suffix%>" id="hm<%=locals.suffix%>" class="form-select">
+<option <%= locals.hm === 1 ? 'selected' : '' %> value="Nisan">Nisan</option>
+<option <%= locals.hm === 2 ? 'selected' : '' %> value="Iyyar">Iyyar</option>
+<option <%= locals.hm === 3 ? 'selected' : '' %> value="Sivan">Sivan</option>
+<option <%= locals.hm === 4 ? 'selected' : '' %> value="Tamuz">Tamuz</option>
+<option <%= locals.hm === 5 ? 'selected' : '' %> value="Av">Av</option>
+<option <%= locals.hm === 6 ? 'selected' : '' %> value="Elul">Elul</option>
+<option <%= locals.hm === 7 ? 'selected' : '' %> value="Tishrei">Tishrei</option>
+<option <%= locals.hm === 8 ? 'selected' : '' %> value="Cheshvan">Cheshvan</option>
+<option <%= locals.hm === 9 ? 'selected' : '' %> value="Kislev">Kislev</option>
+<option <%= locals.hm === 10 ? 'selected' : '' %> value="Tevet">Tevet</option>
+<option <%= locals.hm === 11 ? 'selected' : '' %> value="Shvat">Sh'vat</option>
+<option <%= (locals.hm === 12 && !locals.hleap) ? 'selected' : '' %> value="Adar">Adar</option>
+<option <%= (locals.hm === 12 && locals.hleap) ? 'selected' : '' %> value="Adar1">Adar I</option>
+<option <%= locals.hm === 13 ? 'selected' : '' %> value="Adar2">Adar II</option>
 </select>
-<label for="hm<%=suffix%>">Month</label>
-</div><!-- /hm<%=suffix%> -->
+<label for="hm<%=locals.suffix%>">Month</label>
+</div><!-- /hm<%=locals.suffix%> -->
 <div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="hy<%=suffix%>" placeholder="year" value="<%= hy %>" size="4" maxlength="4" id="hy<%=suffix%>" pattern="\d*" title="Enter a Hebrew year, for example 5786" autocomplete="off" <%- locals.pmIgnore || '' %>>
-<label for="hy<%=suffix%>">Year</label>
-</div><!-- /hy<%=suffix%> -->
+<input type="text" inputmode="numeric" class="form-control" required name="hy<%=locals.suffix%>" placeholder="year" value="<%= locals.hy %>" size="4" maxlength="4" id="hy<%=locals.suffix%>" pattern="\d*" title="Enter a Hebrew year, for example 5786" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<label for="hy<%=locals.suffix%>">Year</label>
+</div><!-- /hy<%=locals.suffix%> -->

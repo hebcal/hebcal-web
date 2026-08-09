@@ -111,6 +111,12 @@ render(app, {
   viewExt: 'ejs',
   debug: false,
   async: true,
+  // Compile without the `with (locals)` block that ejs wraps a template body
+  // in by default. Every identifier inside a `with` resolves dynamically —
+  // V8 has to probe the locals object first, even for calls to ejs's own
+  // __append — which costs about a fifth of template execution time here.
+  // The templates therefore say `locals.foo`, not `foo`.
+  _with: false,
 });
 
 app.use(async function fixup1(ctx, next) {

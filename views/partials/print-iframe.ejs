@@ -8,7 +8,7 @@
     </div>
   </div>
 </div>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   // For now, only do magic print stuff on Chrome, Edge 20+ and Firefox
   const isChromium = navigator.userAgent.includes('Chrome'); // also matches Edge

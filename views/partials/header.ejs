@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="<%=lang%>" data-bs-theme="auto"><head>
+<html lang="<%=locals.lang%>" data-bs-theme="auto"><head>
 <meta charset="utf-8">
-<title><%= title %></title>
+<title><%= locals.title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<% if (typeof criticalCss === 'string') { -%>
-<style><%- await include(criticalCss) %></style>
-<link rel="stylesheet" href="<%= mainCssHref %>" media="print" id="maincss">
-<noscript><link rel="stylesheet" href="<%= mainCssHref %>"></noscript>
-<script nonce="<%=nonce%>">
+<% if (typeof locals.criticalCss === 'string') { -%>
+<style><%- await include(locals.criticalCss) %></style>
+<link rel="stylesheet" href="<%= locals.mainCssHref %>" media="print" id="maincss">
+<noscript><link rel="stylesheet" href="<%= locals.mainCssHref %>"></noscript>
+<script nonce="<%=locals.nonce%>">
 document.getElementById('maincss').addEventListener('load',function(){
   this.media = 'all';
 });
@@ -16,7 +16,7 @@ document.getElementById('maincss').addEventListener('load',function(){
 <% } else { -%>
 <%- await include('bootstrap-css.ejs') -%>
 <% } -%>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
   document.documentElement.setAttribute('data-bs-theme', 'dark');
 }
