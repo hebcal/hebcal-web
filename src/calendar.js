@@ -3,7 +3,8 @@ import '@hebcal/learning';
 import {getEventCategories} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
-import {isoDateStringToDate} from './dateUtil.js';
+import {isoDateStringToDate, yearIsOutsideGregRange,
+  yearIsOutsideHebRange} from './dateUtil.js';
 import {empty, off} from './empty.js';
 import {getLocationFromQuery} from './location.js';
 import {lgToLocale} from './lang.js';
@@ -47,6 +48,40 @@ function getMaskFromQuery(query) {
     }
   }
   return mask;
+}
+
+/**
+ * Daily-learning calendars (Daf Yomi, 929, Yerushalmi, Mishna Yomi and the
+ * rest) are computed by walking forward from each cycle's start date, so their
+ * cost grows linearly with distance from that epoch. Requesting them for a year
+ * millennia away is both meaningless -- these cycles began in the 20th and 21st
+ * centuries -- and ruinously expensive: Gregorian year 9999 renders in about
+ * 4ms without them and 8.7 seconds with them.
+ *
+ * That work is synchronous, so it blocks the event loop for its whole duration:
+ * one such request stalls every other request on the process, and outlasts the
+ * 8s request timeout, which cannot fire while synchronous code is running.
+ *
+ * Drop the learning calendars outside the supported year range rather than
+ * rejecting the request, so a far-future calendar still renders -- people do
+ * ask for those, just without Daf Yomi.
+ * @private
+ * @param {import('@hebcal/core').CalOptions} options
+ */
+function dropDailyLearningOutsideRange(options) {
+  if (typeof options.dailyLearning !== 'object') {
+    return;
+  }
+  const year = options.year;
+  if (typeof year !== 'number') {
+    return;
+  }
+  const outOfRange = options.isHebrewYear ?
+    yearIsOutsideHebRange(year) :
+    yearIsOutsideGregRange(year);
+  if (outOfRange) {
+    delete options.dailyLearning;
+  }
 }
 
 /**
@@ -206,6 +241,7 @@ export function makeHebcalOptions(db, query) {
       }
     }
   }
+  dropDailyLearningOutsideRange(options);
   if (!empty(query.month)) {
     const month = Number.parseInt(query.month, 10);
     if (month >= 1 && month <= 12) {

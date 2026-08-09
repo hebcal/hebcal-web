@@ -388,3 +388,50 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
     await expectConditionalEtag(server, url);
   });
 });
+
+describe('/hebcal far-future years', () => {
+  // Daily-learning calendars are computed by walking forward from each cycle's
+  // start date, so their cost grows linearly with distance from that epoch:
+  // Gregorian year 9999 renders in ~4ms without them and ~8.7s with them. That
+  // work is synchronous, so a single such request blocked the event loop for
+  // every other request on the process and outlasted the 8s timeout, which
+  // cannot fire while synchronous code runs.
+  //
+  // Far-future calendars themselves are legitimate and still render; only the
+  // learning calendars are dropped, since those cycles began in the 20th and
+  // 21st centuries and mean nothing millennia out.
+  const learning = '&F=on&myomi=on&dpy=on&nyomi=on&dty=on&dps=on&d929=on' +
+    '&dr1=on&dr3=on&yyomi=on&dcc=on&dshl=on&ayd=on&dw=on&dpa=on&ahsy=on&dksa=on';
+  const cal = (year, extra = '') =>
+    `/hebcal?v=1&year=${year}&yt=G&maj=on&min=on&nx=on&ss=on&s=on${extra}`;
+
+  it.each([
+    ['html', ''],
+    ['json', '&cfg=json'],
+    ['csv', '&cfg=csv'],
+  ])('still renders a far-future calendar (%s)', async (why, suffix) => {
+    const response = await request(server).get(cal(9999, learning + suffix));
+    expect(response.status).toBe(200);
+  });
+
+  it('keeps daily learning for years inside the supported range', async () => {
+    const response = await request(server).get(cal(2026, learning + '&cfg=json'));
+    expect(response.status).toBe(200);
+    const dafYomi = response.body.items.filter((i) => i.category === 'dafyomi');
+    expect(dafYomi.length).toBeGreaterThan(300);
+  });
+
+  it('drops daily learning beyond the supported range', async () => {
+    const response = await request(server).get(cal(9999, learning + '&cfg=json'));
+    expect(response.status).toBe(200);
+    expect(response.body.items.length).toBeGreaterThan(0);
+    expect(response.body.items.filter((i) => i.category === 'dafyomi')).toHaveLength(0);
+  });
+
+  it('still rejects out-of-range years for .ics and .rss, as before', async () => {
+    for (const cfg of ['ics', 'rss']) {
+      const response = await request(server).get(cal(9999, `&cfg=${cfg}`));
+      expect(response.status).toBe(410);
+    }
+  });
+});
