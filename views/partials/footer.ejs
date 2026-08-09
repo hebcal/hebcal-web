@@ -24,7 +24,7 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 <%   if (locals.footerScripts.clipboard) { %><script nonce="<%=locals.nonce%>"><%- await include('client-clipboard.min.js') %></script><% } -%>
 <%   if (locals.footerScripts.typeahead) { %><%- await include('script-typeahead.ejs') %><% } -%>
 <% } -%>
-<% if (typeof locals.xtra_html !== 'undefined') { %><%- locals.xtra_html %><% } -%>
+<% if (locals.xtra_html !== undefined) { %><%- locals.xtra_html %><% } -%>
 <script nonce="<%=locals.nonce%>"><%- await include('analytics.min.js') %></script>
 <% if (typeof locals.cookieBanner === 'boolean' && locals.cookieBanner) { -%>
 <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom mb-2">

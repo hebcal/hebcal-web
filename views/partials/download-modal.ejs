@@ -26,7 +26,7 @@
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ios'}) -%>
-<% if (typeof locals.emoiSwitchDisabled === 'undefined') { %>
+<% if (locals.emoiSwitchDisabled === undefined) { %>
 <div class="row g-2 mb-2">
   <div class="col-auto">Color</div>
   <div class="col-2">

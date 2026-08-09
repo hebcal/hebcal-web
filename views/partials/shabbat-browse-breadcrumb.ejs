@@ -4,9 +4,9 @@
 <ol class="breadcrumb">
 <li class="breadcrumb-item"><a href="/shabbat">Shabbat</a></li>
 <li class="breadcrumb-item"><a href="/shabbat/browse/">Countries</a></li>
-<% if (typeof locals.results === 'undefined') { %>
+<% if (locals.results === undefined) { %>
 <li class="breadcrumb-item active"><%=locals.countryName%></li>
-<% } else if (typeof locals.countryA1 !== 'undefined') { %>
+<% } else if (locals.countryA1 !== undefined) { %>
 <li class="breadcrumb-item"><a href="/shabbat/browse/<%=locals.countryA1.countryAnchor%>"><%=locals.countryA1.country%></a></li>
 <li class="breadcrumb-item active"><%=locals.countryA1.name%></li>
 <% } else { %>

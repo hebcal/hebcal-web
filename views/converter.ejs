@@ -35,7 +35,7 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<% if (typeof locals.message !== 'undefined') { -%>
+<% if (locals.message !== undefined) { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= locals.message %>
@@ -212,7 +212,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 </div><!-- .alert -->
 </div>
 <% } %>
-<% if (typeof locals.message === 'undefined') { -%>
+<% if (locals.message === undefined) { -%>
 <div id="future" class="row">
 <% if (typeof locals.futureYearsHeb === 'object' && locals.futureYearsHeb.length > 0) { -%>
 <div class="col-md-6" id="future-heb">

@@ -1,4 +1,4 @@
-<% if (typeof locals.emoiSwitchDisabled === 'undefined') { %>
+<% if (locals.emoiSwitchDisabled === undefined) { %>
 <div class="form-check emoji-checkbox mb-2">
   <input class="form-check-input" type="checkbox" id="e-<%=locals.id%>" checked>
   <label class="form-check-label" for="e-<%=locals.id%>">Show images in event names <%= locals.q.v === 'yahrzeit' ? '🕯️ ✡️' : '✡️ 🌒'%></label>

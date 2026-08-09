@@ -20,7 +20,7 @@ ul.hebcal-results li {
 <div class="col-md-8">
 <h2><%= locals.Locale.gettext("Shabbat Times for", locals.locale) %> <%= locals.location.getShortName() %></h2>
 <h5 class="text-body-secondary"><%= locals.location.getName() %></h5>
-<% if (typeof locals.message !== 'undefined') { -%>
+<% if (locals.message !== undefined) { -%>
 <div class="alert alert-danger alert-dismissible" role="alert">
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   <%= locals.message %>

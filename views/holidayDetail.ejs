@@ -3,8 +3,8 @@
 }) -%>
 <link rel="canonical" href="https://www.hebcal.com/holidays/<%= locals.holidayAnchor %><%= locals.year ? '-' + locals.year : '' %><%= (locals.il && locals.isShaloshRegalim) ? '?i=on' : '' %>">
 <% if (locals.noindex) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<% if (typeof locals.prev !== 'undefined') { %><link rel="prev" href="<%=locals.prev.href%>"><% } %>
-<% if (typeof locals.next !== 'undefined') { %><link rel="next" href="<%=locals.next.href%>"><% } %>
+<% if (locals.prev !== undefined) { %><link rel="prev" href="<%=locals.prev.href%>"><% } %>
+<% if (locals.next !== undefined) { %><link rel="next" href="<%=locals.next.href%>"><% } %>
 <meta name="description" content="<%=locals.descFirstTwo%> <%=locals.holidayQ%> <%=locals.nextObserved%>">
 <meta name="keywords" content="<%=locals.translations.join(',')%>">
 <style>
@@ -157,7 +157,7 @@ data-ad-slot="5342180883"></ins>
 </script>
 </div><!-- .d-print-none -->
 
-<% if (typeof locals.meta.reading !== 'undefined') { %>
+<% if (locals.meta.reading !== undefined) { %>
 <h3 id="reading" class="mt-4">Tanakh</h3>
 <% if (locals.isShaloshRegalim) { %>
 <p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.rpath + (locals.il ? '' : '?i=on'), subject: 'holiday schedule'}) -%></p>
@@ -175,11 +175,11 @@ data-ad-slot="5342180883"></ins>
 <% } // meta.items %>
 
 <% for (const [item, reading] of Object.entries(locals.meta.reading)) { %>
-<% if (typeof reading.d !== 'undefined') { %><div id="r-<%=reading.d.format('YYYY-MM-DD')%><%= item.endsWith(" (Mincha)") ? '-mincha':''%>"></div><% } -%>
+<% if (reading.d !== undefined) { %><div id="r-<%=reading.d.format('YYYY-MM-DD')%><%= item.endsWith(" (Mincha)") ? '-mincha':''%>"></div><% } -%>
 <h4 id="reading-<%=reading.id%>"><%=item.replaceAll("'", '’')%>
 <% if (reading.hebrew) { %> / <span lang="he" dir="rtl" class="text-nowrap"><%= reading.hebrew %></span><% } %>
 <% if (reading.note) { %><br><span class="text-burgundy small"><%=reading.note%></span><% } -%>
-<% if (typeof reading.d !== 'undefined') { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString().replaceAll("'", '’')%></span></time><% } %>
+<% if (reading.d !== undefined) { %><br><time class="text-body-secondary small" datetime="<%=reading.d.format('YYYY-MM-DD')%>"><%=reading.d.format('dddd')%>, <span class="text-nowrap"><%=reading.d.format('D MMMM YYYY')%></span> / <span class="text-nowrap"><%=reading.hd.toString().replaceAll("'", '’')%></span></time><% } %>
 </h4>
 <% if (reading.summary) { %>
 <p class="lead torah">Torah Portion:
@@ -223,7 +223,7 @@ Jewish Holidays: A Guide &amp; Commentary</a></em>
 <small class="text-body-secondary">(paid link)</small>
 <dd>Rabbi Michael Strassfeld
 <% } -%>
-<% if (typeof locals.meta.reading !== 'undefined') { %>
+<% if (locals.meta.reading !== undefined) { %>
 <dt><em><a rel="sponsored"
 title="Tanakh: The Holy Scriptures, The New JPS Translation According to the Traditional Hebrew Text"
 href="https://www.amazon.com/o/ASIN/0827603665/hebcal-20">Tanakh:
@@ -240,7 +240,7 @@ href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <% } %>
 </dl>
 </div><!-- .col-md-10 -->
-<% if (typeof locals.meta.books !== 'undefined') { %>
+<% if (locals.meta.books !== undefined) { %>
 <div class="col-md-2 mt-2">
 <h6 id="books">Books <small class="text-body-secondary">(paid links)</small></h6>
 <div class="row">
@@ -278,10 +278,10 @@ Thank you for supporting Hebcal.</p>
 <div class="row">
 <%- await include('partials/holidayDetailBreadcrumb.ejs') -%>
 </div>
-<% if (typeof locals.prev !== 'undefined' || typeof locals.next !== 'undefined') { %>
+<% if (locals.prev !== undefined || locals.next !== undefined) { %>
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (typeof locals.prev !== 'undefined') { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=locals.prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=locals.prev.startIsoDate%>"><%-locals.prev.d.format('D[&nbsp;]MMMM')%></time> · <%=locals.prev.name.replaceAll("'", '’')%></a></div><% } %>
-<% if (typeof locals.next !== 'undefined') { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=locals.next.href%>"><%=locals.next.name.replaceAll("'", '’')%> · <time datetime="<%=locals.next.startIsoDate%>"><%-locals.next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
+<% if (locals.prev !== undefined) { %><div><a rel="prev" class="btn btn-outline-secondary me-2" href="<%=locals.prev.href%>"><span aria-hidden="true">←&nbsp;</span><time datetime="<%=locals.prev.startIsoDate%>"><%-locals.prev.d.format('D[&nbsp;]MMMM')%></time> · <%=locals.prev.name.replaceAll("'", '’')%></a></div><% } %>
+<% if (locals.next !== undefined) { %><div><a rel="next" class="btn btn-outline-secondary ms-2" href="<%=locals.next.href%>"><%=locals.next.name.replaceAll("'", '’')%> · <time datetime="<%=locals.next.startIsoDate%>"><%-locals.next.d.format('D[&nbsp;]MMMM')%></time><span aria-hidden="true">&nbsp;→</span></a></div><% } %>
 </div>
 <% } %>
 <% if (!locals.noindex && !locals.currentItem.d.isBefore(locals.today) && locals.jsonLD) { %><script type="application/ld+json"><%- locals.jsonForScript(locals.jsonLD) %></script><% } %>

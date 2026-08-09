@@ -111,7 +111,7 @@ Some congregations read the entire parsha every year.</div>
   const triReading = locals.triennial.readings[yr - 1]; %>
 <div class="col-lg-3 col-sm-6">
 <h5><span class="text-nowrap">Triennial Year <%=yr%></span>
-<% if (typeof triReading.d !== 'undefined') { %><br><span class="h6 small text-body-secondary"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
+<% if (triReading.d !== undefined) { %><br><span class="h6 small text-body-secondary"><time datetime="<%=triReading.d.format('YYYY-MM-DD')%>"><%=triReading.d.format('D MMM YYYY')%></time></span><% } %></h5>
 <% if (triReading.readSeparately) { %>
 <p>Read separately <%= locals.israelDiasporaDiffer ? 'in ' + locals.locationName : '' %> in <%=triReading.hyear%></p>
 <ul class="list-unstyled">

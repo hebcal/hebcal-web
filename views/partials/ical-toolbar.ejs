@@ -13,7 +13,7 @@ target="_blank"
 title="Subscribe to <%=locals.name%> in Outlook.com"
 href="https://outlook.live.com/calendar/addfromweb?url=http://download.hebcal.com/ical/<%=locals.basename%>.ics&amp;name=<%=encodeURIComponent(locals.name)%>&amp;mkt=en-001">
 <svg class="icon"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg> Outlook.com</a>
-<% if (typeof locals.noCSV === 'undefined') { %>
+<% if (locals.noCSV === undefined) { %>
 <a class="btn btn-outline-primary btn-sm me-2 mb-2 download" id="quick-csv-<%=locals.basename%>"
 title="Download <%=locals.name%> legacy Comma Separated Values format"
 href="https://download.hebcal.com/ical/<%=locals.basename%>.csv" download="<%=locals.basename%>.csv">
