@@ -12,8 +12,8 @@ import {zmanimIcalendar} from './zmanimDownload.js';
 import {deserializeDownload} from './deserializeDownload.js';
 import {readJSON} from './readJSON.js';
 import {createBaseApp, useBackendHostname, useObservability, useTimeout,
-  useCompression, useResponseLength, startServer,
-  stopIfTimedOut} from './app-common.js';
+  useCompression, useResponseLength,
+  startServer} from './app-common.js';
 import './locale.js';
 
 const redirectMap = readJSON('./redirectDownload.json');
@@ -42,11 +42,14 @@ app.use(async function onlyGetAndHead(ctx, next) {
         {headers: {'Allow': 'GET, HEAD'}});
   }
   await next();
+  // Semi-unrelated cleanup. If the handler en
+  // Cache-Control set before a throw survives onto error responses in the download app
+  if (ctx.status === 404) {
+    ctx.remove('Cache-Control');
+  }
 });
 
 useTimeout(app);
-
-app.use(stopIfTimedOut());
 
 app.use(async function fixup0(ctx, next) {
   // don't allow compress middleware to assume that a missing
@@ -85,7 +88,6 @@ app.use(async function redirV2(ctx, next) {
 app.use(conditional());
 useCompression(app, {brotliQuality: 3, zstdLevel: 10});
 
-app.use(stopIfTimedOut());
 useResponseLength(app);
 
 const DOCUMENT_ROOT = '/var/www/html';
@@ -103,7 +105,8 @@ app.use(async function fixup1(ctx, next) {
   }
   if (rpath === '/ical' || rpath === '/ical/') {
     ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
-    ctx.redirect('https://www.hebcal.com/ical/', 301);
+    ctx.status = 301;
+    ctx.redirect('https://www.hebcal.com/ical/');
     return;
   }
   if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
@@ -123,8 +126,6 @@ app.use(async function fixup1(ctx, next) {
   }
   return next();
 });
-
-app.use(stopIfTimedOut());
 
 app.use(async function redirLegacy(ctx, next) {
   if (ctx.request.querystring.length === 0) {
@@ -191,8 +192,6 @@ app.use(async function fixup2(ctx, next) {
   await next();
 });
 
-app.use(stopIfTimedOut());
-
 app.use(async function fixup3(ctx, next) {
   const rpath = ctx.request.path;
   const q = ctx.request.query;
@@ -221,6 +220,13 @@ app.use(async function sendStatic(ctx, next) {
   return next();
 });
 
+// This app has no cooperative timeout checkpoints, unlike app-www.js. Nothing
+// in the chain ahead of the dispatcher yields to the event loop: sendStatic()
+// does async fs reads, but only on the paths where it answers the request and
+// ends the chain, so a checkpoint after it is still reached microseconds into
+// the request. With no await that can let the 8s timer fire, ctx.state.timeout
+// is always false here and a checkpoint would be pure decoration.
+
 // request dispatcher
 app.use(async function router(ctx, next) {
   const rpath = ctx.request.path;
@@ -245,8 +251,6 @@ app.use(async function router(ctx, next) {
   }
   await next();
 });
-
-app.use(stopIfTimedOut());
 
 app.use(serve(DOCUMENT_ROOT, {defer: false, maxage: 604800000}));
 

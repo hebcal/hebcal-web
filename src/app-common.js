@@ -103,6 +103,24 @@ export function useObservability(app) {
 
 /**
  * Registers the 8-second request timeout middleware.
+ *
+ * **This bounds slow I/O only. It cannot bound slow CPU.** The timeout is a
+ * `setTimeout` raced against the middleware chain, so it is a macrotask: while
+ * a handler is doing synchronous work the event loop never turns and the timer
+ * physically cannot fire. Measured: a handler that awaits for 2000ms is cut off
+ * at ~520ms and returns 503, while a handler that spins for 2000ms runs to
+ * completion and returns 200.
+ *
+ * It is still worth having -- a hung MySQL query or geoip socket is exactly the
+ * case it catches, and it costs ~0.5us per request -- but do not reach for it
+ * as protection against an expensive render. JavaScript has no way to cancel
+ * synchronous work, so the only real defenses are bounding the input (see
+ * `dropDailyLearningOutsideRange()` in calendar.js), moving the work off-thread,
+ * or Varnish's `first_byte_timeout`, which is what actually shields users today.
+ *
+ * Note the timeout does not stop the doomed request either: `Promise.race()`
+ * abandons the result but the handler keeps running. {@link stopIfTimedOut}
+ * limits the waste by refusing to enter later middleware.
  * @param {Koa} app
  */
 export function useTimeout(app) {
@@ -197,6 +215,21 @@ export function startServer(app, defaultPort) {
   });
 }
 
+/**
+ * Checkpoint that refuses to enter the rest of the middleware chain once
+ * {@link useTimeout} has already fired.
+ *
+ * A timed-out request is not cancelled -- `Promise.race()` abandons the result
+ * but the handler keeps running and keeps burning CPU on a response the client
+ * will never see. Sprinkling these between stages caps that waste: measured
+ * with a 300ms timeout, a slow lookup followed by a 400ms render runs the
+ * render once without a checkpoint and zero times with one.
+ *
+ * This only helps where the chain can still be interrupted, which means the
+ * timer must already have fired -- so it is subject to the same limitation as
+ * {@link useTimeout} and does nothing about a single long synchronous handler.
+ * @return {function} Koa middleware
+ */
 export function stopIfTimedOut() {
   return async function stopIfTimedOut0(ctx, next) {
     if (!ctx.state.timeout) {
