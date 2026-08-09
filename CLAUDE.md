@@ -231,6 +231,50 @@ app-level response-caching win available; only per-render cost matters.
   Node 26 has **native** Temporal, so this cost shows as self time in the
   calling frame rather than in `temporal-polyfill`.
 
+### Response compression (Aug 2026)
+
+`useCompression()` in `app-common.js` offers gzip, brotli and zstd on both
+servers. koa-compress negotiates in the fixed order
+`['zstd', 'br', 'gzip', 'deflate', 'identity']`, so **zstd wins whenever the
+client offers it** and disabling it falls through to brotli. Measure with
+`tools/perf/encstats.js` and `tools/perf/compress-bench.js`.
+
+- **Who uses what is split by client type, not by route.** On download, zstd is
+  23% of 200s but comes almost entirely from browsers (72% of browser
+  responses, mostly `.csv`). The automated subscribers use brotli and never
+  zstd at all: Google Calendar 99.6% br, Apple iOS/macOS 99.5% br, Exchange and
+  script clients 99% gzip. PDFs are never compressed — `application/pdf` does
+  not match koa-compress's content-type filter — so PDF is irrelevant here.
+- **Dropping an encoding to reduce Varnish variants does not pay off on
+  download, because the URLs that repeat and the URLs that use zstd are
+  disjoint sets.** Of ~7,000 URLs fetched more than once, 6,076 are served as
+  brotli only, and just **81 would lose a variant if zstd were removed** — the
+  repeated URLs are subscription feeds polled by calendar clients, while zstd
+  is browsers doing one-off downloads that never repeat. Against that, those
+  responses grow ~19% (`.ics`) to ~24% (`.csv`). Weigh any future "drop an
+  encoding" proposal against `encsets`-style analysis, not against the raw
+  share of responses.
+- **Count only status 200 when analyzing this.** A 304 has no body and no
+  `Content-Encoding`, so counting 304s makes uncompressed responses look like a
+  majority and invents a `br+none` variant pair that does not exist. Exclude
+  `/ping` and `/metrics` too.
+- **The zstd levels are the real mistuning, and both are far past the knee.**
+  zstd is very fast at levels 1–3 and falls off a cliff above ~6:
+
+  | corpus | `zstd:3` | `zstd:10` | `zstd:12` |
+  |---|---|---|---|
+  | `.ics` | 0.04 ms / 7.06% | 0.24 ms / 6.14% | 0.65 ms / 6.10% |
+  | `.csv` | 0.15 ms / 14.08% | 1.44 ms / 11.06% | 3.62 ms / 10.60% |
+  | www HTML | 0.09 ms / 26.50% | 0.62 ms / 24.30% | 1.23 ms / 24.23% |
+
+  www runs `zstdLevel: 12`, which costs 2x the CPU of level 10 for 0.07
+  percentage points of size — pure waste. Brotli, by contrast, is tuned about
+  right: `br:6` on www is within 0.6pp of `br:9`, and `br:3` on download is a
+  reasonable speed pick.
+- **On `.ics`, zstd at level 3 strictly dominates brotli at quality 3** — 0.04 ms
+  vs 0.14 ms *and* 7.06% vs 7.28%. `.ics` is repetitive enough that zstd's
+  cheap levels give brotli-quality ratios, which is not true of HTML.
+
 ### Where the time goes on www.hebcal.com (Aug 2026 baseline)
 
 By share of total request time: `/hebcal` ~38%, `/converter` ~20%,

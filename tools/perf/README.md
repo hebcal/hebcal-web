@@ -60,3 +60,39 @@ Both take `<urls-file> <limit> <out.json> [port]`. Capture before and after,
 then diff the JSON. Sanity-check the method first by capturing twice against
 unchanged code — that must come out 100% identical, otherwise the normalization
 is incomplete and any comparison built on it is meaningless.
+
+## Compression
+
+Two questions come up together: which content encodings are worth offering, and
+what level each should run at. `encstats.js` answers the first from production
+logs, `compress-bench.js` the second from real response bodies.
+
+```bash
+# what clients actually negotiate, by extension / user-agent / route family
+node tools/perf/encstats.js dl19.log dl19-new.log dl16.log
+node tools/perf/encstats.js --by=ua w45.log w46.log
+
+# CPU vs ratio, over real bodies rather than synthetic text
+node tools/perf/server.js download &
+node tools/perf/capture-bodies.js /path/to/out/v4-ics.txt 250 /tmp/corpus/ics
+node tools/perf/compress-bench.js /tmp/corpus/ics
+node tools/perf/compress-bench.js /tmp/corpus/ics --levels=zstd:3,zstd:10 --reps=5
+```
+
+`encstats.js` reads the `enc` field, which is the response `Content-Encoding`;
+absent means the response went out uncompressed. Two filters matter and are on
+by default: only status 200 counts, because 304s have no body and would
+otherwise show up as a phantom "uncompressed" majority; and `/ping` and
+`/metrics` are dropped, since the health check and the Prometheus scrape are
+high-count machine traffic that says nothing about real clients. `--all` keeps
+them.
+
+`capture-bodies.js` fetches with `Accept-Encoding: identity`, so the corpus is
+what the compressor is actually handed. Benchmark against real bodies —
+`.ics` is extremely repetitive and compresses to ~6%, `.csv` to ~11%, and HTML
+to ~23%, so a conclusion drawn from one does not transfer to the others.
+
+When reading the output, the column that matters is **vs best**: the extra bytes
+a configuration costs over the smallest one tested. Ratio differences of under a
+percentage point are not worth multiples of CPU, and the levels sit on a sharp
+knee — see the findings in `CLAUDE.md`.
