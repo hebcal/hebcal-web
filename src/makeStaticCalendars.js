@@ -4,12 +4,15 @@ import {exec} from 'node:child_process';
 import util from 'node:util';
 import fs from 'node:fs';
 import {basename} from 'node:path';
-import minimist from 'minimist';
 import pino from 'pino';
 
-const argv = minimist(process.argv.slice(2), {
-  boolean: ['help', 'quiet', 'verbose', 'nocompress'],
-  alias: {h: 'help', q: 'quiet', v: 'verbose', c: 'nocompress'},
+const {values: argv} = util.parseArgs({
+  options: {
+    help: {type: 'boolean', short: 'h'},
+    quiet: {type: 'boolean', short: 'q'},
+    verbose: {type: 'boolean', short: 'v'},
+    nocompress: {type: 'boolean', short: 'c'},
+  },
 });
 
 if (argv.help) {
