@@ -101,7 +101,7 @@ app.use(async function fixup0(ctx, next) {
   await next();
 });
 
-useCompression(app, {brotliQuality: 6, zstdLevel: 12});
+useCompression(app, {brotliQuality: 6, zstdLevel: 6});
 
 useResponseLength(app);
 

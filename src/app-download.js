@@ -86,7 +86,7 @@ app.use(async function redirV2(ctx, next) {
 });
 
 app.use(conditional());
-useCompression(app, {brotliQuality: 3, zstdLevel: 10});
+useCompression(app, {brotliQuality: 3, zstdLevel: 6});
 
 useResponseLength(app);
 

@@ -195,12 +195,31 @@ app-level response-caching win available; only per-render cost matters.
   under `layout` (57% of PDF CPU), not under `open` (5%) — don't be misled by
   the self-time profile alone. Across 253 real PDFs there were only ~2,000
   unique (font, word) pairs, i.e. ~97% of shaping is redundant across requests.
-  `src/pdfFontCache.js` now shares the shaped-word cache process-wide (63 → 32
-  ms/request, output unchanged). It deliberately does **not** share the parsed
-  fontkit font, which would be ~1.5x more: see the header comment there for why
-  that corrupts the ToUnicode CMap. Any future attempt to cache fonts across
-  documents has to reckon with fontkit caching `Glyph` objects by id along with
-  the code points from whichever call created them first.
+  **Do not try to fix this by sharing the shaped-word cache across documents.**
+  `src/pdfFontCache.js` did exactly that (63 → 32 ms/request, byte-identical
+  output) and was reverted on 2026-08-09 after it exhausted memory in
+  production: every `download.hebcal.com` worker was OOM-killed after ~189 PDFs,
+  restarting every ~20 minutes on a 990 MB box.
+
+  The cache was bounded at 20,000 entries per font, which bounds *entries* but
+  not *bytes*. Its values are fontkit `GlyphRun`s, and every `Glyph` in a run
+  holds `_font` — the whole parsed font, with its cmap processor, layout engine
+  and glyph cache. So each entry pins the entire font of whichever document
+  first shaped that word, and entries are only ever written on a miss, never
+  overwritten. Rendered text is *not* fixed vocabulary — the calendar subtitle
+  carries city names, ZIP codes and years — so nearly every request contributed
+  a new word, and with it a new pinned font: 60 documents pinned 60 distinct
+  fonts, and a local replay of real production URLs retained ~2.8 MB per PDF
+  with the heap climbing linearly and no plateau. Reverting made the same
+  replay flat at ~40 MB across 400 PDFs.
+
+  Any future attempt here has to keep cached values free of references back
+  into per-document state, and cannot simply share the parsed font either: that
+  is ~1.5x on its own, but fontkit caches `Glyph` objects by id along with the
+  code points from whichever call created them first, and pdfkit copies
+  `glyph.codePoints` into the PDF's ToUnicode CMap — which measurably changed
+  the CMap in ~4% of a 250-PDF sample, silently degrading copy/paste, search
+  and accessibility.
 - **iCalendar — `foldLine` was ~29% of `.ics` CPU** and ~57% of `/v3` yahrzeit
   CPU, essentially all of it `Intl.Segmenter`. Fixed upstream in
   `@hebcal/icalendar` by folding on code-point boundaries and consulting the
@@ -211,6 +230,54 @@ app-level response-caching win available; only per-render cost matters.
   `withTimeZone` does not change the instant, so that leg is dead weight.
   Node 26 has **native** Temporal, so this cost shows as self time in the
   calling frame rather than in `temporal-polyfill`.
+
+### Response compression (Aug 2026)
+
+`useCompression()` in `app-common.js` offers gzip, brotli and zstd on both
+servers. koa-compress negotiates in the fixed order
+`['zstd', 'br', 'gzip', 'deflate', 'identity']`, so **zstd wins whenever the
+client offers it** and disabling it falls through to brotli. Measure with
+`tools/perf/encstats.js` and `tools/perf/compress-bench.js`.
+
+- **Who uses what is split by client type, not by route.** On download, zstd is
+  23% of 200s but comes almost entirely from browsers (72% of browser
+  responses, mostly `.csv`). The automated subscribers use brotli and never
+  zstd at all: Google Calendar 99.6% br, Apple iOS/macOS 99.5% br, Exchange and
+  script clients 99% gzip. PDFs are never compressed — `application/pdf` does
+  not match koa-compress's content-type filter — so PDF is irrelevant here.
+- **Dropping an encoding to reduce Varnish variants does not pay off on
+  download, because the URLs that repeat and the URLs that use zstd are
+  disjoint sets.** Of ~7,000 URLs fetched more than once, 6,076 are served as
+  brotli only, and just **81 would lose a variant if zstd were removed** — the
+  repeated URLs are subscription feeds polled by calendar clients, while zstd
+  is browsers doing one-off downloads that never repeat. Against that, those
+  responses grow ~19% (`.ics`) to ~24% (`.csv`). Weigh any future "drop an
+  encoding" proposal against `encsets`-style analysis, not against the raw
+  share of responses.
+- **Count only status 200 when analyzing this.** A 304 has no body and no
+  `Content-Encoding`, so counting 304s makes uncompressed responses look like a
+  majority and invents a `br+none` variant pair that does not exist. Exclude
+  `/ping` and `/metrics` too.
+- **The zstd levels are the real mistuning, and both are far past the knee.**
+  zstd is very fast at levels 1–3 and falls off a cliff above ~6:
+
+  | corpus | `zstd:3` | `zstd:10` | `zstd:12` |
+  |---|---|---|---|
+  | `.ics` | 0.04 ms / 7.06% | 0.24 ms / 6.14% | 0.65 ms / 6.10% |
+  | `.csv` | 0.15 ms / 14.08% | 1.44 ms / 11.06% | 3.62 ms / 10.60% |
+  | www HTML | 0.09 ms / 26.50% | 0.62 ms / 24.30% | 1.23 ms / 24.23% |
+
+  Both servers now run `zstdLevel: 6`, down from 12 on www and 10 on download.
+  Level 12 cost 2x the CPU of level 10 for 0.07 percentage points of size.
+  Charging every logged 200 at the level actually used, compression was 26.9%
+  of total request time on www and 12.3% on download; the retune cuts 14.4% of
+  total www request time for +1.1% bytes on the wire, and 2.3% of download for
+  +0.8%. Do not raise these again without re-running the sweep. Brotli, by
+  contrast, is tuned about right: `br:6` on www is within 0.6pp of `br:9`, and
+  `br:3` on download is a reasonable speed pick.
+- **On `.ics`, zstd at level 3 strictly dominates brotli at quality 3** — 0.04 ms
+  vs 0.14 ms *and* 7.06% vs 7.28%. `.ics` is repetitive enough that zstd's
+  cheap levels give brotli-quality ratios, which is not true of HTML.
 
 ### Where the time goes on www.hebcal.com (Aug 2026 baseline)
 
