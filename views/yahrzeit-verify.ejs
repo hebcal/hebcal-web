@@ -2,44 +2,44 @@
 <div class="row mt-2">
 <div class="col">
 <p class="lead">Receive personal Hebrew calendar anniversary reminders by email.</p>
-<% if (confirmed) { %>
+<% if (locals.confirmed) { %>
 <div class="alert alert-success">
-<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> Your annual email reminders are now active.
 </div><!-- .alert -->
-<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
-  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=locals.calendarId%>">
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#gi-user-parents"></use></svg>
   View calendar</a>
-  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>#form">
-  <svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=locals.calendarId%>#form">
+  <svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg>
   Edit calendar</a></p>
-<% } else if (alreadyVerified) { %>
+<% } else if (locals.alreadyVerified) { %>
 <div class="alert alert-info">
-<svg class="icon me-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
-<strong>Email already verified.</strong> Your annual email reminders are already active and will be sent to <strong><%= emailAddress %></strong>.
+<svg class="icon me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
+<strong>Email already verified.</strong> Your annual email reminders are already active and will be sent to <strong><%= locals.emailAddress %></strong>.
 </div><!-- .alert -->
-<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>">
-  <svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#gi-user-parents"></use></svg>
+<p><a class="btn btn-primary mb-2 me-2" href="/yahrzeit/edit/<%=locals.calendarId%>">
+  <svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#gi-user-parents"></use></svg>
   View calendar</a>
-  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=calendarId%>#form">
-  <svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg>
+  <a class="btn btn-secondary mb-2 me-2" href="/yahrzeit/edit/<%=locals.calendarId%>#form">
+  <svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg>
   Edit calendar</a></p>
 <% } else { %>
-<p>To activate your <%= anniversaryType %> reminders, please confirm your email
+<p>To activate your <%= locals.anniversaryType %> reminders, please confirm your email
 and complete your registration via the button below.</p>
-<p>Email: <strong><%= emailAddress %></strong></p>
-<form method="post" action="<%= rpath %>">
+<p>Email: <strong><%= locals.emailAddress %></strong></p>
+<form method="post" action="<%= locals.rpath %>">
 <input type="hidden" name="commit" value="1">
 <button type="submit" class="btn btn-primary mb-2">
-  <svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+  <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
   Confirm
 </button>
 </form>
 <p>Receive annual reminders for:</p>
 <ol>
-<% for (let num = 1; num <= maxId; num++) { -%>
-<%   if (details['date'+num]) { -%>
-<li><%= details['n'+num] || `Person${num}` %><% if (details['t'+num] !== 'Other') { %>’s <%= details['t'+num] %><% } %> - <%= details['date'+num] %>
+<% for (let num = 1; num <= locals.maxId; num++) { -%>
+<%   if (locals.details['date'+num]) { -%>
+<li><%= locals.details['n'+num] || `Person${num}` %><% if (locals.details['t'+num] !== 'Other') { %>’s <%= locals.details['t'+num] %><% } %> - <%= locals.details['date'+num] %>
 <%   } -%>
 <% } -%>
 </ol>

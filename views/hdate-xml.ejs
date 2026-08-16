@@ -3,16 +3,16 @@
 <channel>
 <title>Hebrew Date</title>
 <link>https://www.hebcal.com/converter</link>
-<atom:link href="https://www.hebcal.com<%= rpath %>" rel="self" type="application/rss+xml" />
+<atom:link href="https://www.hebcal.com<%= locals.rpath %>" rel="self" type="application/rss+xml" />
 <description>Today’s Hebrew Date from Hebcal.com</description>
-<language><%= lang %></language>
-<copyright>Copyright (c) <%= year %> Michael J. Radwin. All rights reserved.</copyright>
-<lastBuildDate><%= lastBuildDate %></lastBuildDate>
+<language><%= locals.lang %></language>
+<copyright>Copyright (c) <%= locals.year %> Michael J. Radwin. All rights reserved.</copyright>
+<lastBuildDate><%= locals.lastBuildDate %></lastBuildDate>
 <item>
-<title><%= title %></title>
-<link>https://www.hebcal.com/converter?hd=<%=hd%>&amp;hm=<%=hm%>&amp;hy=<%=hy%>&amp;h2g=1&amp;utm_medium=rss&amp;utm_source=rss-hdate-<%=lang%></link>
-<description><%= title %></description>
-<pubDate><%= lastBuildDate %></pubDate>
+<title><%= locals.title %></title>
+<link>https://www.hebcal.com/converter?hd=<%=locals.hd%>&amp;hm=<%=locals.hm%>&amp;hy=<%=locals.hy%>&amp;h2g=1&amp;utm_medium=rss&amp;utm_source=rss-hdate-<%=locals.lang%></link>
+<description><%= locals.title %></description>
+<pubDate><%= locals.lastBuildDate %></pubDate>
 </item>
 </channel>
 </rss>

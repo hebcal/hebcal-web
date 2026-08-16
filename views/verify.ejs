@@ -3,21 +3,21 @@
 <div class="col">
 <p class="lead">Confirm your subscription to weekly Shabbat candle-lighting
   times and Torah portion by email.</p>
-<% if (confirmed) { %>
+<% if (locals.confirmed) { %>
 <div class="alert alert-success">
-<svg class="icon m-2"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+<svg class="icon m-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 <strong>Thank you!</strong> Your subscription is now active.
-A confirmation message has been sent to <strong><%= emailAddress %></strong>.
+A confirmation message has been sent to <strong><%= locals.emailAddress %></strong>.
 </div><!-- .alert -->
 <% } else { %>
 <p>To activate your account, please confirm your email and complete your registration via the button below.</p>
-<p>Email: <strong><%= emailAddress %></strong>
-<br>Location: <%= locationName %></p>
-<form method="post" action="<%= rpath %>">
-<input type="hidden" name="k" value="<%= subscriptionId %>">
+<p>Email: <strong><%= locals.emailAddress %></strong>
+<br>Location: <%= locals.locationName %></p>
+<form method="post" action="<%= locals.rpath %>">
+<input type="hidden" name="k" value="<%= locals.subscriptionId %>">
 <input type="hidden" name="commit" value="1">
 <button type="submit" class="btn btn-primary mb-2">
-  <svg class="icon icon-sm mt-n1"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+  <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
   Confirm Subscription
 </button>
 </form>

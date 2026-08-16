@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hebcal>
-<gregorian year="<%= gy %>" month="<%= gm %>" day="<%= gd %>" <% if (gs) { %>sunset="1" <% } %>/>
-<hebrew year="<%= hy %>" month="<%= hmStr %>" day="<%= hd %>" str="<%= hebrew %>" />
-<hebdate year="<%= heDateParts.y %>" month="<%= heDateParts.m %>" day="<%= heDateParts.d %>" />
-<% if (events.length) { -%>
+<gregorian year="<%= locals.gy %>" month="<%= locals.gm %>" day="<%= locals.gd %>" <% if (locals.gs) { %>sunset="1" <% } %>/>
+<hebrew year="<%= locals.hy %>" month="<%= locals.hmStr %>" day="<%= locals.hd %>" str="<%= locals.hebrew %>" />
+<hebdate year="<%= locals.heDateParts.y %>" month="<%= locals.heDateParts.m %>" day="<%= locals.heDateParts.d %>" />
+<% if (locals.events.length) { -%>
 <events>
-<%   dateItems.both.forEach((item) => { -%>
+<%   locals.dateItems.both.forEach((item) => { -%>
  <event name="<%= item.desc %>" diaspora="1" israel="1" <% if (item.url) { %>href="<%= item.url %>"<% } %> />
 <% }); -%>
-<%   dateItems.diasporaOnly.forEach((item) => { -%>
+<%   locals.dateItems.diasporaOnly.forEach((item) => { -%>
  <event name="<%= item.desc %>" diaspora="1" israel="0" href="<%= item.url %>" />
 <% }); -%>
-<%   dateItems.israelOnly.forEach((item) => { -%>
+<%   locals.dateItems.israelOnly.forEach((item) => { -%>
  <event name="<%= item.desc %>" diaspora="0" israel="1" href="<%= item.url %>" />
 <% }); -%>
 </events>

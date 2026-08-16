@@ -1,12 +1,12 @@
 <%- await include('partials/header.ejs', {
-  title: `Shabbat Torah Readings ${hyear} - Hebcal`,
+  title: `Shabbat Torah Readings ${locals.hyear} - Hebcal`,
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/sedrot/<%=hyear%>?i=<%=il?'on':'off'%>">
-<% if (noIndex) { -%>
+<link rel="canonical" href="https://www.hebcal.com/sedrot/<%=locals.hyear%>?i=<%=locals.il?'on':'off'%>">
+<% if (locals.noIndex) { -%>
 <meta name="robots" content="noindex, nofollow">
 <% } else { -%>
-<link rel="prev" href="<%=prev%>">
-<link rel="next" href="<%=next%>">
+<link rel="prev" href="<%=locals.prev%>">
+<link rel="next" href="<%=locals.next%>">
 <% } -%>
 </head>
 <body>
@@ -14,10 +14,10 @@
 <div class="container">
 <div class="row mt-2">
 <div class="col">
-<% if (hyear <= 5513) { -%>
+<% if (locals.hyear <= 5513) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h2>Shabbat Torah Readings <%=hyear%> <span class="h4 small text-body-secondary"><%=il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
+<h2>Shabbat Torah Readings <%=locals.hyear%> <span class="h4 small text-body-secondary"><%=locals.il ? 'Israel 🇮🇱' : 'Diaspora'%></span></h2>
 <p>The Torah (Five Books of Moses) is divided into 54 sections,
 or <em>parshiyot</em>. Each section (called a <em>parsha</em>, also
 transliterated <em>parashah</em> or <em>parasha</em>) is read during a
@@ -26,8 +26,8 @@ over the course of one Hebrew calendar year.</p>
 <p><a class="float-end btn btn-sm btn-secondary ms-3 mt-1 mb-1 d-print-none"
 href="#hcdl-modal" role="button" data-bs-toggle="modal"
 data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use
-href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
-<small><%- await include('partials/israel-diaspora-note.ejs', {il, href: hyear + '?i=' + (il ? 'off' : 'on'), subject: 'Torah reading schedule'}) -%></small></p>
+href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<small><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.hyear + '?i=' + (locals.il ? 'off' : 'on'), subject: 'Torah reading schedule'}) -%></small></p>
 
 <table class="table table-striped">
 <colgroup>
@@ -36,18 +36,18 @@ href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 <thead>
 <tr>
   <th>
-    <div class="float-start"><a title="<%=hyear-1%>" href="<%=prev%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+    <div class="float-start"><a title="<%=locals.hyear-1%>" href="<%=locals.prev%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
     Date</th>
   <th><span class="d-none d-sm-inline">Hebrew Date</span></th>
   <th>Parsha</th>
   <th><span class="d-none d-md-inline">Reading</span>
-    <div class="float-end"><a title="<%=hyear+1%>" href="<%=next%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a></div>
+    <div class="float-end"><a title="<%=locals.hyear+1%>" href="<%=locals.next%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#bi-chevron-double-right"></use></svg></a></div>
   </th>
 </tr>
 </thead>
 <tbody class="table-group-divider">
 <% let py = -1;
-for (const item of items) { %>
+for (const item of locals.items) { %>
 <tr>
   <td><time datetime="<%= item.d.format('YYYY-MM-DD') %>"><span class="text-nowrap"><%= item.d.format('MMMM D') %></span><%= item.d.year() !== py ? item.d.format(', YYYY') : '' %></time></td>
   <td><span class="d-none d-sm-inline text-nowrap"><%= item.hd.getDate() %> <%= item.hd.getMonthName() %></span></td>
@@ -66,10 +66,10 @@ for (const item of items) { %>
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <div>
-<a class="btn btn-outline-secondary me-2" href="<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=hyear - 1%></a>
+<a class="btn btn-outline-secondary me-2" href="<%=locals.prev%>"><span aria-hidden="true">←&nbsp;</span><%=locals.hyear - 1%></a>
 </div>
 <div>
-<a class="btn btn-outline-secondary ms-2" href="<%=next%>"><%=hyear + 1%><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="<%=locals.next%>"><%=locals.hyear + 1%><span aria-hidden="true">&nbsp;→</span></a>
 </div>
 </div>
 

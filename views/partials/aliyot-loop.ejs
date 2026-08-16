@@ -1,6 +1,6 @@
-<% if (typeof aliyot === 'object' && aliyot !== null) { -%>
+<% if (typeof locals.aliyot === 'object' && locals.aliyot !== null) { -%>
 <ol class="list-unstyled">
-<% for (const aliyah of Object.values(aliyot)) { -%>
+<% for (const aliyah of Object.values(locals.aliyot)) { -%>
 <%- await include('aliyah-listitem.ejs', {aliyah: aliyah}) -%>
 <% } -%>
 </ol>

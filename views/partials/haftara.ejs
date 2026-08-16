@@ -1,15 +1,15 @@
-<% if (reading.haftara) { %>
-<p class="haftara">Haftarah<%=reading.sephardic ? ' for Ashkenazim' : ''%><% if (reading?.reason?.haftara) { %><span class="text-success">*</span><% } %>:
-<%- reading.haftaraHtml %>
-<%- await include('numverses.ejs', {v: reading.haftaraNumV}) -%>
-<% if (reading?.reason?.haftara) { %><br><span class="text-success ps-1 small">*<%= reading.reason.haftara %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
-<% if (reading.haftThemeStr) { %><br><small class="text-body-secondary"><%= reading.haftThemeStr %></small><% } %>
+<% if (locals.reading.haftara) { %>
+<p class="haftara">Haftarah<%=locals.reading.sephardic ? ' for Ashkenazim' : ''%><% if (locals.reading?.reason?.haftara) { %><span class="text-success">*</span><% } %>:
+<%- locals.reading.haftaraHtml %>
+<%- await include('numverses.ejs', {v: locals.reading.haftaraNumV}) -%>
+<% if (locals.reading?.reason?.haftara) { %><br><span class="text-success ps-1 small">*<%= locals.reading.reason.haftara %> <%= locals.date ? '' : 'on ' + locals.d.format('D MMMM YYYY') %></span><% } %>
+<% if (locals.reading.haftThemeStr) { %><br><small class="text-body-secondary"><%= locals.reading.haftThemeStr %></small><% } %>
 </p>
 <% } // reading.haftara %>
-<% if (reading.sephardic) { %>
-<p class="haftara">Haftarah for Sephardim<% if (reading?.reason?.sephardic) { %><span class="text-success">*</span><% } %>:
-<%- reading.sephardicHtml %>
-<%- await include('numverses.ejs', {v: reading.sephardicNumV}) -%>
-<% if (reading?.reason?.sephardic) { %><br><span class="text-success ps-1 small">*<%= reading.reason.sephardic %> <%= date ? '' : 'on ' + d.format('D MMMM YYYY') %></span><% } %>
+<% if (locals.reading.sephardic) { %>
+<p class="haftara">Haftarah for Sephardim<% if (locals.reading?.reason?.sephardic) { %><span class="text-success">*</span><% } %>:
+<%- locals.reading.sephardicHtml %>
+<%- await include('numverses.ejs', {v: locals.reading.sephardicNumV}) -%>
+<% if (locals.reading?.reason?.sephardic) { %><br><span class="text-success ps-1 small">*<%= locals.reading.reason.sephardic %> <%= locals.date ? '' : 'on ' + locals.d.format('D MMMM YYYY') %></span><% } %>
 </p>
 <% } // reading.sephardic %>

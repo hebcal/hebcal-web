@@ -1,9 +1,9 @@
 <%- await include('partials/header.ejs', {
-  title: 'Jewish Holidays' + (yearOverride ? ` ${hyear - 1}-${hyear + 4}` : '') + ' - Hebcal',
+  title: 'Jewish Holidays' + (locals.yearOverride ? ` ${locals.hyear - 1}-${locals.hyear + 4}` : '') + ' - Hebcal',
 }) -%>
-<link rel="canonical" href="<%=canonical.href%>">
-<% if (hyear <= 5513 || hyear > (today.year() + 3860)) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<meta name="description" content="Dates of major and minor Jewish holidays for years <%=hyear-3762%>-<%=hyear-3756%>. Links to pages describing observance and customs, holiday Torah readings.">
+<link rel="canonical" href="<%=locals.canonical.href%>">
+<% if (locals.hyear <= 5513 || locals.hyear > (locals.today.year() + 3860)) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<meta name="description" content="Dates of major and minor Jewish holidays for years <%=locals.hyear-3762%>-<%=locals.hyear-3756%>. Links to pages describing observance and customs, holiday Torah readings.">
 <link rel="preconnect" href="https://pagead2.googlesyndication.com">
 </head>
 <body>
@@ -11,38 +11,38 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-8">
-<h2>Jewish Holidays <%= yearOverride ? `${hyear - 1}-${hyear + 4}` : '' %></h2>
-<% if (hyear <= 4939) { -%>
+<h2>Jewish Holidays <%= locals.yearOverride ? `${locals.hyear - 1}-${locals.hyear + 4}` : '' %></h2>
+<% if (locals.hyear <= 4939) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (hyear <= 5513) { -%>
+<% } else if (locals.hyear <= 5513) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<p>Dates of major and minor Jewish holidays for years <%=hyear-3762%>-<%=hyear-3756%>,
- as observed in <%= il ? 'Israel' : 'the Diaspora' %>.
+<p>Dates of major and minor Jewish holidays for years <%=locals.hyear-3762%>-<%=locals.hyear-3756%>,
+ as observed in <%= locals.il ? 'Israel' : 'the Diaspora' %>.
 <span class="d-print-none">
 Each holiday page includes a brief overview of special observances and
 customs, and any special Torah readings.</span></p>
 <p>Except for minor fasts,
 holidays begin at sundown on the first date specified and end at nightfall
 on the last date specified. For example, if the dates for Rosh
-Hashana are listed as <strong><time datetime="<%=RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=RH.add(1, 'd').format('MMM D')%></time></strong>,
-then the holiday begins at sundown on <strong><%=RH.subtract(1, 'd').format('MMM D')%></strong>
-and ends at nightfall on <strong><%=RH.add(1, 'd').format('MMM D')%></strong>.</p>
-<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: inverse.href, subject: 'holiday schedule'}) -%></p>
+Hashana are listed as <strong><time datetime="<%=locals.RH.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=locals.RH.subtract(1, 'd').format('MMM D')%></time>-<time datetime="<%=locals.RH.add(1, 'd').format('YYYY-MM-DD')%>"><%=locals.RH.add(1, 'd').format('MMM D')%></time></strong>,
+then the holiday begins at sundown on <strong><%=locals.RH.subtract(1, 'd').format('MMM D')%></strong>
+and ends at nightfall on <strong><%=locals.RH.add(1, 'd').format('MMM D')%></strong>.</p>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.inverse.href, subject: 'holiday schedule'}) -%></p>
 </div><!-- .col-sm-8 -->
 <div class="col-sm-4 d-print-none">
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-body-secondary mb-1">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-print-none mb-2">
-<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=locals.nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <!-- 300x250, created 10/14/10 -->
 <ins class="adsbygoogle"
 style="display:inline-block;width:300px;height:250px"
 data-ad-client="ca-pub-7687563417622459"
 data-ad-slot="1140358973"></ins>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-print-none -->
@@ -51,19 +51,19 @@ data-ad-slot="1140358973"></ins>
 <div class="row mt-2 d-print-none">
 <div class="col-auto">
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=hyear%>" href="hebcal-<%=hyear%>.pdf<%=il?'?i=on':''%>"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=locals.hyear%>" href="hebcal-<%=locals.hyear%>.pdf<%=locals.il?'?i=on':''%>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 </div>
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<a class="btn btn-secondary btn-sm" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
 </div>
 <div class="btn-group me-1 mb-1" role="group">
-<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal<%=il?'?i=on':''%>"><svg class="icon"><use href="<%=spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
+<a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal<%=locals.il?'?i=on':''%>"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
 </div><!-- .col-auto -->
 </div><!-- .row -->
 <div class="row mt-2">
 <div class="col">
-<% for (const [catId, category] of Object.entries(categories)) { %>
+<% for (const [catId, category] of Object.entries(locals.categories)) { %>
 <div id="<%=category.id%>" class="mt-3">
 <h3><%=category.name%>&nbsp;&nbsp;<%=category.emoji%></h3>
 <% if ('major-holidays' === category.id) { %>
@@ -95,29 +95,29 @@ precedence over what would be a minor holiday.</p>
 </colgroup>
 <thead class="table-group-divider">
 <tr><th>
-<% if (hyear > 3762) { -%>
-<div><a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
+<% if (locals.hyear > 3762) { -%>
+<div><a href="/holidays/?<%=locals.il?'i=on&':''%>year=<%=locals.hyear-5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#bi-chevron-double-left"></use></svg></a></div>
 <% } -%>
 Holiday
 </th>
-<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %>
+<% for (let yr = locals.hyear - 1; yr <= locals.hyear + 4; yr++) { %>
 <th>
-<% if (yr === hyear + 4) { %>
+<% if (yr === locals.hyear + 4) { %>
 <div class="float-end">
-<a href="/holidays/?<%=il?'i=on&':''%>year=<%=hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=spriteHref%>#bi-chevron-double-right"></use></svg></a>
+<a href="/holidays/?<%=locals.il?'i=on&':''%>year=<%=locals.hyear+5%>"><svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#bi-chevron-double-right"></use></svg></a>
 </div>
 <% } %>
-<a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
-<br><small class="<%= yr === hyear ? 'text-burgundy' : 'text-body-secondary' %>"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
+<a title="<%=yr-3761%>-<%=yr-3760%>" href="<%=yr-3761%>-<%=yr-3760%><%=locals.il?'?i=on':''%><%=('major-holidays' === category.id)?'':'#'+category.id%>"><%=yr%></a>
+<br><small class="<%= yr === locals.hyear ? 'text-burgundy' : 'text-body-secondary' %>"><%=yr-3761%>&#8209;<%=yr-3760%></small></th>
 <% } %>
 </tr>
 </thead>
 <tbody class="table-group-divider">
-<% for (const [holiday,arr] of Object.entries(items[catId])) { %>
-<% let first = arr.find((item) => typeof item !== 'undefined'); %>
-<tr><td><a href="<%=first.id%><%=il||first.ilOnly?'?i=on':''%>" title="<%=first.descrShort%>"><%=holiday.replaceAll("'", '’')%></a></td>
+<% for (const [holiday,arr] of Object.entries(locals.items[catId])) { %>
+<% let first = arr.find((item) => item !== undefined); %>
+<tr><td><a href="<%=first.id%><%=locals.il||first.ilOnly?'?i=on':''%>" title="<%=first.descrShort%>"><%=holiday.replaceAll("'", '’')%></a></td>
 <% for (const item of arr) { %>
-<td><% if (typeof item !== 'undefined') { %><%-item.dates%><% } %></td>
+<td><% if (item !== undefined) { %><%-item.dates%><% } %></td>
 <% } %>
 </tr>
 <% } %>

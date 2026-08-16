@@ -1,12 +1,12 @@
-<% if (typeof emoiSwitchDisabled === 'undefined') { %>
+<% if (locals.emoiSwitchDisabled === undefined) { %>
 <div class="form-check emoji-checkbox mb-2">
-  <input class="form-check-input" type="checkbox" id="e-<%=id%>" checked>
-  <label class="form-check-label" for="e-<%=id%>">Show images in event names <%= q.v === 'yahrzeit' ? '🕯️ ✡️' : '✡️ 🌒'%></label>
+  <input class="form-check-input" type="checkbox" id="e-<%=locals.id%>" checked>
+  <label class="form-check-label" for="e-<%=locals.id%>">Show images in event names <%= locals.q.v === 'yahrzeit' ? '🕯️ ✡️' : '✡️ 🌒'%></label>
 </div>
-<% if (q.v === 'yahrzeit') { %>
+<% if (locals.q.v === 'yahrzeit') { %>
 <div class="form-check reminder-checkbox mb-2">
-  <input class="form-check-input" type="checkbox" id="rem-<%=id%>" checked>
-  <label class="form-check-label" for="rem-<%=id%>">Calendar reminder day before yahrzeit</label>
+  <input class="form-check-input" type="checkbox" id="rem-<%=locals.id%>" checked>
+  <label class="form-check-label" for="rem-<%=locals.id%>">Calendar reminder day before yahrzeit</label>
 </div>
 <% } %>
 <% } %>

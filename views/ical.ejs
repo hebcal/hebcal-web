@@ -34,7 +34,7 @@ application. Subscribers to these feeds receive perpetual updates.</p>
 <div class="row">
 <div class="col">
 <div class="accordion" id="holidays">
-<% for (const cfg of holidayCalendars) {
+<% for (const cfg of locals.holidayCalendars) {
 const id = cfg.downloadSlug;
 const p = {
   ...cfg,
@@ -76,7 +76,7 @@ and yahrzeits.</p>`,
 <p>From ancient biblical times, the Torah has been divided into portions which are read each week on a yearly calendar.
 In line with this tradition, various calendars have emerged to facilitate groups of learners in collectively studying designated texts.</p>
 <div class="accordion" id="learning2">
-<% for (const cfg of dailyLearningConfig) {
+<% for (const cfg of locals.dailyLearningConfig) {
 if (!cfg.dailyLearningOptName || !cfg.descLong) {
   continue;
 }
@@ -114,7 +114,7 @@ if (id === 'mishna-yomi') {
 <strong>Israeli holiday schedule</strong>, etc</p>
 Select an event language:
 <ul>
-<% for (const [langName, desc] of Object.entries(langNames)) { %>
+<% for (const [langName, desc] of Object.entries(locals.langNames)) { %>
 <li><a href="/hebcal?lg=<%=langName%>"><%=desc[0].replace('transliterations','translit')%></a> <span class="text-body-secondary">- <%=desc[1]||desc[0]%></span></li>
 <% } %>
 </ul>

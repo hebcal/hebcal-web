@@ -1,12 +1,12 @@
 <%- await include('partials/header.ejs', {
   title: 'Weekly Torah Readings - Parashat haShavua - Hebcal',
 }) -%>
-<link rel="canonical" href="<%=canonical.href%>">
-<% if (noIndex) { -%>
+<link rel="canonical" href="<%=locals.canonical.href%>">
+<% if (locals.noIndex) { -%>
 <meta name="robots" content="noindex, nofollow">
 <% } else { -%>
-<link rel="prev" href="<%=prev%>">
-<link rel="next" href="<%=next%>">
+<link rel="prev" href="<%=locals.prev%>">
+<link rel="next" href="<%=locals.next%>">
 <% } -%>
 </head>
 <body>
@@ -14,27 +14,27 @@
 <div class="container">
 <div class="row mt-2">
 <div class="col">
-<% if (hyear <= 5513) { -%>
+<% if (locals.hyear <= 5513) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
-<h2>Shabbat Torah Readings <%=hyear-1%>-<%=hyear+4%></h2>
-<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il, href: inverse.href, subject: 'Torah reading schedule'}) -%></p>
+<h2>Shabbat Torah Readings <%=locals.hyear-1%>-<%=locals.hyear+4%></h2>
+<p class="small"><%- await include('partials/israel-diaspora-note.ejs', {il: locals.il, href: locals.inverse.href, subject: 'Torah reading schedule'}) -%></p>
 <div class="table-responsive">
 <table class="table table-striped">
 <colgroup>
 <col><col><col><col><col><col><col>
 </colgroup>
 <tbody class="table-group-divider">
-<% for (const book of torahBookNames.filter((book) => book !== 'DoubledParshiyot')) { %>
+<% for (const book of locals.torahBookNames.filter((book) => book !== 'DoubledParshiyot')) { %>
 <tr class="table-group-divider"><th><%=book%></th>
-<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) { %><th><a class="link-body-emphasis" href="<%=yr%>?i=<%=il?'on':'off'%>"><%=yr%></a></th><% } %>
+<% for (let yr = locals.hyear - 1; yr <= locals.hyear + 4; yr++) { %><th><a class="link-body-emphasis" href="<%=yr%>?i=<%=locals.il?'on':'off'%>"><%=yr%></a></th><% } %>
 </tr>
-<%   for (const [anchor, parshaName] of parshaByBook.get(book)) {
-  const years = byParsha.get(parshaName);
+<%   for (const [anchor, parshaName] of locals.parshaByBook.get(book)) {
+  const years = locals.byParsha.get(parshaName);
 %>
 <tr>
-  <td><a href="<%=anchor%><%= il ? '?i=on' : ''%>"><%= parshaName.replaceAll("'", '’') %></a></td>
-<% for (let yr = hyear - 1; yr <= hyear + 4; yr++) {
+  <td><a href="<%=anchor%><%= locals.il ? '?i=on' : ''%>"><%= parshaName.replaceAll("'", '’') %></a></td>
+<% for (let yr = locals.hyear - 1; yr <= locals.hyear + 4; yr++) {
   const items = years.get(yr); %>
 <% if (items) { %>
 <td>
@@ -60,10 +60,10 @@
 
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
 <div>
-<a class="btn btn-outline-secondary me-2" href="<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=hyear-6%>-<%=hyear-1%></a>
+<a class="btn btn-outline-secondary me-2" href="<%=locals.prev%>"><span aria-hidden="true">←&nbsp;</span><%=locals.hyear-6%>-<%=locals.hyear-1%></a>
 </div>
 <div>
-<a class="btn btn-outline-secondary ms-2" href="<%=next%>"><%=hyear+4%>-<%=hyear+9%><span aria-hidden="true">&nbsp;→</span></a>
+<a class="btn btn-outline-secondary ms-2" href="<%=locals.next%>"><%=locals.hyear+4%>-<%=locals.hyear+9%><span aria-hidden="true">&nbsp;→</span></a>
 </div>
 </div>
 

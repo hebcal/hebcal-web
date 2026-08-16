@@ -1,51 +1,51 @@
-<div class="yahrzeit-row" id="row<%=num%>">
+<div class="yahrzeit-row" id="row<%=locals.num%>">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
-<div class="col-auto"><%=num%>.</div>
-<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=num%>" id="n<%=num%>" value="<%= q['n'+num] || '' %>" placeholder="Name" autocomplete="off" <%- locals.pmIgnore || '' %>>
-<label class="form-label" for="n<%=num%>">Name</label></div>
-<div class="col-auto form-floating"><select name="t<%=num%>" id="t<%=num%>" class="form-select">
- <option <%= (q['t'+num] === 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
- <option <%= (q['t'+num] === 'Birthday') ? 'selected' : '' %>>Birthday</option>
- <option <%= (q['t'+num] === 'Anniversary') ? 'selected' : '' %>>Anniversary</option>
- <option <%= (q['t'+num] === 'Other') ? 'selected' : '' %>>Other</option>
+<div class="col-auto"><%=locals.num%>.</div>
+<div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=locals.num%>" id="n<%=locals.num%>" value="<%= locals.q['n'+locals.num] || '' %>" placeholder="Name" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<label class="form-label" for="n<%=locals.num%>">Name</label></div>
+<div class="col-auto form-floating"><select name="t<%=locals.num%>" id="t<%=locals.num%>" class="form-select">
+ <option <%= (locals.q['t'+locals.num] === 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
+ <option <%= (locals.q['t'+locals.num] === 'Birthday') ? 'selected' : '' %>>Birthday</option>
+ <option <%= (locals.q['t'+locals.num] === 'Anniversary') ? 'selected' : '' %>>Anniversary</option>
+ <option <%= (locals.q['t'+locals.num] === 'Other') ? 'selected' : '' %>>Other</option>
 </select>
-<label class="form-label" for="t<%=num%>">Type</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=num%>" id="d<%=num%>" value="<%= q['d'+num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31" autocomplete="off">
-<label class="form-label" for="d<%=num%>">Day</label>
+<label class="form-label" for="t<%=locals.num%>">Type</label></div>
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=locals.num%>" id="d<%=locals.num%>" value="<%= locals.q['d'+locals.num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31" autocomplete="off">
+<label class="form-label" for="d<%=locals.num%>">Day</label>
 <div class="invalid-feedback">Please enter a valid day of month.</div>
 </div>
-<div class="col-auto form-floating"><select name="m<%=num%>" id="m<%=num%>" class="form-select">
- <option <%= q['m'+num] == 1 ? 'selected' : '' %> value="1">01-Jan</option>
- <option <%= q['m'+num] == 2 ? 'selected' : '' %> value="2">02-Feb</option>
- <option <%= q['m'+num] == 3 ? 'selected' : '' %> value="3">03-Mar</option>
- <option <%= q['m'+num] == 4 ? 'selected' : '' %> value="4">04-Apr</option>
- <option <%= q['m'+num] == 5 ? 'selected' : '' %> value="5">05-May</option>
- <option <%= q['m'+num] == 6 ? 'selected' : '' %> value="6">06-Jun</option>
- <option <%= q['m'+num] == 7 ? 'selected' : '' %> value="7">07-Jul</option>
- <option <%= q['m'+num] == 8 ? 'selected' : '' %> value="8">08-Aug</option>
- <option <%= q['m'+num] == 9 ? 'selected' : '' %> value="9">09-Sep</option>
- <option <%= q['m'+num] == 10 ? 'selected' : '' %> value="10">10-Oct</option>
- <option <%= q['m'+num] == 11 ? 'selected' : '' %> value="11">11-Nov</option>
- <option <%= q['m'+num] == 12 ? 'selected' : '' %> value="12">12-Dec</option>
+<div class="col-auto form-floating"><select name="m<%=locals.num%>" id="m<%=locals.num%>" class="form-select">
+ <option <%= locals.q['m'+locals.num] == 1 ? 'selected' : '' %> value="1">01-Jan</option>
+ <option <%= locals.q['m'+locals.num] == 2 ? 'selected' : '' %> value="2">02-Feb</option>
+ <option <%= locals.q['m'+locals.num] == 3 ? 'selected' : '' %> value="3">03-Mar</option>
+ <option <%= locals.q['m'+locals.num] == 4 ? 'selected' : '' %> value="4">04-Apr</option>
+ <option <%= locals.q['m'+locals.num] == 5 ? 'selected' : '' %> value="5">05-May</option>
+ <option <%= locals.q['m'+locals.num] == 6 ? 'selected' : '' %> value="6">06-Jun</option>
+ <option <%= locals.q['m'+locals.num] == 7 ? 'selected' : '' %> value="7">07-Jul</option>
+ <option <%= locals.q['m'+locals.num] == 8 ? 'selected' : '' %> value="8">08-Aug</option>
+ <option <%= locals.q['m'+locals.num] == 9 ? 'selected' : '' %> value="9">09-Sep</option>
+ <option <%= locals.q['m'+locals.num] == 10 ? 'selected' : '' %> value="10">10-Oct</option>
+ <option <%= locals.q['m'+locals.num] == 11 ? 'selected' : '' %> value="11">11-Nov</option>
+ <option <%= locals.q['m'+locals.num] == 12 ? 'selected' : '' %> value="12">12-Dec</option>
 </select>
-<label class="form-label" for="m<%=num%>">Month</label></div>
-<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=num%>" id="y<%=num%>" value="<%= q['y'+num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year" title="Enter a year, for example 1970" autocomplete="off" <%- locals.pmIgnore || '' %>>
-<label class="form-label" for="y<%=num%>">Year</label>
+<label class="form-label" for="m<%=locals.num%>">Month</label></div>
+<div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="y<%=locals.num%>" id="y<%=locals.num%>" value="<%= locals.q['y'+locals.num] || '' %>" size="4" maxlength="4" pattern="\d*" placeholder="Year" title="Enter a year, for example 1970" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<label class="form-label" for="y<%=locals.num%>">Year</label>
 <div class="invalid-feedback">Please enter a valid Gregorian year.</div>
 </div>
 <div class="col-auto m-2">
  <div class="form-check">
- <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-0" <%= q['s'+num] !== 'on' ? ' checked' : '' %> value="off">
- <label class="form-check-label small" for="s<%=num%>-0">Before sunset</label>
+ <input class="form-check-input" type="radio" name="s<%=locals.num%>" id="s<%=locals.num%>-0" <%= locals.q['s'+locals.num] !== 'on' ? ' checked' : '' %> value="off">
+ <label class="form-check-label small" for="s<%=locals.num%>-0">Before sunset</label>
  </div>
  <div class="form-check">
- <input class="form-check-input" type="radio" name="s<%=num%>" id="s<%=num%>-1" <%= q['s'+num] === 'on' ? ' checked' : '' %> value="on">
- <label class="form-check-label small" for="s<%=num%>-1">After sunset</label>
+ <input class="form-check-input" type="radio" name="s<%=locals.num%>" id="s<%=locals.num%>-1" <%= locals.q['s'+locals.num] === 'on' ? ' checked' : '' %> value="on">
+ <label class="form-check-label small" for="s<%=locals.num%>-1">After sunset</label>
  </div>
 </div>
 <div class="col-auto ms-2">
-<button type="button" class="btn btn-sm btn-outline-danger del" id="del-<%=num%>">
-<svg class="icon"><use href="<%=spriteHref%>#bi-trash"></use></svg>
+<button type="button" class="btn btn-sm btn-outline-danger del" id="del-<%=locals.num%>">
+<svg class="icon"><use href="<%=locals.spriteHref%>#bi-trash"></use></svg>
 Delete
 </button>
 </div>

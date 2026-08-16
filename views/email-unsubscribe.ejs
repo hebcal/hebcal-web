@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title><%= title %></title>
+<title><%= locals.title %></title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%- await include('partials/bootstrap-css.ejs') -%>
 <style>
@@ -35,21 +35,21 @@ body { background-color: #eee;}
 <div class="card">
 <div class="card-body">
   <h3 class="card-title">
-    <svg class="icon-lg me-2 text-success"><use href="<%=spriteHref%>#bs-check-large"></use></svg>
+    <svg class="icon-lg me-2 text-success"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
     Unsubscribed</h3>
   <p class="card-text">
-    <strong><%= emailAddress %></strong>
-    <% if (success) { %> has been <% } else { %> was previously <% } %>
+    <strong><%= locals.emailAddress %></strong>
+    <% if (locals.success) { %> has been <% } else { %> was previously <% } %>
     removed from the email subscription list.
   </p>
   <p class="small">You will no longer receive email from this list.</p>
   <p><a class="btn btn-secondary" href="/">Go to Hebcal »</a></p>
   <p class="small">Unsubscribed by mistake?</p>
   <form method="post" action="/email/verify.php">
-    <input type="hidden" name="k" value="<%=subscriptionId%>">
+    <input type="hidden" name="k" value="<%=locals.subscriptionId%>">
     <input type="hidden" name="commit" value="1">
     <button type="submit" class="btn btn-secondary">
-      <svg class="icon mt-n05"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg>
+      <svg class="icon mt-n05"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg>
       Subscribe again
     </button>
   </form>
@@ -58,7 +58,7 @@ body { background-color: #eee;}
 </div><!-- .col -->
 </div><!-- .row -->
 </div><!-- .container -->
-<script nonce="<%=nonce%>"><%- await include('partials/analytics.js') %></script>
+<script nonce="<%=locals.nonce%>"><%- await include('partials/analytics.js') %></script>
 </body>
 </html>
-<!-- <%= hostname %> <%= new Date().toISOString() %> -->
+<!-- <%= locals.hostname %> <%= new Date().toISOString() %> -->

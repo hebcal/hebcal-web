@@ -4,19 +4,19 @@
 <div class="row mt-2">
 <div class="col">
 <div class="float-start">
-  <svg width="64" height="64" class="me-3 mb-2"><use href="<%=cspriteHref%>#couple"></use></svg>
+  <svg width="64" height="64" class="me-3 mb-2"><use href="<%=locals.cspriteHref%>#couple"></use></svg>
 </div>
 <p class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
   and Hebrew Anniversaries.</p>
 <p class="clearfix">Print, subscribe to annual email reminders, and download
   a multi-year calendar feed to Apple, Google, Outlook, and more.</p>
-<% if (typeof message !== 'undefined') { -%>
+<% if (locals.message !== undefined) { -%>
 <div class="alert alert-danger" role="alert">
-<%= message %>
+<%= locals.message %>
 </div><!-- .alert -->
-<% } else if (typeof q.em === 'string') { -%>
+<% } else if (typeof locals.q.em === 'string') { -%>
 <div class="alert alert-warning" role="alert">
-Sorry, the email address <strong><%= q.em %></strong> is not
+Sorry, the email address <strong><%= locals.q.em %></strong> is not
 subscribed to Yahrzeit + Anniversary Calendar annual email reminders.
 </div><!-- .alert -->
 <% } -%>
@@ -24,7 +24,7 @@ subscribed to Yahrzeit + Anniversary Calendar annual email reminders.
 <form action="/yahrzeit/search" method="post" class="row row-cols-lg-auto g-3 align-items-center mb-3">
   <div class="col">
     <label class="visually-hidden" for="em">Email address</label>
-    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em %>" required>
+    <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= locals.q.em %>" required>
   </div>
   <div class="col">
     <button type="submit" class="btn btn-primary">Search</button>

@@ -1,8 +1,8 @@
 <%- await include('partials/header.ejs', {
-  title: `${ev.render('en')}, ${hyear} - ${d.format('D MMMM YYYY')} - Hebcal`,
+  title: `${locals.ev.render('en')}, ${locals.hyear} - ${locals.d.format('D MMMM YYYY')} - Hebcal`,
 }) -%>
-<link rel="canonical" href="https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>">
-<% if (d.year() <= 1752 || d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<link rel="canonical" href="https://www.hebcal.com/omer/<%=locals.hyear%>/<%=locals.omerDay%>">
+<% if (locals.d.year() <= 1752 || locals.d.year() > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <style>
 #today {text-align: center}
 .text-balance {text-wrap: balance}
@@ -13,54 +13,54 @@
 <div class="container">
 <div class="row">
 <div class="col mt-2 d-none d-lg-block">
-<p><a href="/omer/<%=hyear%>">Counting of the Omer <%= hyear - 3760 %></a> / <span class="text-nowrap" dir="rtl" lang="he">סְפִירַת הָעוֹמֶר <%= hyear %></span></p>
+<p><a href="/omer/<%=locals.hyear%>">Counting of the Omer <%= locals.hyear - 3760 %></a> / <span class="text-nowrap" dir="rtl" lang="he">סְפִירַת הָעוֹמֶר <%= locals.hyear %></span></p>
 </div>
 </div>
 <div class="row">
 <div class="col">
-<% if (d.year() <= 1178) { -%>
+<% if (locals.d.year() <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (d.year() <= 1752) { -%>
+<% } else if (locals.d.year() <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
 <% } -%>
 <div id="today" class="mt-3">
 <ul class="list-unstyled">
-<li class="fs-2"><time datetime="<%= d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
-<li class="fs-3 lh-sm"><%= hd.toString().replaceAll("'", '’') %></li>
-<li class="fs-1 text-burgundy"><%= ev.render('en') %></li>
-<li class="fs-1 lh-sm pt-1 pb-2 text-balance" dir="rtl" lang="he"><%= ev.getTodayIs('he') %></li>
-<li class="fs-4 lh-sm text-balance"><%= ev.getTodayIs('en') %></li>
-<li class="fs-2 lh-sm pt-2" dir="rtl" lang="he"><%= sefHebrew %></li>
-<li class="lh-sm"><em><%= sefTranslit %></em></li>
-<li class="lh-sm"><%= sefEnglish %></li>
+<li class="fs-2"><time datetime="<%= locals.d.subtract(1, 'd').format('YYYY-MM-DD') %>"><%= locals.d.subtract(1, 'd').format('dddd [night], D MMMM YYYY') %></time></li>
+<li class="fs-3 lh-sm"><%= locals.hd.toString().replaceAll("'", '’') %></li>
+<li class="fs-1 text-burgundy"><%= locals.ev.render('en') %></li>
+<li class="fs-1 lh-sm pt-1 pb-2 text-balance" dir="rtl" lang="he"><%= locals.ev.getTodayIs('he') %></li>
+<li class="fs-4 lh-sm text-balance"><%= locals.ev.getTodayIs('en') %></li>
+<li class="fs-2 lh-sm pt-2" dir="rtl" lang="he"><%= locals.sefHebrew %></li>
+<li class="lh-sm"><em><%= locals.sefTranslit %></em></li>
+<li class="lh-sm"><%= locals.sefEnglish %></li>
 <li class="fs-3 pt-2" dir="rtl" lang="he">
-  <%= ev.getAnaBekoachWord() %>
+  <%= locals.ev.getAnaBekoachWord() %>
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <%= ev.getLamnatzeachWord() %>
+  <%= locals.ev.getLamnatzeachWord() %>
   &nbsp; &nbsp; &nbsp; &nbsp;
-  <%= ev.getLamnatzeachLetter() %>
+  <%= locals.ev.getLamnatzeachLetter() %>
 </li>
-<% for (const ev of holidays) { %>
-<li class="mt-2"><% if (ev.url()) { %><a href="<%= ev.url() %>"><% } %><%= ev.render('en') %><% if (ev.url()) { %></a><% } %></li>
+<% for (const holiday of locals.holidays) { %>
+<li class="mt-2"><% if (holiday.url()) { %><a href="<%= holiday.url() %>"><% } %><%= holiday.render('en') %><% if (holiday.url()) { %></a><% } %></li>
 <% } %>
 </ul>
 </div><!-- #today -->
 </div><!-- .col -->
 </div><!-- .row -->
 <div class="d-flex gx-2 mt-2 justify-content-between d-print-none">
-<% if (omerDay === 1) { -%>
-<% if (hyear > 5000) { -%>
-<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear-1%>/49"><span aria-hidden="true">←&nbsp;</span>49th&nbsp;day</a></div>
+<% if (locals.omerDay === 1) { -%>
+<% if (locals.hyear > 5000) { -%>
+<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=locals.hyear-1%>/49"><span aria-hidden="true">←&nbsp;</span>49th&nbsp;day</a></div>
 <% } -%>
 <% } else { -%>
-<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=hyear%>/<%=prev%>"><span aria-hidden="true">←&nbsp;</span><%=prevNth%>&nbsp;day</a></div>
+<div><a rel="prev" class="btn btn-outline-secondary me-2" href="/omer/<%=locals.hyear%>/<%=locals.prev%>"><span aria-hidden="true">←&nbsp;</span><%=locals.prevNth%>&nbsp;day</a></div>
 <% } -%>
-<% if (omerDay === 49) { -%>
-<% if (hyear < 6759) { -%>
-<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear+1%>/1">1st&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
+<% if (locals.omerDay === 49) { -%>
+<% if (locals.hyear < 6759) { -%>
+<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=locals.hyear+1%>/1">1st&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 <% } else { -%>
-<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=hyear%>/<%=next%>"><%=nextNth%>&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
+<div><a rel="next" class="btn btn-outline-secondary ms-2" href="/omer/<%=locals.hyear%>/<%=locals.next%>"><%=locals.nextNth%>&nbsp;day<span aria-hidden="true">&nbsp;→</span></a></div>
 <% } -%>
 </div>
 <script type="application/ld+json">
@@ -70,13 +70,13 @@
  "itemListElement": [{
   "@type": "ListItem",
   "position": 1,
-  "name": "Omer <%=hyear%>",
-  "item": "https://www.hebcal.com/omer/<%=hyear%>"
+  "name": "Omer <%=locals.hyear%>",
+  "item": "https://www.hebcal.com/omer/<%=locals.hyear%>"
  },{
   "@type": "ListItem",
   "position": 2,
-  "name": "Day <%=omerDay%>",
-  "item": "https://www.hebcal.com/omer/<%=hyear%>/<%=omerDay%>"
+  "name": "Day <%=locals.omerDay%>",
+  "item": "https://www.hebcal.com/omer/<%=locals.hyear%>/<%=locals.omerDay%>"
  }]
 }
 </script>

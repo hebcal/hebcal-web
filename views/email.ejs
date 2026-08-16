@@ -6,39 +6,39 @@
 <div class="container">
 <div class="row">
 <div class="col">
-<p class="lead"><%= defaultUnsubscribe ? 'Unsubscribe from' : 'Subscribe to' %> weekly Shabbat candle-lighting times and Torah portion by email.</p>
-<% if (typeof message !== 'undefined') { %>
+<p class="lead"><%= locals.defaultUnsubscribe ? 'Unsubscribe from' : 'Subscribe to' %> weekly Shabbat candle-lighting times and Torah portion by email.</p>
+<% if (locals.message !== undefined) { %>
 <div class="alert alert-danger alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-<%= message %>
+<%= locals.message %>
 </div><!-- .alert -->
 <% } %>
 <div id="email-form">
-<form id="f1" action="<%= rpath %>" method="post">
+<form id="f1" action="<%= locals.rpath %>" method="post">
 <input type="hidden" name="v" value="1">
-<% if (typeof q.em === 'string' && q.status === 'active') { %>
-<input type="hidden" name="prev" value="<%= q.em %>">
+<% if (typeof locals.q.em === 'string' && locals.q.status === 'active') { %>
+<input type="hidden" name="prev" value="<%= locals.q.em %>">
 <% } %>
-<% if (typeof q.k === 'string' && q.status === 'active') { %>
-<input type="hidden" name="k" value="<%= q.k %>">
+<% if (typeof locals.q.k === 'string' && locals.q.status === 'active') { %>
+<input type="hidden" name="k" value="<%= locals.q.k %>">
 <% } %>
 <div class="form-floating mb-3">
-<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= q.em || '' %>" required>
+<input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" value="<%= locals.q.em || '' %>" required>
 <label class="form-label" for="em">Email address</label>
 </div>
-<% if (!defaultUnsubscribe) { %>
-<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
-<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
-<input type="hidden" name="geonameid" id="geonameid" value="<%= q.geonameid %>">
+<% if (!locals.defaultUnsubscribe) { %>
+<input type="hidden" name="geo" id="geo" value="<%= locals.q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= locals.q.zip || '' %>">
+<input type="hidden" name="geonameid" id="geonameid" value="<%= locals.q.geonameid %>">
 <%- await include('partials/city-and-havdalah.ejs') -%>
 <button type="submit"
-class="btn btn-primary" name="modify" value="1"><%= q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
+class="btn btn-primary" name="modify" value="1"><%= locals.q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
 <% } %>
 <button type="submit"
-class="btn btn-<%= defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
+class="btn btn-<%= locals.defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
 </form>
 </div><!-- #email-form -->
-<% if (!defaultUnsubscribe) { %>
+<% if (!locals.defaultUnsubscribe) { %>
 <hr>
 <p>You'll receive a maximum of one message per week, typically on Thursday morning.</p>
 <div id="privacy-policy">

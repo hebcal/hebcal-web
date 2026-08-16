@@ -29,18 +29,18 @@ a.text-green1 {
 <body>
 <%- await include('partials/navbar.ejs') -%>
 <div class="container text-center">
-<ul class="bullet-list-inline" lang="<%=locale%>" dir="<%=locale==='he'?'rtl':'ltr'%>">
-<% items.forEach((item) => { %>
+<ul class="bullet-list-inline" lang="<%=locals.locale%>" dir="<%=locals.locale==='he'?'rtl':'ltr'%>">
+<% locals.items.forEach((item) => { %>
 <li><%- item %></li>
 <% }); %>
 </ul>
 <h1>Jewish holiday calendars &amp; Hebrew date converter</h1>
-<% if (holidayBlurb) { -%>
+<% if (locals.holidayBlurb) { -%>
 <div class="row">
 <div class="col-sm-8 offset-sm-2">
  <div class="alert alert-success">
-  <div class="fs-5" id="holiday-blurb"><%- holidayBlurb %></div>
-  <div><%- holidayLongText %>.</div>
+  <div class="fs-5" id="holiday-blurb"><%- locals.holidayBlurb %></div>
+  <div><%- locals.holidayLongText %>.</div>
  </div><!-- .alert -->
 </div><!-- .col-sm-8 -->
 </div><!-- .row -->
@@ -55,9 +55,9 @@ any year, past or present.
 Download to Apple, Google, Microsoft Outlook and more.</div>
 </div>
 <div class="col-md-auto text-center pe-3">
-<p><a class="btn btn-primary btn-xl fs-3" href="<%=calendarUrl + yearArgs %>">
-  <svg class="icon icon-md mb-1 me-1"><use href="<%=spriteHref%>#bi-calendar3"></use></svg>
-  <%= gregRangeShort %> Calendar</a>
+<p><a class="btn btn-primary btn-xl fs-3" href="<%=locals.calendarUrl + locals.yearArgs %>">
+  <svg class="icon icon-md mb-1 me-1"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
+  <%= locals.gregRangeShort %> Calendar</a>
 <br><small><a title="Hebcal Custom Calendar" href="/hebcal">Customize calendar settings</a></small></p>
 </div>
 </div><!-- .row -->
@@ -66,29 +66,29 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 <div class="lead">Convert between Hebrew and Gregorian dates and see today&apos;s date in a Hebrew font.</div>
 </div>
 <div class="col-md-auto text-center pe-3">
-<p><a class="btn btn-secondary btn-xl fs-3 text-nowrap" href="/converter?gd=<%=gd%>&gm=<%=gm%>&gy=<%=gy%><%=afterSunset?'&gs=on':''%><%=il?'&i=on':''%>&g2h=1">
-  <svg class="icon icon-md mb-1 me-1"><use href="<%=spriteHref%>#gi-refresh"></use></svg>
+<p><a class="btn btn-secondary btn-xl fs-3 text-nowrap" href="/converter?gd=<%=locals.gd%>&gm=<%=locals.gm%>&gy=<%=locals.gy%><%=locals.afterSunset?'&gs=on':''%><%=locals.il?'&i=on':''%>&g2h=1">
+  <svg class="icon icon-md mb-1 me-1"><use href="<%=locals.spriteHref%>#gi-refresh"></use></svg>
   Date Converter</a></p>
 </div>
 </div><!-- .row -->
 
 <div class="row mt-3">
 <div class="col-sm-4 mb-3">
-<a href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">
-  <svg width="68" height="68" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#magen-david"></use></svg>
+<a href="/holidays/<%= locals.gregRange %><%=locals.il?'?i=on':''%>">
+  <svg width="68" height="68" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#magen-david"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/holidays/<%= gregRange %><%=il?'?i=on':''%>">Holidays</a></h3>
+<h3 class="text-center"><a class="text-body text-decoration-none" href="/holidays/<%= locals.gregRange %><%=locals.il?'?i=on':''%>">Holidays</a></h3>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
-<br><a href="/holidays/<%=hy-3761%>-<%=hy-3760%><%=il?'?i=on':''%>"><%=hy%></a> ·
-<a href="/holidays/<%= (gm === 12 && gd >= 10) ? gy + 1 : gy %><%=il?'?i=on':''%>"><%= (gm === 12 && gd >= 10) ? gy + 1 : gy %></a> ·
-<a class="text-nowrap" href="/holidays/<%=il?'?i=on':''%>">6-year summary</a> ·
+<br><a href="/holidays/<%=locals.hy-3761%>-<%=locals.hy-3760%><%=locals.il?'?i=on':''%>"><%=locals.hy%></a> ·
+<a href="/holidays/<%= (locals.gm === 12 && locals.gd >= 10) ? locals.gy + 1 : locals.gy %><%=locals.il?'?i=on':''%>"><%= (locals.gm === 12 && locals.gd >= 10) ? locals.gy + 1 : locals.gy %></a> ·
+<a class="text-nowrap" href="/holidays/<%=locals.il?'?i=on':''%>">6-year summary</a> ·
 <a class="text-nowrap" href="/hebcal">Custom calendar &raquo;</a>
 </p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
 <a href="/yahrzeit">
-  <svg width="80" height="65" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#couple"></use></svg>
+  <svg width="80" height="65" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#couple"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/yahrzeit">Yahrzeits and Birthdays</a></h3>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
@@ -98,10 +98,10 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
-<a href="<%=shabbatUrl%>">
-  <svg width="64" height="64" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#candles"></use></svg>
+<a href="<%=locals.shabbatUrl%>">
+  <svg width="64" height="64" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#candles"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="<%=shabbatUrl%>">Shabbat Times</a></h3>
+<h3 class="text-center"><a class="text-body text-decoration-none" href="<%=locals.shabbatUrl%>">Shabbat Times</a></h3>
 <p>Candle-lighting &amp; Havdalah times for Shabbat and holidays.
 Start and end times for fast days.
 Over <a href="/shabbat/browse/">100,000 world cities</a> supported.
@@ -112,36 +112,36 @@ href="/fridge">Year at-a-glance &raquo;</a></p>
 
 <div class="row">
 <div class="col-sm-4 mb-3">
-<a href="/sedrot/<%=il?'?i=on':''%>">
-  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#torah-235339"></use></svg>
+<a href="/sedrot/<%=locals.il?'?i=on':''%>">
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#torah-235339"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/sedrot/<%=il?'?i=on':''%>">Torah Readings</a></h3>
+<h3 class="text-center"><a class="text-body text-decoration-none" href="/sedrot/<%=locals.il?'?i=on':''%>">Torah Readings</a></h3>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
 Full kriyah, triennial cycle, weekday readings.
 Spreadsheets for <em>leyning</em> coordinators.
-<br><% if (typeof parshaEvent === 'object') { %><a href="<%=parshaEvent.url()%>"><%=parshaEvent.renderBrief(lg).replaceAll("'", '’')%></a> · <% } %>
-<a class="text-nowrap" href="/sedrot/<%=hy%>?i=<%=il?'on':'off'%>">Readings for <%=hy%></a> ·
-<a class="text-nowrap" href="/sedrot/<%=il?'?i=on':''%>">See more &raquo;</a></p>
+<br><% if (typeof locals.parshaEvent === 'object') { %><a href="<%=locals.parshaEvent.url()%>"><%=locals.parshaEvent.renderBrief(locals.lg).replaceAll("'", '’')%></a> · <% } %>
+<a class="text-nowrap" href="/sedrot/<%=locals.hy%>?i=<%=locals.il?'on':'off'%>">Readings for <%=locals.hy%></a> ·
+<a class="text-nowrap" href="/sedrot/<%=locals.il?'?i=on':''%>">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
-<a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">
-<svg width="80" height="69" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#book"></use></svg>
+<a href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">
+<svg width="80" height="69" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#book"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/learning/<%=isoDt%><%=il?'?i=on':''%>">Daily learning</a></h3>
-<div class="text-center"><%= locale === 'he' ? hd.renderGematriya() : hd.render(lg, true) %></div>
+<h3 class="text-center"><a class="text-body text-decoration-none" href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">Daily learning</a></h3>
+<div class="text-center"><%= locals.locale === 'he' ? locals.hd.renderGematriya() : locals.hd.render(locals.lg, true) %></div>
 <ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·
-  <a class="text-nowrap" href="<%= dafYomi.url() %>"><%= dafYomi.renderBrief(lg) %></a></li>
+  <a class="text-nowrap" href="<%= locals.dafYomi.url() %>"><%= locals.dafYomi.renderBrief(locals.lg) %></a></li>
    <li><span class="text-nowrap">Mishna Yomi</span> ·
-   <a class="text-nowrap" href="<%= mishnaYomi.url() %>"><%= mishnaYomi.renderBrief(lg) %></a></li>
-   <li><a href="/learning/<%=isoDt%><%=il?'?i=on':''%>">See more &raquo;</a></li>
+   <a class="text-nowrap" href="<%= locals.mishnaYomi.url() %>"><%= locals.mishnaYomi.renderBrief(locals.lg) %></a></li>
+   <li><a href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">See more &raquo;</a></li>
   </ul>
 </div><!-- .col-sm-4 -->
 
 <div class="col-sm-4 mb-3">
 <a href="/ical/">
-  <svg width="80" height="72" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#cloud-download"></use></svg>
+  <svg width="80" height="72" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#cloud-download"></use></svg>
 </a>
 <h3 class="text-center"><a class="text-body text-decoration-none" href="/ical/">Download</a></h3>
 <p>Download Jewish holidays and Hebrew dates for iPhone, iPad, Android
@@ -155,7 +155,7 @@ app that supports iCalendar (.ics) feeds.
 <div class="row">
 <div class="col-sm-2">
 <a href="/home/developer-apis">
-  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=cspriteHref%>#code"></use></svg>
+  <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#code"></use></svg>
 </a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">

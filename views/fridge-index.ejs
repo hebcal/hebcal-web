@@ -9,21 +9,21 @@
 single page. You can print it out and post it on your refrigerator.</p>
 
 <form action="/shabbat/fridge.cgi" method="get" autocomplete="off">
-<input type="hidden" name="geo" id="geo" value="<%= q.geo || 'geonameid' %>">
-<input type="hidden" name="zip" id="zip" value="<%= q.zip || '' %>">
-<input type="hidden" name="geonameid" value="<%= q.geonameid %>" id="geonameid">
+<input type="hidden" name="geo" id="geo" value="<%= locals.q.geo || 'geonameid' %>">
+<input type="hidden" name="zip" id="zip" value="<%= locals.q.zip || '' %>">
+<input type="hidden" name="geonameid" value="<%= locals.q.geonameid %>" id="geonameid">
 <%- await include('partials/city-and-havdalah.ejs') -%>
 <div class="mt-2">
 <label class="mb-1" for="lg">Event titles</label>
 <select name="lg" class="form-select" id="lg">
-<% for (const [langName, desc] of Object.entries(langNames)) { -%>
-<option <%= (q.lg === langName) ? 'selected' : '' %> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
+<% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
+<option <%= (locals.q.lg === langName) ? 'selected' : '' %> value="<%=langName%>"><%=desc[1] ? desc[1] + ' - ' : ''%><%=desc[0]%></option>
 <% } -%>
 </select>
 </div>
 <div class="mt-3">
 <button type="submit" class="btn btn-primary">
-  <svg class="icon mb-1"><use href="<%=spriteHref%>#gi-candle"></use></svg>
+  <svg class="icon mb-1"><use href="<%=locals.spriteHref%>#gi-candle"></use></svg>
   Get Shabbat Times</button>
 </div>
 </form>

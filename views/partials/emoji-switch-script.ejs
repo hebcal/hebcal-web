@@ -1,7 +1,7 @@
 <script type="application/json" id="dlURLs">
-<%- jsonForScript(url) %>
+<%- locals.jsonForScript(locals.url) %>
 </script>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const dlURLs = JSON.parse(document.getElementById('dlURLs').textContent);
   let calColor = '';

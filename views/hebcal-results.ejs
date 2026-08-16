@@ -1,10 +1,10 @@
 <%- await include('partials/header.ejs', {
-  title: shortTitle + ' ' + locationName + ' - Hebcal',
+  title: locals.shortTitle + ' ' + locals.locationName + ' - Hebcal',
   criticalCss: 'critical-hebcal-results.css',
 }) -%>
 <link rel="dns-prefetch" href="https://download.hebcal.com/">
-<% if (gy <= 1752 || gy > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
-<link rel="canonical" href="<%= url.canonical %>">
+<% if (locals.gy <= 1752 || locals.gy > new Date().getFullYear() + 100) { %><meta name="robots" content="noindex, nofollow"><% } %>
+<link rel="canonical" href="<%= locals.url.canonical %>">
 <style>
 div.cal { margin-bottom: 18px }
 div.pbba { page-break-before: always }
@@ -76,59 +76,59 @@ div#hebcal-loading h3 {
 <div class="container-fluid">
 <div class="row">
 <div class="col-sm-8 mb-2">
-<% if (gy <= 1178) { -%>
+<% if (locals.gy <= 1178) { -%>
 <%- await include('partials/warning-early.ejs') -%>
-<% } else if (gy <= 1752) { -%>
+<% } else if (locals.gy <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
-<% } else if (gy >= 3762 && q.yt === 'G') { -%>
+<% } else if (locals.gy >= 3762 && locals.q.yt === 'G') { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Note!</strong>
-You are viewing <strong>Gregorian</strong> year <%=gy%>, which
-is <%=futureYears%> years <em>in the future</em>.<br>
+You are viewing <strong>Gregorian</strong> year <%=locals.gy%>, which
+is <%=locals.futureYears%> years <em>in the future</em>.<br>
 Did you really intend this? Perhaps you wish to view the calendar
-for <a href="<%-sameUrlHebYear%>">Hebrew year <%=gy%></a>?<br>
-If you really intended to use Gregorian year <%=gy%>, please
+for <a href="<%-locals.sameUrlHebYear%>">Hebrew year <%=locals.gy%></a>?<br>
+If you really intended to use Gregorian year <%=locals.gy%>, please
 continue. Hebcal.com results this far in the future should be
 accurate.
 </div><!-- .alert -->
 <% } -%>
 <%- await include('partials/location-warnings.ejs') -%>
-<h2><%= shortTitle %>
-<% if (locationName.includes(' ')) { %><br><% } %><span class="text-body-secondary h4"><%= locationName -%>
-<% if (options.il && typeof location === 'object' && location.getCountryCode() !== 'IL') { %> · <small class="text-nowrap">Israel 🇮🇱 holiday schedule</small><% } -%>
+<h2><%= locals.shortTitle %>
+<% if (locals.locationName.includes(' ')) { %><br><% } %><span class="text-body-secondary h4"><%= locals.locationName -%>
+<% if (locals.options.il && typeof locals.location === 'object' && locals.location.getCountryCode() !== 'IL') { %> · <small class="text-nowrap">Israel 🇮🇱 holiday schedule</small><% } -%>
 </span></h2>
 <div class="d-print-none">
   <div class="btn-group me-1" role="group">
     <input type="radio" class="btn-check" name="view" id="toggle-month" autocomplete="off" checked>
     <label class="btn btn-secondary btn-sm mb-1" for="toggle-month">
-      <svg class="icon align-top"><use href="<%=spriteHref%>#bi-calendar3"></use></svg> Month
+      <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg> Month
    </label>
     <input type="radio" class="btn-check" name="view" id="toggle-list" autocomplete="off">
     <label class="btn btn-secondary btn-sm mb-1" for="toggle-list">
-      <svg class="icon align-top"><use href="<%=spriteHref%>#bi-list-ul"></use></svg> List
+      <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-list-ul"></use></svg> List
    </label>
   </div><!-- .btn-group -->
-<% if (gy >= 1900 && gy <= 2999) { -%>
-<div class="btn-group me-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
-<% if (q.c === 'on') { -%>
+<% if (locals.gy >= 1900 && locals.gy <= 2999) { -%>
+<div class="btn-group me-1 mb-1" role="group"><a href="#hcdl-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
+<% if (locals.q.c === 'on') { -%>
 <div class="btn-group me-1" role="group">
-  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
+  <div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= locals.url.pdf %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
   <button type="button" class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split mb-1" data-bs-toggle="dropdown" aria-expanded="false">
    <span class="visually-hidden">Toggle Dropdown</span>
   </button>
   <ul class="dropdown-menu">
-  <li><a class="dropdown-item download" id="pdf" href="<%= url.pdf %>">Monthly calendar</a></li>
-  <li><a class="dropdown-item" href="<%= url.fridge %>">Candle-lighting times only</a></li>
+  <li><a class="dropdown-item download" id="pdf" href="<%= locals.url.pdf %>">Monthly calendar</a></li>
+  <li><a class="dropdown-item" href="<%= locals.url.fridge %>">Candle-lighting times only</a></li>
   </ul>
 </div>
-<div class="btn-group me-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#email-modal"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-envelope-fill"></use></svg> Email</a></div>
+<div class="btn-group me-1 mb-1" role="group"><a href="#email-modal" role="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#email-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email</a></div>
 <% } else { -%>
-<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= url.pdf %>"><svg class="icon align-top"><use href="<%=spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
+<div class="btn-group mb-1" role="group"><a class="btn btn-secondary btn-sm download" id="print-pdf" href="<%= locals.url.pdf %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a></div>
 <% } -%>
 <% } -%>
-<a class="btn btn-secondary btn-sm mb-1" href="<%= url.settings %>" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-settings" aria-controls="offcanvas-settings" title="Change calendar options">
-  <svg class="icon align-top"><use href="<%=spriteHref%>#bi-gear-fill"></use></svg>
+<a class="btn btn-secondary btn-sm mb-1" href="<%= locals.url.settings %>" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-settings" aria-controls="offcanvas-settings" title="Change calendar options">
+  <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-gear-fill"></use></svg>
   Settings</a>
 </div><!-- .d-print-none -->
 </div><!-- .col-sm-8 -->
@@ -137,14 +137,14 @@ accurate.
 <h6 class="text-body-secondary mb-2">Advertisement</h6>
 </div><!-- .d-flex -->
 <div class="d-flex justify-content-center d-print-none mb-2">
-<script async nonce="<%=nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
+<script async nonce="<%=locals.nonce%>" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7687563417622459"
 crossorigin="anonymous"></script>
 <!-- banner-320x100 -->
 <ins class="adsbygoogle"
 style="display:inline-block;width:320px;height:100px"
 data-ad-client="ca-pub-7687563417622459"
 data-ad-slot="1867606375"></ins>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
 </div><!-- .d-flex -->
@@ -158,19 +158,19 @@ data-ad-slot="1867606375"></ins>
 <div id="hebcal-results">
 </div><!-- #hebcal-results -->
 <script type="application/json" id="hebcalData">
-<%- jsonForScript({
-  lang: q.lg || "s",
-  locale,
-  cconfig,
-  localeConfig,
-  events: items,
-  memos,
-  opts,
-  shortTitle,
-  locationName,
+<%- locals.jsonForScript({
+  lang: locals.q.lg || "s",
+  locale: locals.locale,
+  cconfig: locals.cconfig,
+  localeConfig: locals.localeConfig,
+  events: locals.items,
+  memos: locals.memos,
+  opts: locals.opts,
+  shortTitle: locals.shortTitle,
+  locationName: locals.locationName,
 }) %>
 </script>
-<script nonce="<%=nonce%>">
+<script nonce="<%=locals.nonce%>">
 <%- await include('partials/hebcalResults.min.js') -%>
 document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 </script>
@@ -184,9 +184,9 @@ document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 <%- await include('partials/hebcal-form.ejs') -%>
 </div>
 </div>
-<% if (gy >= 1900 && gy <= 2999) { -%>
+<% if (locals.gy >= 1900 && locals.gy <= 2999) { -%>
 <%- await include('partials/download-modal.ejs') -%>
-<% if (q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
+<% if (locals.q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <%- await include('partials/print-iframe.ejs') -%>
