@@ -1,8 +1,9 @@
+<% const footerNow = new Date(); -%>
 <footer class="hebcal-footer d-print-none">
 <div class="row">
 <div class="col">
 <ul class="bullet-list-inline">
-<li><time datetime="<%= new Date().toISOString() %>"><%= locals.footerDateFmt.format(new Date()) %></time></li>
+<li><time datetime="<%= footerNow.toISOString() %>"><%= locals.footerDateFmt.format(footerNow) %></time></li>
 <li><a href="/home/about">About</a></li>
 <li><a href="/home/privacy-policy">Privacy</a></li>
 <li><a href="/home/help">Help</a></li>
@@ -53,4 +54,4 @@ document.addEventListener('DOMContentLoaded', function() {
 <% } -%>
 </body>
 </html>
-<!-- <%= locals.hostname %> <%= new Date().toISOString() %> -->
+<!-- <%= locals.hostname %> <%= footerNow.toISOString() %> -->
