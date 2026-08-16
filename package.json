@@ -1,6 +1,6 @@
 {
   "name": "hebcal-web",
-  "version": "4.0.3",
+  "version": "4.1.0",
   "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
   "repository": {
     "type": "git",
@@ -84,7 +84,7 @@
     "@hebcal/triennial": "^6.3.2",
     "@koa/ejs": "^5.1.0",
     "@koa/send": "^6.0.0",
-    "dayjs": "^1.11.21",
+    "dayjs": "^1.11.22",
     "ejs": "^6.0.1",
     "fastest-levenshtein": "^1.0.16",
     "geo-tz": "^8.1.8",
