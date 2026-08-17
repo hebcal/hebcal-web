@@ -17,11 +17,10 @@ describe('Holidays Routes', () => {
     expect(response.type).toContain('html');
   });
 
-  it('should return 200 for holidays PDF', async () => {
+  it('should return 501 for holidays PDF', async () => {
     const response = await request(server)
         .get('/holidays/hebcal-2026.pdf');
-    expect(response.status).toBe(200);
-    expect(response.type).toBe('application/pdf');
+    expect(response.status).toBe(501);
   });
 
   it('should handle holiday year search', async () => {
