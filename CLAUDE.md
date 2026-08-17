@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **hebcal-web** is a Node.js web server for Hebcal.com — a Hebrew calendar and Jewish holiday service. It runs two separate Koa HTTP servers:
 - `www.hebcal.com`: Hebrew date converter, Yahrzeit (memorial dates), Shabbat times, holiday info, Torah portions, daily learning, etc.
-- `download.hebcal.com`: Calendar export in iCalendar, PDF, and CSV formats
+- `download.hebcal.com`: Calendar export in iCalendar and CSV formats
 
 All source files use ES modules (`"type": "module"` in package.json). Requires Node.js >= 24.
 
@@ -57,7 +57,10 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Holidays**: `holidayApp.js`, `getHolidayMeta.js`
 - **Shabbat/Zmanim**: `shabbat.js`, `zmanim.js`
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`
-- **Downloads/export**: `hebcal-download.js`, `pdf.js`, `makeDownloadProps.js`, `deserializeDownload.js`
+- **Downloads/export**: `hebcal-download.js`, `makeDownloadProps.js`, `deserializeDownload.js`.
+  PDF rendering was removed from this app; `.pdf` download requests now return
+  501 and PDFs are served exclusively by
+  [hebcal-api-go](https://github.com/hebcal/hebcal-api-go).
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
 - **FullCalendar**: `fullcalendar.js` (`/hebcal?cfg=fc` server-side JSON);
   `client-fullcalendar.js` is the separate browser bundle
@@ -165,8 +168,8 @@ synthetic URLs badly misrepresent the work mix. The approach that worked:
 
 1. Aggregate a production logfile by route family × extension × status,
    weighting by **total** `duration` rather than request count. Request counts
-   are dominated by 304s and `/ping`; time is dominated by a few `.pdf` routes.
-2. Sample URLs per family into flat lists (`.ics`/`.csv`/`.pdf` behave nothing
+   are dominated by 304s and `/ping`.
+2. Sample URLs per family into flat lists (`.ics` and `.csv` behave nothing
    alike, so profile them separately as well as mixed).
 3. Boot the app via a wrapper that imports `{app}` from `src/app-download.js`
    (it only self-starts when run directly) and drives
@@ -186,40 +189,12 @@ app-level response-caching win available; only per-render cost matters.
 
 ### Where the time goes on download.hebcal.com (Aug 2026 baseline)
 
-`.pdf` was ~51% of total server time, `.ics` ~30%, `.csv` ~10%.
+At the time of this baseline `.pdf` was ~51% of total server time, `.ics` ~30%,
+`.csv` ~10%. **PDF rendering has since been removed from this app** (it is now
+served by [hebcal-api-go](https://github.com/hebcal/hebcal-api-go)), so the
+pdfkit/fontkit costs that dominated this profile no longer apply here; `.ics`
+and `.csv` are now the work that matters.
 
-- **PDF — pdfkit re-parses fonts and discards its layout cache every request.**
-  `PDFFontFactory.open()` does `readFileSync` + `fontkit.create` per document,
-  and pdfkit's word-level `layoutCache` lives on `EmbeddedFont`, which is
-  per-document. fontkit decodes GSUB/GPOS lazily, so the re-parse cost surfaces
-  under `layout` (57% of PDF CPU), not under `open` (5%) — don't be misled by
-  the self-time profile alone. Across 253 real PDFs there were only ~2,000
-  unique (font, word) pairs, i.e. ~97% of shaping is redundant across requests.
-  **Do not try to fix this by sharing the shaped-word cache across documents.**
-  `src/pdfFontCache.js` did exactly that (63 → 32 ms/request, byte-identical
-  output) and was reverted on 2026-08-09 after it exhausted memory in
-  production: every `download.hebcal.com` worker was OOM-killed after ~189 PDFs,
-  restarting every ~20 minutes on a 990 MB box.
-
-  The cache was bounded at 20,000 entries per font, which bounds *entries* but
-  not *bytes*. Its values are fontkit `GlyphRun`s, and every `Glyph` in a run
-  holds `_font` — the whole parsed font, with its cmap processor, layout engine
-  and glyph cache. So each entry pins the entire font of whichever document
-  first shaped that word, and entries are only ever written on a miss, never
-  overwritten. Rendered text is *not* fixed vocabulary — the calendar subtitle
-  carries city names, ZIP codes and years — so nearly every request contributed
-  a new word, and with it a new pinned font: 60 documents pinned 60 distinct
-  fonts, and a local replay of real production URLs retained ~2.8 MB per PDF
-  with the heap climbing linearly and no plateau. Reverting made the same
-  replay flat at ~40 MB across 400 PDFs.
-
-  Any future attempt here has to keep cached values free of references back
-  into per-document state, and cannot simply share the parsed font either: that
-  is ~1.5x on its own, but fontkit caches `Glyph` objects by id along with the
-  code points from whichever call created them first, and pdfkit copies
-  `glyph.codePoints` into the PDF's ToUnicode CMap — which measurably changed
-  the CMap in ~4% of a 250-PDF sample, silently degrading copy/paste, search
-  and accessibility.
 - **iCalendar — `foldLine` was ~29% of `.ics` CPU** and ~57% of `/v3` yahrzeit
   CPU, essentially all of it `Intl.Segmenter`. Fixed upstream in
   `@hebcal/icalendar` by folding on code-point boundaries and consulting the
@@ -243,8 +218,7 @@ client offers it** and disabling it falls through to brotli. Measure with
   23% of 200s but comes almost entirely from browsers (72% of browser
   responses, mostly `.csv`). The automated subscribers use brotli and never
   zstd at all: Google Calendar 99.6% br, Apple iOS/macOS 99.5% br, Exchange and
-  script clients 99% gzip. PDFs are never compressed — `application/pdf` does
-  not match koa-compress's content-type filter — so PDF is irrelevant here.
+  script clients 99% gzip.
 - **Dropping an encoding to reduce Varnish variants does not pay off on
   download, because the URLs that repeat and the URLs that use zstd are
   disjoint sets.** Of ~7,000 URLs fetched more than once, 6,076 are served as
@@ -282,8 +256,7 @@ client offers it** and disabling it falls through to brotli. Measure with
 ### Where the time goes on www.hebcal.com (Aug 2026 baseline)
 
 By share of total request time: `/hebcal` ~38%, `/converter` ~20%,
-`/shabbat` ~17%, `/holidays` ~14%. `/holidays/*.pdf` is only ~1%, so the PDF
-work above is a download-side concern only.
+`/shabbat` ~17%, `/holidays` ~14%.
 
 The profile is **not** template-bound, despite first appearances. A CPU
 profile shows a large `(vm)` bucket that is tempting to read as compiled EJS;
@@ -366,6 +339,4 @@ surfaces this; `hebcal-devops` has `NodeEventLoopStalled` (>2s) and
 
 These routes are cached by ETag, so byte-identical output is the bar. Compare
 normalized response bodies before/after (strip `DTSTAMP`/`LAST-MODIFIED`, which
-vary per request). For PDFs, compare **inflated content streams**, not whole
-files: pdfkit writes a random `/ID` in the trailer via `crypto.getRandomValues`,
-so two runs of unmodified code never produce identical bytes.
+vary per request).

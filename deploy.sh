@@ -20,7 +20,6 @@ compress_file ./static/i/$npm_package_config_holidayFcApp
 compress_file ./static/favicon.svg
 
 # deploy for prod
-rsync -a ./fonts/ /var/www/fonts/
 rsync -a node_modules/simpledotcss/simple.min.css static/simple.min.css
 rsync -a ./static/ /var/www/html/
 rsync -a ./package.json /var/www/

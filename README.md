@@ -1,7 +1,8 @@
 # hebcal-web
 Web server for Hebcal.com
 * www.hebcal.com (Hebrew Date Converter, Yahrzeit, Shabbat, etc)
-* download.hebcal.com to export iCalendar, PDF and CSV
+* download.hebcal.com to export iCalendar and CSV
+  (PDF export has moved to [hebcal-api-go](https://github.com/hebcal/hebcal-api-go))
 
 ## Running dev server
 

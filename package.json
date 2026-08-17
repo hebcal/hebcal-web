@@ -103,7 +103,6 @@
     "mysql2": "^3.23.3",
     "nodemailer": "^9.0.5",
     "nodemailer-html-to-text": "^3.2.0",
-    "pdfkit": "^0.19.1",
     "pino": "^10.3.1",
     "probe-image-size": "^7.4.0",
     "prom-client": "^15.1.3",

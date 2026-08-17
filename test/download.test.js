@@ -108,17 +108,10 @@ describe('v4 CSV downloads', () => {
 });
 
 describe('v4 PDF downloads', () => {
-  it.each([
-    ['/v4/.../hebcal_2020_new_york.pdf',
-      '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf'],
-    ['/v4/.../hebcal_2021_toronto.pdf',
-      '/v4/CAEYAUABWLm6-AJg5Q9qAXN4EogBAQ/hebcal_2021_toronto.pdf'],
-    ['mm=2 (Hebrew months & Hebrew numerals)',
-      '/v4/CAEQARgBIAEoATABQAFg6w9qAmVziAEBgAQC/hebcal_2027.pdf'],
-  ])('returns 200 PDF for %s', async (why, url) => {
-    const response = await request(server).get(url);
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch(/pdf/);
+  it('returns 501 Not Implemented (PDFs served by hebcal-api-go)', async () => {
+    const response = await request(server)
+        .get('/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf');
+    expect(response.status).toBe(501);
   });
 });
 
@@ -305,10 +298,6 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
 
   it('handles conditional requests for CSV', async () => {
     await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
-  });
-
-  it('handles conditional requests for PDF', async () => {
-    await expectConditionalEtag(server, '/v4/CAEYAUABWIWDuQJg5A9qAXN4EogBAQ/hebcal_2020_new_york.pdf');
   });
 });
 

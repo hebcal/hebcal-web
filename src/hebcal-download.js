@@ -2,7 +2,6 @@ import {HDate, Event, Zmanim, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {getCalendarTitle, makeAnchor} from '@hebcal/rest-api';
 import '@hebcal/locales';
-import {createPdfDoc, renderPdf} from './pdf.js';
 import {basename} from 'node:path';
 import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
@@ -62,6 +61,10 @@ export async function hebcalDownload(ctx) {
   }
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
+  if (extension === '.pdf') {
+    // PDF rendering now served exclusively by https://github.com/hebcal/hebcal-api-go
+    ctx.throw(501, 'This service does not render PDFs');
+  }
   const ics = extension === '.ics';
   const csv = extension === '.csv';
   if (ics || csv) {
@@ -122,23 +125,6 @@ export async function hebcalDownload(ctx) {
     ctx.response.attachment(basename(path));
     ctx.response.type = 'text/x-csv; charset=utf-8';
     ctx.body = byteOrderMark(options.locale) + csv;
-  } else if (extension === '.pdf') {
-    if (!events.length) {
-      ctx.remove('Cache-Control');
-      ctx.remove('ETag');
-      ctx.throw(400, 'Please select at least one event option');
-    }
-    ctx.remove('Vary');
-    ctx.compress = false;
-    ctx.set('Access-Control-Allow-Origin', '*');
-    ctx.response.type = 'application/pdf';
-    const title = getCalendarTitle(events, options);
-    const doc = ctx.body = createPdfDoc(title, options);
-    options.utmSource = query.utm_source; // OK if undefined
-    options.utmMedium = query.utm_medium; // OK if undefined
-    options.utmCampaign = query.utm_campaign || 'pdf-' + campaignName(events, options);
-    renderPdf(doc, events, options, query);
-    doc.end();
   } else {
     ctx.status = 404;
     ctx.remove('Cache-Control');
