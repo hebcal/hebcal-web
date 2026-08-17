@@ -187,9 +187,9 @@ document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 <% if (locals.gy >= 1900 && locals.gy <= 2999) { -%>
 <%- await include('partials/download-modal.ejs') -%>
 <% if (locals.q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
-<% } -%>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <%- await include('partials/print-iframe.ejs') -%>
+<% } -%>
 <% const typeaheadScript = await include('partials/script-typeahead.ejs'); -%>
 <% const hebcalFormScript = await include('partials/script-hebcal-form.ejs'); -%>
 <%- await include('partials/footer.ejs', {
