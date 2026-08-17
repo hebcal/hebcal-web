@@ -15,6 +15,12 @@ const INT32_MIN = -2147483648;
 const dlPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
+// PDFs are served by hebcal-api-go, not this app. In production Varnish routes
+// download.hebcal.com/*.pdf there, so the host is unchanged; in dev, point PDF
+// URLs at the local hebcal-api-go on port 8082 while .ics/.csv stay on 8081.
+const pdfPrefix = process.env.NODE_ENV === 'production' ?
+  'https://download.hebcal.com' : 'http://127.0.0.1:8082';
+
 /**
  * @param {string} str
  * @return {number}
@@ -184,7 +190,7 @@ export function makeDownloadProps(ctx, q, options) {
   const emoji = typeof q.emoji === 'string' ? q.emoji : '1';
   const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji}) + '.ics';
   const url = ctx.state.url = {
-    pdf: dlhref + '.pdf',
+    pdf: pdfPrefix + dlhref.substring(dlPrefix.length) + '.pdf',
     ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji}) + '.ics',
     subical,
     webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
