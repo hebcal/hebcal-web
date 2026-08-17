@@ -4,8 +4,8 @@
 }) -%>
 <% if (locals.gy <= 1752 || locals.gy > locals.currentYear + 100) { %><meta name="robots" content="nofollow"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/converter?<%=locals.canonical%>">
-<% if (typeof locals.prev === 'object' && locals.prev !== null) { %><link rel="prev" href="<%=locals.prev.url%>"><% } %>
-<% if (typeof locals.next === 'object' && locals.next !== null) { %><link rel="next" href="<%=locals.next.url%>"><% } %>
+<% if (locals.prev) { %><link rel="prev" href="<%=locals.prev.url%>"><% } %>
+<% if (locals.next) { %><link rel="next" href="<%=locals.next.url%>"><% } %>
 <meta name="description" content="Convert Gregorian/civil and Hebrew/Jewish calendar dates. <%= locals.first %> = <%= locals.second %>">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="/etc/hdate-en.xml">
 <style>
@@ -72,12 +72,12 @@ const isPast = locals.hy < todayHebYear;
 </div>
 </div><!-- .d-flex -->
 <div class="overflow-auto">
-<% if (typeof locals.prev === 'object' && locals.prev !== null) { -%>
+<% if (locals.prev) { -%>
 <div class="float-start d-print-none me-2">
 <a class="btn btn-xs btn-outline-secondary" href="<%=locals.prev.url%>" title="previous date"><span aria-hidden="true">←</span> <%=locals.prev.title%></a>
 </div>
 <% } -%>
-<% if (typeof locals.next === 'object' && locals.next !== null) { -%>
+<% if (locals.next) { -%>
 <div class="float-end d-print-none ms-2">
 <a class="btn btn-xs btn-outline-secondary" href="<%=locals.next.url%>" title="next date"><%=locals.next.title%> <span aria-hidden="true">→</span></a>
 </div>
@@ -200,7 +200,7 @@ Free annual email reminders &amp; calendar downloads.
 </div><!-- .col -->
 <% } -%>
 </div><!-- .row -->
-<% if (typeof locals.futureYearsHeb === 'object' && locals.futureYearsHeb.length > 0 &&
+<% if (locals.futureYearsHeb?.length > 0 &&
  locals.hd === 30 && (locals.hm === 8 || locals.hm === 9 || (locals.hleap && locals.hm === 12))) { %>
 <div class="row">
 <div class="alert alert-warning alert-dismissible" role="alert">
@@ -214,7 +214,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <% } %>
 <% if (locals.message === undefined) { -%>
 <div id="future" class="row">
-<% if (typeof locals.futureYearsHeb === 'object' && locals.futureYearsHeb.length > 0) { -%>
+<% if (locals.futureYearsHeb?.length > 0) { -%>
 <div class="col-md-6" id="future-heb">
 <div class="row">
  <div class="col-auto"><h4><%= locals.hdate.render(locals.locale, false) %></h4></div>

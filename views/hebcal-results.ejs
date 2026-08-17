@@ -96,7 +96,7 @@ accurate.
 <%- await include('partials/location-warnings.ejs') -%>
 <h2><%= locals.shortTitle %>
 <% if (locals.locationName.includes(' ')) { %><br><% } %><span class="text-body-secondary h4"><%= locals.locationName -%>
-<% if (locals.options.il && typeof locals.location === 'object' && locals.location.getCountryCode() !== 'IL') { %> · <small class="text-nowrap">Israel 🇮🇱 holiday schedule</small><% } -%>
+<% if (locals.options.il && locals.location && locals.location.getCountryCode() !== 'IL') { %> · <small class="text-nowrap">Israel 🇮🇱 holiday schedule</small><% } -%>
 </span></h2>
 <div class="d-print-none">
   <div class="btn-group me-1" role="group">

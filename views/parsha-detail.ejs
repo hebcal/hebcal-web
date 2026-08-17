@@ -44,7 +44,7 @@ Next read <% if (locals.israelDiasporaDiffer) { %>in <%=locals.locationName%><% 
 title="Parashat <%=locals.parshaName%> from Sefaria"><%=locals.parsha.bookName%> <%=locals.parsha.verses%></a>
 <% } -%>
 </h4>
-<% if (typeof locals.summary === 'object') { %><p><%- locals.summary.html %>&nbsp;<sup><a title="<%= locals.summary.title %>" href="<%- locals.summary.link %>">[1]</a></sup></p><% } %>
+<% if (locals.summary) { %><p><%- locals.summary.html %>&nbsp;<sup><a title="<%= locals.summary.title %>" href="<%- locals.summary.link %>">[1]</a></sup></p><% } %>
 </div><!-- .col -->
 </div><!-- .row -->
 
@@ -126,7 +126,7 @@ Some congregations read the entire parsha every year.</div>
 <% } else { %>
 <%- await include('partials/aliyot-loop.ejs', {aliyot: triReading.aliyot}) -%>
 <% } %>
-<% if (triReading.reason && triReading.reason.haftara) { -%>
+<% if (triReading.reason?.haftara) { -%>
 <p class="haftara">Haftarah<span class="text-success">*</span>:
 <%- triReading.haftaraHtml %>
 <%- await include('partials/numverses.ejs', {v: triReading.haftaraNumV}) -%>
@@ -164,37 +164,37 @@ Some congregations read the entire parsha every year.</div>
 <div class="col">
 <h4 id="drash">Commentary and Divrei Torah</h4>
 <ul class="bullet-list-inline">
-<% if (typeof locals.commentary['sefaria'] === 'object') { -%>
+<% if (locals.commentary['sefaria']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> from Sefaria" href="https://www.sefaria.org/topics/parashat-<%=locals.commentary['sefaria'].target%>?tab=sources">Sefaria</a></li>
 <% } -%>
-<% if (typeof locals.commentary['wikipedia'] === 'object') { -%>
+<% if (locals.commentary['wikipedia']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> from Wikipedia" href="https://en.wikipedia.org/wiki/<%=locals.commentary['wikipedia'].target%>">Wikipedia</a></li>
 <% } -%>
-<% if (typeof locals.commentary['ou.org'] === 'object') { -%>
+<% if (locals.commentary['ou.org']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from OU" href="https://outorah.org/series/3111?parsha=<%=encodeURIComponent(locals.commentary['ou.org'].target)%>&amp;size=30">OU Torah</a></li>
 <% } -%>
-<% if (typeof locals.commentary['torah.org'] === 'object') { -%>
+<% if (locals.commentary['torah.org']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Torah.org" href="https://torah.org/parsha/<%=locals.commentary['torah.org'].target%>/">Torah.org</a></li>
 <% } -%>
 <% if (typeof locals.commentary['chabad.org'] === 'number') { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Chabad" href="https://www.chabad.org/article.asp?aid=<%=locals.commentary['chabad.org']%>">Chabad</a></li>
 <% } -%>
-<% if (typeof locals.commentary['rabbisacks.org'] === 'string' && locals.commentary['rabbisacks.org'].length !== 0) { -%>
+<% if (locals.commentary['rabbisacks.org']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Jewish Theological Seminary" href="https://www.rabbisacks.org/covenant-conversation/<%=locals.commentary['rabbisacks.org']%>/">Rabbi Sacks z”l</a></li>
 <% } -%>
-<% if (typeof locals.commentary['reformjudaism.org'] === 'object') { -%>
+<% if (locals.commentary['reformjudaism.org']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Reform Judaism" href="https://reformjudaism.org/torah/portion/<%=locals.commentary['reformjudaism.org'].target%>">Reform Judaism</a></li>
 <% } -%>
-<% if (typeof locals.commentary['ajr.edu'] === 'object') { -%>
+<% if (locals.commentary['ajr.edu']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from the Academy for Jewish Religion" href="https://ajr.edu/divrei-torah/?_by_parsha=<%=locals.commentary['ajr.edu'].target%>">Academy for Jewish Religion</a></li>
 <% } -%>
-<% if (typeof locals.commentary['jtsa.edu'] === 'string' && locals.commentary['jtsa.edu'].length !== 0) { -%>
+<% if (locals.commentary['jtsa.edu']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Jewish Theological Seminary" href="https://www.jtsa.edu/jts-torah-online/?parashah=<%=locals.commentary['jtsa.edu']%>">Jewish Theological Seminary</a></li>
 <% } -%>
 <% if (typeof locals.commentary['ej'] === 'string') { -%>
 <li><a title="Parashat <%=locals.parshaName%> commentary from Exploring Judaism" href="https://exploringjudaism.org/learning/torah/<%=locals.commentary['ej']%>/">Exploring Judaism</a></li>
 <% } -%>
-<% if (typeof locals.commentary['learntefillah.com'] === 'string' && locals.commentary['learntefillah.com'].length !== 0) { -%>
+<% if (locals.commentary['learntefillah.com']) { -%>
 <li><a title="Parashat <%=locals.parshaName%> tikkun from LearnTefillah.com" href="https://www.learntefillah.com/parasha/<%=locals.commentary['learntefillah.com']%>/rishon/">LearnTefillah.com</a></li>
 <% } -%>
 </ul>
@@ -266,7 +266,7 @@ Parashat <%=locals.parshaName%> is read in <%=locals.locationName%> on:
 <div class="col">
 <h4 id="ref">References</h4>
 <dl>
-<% if (typeof locals.summary === 'object') { %>
+<% if (locals.summary) { %>
 <dt><a href="<%- locals.summary.link %>">Parashat <%=locals.parsha.p1||locals.parshaName%> from Sefaria.org</a>
 <dd>Sefaria, Inc.
 <% } %>

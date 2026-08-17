@@ -20,14 +20,14 @@ and <a href="https://www.maxmind.com/">MaxMind</a>, also licensed under Creative
 </footer>
 </div><!-- .container -->
 <script defer nonce="<%=locals.nonce%>" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-<% if (typeof locals.footerScripts === 'object') { -%>
+<% if (locals.footerScripts) { -%>
 <%   if (locals.footerScripts.tooltip) { %><%- await include('script-tooltip.ejs') %><% } -%>
 <%   if (locals.footerScripts.clipboard) { %><script nonce="<%=locals.nonce%>"><%- await include('client-clipboard.min.js') %></script><% } -%>
 <%   if (locals.footerScripts.typeahead) { %><%- await include('script-typeahead.ejs') %><% } -%>
 <% } -%>
 <% if (locals.xtra_html !== undefined) { %><%- locals.xtra_html %><% } -%>
 <script nonce="<%=locals.nonce%>"><%- await include('analytics.min.js') %></script>
-<% if (typeof locals.cookieBanner === 'boolean' && locals.cookieBanner) { -%>
+<% if (locals.cookieBanner) { -%>
 <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center fixed-bottom mb-2">
  <div id="cookie-toast" class="toast bg-body-tertiary" role="alert" aria-live="polite" aria-atomic="true" data-bs-autohide="false">
   <div class="toast-header">

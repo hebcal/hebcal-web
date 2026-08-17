@@ -31,7 +31,7 @@
 <p class="lead">This week’s Torah portion is <a class="text-nowrap" href="<%=locals.parshaHref%>">Parashat <%=locals.parsha.replaceAll("'", '’')%></a>
  (read on <time datetime="<%=locals.saturday.format('YYYY-MM-DD')%>"><%=locals.saturday.format('D MMMM YYYY')%></time>).</p>
 <% } %>
-<% if (typeof locals.meta === 'object') { %>
+<% if (locals.meta) { %>
 <p><%- locals.meta.summaryHtml.html %>&nbsp;<sup><a title="<%= locals.meta.summaryHtml.title %>" href="<%- locals.meta.summaryHtml.link %>">[1]</a></sup></p>
 <ul class="bullet-list-inline">
   <li>Torah reading: <a href="<%=locals.parshaHref%>#torah"><%=locals.meta.bookName%> <%=locals.meta.verses%></a></li>

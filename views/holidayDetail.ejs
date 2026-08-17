@@ -31,7 +31,7 @@
  This corresponds to Parashat <%= locals.currentItem.parsha.join('-') %>.
 <% } %>
 </p>
-<% if (typeof locals.meta.photo === 'object') { -%>
+<% if (locals.meta.photo) { -%>
 <div>
 <picture>
 <% if (locals.meta.photo.avif) { -%>
@@ -54,7 +54,7 @@ class="img-fluid">
 <p><small class="d-print-none"><em>Read more from <a class="outbound"
 title="More about <%=locals.holiday%> from <%=locals.meta.about.name%>"
 href="<%=locals.meta.about.href%>"><%=locals.meta.about.name%></a>
-<% if (locals.meta.about.name !== 'Wikipedia' && typeof locals.meta.wikipedia === 'object' && typeof locals.meta.wikipedia.href === 'string') { %>
+<% if (locals.meta.about.name !== 'Wikipedia' && typeof locals.meta.wikipedia?.href === 'string') { %>
 or <a class="outbound" title="More about <%=locals.holiday%> from Wikipedia"
 href="<%=locals.meta.wikipedia.href%>">Wikipedia</a>
 <% } // wikipedia %>
@@ -234,7 +234,7 @@ The Holy Scriptures</a></em>
 href="https://www.sefaria.org/texts/Tanakh">Sefaria Tanakh</a></em>
 <dd>Sefaria.org
 <% } // meta.reading %>
-<% if (typeof locals.meta.wikipedia === 'object' && typeof locals.meta.wikipedia.href === 'string') { %>
+<% if (typeof locals.meta.wikipedia?.href === 'string') { %>
 <dt><a href="<%=locals.meta.wikipedia.href%>">“<%=locals.meta.wikipedia.title%>” in <em>Wikipedia: The Free Encyclopedia</em></a>
 <dd>Wikimedia Foundation Inc.
 <% } %>

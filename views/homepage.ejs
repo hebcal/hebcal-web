@@ -119,7 +119,7 @@ href="/fridge">Year at-a-glance &raquo;</a></p>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
 Full kriyah, triennial cycle, weekday readings.
 Spreadsheets for <em>leyning</em> coordinators.
-<br><% if (typeof locals.parshaEvent === 'object') { %><a href="<%=locals.parshaEvent.url()%>"><%=locals.parshaEvent.renderBrief(locals.lg).replaceAll("'", '’')%></a> · <% } %>
+<br><% if (locals.parshaEvent) { %><a href="<%=locals.parshaEvent.url()%>"><%=locals.parshaEvent.renderBrief(locals.lg).replaceAll("'", '’')%></a> · <% } %>
 <a class="text-nowrap" href="/sedrot/<%=locals.hy%>?i=<%=locals.il?'on':'off'%>">Readings for <%=locals.hy%></a> ·
 <a class="text-nowrap" href="/sedrot/<%=locals.il?'?i=on':''%>">See more &raquo;</a></p>
 </div><!-- .col-sm-4 -->

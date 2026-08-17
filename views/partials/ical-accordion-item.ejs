@@ -1,7 +1,7 @@
 <div class="accordion-item">
 <h2 class="accordion-header" id="heading-<%=locals.id%>">
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#body-<%=locals.id%>" aria-expanded="false" aria-controls="body-<%=locals.id%>">
-<% if (typeof locals.he === 'boolean' && locals.he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=locals.name%></span><% } else { %><%=typeof locals.titleName === 'string' ? locals.titleName : locals.name%><% } %>
+<% if (locals.he) { %><span lang="he" dir="rtl" style="font-size: 1.5rem"><%=locals.name%></span><% } else { %><%=typeof locals.titleName === 'string' ? locals.titleName : locals.name%><% } %>
 <% if (typeof locals.emoji === 'string') { %>&nbsp; <span class="text-nowrap"><%=locals.emoji%></span><% } %>
 </button>
 </h2>
@@ -12,7 +12,7 @@
 <% if (locals.noToolbar === undefined) { %><%- await include('ical-toolbar.ejs', {
   name: locals.name,
   basename: locals.id,
-  noCSV: (typeof locals.noCSV === 'boolean' && locals.noCSV) ? true : undefined,
+  noCSV: locals.noCSV ? true : undefined,
 }) %><% } %>
 <% if (typeof locals.moreInfo === 'string') { %><%-locals.moreInfo%><% } %>
 </div>

@@ -5,7 +5,7 @@
 <div class="alert alert-success">
 <svg class="icon me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 Annual reminders
-<% if (typeof locals.info === 'object' && typeof locals.info.name === 'string') { -%>
+<% if (typeof locals.info?.name === 'string') { -%>
 of <strong><%= locals.info.name %>’s <%= locals.info.typeStr %></strong>
 <% } -%>
 will no longer be sent to <strong><%= locals.emailAddress %></strong>.

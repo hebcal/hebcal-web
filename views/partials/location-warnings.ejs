@@ -1,4 +1,4 @@
-<% if (typeof locals.location === 'object') { -%>
+<% if (locals.location) { -%>
 <% if (locals.location.getCountryCode() === 'US' &&
       (locals.locationName.includes(' IN ') || locals.locationName.includes(' Indiana'))) { -%>
 <div class="alert alert-warning alert-dismissible">
