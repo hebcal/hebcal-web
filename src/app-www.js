@@ -86,11 +86,11 @@ app.use(async function fixup0(ctx, next) {
       ctx.request.querystring = qs2.substring(0, back);
     }
   }
-  // Collapse duplicate identical key/values in querystring
+  // Collapse to the first value associated to a given query parameter
   const query = {...ctx.request.query};
   let needsRewrite = false;
   for (const [key, value] of Object.entries(query)) {
-    if (Array.isArray(value) && value.length >= 2 && value[0] === value[1]) {
+    if (Array.isArray(value)) {
       query[key] = value[0];
       needsRewrite = true;
     }

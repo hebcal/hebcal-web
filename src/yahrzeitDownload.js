@@ -32,10 +32,10 @@ export async function yahrzeitDownload(ctx) {
   const rpath = ctx.request.path;
   const details = rpath.startsWith('/v3') ? await getDetailsFromDb(ctx) : {};
   const query = {...details, ...ctx.request.query};
-  // Fix for legacy duplicated key/value pairs
+  // Collapse to the first value associated to a given query parameter
   for (const [key, value] of Object.entries(query)) {
-    if (Array.isArray(value) && value.length === 2) {
-      query[key] = value[1];
+    if (Array.isArray(value)) {
+      query[key] = value[0];
     }
   }
   const vv = query.v;

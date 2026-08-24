@@ -153,6 +153,24 @@ describe('Converter h2g ndays', () => {
   });
 });
 
+describe('Duplicate query parameters', () => {
+  // Regression: this exact URL threw a 500 because lg arrived as ['hn','h']
+  // instead of a scalar. fixup0 now collapses every array-valued param.
+  it('should not 500 when a param appears twice with different values', async () => {
+    const response = await request(server)
+        .get('/converter?g2h=1&g2h=1&gd=25&gm=12&gs=on&gy=2025&lg=hn&lg=h');
+    expect(response.status).toBe(200);
+  });
+
+  it('should collapse a duplicated param to its first value', async () => {
+    const response = await request(server)
+        .get('/converter?cfg=json&g2h=1&gy=2025&gm=12&gd=25&gd=26');
+    expect(response.status).toBe(200);
+    // gd=25 (the first value) wins over gd=26
+    expect(response.body.gd).toBe(25);
+  });
+});
+
 describe('Converter language', () => {
   const url = '/converter?cfg=json&gy=2026&gm=11&gd=7&g2h=1';
 
