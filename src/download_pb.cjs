@@ -219,7 +219,8 @@ proto.Download.toObject = function(includeInstance, msg) {
     yomtovonly: jspb.Message.getBooleanFieldWithDefault(msg, 65, false),
     dirshuamudyomi: jspb.Message.getBooleanFieldWithDefault(msg, 66, false),
     tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0),
-    nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false)
+    nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false),
+    dirshudafhalacha: jspb.Message.getBooleanFieldWithDefault(msg, 69, false)
   };
 
   if (includeInstance) {
@@ -515,6 +516,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 68:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setNine29(value);
+      break;
+    case 69:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setDirshudafhalacha(value);
       break;
     default:
       reader.skipField();
@@ -997,6 +1002,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       68,
+      f
+    );
+  }
+  f = message.getDirshudafhalacha();
+  if (f) {
+    writer.writeBool(
+      69,
       f
     );
   }
@@ -2332,6 +2344,24 @@ proto.Download.prototype.getNine29 = function() {
  */
 proto.Download.prototype.setNine29 = function(value) {
   return jspb.Message.setProto3BooleanField(this, 68, value);
+};
+
+
+/**
+ * optional bool dirshuDafHalacha = 69;
+ * @return {boolean}
+ */
+proto.Download.prototype.getDirshudafhalacha = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 69, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setDirshudafhalacha = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 69, value);
 };
 
 

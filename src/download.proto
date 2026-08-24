@@ -89,4 +89,5 @@ message Download {
   bool dirshuAmudYomi = 66;
   float tzeit = 67;
   bool nine29 = 68;
+  bool dirshuDafHalacha = 69;
 }

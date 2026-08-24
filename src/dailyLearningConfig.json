@@ -288,6 +288,20 @@
     "descMedium": "Simplified summary of the Shulchan Arukh, focusing on Orach Chayim and Yoreh De'ah"
   },
   {
+    "eventCategory": "dirshuDafHalacha",
+    "queryParam": "ddh",
+    "dailyLearningOptName": "dirshuDafHalacha",
+    "protocName": "dirshuDafHalacha",
+    "downloadSlug": "dirshu-daf-halacha",
+    "feedLength": 365,
+    "years": 2,
+    "group": "Halacha",
+    "settingsName": "Daf HaYomi B’Halacha (Dirshu)",
+    "shortName": "Daf HaYomi B’Halacha (Dirshu)",
+    "descLong": "One amud of the Dirshu edition is covered on each of Sunday through Thursday (Yom Tov included), and Friday and Shabbat review (chazarah) that week’s five days. Readings are given as Shulchan Arukh, Orach Chayim siman:seif references.",
+    "descMedium": "Dirshu’s daily Mishnah Berurah program"
+  },
+  {
     "eventCategory": "parashat",
     "queryParam": "s",
     "dailyLearningOptName": null,
