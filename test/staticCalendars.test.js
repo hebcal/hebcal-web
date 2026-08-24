@@ -301,6 +301,7 @@ describe('every published feed', () => {
       'rambam3', 'sefer-hamitzvot', 'yerushalmi-vilna',
       'yerushalmi-schottenstein', 'chofetz-chaim', 'dirshu-amud-hayomi',
       'daf-weekly', 'pirkei-avot', 'ahs-yomi', 'ksa-yomi',
+      'dirshu-daf-halacha',
     ]);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
