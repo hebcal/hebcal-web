@@ -223,7 +223,7 @@ async function renderForm(ctx, error) {
   });
 }
 
-const hebMonthAbbr = {
+const hebMonthAbbr0 = {
   'Adar': 'Adar',
   'Adar I': 'Adar1',
   'Adar II': 'Adar2',
@@ -234,12 +234,16 @@ const hebMonthAbbr = {
   'Kislev': 'Kis.',
   'Nisan': 'Nis.',
   'Sh\'vat': 'Shv.',
-  'Sh’vat': 'Shv.',
   'Sivan': 'Siv.',
   'Tamuz': 'Tam.',
   'Tevet': 'Tev.',
-  'Teves': 'Tev.',
   'Tishrei': 'Tish.',
+};
+
+const hebMonthAbbr = {
+  ...hebMonthAbbr0,
+  'Sh’vat': 'Shv.',
+  'Teves': 'Tev.',
 };
 
 /**
@@ -248,7 +252,7 @@ const hebMonthAbbr = {
  * three variants of Adar, Adar I, and Adar II.
  */
 function getHebMonthNames(lang) {
-  const orig = Object.keys(hebMonthAbbr).filter(x => !x.includes('’'));
+  const orig = Object.keys(hebMonthAbbr0);
   const months = {};
   for (const s of orig) {
     months[s] = Locale.gettext(s, lang);
