@@ -73,7 +73,8 @@ function getHebMonthName(d) {
   const abs = greg2abs(d.toDate());
   const hdt = abs <= EPOCH ? HDATE_EPOCH : abs2hebrew(abs);
   const localeData = window.hebcal.localeConfig;
-  const str = localeData.hebMonths[hdt.mm] || getMonthName(hdt.mm, hdt.yy);
+  const monthName0 = getMonthName(hdt.mm, hdt.yy);
+  const str = localeData.hebMonths[monthName0];
   hdt.monthName = str.replaceAll('\'', '’');
   return hdt;
 }
@@ -238,7 +239,8 @@ function splitByHebrewMonth(events) {
     const localeData = conf.localeConfig;
     const hd = month.startHd;
     const endHd = month.endHd;
-    const monthName = localeData.hebMonths[hd.mm] || getMonthName(hd.mm, hd.yy);
+    const monthName0 = getMonthName(hd.mm, hd.yy);
+    const monthName = localeData.hebMonths[monthName0];
     const endYear = endHd.yy;
     const isHebrew = conf.locale === 'he';
     const endYearStr = isHebrew ? gematriya(endYear) : endYear;

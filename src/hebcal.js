@@ -242,13 +242,16 @@ const hebMonthAbbr = {
   'Tishrei': 'Tish.',
 };
 
-
-function getHebMonthNames(events, lang) {
-  const year = events[0].getDate().getFullYear();
-  const months = new Array(14);
-  for (let i = 1; i <= 13; i++) {
-    const name = HDate.getMonthName(i, year);
-    months[i] = Locale.gettext(name, lang);
+/**
+ * Because the rendered calendar may span multiple years (both leap
+ * and regular), collect all month name translations, including all
+ * three variants of Adar, Adar I, and Adar II.
+ */
+function getHebMonthNames(lang) {
+  const orig = Object.keys(hebMonthAbbr).filter(x => !x.includes('’'));
+  const months = {};
+  for (const s of orig) {
+    months[s] = Locale.gettext(s, lang);
   }
   return months;
 }
@@ -359,7 +362,7 @@ function renderHtml(ctx) {
     weekdays: localeData.weekdays(),
     monthsShort: localeData.monthsShort(),
     months: localeData.months(),
-    hebMonths: getHebMonthNames(events, options.locale || 's'),
+    hebMonths: getHebMonthNames(options.locale || 's'),
     hebMonthAbbr: locale === 'en' ? hebMonthAbbr : undefined,
   };
   const gy = events[0].greg().getFullYear();
