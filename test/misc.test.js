@@ -157,62 +157,6 @@ describe('Leyning Routes', () => {
     const item = response.body.items[0];
     expect(item.consolation).toBe('3,5');
   });
-
-  it('should not label readings with events unless events=on', async () => {
-    const response = await request(server)
-        .get('/leyning?cfg=json&date=2026-02-14');
-    expect(response.status).toBe(200);
-    expect(response.body.items.map((i) => i.name.en)).toEqual(['Mishpatim']);
-    expect(response.body.items[0].desc).toBeUndefined();
-  });
-
-  it('should label holiday readings with their events when events=on', async () => {
-    const response = await request(server)
-        .get('/leyning?cfg=json&date=2025-12-22&events=on');
-    expect(response.status).toBe(200);
-    expect(response.body.items).toHaveLength(1);
-    expect(response.body.items[0].name.en).toBe('Chanukah Day 8');
-    expect(response.body.items[0].desc).toEqual(['Chanukah: 8th Day']);
-  });
-
-  it('should list every event sharing one reading when events=on', async () => {
-    // 1 Tevet 5786 is both Rosh Chodesh and the 7th day of Chanukah, and
-    // the two events resolve to the same reading key.
-    const response = await request(server)
-        .get('/leyning?cfg=json&date=2025-12-21&events=on');
-    expect(response.status).toBe(200);
-    expect(response.body.items).toHaveLength(1);
-    expect(response.body.items[0].name.en).toBe('Chanukah Day 7 (on Rosh Chodesh)');
-    expect(response.body.items[0].desc).toEqual(['Chanukah: 8 Candles', 'Rosh Chodesh Tevet']);
-  });
-
-  it('should add the special Shabbat reading suppressed by the parsha when events=on', async () => {
-    // Shabbat Shekalim 2026-02-14: getLeyningOnDate() folds the special
-    // maftir and Haftarah into Parashat Mishpatim and drops the standalone
-    // reading, which callers rendering one reading per event still need.
-    const response = await request(server)
-        .get('/leyning?cfg=json&date=2026-02-14&events=on');
-    expect(response.status).toBe(200);
-    const byName = Object.fromEntries(response.body.items.map((i) => [i.name.en, i]));
-    expect(Object.keys(byName).sort()).toEqual(['Mishpatim', 'Shabbat Shekalim']);
-    expect(byName['Mishpatim'].desc).toBeUndefined();
-    expect(byName['Shabbat Shekalim'].desc).toEqual(['Shabbat Shekalim']);
-    expect(byName['Shabbat Shekalim'].haftara).toBe('II Kings 12:1-17');
-    expect(byName['Shabbat Shekalim'].fullkriyah.M).toMatchObject({
-      k: 'Exodus', b: '30:11', e: '30:16',
-    });
-  });
-
-  it('should leave weekday and Mincha readings unlabeled when events=on', async () => {
-    // Yom Kippur 2025-10-02 has both a morning and a Mincha reading; only
-    // the morning one belongs to the Yom Kippur event.
-    const response = await request(server)
-        .get('/leyning?cfg=json&date=2025-10-02&events=on');
-    expect(response.status).toBe(200);
-    const byName = Object.fromEntries(response.body.items.map((i) => [i.name.en, i]));
-    expect(byName['Yom Kippur'].desc).toEqual(['Yom Kippur']);
-    expect(byName['Yom Kippur (Mincha)'].desc).toBeUndefined();
-  });
 });
 
 describe('Delete Cookie Route', () => {

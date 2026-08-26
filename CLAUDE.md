@@ -95,18 +95,6 @@ Each feature is typically one or a few files handling routing, business logic, a
   descriptions over time and now embeds Markdown in some of them; drash.json
   holds plain text, so re-scraping means flattening `[text](url)` and
   `*emphasis*` first.
-- **Torah readings**: `leyning.js` (`/leyning?cfg=json`) wraps
-  `getLeyningOnDate()`. The optional `&events=on` exists for
-  [hebcal-api-go](https://github.com/hebcal/hebcal-api-go), whose `/shabbat`
-  renders one reading per calendar event the way
-  `eventToClassicApiObject()` does. It labels each holiday reading with the
-  `desc` of the events that produce it, and adds back the holiday readings
-  `getLeyningOnDate()` drops on a Shabbat that also has a parsha (Rosh
-  Chodesh, the special Shabbatot) because their maftir and Haftarah are
-  folded into the parsha reading. Those readings are not always
-  reconstructable from the parsha item — Shabbat Shuva's own Haftarah has a
-  third part the "(with Vayeilech)" variant lacks — so they have to be
-  emitted separately. Without `events=on` the response is unchanged.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`
