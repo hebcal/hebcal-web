@@ -9,7 +9,7 @@
 single page. You can print it out and post it on your refrigerator.</p>
 
 <form action="/shabbat/fridge.cgi" method="get" autocomplete="off">
-<input type="hidden" name="geo" id="geo" value="<%= locals.q.geo || 'geonameid' %>">
+<input type="hidden" name="geo" id="geo" value="<%= locals.q.geo || 'geoname' %>">
 <input type="hidden" name="zip" id="zip" value="<%= locals.q.zip || '' %>">
 <input type="hidden" name="geonameid" value="<%= locals.q.geonameid %>" id="geonameid">
 <%- await include('partials/city-and-havdalah.ejs') -%>
