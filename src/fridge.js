@@ -61,7 +61,13 @@ export async function fridgeShabbat(ctx) {
 
 async function fridgeIndex(ctx) {
   const q = await setDefautLangTz(ctx);
-  const location = ctx.state.location;
+  let location = ctx.state.location;
+  if (!location) {
+    location = ctx.db.lookupLegacyCity('New York');
+    q.geonameid = location.getGeoId();
+    q.geo = 'geoname';
+    q.zip = '';
+  }
   q['city-typeahead'] = location && location.geo !== 'pos' ? location.getName() : '';
   return ctx.render('fridge-index', {
     q,
