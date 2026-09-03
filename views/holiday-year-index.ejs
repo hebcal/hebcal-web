@@ -188,7 +188,7 @@ candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p
 <% if ((locals.isHebrewYear && locals.calendarYear >= 5000 && locals.calendarYear <= 6759) ||
        (!locals.isHebrewYear && locals.year >= 1900 && locals.year < 3000)) { -%>
 <div class="mb-4">
-<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=locals.isHebrewYear?locals.calendarYear:locals.year%>.pdf<%=locals.iSuffix%>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
+<a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=locals.isHebrewYear?locals.calendarYear:locals.year%><%=locals.il?'-il':''%>.pdf"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 <p class="small">Printable PDF, one page per month, in landscape</p>
 </div>
 <% } -%>
