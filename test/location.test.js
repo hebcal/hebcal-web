@@ -1,5 +1,5 @@
 import {expect, test} from 'vitest';
-import {getLocationFromGeoIp} from '../src/location.js';
+import {getLocationFromGeoIp, getLocationFromQuery} from '../src/location.js';
 
 /**
  * Minimal Koa-like ctx with a `get(header)` accessor and a geoipClient that
@@ -49,4 +49,20 @@ test('getLocationFromGeoIp does not short-circuit for human user-agent', async (
   // service returns null (unknown IP or unreachable) -> {geo: 'none'}, but this
   // exercises the non-robot path (does not throw, falls through past isRobot).
   expect(await getLocationFromGeoIp(ctx)).toEqual({geo: 'none'});
+});
+
+// Pins the two url-decoding leniency hacks for a latitude/longitude
+// request's tzid: a raw UTC offset like "+03:00" (whose "+" url-decodes to
+// " "), and "Etc/GMT+5" (whose "+" likewise url-decodes to " ", landing as
+// "Etc/GMT 5").
+test.each([
+  ['Etc/GMT+5', 'Etc/GMT+5'], // untouched, already valid
+  ['Etc/GMT 5', 'Etc/GMT+5'], // "+" url-decoded to " "
+  ['Etc/GMT 12', 'Etc/GMT+12'], // two-digit offset
+  [' 03:00', 'Etc/GMT+3'], // "+03:00" url-decoded to " 03:00"
+  ['-02:00', 'Etc/GMT-2'],
+])('getLocationFromQuery tzid=%s leniency', (tzid, want) => {
+  const query = {latitude: '41.85', longitude: '-87.65', tzid};
+  const loc = getLocationFromQuery({}, query);
+  expect(loc.getTzid()).toBe(want);
 });
