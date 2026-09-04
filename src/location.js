@@ -194,6 +194,12 @@ export function getLocationFromQuery(db, query) {
         const dir = m[1] === '-' ? '-' : '+';
         query.tzid = 'Etc/GMT' + dir + Number.parseInt(m[2], 10);
       }
+    } else if (tzid.startsWith('Etc/GMT ')) {
+      // hack for client who passes tzid=Etc/GMT+5 ("+" url-decodes to " ")
+      const m = /^Etc\/GMT (\d{1,2})$/.exec(tzid);
+      if (m) {
+        query.tzid = 'Etc/GMT+' + m[1];
+      }
     }
     try {
       new Intl.DateTimeFormat('en-US', {timeZone: query.tzid});
