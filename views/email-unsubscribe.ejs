@@ -45,7 +45,7 @@ body { background-color: #eee;}
   <p class="small">You will no longer receive email from this list.</p>
   <p><a class="btn btn-secondary" href="/">Go to Hebcal »</a></p>
   <p class="small">Unsubscribed by mistake?</p>
-  <form method="post" action="/email/verify.php">
+  <form method="post" action="/email/verify">
     <input type="hidden" name="k" value="<%=locals.subscriptionId%>">
     <input type="hidden" name="commit" value="1">
     <button type="submit" class="btn btn-secondary">

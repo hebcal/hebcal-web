@@ -184,11 +184,13 @@ Disallow: /email
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
       return;
-    } else if (rpath === '/email/verify.php') {
-      return emailVerify(ctx);
-    } else if (rpath === '/email/open') {
-      return emailOpen(ctx);
     } else if (rpath.startsWith('/email')) {
+      if (rpath === '/email/open') {
+        onlyGetAndHead(ctx);
+        return emailOpen(ctx);
+      } else if (rpath.startsWith('/email/verify')) {
+        return emailVerify(ctx);
+      }
       return emailForm(ctx);
     } else if (rpath.startsWith('/link')) {
       return shabbatJsLink(ctx);

@@ -1,4 +1,4 @@
-import randomBigInt from 'random-bigint';
+import {ulid} from 'ulid';
 import {getLocationFromQuery} from './location.js';
 import {cleanQuery} from './cleanQuery.js';
 import {queryDefaultCandleMins, processCookieAndQuery} from './urlArgs.js';
@@ -459,11 +459,20 @@ function getZip(q) {
   return zip;
 }
 
+/**
+ * Random subscription ID generator, returns a 24-character string.
+ * A lowercased ULID (Crockford base32) truncated to 24 chars: a 10-char
+ * millisecond timestamp prefix followed by 14 chars (~70 bits) of randomness.
+ * The Crockford alphabet is a subset of [0-9a-z], so the result satisfies the
+ * subscription-key validator.
+ * @param {import('koa').Context} ctx
+ * @return {string}
+ */
 function makeSubscriptionId(ctx) {
   if (ctx.state.subscriptionId) {
     return ctx.state.subscriptionId;
   }
-  return randomBigInt(80).toString(36).padStart(16, '0') + Date.now().toString(36);
+  return ulid().toLowerCase().substring(0, 24);
 }
 
 async function writeStagingInfo(ctx, db, q) {
@@ -496,7 +505,7 @@ async function writeStagingInfo(ctx, db, q) {
   ]);
   const locationName = ctx.state.locationName;
   matomoTrack(ctx, 'Email', 'signup-backend', 'shabbat-weekly');
-  const url = `https://www.hebcal.com/email/verify.php?${subscriptionId}`;
+  const url = `https://www.hebcal.com/email/verify?${subscriptionId}`;
   const msgid = makeMessageId(subscriptionId);
   const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-verify');
   const message = {

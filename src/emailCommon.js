@@ -81,7 +81,7 @@ export function sendMailLogErr(ctx, message) {
  * @return {string}
  */
 export function makeMessageId(id) {
-  return `${id}.${Date.now()}`;
+  return `${id}.${Date.now().toString(36)}`;
 }
 
 /**
