@@ -132,8 +132,13 @@ export function rejectForgedCrossOriginPost(ctx) {
     return;
   }
   const origin = ctx.get('origin');
-  if (!origin) {
-    // No Origin header: not a browser cross-site request. Allow.
+  if (!origin || origin === 'null') {
+    // No Origin header, or an opaque ("null") origin. Neither is a browser
+    // cross-site request carrying a real, forgeable origin, so allow both.
+    // `null` is the spec serialization of an opaque origin and browsers do
+    // send it for legitimate traffic -- e.g. iOS Safari POSTing a form that
+    // was reached by following a link from an email (the Mail app is an
+    // opaque initiator). Rejecting it 403s real subscribers.
     return;
   }
   let hostname;

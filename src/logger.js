@@ -69,6 +69,8 @@ export function makeLogInfo(ctx) {
   if (!empty(inm)) info.inm = inm;
   const ref = ctx.get('referer');
   if (!empty(ref)) info.ref = ref;
+  const origin = ctx.get('origin');
+  if (!empty(origin)) info.origin = origin;
   const cookie = ctx.get('cookie');
   if (!empty(cookie)) info.cookie = cookie;
   const enc = ctx.response.get('content-encoding');

@@ -85,13 +85,17 @@ describe('Email subscribe CSRF protection', () => {
     expect(response.status).toBe(403);
   });
 
-  it('rejects an opaque "null" Origin', async () => {
+  it('allows an opaque "null" Origin (iOS Safari POST from an email link)', async () => {
+    // `null` is the spec serialization of an opaque origin, not a real
+    // cross-site origin, and browsers send it for legitimate traffic (e.g.
+    // iOS Safari submitting a form reached by following an email link). It is
+    // treated like a missing Origin, not a forged one.
     const response = await request(server)
         .post('/yahrzeit/email')
         .set('Origin', 'null')
         .type('form')
         .send({});
-    expect(response.status).toBe(403);
+    expect(response.status).not.toBe(403);
   });
 
   it('allows POST /yahrzeit/email from the hebcal.com Origin', async () => {
