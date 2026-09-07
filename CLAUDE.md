@@ -19,6 +19,17 @@ touch hebcal-dot-com.ini                                     # local config (can
 npm run build                                                # compile PO translations, SCSS, rollup bundles
 ```
 
+### Bumping `@hebcal/*` dependencies
+
+When `npm install` fails with `ETARGET` / "No matching version found for
+`@hebcal/<pkg>@^x.y.z`" shortly after that version was published, the cause is
+stale cached registry metadata (npm reuses its on-disk packument without
+re-checking the registry until it ages past the freshness window), not a real
+missing version. Fix: `npm install --prefer-online` (forces ETag revalidation of
+metadata — lightweight, preferred). Heavier fallback: `npm cache clean --force`
+then `npm install`. Confirm the registry actually has it first with
+`npm view @hebcal/<pkg>@<ver> version --prefer-online`.
+
 ## Commands
 
 ```bash
@@ -137,6 +148,29 @@ npm run build   # po2json + css-compile + css-rename + rollup
 ```
 
 Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock.js`. All tests must pass before committing or pushing.
+
+### Test harness isolation
+
+- **Route tests share one listening server per file.** `test/testServer.js`
+  `makeServer(app)` does one `http.createServer(app.callback())` +
+  `server.listen(0)` in `beforeAll` and `server.close()` in `afterAll`; every
+  route test uses `request(server)`, never `request(app.callback())`. This was
+  the fix (2026-07-15) for a ~15–20% flake rate where a route returned the
+  wrong HTTP status (e.g. `PUT / → 400` instead of 405, stray `404`/`503`). Bare
+  `app.callback()` makes supertest `listen(0)`+`close()` a fresh ephemeral
+  server per request, and under ~20 parallel worker processes an occasional
+  connection lands on a wrong/closing server. `vitest.config.js` carries
+  `retry: 2` for the rare residual. It was **not** a Node version regression.
+  Keep new route tests on `makeServer`.
+- **Don't run the full suite concurrently with another run.**
+  `test/imageFormats.test.js` writes fixture images to a fixed shared path
+  (`DOCUMENT_ROOT/i/is/{16x9-768,800,640,400}/112151899.{webp,avif}`, with
+  `DOCUMENT_ROOT` = `./static` outside production) in `beforeAll` and `rmSync`s
+  them in `afterAll`. Two simultaneous `npx vitest run` invocations race —
+  typically `expect(srcset).toContain('800w')` fails. A single run is reliable.
+  If it ever needs a real fix, make the fixture name unique per run (e.g.
+  `process.pid` in the stem). The rest of the harness is isolation-safe (HTTP
+  servers `listen(0)`, the geoip test uses `mkdtemp`).
 
 ### Testing Before Commit/Push
 
