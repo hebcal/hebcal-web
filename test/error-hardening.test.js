@@ -22,8 +22,8 @@ describe('www server: bad-parameter hardening', () => {
       '/etc/dafyomi-en.xml?gy=1&gm=1&gd=1'],
     ['parsha index in a year before triennial support',
       '/sedrot/?gy=1&gm=1&gd=1'],
-    ['zmanim ICS at a polar latitude with no events',
-      '/zmanim?cfg=ics&geo=pos&latitude=90&longitude=0&tzid=UTC'],
+    ['hebcal JSON at a polar latitude with no events',
+      '/hebcal?cfg=ics&c=on&geo=pos&latitude=90&longitude=0&tzid=UTC&maj=off&min=off&mod=off&nx=off&leyning=off&s=off&ss=off&mf=off'],
   ])('400 for %s', async (why, url) => {
     const res = await request(server).get(url);
     expect(res.status).toBe(400);

@@ -7,38 +7,15 @@ import {makeServer} from './testServer.js';
 
 const server = makeServer(app);
 
-describe('Zmanim and Omer Routes', () => {
-  it('should return 200 for /zmanim', async () => {
+describe('Zmanim Routes', () => {
+  it('should return 501 for /zmanim', async () => {
     const response = await request(server)
         .get('/zmanim?cfg=json&geonameid=293397&date=2025-12-24');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
+    expect(response.status).toBe(501);
   });
+});
 
-  it('should return Assur Melacha status with im=1 parameter', async () => {
-    const response = await request(server)
-        .get('/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-
-    // Validate response structure for Assur Melacha API
-    const body = response.body;
-    expect(body).toHaveProperty('date');
-    expect(body).toHaveProperty('version');
-    expect(body).toHaveProperty('location');
-    expect(body).toHaveProperty('status');
-
-    // Validate location object
-    expect(body.location).toHaveProperty('geonameid');
-    expect(body.location.geonameid).toBe(3448439);
-
-    // Validate status object
-    expect(body.status).toHaveProperty('localTime');
-    expect(body.status).toHaveProperty('isAssurBemlacha');
-    expect(typeof body.status.isAssurBemlacha).toBe('boolean');
-    expect(typeof body.status.localTime).toBe('string');
-  });
-
+describe('Omer Routes', () => {
   it('should return 200 for /omer with date', async () => {
     const response = await request(server)
         .get('/omer/6473/32');
@@ -102,11 +79,10 @@ describe('Daily Learning Routes', () => {
 });
 
 describe('Geo Location Routes', () => {
-  it('should return 200 for /geo with valid geonameid', async () => {
+  it('should return 501 for /geo with valid geonameid', async () => {
     const response = await request(server)
         .get('/geo?geonameid=293397');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
+    expect(response.status).toBe(501);
   });
 });
 
@@ -188,23 +164,6 @@ describe('Link Routes', () => {
         .post('/link?geonameid=293397');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
-  });
-});
-
-describe('Zmanim Routes with ZIP code mock', () => {
-  let teardown;
-  beforeAll(() => {
-    teardown = injectZipsMock(app.context.db);
-  });
-  afterAll(() => teardown());
-
-  it('should return tzeit7083deg in JSON body for /zmanim?zip=90210', async () => {
-    const response = await request(server)
-        .get('/zmanim?cfg=json&zip=90210&date=2025-12-24');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-    expect(response.body).toHaveProperty('times');
-    expect(response.body.times).toHaveProperty('tzeit7083deg');
   });
 });
 

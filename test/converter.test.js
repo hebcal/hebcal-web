@@ -6,20 +6,6 @@ import {makeServer} from './testServer.js';
 const server = makeServer(app);
 
 describe('Converter Routes', () => {
-  it('should return 200 for GET /converter with valid params', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-  });
-
-  it('should return 400 for GET /converter with invalid params', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&hy=5785&hm=&hd=24&h2g=1&strict=1');
-    expect(response.status).toBe(400);
-    expect(response.type).toContain('json');
-  });
-
   it('should return 200 for GET /converter with Hebrew date', async () => {
     const response = await request(server)
         .get('/converter?h2g=1&hd=10&hm=Av&hy=6872');
@@ -27,85 +13,17 @@ describe('Converter Routes', () => {
     expect(response.type).toContain('html');
   });
 
-  it('should handle POST /converter with JSON config', async () => {
+  // ?cfg=xml and ?cfg=json are served exclusively by hebcal-api-go now.
+  it('should return 501 for GET /converter?cfg=json', async () => {
     const response = await request(server)
-        .post('/converter?cfg=json&hy=5786&hm=Cheshvan&hd=14&h2g=1&strict=1&gs=off');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
+        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1');
+    expect(response.status).toBe(501);
   });
 
-  it('should report a clear error for h2g missing the hm param', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&hd=12&hy=5801&h2g=1');
-    expect(response.status).toBe(400);
-    expect(response.body.error).toBe('Hebrew month is required');
-  });
-
-  it('should handle GET /converter with XML config', async () => {
+  it('should return 501 for GET /converter?cfg=xml', async () => {
     const response = await request(server)
         .get('/converter/?cfg=xml&gy=2025&gm=12&gd=24&g2h=1');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('xml');
-  });
-});
-
-describe('Converter JSONP', () => {
-  it('should wrap a single date in a JSONP callback', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1&callback=cb');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
-    expect(response.text).toMatch(/^cb\(\{/);
-  });
-
-  it('should wrap a date range in a JSONP callback', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&start=2025-01-01&end=2025-01-07&callback=cb');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('javascript');
-    expect(response.text).toMatch(/^cb\(\{/);
-  });
-
-  it('should ignore a hostile callback and return plain JSON', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1&callback=' +
-          encodeURIComponent('</script><svg onload=alert(1)>'));
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-    expect(response.text).not.toContain('onload');
-    expect(response.text).not.toContain('<');
-    expect(response.body.hy).toBe(5786);
-  });
-
-  it('should not reflect an error message as executable script', async () => {
-    // the error path echoes err.message, which can quote the bad input back
-    const evil = '<script>alert(1)</script>';
-    const response = await request(server)
-        .get('/converter?cfg=json&h2g=1&hy=5801&hd=12&hm=' + encodeURIComponent(evil));
-    expect(response.type).toContain('json');
-    expect(response.headers['x-content-type-options']).toBe('nosniff');
-    // any echo of the input must be JSON-encoded, never raw markup in a script body
-    expect(response.text).not.toMatch(/^[^{]/);
-  });
-});
-
-describe('Converter compression', () => {
-  it('should compress a large batch date range response', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&start=2025-01-01&end=2025-12-31')
-        .set('Accept-Encoding', 'gzip');
-    expect(response.status).toBe(200);
-    expect(response.headers['content-encoding']).toBeDefined();
-    expect(response.headers['vary']).toContain('Accept-Encoding');
-  });
-
-  it('should not compress a small single date response', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1')
-        .set('Accept-Encoding', 'gzip');
-    expect(response.status).toBe(200);
-    expect(response.headers['content-encoding']).toBeUndefined();
-    expect(response.headers['vary']).toBeUndefined();
+    expect(response.status).toBe(501);
   });
 });
 
@@ -124,32 +42,17 @@ describe('Converter CSV Route', () => {
     expect(response.type).toContain('html');
   });
 
-  it('should return 400 (not 500) for /converter/csv with a date range', async () => {
+  // Date-range conversion (start/end, ndays) moved to hebcal-api-go: 501, not 500.
+  it('should return 501 (not 500) for /converter/csv with a date range', async () => {
     const response = await request(server)
         .get('/converter/csv?start=2024-01-01&end=2024-01-05');
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(501);
   });
 
-  it('should return 400 (not 500) for /converter/csv with ndays', async () => {
+  it('should return 501 (not 500) for /converter/csv with ndays', async () => {
     const response = await request(server)
         .get('/converter/csv?h2g=1&ndays=2');
-    expect(response.status).toBe(400);
-  });
-});
-
-describe('Converter h2g ndays', () => {
-  it('should convert a Hebrew date plus ndays into a range', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&h2g=1&ndays=3&hy=5785&hm=Av&hd=1');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
-    expect(Object.keys(response.body.hdates)).toHaveLength(3);
-  });
-
-  it('should return 400 for ndays with a non-numeric Hebrew date', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&h2g=1&ndays=3&hy=abc&hm=Av&hd=1');
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(501);
   });
 });
 
@@ -160,42 +63,5 @@ describe('Duplicate query parameters', () => {
     const response = await request(server)
         .get('/converter?g2h=1&g2h=1&gd=25&gm=12&gs=on&gy=2025&lg=hn&lg=h');
     expect(response.status).toBe(200);
-  });
-
-  it('should collapse a duplicated param to its first value', async () => {
-    const response = await request(server)
-        .get('/converter?cfg=json&g2h=1&gy=2025&gm=12&gd=25&gd=26');
-    expect(response.status).toBe(200);
-    // gd=25 (the first value) wins over gd=26
-    expect(response.body.gd).toBe(25);
-  });
-});
-
-describe('Converter language', () => {
-  const url = '/converter?cfg=json&gy=2026&gm=11&gd=7&g2h=1';
-
-  it('should render events in the requested language', async () => {
-    const cases = {
-      's': 'Parashat Chayei Sara',
-      'a': 'Parshas Chayei Sara',
-      'sh': 'Parashat Chayei Sara',
-      // ah is Ashkenazi transliteration plus Hebrew in email subject lines;
-      // @hebcal/hdate's own alias table does not know it, so lgToLocale has
-      // to resolve it before anything renders
-      'ah': 'Parshas Chayei Sara',
-      'h': 'פָּרָשַׁת חַיֵּי שָֹרָה',
-      'fr': 'Parachah H̲ayé Sarah',
-    };
-    for (const [lg, parsha] of Object.entries(cases)) {
-      const response = await request(server).get(`${url}&lg=${lg}`);
-      expect(response.status).toBe(200);
-      expect(response.body.events, `lg=${lg}`).toContain(parsha);
-    }
-  });
-
-  it('should default to Sephardic transliteration', async () => {
-    const response = await request(server).get(url);
-    expect(response.status).toBe(200);
-    expect(response.body.events).toContain('Parashat Chayei Sara');
   });
 });

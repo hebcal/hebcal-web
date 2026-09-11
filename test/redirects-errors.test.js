@@ -48,16 +48,16 @@ describe('410 Gone Responses', () => {
 describe('HTTP Method Restrictions', () => {
   it('should allow GET on /converter', async () => {
     const response = await request(server)
-        .get('/converter?cfg=json&gy=2025&gm=12&gd=24&g2h=1');
+        .get('/converter?gy=2025&gm=12&gd=24&g2h=1');
     expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
+    expect(response.type).toContain('html');
   });
 
   it('should allow POST on /converter', async () => {
     const response = await request(server)
-        .post('/converter?cfg=json&hy=5786&hm=Av&hd=3&h2g=1&strict=1&gs=off');
+        .post('/converter?hy=5786&hm=Av&hd=3&h2g=1&strict=1&gs=off');
     expect(response.status).toBe(200);
-    expect(response.type).toContain('json');
+    expect(response.type).toContain('html');
   });
 
   it('should return 405 for GET-only route with POST', async () => {

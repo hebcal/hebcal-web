@@ -64,9 +64,25 @@ npx vitest run test/converter.test.js
 
 ### Feature modules (`src/`)
 Each feature is typically one or a few files handling routing, business logic, and EJS template rendering:
-- **Date conversion**: `converter.js`, `dateUtil.js`
+- **Date conversion**: `converter.js`, `dateUtil.js`. The `?cfg=xml` and
+  `?cfg=json` API variants were removed from this app; `/converter?cfg=xml`
+  and `?cfg=json` now return 501 and are served exclusively by
+  [hebcal-api-go](https://github.com/hebcal/hebcal-api-go) (the removed
+  `converter-xml.ejs` template went with them). Date-range batch conversion
+  (`start`/`end` and `h2g&ndays`, the old cfg=json batch mode) also moved to
+  hebcal-api-go, so `converter.js` returns 501 for those inputs — the
+  `convertDateRange()` function and `dateUtil.js`'s `getStartAndEnd()` (with its
+  `isoToDayjs`/`MAX_DAYS` helpers) were deleted. `/converter` still renders the
+  HTML single-date page here. `/converter/csv` (`dateConverterCsv`) is also kept:
+  in production Varnish routes those requests to the hebcal-api-go backend, not
+  to this one, but the handler stays here so the CSV export can be exercised in
+  local testing.
 - **Holidays**: `holidayApp.js`, `getHolidayMeta.js`
-- **Shabbat/Zmanim**: `shabbat.js`, `zmanim.js`
+- **Shabbat/Zmanim**: `shabbat.js`. Zmanim (`src/zmanim.js`) was removed from
+  www.hebcal.com — `/zmanim` and `/geo` on **app-www** now return 501 (see
+  `router.js`) and are served by hebcal-api-go. Zmanim on **download.hebcal.com**
+  is unchanged: `zmanimDownload.js` (+ shared `zmanimCommon.js`) still serves the
+  `.ics`/`.csv` zmanim feeds from app-download.
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`
 - **Downloads/export**: `hebcal-download.js`, `makeDownloadProps.js`, `deserializeDownload.js`.
   PDF rendering was removed from this app; `.pdf` download requests now return
@@ -108,7 +124,10 @@ Each feature is typically one or a few files handling routing, business logic, a
   `*emphasis*` first.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
-- **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`
+- **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
+  standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
+  hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used
+  in-process by other routes.
 
 ### Data files (`src/`)
 JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`, `redirect.json`, `redirectDownload.json`

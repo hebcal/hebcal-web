@@ -1,13 +1,13 @@
-import {HDate, calendar, Event, ParshaEvent, Locale, months, OmerEvent, gematriya,
+import {HDate, calendar, Event, ParshaEvent, Locale, months, OmerEvent,
   greg, getHolidaysOnDate, getSedra, holidayDesc as hdesc} from '@hebcal/core';
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
-import {httpRedirect, hebrewFontPreload, jsonpBody} from './common.js';
+import {httpRedirect, hebrewFontPreload} from './common.js';
 import {setDefautLangTz} from './defaultLangTz.js';
-import {CACHE_CONTROL_7DAYS, CACHE_CONTROL_1_YEAR} from './cacheControl.js';
+import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
-  getStartAndEnd, simchatTorahDate,
+  simchatTorahDate,
   makeHebDate, isoDateStringToDate} from './dateUtil.js';
 import {empty} from './empty.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
@@ -15,10 +15,6 @@ import {pad4} from '@hebcal/hdate';
 import {makeAnchor} from '@hebcal/rest-api';
 import './dayjs-locales.js';
 import {gematriyaDate} from './gematriyaDate.js';
-import {xmlEsc} from './sanitize.js';
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js';
-
-dayjs.extend(isSameOrBefore);
 
 /**
  * @param {string} val
@@ -28,7 +24,9 @@ function isset(val) {
   return typeof val === 'string';
 }
 
-const RANGE_REQUIRES_CFG_JSON = 'Date range conversion using \'start\' and \'end\' requires cfg=json';
+// Date-range conversion (start/end and h2g&ndays, the old cfg=json batch mode)
+// is served exclusively by hebcal-api-go now; this app returns 501 for it.
+const RANGE_NOT_SUPPORTED = 'Please use hebcal-api-go for date range conversion';
 
 /**
  * @param {import('koa').Context} ctx
@@ -39,6 +37,11 @@ export async function hebrewDateConverter(ctx) {
     await setDefautLangTz(ctx);
   }
   const q = ctx.request.query;
+  // The ?cfg=xml and ?cfg=json variants are now served exclusively by
+  // hebcal-api-go; this app only renders the HTML converter page.
+  if (q.cfg === 'json' || q.cfg === 'xml') {
+    ctx.throw(501, `Please use hebcal-api-go for ${ctx.request.path}?cfg=${q.cfg}`);
+  }
   // Resolve lg through lgToLocale before rendering anything, the way
   // makeHebcalOptions() does for /shabbat and /hebcal. Everything downstream
   // renders from ctx.state.lg, and @hebcal/hdate's own alias table knows only
@@ -63,95 +66,35 @@ export async function hebrewDateConverter(ctx) {
     const {gy, gd, gm, afterSunset} = getBeforeAfterSunsetForLocation(now, location);
     const gs = afterSunset ? '&gs=on' : '';
     const il = location.getIsrael() ? '&i=on' : '';
-    const json = q.cfg === 'json' ? '&cfg=json' : '';
     const lg = empty(q.lg) ? '' : `&lg=${q.lg}`;
     ctx.set('Cache-Control', 'private, max-age=1200');
-    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${json}${lg}`;
+    const url = `/converter?gd=${gd}&gm=${gm}&gy=${gy}${gs}${il}&g2h=1${lg}`;
     httpRedirect(ctx, url, 302);
     return;
   }
   const p = makeProperties(ctx, props);
   if (p.message) {
     ctx.status = 400;
-  } else if (typeof p.hdates === 'object' && q.cfg !== 'json') {
-    ctx.status = 400;
-    p.message = RANGE_REQUIRES_CFG_JSON;
   }
   if (ctx.status !== 400 && !p.noCache) {
     if (checkFreshETag(ctx, q, props)) {
       // RFC 7232 §4.1: a 304 SHOULD carry the same
       // Cache-Control/Expires/Vary it would have sent on a 200
-      const ccVal = q.cfg === 'json' || q.cfg === 'xml' ?
-        CACHE_CONTROL_1_YEAR : CACHE_CONTROL_7DAYS;
-      ctx.set('Cache-Control', ccVal);
+      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
       return;
     }
   }
-  if (q.cfg === 'json') {
-    ctx.type = 'json';
-    if (p.message) {
-      ctx.body = {error: p.message};
-    } else if (typeof p.hdates === 'object') {
-      ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-      ctx.body = jsonpBody(ctx, p);
-    } else {
-      if (!p.noCache) {
-        ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-      }
-      const result = {
-        gy: p.gy,
-        gm: p.gm,
-        gd: p.gd,
-        afterSunset: Boolean(p.gs),
-        hy: p.hy,
-        hm: p.hmStr,
-        hd: p.hd,
-        hebrew: p.hebrew,
-        heDateParts: {
-          y: gematriya(p.hy),
-          m: Locale.gettext(p.hmStr, 'he-x-NoNikud'),
-          d: gematriya(p.hd),
-        },
-      };
-      if (p.events.length) {
-        result.events = p.events.map(renameChanukah(p.lg));
-        if (q.i !== undefined) {
-          result.il = p.il;
-        }
-      }
-      ctx.body = jsonpBody(ctx, result);
-    }
-  } else if (q.cfg === 'xml') {
-    ctx.type = 'text/xml';
-    if (p.message) {
-      ctx.body = `<error message="${xmlEsc(p.message)}" />\n`;
-    } else {
-      p.writeResp = false;
-      p.heDateParts = {
-        y: gematriya(p.hy),
-        m: Locale.gettext(p.hmStr, 'he-x-NoNikud'),
-        d: gematriya(p.hd),
-      };
-      if (!p.noCache) {
-        ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-      }
-      ctx.body = await ctx.render('converter-xml', p);
-    }
-  } else if (typeof p.hdates === 'object') {
-    ctx.throw(400, RANGE_REQUIRES_CFG_JSON);
-  } else {
-    if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
-      ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
-    }
-    p.h2gURL = h2gURL;
-    p.currentYear = now.getFullYear();
-    if (!p.message) {
-      makePrevNext(p);
-      makeFutureYears(ctx, p);
-    }
-    hebrewFontPreload(ctx);
-    return ctx.render('converter', p);
+  if (!p.noCache && ctx.method === 'GET' && ctx.request.querystring.length !== 0) {
+    ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   }
+  p.h2gURL = h2gURL;
+  p.currentYear = now.getFullYear();
+  if (!p.message) {
+    makePrevNext(p);
+    makeFutureYears(ctx, p);
+  }
+  hebrewFontPreload(ctx);
+  return ctx.render('converter', p);
 }
 
 /**
@@ -290,9 +233,6 @@ const hmonthArg = {
  * @return {Object}
  */
 function makeProperties(ctx, props) {
-  if (typeof props.hdates === 'object') {
-    return props;
-  }
   const query = ctx.request.query;
   const lg = ctx.state.lg;
   const locale = ctx.state.locale;
@@ -489,12 +429,7 @@ function makeOmer(hdate) {
 function parseConverterQuery(ctx) {
   const query = ctx.request.query;
   if (!empty(query.start) && !empty(query.end)) {
-    const {isRange, startD, endD} = getStartAndEnd(query, 'UTC');
-    if (isRange) {
-      return convertDateRange(ctx, startD, endD);
-    } else {
-      return g2h(startD.toDate(), false, false);
-    }
+    ctx.throw(501, RANGE_NOT_SUPPORTED);
   }
   if (isset(query.h2g) && query.strict === '1') {
     for (const param of ['hy', 'hm', 'hd']) {
@@ -507,22 +442,17 @@ function parseConverterQuery(ctx) {
     if (empty(query.ndays) && empty(query.hy) && empty(query.hm) && empty(query.hd)) {
       return g2h(ctx.state.now, false, true);
     }
-    // in either mode, this will throw if the params are invalid
+    // ndays produced a date range (old cfg=json batch mode); reject before
+    // validating hy/hm/hd so the 501 wins over a "missing param" 400.
+    if (!empty(query.ndays)) {
+      ctx.throw(501, RANGE_NOT_SUPPORTED);
+    }
+    // this will throw if the params are invalid
     const hdate = makeHebDate(query.hy, query.hm, query.hd);
     const dt = hdate.greg();
     const gy = dt.getFullYear();
     if (gy > 9999) {
       ctx.throw(400, `Gregorian year cannot be greater than 9999: ${gy}`);
-    }
-    if (!empty(query.ndays)) {
-      const ndays = Number.parseInt(query.ndays, 10);
-      if (Number.isNaN(ndays) || ndays < 1) {
-        ctx.throw(400, `Invalid value for ndays: ${query.ndays}`);
-      }
-      const startD = dayjs(dt);
-      const numDays = Math.min(ndays - 1, 179);
-      const endD = startD.add(numDays, 'days');
-      return convertDateRange(ctx, startD, endD);
     }
     return {type: 'h2g', dt, hdate, gs: false};
   }
@@ -550,49 +480,6 @@ function parseConverterQuery(ctx) {
 }
 
 /**
- * @param {import('koa').Context} ctx
- * @param {dayjs.Dayjs} startD
- * @param {dayjs.Dayjs} endD
- * @return {Object}
- */
-function convertDateRange(ctx, startD, endD) {
-  const query = ctx.request.query;
-  const il = Boolean(query.i === 'on');
-  const lg = ctx.state.lg;
-  const hdates = {};
-  for (let d = startD; d.isSameOrBefore(endD, 'd'); d = d.add(1, 'd')) {
-    const dt = d.toDate();
-    const isoDate = dateToISOString(dt);
-    const hdate = new HDate(dt);
-    const hy = hdate.getFullYear();
-    const hm = hdate.getMonthName();
-    const hd = hdate.getDate();
-    const result = {
-      hy, hm, hd,
-      hebrew: gematriyaDate(hdate),
-      heDateParts: {
-        y: gematriya(hy),
-        m: Locale.gettext(hm, 'he-x-NoNikud'),
-        d: gematriya(hd),
-      },
-    };
-    const events = getEvents(hdate, il);
-    if (events.length) {
-      result.events = events.map(renameChanukah(lg));
-      if (query.i !== undefined) {
-        result.il = il;
-      }
-    }
-    hdates[isoDate] = result;
-  }
-  return {
-    start: dateToISOString(startD.toDate()),
-    end: dateToISOString(endD.toDate()),
-    hdates,
-  };
-}
-
-/**
  * @private
  * @param {Date} dt
  * @param {boolean} gs
@@ -612,9 +499,6 @@ function g2h(dt, gs, noCache) {
  */
 export async function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
-  if (typeof p.hdates === 'object') {
-    ctx.throw(400, 'Date range conversion is not supported for CSV download');
-  }
   if (!p.noCache && ctx.request.querystring.length !== 0) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   }

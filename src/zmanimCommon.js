@@ -60,7 +60,7 @@ export const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
  * @param {boolean} useElevation
  * @return {Object<string,string>}
  */
-export function getTimes(names, d, location, formatAsString, roundMinute, useElevation) {
+function getTimes(names, d, location, formatAsString, roundMinute, useElevation) {
   const times = {};
   const zman = new Zmanim(location, d.toDate(), useElevation);
   for (const name of names) {

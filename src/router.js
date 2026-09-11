@@ -1,7 +1,6 @@
 import createError from 'http-errors';
 import {basename} from 'node:path';
 import {send} from '@koa/send';
-import {getLocationFromQuery} from './location.js';
 import {
   httpRedirect,
   DOCUMENT_ROOT,
@@ -36,7 +35,6 @@ import {shabbatJsLink} from './shabbat-link.js';
 import {shortUrlRedir} from './shortUrlRedir.js';
 import {yahrzeitApp} from './yahrzeit.js';
 import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch} from './yahrzeit-email.js';
-import {getZmanim} from './zmanim.js';
 import {omerApp} from './omerApp.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
@@ -136,20 +134,15 @@ Disallow: /email
       return apiDocs(ctx);
     } else if (rpath.startsWith('/complete')) {
       return geoAutoComplete(ctx);
-    } else if (rpath.startsWith('/zmanim')) {
-      onlyGetAndHead(ctx);
-      return getZmanim(ctx);
     } else if (rpath.startsWith('/leyning')) {
       onlyGetAndHead(ctx);
       return getLeyning(ctx);
     } else if (rpath.startsWith('/learning')) {
       onlyGetAndHead(ctx);
       return dailyLearningApp(ctx);
-    } else if (rpath.startsWith('/geo')) {
-    // it's fine if this throws a Not Found exception
-      ctx.response.type = ctx.request.header['accept'] = 'application/json';
-      ctx.body = getLocationFromQuery(ctx.db, ctx.request.query);
-      return;
+    } else if (rpath.startsWith('/geo') || rpath.startsWith('/zmanim')) {
+      // These routes now served exclusively by hebcal-api-go
+      ctx.throw(501, `Please use hebcal-api-go for ${rpath}`);
     } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
       return fridgeShabbat(ctx);
     } else if (rpath.startsWith('/converter/csv')) {

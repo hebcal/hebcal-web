@@ -216,54 +216,6 @@ export function nowInTimezone(tzid) {
   return dayjs(isoDate.substring(0, 10));
 }
 
-const MAX_DAYS = 180;
-
-/**
- * @param {string} str
- * @return {dayjs.Dayjs}
- */
-function isoToDayjs(str) {
-  return dayjs(isoDateStringToDate(str));
-}
-
-/**
- * @typedef {Object} StartAndEnd
- * @property {dayjs.Dayjs} startD
- * @property {dayjs.Dayjs} endD
- * @property {boolean} isRange
- */
-
-/**
- * @param {Object.<string,string>} q
- * @param {string} tzid
- * @return {StartAndEnd}
- */
-export function getStartAndEnd(q, tzid) {
-  if (!empty(q.start) && empty(q.end)) {
-    q.end = q.start;
-  } else if (empty(q.start) && !empty(q.end)) {
-    q.start = q.end;
-  }
-  if (!empty(q.start) && !empty(q.end) && q.start === q.end) {
-    q.date = q.start;
-    delete q.start;
-    delete q.end;
-  }
-  let isRange = !empty(q.start) && !empty(q.end);
-  const singleD = isRange ? null : empty(q.date) ? nowInTimezone(tzid) : isoToDayjs(q.date);
-  const startD = isRange ? isoToDayjs(q.start) : singleD;
-  let endD = isRange ? isoToDayjs(q.end) : singleD;
-  if (isRange) {
-    if (endD.isBefore(startD, 'd')) {
-      isRange = false;
-      endD = startD;
-    } else if (endD.diff(startD, 'd') > MAX_DAYS) {
-      endD = startD.add(MAX_DAYS, 'd');
-    }
-  }
-  return {isRange, startD, endD};
-}
-
 /**
  * Given a day, returns the Shabbat week window `[start, endOfWeek]` used for
  * weekly Shabbat/parsha listings. If the day is Saturday, backs up to Friday
