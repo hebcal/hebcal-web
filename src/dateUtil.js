@@ -48,6 +48,8 @@ export function getTodayDate(query) {
 }
 
 /**
+ * Parse and validate Gregorian year/month/day strings into a Date,
+ * throwing an HTTP 400 for non-numeric, out-of-range, or pre-Hebrew-year-1 input.
  * @param {string} gy Gregorian Year
  * @param {string} gm Gregorian Month
  * @param {string} gd Gregorian Day
@@ -67,6 +69,8 @@ export function makeGregDate(gy, gm, gd) {
     throw createError(400, `Gregorian month out of valid range 1-12: ${gm}`);
   } else if (yy > 9999) {
     throw createError(400, `Gregorian year cannot be greater than 9999: ${gy}`);
+  } else if (yy < -3760) {
+    throw createError(400, `Gregorian year ${gy} is before Hebrew year 1`);
   }
   const maxDay = greg.daysInMonth(mm, yy);
   if (dd < 1 || dd > maxDay) {
@@ -86,6 +90,8 @@ export function makeGregDate(gy, gm, gd) {
 }
 
 /**
+ * Parse and validate Hebrew year/month/day strings into an HDate, throwing an
+ * HTTP 400 for invalid input. Adar II folds to Adar in a non-leap year.
  * @param {string} hyStr Hebrew Year
  * @param {string} hmStr Hebrew Month
  * @param {string} hdStr Hebrew Day
@@ -124,6 +130,8 @@ export function makeHebDate(hyStr, hmStr, hdStr) {
 }
 
 /**
+ * Given an instant and a location, returns that day's civil date plus whether
+ * the instant falls after local sunset (for Hebrew-date roll-over).
  * @param {Date} dt
  * @param {Location} location
  * @return {any}
@@ -142,6 +150,9 @@ export function getBeforeAfterSunsetForLocation(dt, location) {
 }
 
 /**
+ * Resolves the effective date for a request: when the query overrides the date
+ * it is used as-is; otherwise today's date is returned with sunset awareness
+ * (if a location is known).
  * @param {Object.<string,string>} q
  * @param {Location} location
  * @return {any}
@@ -158,6 +169,8 @@ export function getSunsetAwareDate(q, location) {
 }
 
 /**
+ * Returns the Hebrew year to default to: the current year up through Tu B'Av
+ * (15 Av), then the next year (so the upcoming High Holidays are shown).
  * @param {HDate} hdate today
  * @return {number}
  */
@@ -208,6 +221,7 @@ export function getDefaultYear(dt, hdate) {
 }
 
 /**
+ * Returns today's date (midnight) in the given IANA timezone as a dayjs.
  * @param {string} tzid
  * @return {dayjs.Dayjs}
  */
@@ -233,6 +247,9 @@ export function shabbatWeekRange(d) {
 }
 
 /**
+ * Sets the response `Expires` header to the start of the coming Sunday
+ * (i.e. Saturday midnight) in the given timezone, so weekly content is
+ * cached only until the next Shabbat has passed.
  * @param {import('koa').Context} ctx
  * @param {Date} now
  * @param {string} tzid
@@ -245,6 +262,8 @@ export function expiresSaturdayNight(ctx, now, tzid) {
 }
 
 /**
+ * Returns the date of Simchat Torah for the given Hebrew year: 22 Tishrei in
+ * Israel, 23 Tishrei in the diaspora.
  * @param {number} year Hebrew year
  * @param {boolean} il
  * @return {HDate}
@@ -255,6 +274,7 @@ export function simchatTorahDate(year, il) {
 }
 
 /**
+ * True if the Gregorian year is NaN or outside the supported range (100-2999).
  * @param {number} year
  * @return {boolean}
  */
@@ -263,6 +283,7 @@ export function yearIsOutsideGregRange(year) {
 }
 
 /**
+ * True if the Hebrew year is NaN or outside the supported range (3860-6759).
  * @param {number} year
  * @return {boolean}
  */
