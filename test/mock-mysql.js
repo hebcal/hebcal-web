@@ -47,6 +47,27 @@ export class MockMysqlDb {
       emailsByAddress: {
         'nobody@example.com': '01jthv2t5k88yermamssn96pze',
       },
+      // Login accounts, provider links, and sessions for "Sign in with Google".
+      users: {},
+      userIdentities: {}, // keyed by `${provider}\0${sub}`
+      userSessions: {}, // keyed by session id
+    };
+  }
+
+  /**
+   * Test helper: seed a user + active session so a signed `S` cookie can be
+   * exercised through loadSession().
+   * @param {{userId: string, email: string, displayName?: string, sessionId: string, expires?: Date}} opts
+   */
+  seedSession(opts) {
+    const {userId, email, displayName = null, sessionId} = opts;
+    const expires = opts.expires || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    this.mockData.users[userId] = {
+      id: userId, email, email_verified: 1, display_name: displayName,
+      created: new Date(),
+    };
+    this.mockData.userSessions[sessionId] = {
+      id: sessionId, user_id: userId, expires, created: new Date(),
     };
   }
 
@@ -155,6 +176,82 @@ export class MockMysqlDb {
     // Handle INSERT queries for email open tracking
     if (sql.includes('INSERT INTO email_open')) {
       return {insertId: 1};
+    }
+
+    // ----- Login: user_session -----
+    if (sql.includes('INSERT INTO user_session')) {
+      const [id, userId, expires, ip, ua] = args;
+      this.mockData.userSessions[id] = {
+        id, user_id: userId, expires, ip, user_agent: ua, created: new Date(),
+      };
+      return {affectedRows: 1};
+    }
+    if (sql.includes('FROM user_session s') && sql.includes('JOIN user u')) {
+      const sessionId = args[0];
+      const s = this.mockData.userSessions[sessionId];
+      if (!s) {
+        return [];
+      }
+      const u = this.mockData.users[s.user_id];
+      if (!u) {
+        return [];
+      }
+      return [{
+        user_id: s.user_id,
+        expires: s.expires,
+        created: s.created,
+        email: u.email,
+        display_name: u.display_name,
+      }];
+    }
+    if (sql.includes('UPDATE user_session') && sql.includes('SET expires')) {
+      const [newExpires, sessionId] = args;
+      const s = this.mockData.userSessions[sessionId];
+      if (s) {
+        s.expires = newExpires;
+      }
+      return {affectedRows: 1};
+    }
+    if (sql.includes('DELETE FROM user_session')) {
+      delete this.mockData.userSessions[args[0]];
+      return {affectedRows: 1};
+    }
+
+    // ----- Login: user_identity -----
+    if (sql.includes('SELECT user_id FROM user_identity')) {
+      const [provider, sub] = args;
+      const row = this.mockData.userIdentities[`${provider}\0${sub}`];
+      return row ? [{user_id: row.user_id}] : [];
+    }
+    if (sql.includes('UPDATE user_identity')) {
+      const [email, provider, sub] = args;
+      const row = this.mockData.userIdentities[`${provider}\0${sub}`];
+      if (row) {
+        row.email = email;
+      }
+      return {affectedRows: 1};
+    }
+    if (sql.includes('INSERT INTO user_identity')) {
+      const [provider, sub, userId, email] = args;
+      this.mockData.userIdentities[`${provider}\0${sub}`] = {
+        provider, provider_sub: sub, user_id: userId, email,
+      };
+      return {affectedRows: 1};
+    }
+
+    // ----- Login: user -----
+    if (sql.includes('SELECT id FROM user WHERE email')) {
+      const email = args[0];
+      const found = Object.values(this.mockData.users).find((u) => u.email === email);
+      return found ? [{id: found.id}] : [];
+    }
+    if (sql.includes('INSERT INTO user ')) {
+      const [id, email, emailVerified, displayName] = args;
+      this.mockData.users[id] = {
+        id, email, email_verified: emailVerified, display_name: displayName,
+        created: new Date(),
+      };
+      return {affectedRows: 1};
     }
 
     // Default: return empty array

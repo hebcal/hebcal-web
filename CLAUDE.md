@@ -124,6 +124,29 @@ Each feature is typically one or a few files handling routing, business logic, a
   `*emphasis*` first.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
+- **Login / accounts** (`login.js`, `session.js`, `oauthGoogle.js`,
+  `userAccount.js`): "Sign in with Google" via OpenID Connect (Authorization
+  Code + PKCE, using `openid-client`). This is the app's *only* notion of an
+  authenticated user — everything else (Yahrzeit, email) is identified by
+  unguessable capability tokens, not accounts. `session.js` holds DB-backed
+  sessions (the `user_session` table) behind a signed, `httpOnly` `S` cookie;
+  a store must be shared because each www host is one process and several w
+  servers sit behind Varnish. `loadSession()` runs as middleware in
+  `app-www.js` and sets `ctx.state.user` — it early-returns with no DB hit when
+  no `S` cookie is present, so anonymous requests (the vast majority) pay
+  nothing. `userAccount.js` maps a provider login to a `user` row via
+  `user_identity`, merging accounts across providers **only** on a
+  provider-verified email. All routes (`/login`, `/login/google`,
+  `/login/google/callback`, `/logout`, `/account`) set
+  `Cache-Control: private, no-store`. **Config**: `hebcal.google.oauth.*` and
+  `hebcal.session.secret` in `hebcal-dot-com.ini`; login self-disables (`/login`
+  shows nothing, `/login/google` 404s) when the Google keys are absent, so dev
+  hosts and tests without secrets are unaffected. **Varnish caveat**: do not
+  personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
+  server-side — a cached anonymous copy would leak to logged-in users and vice
+  versa. Render login state client-side instead. Apple ("Sign in with Apple")
+  is intended as a second provider later; the `user_identity.provider` column
+  and the merge-by-verified-email logic already accommodate it.
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used

@@ -1,0 +1,21 @@
+<%- await include('partials/header-and-navbar.ejs') -%>
+<div class="row mt-3">
+<div class="col-md-8 offset-md-2">
+<h2 class="mb-3">Your Account</h2>
+<table class="table">
+<tbody>
+<% if (locals.user.displayName) { %>
+<tr><th scope="row">Name</th><td><%= locals.user.displayName %></td></tr>
+<% } %>
+<tr><th scope="row">Email</th><td><%= locals.user.email %></td></tr>
+</tbody>
+</table>
+<form method="post" action="/logout" class="mt-4">
+<button type="submit" class="btn btn-outline-secondary">
+<svg class="icon icon-sm mt-n1 me-1"><use href="<%=locals.spriteHref%>#bi-gear-fill"></use></svg>
+Sign out
+</button>
+</form>
+</div><!-- .col -->
+</div><!-- .row -->
+<%- await include('partials/footer.ejs') -%>

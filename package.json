@@ -102,6 +102,7 @@
     "mysql2": "^3.24.4",
     "nodemailer": "^10.0.9",
     "nodemailer-html-to-text": "^3.2.0",
+    "openid-client": "^6.8.8",
     "pino": "^10.3.1",
     "probe-image-size": "^7.4.0",
     "prom-client": "^15.1.3",

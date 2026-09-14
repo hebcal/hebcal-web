@@ -100,3 +100,55 @@ CREATE TABLE email_open (
   delta int DEFAULT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
+-- ---------------------------------------------------------------------------
+-- User accounts for "Sign in with Google" / "Sign in with Apple".
+--
+-- Historically Hebcal has had no notion of a logged-in user: Yahrzeit lists
+-- and email subscriptions are identified by unguessable capability tokens in
+-- URLs, not by an authenticated account. These three tables add that concept.
+--
+--   user            one row per person (their canonical identity + email)
+--   user_identity   links one or more OAuth logins (google/apple) to a user,
+--                   so signing in with either provider lands on one account
+--   user_session    server-side sessions backing the signed `S` cookie
+-- ---------------------------------------------------------------------------
+
+-- `email` holds only a provider-verified address, or NULL. MySQL permits
+-- multiple NULLs under a UNIQUE key, so accounts created from an unverified
+-- login (no trustworthy email) do not collide. The per-login email address --
+-- verified or not -- is always kept in user_identity.email.
+CREATE TABLE user (
+  id char(26) NOT NULL,
+  email varchar(254) DEFAULT NULL,
+  email_verified tinyint(1) NOT NULL DEFAULT '0',
+  display_name varchar(255) DEFAULT NULL,
+  created datetime NOT NULL,
+  updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY user_email (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE user_identity (
+  provider varchar(32) NOT NULL,
+  provider_sub varchar(255) NOT NULL,
+  user_id char(26) NOT NULL,
+  email varchar(254) DEFAULT NULL,
+  created datetime NOT NULL,
+  updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (provider, provider_sub),
+  KEY user_identity_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE user_session (
+  id char(32) NOT NULL,
+  user_id char(26) NOT NULL,
+  created datetime NOT NULL,
+  expires datetime NOT NULL,
+  last_seen timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  ip varchar(45) DEFAULT NULL,
+  user_agent varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY user_session_user (user_id),
+  KEY user_session_expires (expires)
+) ENGINE=InnoDB DEFAULT CHARSET=ascii;
