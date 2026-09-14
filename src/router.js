@@ -34,6 +34,13 @@ import {shabbatBrowse} from './shabbat-browse.js';
 import {shabbatJsLink} from './shabbat-link.js';
 import {shortUrlRedir} from './shortUrlRedir.js';
 import {yahrzeitApp} from './yahrzeit.js';
+import {
+  loginPage,
+  loginGoogleStart,
+  loginGoogleCallback,
+  logout,
+  accountPage,
+} from './login.js';
 import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch} from './yahrzeit-email.js';
 import {omerApp} from './omerApp.js';
 import {sitemapZips} from './sitemapZips.js';
@@ -103,6 +110,8 @@ export function wwwRouter() {
 Disallow: /shabbat/fridge.cgi
 Disallow: /converter/csv
 Disallow: /email
+Disallow: /login
+Disallow: /account
 `;
       return;
     } else if (rpath === '/ping') {
@@ -185,6 +194,20 @@ Disallow: /email
         return emailVerify(ctx);
       }
       return emailForm(ctx);
+    } else if (rpath === '/login/google/callback') {
+      onlyGetAndHead(ctx);
+      return loginGoogleCallback(ctx);
+    } else if (rpath === '/login/google') {
+      onlyGetAndHead(ctx);
+      return loginGoogleStart(ctx);
+    } else if (rpath === '/login') {
+      onlyGetAndHead(ctx);
+      return loginPage(ctx);
+    } else if (rpath === '/logout') {
+      return logout(ctx);
+    } else if (rpath === '/account') {
+      onlyGetAndHead(ctx);
+      return accountPage(ctx);
     } else if (rpath.startsWith('/link')) {
       return shabbatJsLink(ctx);
     } else if (rpath === '/ical/') {

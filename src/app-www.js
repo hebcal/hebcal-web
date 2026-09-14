@@ -15,6 +15,7 @@ import {createBaseApp, useBackendHostname, useObservability, useTimeout,
   useCompression, useResponseLength, startServer,
   stopIfTimedOut} from './app-common.js';
 import {aiChatbotLogger} from './logger.js';
+import {loadSession} from './session.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -241,6 +242,14 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
     ctx.set('X-XSS-Protection', '0');
     ctx.set('Reporting-Endpoints', 'default="https://y61ectdg.uriports.com/reports"');
   }
+});
+
+// Load the login session (if any) so ctx.state.user is available to routes and
+// templates. Early-returns without a DB hit when no session cookie is present,
+// so anonymous requests pay nothing.
+app.use(async function sessionMiddleware(ctx, next) {
+  await loadSession(ctx);
+  await next();
 });
 
 // request dispatcher
