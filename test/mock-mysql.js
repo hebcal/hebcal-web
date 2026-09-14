@@ -61,7 +61,7 @@ export class MockMysqlDb {
    */
   seedSession(opts) {
     const {userId, email, displayName = null, sessionId} = opts;
-    const expires = opts.expires || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    const expires = opts.expires || new Date(Date.now() + 399 * 24 * 60 * 60 * 1000);
     this.mockData.users[userId] = {
       id: userId, email, email_verified: 1, display_name: displayName,
       created: new Date(),

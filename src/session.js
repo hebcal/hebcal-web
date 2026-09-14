@@ -19,12 +19,21 @@ import {getIpAddress} from './getIpAddress.js';
 
 export const SESSION_COOKIE = 'S';
 
-// 30-day rolling sessions. Long-lived on purpose: this is a calendar site, not
-// a bank, and users expect to stay signed in. `expires` is pushed forward when
-// a session is more than a day into its life (see touchIfStale), so an active
-// user is never logged out from under themselves.
-const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000;
-const SESSION_REFRESH_MS = 24 * 60 * 60 * 1000;
+// 399-day rolling sessions, matching the `C` preference cookie and sitting just
+// under the ~400-day cap browsers clamp persistent cookies to. Long-lived on
+// purpose: this is a calendar site, not a bank, users expect to stay signed in,
+// and the TTL only bounds *inactive* sessions -- an active user's `expires` is
+// pushed forward (see touchIfStale) so they are never logged out from under
+// themselves. What keeps a lifetime this long safe is that every session is a
+// `user_session` row we can revoke server-side (logout, admin, prune); a
+// stateless token could not afford this.
+//
+// The refresh interval is the most a session's `expires` may lag "now" before
+// we re-stamp it. Kept coarse (weekly) because each refresh emits a Set-Cookie,
+// and Varnish will not cache a response that carries one -- so a shorter
+// interval would needlessly bypass the cache for active users.
+const SESSION_TTL_MS = 399 * 24 * 60 * 60 * 1000;
+const SESSION_REFRESH_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
  * @param {import('koa').Context} ctx

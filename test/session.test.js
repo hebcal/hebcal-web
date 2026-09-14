@@ -126,7 +126,7 @@ describe('DB-backed sessions', () => {
   it('refreshes a session that is inside the refresh window', async () => {
     const mysql = new MockMysqlDb();
     const sid = 'c'.repeat(32);
-    // expires in 2 days: well past the (30 - 1) day refresh threshold.
+    // expires in 2 days: far inside the refresh threshold (TTL minus a week).
     const soon = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000);
     mysql.seedSession({
       userId: 'u_old', email: 'o@example.com', sessionId: sid, expires: soon,
@@ -135,7 +135,7 @@ describe('DB-backed sessions', () => {
     ctx._jar.set(SESSION_COOKIE, signValue(sid, SECRET));
     await loadSession(ctx);
     expect(ctx.state.user).toBeTruthy();
-    // expiry was slid forward toward +30 days
+    // expiry was slid forward toward the full TTL (well beyond +2 days)
     expect(new Date(mysql.mockData.userSessions[sid].expires).getTime())
         .toBeGreaterThan(soon.getTime());
   });
