@@ -164,27 +164,33 @@ export class MockMysqlDb {
       return [];
     }
 
-    // Handle INSERT of a new yahrzeit email subscription
+    // Handle INSERT of a new yahrzeit email subscription. sub_status is now a
+    // bound parameter (args[3]); default to pending if absent.
     if (sql.includes('INSERT INTO yahrzeit_email')) {
-      const [id, emailAddr, calendarId] = args;
+      const [id, emailAddr, calendarId, subStatus] = args;
       this.mockData.yahrzeitEmailSubs[id] = {
         id,
         email_addr: emailAddr,
         calendar_id: calendarId,
-        sub_status: 'pending',
+        sub_status: subStatus || 'pending',
       };
       return {affectedRows: 1};
     }
 
-    // Handle UPDATE of a yahrzeit email subscription status
+    // Handle UPDATE of a yahrzeit email subscription status, whether the status
+    // is a bound parameter ("sub_status = ?", value first) or a literal.
     if (sql.includes('UPDATE yahrzeit_email')) {
       const id = args[args.length - 1];
       const sub = this.mockData.yahrzeitEmailSubs[id];
       if (sub) {
-        for (const status of ['active', 'pending', 'unsub']) {
-          if (sql.includes(`sub_status = '${status}'`)) {
-            sub.sub_status = status;
-            break;
+        if (sql.includes('sub_status = ?')) {
+          sub.sub_status = args[0];
+        } else {
+          for (const status of ['active', 'pending', 'unsub']) {
+            if (sql.includes(`sub_status = '${status}'`)) {
+              sub.sub_status = status;
+              break;
+            }
           }
         }
       }

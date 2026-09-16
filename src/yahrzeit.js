@@ -133,6 +133,8 @@ export async function yahrzeitApp(ctx) {
   }
   q.years = getNumYears(q.years);
   ctx.state.typesSet = getAnniversaryTypes(q);
+  // Set after a signed-in "Save" redirects back here (see yahrzeit-email.js).
+  ctx.state.savedToAccount = ctx.request.query.saved === '1';
   ctx.status = 200;
   if (doesCookieNeedRefresh(ctx)) {
     const ck = processCookieAndQuery(ctx.cookies.get('C'), hebcalFormDefaults, q);

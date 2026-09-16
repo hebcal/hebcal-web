@@ -234,23 +234,42 @@ export async function yahrzeitEmailSub(ctx) {
       ctx.logger.error(err);
     });
   }
+  // A signed-in user subscribing their own provider-verified email already
+  // proves ownership, so activate immediately and skip the confirmation email
+  // (mirrors the Shabbat flow). `user.email` is only ever a verified address.
+  const verifiedBySignin = ctx.state.user &&
+    typeof ctx.state.user.email === 'string' &&
+    ctx.state.user.email.length > 0 &&
+    ctx.state.user.email.toLowerCase() === q.em;
+  const newStatus = verifiedBySignin ? 'active' : 'pending';
   let {id, status} = await existingSubByEmailAndCalendar(ctx, q.em, calendarId);
   if (id === false) {
     id = makeUlid(ctx);
     const sql = `INSERT INTO yahrzeit_email
     (id, email_addr, calendar_id, sub_status, created, ip_addr)
-    VALUES (?, ?, ?, 'pending', NOW(), ?)`;
-    await dbQuery(ctx, sql, [id, q.em, calendarId, ip]);
+    VALUES (?, ?, ?, ?, NOW(), ?)`;
+    await dbQuery(ctx, sql, [id, q.em, calendarId, newStatus, ip]);
   } else if (status === 'active') {
     const sqlUpdate = `UPDATE yahrzeit_optout SET deactivated = 0 WHERE email_id = ?`;
     dbQuery(ctx, sqlUpdate, [id]).catch((err) => {
       ctx.logger.error(err);
     });
+    if (q.cfg === 'html') {
+      return ctx.redirect(`/yahrzeit/edit/${calendarId}?saved=1`);
+    }
     ctx.body = {ok: true, alreadySubscribed: true};
     return;
   } else {
-    const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = 'pending', ip_addr = ? WHERE id = ?`;
-    await dbQuery(ctx, sqlUpdate, [ip, id]);
+    const sqlUpdate = `UPDATE yahrzeit_email SET sub_status = ?, ip_addr = ? WHERE id = ?`;
+    await dbQuery(ctx, sqlUpdate, [newStatus, ip, id]);
+  }
+  if (verifiedBySignin) {
+    matomoTrack(ctx, 'Email', 'signup', 'yahrzeit-reminder-google');
+    if (q.cfg === 'html') {
+      return ctx.redirect(`/yahrzeit/edit/${calendarId}?saved=1`);
+    }
+    ctx.body = {ok: true, verified: true};
+    return;
   }
   matomoTrack(ctx, 'Email', 'signup-backend', 'yahrzeit-reminder');
   const anniversaryType = q.type === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';

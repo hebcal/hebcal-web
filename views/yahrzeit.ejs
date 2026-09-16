@@ -19,6 +19,15 @@ div.yahrzeit-row {
 <div class="container">
 <div class="row">
 <div class="col">
+<% if (locals.savedToAccount) { %>
+<div class="alert alert-success alert-dismissible mt-2" role="alert">
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<svg class="icon icon-sm mt-n1 me-1"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
+<strong>Saved to your account.</strong> This calendar is stored with your
+Hebcal account<% if (locals.user && locals.user.email) { %> (<%= locals.user.email %>)<% } %>
+and you'll receive annual reminder emails.
+</div><!-- .alert -->
+<% } %>
 <% if (typeof locals.q.ref_url === 'string') { -%>
 <% let ref_text = locals.q.ref_text || locals.q.ref_url; -%>
 <p class="lead">Welcome to the Hebcal Yahrzeit + Anniversary Calendar.</p>
@@ -28,13 +37,7 @@ div.yahrzeit-row {
 <div class="btn-toolbar d-print-none mt-2">
 <% if (locals.showDownload) { %>
 <div class="me-2 mb-2">
-  <a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <% if (!locals.q.em) { -%>
-    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
-  <% } else { -%>
-    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
-  <% } -%>
-  </a>
+  <%- await include('partials/yahrzeit-email-button.ejs') -%>
 </div>
 <div class="me-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
@@ -95,13 +98,7 @@ The date entered for <strong><%=locals.distantPastDate.name%></strong> is
 <% if (locals.tables !== null && locals.showDownload) { %>
 <div class="btn-toolbar d-print-none mt-3 mb-4">
 <div class="me-2 mb-2">
-<a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
-  <% if (!locals.q.em) { -%>
-    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
-  <% } else { -%>
-    <svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
-  <% } -%>
-</a>
+<%- await include('partials/yahrzeit-email-button.ejs') -%>
 </div>
 <div class="me-2 mb-2">
 <a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
@@ -278,6 +275,12 @@ instructions</a>.</p>
 <div id="email-modal-entry">
   <p><% if (!locals.q.em) { %>Enter your email address to save your personal calendar.<% } %>
     Receive annual reminder emails one week before and one day before each anniversary.</p>
+  <% if (locals.googleLoginEnabled) { %>
+  <div class="d-grid mb-2">
+    <%- await include('partials/google-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
+  </div>
+  <p class="text-center text-muted small mb-2">or enter your email address</p>
+  <% } %>
   <div class="form-floating mb-3">
     <input class="form-control" type="email" name="em" id="em" value="<%=locals.q.em || ''%>" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
