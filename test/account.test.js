@@ -36,14 +36,16 @@ describe('/account subscriptions', () => {
     const res = await request(server).get('/account').set('Cookie', cookie(sid));
     expect(res.status).toBe(200);
     expect(res.headers['cache-control']).toContain('no-store');
-    expect(res.text).toContain('Shabbat candle-lighting email');
+    expect(res.text).toContain('Shabbat candle-lighting');
     expect(res.text).toContain('Manage subscription');
     // The manage link deep-links into /email with the base64 `e` param so the
     // form pre-fills this subscriber's saved settings.
     const eParam = encodeURIComponent(Buffer.from(email).toString('base64'));
     expect(res.text).toContain(`/email?e=${eParam}`);
-    expect(res.text).toContain('Yahrzeit + Anniversary reminders');
+    expect(res.text).toContain('Yahrzeit + Anniversary Calendars');
     expect(res.text).toContain('/yahrzeit/edit/01jthv2t5k88yermamssn96pzf');
+    // Each calendar row has an unsubscribe link keyed by the yahrzeit_email id.
+    expect(res.text).toContain('/yahrzeit/email?id=yz-1&amp;num=all&amp;unsubscribe=1');
   });
 
   it('shows empty states when the user has no subscriptions', async () => {
@@ -51,7 +53,7 @@ describe('/account subscriptions', () => {
     mysql.seedSession({userId: 'acc2', email: 'nobody-here@example.com', sessionId: sid});
     const res = await request(server).get('/account').set('Cookie', cookie(sid));
     expect(res.status).toBe(200);
-    expect(res.text).toContain('You are not subscribed');
+    expect(res.text).toContain('No subscription found');
     expect(res.text).toContain('no active reminders');
   });
 });
