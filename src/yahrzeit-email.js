@@ -102,6 +102,31 @@ async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
   return {id: found.id, status: found.sub_status};
 }
 
+/**
+ * GET /yahrzeit/email-status -- JSON used by the yahrzeit email modal's
+ * client-side JS to personalize itself without the page HTML varying by user.
+ * Reports whether the signed-in user already has an active reminder
+ * subscription (with their own email) for this calendar.
+ * @param {import('koa').Context} ctx
+ */
+export async function yahrzeitEmailStatus(ctx) {
+  ctx.set('Cache-Control', 'private, no-store');
+  ctx.type = 'application/json';
+  const user = ctx.state.user;
+  const calendarId = ctx.request.query.ulid;
+  if (!user || !user.email || empty(calendarId)) {
+    ctx.body = {loggedIn: Boolean(user && user.email)};
+    return;
+  }
+  const {status} = await existingSubByEmailAndCalendar(
+      ctx, user.email.toLowerCase(), calendarId);
+  ctx.body = {
+    loggedIn: true,
+    email: user.email,
+    subscribedToThisCalendar: status === 'active',
+  };
+}
+
 function makeUlid(ctx) {
   const id = ulid().toLowerCase();
   const logInfo = makeLogInfo(ctx);

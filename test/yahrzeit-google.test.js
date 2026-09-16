@@ -91,6 +91,41 @@ describe('yahrzeit Google sign-in', () => {
     expect(res.text).toContain('Email reminders');
     // ...and does NOT render a direct one-click Save form.
     expect(res.text).not.toContain('action="/yahrzeit/email"');
+    // The signed-in modal variants + status probe are present (toggled by JS).
+    expect(res.text).toContain('id="ye-active"');
+    expect(res.text).toContain('id="ye-google"');
+    expect(res.text).toContain('/yahrzeit/email-status');
+  });
+
+  it('email-status returns loggedIn:false for anonymous', async () => {
+    const res = await request(server).get(`/yahrzeit/email-status?ulid=${CAL}`);
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({loggedIn: false});
+    expect(res.headers['cache-control']).toContain('no-store');
+  });
+
+  it('email-status reports subscribedToThisCalendar:true when the signed-in user has an active sub', async () => {
+    const sid = 'd'.repeat(32);
+    const email = 'owner-yz@example.com';
+    mysql.seedSession({userId: 'yz4', email, sessionId: sid});
+    mysql.mockData.yahrzeitEmailSubs['yz-owner'] = {
+      id: 'yz-owner', email_addr: email, calendar_id: CAL, sub_status: 'active',
+    };
+    const res = await request(server)
+        .get(`/yahrzeit/email-status?ulid=${CAL}`)
+        .set('Cookie', cookie(sid));
+    expect(res.body).toMatchObject({
+      loggedIn: true, email, subscribedToThisCalendar: true,
+    });
+  });
+
+  it('email-status reports subscribedToThisCalendar:false when the user has no sub here', async () => {
+    const sid = 'e'.repeat(32);
+    mysql.seedSession({userId: 'yz5', email: 'nosub-yz@example.com', sessionId: sid});
+    const res = await request(server)
+        .get(`/yahrzeit/email-status?ulid=${CAL}`)
+        .set('Cookie', cookie(sid));
+    expect(res.body).toMatchObject({loggedIn: true, subscribedToThisCalendar: false});
   });
 
   it('anonymous subscribe still uses the pending + verification flow', async () => {

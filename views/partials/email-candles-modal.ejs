@@ -27,16 +27,26 @@
   <strong>Thank you!</strong> A confirmation message has been sent to your email address.
   Click the link within that message to confirm your subscription.
 </div><!-- .alert -->
+<div id="email-modal-verified" class="alert alert-success" role="alert" style="display: none">
+  <strong>You're subscribed!</strong> Because you're signed in, your weekly
+  Shabbat times start right away &mdash; no confirmation email needed.
+</div><!-- .alert -->
 <div id="email-modal-entry">
   <p>Get candle-lighting times for <%= locals.location?.getShortName() %>, Parashat ha-Shavua
     &amp; Havdalah delivered to your inbox every Thursday.</p>
   <% if (locals.googleLoginEnabled) { %>
-  <div class="d-grid mb-2">
+  <div class="d-grid mb-2" id="emc-google">
     <%- await include('google-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
   </div>
-  <p class="text-center text-muted small mb-2">or subscribe with your email address</p>
+  <div class="d-grid mb-2" id="emc-subscribe-me" hidden>
+    <button type="button" class="btn btn-primary">Subscribe <span id="emc-me-label"></span></button>
+  </div>
+  <div class="d-grid mb-2" id="emc-update" hidden>
+    <a class="btn btn-secondary" id="emc-update-link" href="/email">Update Settings</a>
+  </div>
+  <p class="text-center text-muted small mb-2" id="emc-divider">or subscribe with your email address</p>
   <% } %>
-  <div class="form-floating mb-3">
+  <div class="form-floating mb-3" id="emc-email-field">
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
@@ -54,5 +64,8 @@
 </form>
 </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
-</div><!-- .modal -->  
+</div><!-- .modal -->
 <%- await include('email-modal-script.ejs') -%>
+<% if (locals.googleLoginEnabled) { %>
+<%- await include('email-candles-signin.ejs') -%>
+<% } %>
