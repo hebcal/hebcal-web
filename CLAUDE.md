@@ -151,7 +151,12 @@ Each feature is typically one or a few files handling routing, business logic, a
   to themselves in dev -- both must be registered on the OAuth client), and uses
   the configured `redirect_uri` (or the www.hebcal.com default) otherwise. The
   chosen URI is recorded in the signed transaction cookie so the callback's
-  token exchange uses the exact same value. **Varnish caveat**: do not
+  token exchange uses the exact same value. **`/account`** lists the signed-in
+  user's Shabbat and Yahrzeit+Anniversary email subscriptions
+  (`accountSubscriptions.js` joins them by the account's verified email --
+  `hebcal_shabbat_email.email_address` and the active `yahrzeit_email` rows);
+  the Shabbat "Manage subscription" link deep-links to `/email?e=<base64 email>`
+  so the form pre-fills that subscriber's saved settings. **Varnish caveat**: do not
   personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
   server-side — a cached anonymous copy would leak to logged-in users and vice
   versa. Render login state client-side instead. Apple ("Sign in with Apple")
