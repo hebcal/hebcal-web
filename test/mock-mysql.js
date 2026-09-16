@@ -168,6 +168,20 @@ export class MockMysqlDb {
       return {affectedRows: 1};
     }
 
+    // Handle REPLACE INTO for shabbat email (staging 'pending' or signed-in
+    // 'active'); record it so signup flows can be asserted end-to-end.
+    if (sql.includes('REPLACE INTO hebcal_shabbat_email')) {
+      const [emailId, emailAddress, emailStatus] = args;
+      this.mockData.subscriptions[emailId] = {
+        email_id: emailId,
+        email_address: emailAddress,
+        email_status: emailStatus,
+        email_created: new Date(),
+      };
+      this.mockData.emailsByAddress[emailAddress] = emailId;
+      return {affectedRows: 1};
+    }
+
     // Handle UPDATE queries for shabbat email
     if (sql.includes('UPDATE hebcal_shabbat_email')) {
       return {affectedRows: 1};

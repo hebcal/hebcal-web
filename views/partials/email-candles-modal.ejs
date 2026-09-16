@@ -30,6 +30,10 @@
 <div id="email-modal-entry">
   <p>Get candle-lighting times for <%= locals.location?.getShortName() %>, Parashat ha-Shavua
     &amp; Havdalah delivered to your inbox every Thursday.</p>
+  <div class="d-grid mb-2">
+    <%- await include('google-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
+  </div>
+  <p class="text-center text-muted small mb-2">or subscribe with your email address</p>
   <div class="form-floating mb-3">
     <input class="form-control" type="email" name="em" id="em" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
