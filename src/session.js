@@ -120,7 +120,10 @@ function setSessionCookie(ctx, sessionId, expires) {
   const signed = signValue(sessionId, sessionSecret(ctx));
   ctx.cookies.set(SESSION_COOKIE, signed, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // No `secure`: TLS is terminated at Varnish/Caddy, so Koa sees an http
+    // connection and would throw "Cannot send secure cookie over unencrypted
+    // connection". The edge is https-only, so the cookie still only travels
+    // over TLS between the browser and the terminator.
     sameSite: 'lax',
     expires,
     overwrite: true,
@@ -234,7 +237,7 @@ export async function destroySession(ctx) {
 function clearSessionCookie(ctx) {
   ctx.cookies.set(SESSION_COOKIE, null, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // No `secure` -- see setSessionCookie().
     sameSite: 'lax',
     overwrite: true,
   });
