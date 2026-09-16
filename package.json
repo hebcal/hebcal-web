@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/hebcal/hebcal-web#readme",
   "config": {
-    "sprite": "sprite14.svg",
+    "sprite": "sprite15.svg",
     "csprite": "color-icons4.svg",
     "mainCss": "style-5.3.8k.css",
     "holidayFcApp": "fc-6.1.21a.min.js",

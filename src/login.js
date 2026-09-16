@@ -3,6 +3,7 @@ import {rejectForgedCrossOriginPost} from './common.js';
 import {matomoTrack} from './matomoTrack.js';
 import {createSession, destroySession, signValue, unsignValue} from './session.js';
 import {findOrCreateUser} from './userAccount.js';
+import {getAccountSubscriptions, formatMonthYear} from './accountSubscriptions.js';
 import {
   isGoogleLoginConfigured,
   beginGoogleLogin,
@@ -155,8 +156,12 @@ export async function accountPage(ctx) {
     ctx.redirect('/login?next=%2Faccount');
     return;
   }
+  const {shabbat, yahrzeit} = await getAccountSubscriptions(ctx, ctx.state.user.email);
   return ctx.render('account', {
     title: 'Your Account - Hebcal',
     user: ctx.state.user,
+    shabbat,
+    yahrzeit,
+    formatMonthYear,
   });
 }

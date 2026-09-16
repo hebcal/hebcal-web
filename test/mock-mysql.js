@@ -114,6 +114,29 @@ export class MockMysqlDb {
       }];
     }
 
+    // Handle the account-page lookup: active yahrzeit email subs by address,
+    // joined to their calendar contents.
+    if (sql.includes('FROM yahrzeit_email e, yahrzeit y') && sql.includes('e.email_addr = ?')) {
+      const email = args[0];
+      const out = [];
+      for (const sub of Object.values(this.mockData.yahrzeitEmailSubs)) {
+        if (sub.email_addr !== email || sub.sub_status !== 'active') {
+          continue;
+        }
+        const cal = this.mockData.yahrzeitCalendars[sub.calendar_id];
+        if (!cal) {
+          continue;
+        }
+        out.push({
+          id: sub.id,
+          calendar_id: sub.calendar_id,
+          contents: structuredClone(cal.contents),
+          updated: cal.updated,
+        });
+      }
+      return out;
+    }
+
     // Handle existingSubByEmailAndCalendar lookup
     if (sql.includes('SELECT id, sub_status FROM yahrzeit_email')) {
       const [emailAddr, calendarId] = args;
