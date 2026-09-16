@@ -34,15 +34,18 @@
 <div id="email-modal-entry">
   <p>Get candle-lighting times for <%= locals.location?.getShortName() %>, Parashat ha-Shavua
     &amp; Havdalah delivered to your inbox every Thursday.</p>
+  <%# Note: the toggled wrappers must NOT use Bootstrap's `d-grid`, whose
+      `display:grid !important` overrides the `hidden` attribute. Full width
+      comes from `w-100` on the buttons instead. %>
   <% if (locals.googleLoginEnabled) { %>
-  <div class="d-grid mb-2" id="emc-google">
+  <div class="mb-2" id="emc-google">
     <%- await include('google-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
   </div>
-  <div class="d-grid mb-2" id="emc-subscribe-me" hidden>
-    <button type="button" class="btn btn-primary">Subscribe <span id="emc-me-label"></span></button>
+  <div class="mb-2" id="emc-subscribe-me" hidden>
+    <button type="button" class="btn btn-primary w-100">Subscribe <span id="emc-me-label"></span></button>
   </div>
-  <div class="d-grid mb-2" id="emc-update" hidden>
-    <a class="btn btn-secondary" id="emc-update-link" href="/email">Update Settings</a>
+  <div class="mb-2" id="emc-update" hidden>
+    <a class="btn btn-secondary w-100" id="emc-update-link" href="/email">Update Settings</a>
   </div>
   <p class="text-center text-muted small mb-2" id="emc-divider">or subscribe with your email address</p>
   <% } %>

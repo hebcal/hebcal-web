@@ -26,19 +26,39 @@
   var entry = d.getElementById('email-modal-entry');
   var verified = d.getElementById('email-modal-verified');
   var failure = d.getElementById('email-modal-failure');
-  var mode = null; // 'B' (subscribe as self) or 'C' (already subscribed here)
+  var ready = false;
+  var hasActiveSub = false;
   var userEmail = null;
 
-  // The elements below are NOT touched by the shared bundle, so the `hidden`
-  // attribute is safe (it restores each element's own display when cleared).
-  // The footer Subscribe button IS shown by the bundle via inline style, so we
-  // must override its display inline to hide it, not with `hidden`.
+  function locationParams() {
+    var p = '';
+    ['geonameid', 'zip'].forEach(function(k) {
+      var el = form.querySelector('[name="' + k + '"]');
+      if (el && el.value) {
+        p += '&' + k + '=' + encodeURIComponent(el.value);
+      }
+    });
+    return p;
+  }
+
+  // A signed-in user never sees "Sign in with Google". With an active
+  // subscription they see ONLY "Update Settings" (carrying this page's city so
+  // they can switch to it); otherwise ONLY "Subscribe <email>". Never both.
   function apply() {
-    if (!mode) {
+    if (!ready) {
       return;
     }
     if (google) google.hidden = true;
-    if (mode === 'B') {
+    if (hasActiveSub) {
+      if (updateLink) {
+        updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail)) + locationParams();
+      }
+      if (updateBox) updateBox.hidden = false;
+      if (subscribeMe) subscribeMe.hidden = true;
+      if (divider) divider.hidden = true;
+      if (emailField) emailField.hidden = true;
+      if (bottomBtn) bottomBtn.style.display = 'none';
+    } else {
       if (meLabel) meLabel.textContent = userEmail;
       if (subscribeMe) subscribeMe.hidden = false;
       if (updateBox) updateBox.hidden = true;
@@ -48,21 +68,14 @@
       }
       if (emailField) emailField.hidden = false;
       if (bottomBtn) {
+        bottomBtn.style.display = '';
         bottomBtn.classList.remove('btn-primary');
         bottomBtn.classList.add('btn-secondary');
       }
-    } else {
-      if (updateLink) updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail));
-      if (updateBox) updateBox.hidden = false;
-      if (subscribeMe) subscribeMe.hidden = true;
-      if (divider) divider.hidden = true;
-      if (emailField) emailField.hidden = true;
-      if (bottomBtn) bottomBtn.style.display = 'none';
     }
   }
 
-  // The bundle's show.bs.modal handler resets the entry to its default state, so
-  // re-apply ours afterwards (and clear the verified-success alert).
+  // The bundle's show.bs.modal handler resets the entry, so re-apply after it.
   if (modal) {
     modal.addEventListener('show.bs.modal', function() {
       setTimeout(function() {
@@ -89,7 +102,8 @@
           return; // stale hint cookie: leave the default (Case A)
         }
         userEmail = data.email;
-        mode = data.subscribedToThisCity ? 'C' : 'B';
+        hasActiveSub = !!data.hasActiveSub;
+        ready = true;
         apply();
       })
       .catch(function() {});

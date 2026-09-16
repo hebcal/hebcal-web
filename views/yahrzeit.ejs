@@ -279,7 +279,8 @@ instructions</a>.</p>
   <div class="alert alert-success" id="ye-active" role="alert" hidden>
     <strong>Annual reminder emails active</strong> for <span id="ye-active-email"></span>.
   </div>
-  <div class="d-grid mb-2" id="ye-google">
+  <%# Not `d-grid`: its `display:grid !important` would override `hidden`. %>
+  <div class="mb-2" id="ye-google">
     <%- await include('partials/google-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
   </div>
   <p class="text-center text-muted small mb-2" id="ye-divider">or enter your email address</p>

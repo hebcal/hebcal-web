@@ -33,33 +33,25 @@ describe('/email/subscription-status', () => {
     expect(res.headers['cache-control']).toContain('no-store');
   });
 
-  it('reports subscribedToThisCity:true when the active sub matches the city', async () => {
+  it('reports hasActiveSub:true when the user has any active subscription (even for another city)', async () => {
     const sid = 'a'.repeat(32);
     mysql.seedSession({userId: 'u1', email: 'nobody@example.com', sessionId: sid});
+    // nobody@example.com is subscribed to SUBSCRIBED_GEO; ask about OTHER_GEO.
     const res = await request(server)
-        .get(`/email/subscription-status?geonameid=${SUBSCRIBED_GEO}`)
+        .get(`/email/subscription-status?geonameid=${OTHER_GEO}`)
         .set('Cookie', cookie(sid));
     expect(res.body).toMatchObject({
-      loggedIn: true, email: 'nobody@example.com', subscribedToThisCity: true,
+      loggedIn: true, email: 'nobody@example.com', hasActiveSub: true,
     });
   });
 
-  it('reports subscribedToThisCity:false for a different city', async () => {
-    const sid = 'a'.repeat(32);
-    mysql.seedSession({userId: 'u1', email: 'nobody@example.com', sessionId: sid});
-    const res = await request(server)
-        .get(`/email/subscription-status?geonameid=${OTHER_GEO}`)
-        .set('Cookie', cookie(sid));
-    expect(res.body).toMatchObject({loggedIn: true, subscribedToThisCity: false});
-  });
-
-  it('reports subscribedToThisCity:false when the user has no subscription', async () => {
+  it('reports hasActiveSub:false when the user has no subscription', async () => {
     const sid = 'b'.repeat(32);
     mysql.seedSession({userId: 'u2', email: 'no-sub@example.com', sessionId: sid});
     const res = await request(server)
-        .get(`/email/subscription-status?geonameid=${OTHER_GEO}`)
+        .get(`/email/subscription-status?geonameid=${SUBSCRIBED_GEO}`)
         .set('Cookie', cookie(sid));
-    expect(res.body).toMatchObject({loggedIn: true, subscribedToThisCity: false});
+    expect(res.body).toMatchObject({loggedIn: true, hasActiveSub: false});
   });
 });
 
