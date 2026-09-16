@@ -24,7 +24,7 @@ Sign out
 <% if (locals.shabbat && locals.shabbat.status === 'active') { %>
 <p>You are subscribed to weekly Shabbat candle-lighting times<% if (locals.shabbat.locationName) { %>
 for <strong><%= locals.shabbat.locationName %></strong><% } %>.</p>
-<p><a class="btn btn-outline-primary btn-sm" href="<%= locals.shabbat.manageUrl %>">Manage subscription</a></p>
+<p><a class="btn btn-primary btn-sm" href="<%= locals.shabbat.manageUrl %>">Manage subscription &raquo;</a></p>
 <% } else if (locals.shabbat && locals.shabbat.status === 'pending') { %>
 <p>Your Shabbat email subscription is <strong>pending confirmation</strong>. Please
 check your email for the confirmation link, or
