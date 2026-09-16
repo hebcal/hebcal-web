@@ -62,6 +62,9 @@ describe('candles modal renders on shabbat and hebcal routes', () => {
     expect(res.text).toContain('id="emc-subscribe-me"');
     expect(res.text).toContain('id="emc-update"');
     expect(res.text).toContain('/email/subscription-status');
+    // The Update Settings link carries the full candle-lighting settings
+    // (makeGeoUrlArgs) so the JS can append e=<base64 email>.
+    expect(res.text).toMatch(/data-args="[^"]*ue=/);
   });
 
   it('hebcal route includes the modal signed-in variants + status script', async () => {
@@ -70,5 +73,6 @@ describe('candles modal renders on shabbat and hebcal routes', () => {
     expect(res.status).toBe(200);
     expect(res.text).toContain('id="emc-subscribe-me"');
     expect(res.text).toContain('/email/subscription-status');
+    expect(res.text).toMatch(/data-args="[^"]*ue=/);
   });
 });

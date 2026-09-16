@@ -357,6 +357,9 @@ function renderHtml(ctx) {
   url.title = getCalendarTitle(events, optsTmp);
   if (options.candlelighting) {
     const geoUrlArgs = makeGeoUrlArgs(q, location, options);
+    // Exposed for the email-candles modal's "Update Settings" deep link (the
+    // shabbat route already sets ctx.state.geoUrlArgs).
+    ctx.state.geoUrlArgs = geoUrlArgs;
     const idx = Math.floor(events.length / 2);
     const hyear = options.isHebrewYear ? options.year : events[idx].getDate().getFullYear();
     url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;

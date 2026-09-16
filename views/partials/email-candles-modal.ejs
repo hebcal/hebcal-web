@@ -45,7 +45,8 @@
     <button type="button" class="btn btn-primary w-100">Subscribe <span id="emc-me-label"></span></button>
   </div>
   <div class="mb-2" id="emc-update" hidden>
-    <a class="btn btn-secondary w-100" id="emc-update-link" href="/email">Update Settings</a>
+    <a class="btn btn-secondary w-100" id="emc-update-link" href="/email"
+      data-args="<%= locals.geoUrlArgs || '' %>">Update Settings</a>
   </div>
   <p class="text-center text-muted small mb-2" id="emc-divider">or subscribe with your email address</p>
   <% } %>

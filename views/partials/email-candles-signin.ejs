@@ -30,20 +30,10 @@
   var hasActiveSub = false;
   var userEmail = null;
 
-  function locationParams() {
-    var p = '';
-    ['geonameid', 'zip'].forEach(function(k) {
-      var el = form.querySelector('[name="' + k + '"]');
-      if (el && el.value) {
-        p += '&' + k + '=' + encodeURIComponent(el.value);
-      }
-    });
-    return p;
-  }
-
   // A signed-in user never sees "Sign in with Google". With an active
-  // subscription they see ONLY "Update Settings" (carrying this page's city so
-  // they can switch to it); otherwise ONLY "Subscribe <email>". Never both.
+  // subscription they see ONLY "Update Settings" (carrying this page's full
+  // candle-lighting settings, from makeGeoUrlArgs, so they can switch their
+  // subscription to it); otherwise ONLY "Subscribe <email>". Never both.
   function apply() {
     if (!ready) {
       return;
@@ -51,7 +41,9 @@
     if (google) google.hidden = true;
     if (hasActiveSub) {
       if (updateLink) {
-        updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail)) + locationParams();
+        var args = updateLink.getAttribute('data-args') || '';
+        updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail)) +
+          (args ? '&' + args : '');
       }
       if (updateBox) updateBox.hidden = false;
       if (subscribeMe) subscribeMe.hidden = true;
