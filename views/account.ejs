@@ -22,7 +22,7 @@ Sign out
  <use href="<%=locals.spriteHref%>#gi-candle"></use></svg>
  Shabbat candle-lighting times</h5>
 <% if (locals.shabbat && locals.shabbat.status === 'active') { %>
-<p>You are subscribed to weekly Shabbat candle-lighting times<% if (locals.shabbat.locationName) { %>
+<p>You are subscribed to weekly emails<% if (locals.shabbat.locationName) { %>
 for <strong><%= locals.shabbat.locationName %></strong><% } %>.</p>
 <p><a class="btn btn-primary btn-sm" href="<%= locals.shabbat.manageUrl %>">Manage subscription &raquo;</a></p>
 <% } else if (locals.shabbat && locals.shabbat.status === 'pending') { %>
