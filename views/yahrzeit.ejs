@@ -276,10 +276,13 @@ instructions</a>.</p>
   <p><% if (!locals.q.em) { %>Enter your email address to save your personal calendar.<% } %>
     Receive annual reminder emails one week before and one day before each anniversary.</p>
   <% if (locals.googleLoginEnabled) { %>
-  <div class="d-grid mb-2">
+  <div class="alert alert-success" id="ye-active" role="alert" hidden>
+    <strong>Annual reminder emails active</strong> for <span id="ye-active-email"></span>.
+  </div>
+  <div class="d-grid mb-2" id="ye-google">
     <%- await include('partials/google-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
   </div>
-  <p class="text-center text-muted small mb-2">or enter your email address</p>
+  <p class="text-center text-muted small mb-2" id="ye-divider">or enter your email address</p>
   <% } %>
   <div class="form-floating mb-3">
     <input class="form-control" type="email" name="em" id="em" value="<%=locals.q.em || ''%>" placeholder="user@example.com" required>
@@ -300,6 +303,9 @@ instructions</a>.</p>
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
 <%- await include('partials/email-modal-script.ejs') -%>
+<% if (locals.googleLoginEnabled) { %>
+<%- await include('partials/yahrzeit-signin.ejs') -%>
+<% } %>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>
 <script nonce="<%=locals.nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>

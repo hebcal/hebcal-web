@@ -15,6 +15,40 @@ function cacheControlPrivate(ctx) {
   ctx.set('Cache-Control', 'private');
 }
 
+/**
+ * GET /email/subscription-status -- JSON used by the candles modal's client-side
+ * JS to personalize itself without the page HTML varying by user (cache-safe).
+ * Reports whether the caller is signed in, their verified email, and whether
+ * they already have an active Shabbat subscription for the requested city.
+ * @param {import('koa').Context} ctx
+ */
+export async function emailSubscriptionStatus(ctx) {
+  ctx.set('Cache-Control', 'private, no-store');
+  ctx.type = 'application/json';
+  const user = ctx.state.user;
+  if (!user || !user.email) {
+    ctx.body = {loggedIn: false};
+    return;
+  }
+  const q = {...ctx.request.query};
+  const sql = `SELECT email_status, email_candles_zipcode, email_candles_geonameid
+    FROM hebcal_shabbat_email WHERE email_address = ?`;
+  const rows = await ctx.mysql.query(sql, user.email);
+  const row = rows?.[0];
+  const active = row?.email_status === 'active';
+  let subscribedToThisCity = false;
+  if (active) {
+    if (q.geonameid && row.email_candles_geonameid != null &&
+        String(row.email_candles_geonameid) === String(q.geonameid)) {
+      subscribedToThisCity = true;
+    } else if (q.zip && row.email_candles_zipcode &&
+        row.email_candles_zipcode === q.zip) {
+      subscribedToThisCity = true;
+    }
+  }
+  ctx.body = {loggedIn: true, email: user.email, subscribedToThisCity};
+}
+
 export async function emailVerify(ctx) {
   cacheControlPrivate(ctx);
   const query = {...ctx.request.body, ...ctx.request.query};

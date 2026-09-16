@@ -15,7 +15,7 @@ import {dailyLearningConfig} from './urlArgs.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
 import {apiDocs} from './apiDocs.js';
-import {emailForm, emailVerify} from './email.js';
+import {emailForm, emailVerify, emailSubscriptionStatus} from './email.js';
 import {emailOpen} from './emailOpen.js';
 import {fridgeShabbat} from './fridge.js';
 import {hdateJavascript, hdateXml} from './hdate.js';
@@ -41,7 +41,7 @@ import {
   logout,
   accountPage,
 } from './login.js';
-import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch} from './yahrzeit-email.js';
+import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch, yahrzeitEmailStatus} from './yahrzeit-email.js';
 import {omerApp} from './omerApp.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
@@ -171,6 +171,9 @@ Disallow: /account
     } else if (rpath.startsWith('/hebcal')) {
       onlyGetAndHead(ctx);
       return hebcalApp(ctx);
+    } else if (rpath === '/yahrzeit/email-status') {
+      onlyGetAndHead(ctx);
+      return yahrzeitEmailStatus(ctx);
     } else if (rpath === '/yahrzeit/email') {
       return yahrzeitEmailSub(ctx);
     } else if (rpath.startsWith('/yahrzeit/verify')) {
@@ -192,6 +195,9 @@ Disallow: /account
         return emailOpen(ctx);
       } else if (rpath.startsWith('/email/verify')) {
         return emailVerify(ctx);
+      } else if (rpath === '/email/subscription-status') {
+        onlyGetAndHead(ctx);
+        return emailSubscriptionStatus(ctx);
       }
       return emailForm(ctx);
     } else if (rpath === '/login/google/callback') {
