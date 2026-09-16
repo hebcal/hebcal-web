@@ -1,6 +1,9 @@
-<% if (locals.user && locals.user.email && locals.ulid) { %>
-<%# Signed in: save/associate this calendar directly, no modal, no email
-    confirmation -- the user's Google email is already verified. %>
+<% if (locals.user && locals.user.email && locals.ulid && !locals.q.em) { %>
+<%# Signed in and this calendar has no email yet: one-click Save that
+    associates it with the signed-in user (no modal, no confirmation email --
+    their Google email is already verified). Once saved, q.em is set and we
+    fall through to the standard modal below, which still lets any number of
+    email addresses subscribe to the same calendar. %>
 <form method="post" action="/yahrzeit/email" class="d-inline">
 <input type="hidden" name="v" value="1">
 <input type="hidden" name="cfg" value="html">
@@ -8,11 +11,7 @@
 <input type="hidden" name="ulid" value="<%=locals.ulid%>">
 <input type="hidden" name="em" value="<%=locals.user.email%>">
 <button type="submit" class="btn btn-secondary">
-<% if (!locals.q.em) { -%>
 <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
-<% } else { -%>
-<svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
-<% } -%>
 </button>
 </form>
 <% } else { %>

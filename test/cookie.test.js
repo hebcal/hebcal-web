@@ -3,7 +3,20 @@ import {
   doesCookieNeedRefresh,
   setHebcalCookie,
   possiblySetCookie,
+  setLoginHintCookie,
 } from '../src/cookie.js';
+
+/**
+ * @param {Object} ctx a makeCtx() result
+ * @return {string|undefined} the C cookie value from the appended Set-Cookie
+ */
+function appendedC(ctx) {
+  const header = ctx._appended['Set-Cookie']?.[0];
+  if (!header) {
+    return undefined;
+  }
+  return header.replace(/^C=/, '').replace(/; .*/, '');
+}
 
 /**
  * Build a minimal mock of a Koa context for the cookie helpers.
@@ -184,5 +197,61 @@ describe('possiblySetCookie', () => {
     const ctx = makeCtx({userAgent: 'Mozilla/5.0 (Macintosh)'});
     expect(possiblySetCookie(ctx, {c: 'on'})).toBe(true);
     expect(ctx._appended['Set-Cookie'][0]).toMatch(/^C=uid=/);
+  });
+});
+
+describe('setLoginHintCookie', () => {
+  it('adds hu=1 for a logged-in user with no prior C cookie', () => {
+    const ctx = makeCtx({});
+    setLoginHintCookie(ctx, true);
+    const c = appendedC(ctx);
+    expect(c).toMatch(/(?:^|&)hu=1(?:&|$)/);
+    expect(c).toMatch(/uid=/);
+  });
+
+  it('adds hu=1 while preserving the existing C cookie prefs', () => {
+    const ctx = makeCtx({cookie: 'uid=abc&lg=s&b=18&exp=2035-01-01'});
+    setLoginHintCookie(ctx, true);
+    const c = appendedC(ctx);
+    expect(c).toContain('uid=abc');
+    expect(c).toContain('lg=s');
+    expect(c).toMatch(/(?:^|&)hu=1(?:&|$)/);
+  });
+
+  it('is a no-op when hu=1 is already present', () => {
+    const ctx = makeCtx({cookie: 'uid=abc&hu=1&exp=2035-01-01'});
+    setLoginHintCookie(ctx, true);
+    expect(ctx._appended['Set-Cookie']).toBeUndefined();
+  });
+
+  it('removes hu on logout but keeps other prefs', () => {
+    const ctx = makeCtx({cookie: 'uid=abc&lg=s&hu=1&exp=2035-01-01'});
+    setLoginHintCookie(ctx, false);
+    const c = appendedC(ctx);
+    expect(c).not.toContain('hu=1');
+    expect(c).toContain('lg=s');
+  });
+
+  it('is a no-op on logout when hu is absent', () => {
+    const ctx = makeCtx({cookie: 'uid=abc&lg=s&exp=2035-01-01'});
+    setLoginHintCookie(ctx, false);
+    expect(ctx._appended['Set-Cookie']).toBeUndefined();
+  });
+
+  it('respects the tracking opt-out', () => {
+    const ctx = makeCtx({cookie: 'opt_out'});
+    setLoginHintCookie(ctx, true);
+    expect(ctx._appended['Set-Cookie']).toBeUndefined();
+  });
+});
+
+describe('makeCookie preserves the login hint', () => {
+  it('keeps hu=1 across a preference-driven cookie rewrite', () => {
+    const uid = '12345678-1234-1234-1234-123456789012';
+    const ctx = makeCtx({cookie: `uid=${uid}&hu=1&exp=2035-01-01`, query: {lg: 's'}});
+    setHebcalCookie(ctx, {lg: 's'});
+    const c = appendedC(ctx);
+    expect(c).toMatch(/(?:^|&)hu=1(?:&|$)/);
+    expect(c).toContain('lg=s');
   });
 });
