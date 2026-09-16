@@ -83,7 +83,8 @@ export async function loginGoogleStart(ctx) {
   const encoded = Buffer.from(JSON.stringify(payload)).toString('base64url');
   ctx.cookies.set(TXN_COOKIE, signValue(encoded, sessionSecret(ctx)), {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // No `secure` -- see setSessionCookie() in session.js (TLS is terminated
+    // upstream, so Koa sees http and would refuse a secure cookie).
     sameSite: 'lax',
     expires: new Date(Date.now() + TXN_TTL_MS),
     overwrite: true,
