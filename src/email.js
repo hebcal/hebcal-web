@@ -30,23 +30,13 @@ export async function emailSubscriptionStatus(ctx) {
     ctx.body = {loggedIn: false};
     return;
   }
-  const q = {...ctx.request.query};
-  const sql = `SELECT email_status, email_candles_zipcode, email_candles_geonameid
-    FROM hebcal_shabbat_email WHERE email_address = ?`;
+  const sql = `SELECT email_status FROM hebcal_shabbat_email WHERE email_address = ?`;
   const rows = await ctx.mysql.query(sql, user.email);
-  const row = rows?.[0];
-  const active = row?.email_status === 'active';
-  let subscribedToThisCity = false;
-  if (active) {
-    if (q.geonameid && row.email_candles_geonameid != null &&
-        String(row.email_candles_geonameid) === String(q.geonameid)) {
-      subscribedToThisCity = true;
-    } else if (q.zip && row.email_candles_zipcode &&
-        row.email_candles_zipcode === q.zip) {
-      subscribedToThisCity = true;
-    }
-  }
-  ctx.body = {loggedIn: true, email: user.email, subscribedToThisCity};
+  // A user has at most one Shabbat subscription (keyed by email_address). If it
+  // is active they manage it via "Update Settings" (which can switch its city);
+  // otherwise they get a one-click "Subscribe <email>".
+  const hasActiveSub = rows?.[0]?.email_status === 'active';
+  ctx.body = {loggedIn: true, email: user.email, hasActiveSub};
 }
 
 export async function emailVerify(ctx) {
