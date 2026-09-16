@@ -47,7 +47,8 @@ if (locals.rpath === '/') {
     </form>
 <% if (locals.googleLoginEnabled) { %>
     <ul class="navbar-nav ms-2 d-print-none">
-      <li class="nav-item" id="acct-signin"><a class="nav-link" href="/login">Sign in</a></li>
+      <li class="nav-item" id="acct-signin"><a class="nav-link" href="/login">
+        <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-person-circle"></use></svg> Sign in</a></li>
       <li class="nav-item" id="acct-account" hidden><a class="nav-link" href="/account" title="Your account">
         <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-person-circle"></use></svg> Account</a></li>
     </ul>
