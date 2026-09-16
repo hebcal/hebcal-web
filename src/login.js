@@ -60,9 +60,9 @@ export async function loginPage(ctx) {
     ctx.redirect(next === '/' ? '/account' : next);
     return;
   }
+  // googleLoginEnabled is set globally in app-www.js sessionMiddleware.
   return ctx.render('login', {
     title: 'Sign in - Hebcal',
-    googleEnabled: isGoogleLoginConfigured(ctx.iniConfig),
     next,
   });
 }
@@ -112,9 +112,12 @@ export async function loginGoogleCallback(ctx) {
     ctx.throw(400, 'Malformed login state; please try again');
   }
 
-  // Rebuild the callback URL from the trusted redirect_uri + the real query
-  // string, so proxy-supplied Host/proto headers cannot influence validation.
-  const cbUrl = new URL(googleRedirectUri(ctx));
+  // Rebuild the callback URL from the redirect_uri that was recorded in the
+  // signed transaction cookie at the start of the flow (plus the real query
+  // string). Using the stored value -- not a fresh derivation -- guarantees the
+  // token exchange's redirect_uri exactly matches the one sent to Google, which
+  // matters when the dev host (localhost vs 127.0.0.1) determined it.
+  const cbUrl = new URL(txn.redirect_uri || googleRedirectUri(ctx));
   cbUrl.search = ctx.request.querystring;
 
   let profile;

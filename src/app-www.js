@@ -16,6 +16,7 @@ import {createBaseApp, useBackendHostname, useObservability, useTimeout,
   stopIfTimedOut} from './app-common.js';
 import {aiChatbotLogger} from './logger.js';
 import {loadSession} from './session.js';
+import {isGoogleLoginConfigured} from './oauthGoogle.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -249,6 +250,10 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
 // so anonymous requests pay nothing.
 app.use(async function sessionMiddleware(ctx, next) {
   await loadSession(ctx);
+  // Global flag so any template can decide whether to show a "Sign in with
+  // Google" button. Same for every viewer (config-derived), so it does not
+  // personalize a cached page.
+  ctx.state.googleLoginEnabled = isGoogleLoginConfigured(ctx.iniConfig);
   await next();
 });
 
