@@ -23,7 +23,6 @@ export async function getShabbatSubscription(ctx, email) {
   // and pre-fills location/Havdalah/candle-minutes -- the same param the
   // confirmation-email "Update Settings" / "Unsubscribe" links use.
   const eParam = encodeURIComponent(Buffer.from(email).toString('base64'));
-  const utm = 'utm_source=newsletter&utm_medium=email&utm_campaign=shabbat-txn';
   return {
     status: r.email_status,
     locationName: locationNameFromRow(ctx, r),
@@ -32,7 +31,7 @@ export async function getShabbatSubscription(ctx, email) {
     manageUrl: '/email?e=' + eParam,
     // Links to the pre-unsubscribe confirmation page (not an immediate
     // unsubscribe), so an accidental click can be undone.
-    unsubscribeUrl: '/email?e=' + eParam + '&unsubscribe=1&cfg=html&' + utm,
+    unsubscribeUrl: '/email?e=' + eParam + '&unsubscribe=1&cfg=html',
   };
 }
 
