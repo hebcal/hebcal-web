@@ -156,6 +156,15 @@ export async function emailForm(ctx) {
       q = processCookieAndQuery(cookieString, {}, q);
     }
   }
+  // A signed-in user's provider-verified email lets us pre-fill the form and,
+  // on submit, skip the email-confirmation round-trip. The rendered page is
+  // then personalized, so it must never be cached.
+  if (ctx.state.user) {
+    cacheControlPrivate(ctx);
+    if (!q.em && typeof ctx.state.user.email === 'string' && ctx.state.user.email) {
+      q.em = ctx.state.user.email;
+    }
+  }
   cleanQuery(q);
   const isJSON = q.cfg === 'json';
   if (isJSON) {
@@ -239,6 +248,29 @@ export async function emailForm(ctx) {
         }
         return ctx.render('email-success', {
           updated: true,
+        });
+      }
+      // If the subscriber is signed in and the address they're subscribing is
+      // their own provider-verified email, we already have proof of ownership,
+      // so activate immediately and skip the confirmation email. `user.email`
+      // is only ever set from a provider-verified address (see userAccount.js).
+      const verifiedBySignin = ctx.state.user &&
+        typeof ctx.state.user.email === 'string' &&
+        ctx.state.user.email.length > 0 &&
+        ctx.state.user.email.toLowerCase() === String(q.em).toLowerCase();
+      if (verifiedBySignin) {
+        try {
+          await subscribeVerifiedUser(ctx, db, q);
+        } catch (err) {
+          ctx.logger.warn(err);
+          ctx.throw(400, err.message);
+        }
+        if (isJSON) {
+          ctx.body = {ok: true, verified: true};
+          return;
+        }
+        return ctx.render('email-success', {
+          alreadyVerified: true,
         });
       }
       try {
@@ -475,7 +507,17 @@ function makeSubscriptionId(ctx) {
   return ulid().toLowerCase().substring(0, 24);
 }
 
-async function writeStagingInfo(ctx, db, q) {
+/**
+ * Insert (or replace) a subscription row with the given status, returning the
+ * subscription id. Shared by the pending (verify-by-email) flow and the
+ * signed-in "activate immediately" flow.
+ * @param {import('koa').Context} ctx
+ * @param {import('./db.js').MysqlDb} db
+ * @param {Object} q
+ * @param {'pending'|'active'} status
+ * @return {Promise<string>}
+ */
+async function insertSub(ctx, db, q, status) {
   const ip = getIpAddress(ctx);
   const subscriptionId = ctx.state.subscriptionId = makeSubscriptionId(ctx);
   const zip = getZip(q);
@@ -487,7 +529,7 @@ async function writeStagingInfo(ctx, db, q) {
    email_use_elevation,
    email_candles_havdalah, email_havdalah_degrees, email_sundown_candles,
    ${locationColumn}, email_ip)
-  VALUES (?, ?, 'pending', NOW(), ?, ?, ?, ?, ?, ?)`;
+  VALUES (?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?)`;
   const mins = getHavdalahMins(q);
   let degs = getHavdalahDegrees(q);
   if (mins === null && degs === null) {
@@ -496,6 +538,7 @@ async function writeStagingInfo(ctx, db, q) {
   await db.query(sql, [
     subscriptionId,
     q.em,
+    status,
     getUseElevation(q),
     mins,
     degs,
@@ -503,6 +546,54 @@ async function writeStagingInfo(ctx, db, q) {
     locationValue,
     ip,
   ]);
+  return subscriptionId;
+}
+
+/**
+ * Activate a subscription immediately for a signed-in user whose provider-
+ * verified email matches the address, skipping the confirmation round-trip,
+ * and send a "subscription complete" welcome message.
+ * @param {import('koa').Context} ctx
+ * @param {import('./db.js').MysqlDb} db
+ * @param {Object} q
+ */
+async function subscribeVerifiedUser(ctx, db, q) {
+  const subscriptionId = await insertSub(ctx, db, q, 'active');
+  const emailAddress = ctx.state.emailAddress;
+  const locationName = ctx.state.locationName;
+  matomoTrack(ctx, 'Email', 'signup', 'shabbat-weekly-google');
+  const unsubAddr = `shabbat-unsubscribe+${subscriptionId}@hebcal.com`;
+  const msgid = makeMessageId(subscriptionId);
+  const imgOpen = getImgOpenHtml(msgid, locationName, 'shabbat-complete');
+  const footerHtml = makeFooter(emailAddress);
+  const message = {
+    to: emailAddress,
+    subject: 'Your subscription to Hebcal is complete',
+    messageId: `<${msgid}@hebcal.com>`,
+    headers: {
+      'List-Unsubscribe': `<mailto:${unsubAddr}>`,
+    },
+    html: `<div dir="ltr" style="font-size:18px;font-family:georgia,'times new roman',times,serif;">
+<div>Hello,</div>
+${BLANK}
+<div>Your subscription to weekly Shabbat candle-lighting times from Hebcal for
+<strong>${locationName}</strong> is now active.</div>
+${BLANK}
+<div>You'll receive a maximum of one message per week, typically on Thursday morning.</div>
+${BLANK}
+<div style="font-size:16px">Kol Tuv,
+<br>Hebcal.com</div>
+${BLANK}
+${footerHtml}
+${imgOpen}</div>
+`,
+  };
+  sendMailLogErr(ctx, message);
+}
+
+async function writeStagingInfo(ctx, db, q) {
+  const ip = getIpAddress(ctx);
+  const subscriptionId = await insertSub(ctx, db, q, 'pending');
   const locationName = ctx.state.locationName;
   matomoTrack(ctx, 'Email', 'signup-backend', 'shabbat-weekly');
   const url = `https://www.hebcal.com/email/verify?${subscriptionId}`;

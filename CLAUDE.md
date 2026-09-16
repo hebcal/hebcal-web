@@ -147,6 +147,18 @@ Each feature is typically one or a few files handling routing, business logic, a
   versa. Render login state client-side instead. Apple ("Sign in with Apple")
   is intended as a second provider later; the `user_identity.provider` column
   and the merge-by-verified-email logic already accommodate it.
+  **`/email` integration**: `email.js` pre-fills a signed-in user's email and,
+  when the subscribed address equals their provider-verified `user.email`,
+  activates the Shabbat subscription immediately via `subscribeVerifiedUser()`
+  instead of the pending + confirm-by-email round-trip (`insertSub()` is the
+  shared writer for both). The signed-in `/email` page is marked
+  `Cache-Control: private`. The reusable `views/partials/google-signin-button.ejs`
+  is included by `login.ejs`, `email.ejs`, and the (cache-safe, non-personalized)
+  `email-candles-modal.ejs`. No account/subscription migration was needed for
+  pre-existing subscribers: the old flows never created `user` rows, subscriptions
+  are keyed by email address, and re-subscribing while signed in reuses the same
+  email-keyed row -- so nothing is duplicated, and old subscriptions surface by an
+  email join once an account page lists them.
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used
