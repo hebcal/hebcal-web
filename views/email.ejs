@@ -49,7 +49,7 @@ address activates instantly; no confirmation email needed.
 class="btn btn-primary" name="modify" value="1"><%= locals.q.status === 'active' ? 'Update Subscription' : 'Subscribe' %></button>
 <% } %>
 <button type="submit"
-class="btn btn-<%= locals.defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
+class="ms-2 btn btn-<%= locals.defaultUnsubscribe ? 'primary' : 'secondary' %>" name="unsubscribe" value="1">Unsubscribe</button>
 </form>
 </div><!-- #email-form -->
 <% if (!locals.defaultUnsubscribe) { %>
