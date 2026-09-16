@@ -156,7 +156,19 @@ Each feature is typically one or a few files handling routing, business logic, a
   (`accountSubscriptions.js` joins them by the account's verified email --
   `hebcal_shabbat_email.email_address` and the active `yahrzeit_email` rows);
   the Shabbat "Manage subscription" link deep-links to `/email?e=<base64 email>`
-  so the form pre-fills that subscriber's saved settings. **Varnish caveat**: do not
+  so the form pre-fills that subscriber's saved settings. **Yahrzeit
+  integration**: the yahrzeit email modal shows the Google button (anonymous
+  users), and a signed-in user's toolbar "Save"/"Email reminders" button is a
+  direct `POST /yahrzeit/email` (no modal) that activates the subscription and
+  redirects to `/yahrzeit/edit/<ulid>?saved=1` (`yahrzeit.js` surfaces
+  `savedToAccount` for the success alert). `yahrzeit-email.js` activates
+  immediately for a signed-in verified email (skipping the confirmation email),
+  and marking the calendar `downloaded=1` — so the hebcal-shabbat-email
+  retention cron does not prune it — happens for free because that handler
+  already calls `getYahrzeitDetailsFromDb()`. Sign-in `next` targets that route
+  back to a calendar must use `/yahrzeit/edit/<ulid>`, never `/yahrzeit?ulid=…`:
+  `makeQuery()` keys GET edit-page detection on `query.id`/the `/edit/` path,
+  so a `?ulid=` GET silently fails to load the calendar. **Varnish caveat**: do not
   personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
   server-side — a cached anonymous copy would leak to logged-in users and vice
   versa. Render login state client-side instead. Apple ("Sign in with Apple")
