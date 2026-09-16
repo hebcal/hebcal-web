@@ -43,7 +43,7 @@ if (locals.rpath === '/') {
   <div class="collapse navbar-collapse d-print-none" id="navbarSupportedContent">
     <%- htmlMenu(locals.rpath) %>
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
-      <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search" enterkeyhint="search">
+      <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search" enterkeyhint="search" <%- locals.pmIgnore || '' %>>
     </form>
 <% if (locals.googleLoginEnabled) { %>
     <ul class="navbar-nav ms-2 d-print-none">
