@@ -45,6 +45,19 @@ if (locals.rpath === '/') {
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search" enterkeyhint="search">
     </form>
+<% if (locals.googleLoginEnabled) { %>
+    <ul class="navbar-nav ms-2 d-print-none">
+      <li class="nav-item" id="acct-signin"><a class="nav-link" href="/login">Sign in</a></li>
+      <li class="nav-item" id="acct-account" hidden><a class="nav-link" href="/account" title="Your account">
+        <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-person-circle"></use></svg> Account</a></li>
+    </ul>
+    <script nonce="<%=locals.nonce%>">
+    (function(){try{var m=document.cookie.match(/(?:^|;\s*)C=([^;]*)/);
+    if(m&&/(?:^|&)hu=1(?:&|$)/.test(m[1])){
+    document.getElementById('acct-signin').hidden=true;
+    document.getElementById('acct-account').hidden=false;}}catch(e){}})();
+    </script>
+<% } %>
   </div>
 </div>
 </nav>

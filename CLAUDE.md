@@ -168,7 +168,15 @@ Each feature is typically one or a few files handling routing, business logic, a
   already calls `getYahrzeitDetailsFromDb()`. Sign-in `next` targets that route
   back to a calendar must use `/yahrzeit/edit/<ulid>`, never `/yahrzeit?ulid=…`:
   `makeQuery()` keys GET edit-page detection on `query.id`/the `/edit/` path,
-  so a `?ulid=` GET silently fails to load the calendar. **Varnish caveat**: do not
+  so a `?ulid=` GET silently fails to load the calendar. **Navbar account
+  element**: `navbar.ejs` renders a "Sign in" and an "Account" (→ `/account`)
+  link identically for every viewer (cache-safe) and a small inline script flips
+  between them by reading a `hu=1` flag packed into the existing `C` cookie —
+  NOT a server-rendered "signed in as…" (which would poison the Varnish cache).
+  `setLoginHintCookie()` (in `cookie.js`) adds/removes `hu` on login/logout and
+  `makeCookie()` preserves it across preference rewrites. The
+  `google-signin-button.ejs` uses the 4-colour Google "G" from the color-icons
+  sprite (`#google-color`). **Varnish caveat**: do not
   personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
   server-side — a cached anonymous copy would leak to logged-in users and vice
   versa. Render login state client-side instead. Apple ("Sign in with Apple")
@@ -196,6 +204,17 @@ JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.
 
 ### Templates
 EJS server-side templates live in `views/` (main pages) and `views/partials/` (reusable components).
+
+### SVG sprites
+Two icon sprites in `static/i/`: the monochrome `sprite1.svg` (referenced via
+`pkg.config.sprite` → `locals.spriteHref`, e.g. `#bi-...` Bootstrap icons) and
+the colour `color-icons1.svg` (via `pkg.config.csprite` → `locals.cspriteHref`).
+**`sprite1.svg` and `color-icons1.svg` are the real files to edit;** the
+versioned names (`sprite15.svg`, `color-icons4.svg`, …) are **symlinks** to
+them. To cache-bust after editing, bump `config.sprite`/`config.csprite` to a
+new versioned name and create that name as a **symlink** to the real file — do
+not copy the file. (Add a colour icon's own per-path `fill=` colours; don't put
+a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 
 ### Client-side JS
 `rollup.config.cjs` bundles 8 separate entry points from `src/client-*.js` files → `static/i/`.

@@ -12,6 +12,18 @@ export class MockMysqlDb {
           updated: new Date('2025-01-01'),
           downloaded: 1,
         },
+        // A calendar that already has an email (em) -> treated as "saved".
+        '01jthv2t5k88yermamssn96abc': {
+          contents: {
+            x1: '1978-12-08',
+            n1: 'Saved Person',
+            t1: 'y',
+            years: 20,
+            em: 'owner@example.com',
+          },
+          updated: new Date('2025-01-01'),
+          downloaded: 1,
+        },
       },
       // Yahrzeit email subscriptions, keyed by subscription id.
       // Mutated by INSERT/UPDATE so signup/verify flows can be exercised end-to-end.

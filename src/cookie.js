@@ -112,12 +112,49 @@ function makeCookie(ctx, query, uid) {
       (ck.geonameid && ck.b == queryDefaultCandleMins(ctx, ck)))) {
     delete ck.b;
   }
+  // Preserve the logged-in hint (see setLoginHintCookie) across these
+  // preference-driven rewrites so it is not dropped on the next page visit.
+  const prevC = ctx.cookies.get('C');
+  if (prevC && prevC !== 'opt_out' && /(?:^|&)hu=1(?:&|$)/.test(prevC)) {
+    ck.hu = '1';
+  }
   if (Object.keys(ck).length === 0) {
     return false;
   }
   uid = uid || randomUUID();
   ctx.state.userId = uid;
   return 'uid=' + uid + '&' + new URLSearchParams(ck).toString();
+}
+
+/**
+ * Add or remove the logged-in hint (`hu=1`) inside the existing `C` cookie.
+ * The `C` cookie is not httpOnly, so the navbar's client-side JS can read this
+ * flag and show an account link WITHOUT the page HTML varying by user (which
+ * would break Varnish caching) and without a network round-trip. Carries no
+ * identity -- just presence. Only rewrites when the flag actually changes.
+ * @param {import('koa').Context} ctx
+ * @param {boolean} loggedIn
+ */
+export function setLoginHintCookie(ctx, loggedIn) {
+  const prev = ctx.cookies.get('C') || '';
+  if (prev === 'opt_out') {
+    return; // respect the tracking opt-out; never write a C cookie
+  }
+  const params = new URLSearchParams(prev);
+  params.delete('exp'); // setCookie appends a fresh exp
+  const has = params.get('hu') === '1';
+  if (loggedIn === has) {
+    return; // no change -> avoid a needless Set-Cookie
+  }
+  if (loggedIn) {
+    params.set('hu', '1');
+  } else {
+    params.delete('hu');
+  }
+  if (!params.get('uid')) {
+    params.set('uid', randomUUID());
+  }
+  setCookie(ctx, params.toString());
 }
 
 /**

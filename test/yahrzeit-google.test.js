@@ -9,6 +9,8 @@ const server = makeServer(app);
 const SECRET = 'yahrzeit-google-secret';
 // A calendar the mock DB knows about (see test/mock-mysql.js).
 const CAL = '01jthv2t5k88yermamssn96pzf';
+// A calendar that already has an email saved (contents.em set).
+const SAVED_CAL = '01jthv2t5k88yermamssn96abc';
 let mysql;
 
 beforeAll(() => {
@@ -64,7 +66,7 @@ describe('yahrzeit Google sign-in', () => {
     expect(sub.sub_status).toBe('active');
   });
 
-  it('renders the saved confirmation and a direct (non-modal) Save form for a signed-in user', async () => {
+  it('signed-in + unsaved calendar renders the confirmation and a direct (non-modal) Save form', async () => {
     const sid = 'b'.repeat(32);
     mysql.seedSession({userId: 'yz2', email: 'yz2@example.com', sessionId: sid});
     const res = await request(server)
@@ -72,8 +74,23 @@ describe('yahrzeit Google sign-in', () => {
         .set('Cookie', cookie(sid));
     expect(res.status).toBe(200);
     expect(res.text).toContain('Saved to your account');
-    // Signed-in users get a real form POST, not the modal toggle.
+    // Not-yet-saved calendar -> one-click Save form.
     expect(res.text).toContain('action="/yahrzeit/email"');
+  });
+
+  it('signed-in + already-saved calendar uses the standard modal (multi-email), not the direct form', async () => {
+    const sid = 'c'.repeat(32);
+    mysql.seedSession({userId: 'yz3', email: 'yz3@example.com', sessionId: sid});
+    const res = await request(server)
+        .get(`/yahrzeit/edit/${SAVED_CAL}`)
+        .set('Cookie', cookie(sid));
+    expect(res.status).toBe(200);
+    // Already saved (contents.em set): the toolbar opens the standard dialog so
+    // additional email addresses can subscribe to the same calendar.
+    expect(res.text).toContain('data-bs-target="#email-modal"');
+    expect(res.text).toContain('Email reminders');
+    // ...and does NOT render a direct one-click Save form.
+    expect(res.text).not.toContain('action="/yahrzeit/email"');
   });
 
   it('anonymous subscribe still uses the pending + verification flow', async () => {
