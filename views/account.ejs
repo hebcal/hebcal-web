@@ -11,7 +11,16 @@
 </tbody>
 </table>
 
-<h3 class="mt-4">Shabbat candle-lighting email</h3>
+<form method="post" action="/logout" class="mt-4">
+<button type="submit" class="btn btn-secondary">
+<svg class="icon icon-sm mt-n1 me-1"><use href="<%=locals.spriteHref%>#bi-box-arrow-right"></use></svg>
+Sign out
+</button>
+</form>
+
+<h5 class="mt-4"><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor">
+ <use href="<%=locals.spriteHref%>#gi-candle"></use></svg>
+ Shabbat candle-lighting times</h5>
 <% if (locals.shabbat && locals.shabbat.status === 'active') { %>
 <p>You are subscribed to weekly Shabbat candle-lighting times<% if (locals.shabbat.locationName) { %>
 for <strong><%= locals.shabbat.locationName %></strong><% } %>.</p>
@@ -21,32 +30,30 @@ for <strong><%= locals.shabbat.locationName %></strong><% } %>.</p>
 check your email for the confirmation link, or
 <a href="<%= locals.shabbat.manageUrl %>">re-send it</a>.</p>
 <% } else { %>
-<p>You are not subscribed.
-<a href="/email">Subscribe to weekly Shabbat candle-lighting times</a>.</p>
+<p>No subscription found.<br>
+<a href="/email">Subscribe</a> to weekly Shabbat candle-lighting times
+and Torah portion by email</p>
 <% } %>
 
-<h3 class="mt-4">Yahrzeit + Anniversary reminders</h3>
+<h5 class="mt-4"><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor">
+ <use href="<%=locals.spriteHref%>#gi-user-parents"></use></svg>
+ Yahrzeit + Anniversary Calendars</h5>
 <% if (locals.yahrzeit && locals.yahrzeit.length) { %>
-<ul class="list-group mb-3">
+<table class="table">
+<tbody>
 <% for (const cal of locals.yahrzeit) { %>
-<li class="list-group-item d-flex justify-content-between align-items-center flex-wrap gap-2">
-<a href="/yahrzeit/edit/<%= cal.calendarId %>"><%= cal.title %></a>
-<span class="text-muted small">updated <%= locals.formatMonthYear(cal.updated) %></span>
-</li>
+<tr>
+<td><a href="/yahrzeit/edit/<%= cal.calendarId %>"><%= cal.title %></a></td>
+<td><span class="text-muted small">updated <%= locals.formatMonthYear(cal.updated) %></span></td>
+</tr>
 <% } %>
-</ul>
-<p><a class="btn btn-outline-primary btn-sm" href="/yahrzeit/new">Create another calendar</a></p>
+</tbody>
+</table>
 <% } else { %>
 <p>You have no active reminders.
-<a href="/yahrzeit/new">Create a Yahrzeit or Anniversary calendar</a>.</p>
 <% } %>
+<p><a class="btn btn-primary btn-sm" href="/yahrzeit/new">New calendar &raquo;</a></p>
 
-<form method="post" action="/logout" class="mt-4">
-<button type="submit" class="btn btn-outline-secondary">
-<svg class="icon icon-sm mt-n1 me-1"><use href="<%=locals.spriteHref%>#bi-box-arrow-right"></use></svg>
-Sign out
-</button>
-</form>
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/footer.ejs') -%>
