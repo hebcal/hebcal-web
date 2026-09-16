@@ -37,7 +37,7 @@ describe('/account subscriptions', () => {
     expect(res.status).toBe(200);
     expect(res.headers['cache-control']).toContain('no-store');
     expect(res.text).toContain('Shabbat candle-lighting');
-    expect(res.text).toContain('Manage subscription');
+    expect(res.text).toContain('Update Subscription');
     // The manage link deep-links into /email with the base64 `e` param so the
     // form pre-fills this subscriber's saved settings.
     const eParam = encodeURIComponent(Buffer.from(email).toString('base64'));
