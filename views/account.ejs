@@ -44,7 +44,8 @@ and Torah portion by email</p>
 <% for (const cal of locals.yahrzeit) { %>
 <tr>
 <td><a href="/yahrzeit/edit/<%= cal.calendarId %>"><%= cal.title %></a></td>
-<td><span class="text-muted small">updated <%= locals.formatMonthYear(cal.updated) %></span></td>
+<td><span class="text-muted small">updated <%= locals.formatMonthYear(cal.updated) %>
+&middot; <a href="/yahrzeit/email?id=<%= cal.subId %>&amp;num=all&amp;unsubscribe=1&amp;cfg=html">unsubscribe</a></span></td>
 </tr>
 <% } %>
 </tbody>
