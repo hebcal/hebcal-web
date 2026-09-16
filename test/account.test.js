@@ -42,6 +42,8 @@ describe('/account subscriptions', () => {
     // form pre-fills this subscriber's saved settings.
     const eParam = encodeURIComponent(Buffer.from(email).toString('base64'));
     expect(res.text).toContain(`/email?e=${eParam}`);
+    // Pre-unsubscribe confirmation link for the active Shabbat subscription.
+    expect(res.text).toContain(`/email?e=${eParam}&amp;unsubscribe=1&amp;cfg=html`);
     expect(res.text).toContain('Yahrzeit + Anniversary Calendars');
     expect(res.text).toContain('/yahrzeit/edit/01jthv2t5k88yermamssn96pzf');
     // Each calendar row has an unsubscribe link keyed by the yahrzeit_email id.
