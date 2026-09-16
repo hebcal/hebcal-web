@@ -4,7 +4,7 @@
 <h2 class="mb-3">Sign in to Hebcal</h2>
 <p class="lead">Sign in to save your settings and manage your Yahrzeit and
 email subscriptions.</p>
-<% if (locals.googleEnabled) { %>
+<% if (locals.googleLoginEnabled) { %>
 <div class="d-grid gap-2 col-8 mx-auto my-4">
 <%- await include('partials/google-signin-button.ejs', {next: locals.next, btnBlock: true}) -%>
 </div><!-- .d-grid -->

@@ -20,7 +20,7 @@
 Signed in as <strong><%= locals.user.email %></strong>. Subscribing with this
 address activates instantly &mdash; no confirmation email needed.
 </div><!-- .alert -->
-<% } else { %>
+<% } else if (locals.googleLoginEnabled) { %>
 <div class="mb-3 d-flex align-items-center flex-wrap gap-2">
 <%- await include('partials/google-signin-button.ejs', {next: '/email'}) -%>
 <span class="text-muted">to skip the email confirmation step.</span>

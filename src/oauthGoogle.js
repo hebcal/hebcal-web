@@ -18,10 +18,18 @@ const SCOPE = 'openid email profile';
 let configPromise = null;
 
 /**
+ * Whether Google login is enabled on this host. Enabled by default when a
+ * client id + secret are configured; an explicit `hebcal.google.oauth.disabled`
+ * flag (1/true/yes/on) is a kill switch so the code can ship to main but be
+ * turned off in production without removing the credentials.
  * @param {Object<string,string>} iniConfig
- * @return {boolean} whether Google login is configured on this host
+ * @return {boolean}
  */
 export function isGoogleLoginConfigured(iniConfig) {
+  const disabled = String(iniConfig['hebcal.google.oauth.disabled'] ?? '').trim();
+  if (/^(1|true|yes|on)$/i.test(disabled)) {
+    return false;
+  }
   return Boolean(
       iniConfig['hebcal.google.oauth.client_id'] &&
       iniConfig['hebcal.google.oauth.client_secret'],
@@ -33,6 +41,16 @@ export function isGoogleLoginConfigured(iniConfig) {
  * @return {string}
  */
 export function googleRedirectUri(ctx) {
+  // For local development, derive the redirect URI from the request host so
+  // that http://localhost:8080 and http://127.0.0.1:8080 each redirect back to
+  // themselves (Google treats them as distinct URIs; both must be registered as
+  // Authorized redirect URIs on the OAuth client). We only do this for loopback
+  // hosts, so a spoofed Host header on a real deployment cannot influence it --
+  // and production sets hebcal.google.oauth.redirect_uri explicitly anyway.
+  const host = ctx.host || '';
+  if (/^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(host)) {
+    return `${ctx.protocol}://${host}/login/google/callback`;
+  }
   return ctx.iniConfig['hebcal.google.oauth.redirect_uri'] ||
     'https://www.hebcal.com/login/google/callback';
 }
@@ -63,7 +81,7 @@ function getConfig(ctx) {
  * secrets the caller must stash (in a short-lived signed cookie) for the
  * callback.
  * @param {import('koa').Context} ctx
- * @return {Promise<{url: string, txn: {code_verifier: string, state: string, nonce: string}}>}
+ * @return {Promise<{url: string, txn: {code_verifier: string, state: string, nonce: string, redirect_uri: string}}>}
  */
 export async function beginGoogleLogin(ctx) {
   const config = await getConfig(ctx);
@@ -71,15 +89,18 @@ export async function beginGoogleLogin(ctx) {
   const code_challenge = await oidc.calculatePKCECodeChallenge(code_verifier);
   const state = oidc.randomState();
   const nonce = oidc.randomNonce();
+  // Compute once and carry it in the transaction: the token exchange in the
+  // callback must use the exact same redirect_uri that was sent here.
+  const redirect_uri = googleRedirectUri(ctx);
   const url = oidc.buildAuthorizationUrl(config, {
-    redirect_uri: googleRedirectUri(ctx),
+    redirect_uri,
     scope: SCOPE,
     code_challenge,
     code_challenge_method: 'S256',
     state,
     nonce,
   });
-  return {url: url.href, txn: {code_verifier, state, nonce}};
+  return {url: url.href, txn: {code_verifier, state, nonce, redirect_uri}};
 }
 
 /**

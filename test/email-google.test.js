@@ -13,6 +13,9 @@ beforeAll(() => {
   mysql = new MockMysqlDb();
   app.context.mysql = mysql;
   app.context.iniConfig['hebcal.session.secret'] = SECRET;
+  // Enable Google login so the "Sign in with Google" button renders.
+  app.context.iniConfig['hebcal.google.oauth.client_id'] = 'test-client-id';
+  app.context.iniConfig['hebcal.google.oauth.client_secret'] = 'test-client-secret';
 });
 
 function cookie(sid) {
@@ -24,7 +27,7 @@ const GEONAMEID = '293397';
 
 describe('Google sign-in on /email', () => {
   it('pre-fills the signed-in email and marks the page private on GET', async () => {
-    const sid = 'e'.repeat(32);
+    const sid = '1'.repeat(32);
     mysql.seedSession({userId: 'ug1', email: 'signed@example.com', sessionId: sid});
     const res = await request(server).get('/email').set('Cookie', cookie(sid));
     expect(res.status).toBe(200);
@@ -39,7 +42,7 @@ describe('Google sign-in on /email', () => {
   });
 
   it('activates immediately (no verification email) when the address matches the signed-in user', async () => {
-    const sid = 'f'.repeat(32);
+    const sid = '2'.repeat(32);
     mysql.seedSession({userId: 'ug2', email: 'match@example.com', sessionId: sid});
     const res = await request(server)
         .post('/email')
@@ -54,7 +57,7 @@ describe('Google sign-in on /email', () => {
   });
 
   it('matches the signed-in email case-insensitively', async () => {
-    const sid = 'h'.repeat(32);
+    const sid = '3'.repeat(32);
     mysql.seedSession({userId: 'ug4', email: 'Mixed@Example.com', sessionId: sid});
     const res = await request(server)
         .post('/email')
@@ -66,7 +69,7 @@ describe('Google sign-in on /email', () => {
   });
 
   it('still requires email verification when the address differs from the signed-in user', async () => {
-    const sid = 'g'.repeat(32);
+    const sid = '4'.repeat(32);
     mysql.seedSession({userId: 'ug3', email: 'me@example.com', sessionId: sid});
     const res = await request(server)
         .post('/email')

@@ -141,7 +141,17 @@ Each feature is typically one or a few files handling routing, business logic, a
   `Cache-Control: private, no-store`. **Config**: `hebcal.google.oauth.*` and
   `hebcal.session.secret` in `hebcal-dot-com.ini`; login self-disables (`/login`
   shows nothing, `/login/google` 404s) when the Google keys are absent, so dev
-  hosts and tests without secrets are unaffected. **Varnish caveat**: do not
+  hosts and tests without secrets are unaffected. A
+  `hebcal.google.oauth.disabled` flag (1/true/yes/on) is an explicit kill switch
+  so the feature can ship to main but be turned off in production without
+  removing the credentials; `isGoogleLoginConfigured()` is the single gate, and
+  `app-www.js` exposes its result as `ctx.state.googleLoginEnabled` for the
+  templates. **Redirect URI**: `googleRedirectUri()` derives it from the request
+  host for loopback addresses (so `localhost` and `127.0.0.1` each redirect back
+  to themselves in dev -- both must be registered on the OAuth client), and uses
+  the configured `redirect_uri` (or the www.hebcal.com default) otherwise. The
+  chosen URI is recorded in the signed transaction cookie so the callback's
+  token exchange uses the exact same value. **Varnish caveat**: do not
   personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
   server-side — a cached anonymous copy would leak to logged-in users and vice
   versa. Render login state client-side instead. Apple ("Sign in with Apple")

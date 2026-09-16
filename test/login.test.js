@@ -23,6 +23,7 @@ function enableGoogle() {
 function disableGoogle() {
   delete app.context.iniConfig['hebcal.google.oauth.client_id'];
   delete app.context.iniConfig['hebcal.google.oauth.client_secret'];
+  delete app.context.iniConfig['hebcal.google.oauth.disabled'];
 }
 
 beforeEach(() => {
@@ -41,6 +42,16 @@ describe('login routes', () => {
   it('GET /login/google 404s when not configured', async () => {
     const res = await request(server).get('/login/google');
     expect(res.status).toBe(404);
+  });
+
+  it('honors the disabled kill switch even when credentials are present', async () => {
+    enableGoogle();
+    app.context.iniConfig['hebcal.google.oauth.disabled'] = '1';
+    const page = await request(server).get('/login');
+    expect(page.status).toBe(200);
+    expect(page.text).not.toContain('Sign in with Google');
+    const start = await request(server).get('/login/google');
+    expect(start.status).toBe(404);
   });
 
   it('GET /login/google/callback without a txn cookie is a 400', async () => {
