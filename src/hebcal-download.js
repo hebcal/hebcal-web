@@ -79,9 +79,9 @@ export async function hebcalDownload(ctx) {
   const attrs = {extension};
   if (ics) {
     attrs.icalv = IcalEvent.version();
-  }
-  if (typeof options.dailyLearning === 'object') {
-    attrs.learning = learningVersion;
+    if (typeof options.dailyLearning === 'object') {
+      attrs.learning = learningVersion;
+    }
   }
   if (checkFreshETag(ctx, opts, attrs)) {
     return;
