@@ -12,6 +12,9 @@ import {makeIcalOpts} from './urlArgs.js';
 import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {murmur128HexSync} from '@hebcal/murmurhash3';
+import {pkg} from './pkg.js';
+
+const learningVersion = pkg.dependencies['@hebcal/learning'];
 
 export const maxEventsIcsSub = 2399;
 
@@ -76,6 +79,9 @@ export async function hebcalDownload(ctx) {
   const attrs = {extension};
   if (ics) {
     attrs.icalv = IcalEvent.version();
+  }
+  if (typeof options.dailyLearning === 'object') {
+    attrs.learning = learningVersion;
   }
   if (checkFreshETag(ctx, opts, attrs)) {
     return;

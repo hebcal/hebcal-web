@@ -2,16 +2,35 @@ import {describe, it, expect, beforeAll} from 'vitest';
 import request from 'supertest';
 import os from 'node:os';
 import {HDate, calendar} from '@hebcal/core';
+import {IcalEvent} from '@hebcal/icalendar';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
 import {downloadHref2} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
+import {makeETag} from '../src/etag.js';
+import {makeHebcalOptions} from '../src/calendar.js';
+import {cleanQuery} from '../src/cleanQuery.js';
+import {pkg} from '../src/pkg.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
 import {makeServer} from './testServer.js';
 
 const server = makeServer(app);
+
+function expectedIcsEtag(query) {
+  const clean = {...query};
+  cleanQuery(clean);
+  const options = makeHebcalOptions(null, clean);
+  const attrs = {extension: '.ics', icalv: IcalEvent.version()};
+  if (typeof options.dailyLearning === 'object') {
+    attrs.learning = pkg.dependencies['@hebcal/learning'];
+  }
+  return makeETag({
+    request: {path: '/export/hebcal.ics'},
+    get: () => 'identity',
+  }, {...clean, ...options}, attrs);
+}
 
 beforeAll(() => {
   app.context.mysql = new MockMysqlDb();
@@ -298,6 +317,21 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
 
   it('handles conditional requests for CSV', async () => {
     await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
+  });
+});
+
+describe('download ETags', () => {
+  it('includes the learning dependency version only for daily learning feeds', async () => {
+    const basicQuery = {v: '1', maj: 'on', year: '2026', yt: 'G', month: '3'};
+    const learningQuery = {...basicQuery, F: 'on'};
+
+    const [basic, learning] = await Promise.all([
+      request(server).get('/export/hebcal.ics').query(basicQuery).set('Accept-Encoding', 'identity'),
+      request(server).get('/export/hebcal.ics').query(learningQuery).set('Accept-Encoding', 'identity'),
+    ]);
+
+    expect(basic.headers.etag).toBe(expectedIcsEtag(basicQuery));
+    expect(learning.headers.etag).toBe(expectedIcsEtag(learningQuery));
   });
 });
 
