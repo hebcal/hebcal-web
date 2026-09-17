@@ -10,7 +10,7 @@ import {downloadHref2} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
 import {makeETag} from '../src/etag.js';
-import {makeHebcalOptions} from '../src/calendar.js';
+import {makeHebcalOptions, getNumYears} from '../src/calendar.js';
 import {cleanQuery} from '../src/cleanQuery.js';
 import {pkg} from '../src/pkg.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
@@ -22,6 +22,7 @@ function expectedIcsEtag(query) {
   const clean = {...query};
   cleanQuery(clean);
   const options = makeHebcalOptions(null, clean);
+  options.numYears = getNumYears(options);
   const attrs = {extension: '.ics', icalv: IcalEvent.version()};
   if (typeof options.dailyLearning === 'object') {
     attrs.learning = pkg.dependencies['@hebcal/learning'];
