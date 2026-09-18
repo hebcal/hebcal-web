@@ -447,25 +447,30 @@ Traps specific to www:
   `getIncludePath` has already resolved and stat-ed the path. What does avoid
   it is an absolute include path (`/partials/footer.ejs`), which takes the
   `options.root` branch and resolves with `path.resolve` alone — but
-  `@koa/ejs` never passes `root` down to ejs, so that needs the ~40 lines of
-  `@koa/ejs` replaced with a local render helper first. Worth ~2% of server
-  time across www generally (`MODE=noexists node tools/perf/bench-ejs.js` for
-  the ceiling), but **much more on include-heavy, compute-light pages**: on
-  the `/hebcal?v=0` form page (~11 includes, almost no other work) the stat is
-  ~14% of server time / ~22% of template execution. This was **prototyped and
-  measured** (Sep 2026, branch `ejs-render-helper-proto`, unmerged): a local
-  `src/render.js` mirroring `@koa/ejs` (its bundled ejs 3.1.10 via
-  `koaEjs.ejs` — *not* top-level 6.x; keep `_with:false`; replicate its
-  `writeResp:false`/`layout` handling or the XML feeds break) but passing
-  `root` into `ejs.compile`, plus converting that page's include tree to
-  absolute `/partials/…` paths. Result: **−16% template execution** on the
-  form page (0.133→0.111 ms, at the `noexists` ceiling), server total −4%
-  (inside sub-ms noise on one URL), output byte-identical across 6 page types
-  (`capture-www.mjs`), full suite green. The absolute-path change to shared
-  `header`/`footer` benefits every page that includes them, so the full win
-  needs a mechanical sweep of every relative `include()` in `views/` (plus the
-  `criticalCss` variable at its 4 call sites) — deferred as a modest,
-  cross-cutting increment, smaller than the `_with:false` lever already banked.
+  `@koa/ejs` never passes `root` down to ejs, so avoiding the stat means
+  replacing `@koa/ejs` with a local render helper that forwards `root` into
+  `ejs.compile`. Worth ~2% of server time across www generally
+  (`MODE=noexists node tools/perf/bench-ejs.js` for the ceiling). **This was
+  fully built and measured in Sep 2026, then ABANDONED — do not re-attempt
+  without new evidence.** The whole thing (local `src/render.js` +
+  every include in `views/` converted to absolute + the 4 `criticalCss` call
+  sites) lived on branch `ejs-render-helper-proto`. Verdict: the isolated
+  `/hebcal?v=0` form page (include-heavy, compute-light) looked great at −16%
+  template execution, but that is the best case and does not generalize. Weighting
+  the per-view delta by real traffic (w43 `access.log`, 24h, 440k HTML renders:
+  shabbat 35% / converter 31% / hebcal 21% / holidays 6% / sedrot 3%) gives only
+  **~0.012 ms saved per render, ~5.5% of template execution, ~1% of HTML server
+  time — a few CPU-seconds/day/host.** The saving is ~noise on the compute-heavy,
+  include-light pages that dominate the mix (converter, hebcal v=1) and only
+  reaches ~0.05 ms on include-heavy pages (holidays, sedrot). Not worth
+  permanently owning a hand-rolled replacement for `@koa/ejs` (with its
+  `writeResp`/`layout`/bundled-ejs-3.1.10 subtleties — get `writeResp:false`
+  wrong and the XML feeds break) for that. The output was proven byte-identical
+  (`capture-www.mjs`, 15 URLs) and the suite stayed green, so the *mechanism* is
+  sound and the numbers are trustworthy — the conclusion is that the gain is too
+  small, not that it didn't work. Bigger www levers remain the `@hebcal/hdate`
+  primitives, `calendar()`, and dayjs noted above; `_with:false` (already banked)
+  was a much larger single win than this would have been.
 
 ### A slow request blocks every other request on that process
 
