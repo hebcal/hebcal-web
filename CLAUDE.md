@@ -389,6 +389,24 @@ directly puts template execution at ~8% of wall time. The real weight is in
 `isValid` from constructing many dayjs objects). Those are the places worth
 looking next; the template layer has already been picked over.
 
+**The `/hebcal?v=0` form page is a special case** (Sep 2026): a scraper drives
+~46% of all `/hebcal` hits as `v=0` (renders the HTML form, not a calendar).
+Profiling that exact path (`bench-ejs.js` + a sampled replay through
+`tools/perf/server.js www`) settled two things. (1) There is **nothing worth
+trimming in `hebcalApp()` before `renderForm()`**: `makeHebcalOptions` +
+`cleanQuery` + `processCookieAndQuery` + `getDefaultYear` sum to ~2% of CPU,
+and the `geonameid` lookup (`getLocationFromQuery` → `@hebcal/geo-sqlite`) is
+~0% — better-sqlite3 is native with cached statements. Server-side work is
+~0.3 ms/req; the 1–8 ms seen in production is network + gzip + Pino around it.
+The one real lever is the template render (~47% of server time), i.e. the
+`existsSync`-per-include finding above. (2) The page sent **no `Cache-Control`**,
+so Varnish cached it only at its 120s built-in default; `renderForm` now sets
+`public, max-age=6h` for anonymous requests and `private` whenever a `C` cookie
+is present. That cookie guard is load-bearing: the www VCL does **not** unset
+the request cookie for `/hebcal?v=0` and `vcl_hash` omits the cookie, so a
+cookie-tailored form would otherwise be shared-cached and leak one visitor's
+saved prefs to another.
+
 Template execution is ~23% of server time on the HTML routes, measured by
 wrapping the compiled function (`tools/perf/bench-ejs.js`) rather than by
 reading the profile, because compiled templates are `new Function` bodies
@@ -431,7 +449,23 @@ Traps specific to www:
   `options.root` branch and resolves with `path.resolve` alone — but
   `@koa/ejs` never passes `root` down to ejs, so that needs the ~40 lines of
   `@koa/ejs` replaced with a local render helper first. Worth ~2% of server
-  time (`MODE=noexists node tools/perf/bench-ejs.js` for the ceiling).
+  time across www generally (`MODE=noexists node tools/perf/bench-ejs.js` for
+  the ceiling), but **much more on include-heavy, compute-light pages**: on
+  the `/hebcal?v=0` form page (~11 includes, almost no other work) the stat is
+  ~14% of server time / ~22% of template execution. This was **prototyped and
+  measured** (Sep 2026, branch `ejs-render-helper-proto`, unmerged): a local
+  `src/render.js` mirroring `@koa/ejs` (its bundled ejs 3.1.10 via
+  `koaEjs.ejs` — *not* top-level 6.x; keep `_with:false`; replicate its
+  `writeResp:false`/`layout` handling or the XML feeds break) but passing
+  `root` into `ejs.compile`, plus converting that page's include tree to
+  absolute `/partials/…` paths. Result: **−16% template execution** on the
+  form page (0.133→0.111 ms, at the `noexists` ceiling), server total −4%
+  (inside sub-ms noise on one URL), output byte-identical across 6 page types
+  (`capture-www.mjs`), full suite green. The absolute-path change to shared
+  `header`/`footer` benefits every page that includes them, so the full win
+  needs a mechanical sweep of every relative `include()` in `views/` (plus the
+  `criticalCss` variable at its 4 call sites) — deferred as a modest,
+  cross-cutting increment, smaller than the `_with:false` lever already banked.
 
 ### A slow request blocks every other request on that process
 
