@@ -80,14 +80,16 @@ div#hebcal-loading h3 {
 <%- await include('partials/warning-early.ejs') -%>
 <% } else if (locals.gy <= 1752) { -%>
 <%- await include('partials/warning-1752.ejs') -%>
-<% } else if (locals.gy >= 3762 && locals.q.yt === 'G') { -%>
+<% } else if (locals.gy >= 3762 && !locals.options.isHebrewYear) { -%>
 <div class="alert alert-warning alert-dismissible" role="alert">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 <strong>Note!</strong>
 You are viewing <strong>Gregorian</strong> year <%=locals.gy%>, which
 is <%=locals.futureYears%> years <em>in the future</em>.<br>
+<% if (locals.sameUrlHebYear) { -%>
 Did you really intend this? Perhaps you wish to view the calendar
 for <a href="<%-locals.sameUrlHebYear%>">Hebrew year <%=locals.gy%></a>?<br>
+<% } -%>
 If you really intended to use Gregorian year <%=locals.gy%>, please
 continue. Hebcal.com results this far in the future should be
 accurate.

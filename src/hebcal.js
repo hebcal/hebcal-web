@@ -381,12 +381,15 @@ function renderHtml(ctx) {
     hebMonthAbbr: locale === 'en' ? hebMonthAbbr : undefined,
   };
   const gy = events[0].greg().getFullYear();
-  if (gy >= 3762 && q.yt === 'G') {
+  if (gy >= 3762 && !options.isHebrewYear) {
+    // A missing yt (with year=, or start/end) is implicitly Gregorian, so
+    // gate on !isHebrewYear rather than q.yt === 'G'.
     ctx.state.futureYears = gy - today.year();
-    ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
-  } else if (gy <= 0 && q.yt === 'H') {
-    ctx.state.hebrewYear = options.year;
-    ctx.state.sameUrlGregYear = '/hebcal?' + urlArgs(q, {yt: 'G'});
+    if (!empty(q.year)) {
+      // start/end has no year to convert, so only offer the Hebrew-year link
+      // when there is an actual year param.
+      ctx.state.sameUrlHebYear = '/hebcal?' + urlArgs(q, {yt: 'H'});
+    }
   }
   const cconfig = locationToPlainObj(location);
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
