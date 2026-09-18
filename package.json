@@ -87,7 +87,7 @@
     "ejs": "^6.0.1",
     "fastest-levenshtein": "^1.0.16",
     "geo-tz": "^8.1.9",
-    "google-protobuf": "^4.0.2",
+    "google-protobuf": "^4.0.3",
     "haversine": "^1.1.1",
     "http-errors": "^2.0.1",
     "ini": "^7.0.0",

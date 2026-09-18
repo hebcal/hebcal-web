@@ -2,6 +2,8 @@ import {murmur128Sync} from '@hebcal/murmurhash3';
 import {version as coreVersion} from '@hebcal/core';
 import {pkg} from './pkg.js';
 
+const learningVersion = pkg.dependencies['@hebcal/learning'];
+
 function murmur128SyncBase64(str) {
   const arr4 = murmur128Sync(str);
   const buf = Buffer.allocUnsafe(16);
@@ -22,6 +24,9 @@ function murmur128SyncBase64(str) {
 
 export function makeETag(ctx, options, attrs) {
   const vers = {core: coreVersion, web: pkg.version};
+  if (typeof options.dailyLearning === 'object') {
+    vers.learning = learningVersion;
+  }
   const etagObj = {...vers, ...options, ...attrs, path: ctx.request.path};
   const utm = Object.keys(etagObj).filter((k) => k.startsWith('utm_'));
   for (const key of utm) {
