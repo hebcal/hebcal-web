@@ -203,9 +203,17 @@ function renderCsv(ctx) {
 async function renderForm(ctx, error) {
   const message = error ? error.message : undefined;
   const cookie = ctx.cookies.get('C');
-  if (ctx.request.querystring.length === 0 && cookie?.length) {
-    // private cache only if we're tailoring results by cookie
+  if (cookie?.length) {
+    // The response may be tailored by the visitor's cookie prefs, and Varnish
+    // hashes /hebcal?v=0 without the request cookie, so a shared-cached copy
+    // would leak one visitor's settings to another. Keep these private.
     ctx.set('Cache-Control', 'private');
+  } else if (!error) {
+    // Anonymous form render is a pure function of the URL (city name, year,
+    // option checkboxes); the only date-sensitive bits are the default-year
+    // fallbacks in the button JS, harmless to serve a few hours stale. Let
+    // Varnish hold it far longer than its 120s built-in default.
+    ctx.set('Cache-Control', cacheControl(0.25));
   }
   const today = dayjs();
   const defaultYear = today.month() === 11 ? today.year() + 1 : today.year();
