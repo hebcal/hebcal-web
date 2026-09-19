@@ -304,9 +304,10 @@ describe('Hebcal error handling', () => {
   });
 
   const futureWarn = 'You are viewing <strong>Gregorian</strong> year 5764';
+  const futureWarnGeonameid = '5128581';
   it('should warn about far-future Gregorian year with explicit yt=G', async () => {
     const response = await request(server)
-        .get('/hebcal?geonameid=4780011&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764&yt=G');
+        .get(`/hebcal?geonameid=${futureWarnGeonameid}&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764&yt=G`);
     expect(response.status).toBe(200);
     expect(response.text).toContain(futureWarn);
     expect(response.text).toContain('Hebrew year 5764');
@@ -314,7 +315,7 @@ describe('Hebcal error handling', () => {
 
   it('should warn about far-future Gregorian year when yt is missing (implicit G)', async () => {
     const response = await request(server)
-        .get('/hebcal?geonameid=4780011&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764');
+        .get(`/hebcal?geonameid=${futureWarnGeonameid}&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764`);
     expect(response.status).toBe(200);
     expect(response.text).toContain(futureWarn);
     // Missing yt is implicitly Gregorian, so the Hebrew-year suggestion still shows.
@@ -323,7 +324,7 @@ describe('Hebcal error handling', () => {
 
   it('should warn about far-future Gregorian dates with start/end (no yt or year)', async () => {
     const response = await request(server)
-        .get('/hebcal?geonameid=4780011&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&start=5764-01-01&end=5765-12-12');
+        .get(`/hebcal?geonameid=${futureWarnGeonameid}&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&start=5764-01-01&end=5765-12-12`);
     expect(response.status).toBe(200);
     expect(response.text).toContain(futureWarn);
     // No year param to convert, so no Hebrew-year suggestion link.
@@ -332,7 +333,7 @@ describe('Hebcal error handling', () => {
 
   it('should not warn for a Hebrew year in that range (yt=H)', async () => {
     const response = await request(server)
-        .get('/hebcal?geonameid=4780011&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764&yt=H');
+        .get(`/hebcal?geonameid=${futureWarnGeonameid}&maj=on&nx=on&s=on&ss=on&td=8.5&v=1&year=5764&yt=H`);
     expect(response.status).toBe(200);
     expect(response.text).not.toContain('is <strong>Gregorian</strong> year');
     expect(response.text).not.toContain(futureWarn);
