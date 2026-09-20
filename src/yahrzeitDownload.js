@@ -25,6 +25,26 @@ async function getDetailsFromDb(ctx) {
 
 const maxEventsIcsSub = 1200;
 
+const REMINDER_DURATION_MINUTES = 15;
+
+/**
+ * @param {string} str iCalendar local date-time, e.g. "20260101T143000"
+ * @param {number} minutesToAdd
+ * @return {string}
+ */
+function addMinutesToIcalDateTimeStr(str, minutesToAdd) {
+  const year = +str.slice(0, 4);
+  const month = +str.slice(4, 6) - 1;
+  const day = +str.slice(6, 8);
+  const hour = +str.slice(9, 11);
+  const minute = +str.slice(11, 13);
+  const second = +str.slice(13, 15);
+  const dt = new Date(year, month, day, hour, minute + minutesToAdd, second);
+  const pad2 = (n) => String(n).padStart(2, '0');
+  return `${dt.getFullYear()}${pad2(dt.getMonth() + 1)}${pad2(dt.getDate())}` +
+    `T${pad2(dt.getHours())}${pad2(dt.getMinutes())}${pad2(dt.getSeconds())}`;
+}
+
 /**
  * @param {import('koa').Context} ctx
  */
@@ -109,9 +129,15 @@ export async function yahrzeitDownload(ctx) {
       icalOpt.publishedTTL = false;
     }
     const icals = makeIcalEvents(events2, icalOpt);
-    if (doLocation) {
-      for (const icalEv of icals) {
+    for (const icalEv of icals) {
+      if (doLocation) {
         icalEv.locationName = undefined;
+      }
+      // Yahrzeit reminder events are the only timed events on this calendar;
+      // give them a 15-minute DURATION instead of 0-minute (DTEND===DTSTART)
+      // for stricter RFC 5545 compatibility.
+      if (icalEv.timed) {
+        icalEv.endDate = addMinutesToIcalDateTimeStr(icalEv.startDate, REMINDER_DURATION_MINUTES);
       }
     }
     ctx.append('Vary', 'User-Agent');
