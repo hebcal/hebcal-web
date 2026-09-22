@@ -56,13 +56,13 @@
     "critical": "^9.0.0",
     "csv-parse": "^7.0.2",
     "gettext-parser": "^9.1.1",
-    "oxlint": "^1.83.0",
+    "oxlint": "^1.85.0",
     "papaparse": "^5.7.0",
     "postcss": "^8.5.28",
     "postcss-cli": "^12.0.0",
-    "rollup": "^4.63.3",
-    "sass": "^1.104.1",
-    "supertest": "^7.2.2",
+    "rollup": "^4.63.4",
+    "sass": "^1.105.0",
+    "supertest": "^7.3.0",
     "vitest": "^5.0.1"
   },
   "allowScripts": {
@@ -71,10 +71,10 @@
     "@parcel/watcher": true
   },
   "dependencies": {
-    "@hebcal/core": "^6.9.2",
+    "@hebcal/core": "^6.9.3",
     "@hebcal/geo-sqlite": "^5.12.1",
     "@hebcal/hdate": "^0.22.8",
-    "@hebcal/icalendar": "^7.0.3",
+    "@hebcal/icalendar": "^7.0.4",
     "@hebcal/learning": "^6.11.3",
     "@hebcal/leyning": "^10.0.0",
     "@hebcal/locales": "^6.5.2",

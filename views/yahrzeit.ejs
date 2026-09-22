@@ -113,8 +113,6 @@ The date entered for <strong><%=locals.distantPastDate.name%></strong> is
 </div>
 <p id="form" class="lead">Generate a list of Yahrzeit dates, Hebrew Birthdays,
 and Hebrew Anniversaries.</p>
-<p>Print, subscribe to annual email reminders, and download a multi-year
-calendar feed to Apple, Google, Outlook, and more.</p>
 <div class="clearfix"></div>
 <ul class="nav nav-tabs" role="tablist">
   <li class="nav-item" role="presentation">
@@ -127,10 +125,8 @@ calendar feed to Apple, Google, Outlook, and more.</p>
 </div><!-- .d-print-none -->
 <div class="tab-content">
 <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
-<p class="mt-3 d-print-none">In the form below, enter the date of death (or birth or anniversary).
-Use the <span class="btn btn-sm btn-outline-success disabled" style="opacity: 1;"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-person-plus-fill"></use></svg>
-Add another name</span> button at the bottom of the page to add
-additional names. Use 4-digit years (e.g. 2015 instead of 15).</p>
+<p class="mt-3 d-print-none">In the form below, enter the date(same) of death (or birth or anniversary).
+Use 4-digit years (e.g. 2015 instead of 15).</p>
 <form id="f3" class="d-print-none needs-validation" method="post" action="/yahrzeit"
 data-count="<%=locals.count%>">
 <div id="rows">
@@ -152,7 +148,7 @@ data-count="<%=locals.count%>">
 <p class="text-end float-sm-end">
  <button type="button" class="btn btn-success mt-2" id="newrow">
   <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-person-plus-fill"></use></svg>
-  Add another name</button>
+  Add another</button>
 </p>
 <div class="form-check mt-3 mb-2">
 <input class="form-check-input" type="checkbox" name="hebdate" value="on" <%= locals.q.hebdate === 'on' ? ' checked' : '' %> id="hebdate">
