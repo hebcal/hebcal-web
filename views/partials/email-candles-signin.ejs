@@ -14,7 +14,7 @@
     return;
   }
   var modal = d.getElementById('email-modal');
-  var google = d.getElementById('emc-google');
+  var signin = d.getElementById('emc-signin');
   var subscribeMe = d.getElementById('emc-subscribe-me');
   var subscribeMeBtn = subscribeMe && subscribeMe.querySelector('button');
   var updateBox = d.getElementById('emc-update');
@@ -30,7 +30,7 @@
   var hasActiveSub = false;
   var userEmail = null;
 
-  // A signed-in user never sees "Sign in with Google". With an active
+  // A signed-in user never sees the provider sign-in buttons. With an active
   // subscription they see ONLY "Update Settings" (carrying this page's full
   // candle-lighting settings, from makeGeoUrlArgs, so they can switch their
   // subscription to it); otherwise ONLY "Subscribe <email>". Never both.
@@ -38,7 +38,7 @@
     if (!ready) {
       return;
     }
-    if (google) google.hidden = true;
+    if (signin) signin.hidden = true;
     if (hasActiveSub) {
       if (updateLink) {
         var args = updateLink.getAttribute('data-args') || '';

@@ -125,8 +125,9 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
 - **Email subscriptions**: `email.js`, `emailCommon.js`
 - **Login / accounts** (`login.js`, `session.js`, `oauthGoogle.js`,
-  `userAccount.js`): "Sign in with Google" via OpenID Connect (Authorization
-  Code + PKCE, using `openid-client`). This is the app's *only* notion of an
+  `oauthApple.js`, `userAccount.js`): "Sign in with Google" and "Sign in with
+  Apple" via OpenID Connect (Authorization Code, using `openid-client`; PKCE on
+  Google only). This is the app's *only* notion of an
   authenticated user — everything else (Yahrzeit, email) is identified by
   unguessable capability tokens, not accounts. `session.js` holds DB-backed
   sessions (the `user_session` table) behind a signed, `httpOnly` `S` cookie;
@@ -137,16 +138,22 @@ Each feature is typically one or a few files handling routing, business logic, a
   nothing. `userAccount.js` maps a provider login to a `user` row via
   `user_identity`, merging accounts across providers **only** on a
   provider-verified email. All routes (`/login`, `/login/google`,
-  `/login/google/callback`, `/logout`, `/account`) set
-  `Cache-Control: private, no-store`. **Config**: `hebcal.google.oauth.*` and
-  `hebcal.session.secret` in `hebcal-dot-com.ini`; login self-disables (`/login`
-  shows nothing, `/login/google` 404s) when the Google keys are absent, so dev
-  hosts and tests without secrets are unaffected. A
-  `hebcal.google.oauth.disabled` flag (1/true/yes/on) is an explicit kill switch
-  so the feature can ship to main but be turned off in production without
-  removing the credentials; `isGoogleLoginConfigured()` is the single gate, and
-  `app-www.js` exposes its result as `ctx.state.googleLoginEnabled` for the
-  templates. **Redirect URI**: `googleRedirectUri()` derives it from the request
+  `/login/google/callback`, `/login/apple`, `/login/apple/callback`, `/logout`,
+  `/account`) set `Cache-Control: private, no-store`. **Config**:
+  `hebcal.google.oauth.*`, `hebcal.apple.oauth.*` and `hebcal.session.secret` in
+  `hebcal-dot-com.ini`; each provider self-disables (its button disappears, its
+  `/login/<provider>` 404s) when its keys are absent, so dev hosts and tests
+  without secrets are unaffected. A `hebcal.<provider>.oauth.disabled` flag
+  (1/true/yes/on) is an explicit kill switch so a provider can ship to main but
+  be turned off in production without removing the credentials;
+  `isGoogleLoginConfigured()` / `isAppleLoginConfigured()` are the single gates,
+  and `app-www.js` exposes them as `ctx.state.googleLoginEnabled` /
+  `ctx.state.appleLoginEnabled`, plus `ctx.state.loginEnabled` (either one) for
+  the surrounding chrome -- the navbar account element, a modal's "or use your
+  email address" divider -- which appears as soon as *any* provider is
+  available. Templates must gate a specific button on that provider's flag and
+  everything around it on `loginEnabled`, or a host running only one provider
+  renders an empty sign-in box. **Redirect URI**: `googleRedirectUri()` derives it from the request
   host for loopback addresses (so `localhost` and `127.0.0.1` each redirect back
   to themselves in dev -- both must be registered on the OAuth client), and uses
   the configured `redirect_uri` (or the www.hebcal.com default) otherwise. The
@@ -176,20 +183,60 @@ Each feature is typically one or a few files handling routing, business logic, a
   `setLoginHintCookie()` (in `cookie.js`) adds/removes `hu` on login/logout and
   `makeCookie()` preserves it across preference rewrites. The
   `google-signin-button.ejs` uses the 4-colour Google "G" from the color-icons
-  sprite (`#google-color`). **Varnish caveat**: do not
+  sprite (`#google-color`); `apple-signin-button.ejs` uses the monochrome
+  sprite's `#icon-appleinc` with `fill="currentColor"`. Both are plain links to
+  our own `/login/<provider>`, **not** a provider JS widget, so no page needs a
+  third-party script or a CSP exception. **Varnish caveat**: do not
   personalize otherwise-cacheable pages (e.g. a "signed in as…" navbar)
   server-side — a cached anonymous copy would leak to logged-in users and vice
-  versa. Render login state client-side instead. Apple ("Sign in with Apple")
-  is intended as a second provider later; the `user_identity.provider` column
-  and the merge-by-verified-email logic already accommodate it.
+  versa. Render login state client-side instead.
+  **Apple differs from Google in four ways that shape `oauthApple.js`**, none
+  optional. (1) **There is no static client secret** — Apple issues a `.p8`
+  ES256 key and wants a short-lived JWT signed with it (`iss`=Team ID,
+  `sub`=Services ID, `aud`=`https://appleid.apple.com`) in the `client_secret`
+  field of every token request. `makeClientSecret()` mints one per request with
+  `node:crypto` (no `jose` dependency); ES256 needs
+  `dsaEncoding: 'ieee-p1363'`, because node's EC default is DER and Apple
+  rejects that. It is passed via a **custom `ClientAuth` function**, not
+  `oidc.ClientSecretPost('…')`, because the cached `Configuration` would
+  otherwise freeze an expiring secret. Apple's discovery document advertises
+  `client_secret_post` and nothing else. (2) **The callback is a cross-site
+  POST**: Apple requires `response_mode=form_post` whenever a scope is
+  requested, and the `email` scope is what makes account merging work at all.
+  So `/login/apple/callback` accepts POST (it must *not* go through
+  `onlyGetAndHead()`), does **not** call `rejectForgedCrossOriginPost()` — the
+  real callback carries `Origin: https://appleid.apple.com`, and `state` bound
+  to the browser by the transaction cookie is the CSRF guarantee — and
+  synthesizes a URL from the body so `openid-client` can read the response
+  where it expects to. The knock-on is the **transaction cookie**: `SameSite=Lax`
+  is simply not sent on a cross-site POST, so the Apple flavour must be
+  `SameSite=None; Secure`. `ctx.cookies.set()` refuses to emit `Secure` (Koa
+  sees http — TLS ends at Varnish/Caddy), so `setTxnCookie()` in `login.js`
+  writes the header by hand. One `OT` cookie name serves both providers and the
+  payload names the provider, so an Apple transaction — which *does* ride along
+  cross-site — cannot be spent in the Google callback. (3) **No PKCE**: Apple's
+  discovery document lists no `code_challenge_methods_supported`, and this is a
+  confidential client whose token request is already authenticated by the signed
+  secret. (4) **The display name arrives exactly once**, in the `user` field of
+  the first callback POST, never in an ID token and never on a later sign-in —
+  `parseAppleUserField()` grabs it there or it is lost forever.
+  **"Hide My Email"** gives an `@privaterelay.appleid.com` alias (flagged by the
+  `is_private_email` claim). It is a real, deliverable address, but Apple's relay
+  only forwards from senders registered under **Sign in with Apple → Email
+  Communication**; without that, a subscriber who hid their address silently
+  stops receiving the weekly Shabbat and Yahrzeit mail.
   **`/email` integration**: `email.js` pre-fills a signed-in user's email and,
   when the subscribed address equals their provider-verified `user.email`,
   activates the Shabbat subscription immediately via `subscribeVerifiedUser()`
   instead of the pending + confirm-by-email round-trip (`insertSub()` is the
   shared writer for both). The signed-in `/email` page is marked
-  `Cache-Control: private`. The reusable `views/partials/google-signin-button.ejs`
-  is included by `login.ejs`, `email.ejs`, and the (cache-safe, non-personalized)
-  `email-candles-modal.ejs`. No account/subscription migration was needed for
+  `Cache-Control: private`. The reusable `google-signin-button.ejs` and
+  `apple-signin-button.ejs` partials are included by `login.ejs`, `email.ejs`,
+  `yahrzeit.ejs`, and the (cache-safe, non-personalized)
+  `email-candles-modal.ejs`. In the two modals the buttons sit inside a
+  `#emc-signin` / `#ye-signin` wrapper so the signed-in client-side scripts hide
+  the whole group with one `hidden` — that wrapper must not carry `d-grid`,
+  whose `display:grid !important` overrides `hidden`. No account/subscription migration was needed for
   pre-existing subscribers: the old flows never created `user` rows, subscriptions
   are keyed by email address, and re-subscribing while signed in reuses the same
   email-keyed row -- so nothing is duplicated, and old subscriptions surface by an

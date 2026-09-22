@@ -38,6 +38,8 @@ import {
   loginPage,
   loginGoogleStart,
   loginGoogleCallback,
+  loginAppleStart,
+  loginAppleCallback,
   logout,
   accountPage,
 } from './login.js';
@@ -206,6 +208,14 @@ Disallow: /account
     } else if (rpath === '/login/google') {
       onlyGetAndHead(ctx);
       return loginGoogleStart(ctx);
+    } else if (rpath === '/login/apple/callback') {
+      // Not onlyGetAndHead(): Apple form-POSTs the authorization response,
+      // because it requires response_mode=form_post whenever a scope is
+      // requested. See loginAppleCallback() in login.js.
+      return loginAppleCallback(ctx);
+    } else if (rpath === '/login/apple') {
+      onlyGetAndHead(ctx);
+      return loginAppleStart(ctx);
     } else if (rpath === '/login') {
       onlyGetAndHead(ctx);
       return loginPage(ctx);
