@@ -23,13 +23,13 @@
       .then(function(data) {
         // Only change the modal when the signed-in user ALREADY has an active
         // reminder subscription (with their own email) for this calendar: hide
-        // the redundant Google button, show a confirmation, and reframe the
+        // the redundant sign-in buttons, show a confirmation, and reframe the
         // email entry as adding another address.
         if (!data || !data.loggedIn || !data.email || !data.subscribedToThisCalendar) {
           return;
         }
-        var google = d.getElementById('ye-google');
-        if (google) google.hidden = true;
+        var signin = d.getElementById('ye-signin');
+        if (signin) signin.hidden = true;
         var emailSpan = d.getElementById('ye-active-email');
         if (emailSpan) emailSpan.textContent = data.email;
         var active = d.getElementById('ye-active');

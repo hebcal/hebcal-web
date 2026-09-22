@@ -45,7 +45,7 @@ if (locals.rpath === '/') {
     <form class="d-flex d-print-none" role="search" method="get" id="searchform" action="/home/">
       <input name="s" id="sitesearch" type="text" class="form-control me-2" placeholder="Search" aria-label="Search" enterkeyhint="search" <%- locals.pmIgnore || '' %>>
     </form>
-<% if (locals.googleLoginEnabled) { %>
+<% if (locals.loginEnabled) { %>
     <ul class="navbar-nav ms-2 d-print-none">
       <li class="nav-item" id="acct-signin"><a class="nav-link" href="/login">
         <svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-person-circle"></use></svg> Sign in</a></li>

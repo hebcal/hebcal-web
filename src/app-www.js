@@ -17,6 +17,7 @@ import {createBaseApp, useBackendHostname, useObservability, useTimeout,
 import {aiChatbotLogger} from './logger.js';
 import {loadSession} from './session.js';
 import {isGoogleLoginConfigured} from './oauthGoogle.js';
+import {isAppleLoginConfigured} from './oauthApple.js';
 import './locale.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -250,10 +251,16 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
 // so anonymous requests pay nothing.
 app.use(async function sessionMiddleware(ctx, next) {
   await loadSession(ctx);
-  // Global flag so any template can decide whether to show a "Sign in with
-  // Google" button. Same for every viewer (config-derived), so it does not
-  // personalize a cached page.
+  // Global flags so any template can decide whether to show a "Sign in with
+  // Google" / "Sign in with Apple" button. Same for every viewer
+  // (config-derived), so they do not personalize a cached page. `loginEnabled`
+  // is what gates the surrounding chrome -- the navbar link, a modal's "or use
+  // your email address" divider -- since that appears as soon as *any* provider
+  // is available.
   ctx.state.googleLoginEnabled = isGoogleLoginConfigured(ctx.iniConfig);
+  ctx.state.appleLoginEnabled = isAppleLoginConfigured(ctx.iniConfig);
+  ctx.state.loginEnabled =
+    ctx.state.googleLoginEnabled || ctx.state.appleLoginEnabled;
   await next();
 });
 

@@ -275,14 +275,23 @@ instructions</a>.</p>
 <div id="email-modal-entry">
   <p><% if (!locals.q.em) { %>Enter your email address to save your personal calendar.<% } %>
     Receive annual reminder emails one week before and one day before each anniversary.</p>
-  <% if (locals.googleLoginEnabled) { %>
+  <% if (locals.loginEnabled) { %>
   <div class="alert alert-success" id="ye-active" role="alert" hidden>
     <strong>Annual reminder emails active</strong> for <span id="ye-active-email"></span>.
   </div>
   <%# Not `d-grid`: its `display:grid !important` would override `hidden`. %>
-  <div class="mb-2" id="ye-google">
-    <%- await include('partials/google-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
-  </div>
+  <div id="ye-signin">
+    <% if (locals.googleLoginEnabled) { %>
+    <div class="mb-2">
+      <%- await include('partials/google-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
+    </div>
+    <% } %>
+    <% if (locals.appleLoginEnabled) { %>
+    <div class="mb-2">
+      <%- await include('partials/apple-signin-button.ejs', {next: locals.ulid ? `/yahrzeit/edit/${locals.ulid}` : locals.rpath, btnBlock: true}) -%>
+    </div>
+    <% } %>
+  </div><!-- #ye-signin -->
   <p class="text-center text-muted small mb-2" id="ye-divider">or enter your email address</p>
   <% } %>
   <div class="form-floating mb-3">
@@ -304,7 +313,7 @@ instructions</a>.</p>
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
 <%- await include('partials/email-modal-script.ejs') -%>
-<% if (locals.googleLoginEnabled) { %>
+<% if (locals.loginEnabled) { %>
 <%- await include('partials/yahrzeit-signin.ejs') -%>
 <% } %>
 <%- await include('partials/emoji-switch-script.ejs') -%>

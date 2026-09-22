@@ -36,10 +36,19 @@
   <%# Note: the toggled wrappers must NOT use Bootstrap's `d-grid`, whose
       `display:grid !important` overrides the `hidden` attribute. Full width
       comes from `w-100` on the buttons instead. %>
-  <% if (locals.googleLoginEnabled) { %>
-  <div class="mb-2" id="emc-google">
-    <%- await include('google-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
-  </div>
+  <% if (locals.loginEnabled) { %>
+  <div id="emc-signin">
+    <% if (locals.googleLoginEnabled) { %>
+    <div class="mb-2">
+      <%- await include('google-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
+    </div>
+    <% } %>
+    <% if (locals.appleLoginEnabled) { %>
+    <div class="mb-2">
+      <%- await include('apple-signin-button.ejs', {next: '/email', btnBlock: true}) -%>
+    </div>
+    <% } %>
+  </div><!-- #emc-signin -->
   <div class="mb-2" id="emc-subscribe-me" hidden>
     <button type="button" class="btn btn-primary w-100">Subscribe <span id="emc-me-label"></span></button>
   </div>
@@ -69,6 +78,6 @@
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
 <%- await include('email-modal-script.ejs') -%>
-<% if (locals.googleLoginEnabled) { %>
+<% if (locals.loginEnabled) { %>
 <%- await include('email-candles-signin.ejs') -%>
 <% } %>

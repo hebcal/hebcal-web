@@ -93,7 +93,7 @@ describe('yahrzeit Google sign-in', () => {
     expect(res.text).not.toContain('action="/yahrzeit/email"');
     // The signed-in modal variants + status probe are present (toggled by JS).
     expect(res.text).toContain('id="ye-active"');
-    expect(res.text).toContain('id="ye-google"');
+    expect(res.text).toContain('id="ye-signin"');
     expect(res.text).toContain('/yahrzeit/email-status');
   });
 
