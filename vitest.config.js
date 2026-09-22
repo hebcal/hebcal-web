@@ -5,6 +5,10 @@ export default defineConfig({
     globals: false,
     environment: 'node',
     setupFiles: ['./test/setup.js'],
+    // Pin the INI so the suite never reads a developer's real
+    // hebcal-dot-com.ini. Tests that need a feature configured set the keys
+    // they need on app.context.iniConfig themselves.
+    env: {HEBCAL_INI_PATH: './test/fixtures/empty.ini'},
     testTimeout: 10000,
     hookTimeout: 10000,
     // Shared per-file servers (test/testServer.js) removed nearly all of the

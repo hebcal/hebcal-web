@@ -35,8 +35,16 @@ export function createBaseApp() {
   logger.info('Koa server: starting up');
   app.context.logger = logger;
 
+  // HEBCAL_INI_PATH pins the config file. The test suite sets it (see
+  // vitest.config.js), because otherwise every test inherits whatever
+  // `./hebcal-dot-com.ini` the developer happens to have -- and assertions
+  // about feature gates such as the login providers then pass or fail per
+  // machine. `npm run pretest` only *touches* that file, so it stays empty on a
+  // fresh checkout (CI) and keeps real credentials on a dev box: exactly the
+  // split that makes such a failure invisible until someone else runs the
+  // suite.
   const iniDir = process.env.NODE_ENV === 'production' ? '/etc' : '.';
-  const iniPath = join(iniDir, 'hebcal-dot-com.ini');
+  const iniPath = process.env.HEBCAL_INI_PATH || join(iniDir, 'hebcal-dot-com.ini');
   app.context.iniConfig = ini.parse(fs.readFileSync(iniPath, 'utf-8'));
 
   app.context.db = new GeoDb(logger, 'zips.sqlite3', 'geonames.sqlite3');
