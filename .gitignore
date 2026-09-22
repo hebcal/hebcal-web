@@ -116,6 +116,10 @@ views/partials/*.min.js
 
 # other
 *.ini
+# ...but the test suite's pinned config must be committed: vitest points
+# HEBCAL_INI_PATH at it, and without the file every test run dies in
+# createBaseApp()'s readFileSync.
+!test/fixtures/*.ini
 *.sqlite3
 
 .DS_Store

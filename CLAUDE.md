@@ -319,6 +319,24 @@ Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock
   `process.pid` in the stem). The rest of the harness is isolation-safe (HTTP
   servers `listen(0)`, the geoip test uses `mkdtemp`).
 
+- **The suite reads a pinned INI, not yours.** `vitest.config.js` sets
+  `HEBCAL_INI_PATH=./test/fixtures/empty.ini`, and `createBaseApp()` honours it.
+  Without that pin every test inherits whatever `./hebcal-dot-com.ini` the
+  developer happens to have, so any assertion about a config-gated feature
+  passes or fails per machine. This is not hypothetical: adding Apple login made
+  the navbar's account element depend on `loginEnabled` (Google **or** Apple),
+  and `navbar.test.js` -- which disables only Google -- then failed on a dev box
+  with Apple credentials in its INI while staying green in CI. `npm run pretest`
+  merely `touch`es the file, which does **not** truncate an existing one, so a
+  fresh checkout (CI) sees it empty and a dev box keeps real secrets: precisely
+  the split that hides this class of failure from CI. A test that needs a
+  feature configured sets those keys on `app.context.iniConfig` itself.
+  `.gitignore` has a `!test/fixtures/*.ini` negation under its blanket `*.ini` --
+  drop it and the fixture never reaches CI, where the missing file takes down
+  every test in `createBaseApp()`'s `readFileSync`.
+- **A test asserting a feature is OFF must silence every provider**, not just
+  the one it names. `disableAllProviders()` in `navbar.test.js` is that pattern.
+
 ### Testing Before Commit/Push
 
 Always run unit tests to confirm everything works without breakage before committing or pushing code.
