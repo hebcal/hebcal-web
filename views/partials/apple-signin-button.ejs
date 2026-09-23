@@ -3,7 +3,7 @@
     needs no third-party script and no CSP exception. The Apple mark is the
     monochrome sprite's #icon-appleinc, so `fill="currentColor"` paints it with
     the button's own text colour. %>
-<a class="btn btn-outline-dark<%= locals.btnBlock ? ' w-100' : '' %>" role="button"
+<a class="btn btn-light<%= locals.btnBlock ? ' w-100' : '' %>" role="button"
   href="/login/apple?next=<%= encodeURIComponent(locals.next || '/') %>">
 <svg width="18" height="18" class="mt-n1 me-2" fill="currentColor" aria-hidden="true"><use href="<%=locals.spriteHref%>#icon-appleinc"></use></svg>
 <%= locals.label || 'Sign in with Apple' %>
