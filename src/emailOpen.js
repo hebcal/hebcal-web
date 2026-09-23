@@ -27,31 +27,12 @@ export async function emailOpen(ctx) {
 async function saveEmailOpenToDb(ctx, loc) {
   const q = ctx.request.query;
   const msgid = q.msgid;
-  const delta = computeDelta(msgid);
   const db = ctx.mysql;
-  const sql = 'INSERT INTO email_open (msgid, ip_addr, loc, delta) VALUES (?, ?, ?, ?)';
+  const sql = 'INSERT INTO email_open (msgid, ip_addr, loc) VALUES (?, ?, ?)';
   const ipAddress = getIpAddress(ctx);
   await db.query(sql, [
     msgid.substring(0, 80),
     ipAddress,
     loc.substring(0, 80),
-    delta,
   ]);
-}
-
-/**
- * @param {string} msgid
- * @return {number}
- */
-function computeDelta(msgid) {
-  const parts = msgid.split('.');
-  const sentTime = Number.parseInt(parts.at(-1), 10);
-  if (sentTime) {
-    const delta = Math.trunc((Date.now() - sentTime) / 1000);
-    if (delta < 0 || delta > 2147483647) {
-      return null;
-    }
-    return delta;
-  }
-  return null;
 }
