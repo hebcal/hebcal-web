@@ -35,7 +35,9 @@ export function makeEmailTransport(iniConfig) {
 export async function mySendMail(ctx, message) {
   const startTime = Date.now();
   message.from = 'Hebcal <shabbat-owner@hebcal.com>';
-  message.replyTo = 'no-reply@hebcal.com';
+  if (!message.to?.endsWith('privaterelay.appleid.com')) {
+    message.replyTo = 'no-reply@hebcal.com';
+  }
   const ip = getIpAddress(ctx);
   message.headers = message.headers || {};
   message.headers['X-Originating-IP'] = `[${ip}]`;
