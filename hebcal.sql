@@ -2,7 +2,7 @@ CREATE TABLE yahrzeit (
   id char(26) NOT NULL,
   created datetime NOT NULL,
   updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  ip varchar(16) DEFAULT NULL,
+  ip varchar(39) DEFAULT NULL,
   downloaded tinyint(1) NOT NULL DEFAULT '0',
   contents JSON NOT NULL,
   PRIMARY KEY (id)
@@ -21,7 +21,7 @@ CREATE TABLE hebcal_shabbat_email (
   email_candles_havdalah tinyint DEFAULT NULL,
   email_havdalah_degrees float DEFAULT NULL,
   email_sundown_candles tinyint NOT NULL DEFAULT '18',
-  email_ip varchar(16) DEFAULT NULL,
+  email_ip varchar(39) DEFAULT NULL,
   PRIMARY KEY (email_address),
   UNIQUE KEY email_id (email_id),
   KEY email_status (email_status)
@@ -51,7 +51,7 @@ CREATE TABLE yahrzeit_email (
   sub_status enum('active','pending','unsub','bounce') NOT NULL,
   created datetime NOT NULL,
   updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  ip_addr varchar(16) DEFAULT NULL,
+  ip_addr varchar(39) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY email_addr (email_addr),
   KEY sub_status (sub_status),
@@ -95,7 +95,7 @@ CREATE TABLE email_open (
   id int NOT NULL AUTO_INCREMENT,
   ts timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   msgid varchar(80) NOT NULL,
-  ip_addr varchar(16) NOT NULL,
+  ip_addr varchar(39) DEFAULT NULL,
   loc varchar(80) DEFAULT NULL,
   delta int DEFAULT NULL,
   PRIMARY KEY (id)
