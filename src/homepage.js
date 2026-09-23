@@ -10,6 +10,7 @@ import {processCookieAndQuery,
   urlArgs,
   makeGeoUrlArgs2,
 } from './urlArgs.js';
+import {makeHebcalOptions} from './calendar.js';
 import {pad2, pad4} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
@@ -63,7 +64,7 @@ export async function homepage(ctx) {
   mastheadDates(ctx, dt, afterSunset, hd);
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
-  mastheadCandles(ctx, dt, il);
+  mastheadCandles(ctx, dt);
   const [blurb, longText] = getMastheadGreeting(ctx, hd, il, dateOverride);
   if (blurb) {
     ctx.state.holidayBlurb = blurb;
@@ -113,18 +114,18 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
 
 const MASK_CANDLES = flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS | flags.YOM_TOV_ENDS;
 
-function mastheadCandles(ctx, dt, il) {
+function mastheadCandles(ctx, dt) {
   const location = ctx.state.location;
   if (!location) return;
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
-  const options = {
-    start: dt,
-    end: dt,
-    il,
-    location,
-    candlelighting: true,
-    locale: lg,
+  const query = {
+    ...ctx.state.q,
+    c: 'on',
   };
+  const options = makeHebcalOptions(ctx.db, query);
+  options.start = options.end = dt;
+  delete options.mask;
+  delete options.dailyLearning;
   const events = calendar(options);
   const items = ctx.state.items;
   for (const ev of events.filter((ev) => ev.fmtTime && Boolean(ev.getFlags() & MASK_CANDLES))) {
