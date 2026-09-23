@@ -94,6 +94,8 @@ describe('yahrzeit Google sign-in', () => {
     // The signed-in modal variants + status probe are present (toggled by JS).
     expect(res.text).toContain('id="ye-active"');
     expect(res.text).toContain('id="ye-signin"');
+    expect(res.text).toContain('id="ye-subscribe-me"');
+    expect(res.text).toContain('id="email-modal-verified"');
     expect(res.text).toContain('/yahrzeit/email-status');
   });
 
@@ -126,6 +128,22 @@ describe('yahrzeit Google sign-in', () => {
         .get(`/yahrzeit/email-status?ulid=${CAL}`)
         .set('Cookie', cookie(sid));
     expect(res.body).toMatchObject({loggedIn: true, subscribedToThisCalendar: false});
+  });
+
+  it('signed-in one-click subscribe from the modal (cfg=json) activates immediately', async () => {
+    const sid = 'f'.repeat(32);
+    const email = 'oneclick-yz@example.com';
+    mysql.seedSession({userId: 'yz6', email, sessionId: sid});
+    const res = await request(server)
+        .post('/yahrzeit/email')
+        .set('Cookie', cookie(sid))
+        .type('form')
+        .send({v: '1', cfg: 'json', type: 'yahrzeit', ulid: SAVED_CAL, em: email});
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ok: true, verified: true});
+    const sub = Object.values(mysql.mockData.yahrzeitEmailSubs)
+        .find((s) => s.email_addr === email && s.calendar_id === SAVED_CAL);
+    expect(sub.sub_status).toBe('active');
   });
 
   it('anonymous subscribe still uses the pending + verification flow', async () => {

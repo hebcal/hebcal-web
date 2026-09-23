@@ -60,7 +60,7 @@ describe('candles modal renders on shabbat and hebcal routes', () => {
     const res = await request(server).get(`/shabbat?geonameid=${OTHER_GEO}&b=20`);
     expect(res.status).toBe(200);
     expect(res.text).toContain('id="emc-subscribe-me"');
-    expect(res.text).toContain('id="emc-update"');
+    expect(res.text).toContain('id="emc-active"');
     expect(res.text).toContain('/email/subscription-status');
     // The Update Settings link carries the full candle-lighting settings
     // (makeGeoUrlArgs) so the JS can append e=<base64 email>.

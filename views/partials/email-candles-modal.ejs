@@ -52,7 +52,7 @@
   <div class="mb-2" id="emc-subscribe-me" hidden>
     <button type="button" class="btn btn-primary w-100">Subscribe <span id="emc-me-label"></span></button>
   </div>
-  <div class="mb-2" id="emc-update" hidden>
+  <div class="mb-2" id="emc-active" hidden>
     <a class="btn btn-secondary w-100" id="emc-update-link" href="/email"
       data-args="<%= locals.geoUrlArgs || '' %>">Update Settings</a>
   </div>
@@ -79,5 +79,11 @@
 </div><!-- .modal -->
 <%- await include('email-modal-script.ejs') -%>
 <% if (locals.loginEnabled) { %>
-<%- await include('email-candles-signin.ejs') -%>
+<%- await include('email-modal-signin.ejs', {
+  prefix: 'emc',
+  statusUrl: '/email/subscription-status',
+  statusParams: ['geo', 'zip', 'geonameid'],
+  activeKey: 'hasActiveSub',
+  activeHidesForm: true,
+}) -%>
 <% } %>

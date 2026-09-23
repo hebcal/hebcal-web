@@ -263,6 +263,9 @@ instructions</a>.</p>
   <strong>Thank you!</strong> A confirmation message has been sent to your email address.
   Click the link within that message to confirm your subscription.
 </div><!-- .alert -->
+<div id="email-modal-verified" class="alert alert-success" role="alert" style="display: none">
+  <strong>Thank you!</strong> Annual reminder emails for this personal calendar are now active.
+</div><!-- .alert -->
 <div id="email-modal-already" class="alert alert-warning" role="alert" style="display: none">
   <strong>Already subscribed.</strong> Annual reminder emails
   for this personal calendar are already active. No further action is required.
@@ -287,9 +290,12 @@ instructions</a>.</p>
     </div>
     <% } %>
   </div><!-- #ye-signin -->
+  <div class="mb-2" id="ye-subscribe-me" hidden>
+    <button type="button" class="btn btn-primary w-100"><%= locals.q.em ? 'Subscribe' : 'Save' %> <span id="ye-me-label"></span></button>
+  </div>
   <p class="text-center text-muted small mt-3 mb-3" id="ye-divider">or enter your email address</p>
   <% } %>
-  <div class="form-floating mb-3">
+  <div class="form-floating mb-3" id="ye-email-field">
     <input class="form-control" type="email" name="em" id="em" value="<%=locals.q.em || ''%>" placeholder="user@example.com" required>
     <label class="form-label" for="em">Email address</label>
     <div class="invalid-feedback">Please enter a valid email address.</div>
@@ -309,7 +315,13 @@ instructions</a>.</p>
 </div><!-- .modal -->
 <%- await include('partials/email-modal-script.ejs') -%>
 <% if (locals.loginEnabled) { %>
-<%- await include('partials/yahrzeit-signin.ejs') -%>
+<%- await include('partials/email-modal-signin.ejs', {
+  prefix: 'ye',
+  statusUrl: '/yahrzeit/email-status',
+  statusParams: ['ulid'],
+  activeKey: 'subscribedToThisCalendar',
+  activeDivider: 'subscribe another email address to this calendar',
+}) -%>
 <% } %>
 <%- await include('partials/emoji-switch-script.ejs') -%>
 <% } -%>

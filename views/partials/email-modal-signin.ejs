@@ -1,0 +1,193 @@
+<%#
+  Signed-in personalization for an email-subscription modal (#email-modal with
+  form #f2), shared by the Shabbat candles and Yahrzeit modals. The modal HTML
+  is identical for every viewer (cache-safe); this script asks a status
+  endpoint who is signed in and toggles pre-rendered elements, all with IDs
+  under `prefix`:
+    <prefix>-signin        provider sign-in buttons (hidden once signed in)
+    <prefix>-subscribe-me  wrapper around a one-click "<label> <email>" button
+    <prefix>-me-label      span inside that button, filled with the email
+    <prefix>-active        shown when the user already has an active sub
+    <prefix>-active-email  (optional) span inside it, filled with the email
+    <prefix>-update-link   (optional) link that gets `e=<base64 email>` added
+    <prefix>-divider       the "or ... email address" line
+    <prefix>-email-field   the email text field
+  Include args:
+    prefix          ID prefix, e.g. 'emc' or 'ye'
+    statusUrl       JSON endpoint returning {loggedIn, email, <activeKey>}
+    statusParams    names of #f2 fields to pass to statusUrl as query params
+    activeKey       status field meaning "already subscribed"
+    activeHidesForm when active, hide the email field and footer button too
+    activeDivider   (optional) divider text when active and the form stays
+  The one-click button POSTs #f2 to its data-resource with em=<user email>;
+  the server activates it immediately because the address is verified.
+-%>
+<script nonce="<%=locals.nonce%>">
+(function() {
+  var d = document;
+  var m = d.cookie.match(/(?:^|;\s*)C=([^;]*)/);
+  // Case A (not signed in): leave the modal exactly as server-rendered.
+  if (!(m && /(?:^|&)hu=1(?:&|$)/.test(m[1]))) {
+    return;
+  }
+  var cfg = <%- JSON.stringify({
+    prefix: locals.prefix,
+    statusUrl: locals.statusUrl,
+    statusParams: locals.statusParams || [],
+    activeKey: locals.activeKey,
+    activeHidesForm: Boolean(locals.activeHidesForm),
+    activeDivider: locals.activeDivider || null,
+  }) %>;
+  var form = d.getElementById('f2');
+  if (!form) {
+    return;
+  }
+  function byId(suffix) {
+    return d.getElementById(cfg.prefix + '-' + suffix);
+  }
+  var modal = d.getElementById('email-modal');
+  var signin = byId('signin');
+  var subscribeMe = byId('subscribe-me');
+  var subscribeMeBtn = subscribeMe && subscribeMe.querySelector('button');
+  var meLabel = byId('me-label');
+  var activeBox = byId('active');
+  var activeEmail = byId('active-email');
+  var updateLink = byId('update-link');
+  var divider = byId('divider');
+  var emailField = byId('email-field');
+  var bottomBtn = d.getElementById('email-subscribe');
+  var entry = d.getElementById('email-modal-entry');
+  var verified = d.getElementById('email-modal-verified');
+  var already = d.getElementById('email-modal-already');
+  var failure = d.getElementById('email-modal-failure');
+  var label = form.dataset.emailSubscribeLabel || 'Subscribe';
+  var ready = false;
+  var hasActiveSub = false;
+  var userEmail = null;
+
+  // A signed-in user never sees the provider sign-in buttons. With an active
+  // subscription they see the <prefix>-active box; otherwise the one-click
+  // "<label> <email>" button, with the email field demoted to an alternative.
+  function apply() {
+    if (!ready) {
+      return;
+    }
+    if (signin) signin.hidden = true;
+    if (hasActiveSub) {
+      if (updateLink) {
+        var args = updateLink.getAttribute('data-args') || '';
+        updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail)) +
+          (args ? '&' + args : '');
+      }
+      if (activeEmail) activeEmail.textContent = userEmail;
+      if (activeBox) activeBox.hidden = false;
+      if (subscribeMe) subscribeMe.hidden = true;
+      if (divider) {
+        divider.hidden = cfg.activeHidesForm;
+        if (cfg.activeDivider) divider.textContent = cfg.activeDivider;
+      }
+      if (emailField) emailField.hidden = cfg.activeHidesForm;
+      if (bottomBtn) {
+        bottomBtn.style.display = cfg.activeHidesForm ? 'none' : '';
+        bottomBtn.classList.remove('btn-secondary');
+        bottomBtn.classList.add('btn-primary');
+      }
+    } else {
+      if (meLabel) meLabel.textContent = userEmail;
+      if (subscribeMe) subscribeMe.hidden = false;
+      if (activeBox) activeBox.hidden = true;
+      if (divider) {
+        divider.hidden = false;
+        divider.textContent = 'or subscribe with a different email address';
+      }
+      if (emailField) emailField.hidden = false;
+      if (bottomBtn) {
+        bottomBtn.style.display = '';
+        bottomBtn.classList.remove('btn-primary');
+        bottomBtn.classList.add('btn-secondary');
+      }
+    }
+  }
+
+  // The bundle's show.bs.modal handler resets the entry, so re-apply after it.
+  if (modal) {
+    modal.addEventListener('show.bs.modal', function() {
+      setTimeout(function() {
+        if (verified) verified.style.display = 'none';
+        if (already) already.style.display = 'none';
+        if (subscribeMeBtn && userEmail) {
+          subscribeMeBtn.disabled = false;
+          subscribeMeBtn.textContent = label + ' ' + userEmail;
+        }
+        apply();
+      }, 0);
+    });
+  }
+
+  var qs = new URLSearchParams();
+  cfg.statusParams.forEach(function(k) {
+    var el = form.querySelector('[name="' + k + '"]');
+    if (el && el.value) {
+      qs.append(k, el.value);
+    }
+  });
+  fetch(cfg.statusUrl + '?' + qs.toString(),
+      {credentials: 'include', headers: {'Accept': 'application/json'}})
+      .then(function(r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function(data) {
+        if (!data || !data.loggedIn || !data.email) {
+          return; // stale hint cookie: leave the default (Case A)
+        }
+        userEmail = data.email;
+        hasActiveSub = !!data[cfg.activeKey];
+        ready = true;
+        apply();
+      })
+      .catch(function() {});
+
+  // Blue "<label> <email>" -> activate immediately for the signed-in user.
+  if (subscribeMeBtn) {
+    subscribeMeBtn.addEventListener('click', function() {
+      if (!userEmail) {
+        return;
+      }
+      if (failure) failure.style.display = 'none';
+      subscribeMeBtn.disabled = true;
+      subscribeMeBtn.textContent = 'Processing...';
+      var params = new URLSearchParams(new FormData(form));
+      params.set('em', userEmail);
+      var opts = {
+        method: 'POST', credentials: 'include', body: params,
+        headers: {'Accept': 'application/json'},
+      };
+      if (typeof AbortSignal === 'function') {
+        opts.signal = AbortSignal.timeout(9000);
+      }
+      function fail() {
+        subscribeMeBtn.disabled = false;
+        subscribeMeBtn.textContent = label + ' ' + userEmail;
+        if (failure) failure.style.display = 'block';
+      }
+      fetch(form.dataset.resource, opts)
+          .then(function(r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function(data) {
+            if (data && data.ok) {
+              // Reopening the modal should now show the active state.
+              hasActiveSub = true;
+              if (entry) entry.style.display = 'none';
+              if (bottomBtn) bottomBtn.style.display = 'none';
+              var done = (data.alreadySubscribed && already) ? already : verified;
+              if (done) done.style.display = 'block';
+            } else {
+              fail();
+            }
+          })
+          .catch(fail);
+    });
+  }
+})();
+</script>
