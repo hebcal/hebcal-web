@@ -176,10 +176,10 @@ function makeReading(date, parshaEv, il, parsha) {
     getLeyningForParshaHaShavua(parshaEv, il) :
     getLeyningForParsha(parshaName);
   if (date && parshaName === VEZOT_HABERAKHAH) {
-    for (let i = 1; i <= 6; i++) {
-      delete reading.reason[i];
+    for (const aliyah of Object.values(reading.fullkriyah)) {
+      delete aliyah.reason;
     }
-    delete reading.reason.haftara;
+    reading.reason = {};
   }
   addLinksToLeyning(reading.fullkriyah, false);
   if (parsha.combined) {
