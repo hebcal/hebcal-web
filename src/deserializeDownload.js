@@ -34,7 +34,7 @@ export function deserializeDownload(data) {
     if (year) q.year = year;
   }
   q.lg = msg.getLocale() || 's';
-  q.b = msg.getCandlelightingmins() || undefined;
+  q.b = msg.hasCandlelightingmins() ? msg.getCandlelightingmins() : undefined;
   q.emoji = msg.getEmoji() ? '1' : undefined;
   q.euro = msg.getEuro() ? '1' : undefined;
   switch (msg.getHour12()) {

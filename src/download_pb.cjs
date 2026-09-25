@@ -169,7 +169,7 @@ proto.Download.toObject = function(includeInstance, msg) {
     year: jspb.Message.getFieldWithDefault(msg, 12, 0),
     locale: jspb.Message.getFieldWithDefault(msg, 13, ""),
     havdalahmins: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    candlelightingmins: jspb.Message.getFieldWithDefault(msg, 15, 0),
+    candlelightingmins: (f = jspb.Message.getField(msg, 15)) == null ? undefined : f,
     emoji: jspb.Message.getBooleanFieldWithDefault(msg, 16, false),
     sedrot: jspb.Message.getBooleanFieldWithDefault(msg, 17, false),
     zip: jspb.Message.getFieldWithDefault(msg, 18, ""),
@@ -648,8 +648,8 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getCandlelightingmins();
-  if (f !== 0) {
+  f = /** @type {number} */ (jspb.Message.getField(message, 15));
+  if (f != null) {
     writer.writeInt32(
       15,
       f
@@ -1299,7 +1299,25 @@ proto.Download.prototype.getCandlelightingmins = function() {
  * @return {!proto.Download} returns this
  */
 proto.Download.prototype.setCandlelightingmins = function(value) {
-  return jspb.Message.setProto3IntField(this, 15, value);
+  return jspb.Message.setField(this, 15, value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.clearCandlelightingmins = function() {
+  return jspb.Message.setField(this, 15, undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.Download.prototype.hasCandlelightingmins = function() {
+  return jspb.Message.getField(this, 15) != null;
 };
 
 
