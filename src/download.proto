@@ -16,7 +16,7 @@ message Download {
   int32 year = 12;
   string locale = 13;
   int32 havdalahMins = 14;
-  int32 candleLightingMins = 15;
+  optional int32 candleLightingMins = 15;
 
   bool emoji = 16;
   bool sedrot = 17;
