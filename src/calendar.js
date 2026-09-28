@@ -349,7 +349,7 @@ export function makeHebrewCalendar(ctx, options) {
   if (options.yomTovOnly) {
     events = events.filter((ev) => {
       const categories = getEventCategories(ev);
-      return (categories[0] === 'holiday' && (ev.getFlags() & flags.CHAG));
+      return (categories[0] === 'holiday' && ev.hasFlag('CHAG'));
     });
   } else if (options.noMinorHolidays) {
     events = events.filter((ev) => {

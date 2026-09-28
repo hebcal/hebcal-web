@@ -209,7 +209,7 @@ export async function holidayMainIndex(ctx) {
         il: true,
         year: hyear + i - 1,
         isHebrewYear: true,
-      }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
+      }).filter((ev) => ev.mask === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
       events0 = eventsIlModern.concat(events0);
     }
     const events = getFirstOcccurences(events0);

@@ -112,8 +112,6 @@ function mastheadDates(ctx, dt, afterSunset, hd) {
   items.push(locale === 'he' ? hd.renderGematriya() : hd.render(lg));
 }
 
-const MASK_CANDLES = flags.LIGHT_CANDLES | flags.LIGHT_CANDLES_TZEIS | flags.YOM_TOV_ENDS;
-
 function mastheadCandles(ctx, dt) {
   const location = ctx.state.location;
   if (!location) return;
@@ -128,7 +126,7 @@ function mastheadCandles(ctx, dt) {
   delete options.dailyLearning;
   const events = calendar(options);
   const items = ctx.state.items;
-  for (const ev of events.filter((ev) => ev.fmtTime && Boolean(ev.getFlags() & MASK_CANDLES))) {
+  for (const ev of events.filter((ev) => ev.fmtTime && ev.hasAnyFlag('LIGHT_CANDLES', 'LIGHT_CANDLES_TZEIS', 'YOM_TOV_ENDS'))) {
     items.push(location.getShortName() + ' ' + ev.renderBrief(lg) + ': ' + ev.fmtTime);
   }
 }
@@ -256,7 +254,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
       `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
  Israeli Memorial Day`];
   }
-  const fastDay = holidays.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
+  const fastDay = holidays.find((ev) => ev.hasAnyFlag('MAJOR_FAST', 'MINOR_FAST'));
   if (fastDay?.url()) {
     return fastDayGreeting(ctx, fastDay);
   }
@@ -295,17 +293,17 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   }
 
   const tomorrow = getHolidaysOnDate(hd.next(), il) || [];
-  const chagTomorrow = tomorrow.find((ev) => !(ev.getFlags() & flags.EREV) && chagSameach[ev.basename()]);
+  const chagTomorrow = tomorrow.find((ev) => !ev.hasFlag('EREV') && chagSameach[ev.basename()]);
   if (chagTomorrow) {
     return getHolidayGreeting(ctx, chagTomorrow, il, false);
   }
 
-  const roshChodeshToday = holidays.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
+  const roshChodeshToday = holidays.find((ev) => ev.hasFlag('ROSH_CHODESH'));
   if (roshChodeshToday) {
     return getRoshChodeshGreeting(ctx, hd, roshChodeshToday);
   }
 
-  const roshChodeshTomorrow = tomorrow.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
+  const roshChodeshTomorrow = tomorrow.find((ev) => ev.hasFlag('ROSH_CHODESH'));
   if (roshChodeshTomorrow) {
     return getRoshChodeshGreeting(ctx, hd, roshChodeshTomorrow);
   }
@@ -367,7 +365,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
  begins ${deltaDays} at sundown on ${htmlDate}`];
   }
 
-  const fastTomorrow = tomorrow.find((ev) => ev.getFlags() & (flags.MAJOR_FAST | flags.MINOR_FAST));
+  const fastTomorrow = tomorrow.find((ev) => ev.hasAnyFlag('MAJOR_FAST', 'MINOR_FAST'));
   if (fastTomorrow?.url()) {
     return fastDayGreeting(ctx, fastTomorrow);
   }
@@ -401,14 +399,13 @@ function fastDayGreeting(ctx, ev) {
  * @return {string[]}
  */
 function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
-  const mask = ev.getFlags();
-  if (today && !dateOverride && (mask & flags.CHANUKAH_CANDLES) && ev.chanukahDay) {
+  if (today && !dateOverride && ev.hasFlag('CHANUKAH_CANDLES') && ev.chanukahDay) {
     const tzid = ctx.state.timezone;
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
     const holidays = getHolidaysOnDate(hd, il) || [];
-    const ev2 = holidays.find((ev) => ev.getFlags() & flags.CHANUKAH_CANDLES);
+    const ev2 = holidays.find((ev) => ev.hasFlag('CHANUKAH_CANDLES'));
     if (ev2) {
       return getChanukahGreeting(d, ev2);
     }

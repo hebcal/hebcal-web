@@ -1,4 +1,4 @@
-import {Zmanim, flags, holidayDesc as hdesc} from '@hebcal/core';
+import {Zmanim, holidayDesc as hdesc} from '@hebcal/core';
 import {isoDateString} from '@hebcal/hdate';
 import {
   LEARNING_MASK,
@@ -17,12 +17,11 @@ import {makeEventMemo} from './eventMemo.js';
  */
 export function eventToFullCalendar(ev, tzid, options) {
   const classes = getEventCategories(ev).slice();
-  const mask = ev.getFlags();
-  const isChag = Boolean(mask & flags.CHAG);
+  const isChag = ev.hasFlag('CHAG');
   if (isChag && classes[0] === 'holiday') {
     classes.push('yomtov');
   }
-  if (mask & LEARNING_MASK) {
+  if (ev.mask & LEARNING_MASK) {
     classes.push('learning');
   }
   const eventTime = ev.eventTime;

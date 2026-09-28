@@ -1,4 +1,3 @@
-import {flags} from '@hebcal/core';
 import {formatAliyahWithBook} from '@hebcal/leyning';
 import {
   eventsToClassicApiHeader, eventToClassicApiObject,
@@ -22,7 +21,7 @@ export function myEventsToClassicApi(events, options, leyning) {
   obj.items = events.map((ev) => {
     const apiObj = eventToClassicApiObject(ev, options, leyning);
     if (leyning &&
-      (ev.getFlags() & flags.PARSHA_HASHAVUA) &&
+      ev.hasFlag('PARSHA_HASHAVUA') &&
       ev.getDate().getFullYear() >= 5745) {
       const triReading = getTriennialForParshaHaShavua(ev, options.il);
       const aliyot = triReading?.aliyot;

@@ -1,4 +1,4 @@
-import {Locale, parshiot, flags, getHolidaysOnDate} from '@hebcal/core';
+import {Locale, parshiot, getHolidaysOnDate} from '@hebcal/core';
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor, eventToCsv, CSV_HEADER} from '@hebcal/rest-api';
 import {langNames} from './lang.js';
@@ -293,7 +293,7 @@ export function sefariaAliyahHref(aliyah, sefAliyot) {
  * @return {string|undefined}
  */
 export function getParshaSummary(ev, locale) {
-  if (!(ev.getFlags() & flags.PARSHA_HASHAVUA)) {
+  if (!ev.hasFlag('PARSHA_HASHAVUA')) {
     return undefined;
   }
   const parshaName = ev.getDesc().substring(9);
@@ -307,13 +307,11 @@ export function getParshaSummary(ev, locale) {
   return meta.summaryHtml?.html;
 }
 
-const PARSHA_SPECIAL_MASK = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
-
 function getCsvParshaMemo(ev, il, locale) {
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+  if (ev.hasFlag('PARSHA_HASHAVUA')) {
     const hd = ev.getDate();
     const holidays0 = getHolidaysOnDate(hd, il) || [];
-    const holidays1 = holidays0.filter((ev) => Boolean(ev.getFlags() & PARSHA_SPECIAL_MASK));
+    const holidays1 = holidays0.filter((ev) => ev.hasAnyFlag('SPECIAL_SHABBAT', 'ROSH_CHODESH'));
     if (holidays1.length) {
       return holidays1.map((ev) => ev.render(locale)).join(' + ');
     } else {

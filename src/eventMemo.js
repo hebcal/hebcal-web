@@ -1,4 +1,3 @@
-import { flags } from '@hebcal/core';
 import { localizedHolidayDescription, makeTorahMemoText } from './torahMemo.js';
 
 /**
@@ -10,7 +9,7 @@ import { localizedHolidayDescription, makeTorahMemoText } from './torahMemo.js';
  * @return {string}
  */
 export function makeEventMemo(ev, il, locale) {
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+  if (ev.hasFlag('PARSHA_HASHAVUA')) {
     try {
       const memo = makeTorahMemoText(ev, il);
       if (memo) {

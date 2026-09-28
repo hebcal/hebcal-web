@@ -1,4 +1,4 @@
-import {reformatTimeStr, Locale, HDate, flags, months, greg,
+import {reformatTimeStr, Locale, HDate, months, greg,
   holidayDesc as hdesc} from '@hebcal/core';
 import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
@@ -196,7 +196,7 @@ function makeContents(events, options) {
       continue;
     }
     if (d.day() === 5) {
-      const parshaEv = events.slice(i + 1).find((ev) => ev.getFlags() & flags.PARSHA_HASHAVUA);
+      const parshaEv = events.slice(i + 1).find((ev) => ev.hasFlag('PARSHA_HASHAVUA'));
       if (parshaEv?.getDate().isSameDate(hd.next())) {
         const parsha = parshaEv.render(locale0);
         const space = parsha.indexOf(' ');
@@ -210,7 +210,7 @@ function makeContents(events, options) {
     }
     const nextEv = events[i + 1];
     item.reason = Locale.gettext(nextEv.basename(), locale0);
-    item.yomtov = Boolean(nextEv.getFlags() & flags.CHAG);
+    item.yomtov = nextEv.hasFlag('CHAG');
     objs.push(item);
   }
   return objs;

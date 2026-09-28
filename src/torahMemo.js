@@ -27,8 +27,7 @@ const cache = new QuickLRU({maxSize: 5000});
  * @return {string}
  */
 export function makeTorahMemoText(ev, il) {
-  const mask = ev.getFlags();
-  if (mask & HOLIDAY_IGNORE_MASK || ev.eventTime !== undefined) {
+  if ((ev.mask & HOLIDAY_IGNORE_MASK) || ev.eventTime !== undefined) {
     return '';
   }
   const hd = ev.getDate();
@@ -40,7 +39,7 @@ export function makeTorahMemoText(ev, il) {
   if (typeof cached === 'string') {
     return cached;
   }
-  const reading = mask & flags.PARSHA_HASHAVUA ?
+  const reading = ev.hasFlag('PARSHA_HASHAVUA') ?
     getLeyningForParshaHaShavua(ev, il) :
     getLeyningForHoliday(ev, il);
   let memo = '';

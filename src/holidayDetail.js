@@ -155,7 +155,7 @@ export async function holidayDetail(ctx) {
   const descrShort = getHolidayDescription(next.event, true);
   const descrMedium0 = getHolidayDescription(next.event, false) || next.event.memo || '';
   const descrMediumP = appendPeriod(descrMedium0);
-  const descrMedium = next.event.getFlags() & flags.SHABBAT_MEVARCHIM ?
+  const descrMedium = next.event.hasFlag('SHABBAT_MEVARCHIM') ?
     descrMediumP + ' ' + appendPeriod(next.event.memo) : descrMediumP;
   const sentences = descrMedium0.split(/\.\s+/).slice(0, 2);
   const descFirstTwo = appendPeriod(sentences.join('. '));
@@ -350,7 +350,7 @@ function makeMultiDayHolidayItems(holiday, hyear, il) {
           ppf,
           desc: ev.render('en'),
           event: ev,
-          yomtov: Boolean(ev.getFlags() & flags.CHAG),
+          yomtov: ev.hasFlag('CHAG'),
           monthDayHtml: wrapDisplaySpans('sm', d.format('MMM D'), d.format('MMMM D')),
         };
       });
@@ -406,7 +406,7 @@ function makeHolidayReadings(meta, holiday, year, il, next) {
       if (reading !== undefined) {
         const desc = ev.getDesc();
         const key0 = getLeyningKeyForEvent(ev, il) || desc;
-        const key1 = (ev.getFlags() & flags.ROSH_CHODESH) ? desc : key0;
+        const key1 = ev.hasFlag('ROSH_CHODESH') ? desc : key0;
         const key = dupes.has(key1) ? key1 + ' Day 2' : key1;
         const hd = ev.getDate();
         if (key === 'Simchat Torah') {
@@ -514,7 +514,7 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
   } else {
     itemReading.shortName = item;
   }
-  if (ev?.getDate().getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
+  if (ev?.getDate().getDay() === 6 && ev.hasAnyFlag('SPECIAL_SHABBAT', 'ROSH_CHODESH', 'CHANUKAH_CANDLES')) {
     const hd = ev.getDate();
     const sedra = getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
@@ -523,9 +523,6 @@ function makeHolidayReading(holiday, item, meta, reading, ev, il) {
     }
   }
 }
-
-const SAT_OVERLAY_FLAGS = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH |
-  flags.CHANUKAH_CANDLES;
 
 /**
  * @param {Event} ev
@@ -537,7 +534,7 @@ function getReadingForHoliday(ev, il) {
   const desc = ev.getDesc();
   if (desc === hdesc.CHANUKAH_1_CANDLE) {
     return undefined;
-  } else if (hd.getDay() === 6 && (ev.getFlags() & SAT_OVERLAY_FLAGS)) {
+  } else if (hd.getDay() === 6 && ev.hasAnyFlag('SPECIAL_SHABBAT', 'ROSH_CHODESH', 'CHANUKAH_CANDLES')) {
     const sedra = getSedra(hd.getFullYear(), il);
     const parsha = sedra.lookup(hd);
     if (!parsha.chag) {

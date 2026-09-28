@@ -1,4 +1,4 @@
-import {flags, holidayDesc as hdesc} from '@hebcal/core';
+import {holidayDesc as hdesc} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
 import {
   appendIsraelAndTracking,
@@ -48,8 +48,7 @@ export function createMemo(ev, options) {
   if (desc === hdesc.HAVDALAH || desc === hdesc.CANDLE_LIGHTING) {
     return memo;
   }
-  const mask = ev.getFlags();
-  if (mask & flags.OMER_COUNT) {
+  if (ev.hasFlag('OMER_COUNT')) {
     const sefira = [
       ev.sefira('en'),
       ev.sefira('he'),

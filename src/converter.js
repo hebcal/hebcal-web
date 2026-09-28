@@ -321,7 +321,7 @@ class PseudoParshaEvent extends Event {
    * @param {Event} ev
    */
   constructor(ev) {
-    super(ev.getDate(), 'Parashat ' + ev.basename(), ev.getFlags());
+    super(ev.getDate(), 'Parashat ' + ev.basename(), ev.mask);
     this.ev = ev;
   }
   /** @return {string} */

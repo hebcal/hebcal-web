@@ -53,7 +53,7 @@ async function makeHolidayItem(holiday, ev, il) {
   let name = ev.basename();
   if (holiday === SHMINI_SIMCHAT) {
     const origHref = item.href;
-    const tmp = new Event(ev.getDate(), holiday, ev.getFlags());
+    const tmp = new Event(ev.getDate(), holiday, ev.mask);
     item = eventToHolidayItem(tmp, il);
     item.href = origHref;
     name = il ? SHMINI_ATZERET : SIMCHAT_TORAH;
@@ -151,7 +151,7 @@ export async function holidayYearIndex(ctx) {
       il: true,
       year: calendarYear,
       isHebrewYear,
-    }).filter((ev) => ev.getFlags() === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
+    }).filter((ev) => ev.mask === (flags.IL_ONLY | flags.MODERN_HOLIDAY));
     events0 = eventsIlModern.concat(events0);
     events0.sort((a, b) => a.getDate().abs() - b.getDate().abs());
   }
@@ -165,11 +165,11 @@ export async function holidayYearIndex(ctx) {
   const items = await makeItems(events, il);
 
   const roshChodesh = events
-      .filter((ev) => ev.getFlags() & flags.ROSH_CHODESH)
+      .filter((ev) => ev.hasFlag('ROSH_CHODESH'))
       .map((ev) => eventToHolidayItem(ev, il));
 
   const modernHolidays = events
-      .filter((ev) => ev.getFlags() & flags.MODERN_HOLIDAY)
+      .filter((ev) => ev.hasFlag('MODERN_HOLIDAY'))
       .map((ev) => eventToHolidayItem(ev, il));
 
   const q = makeQueryAndDownloadProps(ctx, {...options, numYears: 5});

@@ -52,7 +52,7 @@ describe('createMemo', () => {
     const events = calendar(options);
     const memo = 'Passover, the Feast of Unleavened Bread';
     const erevPesach = new HolidayEvent(
-        events[0].getDate(), events[0].getDesc(), events[0].getFlags(), {memo});
+        events[0].getDate(), events[0].getDesc(), events[0].mask, {memo});
     expect(createMemo(erevPesach, options)).toBe(
         'Passover, the Feast of Unleavened Bread\n\n' +
         'https://hebcal.com/h/pesach-1993?us=ical&um=icalendar');
@@ -68,7 +68,7 @@ describe('createMemo', () => {
     };
     const events = calendar(options);
     const pesachII = new HolidayEvent(
-        events[2].getDate(), events[2].getDesc(), events[2].getFlags(),
+        events[2].getDate(), events[2].getDesc(), events[2].mask,
         {memo: 'Passover, the Feast of Unleavened Bread'});
     expect(createMemo(pesachII, options)).toBe(
         'Passover, the Feast of Unleavened Bread\n\n' +

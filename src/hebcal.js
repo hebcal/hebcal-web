@@ -326,7 +326,7 @@ function renderHtml(ctx) {
       dt: item0.date,
       cat: item0.category,
     };
-    if (ev.getFlags() & LEARNING_MASK) {
+    if (ev.mask & LEARNING_MASK) {
       item.cat += ' learning';
     } else if (item0.subcat) {
       item.cat += ' ' + item0.subcat;

@@ -1,4 +1,4 @@
-import {HDate, flags, months, ParshaEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
+import {HDate, months, ParshaEvent, getHolidaysOnDate, getSedra} from '@hebcal/core';
 import {getLeyningKeyForEvent, getLeyningForParshaHaShavua,
   getLeyningForHoliday, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
@@ -90,8 +90,7 @@ export async function parshaYearApp(ctx) {
 function makeItem(ev, locale, il, lang) {
   const hd = ev.getDate();
   const d = dayjs(hd.greg()).locale(locale);
-  const mask = ev.getFlags();
-  const isParsha = Boolean(mask & flags.PARSHA_HASHAVUA);
+  const isParsha = ev.hasFlag('PARSHA_HASHAVUA');
   const title0 = ev.render('en');
   const title = isParsha ? title0.substring(title0.indexOf(' ') + 1) : title0;
   const item = {
@@ -112,10 +111,9 @@ function makeItem(ev, locale, il, lang) {
   }
   if (isParsha) {
     const holidays0 = getHolidaysOnDate(hd, il) || [];
-    const mask = flags.SPECIAL_SHABBAT | flags.ROSH_CHODESH;
-    const holidays1 = holidays0.filter((ev) => (ev.getFlags() & mask) || ev.chanukahDay);
+    const holidays1 = holidays0.filter((ev) => ev.hasAnyFlag('SPECIAL_SHABBAT', 'ROSH_CHODESH') || ev.chanukahDay);
     item.holidays = holidays1.map((ev) => holidayEvToItem(ev, il, lang));
-    const roshChodeshToday = holidays1.find((ev) => ev.getFlags() & flags.ROSH_CHODESH);
+    const roshChodeshToday = holidays1.find((ev) => ev.hasFlag('ROSH_CHODESH'));
     if (!roshChodeshToday) {
       const tommorow = hd.next().getDate();
       if (tommorow === 30 || tommorow === 1) {
@@ -127,7 +125,6 @@ function makeItem(ev, locale, il, lang) {
 }
 
 function holidayEvToItem(ev, il, lang) {
-  const mask = ev.getFlags();
   const item = {
     title: ev.render(lang),
   };
@@ -135,7 +132,7 @@ function holidayEvToItem(ev, il, lang) {
   if (url) {
     item.url = shortenUrl(url);
   }
-  if (mask & flags.ROSH_CHODESH) {
+  if (ev.hasFlag('ROSH_CHODESH')) {
     item.title = 'Rosh Ch. ' + item.title.substring(13);
     return item;
   }

@@ -151,7 +151,7 @@ function addLocationOmerAlarms(options, events) {
   const location = options.location;
   const geoid = location.getGeoId();
   const locationName = location.getShortName();
-  for (const ev of events.filter((ev) => ev.getFlags() & flags.OMER_COUNT)) {
+  for (const ev of events.filter((ev) => ev.hasFlag('OMER_COUNT'))) {
     const hd = ev.getDate().prev();
     const dow = hd.getDay();
     const zman = new Zmanim(location, hd, options.useElevation);

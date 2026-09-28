@@ -2,7 +2,6 @@ import {Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {HDate} from '@hebcal/hdate/dist/esm/hdate';
 import {isoDateString} from '@hebcal/hdate/dist/esm/dateFormat';
-import {flags} from '@hebcal/core/dist/esm/event';
 import {getHolidaysOnDate} from '@hebcal/core/dist/esm/holidays';
 
 function makeHebMonthRangeStr(startDt, endDt) {
@@ -25,8 +24,7 @@ function makeHebMonthRangeStr(startDt, endDt) {
  */
 function eventToFullCalendar(ev) {
   const classes = ev.getCategories().slice();
-  const mask = ev.getFlags();
-  const isChag = Boolean(mask & flags.CHAG);
+  const isChag = ev.hasFlag('CHAG');
   if (isChag && classes[0] === 'holiday') {
     classes.push('yomtov');
   }
@@ -52,8 +50,6 @@ function eventToFullCalendar(ev) {
   return fcEvent;
 }
 
-const IGNORE_MASK = flags.YOM_KIPPUR_KATAN | flags.BEHAB;
-
 /**
  * @param {Date} dt
  * @param {boolean} il
@@ -61,7 +57,7 @@ const IGNORE_MASK = flags.YOM_KIPPUR_KATAN | flags.BEHAB;
  */
 function makeFullCalendarHolidaysForDate(dt, il) {
   const holidays = getHolidaysOnDate(dt, il) || [];
-  const filtered = holidays.filter((ev) => (ev.getFlags() & IGNORE_MASK) === 0);
+  const filtered = holidays.filter((ev) => !ev.hasAnyFlag('YOM_KIPPUR_KATAN', 'BEHAB'));
   return filtered.map(eventToFullCalendar);
 }
 

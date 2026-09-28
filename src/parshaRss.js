@@ -85,7 +85,7 @@ class WrappedEvent extends Event {
 function createMemo(ev, il, lang) {
   const memoText = makeTorahMemoText(ev, il);
   const memoHtml = memoText ? '<p>' + memoText.replaceAll('\n', '</p>\n<p>') + '</p>' : '';
-  if (ev.getFlags() & flags.PARSHA_HASHAVUA) {
+  if (ev.hasFlag('PARSHA_HASHAVUA')) {
     // lead with the Sefaria prose summary, the way the .ics DESCRIPTION does.
     // Holiday items below already open with a prose description.
     const summary = getParshaSummary(ev, lang);

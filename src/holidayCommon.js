@@ -127,7 +127,7 @@ function hebrewDateRange(hd, duration, showYear=true) {
  * @return {string}
  */
 function holidayEmoji(ev) {
-  if (ev.getFlags() & (flags.ROSH_CHODESH | flags.SPECIAL_SHABBAT | flags.MINOR_FAST)) {
+  if (ev.hasAnyFlag('ROSH_CHODESH', 'SPECIAL_SHABBAT', 'MINOR_FAST')) {
     return '';
   }
   if (ev.basename() === 'Chanukah') {
@@ -144,7 +144,7 @@ function holidayEmoji(ev) {
 export function eventToHolidayItemBase(ev, il) {
   const {hd, d, duration, endD, beginsWhen} = holidayStartAndEnd(ev, il);
   const holiday = ev.basename();
-  const mask = ev.getFlags();
+  const mask = ev.mask;
   const emoji = holidayEmoji(ev);
   const anchor = makeAnchor(holiday);
   const anchorDate = (typeof ev.urlDateSuffix === 'function') ? ev.urlDateSuffix() : d.year();
@@ -193,7 +193,6 @@ export function eventToHolidayItem(ev, il) {
   const d = item.d;
   const duration = item.duration;
   const endD = item.endD;
-  const mask = item.mask;
   Object.assign(item, {
     startDowHtml: wrapDisplaySpans('md', d.format('ddd'), d.format('dddd')),
     startMonDayHtml: wrapDisplaySpans('md', d.format('MMM D'), d.format('MMMM D')),
@@ -204,7 +203,7 @@ export function eventToHolidayItem(ev, il) {
     hdRangeNoYear: hebrewDateRange(hd, duration, false),
     categories: getEventCategories(ev),
   });
-  if ((mask & flags.SPECIAL_SHABBAT) && !staticSpecial.has(item.name)) {
+  if (ev.hasFlag('SPECIAL_SHABBAT') && !staticSpecial.has(item.name)) {
     const sedra = getSedra(hd.getFullYear(), il);
     const parsha0 = sedra.lookup(hd);
     if (!parsha0.chag) {
@@ -224,7 +223,7 @@ function makeBeginsWhen(ev, duration) {
   if (holiday === 'Leil Selichot') {
     return 'after nightfall';
   }
-  if (ev.getFlags() & flags.SHABBAT_MEVARCHIM) {
+  if (ev.hasFlag('SHABBAT_MEVARCHIM')) {
     return '';
   }
   return duration === 0 ? 'at dawn' : 'at sundown';
@@ -237,13 +236,13 @@ function makeBeginsWhen(ev, duration) {
  */
 function holidayStartAndEnd(ev, il) {
   const holiday = ev.basename();
-  const mask = ev.getFlags();
+  const mask = ev.mask;
   const duration0 = getHolidayDuration(il, mask, holiday);
   const beginsWhen = makeBeginsWhen(ev, duration0);
   const hd = ev.getDate();
   const d0 = dayjs(hd.greg());
   const d = beginsWhen === 'at sundown' ? d0.subtract(1, 'd') : d0;
-  const duration = Boolean(mask & flags.ROSH_CHODESH) && hd.getDate() === 30 ? 2 : duration0;
+  const duration = ev.hasFlag('ROSH_CHODESH') && hd.getDate() === 30 ? 2 : duration0;
   const endD = d.add(duration, 'd');
   return {mask, holiday, d, hd, beginsWhen, duration, endD};
 }
