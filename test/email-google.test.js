@@ -41,6 +41,21 @@ describe('Google sign-in on /email', () => {
     expect(res.text).toContain('/login/google?next=');
   });
 
+  it('hides the sign-in buttons for an active subscriber arriving via ?e=', async () => {
+    const e = Buffer.from('nobody@example.com').toString('base64');
+    const res = await request(server).get(`/email?e=${encodeURIComponent(e)}&modify=1`);
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('nobody@example.com');
+    expect(res.text).not.toContain('/login/google?next=');
+  });
+
+  it('still shows sign-in buttons when ?e= is not an active subscriber', async () => {
+    const e = Buffer.from('verify@example.com').toString('base64');
+    const res = await request(server).get(`/email?e=${encodeURIComponent(e)}`);
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('/login/google?next=');
+  });
+
   it('activates immediately (no verification email) when the address matches the signed-in user', async () => {
     const sid = '2'.repeat(32);
     mysql.seedSession({userId: 'ug2', email: 'match@example.com', sessionId: sid});

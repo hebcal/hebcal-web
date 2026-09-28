@@ -163,6 +163,10 @@ export async function emailForm(ctx) {
   rejectForgedCrossOriginPost(ctx);
   let q = {...ctx.request.body, ...ctx.request.query};
   let defaultUnsubscribe = false;
+  // Set when ?e= names an active subscriber (e.g. the newsletter's "Update
+  // Settings" link). They already proved ownership of the address, so the
+  // sign-in pitch ("skip the email confirmation step") is just noise.
+  let knownSubscriber = false;
   if (typeof q.e === 'string') {
     const buff = Buffer.from(q.e, 'base64');
     q.em = buff.toString('ascii');
@@ -170,6 +174,7 @@ export async function emailForm(ctx) {
     const subInfo = await getSubInfo(db, q.em);
     if (subInfo?.status === 'active') {
       q = {...subInfo, ...q};
+      knownSubscriber = true;
     }
     defaultUnsubscribe = q.unsubscribe === '1';
     cacheControlPrivate(ctx);
@@ -318,6 +323,7 @@ export async function emailForm(ctx) {
   return ctx.render('email', {
     q,
     defaultUnsubscribe,
+    knownSubscriber,
   });
 }
 
