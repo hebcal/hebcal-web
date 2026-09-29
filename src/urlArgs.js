@@ -83,6 +83,41 @@ export const fastTimeOpts = [
 
 export const fastTimeKeys = fastTimeOpts.flatMap((o) => [o.deg, o.mins]);
 
+const MAX_FAST_DEG = 90;
+const MAX_FAST_MINS = 240;
+
+/**
+ * Parses the fast start/end query parameters (`fsd`, `fsm`, `fed`, `fem`,
+ * `tbed`, `tbem`). Values that aren't numbers, or are out of range, are
+ * removed from `query` and ignored. Negative values are treated as positive.
+ * When both the degrees and the minutes parameter of a pair are given,
+ * degrees wins and the minutes parameter is removed from `query`.
+ * @param {Object.<string,string>} query
+ * @return {Object.<string,number>} `@hebcal/core` CalOptions fast time fields
+ */
+export function getFastTimeOpts(query) {
+  const options = {};
+  for (const {deg, mins, degOpt, minsOpt} of fastTimeOpts) {
+    if (!empty(query[deg])) {
+      const num = Math.abs(Number.parseFloat(query[deg]));
+      if (num > 0 && num < MAX_FAST_DEG) { // also rejects NaN
+        options[degOpt] = num;
+      } else {
+        delete query[deg];
+      }
+    }
+    if (!empty(query[mins])) {
+      const num = Math.abs(Number.parseInt(query[mins], 10));
+      if (options[degOpt] === undefined && num > 0 && num <= MAX_FAST_MINS) {
+        options[minsOpt] = num;
+      } else {
+        delete query[mins];
+      }
+    }
+  }
+  return options;
+}
+
 export const queryToName = {
   maj: 'Major Holidays',
   min: 'Minor Holidays',

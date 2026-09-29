@@ -90,4 +90,8 @@ message Download {
   float tzeit = 67;
   bool nine29 = 68;
   bool dirshuDafHalacha = 69;
+  float fastStartDeg = 70;
+  uint32 fastStartMins = 71;
+  float tishaBavEndDeg = 72;
+  uint32 tishaBavEndMins = 73;
 }

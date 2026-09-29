@@ -2,6 +2,16 @@ import DownloadProtoBuf from './download_pb.cjs';
 import {dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
 
 /**
+ * Protobuf `float` fields are 32-bit, so 19.8 decodes as 19.799999237060547.
+ * Six significant digits is below float precision and turns it back into 19.8.
+ * @param {number} num
+ * @return {string}
+ */
+function floatToString(num) {
+  return String(Number(num.toPrecision(6)));
+}
+
+/**
  * @param {string} data
  * @return {Object<string, string>}
  */
@@ -24,6 +34,14 @@ export function deserializeDownload(data) {
   if (tzeit !== 0) {
     q.td = String(tzeit);
   }
+  const fastStartDeg = msg.getFaststartdeg();
+  if (fastStartDeg !== 0) q.fsd = floatToString(fastStartDeg);
+  const fastStartMins = msg.getFaststartmins();
+  if (fastStartMins !== 0) q.fsm = String(fastStartMins);
+  const tishaBavEndDeg = msg.getTishabavenddeg();
+  if (tishaBavEndDeg !== 0) q.tbed = floatToString(tishaBavEndDeg);
+  const tishaBavEndMins = msg.getTishabavendmins();
+  if (tishaBavEndMins !== 0) q.tbem = String(tishaBavEndMins);
   q.yt = msg.getIshebrewyear() ? 'H' : 'G';
   if (msg.getCandlelighting()) q.c = 'on';
   q.geonameid = msg.getGeonameid() || undefined;

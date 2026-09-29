@@ -311,6 +311,78 @@ describe('td protobuf round-trip', () => {
   });
 });
 
+describe('fast start/end protobuf round-trip', () => {
+  const base = {
+    v: '1',
+    maj: 'on',
+    mf: 'on',
+    c: 'on',
+    year: '2026',
+    geo: 'pos',
+    latitude: '40.7128',
+    longitude: '-74.006',
+    tzid: 'America/New_York',
+    lg: 's',
+    M: 'on',
+  };
+
+  function roundTrip(query) {
+    const href = downloadHref2(query, 'test.ics');
+    const encoded = href.match(/\/v4\/([^/]+)\//)[1]
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
+    return deserializeDownload(encoded);
+  }
+
+  it('round-trips fsd and tbed (float) and fsm and tbem (uint32)', () => {
+    const result = roundTrip({...base, fsd: '19.8', tbed: '8.5'});
+    expect(result.fsd).toBe('19.8');
+    expect(result.tbed).toBe('8.5');
+    expect(result.fsm).toBeUndefined();
+    expect(result.tbem).toBeUndefined();
+
+    const result2 = roundTrip({...base, fsm: '72', tbem: '50'});
+    expect(result2.fsm).toBe('72');
+    expect(result2.tbem).toBe('50');
+    expect(result2.fsd).toBeUndefined();
+    expect(result2.tbed).toBeUndefined();
+  });
+
+  it('round-trips 7.083 without float noise', () => {
+    expect(roundTrip({...base, fsd: '7.083'}).fsd).toBe('7.083');
+  });
+
+  it('degrees wins when both are given', () => {
+    const result = roundTrip({...base, fsd: '16.1', fsm: '72'});
+    expect(result.fsd).toBe('16.1');
+    expect(result.fsm).toBeUndefined();
+  });
+
+  it('leaves the token unchanged when the parameters are absent or invalid', () => {
+    const href = downloadHref2(base, 'test.ics');
+    const invalid = {...base, fsd: 'abc', fsm: '0', tbed: '90', tbem: '999'};
+    expect(downloadHref2(invalid, 'test.ics')).toBe(href);
+    const result = roundTrip(base);
+    for (const key of ['fsd', 'fsm', 'tbed', 'tbem']) {
+      expect(result[key]).toBeUndefined();
+    }
+  });
+
+  it('applies fsm and tbem to .ics downloads', async () => {
+    const query = {...base, fsm: '72', tbem: '50', start: '2026-12-20', end: '2027-08-12'};
+    delete query.year;
+    const href = downloadHref2(query, 'fast.ics');
+    const path = href.substring(href.indexOf('/v4/')) + '.ics';
+    const response = await request(server).get(path);
+    expect(response.status).toBe(200);
+    const text = response.text.replaceAll('\r\n', '\n');
+    // Asara B'Tevet: sunrise 07:16 - 72 min
+    expect(text).toMatch(/SUMMARY:Fast begins\nDTSTART;TZID=America\/New_York:20261220T060400/);
+    // Tish'a B'Av: sunset 19:58 + 50 min
+    expect(text).toMatch(/SUMMARY:Fast ends\nDTSTART;TZID=America\/New_York:20270812T204800/);
+  });
+});
+
 describe('304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for ICS', async () => {
     await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics');
