@@ -5,11 +5,25 @@ import {murmur32HexSync} from '@hebcal/murmurhash3';
 import {lightCandlesWhen} from './common.js';
 import {
   BIRTHDAY,
+  OTHER,
   YAHRZEIT,
   getNumYears,
   getYahrzeitDetailForId
 } from './yahrzeitCommon.js';
 
+
+/**
+ * @typedef {import('./yahrzeitCommon.js').YahrzeitDetail} YahrzeitDetail
+ */
+
+/**
+ * Per-calendar settings that are the same for every event generated
+ * from a single yahrzeit/anniversary entry
+ * @typedef {Object} YahrzeitEventOptions
+ * @property {string} [calendarId] ULID of the saved calendar, if any
+ * @property {boolean} includeUrl append a link to the edit page to the memo
+ * @property {boolean} appendHebDate append the Hebrew date to the event title
+ */
 
 const hebrewRe = /[א-ת]/;
 
@@ -54,7 +68,7 @@ export async function makeYahrzeitEvents(maxId, query, reminder) {
   const {startYear, endYear, years} = getDateRange(query);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
-    const events0 = await getEventsForId(query, id, startYear, years);
+    const events0 = getEventsForId(query, id, startYear, years);
     events = events.concat(events0);
     if (reminder) {
       const reminders = makeReminderEvents(events0, id);
@@ -113,19 +127,23 @@ function makeReminderEvents(events, id) {
  * @param {number} id
  * @param {number} startYear
  * @param {number} numYears
- * @return {Promise<Event[]>}
+ * @return {Event[]}
  */
-async function getEventsForId(query, id, startYear, numYears) {
+function getEventsForId(query, id, startYear, numYears) {
   const events = [];
   const info = getYahrzeitDetailForId(query, id);
   if (info === null) {
     return events;
   }
   const calendarId = query.ulid;
-  const includeUrl = Boolean(calendarId && query.dl !== '1');
-  const appendHebDate = (query.hebdate === 'on' || query.hebdate === '1');
+  /** @type {YahrzeitEventOptions} */
+  const options = {
+    calendarId,
+    includeUrl: Boolean(calendarId && query.dl !== '1'),
+    appendHebDate: (query.hebdate === 'on' || query.hebdate === '1'),
+  };
   for (let hyear = startYear; events.length < numYears; hyear++) {
-    const ev = await makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl);
+    const ev = makeYahrzeitEvent(id, info, hyear, options);
     if (ev) {
       events.push(ev);
     }
@@ -133,6 +151,11 @@ async function getEventsForId(query, id, startYear, numYears) {
   return events;
 }
 
+/**
+ * @param {HDate} hd
+ * @param {boolean} isHebrewName
+ * @return {string}
+ */
 function hebdateNoYear(hd, isHebrewName) {
   if (isHebrewName) {
     const dd = hd.getDate();
@@ -143,6 +166,13 @@ function hebdateNoYear(hd, isHebrewName) {
   }
 }
 
+/**
+ * @param {YahrzeitDetail} info
+ * @param {HDate} hd date of observance
+ * @param {number} yearNumber
+ * @param {boolean} appendHebDate
+ * @return {string}
+ */
 function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
   const name = info.name;
   let subj = name;
@@ -170,14 +200,13 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
 
 /**
  * @param {number} id
- * @param {any} info
+ * @param {YahrzeitDetail} info
  * @param {number} hyear
- * @param {boolean} appendHebDate
- * @param {string} calendarId
- * @param {boolean} includeUrl
- * @return {Promise<Event>}
+ * @param {YahrzeitEventOptions} options
+ * @return {Event|null} `null` if there is no observance in `hyear`
  */
-async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, includeUrl) {
+function makeYahrzeitEvent(id, info, hyear, options) {
+  const {calendarId, includeUrl, appendHebDate} = options;
   const type = info.type;
   const isYahrzeit = type === YAHRZEIT;
   const isBirthday = type === BIRTHDAY;
@@ -188,12 +217,9 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   if (!hd) {
     return null;
   }
-  const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-  const hebdate = hd.render('en').replaceAll('\'', '’');
   const origHd = new HDate(origDt);
   const origHyear = origHd.getFullYear();
   const yearNumber = hyear - origHyear;
-  const nth = Locale.ordinal(yearNumber, 'en');
   const name = info.name;
   const subj = makeYahrzeitSubject(info, hd, yearNumber, appendHebDate);
   const ev = new Event(hd, subj, flags.USER_EVENT);
@@ -202,8 +228,10 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   } else if (isBirthday) {
     ev.emoji = '🎂✡️';
   }
-  const observed = dayjs(hd.greg());
-  ev.memo = makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId);
+  const editUrl = includeUrl ?
+    `https://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}` :
+    undefined;
+  ev.memo = makeMemo(info, hd, yearNumber, editUrl);
   const hash = calendarId || murmur32HexSync(name);
   ev.uid = type.toLowerCase() + '-' + hyear + '-' + hash + '-' + id;
   ev.name = name;
@@ -219,12 +247,23 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
 // literal backslash-n: iCalendar-escaped newline, unescaped later for display
 const NL = String.raw`\n`;
 
-function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId) {
+/**
+ * @param {YahrzeitDetail} info
+ * @param {HDate} hd date of observance
+ * @param {number} yearNumber how many years since the original date
+ * @param {string} [editUrl] link to the edit page, appended to the memo
+ * @return {string}
+ */
+function makeMemo(info, hd, yearNumber, editUrl) {
   const type = info.type;
   const isYahrzeit = type === YAHRZEIT;
   const isBirthday = type === BIRTHDAY;
-  const isOther = (type === 'Other');
+  const isOther = (type === OTHER);
   const name = info.name;
+  const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
+  const nth = Locale.ordinal(yearNumber, 'en');
+  const hebdate = hd.render('en').replaceAll('\'', '’');
+  const observed = dayjs(hd.greg());
   const nameAndType = isOther ? name : `${name}’s ${typeStr}`;
   const erev = observed.subtract(1, 'day');
   const verb = isYahrzeit ? 'remembering' : 'honoring';
@@ -242,8 +281,8 @@ function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calenda
   } else if (isBirthday) {
     memo += `${NL}${NL}Mazel Tov!`;
   }
-  if (includeUrl) {
-    memo += `${NL}${NL}https://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
+  if (editUrl) {
+    memo += `${NL}${NL}${editUrl}`;
   }
   return memo;
 }
