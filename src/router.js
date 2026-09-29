@@ -114,6 +114,7 @@ Disallow: /converter/csv
 Disallow: /email
 Disallow: /login
 Disallow: /account
+Disallow: /home/?s=
 `;
       return;
     } else if (rpath === '/ping') {
