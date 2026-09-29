@@ -98,6 +98,8 @@ export function downloadHref2(query, filename, override={}) {
   const fast = getFastTimeOpts(q);
   if (fast.fastStartDeg) msg.setFaststartdeg(fast.fastStartDeg);
   if (fast.fastStartMins) msg.setFaststartmins(fast.fastStartMins);
+  if (fast.fastEndDeg) msg.setFastenddeg(fast.fastEndDeg);
+  if (fast.fastEndMins) msg.setFastendmins(fast.fastEndMins);
   if (fast.tishaBavEndDeg) msg.setTishabavenddeg(fast.tishaBavEndDeg);
   if (fast.tishaBavEndMins) msg.setTishabavendmins(fast.tishaBavEndMins);
   if (on(q.emoji) || q.emoji === true) {

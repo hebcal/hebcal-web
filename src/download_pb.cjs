@@ -13,13 +13,7 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global =
-    (typeof globalThis !== 'undefined' && globalThis) ||
-    (typeof window !== 'undefined' && window) ||
-    (typeof global !== 'undefined' && global) ||
-    (typeof self !== 'undefined' && self) ||
-    (function () { return this; }).call(null) ||
-    Function('return this')();
+var global = globalThis;
 
 goog.exportSymbol('proto.Download', null, global);
 goog.exportSymbol('proto.Download.EndOneofCase', null, global);
@@ -155,76 +149,78 @@ proto.Download.prototype.toObject = function(opt_includeInstance) {
  */
 proto.Download.toObject = function(includeInstance, msg) {
   var f, obj = {
-    major: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    minor: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-    roshchodesh: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    modern: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    minorfast: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    specialshabbat: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    israel: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
-    havdalahtzeit: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
-    ishebrewyear: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
-    candlelighting: jspb.Message.getBooleanFieldWithDefault(msg, 10, false),
-    geonameid: jspb.Message.getFieldWithDefault(msg, 11, 0),
-    year: jspb.Message.getFieldWithDefault(msg, 12, 0),
-    locale: jspb.Message.getFieldWithDefault(msg, 13, ""),
-    havdalahmins: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    candlelightingmins: (f = jspb.Message.getField(msg, 15)) == null ? undefined : f,
-    emoji: jspb.Message.getBooleanFieldWithDefault(msg, 16, false),
-    sedrot: jspb.Message.getBooleanFieldWithDefault(msg, 17, false),
-    zip: jspb.Message.getFieldWithDefault(msg, 18, ""),
-    yearnow: jspb.Message.getBooleanFieldWithDefault(msg, 19, false),
-    subscribe: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
-    addaltdates: jspb.Message.getBooleanFieldWithDefault(msg, 23, false),
-    addaltdatesforevents: jspb.Message.getBooleanFieldWithDefault(msg, 24, false),
-    omer: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
-    dafyomi: jspb.Message.getBooleanFieldWithDefault(msg, 26, false),
-    euro: jspb.Message.getBooleanFieldWithDefault(msg, 27, false),
-    mishnayomi: jspb.Message.getBooleanFieldWithDefault(msg, 28, false),
-    geopos: jspb.Message.getBooleanFieldWithDefault(msg, 29, false),
-    month: jspb.Message.getFieldWithDefault(msg, 30, 0),
-    numyears: jspb.Message.getFieldWithDefault(msg, 31, 0),
-    oldLatitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 32, 0.0),
-    latitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 41, 0.0),
-    oldLongitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 33, 0.0),
-    longitude: jspb.Message.getFloatingPointFieldWithDefault(msg, 42, 0.0),
-    tzid: jspb.Message.getFieldWithDefault(msg, 34, ""),
-    startStr: jspb.Message.getFieldWithDefault(msg, 35, ""),
-    start: jspb.Message.getFieldWithDefault(msg, 43, 0),
-    endStr: jspb.Message.getFieldWithDefault(msg, 36, ""),
-    end: jspb.Message.getFieldWithDefault(msg, 44, 0),
-    yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
-    hour12: jspb.Message.getFieldWithDefault(msg, 39, 0),
-    cityname: jspb.Message.getFieldWithDefault(msg, 40, ""),
-    yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false),
-    nachyomi: jspb.Message.getBooleanFieldWithDefault(msg, 46, false),
-    rambam1: jspb.Message.getBooleanFieldWithDefault(msg, 47, false),
-    chofetzchaim: jspb.Message.getBooleanFieldWithDefault(msg, 48, false),
-    shemirathalashon: jspb.Message.getBooleanFieldWithDefault(msg, 49, false),
-    psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false),
-    dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false),
-    elev: jspb.Message.getFieldWithDefault(msg, 52, 0),
-    useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false),
-    tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false),
-    pirkeiavotsummer: jspb.Message.getBooleanFieldWithDefault(msg, 55, false),
-    yizkor: jspb.Message.getBooleanFieldWithDefault(msg, 56, false),
-    arukhhashulchanyomi: jspb.Message.getBooleanFieldWithDefault(msg, 57, false),
-    yyschottenstein: jspb.Message.getBooleanFieldWithDefault(msg, 58, false),
-    perekyomi: jspb.Message.getBooleanFieldWithDefault(msg, 59, false),
-    shabbatmevarchim: jspb.Message.getBooleanFieldWithDefault(msg, 60, false),
-    rambam3: jspb.Message.getBooleanFieldWithDefault(msg, 61, false),
-    seferhamitzvot: jspb.Message.getBooleanFieldWithDefault(msg, 62, false),
-    kitzurshulchanaruch: jspb.Message.getBooleanFieldWithDefault(msg, 63, false),
-    monthmode: jspb.Message.getFieldWithDefault(msg, 64, 0),
-    yomtovonly: jspb.Message.getBooleanFieldWithDefault(msg, 65, false),
-    dirshuamudyomi: jspb.Message.getBooleanFieldWithDefault(msg, 66, false),
-    tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0),
-    nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false),
-    dirshudafhalacha: jspb.Message.getBooleanFieldWithDefault(msg, 69, false),
-    faststartdeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 70, 0.0),
-    faststartmins: jspb.Message.getFieldWithDefault(msg, 71, 0),
-    tishabavenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 72, 0.0),
-    tishabavendmins: jspb.Message.getFieldWithDefault(msg, 73, 0)
+major: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+minor: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+roshchodesh: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+modern: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+minorfast: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+specialshabbat: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+israel: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+havdalahtzeit: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+ishebrewyear: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
+candlelighting: jspb.Message.getBooleanFieldWithDefault(msg, 10, false),
+geonameid: jspb.Message.getFieldWithDefault(msg, 11, 0),
+year: jspb.Message.getFieldWithDefault(msg, 12, 0),
+locale: jspb.Message.getFieldWithDefault(msg, 13, ""),
+havdalahmins: jspb.Message.getFieldWithDefault(msg, 14, 0),
+candlelightingmins: (f = jspb.Message.getField(msg, 15)) == null ? undefined : f,
+emoji: jspb.Message.getBooleanFieldWithDefault(msg, 16, false),
+sedrot: jspb.Message.getBooleanFieldWithDefault(msg, 17, false),
+zip: jspb.Message.getFieldWithDefault(msg, 18, ""),
+yearnow: jspb.Message.getBooleanFieldWithDefault(msg, 19, false),
+subscribe: jspb.Message.getBooleanFieldWithDefault(msg, 20, false),
+addaltdates: jspb.Message.getBooleanFieldWithDefault(msg, 23, false),
+addaltdatesforevents: jspb.Message.getBooleanFieldWithDefault(msg, 24, false),
+omer: jspb.Message.getBooleanFieldWithDefault(msg, 25, false),
+dafyomi: jspb.Message.getBooleanFieldWithDefault(msg, 26, false),
+euro: jspb.Message.getBooleanFieldWithDefault(msg, 27, false),
+mishnayomi: jspb.Message.getBooleanFieldWithDefault(msg, 28, false),
+geopos: jspb.Message.getBooleanFieldWithDefault(msg, 29, false),
+month: jspb.Message.getFieldWithDefault(msg, 30, 0),
+numyears: jspb.Message.getFieldWithDefault(msg, 31, 0),
+oldLatitude: (f = jspb.Message.getOptionalFloatingPointField(msg, 32)) == null ? undefined : f,
+latitude: (f = jspb.Message.getOptionalFloatingPointField(msg, 41)) == null ? undefined : f,
+oldLongitude: (f = jspb.Message.getOptionalFloatingPointField(msg, 33)) == null ? undefined : f,
+longitude: (f = jspb.Message.getOptionalFloatingPointField(msg, 42)) == null ? undefined : f,
+tzid: jspb.Message.getFieldWithDefault(msg, 34, ""),
+startStr: (f = jspb.Message.getField(msg, 35)) == null ? undefined : f,
+start: (f = jspb.Message.getField(msg, 43)) == null ? undefined : f,
+endStr: (f = jspb.Message.getField(msg, 36)) == null ? undefined : f,
+end: (f = jspb.Message.getField(msg, 44)) == null ? undefined : f,
+yomkippurkatan: jspb.Message.getBooleanFieldWithDefault(msg, 37, false),
+hour12: jspb.Message.getFieldWithDefault(msg, 39, 0),
+cityname: jspb.Message.getFieldWithDefault(msg, 40, ""),
+yerushalmiyomi: jspb.Message.getBooleanFieldWithDefault(msg, 45, false),
+nachyomi: jspb.Message.getBooleanFieldWithDefault(msg, 46, false),
+rambam1: jspb.Message.getBooleanFieldWithDefault(msg, 47, false),
+chofetzchaim: jspb.Message.getBooleanFieldWithDefault(msg, 48, false),
+shemirathalashon: jspb.Message.getBooleanFieldWithDefault(msg, 49, false),
+psalms: jspb.Message.getBooleanFieldWithDefault(msg, 50, false),
+dafweekly: jspb.Message.getBooleanFieldWithDefault(msg, 51, false),
+elev: jspb.Message.getFieldWithDefault(msg, 52, 0),
+useelevation: jspb.Message.getBooleanFieldWithDefault(msg, 53, false),
+tanakhyomi: jspb.Message.getBooleanFieldWithDefault(msg, 54, false),
+pirkeiavotsummer: jspb.Message.getBooleanFieldWithDefault(msg, 55, false),
+yizkor: jspb.Message.getBooleanFieldWithDefault(msg, 56, false),
+arukhhashulchanyomi: jspb.Message.getBooleanFieldWithDefault(msg, 57, false),
+yyschottenstein: jspb.Message.getBooleanFieldWithDefault(msg, 58, false),
+perekyomi: jspb.Message.getBooleanFieldWithDefault(msg, 59, false),
+shabbatmevarchim: jspb.Message.getBooleanFieldWithDefault(msg, 60, false),
+rambam3: jspb.Message.getBooleanFieldWithDefault(msg, 61, false),
+seferhamitzvot: jspb.Message.getBooleanFieldWithDefault(msg, 62, false),
+kitzurshulchanaruch: jspb.Message.getBooleanFieldWithDefault(msg, 63, false),
+monthmode: jspb.Message.getFieldWithDefault(msg, 64, 0),
+yomtovonly: jspb.Message.getBooleanFieldWithDefault(msg, 65, false),
+dirshuamudyomi: jspb.Message.getBooleanFieldWithDefault(msg, 66, false),
+tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0),
+nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false),
+dirshudafhalacha: jspb.Message.getBooleanFieldWithDefault(msg, 69, false),
+faststartdeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 70, 0.0),
+faststartmins: jspb.Message.getFieldWithDefault(msg, 71, 0),
+fastenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 72, 0.0),
+fastendmins: jspb.Message.getFieldWithDefault(msg, 73, 0),
+tishabavenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 74, 0.0),
+tishabavendmins: jspb.Message.getFieldWithDefault(msg, 75, 0)
   };
 
   if (includeInstance) {
@@ -237,7 +233,7 @@ proto.Download.toObject = function(includeInstance, msg) {
 
 /**
  * Deserializes binary data (in protobuf wire format).
- * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @param {jspb.binary.bytesource.ByteSource} bytes The bytes to deserialize.
  * @return {!proto.Download}
  */
 proto.Download.deserializeBinary = function(bytes) {
@@ -310,7 +306,7 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       msg.setYear(value);
       break;
     case 13:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setLocale(value);
       break;
     case 14:
@@ -330,7 +326,7 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       msg.setSedrot(value);
       break;
     case 18:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setZip(value);
       break;
     case 19:
@@ -394,11 +390,11 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       msg.setLongitude(value);
       break;
     case 34:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setTzid(value);
       break;
     case 35:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setStartStr(value);
       break;
     case 43:
@@ -406,7 +402,7 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       msg.setStart(value);
       break;
     case 36:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setEndStr(value);
       break;
     case 44:
@@ -422,7 +418,7 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       msg.setHour12(value);
       break;
     case 40:
-      var value = /** @type {string} */ (reader.readString());
+      var value = /** @type {string} */ (reader.readStringRequireUtf8());
       msg.setCityname(value);
       break;
     case 45:
@@ -535,9 +531,17 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
       break;
     case 72:
       var value = /** @type {number} */ (reader.readFloat());
-      msg.setTishabavenddeg(value);
+      msg.setFastenddeg(value);
       break;
     case 73:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setFastendmins(value);
+      break;
+    case 74:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setTishabavenddeg(value);
+      break;
+    case 75:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setTishabavendmins(value);
       break;
@@ -1046,17 +1050,31 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
-  f = message.getTishabavenddeg();
+  f = message.getFastenddeg();
   if (f !== 0.0) {
     writer.writeFloat(
       72,
       f
     );
   }
-  f = message.getTishabavendmins();
+  f = message.getFastendmins();
   if (f !== 0) {
     writer.writeUint32(
       73,
+      f
+    );
+  }
+  f = message.getTishabavenddeg();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      74,
+      f
+    );
+  }
+  f = message.getTishabavendmins();
+  if (f !== 0) {
+    writer.writeUint32(
+      75,
       f
     );
   }
@@ -2468,10 +2486,10 @@ proto.Download.prototype.setFaststartmins = function(value) {
 
 
 /**
- * optional float tishaBavEndDeg = 72;
+ * optional float fastEndDeg = 72;
  * @return {number}
  */
-proto.Download.prototype.getTishabavenddeg = function() {
+proto.Download.prototype.getFastenddeg = function() {
   return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 72, 0.0));
 };
 
@@ -2480,16 +2498,16 @@ proto.Download.prototype.getTishabavenddeg = function() {
  * @param {number} value
  * @return {!proto.Download} returns this
  */
-proto.Download.prototype.setTishabavenddeg = function(value) {
+proto.Download.prototype.setFastenddeg = function(value) {
   return jspb.Message.setProto3FloatField(this, 72, value);
 };
 
 
 /**
- * optional uint32 tishaBavEndMins = 73;
+ * optional uint32 fastEndMins = 73;
  * @return {number}
  */
-proto.Download.prototype.getTishabavendmins = function() {
+proto.Download.prototype.getFastendmins = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 73, 0));
 };
 
@@ -2498,8 +2516,44 @@ proto.Download.prototype.getTishabavendmins = function() {
  * @param {number} value
  * @return {!proto.Download} returns this
  */
-proto.Download.prototype.setTishabavendmins = function(value) {
+proto.Download.prototype.setFastendmins = function(value) {
   return jspb.Message.setProto3IntField(this, 73, value);
+};
+
+
+/**
+ * optional float tishaBavEndDeg = 74;
+ * @return {number}
+ */
+proto.Download.prototype.getTishabavenddeg = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 74, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTishabavenddeg = function(value) {
+  return jspb.Message.setProto3FloatField(this, 74, value);
+};
+
+
+/**
+ * optional uint32 tishaBavEndMins = 75;
+ * @return {number}
+ */
+proto.Download.prototype.getTishabavendmins = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 75, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTishabavendmins = function(value) {
+  return jspb.Message.setProto3IntField(this, 75, value);
 };
 
 
