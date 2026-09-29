@@ -334,18 +334,22 @@ describe('fast start/end protobuf round-trip', () => {
     return deserializeDownload(encoded);
   }
 
-  it('round-trips fsd and tbed (float) and fsm and tbem (uint32)', () => {
-    const result = roundTrip({...base, fsd: '19.8', tbed: '8.5'});
+  it('round-trips fsd, fed and tbed (float) and fsm, fem and tbem (uint32)', () => {
+    const result = roundTrip({...base, fsd: '19.8', fed: '8.5', tbed: '6.45'});
     expect(result.fsd).toBe('19.8');
-    expect(result.tbed).toBe('8.5');
-    expect(result.fsm).toBeUndefined();
-    expect(result.tbem).toBeUndefined();
+    expect(result.fed).toBe('8.5');
+    expect(result.tbed).toBe('6.45');
+    for (const key of ['fsm', 'fem', 'tbem']) {
+      expect(result[key]).toBeUndefined();
+    }
 
-    const result2 = roundTrip({...base, fsm: '72', tbem: '50'});
+    const result2 = roundTrip({...base, fsm: '72', fem: '20', tbem: '50'});
     expect(result2.fsm).toBe('72');
+    expect(result2.fem).toBe('20');
     expect(result2.tbem).toBe('50');
-    expect(result2.fsd).toBeUndefined();
-    expect(result2.tbed).toBeUndefined();
+    for (const key of ['fsd', 'fed', 'tbed']) {
+      expect(result2[key]).toBeUndefined();
+    }
   });
 
   it('round-trips 7.083 without float noise', () => {
@@ -353,23 +357,29 @@ describe('fast start/end protobuf round-trip', () => {
   });
 
   it('degrees wins when both are given', () => {
-    const result = roundTrip({...base, fsd: '16.1', fsm: '72'});
+    const result = roundTrip({...base, fsd: '16.1', fsm: '72', fed: '7.083', fem: '20'});
     expect(result.fsd).toBe('16.1');
     expect(result.fsm).toBeUndefined();
+    expect(result.fed).toBe('7.083');
+    expect(result.fem).toBeUndefined();
   });
 
   it('leaves the token unchanged when the parameters are absent or invalid', () => {
     const href = downloadHref2(base, 'test.ics');
-    const invalid = {...base, fsd: 'abc', fsm: '0', tbed: '90', tbem: '999'};
+    const invalid = {
+      ...base, fsd: 'abc', fsm: '0', fed: '-0', fem: 'x', tbed: '90', tbem: '999',
+    };
     expect(downloadHref2(invalid, 'test.ics')).toBe(href);
     const result = roundTrip(base);
-    for (const key of ['fsd', 'fsm', 'tbed', 'tbem']) {
+    for (const key of ['fsd', 'fsm', 'fed', 'fem', 'tbed', 'tbem']) {
       expect(result[key]).toBeUndefined();
     }
   });
 
-  it('applies fsm and tbem to .ics downloads', async () => {
-    const query = {...base, fsm: '72', tbem: '50', start: '2026-12-20', end: '2027-08-12'};
+  it('applies fsm, fem and tbem to .ics downloads', async () => {
+    const query = {
+      ...base, fsm: '72', fem: '50', tbem: '50', start: '2026-12-20', end: '2027-08-12',
+    };
     delete query.year;
     const href = downloadHref2(query, 'fast.ics');
     const path = href.substring(href.indexOf('/v4/')) + '.ics';
@@ -378,6 +388,8 @@ describe('fast start/end protobuf round-trip', () => {
     const text = response.text.replaceAll('\r\n', '\n');
     // Asara B'Tevet: sunrise 07:16 - 72 min
     expect(text).toMatch(/SUMMARY:Fast begins\nDTSTART;TZID=America\/New_York:20261220T060400/);
+    // Asara B'Tevet: sunset 16:31 + 50 min
+    expect(text).toMatch(/SUMMARY:Fast ends\nDTSTART;TZID=America\/New_York:20261220T172100/);
     // Tish'a B'Av: sunset 19:58 + 50 min
     expect(text).toMatch(/SUMMARY:Fast ends\nDTSTART;TZID=America\/New_York:20270812T204800/);
   });

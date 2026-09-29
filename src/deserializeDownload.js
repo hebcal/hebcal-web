@@ -38,6 +38,10 @@ export function deserializeDownload(data) {
   if (fastStartDeg !== 0) q.fsd = floatToString(fastStartDeg);
   const fastStartMins = msg.getFaststartmins();
   if (fastStartMins !== 0) q.fsm = String(fastStartMins);
+  const fastEndDeg = msg.getFastenddeg();
+  if (fastEndDeg !== 0) q.fed = floatToString(fastEndDeg);
+  const fastEndMins = msg.getFastendmins();
+  if (fastEndMins !== 0) q.fem = String(fastEndMins);
   const tishaBavEndDeg = msg.getTishabavenddeg();
   if (tishaBavEndDeg !== 0) q.tbed = floatToString(tishaBavEndDeg);
   const tishaBavEndMins = msg.getTishabavendmins();
