@@ -2,7 +2,12 @@ import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import createError from 'http-errors';
 import {empty, off} from './empty.js';
-import {urlArgsObj, dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
+import {
+  urlArgsObj,
+  dailyLearningConfig,
+  protocNameToMethodSuffix,
+  getFastTimeOpts,
+} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
 import DownloadProtoBuf from './download_pb.cjs';
 
@@ -90,6 +95,11 @@ export function downloadHref2(query, filename, override={}) {
   }
   const b = getInt(q.b);
   if (b !== null) msg.setCandlelightingmins(b);
+  const fast = getFastTimeOpts(q);
+  if (fast.fastStartDeg) msg.setFaststartdeg(fast.fastStartDeg);
+  if (fast.fastStartMins) msg.setFaststartmins(fast.fastStartMins);
+  if (fast.tishaBavEndDeg) msg.setTishabavenddeg(fast.tishaBavEndDeg);
+  if (fast.tishaBavEndMins) msg.setTishabavendmins(fast.tishaBavEndMins);
   if (on(q.emoji) || q.emoji === true) {
     msg.setEmoji(true);
   }

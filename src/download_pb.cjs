@@ -220,7 +220,11 @@ proto.Download.toObject = function(includeInstance, msg) {
     dirshuamudyomi: jspb.Message.getBooleanFieldWithDefault(msg, 66, false),
     tzeit: jspb.Message.getFloatingPointFieldWithDefault(msg, 67, 0.0),
     nine29: jspb.Message.getBooleanFieldWithDefault(msg, 68, false),
-    dirshudafhalacha: jspb.Message.getBooleanFieldWithDefault(msg, 69, false)
+    dirshudafhalacha: jspb.Message.getBooleanFieldWithDefault(msg, 69, false),
+    faststartdeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 70, 0.0),
+    faststartmins: jspb.Message.getFieldWithDefault(msg, 71, 0),
+    tishabavenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 72, 0.0),
+    tishabavendmins: jspb.Message.getFieldWithDefault(msg, 73, 0)
   };
 
   if (includeInstance) {
@@ -520,6 +524,22 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 69:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setDirshudafhalacha(value);
+      break;
+    case 70:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setFaststartdeg(value);
+      break;
+    case 71:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setFaststartmins(value);
+      break;
+    case 72:
+      var value = /** @type {number} */ (reader.readFloat());
+      msg.setTishabavenddeg(value);
+      break;
+    case 73:
+      var value = /** @type {number} */ (reader.readUint32());
+      msg.setTishabavendmins(value);
       break;
     default:
       reader.skipField();
@@ -1009,6 +1029,34 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f) {
     writer.writeBool(
       69,
+      f
+    );
+  }
+  f = message.getFaststartdeg();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      70,
+      f
+    );
+  }
+  f = message.getFaststartmins();
+  if (f !== 0) {
+    writer.writeUint32(
+      71,
+      f
+    );
+  }
+  f = message.getTishabavenddeg();
+  if (f !== 0.0) {
+    writer.writeFloat(
+      72,
+      f
+    );
+  }
+  f = message.getTishabavendmins();
+  if (f !== 0) {
+    writer.writeUint32(
+      73,
       f
     );
   }
@@ -2380,6 +2428,78 @@ proto.Download.prototype.getDirshudafhalacha = function() {
  */
 proto.Download.prototype.setDirshudafhalacha = function(value) {
   return jspb.Message.setProto3BooleanField(this, 69, value);
+};
+
+
+/**
+ * optional float fastStartDeg = 70;
+ * @return {number}
+ */
+proto.Download.prototype.getFaststartdeg = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 70, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setFaststartdeg = function(value) {
+  return jspb.Message.setProto3FloatField(this, 70, value);
+};
+
+
+/**
+ * optional uint32 fastStartMins = 71;
+ * @return {number}
+ */
+proto.Download.prototype.getFaststartmins = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 71, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setFaststartmins = function(value) {
+  return jspb.Message.setProto3IntField(this, 71, value);
+};
+
+
+/**
+ * optional float tishaBavEndDeg = 72;
+ * @return {number}
+ */
+proto.Download.prototype.getTishabavenddeg = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 72, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTishabavenddeg = function(value) {
+  return jspb.Message.setProto3FloatField(this, 72, value);
+};
+
+
+/**
+ * optional uint32 tishaBavEndMins = 73;
+ * @return {number}
+ */
+proto.Download.prototype.getTishabavendmins = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 73, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTishabavendmins = function(value) {
+  return jspb.Message.setProto3IntField(this, 73, value);
 };
 
 
