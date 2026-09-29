@@ -13,6 +13,7 @@ import {
   booleanOpts,
   dailyLearningOpts,
   numberOpts,
+  fastTimeOpts,
   locationDefaultCandleMins,
   DEFAULT_CANDLE_MINS,
 } from './urlArgs.js';
@@ -81,6 +82,38 @@ function dropDailyLearningOutsideRange(options) {
     yearIsOutsideGregRange(year);
   if (outOfRange) {
     delete options.dailyLearning;
+  }
+}
+
+const MAX_FAST_DEG = 90;
+const MAX_FAST_MINS = 240;
+
+/**
+ * Parses fast start/end query parameters (`fsd`, `fsm`, `fed`, `fem`,
+ * `tbed`, `tbem`) into `options`. Values that aren't numbers, or are out of
+ * range, are dropped from `query` and ignored. When both the degrees and the
+ * minutes parameter of a pair are given, degrees wins.
+ * @param {Object.<string,string>} query
+ * @param {import('@hebcal/core').CalOptions} options
+ */
+function parseFastTimeOpts(query, options) {
+  for (const {deg, mins, degOpt, minsOpt} of fastTimeOpts) {
+    if (!empty(query[deg])) {
+      const num = Math.abs(Number.parseFloat(query[deg]));
+      if (num > 0 && num < MAX_FAST_DEG) { // also rejects NaN
+        options[degOpt] = num;
+      } else {
+        delete query[deg];
+      }
+    }
+    if (!empty(query[mins])) {
+      const num = Math.abs(Number.parseInt(query[mins], 10));
+      if (options[degOpt] === undefined && num > 0 && num <= MAX_FAST_MINS) {
+        options[minsOpt] = num;
+      } else {
+        delete query[mins];
+      }
+    }
   }
 }
 
@@ -191,6 +224,7 @@ export function makeHebcalOptions(db, query) {
       }
     }
   }
+  parseFastTimeOpts(query, options);
   // force numYears to be >= 1 and <= 10, but only if explicitly specified
   if (typeof options.numYears === 'number') {
     options.numYears = getNumYears(options);

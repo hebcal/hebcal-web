@@ -471,3 +471,69 @@ describe('/hebcal far-future years', () => {
     }
   });
 });
+
+describe('/hebcal fast start and end time parameters', () => {
+  // Asara B'Tevet 5787 (2026-12-20) and Tish'a B'Av 5787 (2027-08-12) in New York
+  const base = '/hebcal?v=1&cfg=json&maj=on&min=off&nx=off&mod=off&ss=off&mf=on&c=on' +
+    '&geo=pos&latitude=40.7128&longitude=-74.006&tzid=America/New_York';
+  const asara = base + '&start=2026-12-20&end=2026-12-20';
+  const tishaBav = base + '&start=2027-08-11&end=2027-08-12';
+
+  async function fastTimes(url) {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(200);
+    return response.body.items
+        .filter((item) => item.title === 'Fast begins' || item.title === 'Fast ends')
+        .map((item) => [item.title, item.date]);
+  }
+
+  it('keeps default times when no parameters are given', async () => {
+    expect(await fastTimes(asara)).toEqual([
+      ['Fast begins', '2026-12-20T05:48:00-05:00'], // 16.1°
+      ['Fast ends', '2026-12-20T17:09:00-05:00'], // 7.083°
+    ]);
+    expect(await fastTimes(tishaBav)).toEqual([
+      ['Fast begins', '2027-08-11T20:00:00-04:00'], // sunset
+      ['Fast ends', '2027-08-12T20:30:00-04:00'], // 6.45°
+    ]);
+  });
+
+  it('fsm and fem set minor fast times in minutes', async () => {
+    expect(await fastTimes(asara + '&fsm=72&fem=50')).toEqual([
+      ['Fast begins', '2026-12-20T06:04:00-05:00'],
+      ['Fast ends', '2026-12-20T17:21:00-05:00'],
+    ]);
+  });
+
+  it('fsd and fed set minor fast times in degrees', async () => {
+    expect(await fastTimes(asara + '&fsd=19.8&fed=8.5')).toEqual([
+      ['Fast begins', '2026-12-20T05:27:00-05:00'],
+      ['Fast ends', '2026-12-20T17:17:00-05:00'],
+    ]);
+  });
+
+  it('ignores invalid values', async () => {
+    expect(await fastTimes(asara + '&fsd=abc&fsm=999&fed=0')).toEqual([
+      ['Fast begins', '2026-12-20T05:48:00-05:00'],
+      ['Fast ends', '2026-12-20T17:09:00-05:00'],
+    ]);
+  });
+
+  it('fsd wins over fsm instead of returning an error', async () => {
+    expect(await fastTimes(asara + '&fsd=19.8&fsm=72')).toEqual([
+      ['Fast begins', '2026-12-20T05:27:00-05:00'],
+      ['Fast ends', '2026-12-20T17:09:00-05:00'],
+    ]);
+  });
+
+  it("Tish'a B'Av still begins at sunset; tbem and tbed set its end", async () => {
+    expect(await fastTimes(tishaBav + '&fsm=72&tbem=50')).toEqual([
+      ['Fast begins', '2027-08-11T20:00:00-04:00'],
+      ['Fast ends', '2027-08-12T20:48:00-04:00'],
+    ]);
+    expect(await fastTimes(tishaBav + '&tbed=8.5')).toEqual([
+      ['Fast begins', '2027-08-11T20:00:00-04:00'],
+      ['Fast ends', '2027-08-12T20:43:00-04:00'],
+    ]);
+  });
+});
