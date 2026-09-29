@@ -73,9 +73,9 @@ const TIMEOUT = 7000;
 const shortTimeout = 3000;
 
 /**
- * @param {*} ctx
+ * @param {import('koa').Context} ctx
  * @param {string} id
- * @return {Promise<Object>}
+ * @return {Promise<Object<string,any>>}
  */
 export async function getYahrzeitDetailsFromDb(ctx, id) {
   const db = ctx.mysql;
@@ -166,7 +166,7 @@ export function getAnniversaryTypes(query) {
 
 /**
  * @param {Object<string,any>} q
- * @return {number[]}—
+ * @return {number[]}
  */
 export function getYahrzeitIds(q) {
   const set = new Set();
@@ -200,9 +200,24 @@ export const ANNIVERSARY = 'Anniversary';
 export const OTHER = 'Other';
 
 /**
+ * One of {@link YAHRZEIT}, {@link BIRTHDAY}, {@link ANNIVERSARY} or {@link OTHER}
+ * @typedef {'Yahrzeit'|'Birthday'|'Anniversary'|'Other'} AnniversaryType
+ */
+
+/**
+ * A single yahrzeit/anniversary entry parsed from a calendar's query params
+ * @typedef {Object} YahrzeitDetail
+ * @property {boolean} afterSunset `true` if the original event occurred after sunset
+ * @property {AnniversaryType} type
+ * @property {string} name name of the person or event (never empty)
+ * @property {dayjs.Dayjs} day Gregorian date of the original event,
+ *   already advanced by one day if `afterSunset`
+ */
+
+/**
  * @private
  * @param {string} str
- * @return {string}
+ * @return {AnniversaryType}
  */
 function getAnniversaryType(str) {
   if (typeof str === 'string') {
@@ -223,7 +238,7 @@ function getAnniversaryType(str) {
  * @private
  * @param {Object<string,string>} query
  * @param {number} id
- * @return {HDate|undefined}
+ * @return {import('@hebcal/hdate').HDate|undefined}
  */
 function getHebDateForId(query, id) {
   const hy = query['hy' + id];
@@ -238,7 +253,7 @@ function getHebDateForId(query, id) {
 /**
  * @param {Object<string,any>} query
  * @param {number} id
- * @return {*}
+ * @return {YahrzeitDetail|null} `null` if entry `id` has no date
  */
 export function getYahrzeitDetailForId(query, id) {
   const type = getAnniversaryType(query['t' + id]);
@@ -269,7 +284,7 @@ export function getYahrzeitDetailForId(query, id) {
 /**
  * @param {Object<string,any>} query
  * @param {number} id
- * @param {string} type
+ * @param {AnniversaryType} type
  * @return {string}
  */
 function getAnniversaryName(query, id, type) {
@@ -285,7 +300,7 @@ function getAnniversaryName(query, id, type) {
  * @private
  * @param {Object<string,string>} query
  * @param {number} id
- * @return {any}
+ * @return {{yy: string, mm: string, dd: string}}
  */
 function getDateForId(query, id) {
   const date = query['x' + id];
