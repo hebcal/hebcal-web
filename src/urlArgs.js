@@ -67,6 +67,22 @@ export const numberOpts = {
   ny: 'numYears',
 };
 
+/**
+ * Query parameters for fast start and end times. Each entry pairs a degrees
+ * parameter with a minutes parameter; the two are mutually exclusive in
+ * `@hebcal/core`, so when both are given the degrees parameter wins.
+ */
+export const fastTimeOpts = [
+  // minor fasts begin: degrees below horizon / minutes before sunrise
+  {deg: 'fsd', mins: 'fsm', degOpt: 'fastStartDeg', minsOpt: 'fastStartMins'},
+  // minor fasts end: degrees below horizon / minutes after sunset
+  {deg: 'fed', mins: 'fem', degOpt: 'fastEndDeg', minsOpt: 'fastEndMins'},
+  // Tish'a B'Av ends: degrees below horizon / minutes after sunset
+  {deg: 'tbed', mins: 'tbem', degOpt: 'tishaBavEndDeg', minsOpt: 'tishaBavEndMins'},
+];
+
+export const fastTimeKeys = fastTimeOpts.flatMap((o) => [o.deg, o.mins]);
+
 export const queryToName = {
   maj: 'Major Holidays',
   min: 'Minor Holidays',
@@ -125,7 +141,7 @@ export function getGeoKeysToRemove(geo) {
   }
   switch (geo) {
     case 'pos': return primaryGeoKeys;
-    case 'none': return allGeoKeys.concat(['b', 'm', 'td', 'M', 'ue']);
+    case 'none': return allGeoKeys.concat(['b', 'm', 'td', 'M', 'ue'], fastTimeKeys);
     case 'geoname': return allGeoKeys.filter((k) => k !== 'geonameid');
     default: return allGeoKeys.filter((k) => k !== geo);
   }

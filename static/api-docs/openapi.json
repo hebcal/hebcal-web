@@ -67,6 +67,12 @@
           {"name": "b", "in": "query", "schema": {"type": "integer", "default": 18}, "description": "Minutes before sunset for candle lighting. Defaults: 18 (most cities), 40 (Jerusalem), 30 (Haifa, Zikhron Ya'akov)."},
           {"name": "M", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Calculate Havdalah at nightfall (tzeit hakochavim)."},
           {"name": "m", "in": "query", "schema": {"type": "integer", "default": 0}, "description": "Fixed minutes after sundown for Havdalah. `0` disables Havdalah."},
+          {"name": "fsd", "in": "query", "schema": {"type": "number", "exclusiveMinimum": true, "minimum": 0, "exclusiveMaximum": true, "maximum": 90, "default": 16.1}, "description": "Minor fasts begin when the sun is this many degrees below the horizon in the morning (default 16.1°, Alot HaShachar). Takes precedence over `fsm`. Tish'a B'Av always begins at sunset. Requires `c=on` and a location."},
+          {"name": "fsm", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 240}, "description": "Minor fasts begin this many minutes before sunrise (e.g. 72 or 90). Honors `ue`. Ignored when `fsd` is given."},
+          {"name": "fed", "in": "query", "schema": {"type": "number", "exclusiveMinimum": true, "minimum": 0, "exclusiveMaximum": true, "maximum": 90, "default": 7.083}, "description": "Minor fasts end when the sun is this many degrees below the horizon in the evening. Default is 7.083° in the Diaspora, or 15 minutes after sunset in Israel. Takes precedence over `fem`. Does not affect Tish'a B'Av."},
+          {"name": "fem", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 240}, "description": "Minor fasts end this many minutes after sunset. Honors `ue`. Ignored when `fed` is given. Does not affect Tish'a B'Av."},
+          {"name": "tbed", "in": "query", "schema": {"type": "number", "exclusiveMinimum": true, "minimum": 0, "exclusiveMaximum": true, "maximum": 90, "default": 6.45}, "description": "Tish'a B'Av ends when the sun is this many degrees below the horizon in the evening (default 6.45°, Rabbi Yechiel Michel Tucazinsky). Takes precedence over `tbem`."},
+          {"name": "tbem", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 240}, "description": "Tish'a B'Av ends this many minutes after sunset. Honors `ue`. Ignored when `tbed` is given."},
 
           {"$ref": "#/components/parameters/Geonameid"},
           {"$ref": "#/components/parameters/Zip"},
