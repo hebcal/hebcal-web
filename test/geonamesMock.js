@@ -40,7 +40,7 @@ function id2nameFor(db) {
     if (!id) {
       // Some classic cities are only stored under a country/state-qualified
       // key, e.g. 'br-saopaulo' or 'us-lasvegas-nv'. Match those too.
-      const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
       const re = new RegExp(`^[a-z]{2}-${escaped}(-.+)?$`);
       for (const [k, v] of db.legacyCities) {
         if (re.test(k)) {

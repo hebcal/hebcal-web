@@ -181,7 +181,7 @@ const UNSAFE_FOR_SCRIPT_RE = /[<>&\u2028\u2029]/g;
 
 function escapeForScript(json) {
   return json.replaceAll(UNSAFE_FOR_SCRIPT_RE,
-      (ch) => '\\u' + ch.codePointAt(0).toString(16).padStart(4, '0'));
+      (ch) => String.raw`\u` + ch.codePointAt(0).toString(16).padStart(4, '0'));
 }
 
 /**

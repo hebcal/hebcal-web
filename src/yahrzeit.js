@@ -226,7 +226,7 @@ async function renderJson(maxId, q) {
     delete item.hebrew;
     delete item.category;
     if (typeof item.memo === 'string') {
-      item.memo = item.memo.replaceAll('\\n', '\n');
+      item.memo = item.memo.replaceAll(String.raw`\n`, '\n');
     }
     const ev = item.ev;
     delete item.ev;

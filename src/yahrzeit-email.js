@@ -115,7 +115,7 @@ export async function yahrzeitEmailStatus(ctx) {
   const user = ctx.state.user;
   const calendarId = ctx.request.query.ulid;
   if (!user || !user.email || empty(calendarId)) {
-    ctx.body = {loggedIn: Boolean(user && user.email)};
+    ctx.body = {loggedIn: Boolean(user?.email)};
     return;
   }
   const {status} = await existingSubByEmailAndCalendar(

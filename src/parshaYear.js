@@ -113,7 +113,7 @@ function makeItem(ev, locale, il, lang) {
     const holidays0 = getHolidaysOnDate(hd, il) || [];
     const holidays1 = holidays0.filter((ev) => ev.hasAnyFlag('SPECIAL_SHABBAT', 'ROSH_CHODESH') || ev.chanukahDay);
     item.holidays = holidays1.map((ev) => holidayEvToItem(ev, il, lang));
-    const roshChodeshToday = holidays1.find((ev) => ev.hasFlag('ROSH_CHODESH'));
+    const roshChodeshToday = holidays1.some((ev) => ev.hasFlag('ROSH_CHODESH'));
     if (!roshChodeshToday) {
       const tommorow = hd.next().getDate();
       if (tommorow === 30 || tommorow === 1) {

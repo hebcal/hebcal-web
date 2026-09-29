@@ -83,7 +83,7 @@ async function compressFiles(files) {
   }
 }
 
-(async function() {
+void (async function() {
   if (!fs.existsSync('ical')) {
     fs.mkdirSync('ical');
   }
