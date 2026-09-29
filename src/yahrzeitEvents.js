@@ -62,9 +62,9 @@ export function getDateRange(query) {
  * @param {number} maxId
  * @param {Object.<string,string>} query
  * @param {boolean} reminder
- * @return {Promise<Event[]>}
+ * @return {Event[]}
  */
-export async function makeYahrzeitEvents(maxId, query, reminder) {
+export function makeYahrzeitEvents(maxId, query, reminder) {
   const {startYear, endYear, years} = getDateRange(query);
   let events = [];
   for (let id = 1; id <= maxId; id++) {
