@@ -39,7 +39,7 @@ export async function yahrzeitEmailVerify(ctx) {
     const ip = getIpAddress(ctx);
     await dbQuery(ctx, sqlUpdate, [ip, subscriptionId]);
     matomoTrack(ctx, 'Email', 'signup-confirmed', 'yahrzeit-reminder');
-    await sendConfirmEmail(ctx, contents, subscriptionId);
+    sendConfirmEmail(ctx, contents, subscriptionId);
   } else if (!alreadyVerified) {
     const obj = ctx.state.details = await getYahrzeitDetailsFromDb(ctx, calendarId);
     ctx.state.anniversaryType = summarizeAnniversaryTypes(obj, true);
@@ -410,7 +410,7 @@ ${BLANK}
 </div>`;
 }
 
-async function sendConfirmEmail(ctx, contents, subscriptionId) {
+function sendConfirmEmail(ctx, contents, subscriptionId) {
   const anniversaryType = contents.anniversaryType === YAHRZEIT ? 'yahrzeit' : 'Hebrew anniversary';
   const calendarId = contents.calendarId;
   const msgid = makeMessageId(subscriptionId);

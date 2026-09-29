@@ -67,7 +67,7 @@ export async function yahrzeitDownload(ctx) {
     reminder = false;
   }
   const maxId = getMaxYahrzeitId(query);
-  const events0 = await makeYahrzeitEvents(maxId, query, reminder);
+  const events0 = makeYahrzeitEvents(maxId, query, reminder);
   const startAbs = sunday - 12 * 7; // 12 weeks ago
   const events = !ics || isAttachment ? events0 : events0.filter((ev) => ev.getDate().abs() >= startAbs);
 

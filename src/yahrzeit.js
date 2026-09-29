@@ -77,7 +77,7 @@ export async function yahrzeitApp(ctx) {
   const q = ctx.state.q = await makeQuery(ctx);
   const maxId = ctx.state.maxId = getMaxYahrzeitId(q);
   if (q.cfg === 'json') {
-    ctx.body = await renderJson(maxId, q);
+    ctx.body = renderJson(maxId, q);
     return;
   } else if (q.cfg === 'fc') {
     ctx.status = 400;
@@ -104,7 +104,7 @@ export async function yahrzeitApp(ctx) {
   if (maxId > 0) {
     const id = getOrMakeUlid(ctx);
     q.ulid = ctx.state.ulid = id;
-    const tables = ctx.state.tables = await makeFormResults(ctx);
+    const tables = ctx.state.tables = makeFormResults(ctx);
     if (tables !== null) {
       const today = dayjs();
       for (let num = 1; num <= maxId; num++) {
@@ -211,9 +211,9 @@ function setYahrzeitCookie(ctx) {
   return true;
 }
 
-async function renderJson(maxId, q) {
+function renderJson(maxId, q) {
   delete q.ulid;
-  const events = await makeYahrzeitEvents(maxId, q, false);
+  const events = makeYahrzeitEvents(maxId, q, false);
   const options = {includeEvent: true};
   if (q.hdp === '1') {
     options.heDateParts = true;
@@ -243,9 +243,9 @@ async function renderJson(maxId, q) {
   return results;
 }
 
-async function makeFormResults(ctx) {
+function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events = await makeYahrzeitEvents(ctx.state.maxId, q, false);
+  const events = makeYahrzeitEvents(ctx.state.maxId, q, false);
   if (events.length === 0) {
     return null;
   }
