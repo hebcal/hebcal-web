@@ -89,7 +89,12 @@ export class MockMysqlDb {
       params = sql.values;
       sql = sql.sql;
     }
-    const args = Array.isArray(params) ? params : params === undefined ? [] : [params];
+    let args = [];
+    if (Array.isArray(params)) {
+      args = params;
+    } else if (params !== undefined) {
+      args = [params];
+    }
 
     // Handle SELECT queries for shabbat email verification
     if (sql.includes('SELECT') && sql.includes('hebcal_shabbat_email')) {
@@ -192,7 +197,7 @@ export class MockMysqlDb {
     // Handle UPDATE of a yahrzeit email subscription status, whether the status
     // is a bound parameter ("sub_status = ?", value first) or a literal.
     if (sql.includes('UPDATE yahrzeit_email')) {
-      const id = args[args.length - 1];
+      const id = args.at(-1);
       const sub = this.mockData.yahrzeitEmailSubs[id];
       if (sub) {
         if (sql.includes('sub_status = ?')) {

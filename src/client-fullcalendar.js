@@ -64,7 +64,7 @@ function makeFullCalendarHolidaysForDate(dt, il) {
 document.addEventListener('DOMContentLoaded', function() {
   let hebmonthEl = null;
   function monthSubtitle(view) {
-    const end = new Date(view.currentEnd.getTime());
+    const end = new Date(view.currentEnd);
     end.setDate(end.getDate() - 1);
     const s = makeHebMonthRangeStr(view.currentStart, end);
     if (hebmonthEl) {

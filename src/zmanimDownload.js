@@ -27,7 +27,12 @@ export async function zmanimIcalendar(ctx) {
   const riseSetOnly = ctx.request.path.startsWith('/sunrs');
   const zmanimAllDay = ctx.request.path.startsWith('/zmanim2');
   const startD = today.subtract(1, 'day');
-  const duration = zmanimAllDay ? 90 : riseSetOnly ? 365 : 60;
+  let duration = 60;
+  if (zmanimAllDay) {
+    duration = 90;
+  } else if (riseSetOnly) {
+    duration = 365;
+  }
   const endD = today.add(duration, 'day');
   const names = riseSetOnly ? ['sunrise', 'sunset'] : ALL_TIMES;
   const times = getTimesForRange(names, startD, endD, location, false, true);

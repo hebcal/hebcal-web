@@ -90,7 +90,7 @@ let cachedKeyFile = null;
 function privateKeyPem(iniConfig) {
   const inline = iniConfig['hebcal.apple.oauth.private_key'];
   if (inline) {
-    return inline.replace(/\\n/g, '\n');
+    return inline.replaceAll('\\n', '\n');
   }
   const path = iniConfig['hebcal.apple.oauth.private_key_file'];
   if (!path) {

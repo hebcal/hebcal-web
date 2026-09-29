@@ -21,7 +21,7 @@ export function eventToFullCalendar(ev, tzid, options) {
   if (isChag && classes[0] === 'holiday') {
     classes.push('yomtov');
   }
-  if (ev.mask & LEARNING_MASK) {
+  if ((ev.mask & LEARNING_MASK) !== 0) {
     classes.push('learning');
   }
   const eventTime = ev.eventTime;

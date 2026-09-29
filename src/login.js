@@ -85,7 +85,13 @@ function safeNext(next) {
 export function setTxnCookie(ctx, value, crossSite) {
   const prefix = `${TXN_COOKIE}=`;
   const existing = ctx.response.get('Set-Cookie');
-  const kept = (Array.isArray(existing) ? existing : existing ? [existing] : [])
+  let previous = [];
+  if (Array.isArray(existing)) {
+    previous = existing;
+  } else if (existing) {
+    previous = [existing];
+  }
+  const kept = previous
       .filter((s) => !s.startsWith(prefix));
   const attrs = ['Path=/', 'HttpOnly'];
   if (crossSite) {

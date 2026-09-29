@@ -26,9 +26,9 @@ function makeDayjs(s) {
   }
   const yearMultiplier = isBCE ? -1 : 1;
   const ymd = s.split('-');
-  const yy = yearMultiplier * parseInt(ymd[0], 10);
-  const mm = parseInt(ymd[1], 10);
-  const dd = parseInt(ymd[2], 10);
+  const yy = yearMultiplier * Number.parseInt(ymd[0], 10);
+  const mm = Number.parseInt(ymd[1], 10);
+  const dd = Number.parseInt(ymd[2], 10);
   const dt = new Date(yy, mm - 1, dd);
   if (yy < 100) {
     dt.setFullYear(yy);
@@ -493,10 +493,10 @@ function getMonthTitle(month, center, prevNext) {
   } else {
     // Gregorian month mode: Gregorian month is primary, Hebrew month is secondary
     const yyStr = yearMonth.substring(0, yearMonth.length - 3);
-    const yy = parseInt(yyStr, 10);
+    const yy = Number.parseInt(yyStr, 10);
     const yearStr = yy > 0 ? yy : -(yy-1) + ' ' + (isHebrewLang ? 'לפנה״ס' : 'B.C.E.');
     const monthStr = yearMonth.substring(yearMonth.length - 2);
-    const mm = parseInt(monthStr, 10);
+    const mm = Number.parseInt(monthStr, 10);
     titleText = localeData.months[mm - 1] + ' ' + yearStr;
     subtitleText = month.monthName || '';
   }
@@ -778,7 +778,7 @@ function renderPagination(months) {
       } else {
         const yearStr = yearMonth.substring(0, yearMonth.length - 3);
         const monthStr = yearMonth.substring(yearMonth.length - 2);
-        const mm = parseInt(monthStr, 10);
+        const mm = Number.parseInt(monthStr, 10);
         title = localeData.months[mm - 1] + ' ' + yearStr;
         innerHTML = localeData.monthsShort[mm - 1];
       }
@@ -809,6 +809,18 @@ function loadData() {
   return window.hebcal;
 }
 
+function show(el) {
+  if (el) {
+    el.style.display = 'block';
+  }
+}
+
+function hide(el) {
+  if (el) {
+    el.style.display = 'none';
+  }
+}
+
 /**
  * `DOMContentLoaded` handler for the hebcal results page: loads the serialized
  * data, renders the calendar/list views, and wires up the view toggles.
@@ -816,16 +828,6 @@ function loadData() {
 function renderResultsPage() {
   const conf = loadData();
   const d = document;
-  function show(el) {
-    if (el) {
-      el.style.display = 'block';
-    }
-  }
-  function hide(el) {
-    if (el) {
-      el.style.display = 'none';
-    }
-  }
 
   const months = splitByMonth(conf.events);
   renderPagination(months);

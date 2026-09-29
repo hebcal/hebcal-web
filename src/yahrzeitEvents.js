@@ -216,6 +216,9 @@ async function makeYahrzeitEvent(id, info, hyear, appendHebDate, calendarId, inc
   return ev;
 }
 
+// literal backslash-n: iCalendar-escaped newline, unescaped later for display
+const NL = String.raw`\n`;
+
 function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calendarId) {
   const type = info.type;
   const isYahrzeit = type === YAHRZEIT;
@@ -227,20 +230,20 @@ function makeMemo(id, info, observed, nth, typeStr, hebdate, includeUrl, calenda
   const verb = isYahrzeit ? 'remembering' : 'honoring';
   const prefix = isOther ? name : `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr}`;
   let memo = `${prefix} occurs on ` +
-    `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.\\n\\n` +
+    `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.${NL}${NL}` +
     `${nameAndType} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +
     `sundown on the day of observance.`;
   if (isYahrzeit) {
     const dow = erev.day();
     const when = lightCandlesWhen(dow);
-    memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.\\n\\n` +
+    memo += ` It is customary to light a memorial candle ${when} as the Yahrzeit begins.${NL}${NL}` +
       'May your loved one’s soul be bound up in the bond of eternal life and may their memory ' +
       'serve as a continued source of inspiration and comfort to you.';
   } else if (isBirthday) {
-    memo += '\\n\\nMazel Tov!';
+    memo += `${NL}${NL}Mazel Tov!`;
   }
   if (includeUrl) {
-    memo += `\\n\\nhttps://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
+    memo += `${NL}${NL}https://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}`;
   }
   return memo;
 }
