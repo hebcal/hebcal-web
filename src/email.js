@@ -194,6 +194,13 @@ export async function emailForm(ctx) {
       q.em = ctx.state.user.email;
     }
   }
+  // Only claim "signed in as ..., activates instantly" when the form is for
+  // the signed-in user's own address. A newsletter "Update Settings" link
+  // (?e=) may name a different subscriber; let them edit that one plainly.
+  const signedInEmailMatches = Boolean(ctx.state.user &&
+    typeof ctx.state.user.email === 'string' && ctx.state.user.email &&
+    typeof q.em === 'string' &&
+    ctx.state.user.email.toLowerCase() === q.em.toLowerCase());
   cleanQuery(q);
   const isJSON = q.cfg === 'json';
   if (isJSON) {
@@ -324,6 +331,7 @@ export async function emailForm(ctx) {
     q,
     defaultUnsubscribe,
     knownSubscriber,
+    signedInEmailMatches,
   });
 }
 

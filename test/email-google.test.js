@@ -56,6 +56,30 @@ describe('Google sign-in on /email', () => {
     expect(res.text).toContain('/login/google?next=');
   });
 
+  it('shows the signed-in notice when the form is for the user\'s own address', async () => {
+    const sid = '5'.repeat(32);
+    mysql.seedSession({userId: 'ug5', email: 'Nobody@Example.com', sessionId: sid});
+    const e = Buffer.from('nobody@example.com').toString('base64');
+    const res = await request(server)
+        .get(`/email?e=${encodeURIComponent(e)}&modify=1`)
+        .set('Cookie', cookie(sid));
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('Signed in as');
+  });
+
+  it('hides the signed-in notice when ?e= names a different address', async () => {
+    const sid = '6'.repeat(32);
+    mysql.seedSession({userId: 'ug6', email: 'me@example.com', sessionId: sid});
+    const e = Buffer.from('nobody@example.com').toString('base64');
+    const res = await request(server)
+        .get(`/email?e=${encodeURIComponent(e)}&modify=1`)
+        .set('Cookie', cookie(sid));
+    expect(res.status).toBe(200);
+    expect(res.text).toContain('nobody@example.com');
+    expect(res.text).not.toContain('Signed in as');
+    expect(res.text).not.toContain('/login/google?next=');
+  });
+
   it('activates immediately (no verification email) when the address matches the signed-in user', async () => {
     const sid = '2'.repeat(32);
     mysql.seedSession({userId: 'ug2', email: 'match@example.com', sessionId: sid});

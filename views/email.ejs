@@ -14,13 +14,13 @@
 </div><!-- .alert -->
 <% } %>
 <% if (!locals.defaultUnsubscribe) { %>
-<% if (locals.user && locals.user.email) { %>
+<% if (locals.signedInEmailMatches) { %>
 <div class="alert alert-info" role="alert">
 <svg class="icon icon-sm mt-n1 me-2"><use href="<%=locals.spriteHref%>#bs-check-large"></use></svg>
 Signed in as <strong><%= locals.user.email %></strong>. Subscribing with this
 address activates instantly; no confirmation email needed.
 </div><!-- .alert -->
-<% } else if (locals.loginEnabled && !locals.knownSubscriber) { %>
+<% } else if (locals.loginEnabled && !locals.user && !locals.knownSubscriber) { %>
 <div class="mb-3 d-flex align-items-center flex-wrap gap-2">
 <% if (locals.googleLoginEnabled) { %>
 <%- await include('partials/google-signin-button.ejs', {next: '/email'}) -%>
