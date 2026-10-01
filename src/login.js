@@ -171,7 +171,7 @@ async function finishLogin(ctx, provider, profile, next) {
  * GET /login -- the "Sign in with Google" / "Sign in with Apple" page.
  * @param {import('koa').Context} ctx
  */
-export async function loginPage(ctx) {
+export function loginPage(ctx) {
   noStore(ctx);
   const next = safeNext(ctx.request.query.next);
   if (ctx.state.user) {

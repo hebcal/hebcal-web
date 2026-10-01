@@ -6,7 +6,7 @@ import {flag} from './emoji-flag.js';
 const NOTFOUND = {error: 'Not Found'};
 const CACHE_CONTROL_3DAYS = cacheControl(3);
 
-export async function geoAutoComplete(ctx) {
+export function geoAutoComplete(ctx) {
   const q = ctx.request.query;
   const qraw = typeof q.q === 'string' ? q.q.trim() : '';
   if (qraw.length === 0) {

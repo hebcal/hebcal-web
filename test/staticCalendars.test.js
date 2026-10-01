@@ -308,7 +308,7 @@ describe('every published feed', () => {
 
   // A feed built in a Hebrew locale carries Hebrew event titles, so the
   // calendar name a subscriber sees in their app should be Hebrew too.
-  it('names every Hebrew-locale feed in Hebrew', async () => {
+  it('names every Hebrew-locale feed in Hebrew', () => {
     const hebrew = /[֐-׿]/;
     const seen = [];
     for (const cfg of staticCalendarConfig) {

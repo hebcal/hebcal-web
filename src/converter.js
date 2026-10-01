@@ -497,7 +497,7 @@ function g2h(dt, gs, noCache) {
 /**
  * @param {import('koa').Context} ctx
  */
-export async function dateConverterCsv(ctx) {
+export function dateConverterCsv(ctx) {
   const p = parseConverterQuery(ctx);
   if (!p.noCache && ctx.request.querystring.length !== 0) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);

@@ -119,7 +119,7 @@ function init() {
   didInit = true;
 }
 
-async function render(ctx, view, props) {
+function render(ctx, view, props) {
   const cc = props.countryCode || 'US';
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
   props.lg = ccDefaults[0];
@@ -189,7 +189,7 @@ export async function shabbatBrowse(ctx) {
   ctx.throw(404, `Browse page not found: ${base}`);
 }
 
-async function countryAdmin1Page(ctx, countryA1) {
+function countryAdmin1Page(ctx, countryA1) {
   const db = new DatabaseSync(geonamesFilename, {readOnly: true});
   const stmt = db.prepare(COUNTRY_ADMIN_SQL);
   const countryCode = countryA1.cc;
@@ -227,7 +227,7 @@ async function countryAdmin1Page(ctx, countryA1) {
   return render(ctx, 'shabbat-browse-country-small', props);
 };
 
-async function countryPage(ctx, countryCode) {
+function countryPage(ctx, countryCode) {
   const countryName = isoToCountry[countryCode];
   const db = new DatabaseSync(geonamesFilename, {readOnly: true});
   const stmt = db.prepare(COUNTRY_SQL);

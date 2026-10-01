@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import {expires, getLang, RSS_CONTENT_TYPE} from './rssCommon.js';
 import {checkFreshETag} from './etag.js';
 
-export async function parshaRss(ctx) {
+export function parshaRss(ctx) {
   const rpath = ctx.request.path;
   const {dt} = getTodayDate(ctx.request.query);
   const saturday = dayjs(dt).day(6);

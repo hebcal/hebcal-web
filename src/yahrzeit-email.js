@@ -18,7 +18,7 @@ import {rejectForgedCrossOriginPost} from './common.js';
 
 const UTM_PARAM = 'utm_source=newsletter&amp;utm_medium=email&amp;utm_campaign=yahrzeit-txn';
 
-async function dbQuery(ctx, sql, params) {
+function dbQuery(ctx, sql, params) {
   return ctx.mysql.query2(ctx, {sql: sql, values: params});
 }
 

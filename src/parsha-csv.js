@@ -11,7 +11,7 @@ const reTriennialIL = /^triennial-il-(\d+)-\d+.csv$/;
 const reTriennialDiaspora = /^triennial-(\d+)-\d+.csv$/;
 const reWeekday = /^weekday-\w+-(\d+).csv$/;
 
-export async function parshaCsv(ctx) {
+export function parshaCsv(ctx) {
   const rpath = ctx.request.path;
   const base = basename(rpath);
   let matches;

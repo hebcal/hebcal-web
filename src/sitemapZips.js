@@ -11,7 +11,7 @@ WHERE NOT (Latitude = 0 AND Longitude = 0)
 AND population >= ${MIN_POPULATION}
 ORDER BY population DESC`;
 
-export async function sitemapZips(ctx) {
+export function sitemapZips(ctx) {
   const db = ctx.db.zipsDb;
   const results = db.prepare(sql).all();
   const attrs = {

@@ -8,7 +8,7 @@ export async function sendGif(ctx) {
   ctx.remove('Last-Modified');
 }
 
-export async function sendMatomoJs(ctx) {
+export function sendMatomoJs(ctx) {
   ctx.set('Cache-Control', 'private, max-age=0');
   ctx.type = 'application/javascript';
   return send(ctx, '/ma/ma.js', {root: DOCUMENT_ROOT});

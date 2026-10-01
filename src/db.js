@@ -70,7 +70,7 @@ export class MysqlDb {
     return rows;
   }
   /** */
-  async close() {
+  close() {
     return true;
   }
 }

@@ -1,7 +1,7 @@
 import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 
-export async function securityTxt(ctx) {
+export function securityTxt(ctx) {
   const dt = new Date();
   ctx.type = 'text/plain';
   const attrs = {

@@ -330,7 +330,7 @@ export class MockMysqlDb {
     return this.query2(ctx, options);
   }
 
-  async close() {
+  close() {
     return true;
   }
 }

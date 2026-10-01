@@ -48,7 +48,7 @@ dayjs.extend(localeData);
 
 const outputTypes = new Set(['json', 'fc', 'e', 'e2', 'csv', 'rss', 'ics']);
 
-export async function hebcalApp(ctx) {
+export function hebcalApp(ctx) {
   const cookie = ctx.cookies.get('C');
   const q = (ctx.request.querystring.length === 0 && !cookie) ?
     {...hebcalFormDefaults} :
@@ -200,7 +200,7 @@ function renderCsv(ctx) {
   return byteOrderMark(options.locale) + csv;
 }
 
-async function renderForm(ctx, error) {
+function renderForm(ctx, error) {
   const message = error ? error.message : undefined;
   const cookie = ctx.cookies.get('C');
   if (cookie?.length) {

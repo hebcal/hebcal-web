@@ -31,7 +31,7 @@ const imgSizes = ['16x9-768', '800', '640', '400'];
 /**
  * @private
  * @param {string} fn filename
- * @return {boolean}
+ * @return {Promise<boolean>}
  */
 async function hasAllSizes(fn) {
   for (const sz of imgSizes) {

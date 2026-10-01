@@ -16,7 +16,7 @@ function getLocale(rpath) {
   return 'en';
 }
 
-export async function hdateJavascript(ctx) {
+export function hdateJavascript(ctx) {
   const locale = getLocale(ctx.request.path);
   const fileName = `hdate-${locale}.min.js`;
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);

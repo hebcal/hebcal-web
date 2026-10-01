@@ -67,7 +67,7 @@ app.use(async function fixup0(ctx, next) {
 });
 
 // Redirect /v2/h/ to /v4/
-app.use(async function redirV2(ctx, next) {
+app.use(function redirV2(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/v2/h/')) {
     const {filename, qs} = parseV2Path(rpath);
@@ -93,7 +93,7 @@ useResponseLength(app);
 const DOCUMENT_ROOT = '/var/www/html';
 
 // Send static files before regular request dispatch
-app.use(async function fixup1(ctx, next) {
+app.use(function fixup1(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath === '/') {
     ctx.redirect('https://www.hebcal.com/');
@@ -127,7 +127,7 @@ app.use(async function fixup1(ctx, next) {
   return next();
 });
 
-app.use(async function redirLegacy(ctx, next) {
+app.use(function redirLegacy(ctx, next) {
   if (ctx.request.querystring.length === 0) {
     const rpath = ctx.request.path;
     const rpath0 = rpath.substring(0, rpath.length - 1);
@@ -192,7 +192,7 @@ app.use(async function fixup2(ctx, next) {
   await next();
 });
 
-app.use(async function fixup3(ctx, next) {
+app.use(function fixup3(ctx, next) {
   const rpath = ctx.request.path;
   const q = ctx.request.query;
   if (rpath.startsWith('/export/') && (q.v === undefined || !q.v.length) && q.y1 && q.m1 && q.d1) {
@@ -203,7 +203,7 @@ app.use(async function fixup3(ctx, next) {
 
 const CACHE_CONTROL_14DAYS = cacheControl(14);
 
-app.use(async function sendStatic(ctx, next) {
+app.use(function sendStatic(ctx, next) {
   const rpath = ctx.request.path;
   if (rpath.startsWith('/ical')) {
     ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);

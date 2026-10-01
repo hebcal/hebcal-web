@@ -16,7 +16,7 @@ const MAX_DAYS = 180;
  * @private
  * @param {import('koa').Context} ctx
  */
-export async function getLeyning(ctx) {
+export function getLeyning(ctx) {
   ctx.response.type = ctx.request.header['accept'] = 'application/json';
   const q = ctx.request.query;
   if (q.cfg !== 'json') {
