@@ -1,15 +1,14 @@
 <div class="yahrzeit-row" id="row<%=locals.num%>">
 <div class="row gy-1 gx-2 mb-3 align-items-center mt-1">
-<div class="col-auto"><%=locals.num%>.</div>
 <div class="col-auto form-floating"><input class="form-control" type="text" name="n<%=locals.num%>" id="n<%=locals.num%>" value="<%= locals.q['n'+locals.num] || '' %>" placeholder="Name" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label class="form-label" for="n<%=locals.num%>">Name</label></div>
-<div class="col-auto form-floating"><select name="t<%=locals.num%>" id="t<%=locals.num%>" class="form-select">
+<div class="col-auto"><select name="t<%=locals.num%>" id="t<%=locals.num%>" class="form-select" aria-label="Anniversary type">
  <option <%= (locals.q['t'+locals.num] === 'Yahrzeit') ? 'selected' : '' %>>Yahrzeit</option>
  <option <%= (locals.q['t'+locals.num] === 'Birthday') ? 'selected' : '' %>>Birthday</option>
  <option <%= (locals.q['t'+locals.num] === 'Anniversary') ? 'selected' : '' %>>Anniversary</option>
  <option <%= (locals.q['t'+locals.num] === 'Other') ? 'selected' : '' %>>Other</option>
 </select>
-<label class="form-label" for="t<%=locals.num%>">Type</label></div>
+</div>
 <div class="col-auto form-floating"><input class="form-control" type="text" inputmode="numeric" name="d<%=locals.num%>" id="d<%=locals.num%>" value="<%= locals.q['d'+locals.num] || '' %>" size="2" maxlength="2" max="31" min="1" pattern="\d*" placeholder="Day" title="Enter a day of the month between 1 and 31" autocomplete="off">
 <label class="form-label" for="d<%=locals.num%>">Day</label>
 <div class="invalid-feedback">Please enter a valid day of month.</div>
