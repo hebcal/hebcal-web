@@ -79,7 +79,7 @@
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.5.3",
     "@hebcal/murmurhash3": "^1.0.0",
-    "@hebcal/rest-api": "^7.3.0",
+    "@hebcal/rest-api": "^7.3.1",
     "@hebcal/triennial": "^6.4.0",
     "@koa/ejs": "^5.1.0",
     "@koa/send": "^6.0.0",
