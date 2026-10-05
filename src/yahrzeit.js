@@ -20,6 +20,7 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   compactJsonToSave,
   getCalendarNames, makeCalendarTitle,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
+import {getYahrzeitSubscriptions} from './accountSubscriptions.js';
 import {makeYahrzeitEvents} from './yahrzeitEvents.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
@@ -69,7 +70,18 @@ export async function yahrzeitApp(ctx) {
   if (ctx.method === 'GET' && !ctx.request.querystring &&
     !rpath.startsWith('/yahrzeit/edit/') && !rpath.startsWith('/yahrzeit/new')) {
     const yahrzeitCookie = ctx.cookies.get('Y') || '';
-    const ids = yahrzeitCookie.split('|');
+    const ids = yahrzeitCookie.split('|').filter(Boolean);
+    // Signed-in users also see every calendar they're subscribed to (the same
+    // ones listed on /account), unioned with the calendars in the Y cookie.
+    const email = ctx.state.user?.email;
+    if (email) {
+      const subs = await getYahrzeitSubscriptions(ctx, email);
+      for (const sub of subs) {
+        if (!ids.includes(sub.calendarId)) {
+          ids.push(sub.calendarId);
+        }
+      }
+    }
     const calendars = ids.length ? await getCalPickerIds(ctx, ids) : [];
     return ctx.render('yahrzeit-calpicker', {calendars});
   }
