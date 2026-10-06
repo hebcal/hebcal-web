@@ -84,6 +84,7 @@ export function deserializeDownload(data) {
   if (msg.getUseelevation()) q.ue = 'on';
   if (msg.getYizkor()) q.yzkr = 'on';
   if (msg.getShabbatmevarchim()) q.mvch = 'on';
+  if (msg.getKiddushlevanamaharil()) q.kl = 'on';
   q.mm = String(msg.getMonthmode());
   if (msg.getYomtovonly()) q.yto = 'on';
   q.month = msg.getMonth() || undefined;

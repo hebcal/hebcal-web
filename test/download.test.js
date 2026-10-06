@@ -395,6 +395,49 @@ describe('fast start/end protobuf round-trip', () => {
   });
 });
 
+describe('kl (Latest Kiddush Levana) protobuf round-trip', () => {
+  const base = {
+    v: '1',
+    c: 'on',
+    year: '2026',
+    month: '9',
+    geo: 'pos',
+    latitude: '40.7128',
+    longitude: '-74.006',
+    tzid: 'America/New_York',
+    lg: 's',
+    M: 'on',
+  };
+
+  function roundTrip(query) {
+    const href = downloadHref2(query, 'test.ics');
+    const encoded = href.match(/\/v4\/([^/]+)\//)[1]
+        .replaceAll('-', '+')
+        .replaceAll('_', '/');
+    return deserializeDownload(encoded);
+  }
+
+  it('round-trips kl=on', () => {
+    expect(roundTrip({...base, kl: 'on'}).kl).toBe('on');
+  });
+
+  it('should not include kl when not set', () => {
+    expect(roundTrip(base).kl).toBeUndefined();
+  });
+
+  it('includes Latest Kiddush Levana in .ics downloads', async () => {
+    const href = downloadHref2({...base, kl: 'on'}, 'kl.ics');
+    const path = href.substring(href.indexOf('/v4/')) + '.ics';
+    const response = await request(server).get(path);
+    expect(response.status).toBe(200);
+    const text = response.text.replaceAll('\r\n', '\n');
+    // Maharil's time is Shabbat Sep 26, 2026 (Sukkot I), so moved back to
+    // candle-lighting on Friday
+    expect(text).toMatch(/SUMMARY:Latest Kiddush Levana\nDTSTART;TZID=America\/New_York:20260925T183000/);
+    expect(text).toContain('DESCRIPTION:Earliest Kiddush Levana (3 days): Mon\\, Sep 14\\, 2026\\, 2:39pm');
+  });
+});
+
 describe('304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for ICS', async () => {
     await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics');

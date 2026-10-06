@@ -96,4 +96,5 @@ message Download {
   uint32 fastEndMins = 73;
   float tishaBavEndDeg = 74;
   uint32 tishaBavEndMins = 75;
+  bool kiddushLevanaMaharil = 76;
 }

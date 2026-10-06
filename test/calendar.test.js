@@ -1,5 +1,6 @@
 import {describe, it, expect} from 'vitest';
-import {makeHebcalOptions} from '../src/calendar.js';
+import {flags} from '@hebcal/core';
+import {makeHebcalOptions, makeHebrewCalendar} from '../src/calendar.js';
 
 // https://github.com/hebcal/hebcal/issues/308
 describe('makeHebcalOptions td (tzeit degrees) parameter', () => {
@@ -104,5 +105,30 @@ describe('makeHebcalOptions fast start/end parameters', () => {
     const options = makeHebcalOptions(null, {year: '2026', fsd: 'abc', fsm: '90'});
     expect(options.fastStartDeg).toBeUndefined();
     expect(options.fastStartMins).toBe(90);
+  });
+});
+
+describe('makeHebcalOptions kl (Latest Kiddush Levana) parameter', () => {
+  const nyc = {geo: 'pos', latitude: '40.7128', longitude: '-74.006', tzid: 'America/New_York'};
+
+  it('enables kiddushLevanaMaharil when there is a location', () => {
+    const options = makeHebcalOptions(null, {year: '2026', kl: 'on', ...nyc});
+    expect(options.kiddushLevanaMaharil).toBe(true);
+    expect(options.mask & flags.KIDDUSH_LEVANA).toBe(flags.KIDDUSH_LEVANA);
+  });
+
+  it('is off by default', () => {
+    const options = makeHebcalOptions(null, {year: '2026', ...nyc});
+    expect(options.kiddushLevanaMaharil).toBeUndefined();
+    expect(options.mask & flags.KIDDUSH_LEVANA).toBe(0);
+  });
+
+  it('is dropped without a location, rather than throwing', () => {
+    const options = makeHebcalOptions(null, {year: '2026', month: '9', kl: 'on', maj: 'on'});
+    expect(options.kiddushLevanaMaharil).toBeUndefined();
+    expect(options.mask & flags.KIDDUSH_LEVANA).toBe(0);
+    const events = makeHebrewCalendar(null, options);
+    expect(events.length).toBeGreaterThan(0);
+    expect(events.some((ev) => ev.hasFlag('KIDDUSH_LEVANA'))).toBe(false);
   });
 });

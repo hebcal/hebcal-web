@@ -152,6 +152,12 @@ if (typeof year !== 'string' || year.length === 0) {
   </div>
   <label class="col-auto col-form-label" for="b1">minutes before sundown</label>
 </div>
+<div class="form-check mb-3">
+<input class="form-check-input" type="checkbox" name="kl" value="on" <%= locals.q.kl === 'on' ? 'checked' : '' %> id="kl">
+<label class="form-check-label" for="kl">Latest Kiddush Levana</label>
+ &nbsp;<span title="Halfway between one molad and the next (Maharil), moved back to candle-lighting before Shabbat or Yom Tov"
+ data-bs-toggle="tooltip" data-bs-animation="false" data-bs-placement="top"><svg class="icon icon-sm mt-n1"><use href="<%=locals.spriteHref%>#bi-info-circle-fill"></use></svg></span>
+</div>
 <div>Havdalah</div>
 <div class="row gx-2 mb-1">
 <div class="col-auto">

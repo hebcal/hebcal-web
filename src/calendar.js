@@ -34,6 +34,7 @@ const optsToMask = {
   min: flags.MINOR_HOLIDAY,
   yzkr: flags.YIZKOR,
   mvch: flags.SHABBAT_MEVARCHIM,
+  kl: flags.KIDDUSH_LEVANA,
 };
 
 /**
@@ -282,6 +283,9 @@ export function makeHebcalOptions(db, query) {
     }
   } else {
     delete options.candlelighting;
+    // Kiddush Levana times require a location
+    delete options.kiddushLevanaMaharil;
+    options.mask &= ~flags.KIDDUSH_LEVANA;
   }
   if (options.candlelighting && typeof options.year === 'number' &&
     ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {

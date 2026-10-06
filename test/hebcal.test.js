@@ -368,6 +368,26 @@ describe('Hebcal HTML rendering options', () => {
     expect(body.items.length).toBeGreaterThan(0);
   });
 
+  it('should include Latest Kiddush Levana when kl=on with a location', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&kl=on&geo=geoname&geonameid=5128581&year=2026&month=9&maj=on');
+    expect(response.status).toBe(200);
+    const items = response.body.items.filter((item) => item.category === 'zmanim' &&
+      item.subcat === 'kiddushLevana');
+    expect(items.length).toBe(1);
+    expect(items[0].title).toBe('Latest Kiddush Levana');
+    expect(items[0].date).toBe('2026-09-25T18:30:00-04:00');
+    expect(items[0].memo).toContain('Latest Kiddush Levana (Maharil): Sat, Sep 26, 2026, 9:00am');
+  });
+
+  it('should ignore kl=on without a location', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&kl=on&year=2026&month=9&maj=on');
+    expect(response.status).toBe(200);
+    expect(response.body.items.length).toBeGreaterThan(0);
+    expect(response.body.items.some((item) => item.subcat === 'kiddushLevana')).toBe(false);
+  });
+
   it('should render HTML calendar for date range using start/end params', async () => {
     const response = await request(server)
         .get('/hebcal?v=1&maj=on&start=2026-03-01&end=2026-03-31&set=off');

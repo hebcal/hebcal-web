@@ -124,6 +124,7 @@ export function downloadHref2(query, filename, override={}) {
   }
   if (on(q.yzkr)) msg.setYizkor(true);
   if (on(q.mvch)) msg.setShabbatmevarchim(true);
+  if (on(q.kl)) msg.setKiddushlevanamaharil(true);
 
   if (on(q.ue)) msg.setUseelevation(true);
 

@@ -59,6 +59,7 @@ export const booleanOpts = {
   ue: 'useElevation',
   yzkr: 'yizkor',
   mvch: 'shabbatMevarchim',
+  kl: 'kiddushLevanaMaharil',
 };
 
 export const numberOpts = {
@@ -132,6 +133,7 @@ export const queryToName = {
   D: 'Hebrew Dates', // Show Hebrew date for dates with some event
   yzkr: 'Yizkor',
   mvch: 'Shabbat Mevarchim',
+  kl: 'Latest Kiddush Levana',
 };
 
 export const queryLongDescr = {
@@ -142,6 +144,7 @@ export const queryLongDescr = {
   ykk: 'Minor day of atonement occurring monthly on the day preceding each Rosh Chodesh',
   yzkr: 'Ashkenazi Jewish memorial prayer service for the dead recited in synagogue during four holidays yearly',
   mvch: 'Shabbat before the start of Rosh Chodesh',
+  kl: 'Halfway between one molad and the next (Maharil), moved back to candle-lighting before Shabbat or Yom Tov',
 };
 
 export const dailyLearningOpts = {};
