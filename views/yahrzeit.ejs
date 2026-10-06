@@ -121,6 +121,11 @@ or anniversaries.</p>
   <li class="nav-item" role="presentation">
     <a class="nav-link" id="import-csv-tab" data-bs-toggle="tab" data-bs-target="#import-csv" type="button" role="tab" aria-controls="import-csv" aria-selected="false">Import</a>
   </li>
+<% if (locals.tables !== null && locals.showDownload) { %>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#hcdl-modal" type="button" role="tab" aria-selected="false">Download</a>
+  </li>
+<% } %>
 </ul>
 </div><!-- .d-print-none -->
 <div class="tab-content">
