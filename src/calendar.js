@@ -287,6 +287,10 @@ export function makeHebcalOptions(db, query) {
     ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
   }
+  if (options.candlelighting && (options.mask & flags.ROSH_CHODESH)) {
+    options.mask |= flags.KIDDUSH_LEVANA;
+    options.kiddushLevanaMaharil = true;
+  }
   const mm = query.mm || '0';
   options.hebrewMonths = (mm === '1' || mm === '2');
   options.gematriyaNumerals = (mm === '2');
