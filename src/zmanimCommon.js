@@ -48,7 +48,53 @@ const TZEIT_TIMES = {
   tzeit72min: 72,
 };
 
-export const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
+/**
+ * Kiddush Levana times are molad-based and occur only on a few days each
+ * month. The `Zmanim` methods return `null` on every other day. Earliest times
+ * that fall during the day move forward to tzeit that evening; latest times
+ * that fall during the day move back to alot hashachar that morning.
+ * Values are `[methodName, isEarliest]`.
+ */
+const KIDDUSH_LEVANA_TIMES = {
+  tchilasZmanKidushLevana3Days: ['getTchilasZmanKidushLevana3Days', true],
+  tchilasZmanKidushLevana7Days: ['getTchilasZmanKidushLevana7Days', true],
+  sofZmanKidushLevanaBetweenMoldos: ['getSofZmanKidushLevanaBetweenMoldos', false],
+  sofZmanKidushLevana15Days: ['getSofZmanKidushLevana15Days', false],
+};
+
+export const ALL_TIMES = Object.keys(TIMES)
+    .concat(Object.keys(TZEIT_TIMES))
+    .concat(Object.keys(KIDDUSH_LEVANA_TIMES));
+
+/**
+ * @private
+ * @param {Date} dt
+ * @param {string} tzid
+ * @return {Temporal.ZonedDateTime|null}
+ */
+function toZdt(dt, tzid) {
+  const millis = dt.getTime();
+  if (Number.isNaN(millis)) {
+    return null;
+  }
+  return Temporal.Instant.fromEpochMilliseconds(millis).toZonedDateTimeISO(tzid);
+}
+
+/**
+ * Earliest times round up and latest times round down, so the rounded
+ * time is never outside the permitted window.
+ * @private
+ * @param {Temporal.ZonedDateTime} zdt
+ * @param {boolean} isEarliest
+ * @param {boolean} roundMinute
+ * @return {Date}
+ */
+function kiddushLevanaToDate(zdt, isEarliest, roundMinute) {
+  if (roundMinute) {
+    zdt = zdt.round({smallestUnit: 'minute', roundingMode: isEarliest ? 'ceil' : 'floor'});
+  }
+  return new Date(zdt.epochMilliseconds);
+}
 
 /**
  * @private
@@ -63,7 +109,12 @@ export const ALL_TIMES = Object.keys(TIMES).concat(Object.keys(TZEIT_TIMES));
 function getTimes(names, d, location, formatAsString, roundMinute, useElevation) {
   const times = {};
   const zman = new Zmanim(location, d.toDate(), useElevation);
+  const klNames = [];
   for (const name of names) {
+    if (KIDDUSH_LEVANA_TIMES[name]) {
+      klNames.push(name);
+      continue;
+    }
     if (TIMES[name]) {
       if (typeof zman[name] !== 'function') {
         throw createError(500, `Internal error: Zmanim.${name} is not a function`);
@@ -83,6 +134,24 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   if (roundMinute) {
     for (const [name, dt] of Object.entries(times)) {
       times[name] = Zmanim.roundTime(dt);
+    }
+  }
+  if (klNames.length) {
+    // Same alot hashachar (16.1°) and tzeit (8.5°) as @hebcal/core's
+    // Latest Kiddush Levana event
+    const tzid = location.getTzid();
+    const alos = toZdt(zman.alotHaShachar(), tzid);
+    const tzeit = toZdt(zman.tzeit(), tzid);
+    // Without alot hashachar and tzeit (e.g. polar latitudes) there is no
+    // way to tell whether the time falls at night
+    if (alos && tzeit) {
+      for (const name of klNames) {
+        const [method, isEarliest] = KIDDUSH_LEVANA_TIMES[name];
+        const zdt = zman[method](alos, tzeit);
+        if (zdt !== null) {
+          times[name] = kiddushLevanaToDate(zdt, isEarliest, roundMinute);
+        }
+      }
     }
   }
   if (formatAsString) {

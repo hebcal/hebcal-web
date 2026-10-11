@@ -229,3 +229,26 @@ msgstr "Tzeit (Baal Hatanya)"
 msgid "MEMO:tzaisBaalHatanya"
 msgstr "Nightfall (Baal Hatanya). Sun is 6° below the western geometric horizon after sunset"
 
+msgid "TITLE:tchilasZmanKidushLevana3Days"
+msgstr "Earliest Kiddush Levana (3 days)"
+
+msgid "MEMO:tchilasZmanKidushLevana3Days"
+msgstr "Earliest time to recite Kiddush Levana according to Rabbeinu Yonah (3 days after the molad). Moved to tzeit if it falls during the day"
+
+msgid "TITLE:tchilasZmanKidushLevana7Days"
+msgstr "Earliest Kiddush Levana (7 days)"
+
+msgid "MEMO:tchilasZmanKidushLevana7Days"
+msgstr "Earliest time to recite Kiddush Levana according to the opinions that it should not be said until 7 days after the molad. Moved to tzeit if it falls during the day"
+
+msgid "TITLE:sofZmanKidushLevanaBetweenMoldos"
+msgstr "Latest Kiddush Levana (Maharil)"
+
+msgid "MEMO:sofZmanKidushLevanaBetweenMoldos"
+msgstr "Latest time to recite Kiddush Levana according to the Maharil, halfway between one molad and the next. Moved back to alot haShachar if it falls during the day"
+
+msgid "TITLE:sofZmanKidushLevana15Days"
+msgstr "Latest Kiddush Levana (15 days)"
+
+msgid "MEMO:sofZmanKidushLevana15Days"
+msgstr "Latest time to recite Kiddush Levana according to the Shulchan Aruch (15 days after the molad). Moved back to alot haShachar if it falls during the day"
