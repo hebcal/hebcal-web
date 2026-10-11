@@ -8,7 +8,7 @@ import { checkFreshETag } from './etag.js';
 import { lgToLocale } from './lang.js';
 import { makeIcalendar } from './icalCommon.js';
 import { getLocationFromQuery } from './location.js';
-import { ALL_TIMES, getTimesForRange } from './zmanimCommon.js';
+import { ALL_TIMES, MOLAD, getTimesForRange } from './zmanimCommon.js';
 
 const TITLE_PREFIX = 'TITLE:';
 const MEMO_PREFIX = 'MEMO:';
@@ -54,8 +54,9 @@ export async function zmanimIcalendar(ctx) {
     dt: today.format('YYYY-MM-DD'),
     icalv: IcalEvent.version(),
   };
-  if (events.length === 0) {
-    // e.g. polar latitudes where sunrise/sunset don't occur on some dates
+  if (events.length === 0 || !hasSolarTimes(times)) {
+    // e.g. polar latitudes where sunrise/sunset don't occur on some dates.
+    // The molad alone doesn't make a zmanim calendar
     ctx.throw(400, `No zmanim available for ${location.getName()}`);
   }
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
@@ -64,6 +65,16 @@ export async function zmanimIcalendar(ctx) {
   }
   ctx.response.type = 'text/calendar; charset=utf-8';
   ctx.body = await makeIcalendar(events, options);
+}
+
+/**
+ * @private
+ * @param {any} times
+ * @return {boolean}
+ */
+function hasSolarTimes(times) {
+  return Object.entries(times).some(([zman, map]) =>
+    zman !== MOLAD && Object.values(map).some((dt) => !Number.isNaN(dt.getTime())));
 }
 
 /**

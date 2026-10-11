@@ -10,6 +10,25 @@ const KL_NAMES = [
   'sofZmanKidushLevana15Days',
 ];
 
+describe('Molad', () => {
+  it('is part of ALL_TIMES', () => {
+    expect(ALL_TIMES).toContain('molad');
+  });
+
+  it('appears only on the day it occurs', () => {
+    const loc = Location.lookup('Jerusalem');
+    const times = getTimesForRange(['molad'], dayjs('2026-10-01'), dayjs('2026-11-30'),
+        loc, true, true, false);
+    // rounded to the nearest minute
+    expect(times).toEqual({
+      molad: {
+        '2026-10-11': '2026-10-11T10:22:00+03:00', // Cheshvan 5787
+        '2026-11-09': '2026-11-09T22:06:00+02:00', // Kislev 5787
+      },
+    });
+  });
+});
+
 describe('Kiddush Levana zmanim', () => {
   it('is part of ALL_TIMES', () => {
     for (const name of KL_NAMES) {
