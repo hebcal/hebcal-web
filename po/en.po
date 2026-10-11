@@ -229,6 +229,12 @@ msgstr "Tzeit (Baal Hatanya)"
 msgid "MEMO:tzaisBaalHatanya"
 msgstr "Nightfall (Baal Hatanya). Sun is 6° below the western geometric horizon after sunset"
 
+msgid "TITLE:molad"
+msgstr "Molad"
+
+msgid "MEMO:molad"
+msgstr "New moon. The moment of the mean conjunction of the moon and sun according to the traditional calculation, converted to local time"
+
 msgid "TITLE:tchilasZmanKidushLevana3Days"
 msgstr "Earliest Kiddush Levana (3 days)"
 

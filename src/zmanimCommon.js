@@ -53,17 +53,26 @@ const TZEIT_TIMES = {
  * month. The `Zmanim` methods return `null` on every other day. Earliest times
  * that fall during the day move forward to tzeit that evening; latest times
  * that fall during the day move back to alot hashachar that morning.
- * Values are `[methodName, isEarliest]`.
+ * Earliest times round up and latest times round down, so the rounded
+ * time is never outside the permitted window.
+ * Values are `[methodName, roundingMode]`.
  */
 const KIDDUSH_LEVANA_TIMES = {
-  tchilasZmanKidushLevana3Days: ['getTchilasZmanKidushLevana3Days', true],
-  tchilasZmanKidushLevana7Days: ['getTchilasZmanKidushLevana7Days', true],
-  sofZmanKidushLevanaBetweenMoldos: ['getSofZmanKidushLevanaBetweenMoldos', false],
-  sofZmanKidushLevana15Days: ['getSofZmanKidushLevana15Days', false],
+  tchilasZmanKidushLevana3Days: ['getTchilasZmanKidushLevana3Days', 'ceil'],
+  tchilasZmanKidushLevana7Days: ['getTchilasZmanKidushLevana7Days', 'ceil'],
+  sofZmanKidushLevanaBetweenMoldos: ['getSofZmanKidushLevanaBetweenMoldos', 'floor'],
+  sofZmanKidushLevana15Days: ['getSofZmanKidushLevana15Days', 'floor'],
 };
+
+/**
+ * The moment of the molad (new moon) as a local time, on the day it occurs.
+ * Unlike every other zman it doesn't depend on the sun.
+ */
+export const MOLAD = 'molad';
 
 export const ALL_TIMES = Object.keys(TIMES)
     .concat(Object.keys(TZEIT_TIMES))
+    .concat([MOLAD])
     .concat(Object.keys(KIDDUSH_LEVANA_TIMES));
 
 /**
@@ -81,17 +90,15 @@ function toZdt(dt, tzid) {
 }
 
 /**
- * Earliest times round up and latest times round down, so the rounded
- * time is never outside the permitted window.
  * @private
  * @param {Temporal.ZonedDateTime} zdt
- * @param {boolean} isEarliest
+ * @param {string} roundingMode
  * @param {boolean} roundMinute
  * @return {Date}
  */
-function kiddushLevanaToDate(zdt, isEarliest, roundMinute) {
+function zdtToDate(zdt, roundingMode, roundMinute) {
   if (roundMinute) {
-    zdt = zdt.round({smallestUnit: 'minute', roundingMode: isEarliest ? 'ceil' : 'floor'});
+    zdt = zdt.round({smallestUnit: 'minute', roundingMode});
   }
   return new Date(zdt.epochMilliseconds);
 }
@@ -113,9 +120,12 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   for (const name of names) {
     if (KIDDUSH_LEVANA_TIMES[name]) {
       klNames.push(name);
-      continue;
-    }
-    if (TIMES[name]) {
+    } else if (name === MOLAD) {
+      const zdt = zman.getZmanMolad();
+      if (zdt !== null) {
+        times[name] = zdtToDate(zdt, 'halfExpand', roundMinute);
+      }
+    } else if (TIMES[name]) {
       if (typeof zman[name] !== 'function') {
         throw createError(500, `Internal error: Zmanim.${name} is not a function`);
       }
@@ -133,7 +143,9 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
   }
   if (roundMinute) {
     for (const [name, dt] of Object.entries(times)) {
-      times[name] = Zmanim.roundTime(dt);
+      if (name !== MOLAD) {
+        times[name] = Zmanim.roundTime(dt);
+      }
     }
   }
   if (klNames.length) {
@@ -146,10 +158,10 @@ function getTimes(names, d, location, formatAsString, roundMinute, useElevation)
     // way to tell whether the time falls at night
     if (alos && tzeit) {
       for (const name of klNames) {
-        const [method, isEarliest] = KIDDUSH_LEVANA_TIMES[name];
+        const [method, roundingMode] = KIDDUSH_LEVANA_TIMES[name];
         const zdt = zman[method](alos, tzeit);
         if (zdt !== null) {
-          times[name] = kiddushLevanaToDate(zdt, isEarliest, roundMinute);
+          times[name] = zdtToDate(zdt, roundingMode, roundMinute);
         }
       }
     }
