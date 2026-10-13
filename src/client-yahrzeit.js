@@ -48,7 +48,7 @@ function clickToDelete(el) {
   const num = el.id.substring(4);
   el.addEventListener('click', function() {
     const node = document.getElementById('row' + num);
-    node.innerHTML = '<div class="row mb-3 align-items-center mt-1"><div class="col-auto">'+num+'.</div>'+
+    node.innerHTML = '<div class="row mb-3 align-items-center mt-1">'+
       '<div class="col-auto"><span class="text-danger lead">Deleted.</span></div>'+
       '<div class="col-auto"><span class="text-burgundy">Click “Update Calendar” to save changes.</span></div>'+
       '</div>';
