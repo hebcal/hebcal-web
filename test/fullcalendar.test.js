@@ -25,21 +25,21 @@ describe('eventToFullCalendar', () => {
     const expected = [
       {
         title: 'Candle lighting',
-        start: '1990-04-06T19:04:00-05:00',
+        start: '1990-04-06T19:03:00-05:00',
         allDay: false,
         hebrew: 'הדלקת נרות',
         className: 'candles',
       },
       {
         title: 'Havdalah (50 min)',
-        start: '1990-04-07T20:14:00-05:00',
+        start: '1990-04-07T20:13:00-05:00',
         allDay: false,
         hebrew: 'הבדלה (50 דקות)',
         className: 'havdalah',
       },
       {
         title: 'Finish eating chametz',
-        start: '1990-04-09T10:41:00-05:00',
+        start: '1990-04-09T10:42:00-05:00',
         allDay: false,
         hebrew: 'סוף זמן אכילת חמץ',
         className: 'zmanim achilasChametz',
@@ -64,7 +64,7 @@ describe('eventToFullCalendar', () => {
       },
       {
         title: 'Candle lighting',
-        start: '1990-04-09T19:07:00-05:00',
+        start: '1990-04-09T19:06:00-05:00',
         allDay: false,
         hebrew: 'הדלקת נרות',
         className: 'candles',
@@ -80,7 +80,7 @@ describe('eventToFullCalendar', () => {
       },
       {
         title: 'Candle lighting',
-        start: '1990-04-10T20:17:00-05:00',
+        start: '1990-04-10T20:16:00-05:00',
         allDay: false,
         hebrew: 'הדלקת נרות',
         className: 'candles',
@@ -96,7 +96,7 @@ describe('eventToFullCalendar', () => {
       },
       {
         title: 'Havdalah (50 min)',
-        start: '1990-04-11T20:18:00-05:00',
+        start: '1990-04-11T20:17:00-05:00',
         allDay: false,
         hebrew: 'הבדלה (50 דקות)',
         className: 'havdalah',
