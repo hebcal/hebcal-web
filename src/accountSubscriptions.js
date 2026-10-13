@@ -72,7 +72,7 @@ export async function getYahrzeitSubscriptions(ctx, email) {
     FROM yahrzeit_email e, yahrzeit y
     WHERE e.email_addr = ? AND e.sub_status = 'active'
       AND e.calendar_id = y.id
-    ORDER BY y.updated ASC`;
+    ORDER BY y.updated DESC`;
   const results = await ctx.mysql.query(sql, email);
   const seen = new Set();
   const subs = [];

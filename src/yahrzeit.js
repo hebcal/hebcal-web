@@ -188,7 +188,8 @@ function getOrMakeUlid(ctx) {
 
 async function getCalPickerIds(ctx, ids) {
   const db = ctx.mysql;
-  const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' + new Array(ids.length).fill('?') + ')';
+  const sql = 'SELECT id, contents FROM yahrzeit WHERE id IN (' +
+    new Array(ids.length).fill('?') + ') ORDER BY updated DESC';
   const results = await db.query2(ctx, {sql, values: ids, timeout: TIMEOUT});
   const nonEmpty = results.filter((row) => getMaxYahrzeitId(row.contents) !== 0);
   const calendars = nonEmpty.map((row) => {
