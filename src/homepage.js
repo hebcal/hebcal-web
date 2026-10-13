@@ -195,6 +195,63 @@ const chagSameach = {
 const TZOM_KAL = '✡️&nbsp;Tzom Kal!&nbsp;&nbsp;<span lang="he" dir="rtl">צוֹם קַל</span>&nbsp;✡️';
 const SHANA_TOVA = '🍏&nbsp;🍯&nbsp;<span lang="he" dir="rtl">שָׁנָה טוֹבָה וּמְתוּקָה</span>&nbsp;🍯&nbsp;🍏';
 const SHANA_TOVA2 = '<strong>Shana Tova u\'Metukah!</strong> We wish you a happy and healthy New Year';
+const WE_REMEMBER = '✡️ We remember ✡️';
+
+/**
+ * Masthead greetings for specific holidays, keyed by `ev.getDesc()`.
+ * Each entry is `[desc, blurb, longText]`. In `longText`, `[link text]` is
+ * replaced with a link to that holiday's page (see `expandLinkTemplate()`).
+ * Checked in order, so earlier entries win when several fall on one day.
+ * @type {[string, string, string][]}
+ */
+const descGreetings = [
+  [hdesc.EREV_TISHA_BAV, TZOM_KAL,
+    '[Tish\'a B\'Av] begins tonight at sundown. We wish you an easy fast'],
+  [hdesc.YOM_HASHOAH, WE_REMEMBER,
+    'Today is [Yom HaShoah], Holocaust and Heroism Remembrance Day'],
+  [hdesc.SWORDS_OF_IRON_WAR_MEMORIAL, WE_REMEMBER,
+    'Today is [Swords of Iron War Memorial Day], October 7th Remembrance Day'],
+  [hdesc.YOM_HAZIKARON, '🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
+    'Today is [Yom HaZikaron], Israeli Memorial Day'],
+];
+
+/**
+ * Countdown greetings shown on days `from`..`to` (inclusive) of Hebrew
+ * `month`, for a holiday that begins at sundown on day `erevDay` of that
+ * same month. In `template`, `[link text]` links to `/holidays/${slug}-${gy}`,
+ * `{date}` is the erev date, and `{hyear}` is the Hebrew year of the holiday.
+ * @type {{month: number, from: number, to: number, erevDay: number,
+ *   slug: string, blurb: string, template: string}[]}
+ */
+const countdownGreetings = [
+  {month: months.ELUL, from: 1, to: 30, erevDay: 29, // entire month of Elul
+    slug: 'rosh-hashana', blurb: SHANA_TOVA,
+    template: SHANA_TOVA2 + '.<br> [Rosh Hashana {hyear}] begins at sundown on {date}'},
+  {month: months.IYYAR, from: 14, to: 17, erevDay: 17,
+    slug: 'lag-baomer',
+    blurb: '🔥&nbsp;<span lang="he" dir="rtl">ל״ג בָּעוֹמֶר שָׂמֵחַ</span>&nbsp;🔥',
+    template: '[Lag BaOmer] begins at sundown on {date}'},
+  {month: months.AV, from: 23, to: 30, erevDay: 30, // last week of Av
+    slug: 'rosh-hashana-labehemot',
+    blurb: '🐑&nbsp;🐓&nbsp;<span lang="he" dir="rtl">רֹאשׁ הַשָּׁנָה לבְּהֵמוֹת שָׂמֵחַ</span>&nbsp;🐓&nbsp;🐑',
+    template: '[Rosh Hashana LaBehemot] (New Year for Tithing Animals) begins at sundown on {date}'},
+  {month: months.SHVAT, from: 2, to: 13, erevDay: 14, // first 2 weeks of Shvat
+    slug: 'tu-bishvat',
+    blurb: '🌳&nbsp;🌱&nbsp;<span lang="he" dir="rtl">ט״ו בִּשְׁבָט שָׂמֵחַ</span>&nbsp;🌱&nbsp;🌳',
+    template: '[Tu BiShvat] (New Year for Trees) begins at sundown on {date}'},
+];
+
+/**
+ * Replaces each `[link text]` in `template` with an anchor to `href`
+ * @private
+ * @param {string} template
+ * @param {string} href
+ * @return {string}
+ */
+function expandLinkTemplate(template, href) {
+  return template.replace(/\[([^\]]+)\]/g,
+      (_, text) => `<a class="text-green1 text-nowrap" href="${href}">${text}</a>`);
+}
 
 /**
  * @private
@@ -240,19 +297,12 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
   }
 
   const holidays = getHolidaysOnDate(hd, il) || [];
-  if (holidays.some((ev) => ev.getDesc() === hdesc.EREV_TISHA_BAV)) {
-    return [TZOM_KAL, `<a class="text-green1 text-nowrap" href="/holidays/tisha-bav-${gy}">Tish'a B'Av</a>
- begins tonight at sundown. We wish you an easy fast`];
-  }
-  if (holidays.some((ev) => ev.getDesc() === hdesc.YOM_HASHOAH)) {
-    return ['✡️ We remember ✡️',
-      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hashoah-${gy}">Yom HaShoah</a>,
- Holocaust and Heroism Remembrance Day`];
-  }
-  if (holidays.some((ev) => ev.getDesc() === hdesc.YOM_HAZIKARON)) {
-    return ['🇮🇱 <span lang="he" dir="rtl">אנחנו זוכרים אותם</span> 🇮🇱',
-      `Today is <a class="text-green1 text-nowrap" href="/holidays/yom-hazikaron-${gy}">Yom HaZikaron</a>,
- Israeli Memorial Day`];
+  for (const [desc, blurb, template] of descGreetings) {
+    const ev = holidays.find((ev) => ev.getDesc() === desc);
+    if (ev) {
+      const href = new URL(ev.url()).pathname;
+      return [blurb, expandLinkTemplate(template, href)];
+    }
   }
   const fastDay = holidays.find((ev) => ev.hasAnyFlag('MAJOR_FAST', 'MINOR_FAST'));
   if (fastDay?.url()) {
@@ -308,35 +358,15 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return getRoshChodeshGreeting(ctx, hd, roshChodeshTomorrow);
   }
 
-  if (isElul) {
-    // for the entire month of Elul
-    const nextYear = yy + 1;
-    const erevRH = dayjs(new HDate(1, months.TISHREI, nextYear).prev().greg()).locale(locale);
-    const htmlDate = myDateFormat(erevRH);
-    return [SHANA_TOVA, SHANA_TOVA2 + `.<br>
- <a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-${gy}">Rosh Hashana ${nextYear}</a>
- begins at sundown on ${htmlDate}`];
-  } else if (mm === months.IYYAR && dd >= 14 && dd <= 17) {
-    const erevLagBaOmer = dayjs(new HDate(17, months.IYYAR, yy).greg()).locale(locale);
-    const htmlDate = myDateFormat(erevLagBaOmer);
-    return ['🔥&nbsp;<span lang="he" dir="rtl">ל״ג בָּעוֹמֶר שָׂמֵחַ</span>&nbsp;🔥',
-      `<a class="text-green1 text-nowrap" href="/holidays/lag-baomer-${gy}">Lag BaOmer</a>
- begins at sundown on ${htmlDate}`];
-  } else if (mm === months.AV && dd >= 23) {
-    // for the last week of Av
-    const erevRHLaBehemot = dayjs(new HDate(30, months.AV, yy).greg()).locale(locale);
-    const htmlDate = myDateFormat(erevRHLaBehemot);
-    return ['🐑&nbsp;🐓&nbsp;<span lang="he" dir="rtl">רֹאשׁ הַשָּׁנָה לבְּהֵמוֹת שָׂמֵחַ</span>&nbsp;🐓&nbsp;🐑',
-      `<a class="text-green1 text-nowrap" href="/holidays/rosh-hashana-labehemot-${gy}">Rosh Hashana LaBehemot</a>
- (New Year for Tithing Animals)
- begins at sundown on ${htmlDate}`];
-  } else if (mm === months.SHVAT && dd >= 2 && dd <= 13) {
-    // first 2 weeks of Shvat
-    const erevTuBiShvat = dayjs(new HDate(14, months.SHVAT, yy).greg()).locale(locale);
-    const htmlDate = myDateFormat(erevTuBiShvat);
-    return ['🌳&nbsp;🌱&nbsp;<span lang="he" dir="rtl">ט״ו בִּשְׁבָט שָׂמֵחַ</span>&nbsp;🌱&nbsp;🌳',
-      `<a class="text-green1 text-nowrap" href="/holidays/tu-bishvat-${gy}">Tu BiShvat</a> (New Year for Trees)
- begins at sundown on ${htmlDate}`];
+  for (const {month, from, to, erevDay, slug, blurb, template} of countdownGreetings) {
+    if (mm === month && dd >= from && dd <= to) {
+      const erevHd = new HDate(erevDay, month, yy);
+      const erev = dayjs(erevHd.greg()).locale(locale);
+      const longText = expandLinkTemplate(template, `/holidays/${slug}-${gy}`)
+          .replace('{hyear}', String(erevHd.next().getFullYear()))
+          .replace('{date}', myDateFormat(erev));
+      return [blurb, longText];
+    }
   }
 
   const purimMonth = HDate.isLeapYear(yy) ? months.ADAR_II : months.ADAR_I;
