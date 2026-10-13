@@ -287,7 +287,8 @@ export function makeHebcalOptions(db, query) {
     ((options.isHebrewYear && options.year < 5661) || options.year < 1900)) {
     options.candlelighting = false;
   }
-  if (options.candlelighting && (options.mask & flags.ROSH_CHODESH)) {
+  if (options.candlelighting && (options.mask & flags.ROSH_CHODESH) &&
+      options.havdalahMins !== 0) {
     options.mask |= flags.KIDDUSH_LEVANA;
     options.kiddushLevanaMaharil = true;
   }
