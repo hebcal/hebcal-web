@@ -160,6 +160,18 @@ export function browseSitemapCountries() {
   return Object.keys(countryIdToIso);
 }
 
+/**
+ * Per-country browse sitemap slugs for the given ISO 3166 codes, in the
+ * order given. Countries with no populous city (no sitemap) are skipped.
+ * @param {string[]} isoCodes
+ * @return {string[]}
+ */
+export function browseSitemapSlugsForIso(isoCodes) {
+  init();
+  const isoToId = new Map(Object.entries(countryIdToIso).map(([id, iso]) => [iso, id]));
+  return isoCodes.map((iso) => isoToId.get(iso)).filter(Boolean);
+}
+
 export async function shabbatBrowse(ctx) {
   init();
   const rpath = ctx.request.path;
