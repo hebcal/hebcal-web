@@ -74,11 +74,11 @@
     "ejs": "$ejs"
   },
   "dependencies": {
-    "@hebcal/core": "^6.14.3",
+    "@hebcal/core": "^6.14.4",
     "@hebcal/geo-sqlite": "^5.12.3",
     "@hebcal/hdate": "^0.23.1",
     "@hebcal/icalendar": "^7.0.6",
-    "@hebcal/learning": "^6.12.1",
+    "@hebcal/learning": "^6.12.2",
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.5.3",
     "@hebcal/murmurhash3": "^1.0.0",
