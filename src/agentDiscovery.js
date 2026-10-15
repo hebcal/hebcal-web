@@ -2,8 +2,10 @@ import {readFileSync} from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {HDate} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
+import {getDefaultHebrewYear} from './dateUtil.js';
 import {browseSitemapSlugsForIso} from './shabbat-browse.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -165,8 +167,31 @@ export function sitemapIndex(ctx) {
     entries.join('') + '</sitemapindex>\n';
 }
 
+/**
+ * Pages linked from the homepage that change at most monthly: the holiday
+ * calendars for the current Hebrew year, the current (or, from 10 December,
+ * next) Gregorian year, and the Torah readings and Omer count for the Hebrew year. Mirrors
+ * the links in `views/homepage.ejs`. Daily/weekly pages (this week's parsha,
+ * daily learning) are deliberately omitted.
+ * @param {Date} [today]
+ * @return {string[]}
+ */
+export function datedPages(today = new Date()) {
+  const hy = getDefaultHebrewYear(new HDate(today));
+  const gy = today.getFullYear();
+  const gm = today.getMonth() + 1;
+  const holidayGy = (gm === 12 && today.getDate() >= 10) ? gy + 1 : gy;
+  return [
+    `/holidays/${hy - 3761}-${hy - 3760}`,
+    `/holidays/${holidayGy}`,
+    `/sedrot/${hy}?i=off`,
+    `/sedrot/${hy}?i=on`,
+    `/omer/${hy}`,
+  ];
+}
+
 export function sitemapPages(ctx) {
-  const entries = MAIN_PAGES.map((loc) => `<url><loc>${ORIGIN}${loc}</loc></url>\n`);
+  const entries = [...MAIN_PAGES, ...datedPages()].map((loc) => `<url><loc>${ORIGIN}${loc}</loc></url>\n`);
   ctx.set('Cache-Control', CACHE_CONTROL_7DAYS);
   ctx.type = 'text/xml';
   ctx.body = XML_HEADER + `<urlset xmlns="${SITEMAP_NS}">\n` +

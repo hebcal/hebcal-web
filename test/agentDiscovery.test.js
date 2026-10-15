@@ -1,7 +1,7 @@
 import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
-import {htmlFragmentToMarkdown} from '../src/agentDiscovery.js';
+import {datedPages, htmlFragmentToMarkdown} from '../src/agentDiscovery.js';
 import {makeServer} from './testServer.js';
 
 const server = makeServer(app);
@@ -197,6 +197,14 @@ describe('Agent discovery files', () => {
     expect(response.status).toBe(200);
     expect(response.text).toContain('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">');
     expect(response.text).toContain('<url><loc>https://www.hebcal.com/</loc></url>');
+    expect(response.text).toMatch(/<loc>https:\/\/www\.hebcal\.com\/holidays\/\d{4}-\d{4}<\/loc>/);
+  });
+
+  it('lists slowly-changing dated pages', () => {
+    expect(datedPages(new Date(2026, 9, 15))).toEqual([
+      '/holidays/2026-2027', '/holidays/2026', '/sedrot/5787?i=off', '/sedrot/5787?i=on', '/omer/5787',
+    ]);
+    expect(datedPages(new Date(2026, 11, 20))[1]).toBe('/holidays/2027');
   });
 
   it('rejects POST to discovery files', async () => {
