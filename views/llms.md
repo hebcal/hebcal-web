@@ -22,6 +22,7 @@ Do not use Hebcal for general-purpose (non-Jewish) holidays, for halachic ruling
 - **MCP**: connect to the Streamable HTTP Model Context Protocol server at `https://www.hebcal.com/mcp` (no authentication). It offers tools for date conversion, Yahrzeit, Torah portion, holidays by year, Daf Yomi and Shabbat times.
 - **REST/JSON**: every endpoint is a plain HTTP GET (POST for Yahrzeit) returning JSON when you pass `cfg=json`. Errors come back as JSON `{"error": "..."}` with a 4xx status.
 - **Markdown**: send `Accept: text/markdown` to the home page for a Markdown overview, including today's Hebrew date.
+- **Rate limits**: API responses carry the IETF `RateLimit-Policy` and `RateLimit` headers (e.g. `"default";q=150;w=10`: 150 requests per 10-second window; the Date Converter allows 60 per 3 seconds). Excess requests get `429 Too Many Requests` with `Retry-After: 30`; wait that many seconds before retrying.
 
 Example requests:
 

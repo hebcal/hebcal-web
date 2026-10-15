@@ -257,6 +257,15 @@ Each feature is typically one or a few files handling routing, business logic, a
   `Cache-Control: private`; adding Markdown to a Varnish-cached page would
   multiply its cache variants by every distinct browser Accept string unless
   the VCL normalizes Accept first.
+- **Rate-limit headers** (`rateLimit.js`): API responses (`cfg=` requests,
+  `/leyning`, `/learning`, `/api-docs/openapi.json`) carry the IETF
+  `RateLimit-Policy` / `RateLimit` fields. The numbers mirror the vsthrottle
+  rules in Varnish's `default.vcl` (hebcal-devops): 150 req/10s per client, and
+  60 req/3s for `/converter`; the 429 + `Retry-After: 30` is Varnish's. This app
+  keeps no counters, so `r` is the full quota. Keep the constants in sync with
+  the VCL. Converter/shabbat `cfg=json`, `/zmanim` and `/complete` are served by
+  hebcal-api-go, so only Varnish `vcl_deliver` can cover them. The middleware
+  must stay *outside* koa-error, which discards headers set on error responses.
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used
