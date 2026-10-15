@@ -257,6 +257,14 @@ Each feature is typically one or a few files handling routing, business logic, a
   `Cache-Control: private`; adding Markdown to a Varnish-cached page would
   multiply its cache variants by every distinct browser Accept string unless
   the VCL normalizes Accept first.
+- **Rate-limit headers** (`rateLimit.js`): API responses (`cfg=` requests,
+  `/leyning`, `/learning`, `/api-docs/openapi.json`) carry the IETF
+  `RateLimit-Policy: "default";q=100;w=60` and `RateLimit: "default";r=100;t=60`
+  fields. The 429 + `Retry-After` is issued by Varnish (hebcal-devops); this app
+  keeps no counters, so `r` is the full quota. Keep `hebcal.ratelimit.quota` /
+  `hebcal.ratelimit.window` in the INI equal to the Varnish limit (quota 0 turns
+  the headers off). The middleware must stay *outside* koa-error, which discards
+  headers set on error responses.
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used

@@ -17,6 +17,7 @@ import {createBaseApp, useBackendHostname, useObservability, useTimeout,
 import {aiChatbotLogger} from './logger.js';
 import {loadSession} from './session.js';
 import {markdownErrors} from './agentDiscovery.js';
+import {rateLimitHeaders} from './rateLimit.js';
 import {isGoogleLoginConfigured} from './oauthGoogle.js';
 import {isAppleLoginConfigured} from './oauthApple.js';
 import './locale.js';
@@ -157,6 +158,9 @@ app.use(async function errorCsp(ctx, next) {
     }
   }
 });
+
+// Outside koa-error, which discards headers set on error responses.
+app.use(rateLimitHeaders());
 
 app.use(error({
   engine: 'ejs',
