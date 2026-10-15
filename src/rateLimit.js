@@ -2,26 +2,27 @@
  * IETF RateLimit header fields (draft-ietf-httpapi-ratelimit-headers) on the
  * machine-readable API responses, so agents can self-throttle.
  *
- * The 429s themselves (with Retry-After) are issued by Varnish, configured in
- * hebcal-devops. This app keeps no per-client counters, so it advertises the
- * policy and reports the full quota as the remaining allowance -- an upper
- * bound that Varnish's 429 + Retry-After corrects. Keep the numbers in sync
- * with the Varnish limit via `hebcal.ratelimit.quota` / `hebcal.ratelimit.window`
- * in hebcal-dot-com.ini (quota 0 turns the headers off).
+ * The limits mirror the vsthrottle rules in Varnish's default.vcl
+ * (hebcal-devops), which also issues the 429s (Retry-After: 30). Keep these
+ * constants in sync with that file. This app keeps no per-client counters, so
+ * `r` reports the full quota -- an upper bound that a 429 corrects.
+ *
+ * Note that `cfg=json|xml` converter and `cfg=json` shabbat responses, /zmanim
+ * and /complete come from hebcal-api-go, not this app; Varnish's vcl_deliver
+ * is the place that covers those (see CLAUDE.md).
  */
-export const DEFAULT_QUOTA = 100;
-export const DEFAULT_WINDOW_SECS = 60;
-const POLICY_NAME = 'default';
+
+/** `is_denied(client.identity, 150, 10s, 30s)` -- everything but /home, /converter */
+export const DEFAULT_POLICY = {quota: 150, window: 10};
+/** `is_denied(client.identity, 60, 3s, 30s)` -- /converter */
+export const CONVERTER_POLICY = {quota: 60, window: 3};
 
 /**
- * @param {Object<string,string>} iniConfig
- * @return {{quota: number, window: number}|null}
+ * @param {string} rpath
+ * @return {{quota: number, window: number}}
  */
-export function rateLimitPolicy(iniConfig) {
-  const q = parseInt(iniConfig?.['hebcal.ratelimit.quota'] ?? DEFAULT_QUOTA, 10);
-  const w = parseInt(iniConfig?.['hebcal.ratelimit.window'] ?? DEFAULT_WINDOW_SECS, 10);
-  if (!(q > 0) || !(w > 0)) return null;
-  return {quota: q, window: w};
+export function policyForPath(rpath) {
+  return rpath.startsWith('/converter') ? CONVERTER_POLICY : DEFAULT_POLICY;
 }
 
 /**
@@ -46,11 +47,10 @@ function isApiRequest(ctx) {
 export function rateLimitHeaders() {
   return async function rateLimitHeadersMiddleware(ctx, next) {
     await next();
-    const policy = rateLimitPolicy(ctx.iniConfig);
-    if (!policy || !isApiRequest(ctx)) return;
-    const {quota, window} = policy;
-    ctx.set('RateLimit-Policy', `"${POLICY_NAME}";q=${quota};w=${window}`);
-    ctx.set('RateLimit', `"${POLICY_NAME}";r=${quota};t=${window}`);
+    if (!isApiRequest(ctx)) return;
+    const {quota, window} = policyForPath(ctx.path);
+    ctx.set('RateLimit-Policy', `"default";q=${quota};w=${window}`);
+    ctx.set('RateLimit', `"default";r=${quota};t=${window}`);
     if (ctx.response.get('Access-Control-Allow-Origin')) {
       ctx.append('Access-Control-Expose-Headers', 'RateLimit, RateLimit-Policy, Retry-After');
     }
