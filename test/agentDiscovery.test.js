@@ -166,6 +166,7 @@ describe('Agent discovery files', () => {
   it('lists the sitemaps in robots.txt', async () => {
     const response = await request(server).get('/robots.txt');
     expect(response.text).toContain('\nSitemap: https://www.hebcal.com/sitemap.xml\n');
+    expect(response.text).toContain('\nSitemap: https://www.hebcal.com/shabbat/browse/sitemap.xml\n');
     expect(response.text).toContain('\nSitemap: https://www.hebcal.com/home/sitemap.xml\n');
   });
 
@@ -179,7 +180,10 @@ describe('Agent discovery files', () => {
     expect(locs).toContain('https://www.hebcal.com/sitemap-pages.xml');
     expect(locs).toContain('https://www.hebcal.com/learning/sitemap.txt');
     expect(locs).not.toContain('https://www.hebcal.com/shabbat/browse/sitemap.xml');
-    expect(locs.some((loc) => /\/shabbat\/browse\/[a-z-]+\.xml$/.test(loc))).toBe(true);
+    const browse = locs.filter((loc) => /\/shabbat\/browse\/[a-z-]+\.xml$/.test(loc));
+    expect(browse.length).toBeGreaterThan(0);
+    expect(browse.length).toBeLessThanOrEqual(40);
+    expect(browse[0]).toBe('https://www.hebcal.com/shabbat/browse/united-states.xml');
     expect(xml.match(/<lastmod>/g).length).toBe(locs.length);
   });
 

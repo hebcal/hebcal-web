@@ -125,6 +125,7 @@ Disallow: /account
 Disallow: /home/?s=
 
 Sitemap: https://www.hebcal.com/sitemap.xml
+Sitemap: https://www.hebcal.com/shabbat/browse/sitemap.xml
 Sitemap: https://www.hebcal.com/home/sitemap.xml
 `;
       return;

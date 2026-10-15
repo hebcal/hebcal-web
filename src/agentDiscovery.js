@@ -4,7 +4,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import dayjs from 'dayjs';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
-import {browseSitemapCountries} from './shabbat-browse.js';
+import {browseSitemapSlugsForIso} from './shabbat-browse.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -115,10 +115,24 @@ const MAIN_PAGES = [
 ];
 
 /**
+ * Top countries by visits (Matomo, Jan-Sep 2026), ISO 3166 codes in rank order.
+ * Excludes countries with no meaningful Jewish population whose traffic is
+ * essentially bots (China, Singapore, Hong Kong, Japan, South Korea, Vietnam,
+ * Indonesia, Bangladesh, Nigeria, Malaysia).
+ */
+const TOP_COUNTRIES = [
+  'US', 'IL', 'CA', 'GB', 'BR', 'AU', 'MX', 'DE', 'FR', 'ZA',
+  'AR', 'CO', 'NL', 'IN', 'ES', 'PH', 'PL', 'SE', 'IT', 'RO',
+  'CH', 'BE', 'CL', 'VE', 'BM', 'TR', 'PA', 'DK', 'IE', 'HU',
+  'NZ', 'EC', 'AT', 'FI', 'CZ',
+];
+
+/**
  * `/sitemap.xml` is a sitemap index. The protocol forbids an index from
- * listing another index, so the per-country Shabbat sitemaps are listed
- * individually rather than via `/shabbat/browse/sitemap.xml`, and the
- * WordPress index at `/home/sitemap.xml` is advertised from robots.txt.
+ * listing another index, so only the per-country Shabbat sitemaps for the
+ * top countries are listed here. The full set is reachable through
+ * `/shabbat/browse/sitemap.xml` (itself an index), and that index and the
+ * WordPress index at `/home/sitemap.xml` are advertised from robots.txt.
  * @param {any} ctx
  */
 export function sitemapIndex(ctx) {
@@ -128,7 +142,7 @@ export function sitemapIndex(ctx) {
     '/learning/sitemap.txt',
     '/omer/sitemap.txt',
     '/sitemap_zips.txt',
-    ...browseSitemapCountries().map((c) => `/shabbat/browse/${c}.xml`),
+    ...browseSitemapSlugsForIso(TOP_COUNTRIES).map((c) => `/shabbat/browse/${c}.xml`),
   ];
   const entries = locs.map((loc) =>
     `<sitemap>\n<loc>${ORIGIN}${loc}</loc>\n<lastmod>${lastmod}</lastmod>\n</sitemap>\n`);
