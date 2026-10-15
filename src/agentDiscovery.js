@@ -40,19 +40,32 @@ const API_CATALOG_TYPE =
   'application/linkset+json; profile="https://www.rfc-editor.org/info/rfc9727"';
 
 /**
+ * Human-readable documentation page for each REST endpoint (the
+ * `service-doc` link), from https://www.hebcal.com/home/developer-apis
+ */
+const API_DOCS = {
+  '/hebcal': '/home/195/jewish-calendar-rest-api',
+  '/converter': '/home/219/hebrew-date-converter-rest-api',
+  '/shabbat': '/home/197/shabbat-times-rest-api',
+  '/zmanim': '/home/1663/zmanim-halachic-times-api',
+  '/leyning': '/home/4277/leyning-torah-reading-api',
+  '/yahrzeit': '/home/1705/yahrzeit-anniversary-api',
+};
+
+/**
  * RFC 9727 API catalog. Every REST endpoint is described by the one
- * OpenAPI document, so each anchor shares its service-desc and service-doc.
+ * OpenAPI document (service-desc), but each has its own service-doc page.
  */
 const apiCatalogBody = JSON.stringify({
-  linkset: ['/hebcal', '/converter', '/shabbat', '/zmanim', '/leyning', '/yahrzeit']
-      .map((p) => ({
+  linkset: Object.entries(API_DOCS)
+      .map(([p, doc]) => ({
         'anchor': ORIGIN + p,
         'service-desc': [{
           href: ORIGIN + OPENAPI_PATH,
           type: 'application/vnd.oai.openapi+json',
         }],
         'service-doc': [{
-          href: ORIGIN + '/home/developer-apis',
+          href: ORIGIN + doc,
           type: 'text/html',
         }],
       })),
