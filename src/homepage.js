@@ -11,6 +11,7 @@ import {processCookieAndQuery,
   makeGeoUrlArgs2,
 } from './urlArgs.js';
 import {makeHebcalOptions} from './calendar.js';
+import {homepageMarkdown, prefersMarkdown} from './agentDiscovery.js';
 import {pad2, pad4} from '@hebcal/hdate';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc.js';
@@ -19,6 +20,41 @@ import './dayjs-locales.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
+
+/**
+ * schema.org identity for the homepage. Hebcal publishes no postal address
+ * or phone number, so the contact point is the contact form.
+ */
+const homepageJsonLD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.hebcal.com/#organization',
+      'name': 'Hebcal',
+      'url': 'https://www.hebcal.com/',
+      'logo': 'https://www.hebcal.com/android-chrome-512x512.png',
+      'description': 'Free Jewish calendar, Hebrew date converter, ' +
+        'Shabbat times and Torah readings.',
+      'founder': {'@type': 'Person', 'name': 'Michael J. Radwin'},
+      'sameAs': ['https://github.com/hebcal'],
+      'contactPoint': {
+        '@type': 'ContactPoint',
+        'contactType': 'customer support',
+        'url': 'https://www.hebcal.com/home/about/contact',
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.hebcal.com/#website',
+      'name': 'Hebcal Jewish Calendar',
+      'url': 'https://www.hebcal.com/',
+      'inLanguage': 'en',
+      'publisher': {'@id': 'https://www.hebcal.com/#organization'},
+      'license': 'https://creativecommons.org/licenses/by/4.0/',
+    },
+  ],
+};
 
 export async function homepage(ctx) {
   const q0 = await setDefautLangTz(ctx);
@@ -61,6 +97,7 @@ export async function homepage(ctx) {
     ctx.state.yearArgs = yearArgsOverride;
   }
   ctx.state.items = [];
+  ctx.state.jsonLD = homepageJsonLD;
   mastheadDates(ctx, dt, afterSunset, hd);
   mastheadHolidays(ctx, hd, il);
   mastheadParsha(ctx, hd, il);
@@ -74,6 +111,12 @@ export async function homepage(ctx) {
   }
   ctx.state.dafYomi = DailyLearning.lookup('dafYomi', hd);
   ctx.state.mishnaYomi = DailyLearning.lookup('mishnaYomi', hd);
+  // Markdown for agents that ask for it (acceptmarkdown.com); the page is
+  // Cache-Control: private, so varying on Accept costs Varnish nothing
+  ctx.vary('Accept');
+  if (prefersMarkdown(ctx)) {
+    return homepageMarkdown(ctx);
+  }
   return ctx.render('homepage');
 }
 

@@ -150,6 +150,16 @@ function addHref(ctx, r, countryCode) {
   r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}&set=off`;
 }
 
+/**
+ * Country slugs that have a per-country browse sitemap
+ * (`/shabbat/browse/<slug>.xml`)
+ * @return {string[]}
+ */
+export function browseSitemapCountries() {
+  init();
+  return Object.keys(countryIdToIso);
+}
+
 export async function shabbatBrowse(ctx) {
   init();
   const rpath = ctx.request.path;
@@ -171,7 +181,7 @@ export async function shabbatBrowse(ctx) {
     }
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
-      countries: Object.keys(countryIdToIso),
+      countries: browseSitemapCountries(),
       lastmod: dayjs().day(0).format('YYYY-MM-DD'),
     });
     return;
