@@ -140,7 +140,12 @@ describe('Agent discovery files', () => {
     for (const link of body.linkset) {
       expect(link.anchor).toMatch(/^https:\/\/www\.hebcal\.com\//);
       expect(link['service-desc'][0].href).toBe('https://www.hebcal.com/api-docs/openapi.json');
+      expect(link['service-doc'][0].href).toMatch(
+          /^https:\/\/www\.hebcal\.com\/home\/\d+\/[a-z-]+$/);
     }
+    const hebcal = body.linkset.find((l) => l.anchor.endsWith('/hebcal'));
+    expect(hebcal['service-doc'][0].href).toBe(
+        'https://www.hebcal.com/home/195/jewish-calendar-rest-api');
   });
 
   it('answers HEAD on the API catalog', async () => {
