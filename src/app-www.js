@@ -16,6 +16,7 @@ import {createBaseApp, useBackendHostname, useObservability, useTimeout,
   stopIfTimedOut} from './app-common.js';
 import {aiChatbotLogger} from './logger.js';
 import {loadSession} from './session.js';
+import {markdownErrors} from './agentDiscovery.js';
 import {isGoogleLoginConfigured} from './oauthGoogle.js';
 import {isAppleLoginConfigured} from './oauthApple.js';
 import './locale.js';
@@ -161,6 +162,10 @@ app.use(error({
   engine: 'ejs',
   template: path.join(__dirname, '..', 'views', 'error.ejs'),
 }));
+
+// koa-error answers only HTML, text and JSON; this renders Markdown errors
+// for agents that send `Accept: text/markdown` and defers everything else.
+app.use(markdownErrors);
 
 app.use(async function checkHttpMethod(ctx, next) {
   const method = ctx.method;

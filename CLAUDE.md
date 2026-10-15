@@ -241,6 +241,22 @@ Each feature is typically one or a few files handling routing, business logic, a
   are keyed by email address, and re-subscribing while signed in reuses the same
   email-keyed row -- so nothing is duplicated, and old subscriptions surface by an
   email join once an account page lists them.
+- **Agent discovery** (`agentDiscovery.js`): `/llms.txt` (content in
+  `views/llms.md`, which is also the body of the Markdown homepage),
+  `/openapi.json` (302 → `/api-docs/openapi.json`), `/developers` and `/docs`
+  (302 → `/home/developer-apis`), the RFC 9727 `/.well-known/api-catalog`, the
+  MCP server card at `/.well-known/mcp/server-card.json` and `/server.json`
+  (mirrors the `io.github.hebcal/hebcal` registry entry; the `/mcp` server
+  itself is hebcal-api-go's), and the `/sitemap.xml` index. A sitemap index may
+  not list another index, so it names the per-country Shabbat browse sitemaps
+  individually and the WordPress `/home/sitemap.xml` index is advertised from
+  robots.txt instead. **Markdown negotiation**: `Accept: text/markdown` gets
+  Markdown on `/` (`homepageMarkdown()`) and on every error (`markdownErrors`,
+  mounted just inside koa-error, which would otherwise send no body at all).
+  Both set `Vary: Accept`. That is free on `/` only because the homepage is
+  `Cache-Control: private`; adding Markdown to a Varnish-cached page would
+  multiply its cache variants by every distinct browser Accept string unless
+  the VCL normalizes Accept first.
 - **Geolocation**: `location.js`, `nearestCity.js`, `defaultLangTz.js`. The
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used

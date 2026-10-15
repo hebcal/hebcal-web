@@ -15,6 +15,14 @@ import {dailyLearningConfig} from './urlArgs.js';
 import {geoAutoComplete} from './complete.js';
 import {hebrewDateConverter, dateConverterCsv} from './converter.js';
 import {apiDocs} from './apiDocs.js';
+import {
+  OPENAPI_PATH,
+  apiCatalog,
+  llmsTxt,
+  mcpServerCard,
+  sitemapIndex,
+  sitemapPages,
+} from './agentDiscovery.js';
 import {emailForm, emailVerify, emailSubscriptionStatus} from './email.js';
 import {emailOpen} from './emailOpen.js';
 import {fridgeShabbat} from './fridge.js';
@@ -115,8 +123,34 @@ Disallow: /email
 Disallow: /login
 Disallow: /account
 Disallow: /home/?s=
+
+Sitemap: https://www.hebcal.com/sitemap.xml
+Sitemap: https://www.hebcal.com/home/sitemap.xml
 `;
       return;
+    } else if (rpath === '/llms.txt') {
+      onlyGetAndHead(ctx);
+      return llmsTxt(ctx);
+    } else if (rpath === '/openapi.json') {
+      onlyGetAndHead(ctx);
+      httpRedirect(ctx, OPENAPI_PATH);
+      return;
+    } else if (rpath === '/developers' || rpath === '/docs') {
+      onlyGetAndHead(ctx);
+      httpRedirect(ctx, '/home/developer-apis');
+      return;
+    } else if (rpath === '/.well-known/api-catalog') {
+      onlyGetAndHead(ctx);
+      return apiCatalog(ctx);
+    } else if (rpath === '/.well-known/mcp/server-card.json' || rpath === '/server.json') {
+      onlyGetAndHead(ctx);
+      return mcpServerCard(ctx);
+    } else if (rpath === '/sitemap.xml') {
+      onlyGetAndHead(ctx);
+      return sitemapIndex(ctx);
+    } else if (rpath === '/sitemap-pages.xml') {
+      onlyGetAndHead(ctx);
+      return sitemapPages(ctx);
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
       return send(ctx, rpath, {root: DOCUMENT_ROOT});

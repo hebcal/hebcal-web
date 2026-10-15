@@ -3,6 +3,14 @@
 <meta name="keywords" content="hebcal,Jewish calendar,Hebrew calendar,candle-lighting,Shabbat,Havdalah,sedrot,Sadinoff,Yahrzeit,calender">
 <meta name="author" content="Michael J. Radwin">
 <link rel="canonical" href="https://www.hebcal.com/">
+<link rel="alternate" type="text/markdown" href="https://www.hebcal.com/llms.txt">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hebcal">
+<meta property="og:title" content="Hebcal Jewish Calendar">
+<meta property="og:description" content="Jewish holidays, Hebrew date converter, Shabbat candle-lighting times, Torah readings and Yahrzeit dates.">
+<meta property="og:url" content="https://www.hebcal.com/">
+<meta property="og:image" content="https://www.hebcal.com/android-chrome-512x512.png">
+<script type="application/ld+json"><%- locals.jsonForScript(locals.jsonLD) %></script>
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="msapplication-TileColor" content="#da532c">
@@ -77,7 +85,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 <a href="/holidays/<%= locals.gregRange %><%=locals.il?'?i=on':''%>">
   <svg width="68" height="68" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#magen-david"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/holidays/<%= locals.gregRange %><%=locals.il?'?i=on':''%>">Holidays</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="/holidays/<%= locals.gregRange %><%=locals.il?'?i=on':''%>">Holidays</a></h2>
 <p>Major, minor &amp; modern holidays, Rosh Chodesh, minor fasts, special Shabbatot.
 <br><a href="/holidays/<%=locals.hy-3761%>-<%=locals.hy-3760%><%=locals.il?'?i=on':''%>"><%=locals.hy%></a> ·
 <a href="/holidays/<%= (locals.gm === 12 && locals.gd >= 10) ? locals.gy + 1 : locals.gy %><%=locals.il?'?i=on':''%>"><%= (locals.gm === 12 && locals.gd >= 10) ? locals.gy + 1 : locals.gy %></a> ·
@@ -90,7 +98,7 @@ Download to Apple, Google, Microsoft Outlook and more.</div>
 <a href="/yahrzeit">
   <svg width="80" height="65" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#couple"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/yahrzeit">Yahrzeits and Birthdays</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="/yahrzeit">Yahrzeits and Birthdays</a></h2>
 <p>Create a personal list of Yahrzeit (memorial) and Yizkor dates,
 Hebrew Birthdays and Anniversaries for 20+ years.
 Free annual email reminders &amp; calendar downloads.
@@ -101,7 +109,7 @@ Free annual email reminders &amp; calendar downloads.
 <a href="<%=locals.shabbatUrl%>">
   <svg width="64" height="64" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#candles"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="<%=locals.shabbatUrl%>">Shabbat Times</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="<%=locals.shabbatUrl%>">Shabbat Times</a></h2>
 <p>Candle-lighting &amp; Havdalah times for Shabbat and holidays.
 Start and end times for fast days.
 Over <a href="/shabbat/browse/">100,000 world cities</a> supported.
@@ -115,7 +123,7 @@ href="/fridge">Year at-a-glance &raquo;</a></p>
 <a href="/sedrot/<%=locals.il?'?i=on':''%>">
   <svg width="80" height="80" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#torah-235339"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/sedrot/<%=locals.il?'?i=on':''%>">Torah Readings</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="/sedrot/<%=locals.il?'?i=on':''%>">Torah Readings</a></h2>
 <p>Aliyah-by-aliyah breakdown for the <em>Parashat ha-Shavua</em>.
 Full kriyah, triennial cycle, weekday readings.
 Spreadsheets for <em>leyning</em> coordinators.
@@ -128,7 +136,7 @@ Spreadsheets for <em>leyning</em> coordinators.
 <a href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">
 <svg width="80" height="69" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#book"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">Daily learning</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="/learning/<%=locals.isoDt%><%=locals.il?'?i=on':''%>">Daily learning</a></h2>
 <div class="text-center"><%= locals.locale === 'he' ? locals.hd.renderGematriya() : locals.hd.render(locals.lg, true) %></div>
 <ul class="list-unstyled text-center">
   <li><span class="text-nowrap">Daf Yomi</span> ·
@@ -143,7 +151,7 @@ Spreadsheets for <em>leyning</em> coordinators.
 <a href="/ical/">
   <svg width="80" height="72" class="mx-auto d-block mb-2"><use href="<%=locals.cspriteHref%>#cloud-download"></use></svg>
 </a>
-<h3 class="text-center"><a class="text-body text-decoration-none" href="/ical/">Download</a></h3>
+<h2 class="h3 text-center"><a class="text-body text-decoration-none" href="/ical/">Download</a></h2>
 <p>Download Jewish holidays and Hebrew dates for iPhone, iPad, Android
 (via Google Calendar), Outlook, macOS Desktop Calendar, or to any
 app that supports iCalendar (.ics) feeds.
@@ -159,8 +167,9 @@ app that supports iCalendar (.ics) feeds.
 </a>
 </div><!-- .col-sm-2 -->
 <div class="col-sm-10">
-<h3><a class="text-body text-decoration-none" href="/home/developer-apis">Developer APIs</a></h3>
+<h2 class="h3"><a class="text-body text-decoration-none" href="/home/developer-apis">Developer APIs</a></h2>
 <p>We're part of the Open Source Judaism movement. Embed Hebcal.com content directly onto your synagogue website with our JavaScript, JSON and RSS APIs, available under a Creative Commons Attribution (CC-BY) License. <a href="/home/developer-apis">Learn more &raquo;</a></p>
+<p>See the <a href="/api-docs/">REST API reference</a> (<a href="/api-docs/openapi.json">OpenAPI spec</a>), connect an AI assistant to our <a href="/home/5027/jewish-calendar-model-context-protocol-mcp">MCP server</a>, or read the <a href="/llms.txt">llms.txt</a> overview.</p>
 </div><!-- .col-sm-10 -->
 
 </div><!-- .row -->
