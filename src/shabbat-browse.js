@@ -26,7 +26,7 @@ const geonamesFilename = 'geonames.sqlite3';
  * We don't want to encourage crawlers to index a city that might disappear
  * from a future version of the geonames database.
  */
-const MIN_POPULATION = 2000;
+const MIN_POPULATION = 1600;
 
 const CONTINENT_SQL = `SELECT Continent, ISO, Country FROM country
 WHERE Continent <> 'AN'
