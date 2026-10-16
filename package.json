@@ -15,7 +15,7 @@
     "csprite": "color-icons5.svg",
     "mainCss": "style-5.3.8n.css",
     "holidayFcApp": "fc-6.1.21a.min.js",
-    "clientapp": "hebcal-app-5.2.2.min.js"
+    "clientapp": "hebcal-app-5.3.0.min.js"
   },
   "type": "module",
   "engines": {
@@ -51,8 +51,8 @@
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.0",
     "@vitest/coverage-v8": "^5.0.4",
+    "autocompleter": "^10.0.0",
     "bootstrap": "^5.3.8",
-    "bootstrap5-autocomplete": "^1.1.42",
     "critical": "^9.0.0",
     "csv-parse": "^7.0.3",
     "gettext-parser": "^9.1.1",
