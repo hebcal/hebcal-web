@@ -1,6 +1,7 @@
 <%- await include('partials/header.ejs', {
 }) -%>
 <meta name="description" content="<%= locals.summary %>">
+<% if (typeof locals.location.population === 'number' && locals.location.population < 1000) { %><meta name="robots" content="noindex"><% } %>
 <link rel="canonical" href="https://www.hebcal.com/shabbat?<%= locals.geoUrlArgs %>&amp;set=off">
 <link rel="alternate" type="application/rss+xml" title="RSS" href="<%= locals.rssUrl %>">
 <style>

@@ -61,6 +61,26 @@ describe('Shabbat Routes', () => {
   });
 });
 
+describe('Shabbat robots meta for small cities', () => {
+  it('adds noindex when population < 1000', async () => {
+    const response = await request(server).get('/shabbat?geonameid=2525725');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<meta name="robots" content="noindex">');
+  });
+
+  it('omits noindex when population >= 1000', async () => {
+    const response = await request(server).get('/shabbat?geonameid=791954');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('name="robots"');
+  });
+
+  it('omits noindex when population is unknown', async () => {
+    const response = await request(server).get('/shabbat?geonameid=5128581');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toContain('name="robots"');
+  });
+});
+
 describe('Fridge Routes', () => {
   it('should handle /fridge route', async () => {
     const response = await request(server)
