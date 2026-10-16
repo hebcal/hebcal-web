@@ -65,6 +65,13 @@ const hebcalClient = {
 
     function fetchSuggestions(text, update) {
       abortFetch();
+      if (text.length < MIN_QUERY_LENGTH) {
+        // Shown as the list's empty message, so it overlays the page like
+        // the suggestions do instead of pushing content down
+        settings.emptyMsg = `Type at least ${MIN_QUERY_LENGTH} letters`;
+        update([]);
+        return;
+      }
       const ctl = controller = new AbortController();
       cityTypeaheadEl.classList.add(LOADING_CLASS);
       const url = '/complete.php?q=' + encodeURIComponent(text);
@@ -102,7 +109,9 @@ const hebcalClient = {
     const settings = {
       input: cityTypeaheadEl,
       className: 'city-ac',
-      minLength: MIN_QUERY_LENGTH,
+      // The library closes the list below minLength; we want it open at one
+      // character to show the hint, and fetchSuggestions() skips the request
+      minLength: 1,
       debounceWaitMs: 300,
       // Like the Enter key, picking a suggestion fills in the city; it only
       // submits the form when autoSubmit is set (see onSelect)
@@ -134,31 +143,17 @@ const hebcalClient = {
     };
     autocomplete(settings);
 
-    const hintEl = document.createElement('div');
-    hintEl.id = 'city-typeahead-hint';
-    hintEl.className = 'small text-body-secondary mt-1';
-    hintEl.setAttribute('aria-live', 'polite');
-    hintEl.textContent = `Type at least ${MIN_QUERY_LENGTH} characters`;
-    hintEl.hidden = true;
-    // Place the hint below the input-clear-wrapper (or plain div) holding the input
-    cityTypeaheadEl.parentElement.after(hintEl);
-    cityTypeaheadEl.setAttribute('aria-describedby', hintEl.id);
-
     const clearBtn = document.getElementById('clear-btn');
     function updateUi() {
       const len = cityTypeaheadEl.value.length;
-      hintEl.hidden = len === 0 || len >= MIN_QUERY_LENGTH;
       if (len < MIN_QUERY_LENGTH) {
-        abortFetch(); // the library has closed the list; don't finish the request
+        abortFetch(); // too short to search; don't finish an earlier request
       }
       if (clearBtn) {
         clearBtn.style.display = len ? 'block' : 'none';
       }
     }
     cityTypeaheadEl.addEventListener('input', updateUi);
-    cityTypeaheadEl.addEventListener('blur', () => {
-      hintEl.hidden = true;
-    });
 
     function setElem(id, val) {
       const elem = document.getElementById(id);
@@ -194,7 +189,7 @@ const hebcalClient = {
     function clearInput() {
       clearGeo();
       cityTypeaheadEl.value = '';
-      // Let the library close the list and updateUi() reset the hint
+      // Let the library close the list and updateUi() hide the clear button
       cityTypeaheadEl.dispatchEvent(new Event('input'));
     }
 
