@@ -12,6 +12,35 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6.5' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-dasharray='30 11'/%3E%3C/svg%3E");
   }
 }
+.city-ac {
+  z-index: 1060; /* above Bootstrap's offcanvas and modals */
+  margin-top: 0.25rem;
+  padding: 0.25rem 0;
+  overflow-y: auto;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+  box-shadow: var(--bs-box-shadow);
+}
+.city-ac > div {
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+}
+.city-ac > div:hover {
+  background: var(--bs-tertiary-bg);
+}
+.city-ac > div.selected {
+  background: var(--bs-primary-bg-subtle);
+}
+.city-ac small {
+  color: var(--bs-secondary-color);
+}
+.city-ac > div.empty {
+  cursor: default;
+  color: var(--bs-secondary-color);
+  background: none;
+}
 </style>
 <script defer nonce="<%=locals.nonce%>" src="<%=locals.clientAppHref%>"></script>
 <script nonce="<%=locals.nonce%>">document.addEventListener('DOMContentLoaded', function() { hebcalClient.createCityTypeahead(false); });</script>

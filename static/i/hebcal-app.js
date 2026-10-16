@@ -1,109 +1,138 @@
-import Autocomplete from 'bootstrap5-autocomplete';
+import autocomplete, {PreventSubmit} from 'autocompleter';
 
 // Single-character queries are the slowest for the /complete backend and
 // rarely useful, so don't search until the user has typed this many.
 const MIN_QUERY_LENGTH = 2;
+const MAX_ITEMS = 10;
 const LOADING_CLASS = 'typeahead-loading';
 
+function el(tag, text) {
+  const elem = document.createElement(tag);
+  elem.textContent = text;
+  return elem;
+}
+
+// Nearest scrollable ancestor, e.g. the body of the settings offcanvas
+function scrollParent(elem) {
+  for (let p = elem.parentElement; p && p !== document.body; p = p.parentElement) {
+    const overflowY = getComputedStyle(p).overflowY;
+    if ((overflowY === 'auto' || overflowY === 'scroll') && p.scrollHeight > p.clientHeight) {
+      return p;
+    }
+  }
+  return document.scrollingElement;
+}
+
 const hebcalClient = {
-  createCityTypeahead: function(autoSubmit, fixedPosition) {
+  createCityTypeahead: function(autoSubmit) {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const doFlags = !navigator.userAgent.includes('Win');
     const cityTypeaheadEl = document.getElementById('city-typeahead');
-    // The library toggles its own is-loading class, but a superseded slow
-    // request's cleanup removes it while the newer request is still pending.
-    // Track in-flight requests ourselves; script-typeahead.ejs styles this.
-    let pendingFetches = 0;
-    const autocomplete = new Autocomplete(cityTypeaheadEl, {
-      noCache: false,
-      liveServer: true,
-      server: '/complete.php',
-      fetchOptions: {
-        method: 'GET',
-        credentials: 'omit',
-        mode: 'cors',
-      },
-      queryParam: 'q',
-      labelField: 'value',
-      valueField: 'value',
-      maximumItems: 10,
-      showAllSuggestions: true,
-      suggestionsThreshold: MIN_QUERY_LENGTH,
-      preventBrowserAutocomplete: true,
-      fixed: Boolean(fixedPosition),
-      onBeforeFetch: (inst) => {
-        pendingFetches++;
-        inst._config.notFoundMessage = undefined;
-        const query = cityTypeaheadEl.value;
-        if (query.length < MIN_QUERY_LENGTH) {
-          // The debounced search reads the input when it fires, so one
-          // scheduled while the input was longer (e.g. focusing a prefilled
-          // field, then typing over it) would send a too-short query.
-          // Aborting before fetch() sends no request; onServerError ignores it.
-          inst._abortController.abort();
-          return;
-        }
-        cityTypeaheadEl.classList.add(LOADING_CLASS);
-        if (query.length) {
-          const encodedStr = query.replaceAll(/[\u00A0-\u9999<>&]/gim, function(i) {
-            return `&#${i.charCodeAt(0)};`;
+
+    function renderItem(item) {
+      const div = document.createElement('div');
+      const flag = doFlags && item.flag ? ' ' + item.flag : '';
+      if (item.geo === 'zip') {
+        div.append(`${item.asciiname}, ${item.admin1} `, el('strong', item.id), ` - USA${flag}`);
+        return div;
+      }
+      const country = item.country;
+      const ctry = country === 'United Kingdom' ? 'UK' : country === 'United States' ? 'USA' : country;
+      let ctryStr = ctry || '';
+      const admin1 = item.cc === 'IL' ? '' : item.admin1 || '';
+      if (ctry && typeof admin1 === 'string' && admin1.length > 0 &&
+          !admin1.includes(item.asciiname)) {
+        ctryStr = `${admin1}, ${ctryStr}`;
+      }
+      div.append(el('strong', item.name || item.asciiname));
+      if (ctryStr) {
+        div.append(' - ', el('small', ctryStr));
+      }
+      div.append(flag);
+      return div;
+    }
+
+    // Only the newest request may update the list or clear the spinner;
+    // starting a new one aborts the previous.
+    let controller = null;
+    function abortFetch() {
+      if (controller) {
+        controller.abort();
+        controller = null;
+        cityTypeaheadEl.classList.remove(LOADING_CLASS);
+      }
+    }
+
+    function fetchSuggestions(text, update) {
+      abortFetch();
+      const ctl = controller = new AbortController();
+      cityTypeaheadEl.classList.add(LOADING_CLASS);
+      const url = '/complete.php?q=' + encodeURIComponent(text);
+      fetch(url, {credentials: 'omit', mode: 'cors', signal: ctl.signal})
+          .then((response) => {
+            if (response.ok) {
+              return response.json();
+            } else if (response.status === 404) {
+              return []; // no results found
+            }
+            throw new Error(`${url} returned ${response.status}`);
+          })
+          .then((items) => {
+            items = items.slice(0, MAX_ITEMS);
+            settings.emptyMsg = `Sorry, no city names match “${text}”.`;
+            if (items.length === 1) {
+              selectSuggestion(items[0]);
+            }
+            update(items);
+          })
+          .catch((err) => {
+            if (err.name !== 'AbortError') {
+              console.error(err);
+              update(false);
+            }
+          })
+          .finally(() => {
+            if (controller === ctl) {
+              controller = null;
+              cityTypeaheadEl.classList.remove(LOADING_CLASS);
+            }
           });
-          inst._config.notFoundMessage = `Sorry, no city names match <b>${encodedStr}</b>.`;
-        }
-      },
-      onAfterFetch: (inst) => {
-        // Runs in a finally, so exactly once per onBeforeFetch, including
-        // for requests aborted because a newer one superseded them
-        pendingFetches--;
-        if (pendingFetches === 0) {
-          cityTypeaheadEl.classList.remove(LOADING_CLASS);
-        }
-      },
-      onServerResponse: (response, inst) => {
-        if (response.ok) {
-          return response.json();
-        } else if (response.status === 404) {
-          // return an empty array if there are no results found
-          return Promise.resolve([]);
-        }
-        // let any other error cascade through
-        return response.json();
-      },
-      onSelectItem: (item, inst) => {
+    }
+
+    const settings = {
+      input: cityTypeaheadEl,
+      className: 'city-ac',
+      minLength: MIN_QUERY_LENGTH,
+      debounceWaitMs: 300,
+      // Like the Enter key, picking a suggestion fills in the city; it only
+      // submits the form when autoSubmit is set (see onSelect)
+      preventSubmit: PreventSubmit.OnSelect,
+      fetch: fetchSuggestions,
+      render: renderItem,
+      onSelect: (item) => {
+        cityTypeaheadEl.value = item.value;
+        updateUi();
         selectSuggestion(item);
         if (autoSubmit) {
-          const el = document.getElementById('shabbat-form');
-          if (el) {
-            el.submit();
+          const form = document.getElementById('shabbat-form');
+          if (form) {
+            form.submit();
           }
         }
       },
-      onRenderItem: (item, label, inst) => {
-        if (Object.keys(inst._items).length === 1) {
-          selectSuggestion(item);
+      // The list always opens below the input, never above it. When there
+      // isn't room below, scroll the input up to make some. The resulting
+      // scroll event makes the library reposition and call this again.
+      customize: (input, inputRect, container, maxHeight) => {
+        const wanted = Math.min(container.scrollHeight, 320);
+        const room = maxHeight - 8;
+        if (room < wanted) {
+          scrollParent(input).scrollBy({top: wanted - room, behavior: 'instant'});
         }
-        if (item.geo === 'zip') {
-          const flag = doFlags && item.flag ? ' ' + item.flag : '';
-          return `${item.asciiname}, ${item.admin1} <strong>${item.id}</strong> - USA${flag}`;
-        } else {
-          const country = item.country;
-          const ctry = country === 'United Kingdom' ? 'UK' : country === 'United States' ? 'USA' : country;
-          let ctryStr = ctry || '';
-          const name = item.name || item.asciiname;
-          const s = `<strong>${name}</strong>`;
-          const admin1 = item.cc === 'IL' ? '' : item.admin1 || '';
-          if (ctry && typeof admin1 === 'string' && admin1.length > 0 &&
-              !admin1.includes(item.asciiname)) {
-            ctryStr = `${admin1}, ${ctryStr}`;
-          }
-          if (ctryStr) {
-            ctryStr = ` - <small>${ctryStr}</small>`;
-          }
-          const flag = doFlags && item.flag ? ' ' + item.flag : '';
-          return `${s}${ctryStr}${flag}`;
-        }
+        container.style.maxHeight = Math.max(room, wanted) + 'px';
       },
-    });
+    };
+    autocomplete(settings);
 
     const hintEl = document.createElement('div');
     hintEl.id = 'city-typeahead-hint';
@@ -114,33 +143,27 @@ const hebcalClient = {
     // Place the hint below the input-clear-wrapper (or plain div) holding the input
     cityTypeaheadEl.parentElement.after(hintEl);
     cityTypeaheadEl.setAttribute('aria-describedby', hintEl.id);
-    function updateHint() {
+
+    const clearBtn = document.getElementById('clear-btn');
+    function updateUi() {
       const len = cityTypeaheadEl.value.length;
       hintEl.hidden = len === 0 || len >= MIN_QUERY_LENGTH;
+      if (len < MIN_QUERY_LENGTH) {
+        abortFetch(); // the library has closed the list; don't finish the request
+      }
+      if (clearBtn) {
+        clearBtn.style.display = len ? 'block' : 'none';
+      }
     }
-    cityTypeaheadEl.addEventListener('input', updateHint);
+    cityTypeaheadEl.addEventListener('input', updateUi);
     cityTypeaheadEl.addEventListener('blur', () => {
       hintEl.hidden = true;
     });
 
-    // ArrowDown deliberately bypasses suggestionsThreshold in the library
-    // ("show menu regardless of input length"), which would send a
-    // too-short query. Capture-phase listeners on the target run before the
-    // library's own keydown handler, so swallow the key here instead.
-    cityTypeaheadEl.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowDown' &&
-          cityTypeaheadEl.value.length < MIN_QUERY_LENGTH &&
-          !autocomplete.isDropdownVisible()) {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        updateHint();
-      }
-    }, true);
-
     function setElem(id, val) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.value = val;
+      const elem = document.getElementById(id);
+      if (elem) {
+        elem.value = val;
       }
     }
 
@@ -168,6 +191,15 @@ const hebcalClient = {
       readyToSubmit = true;
     }
 
+    function clearInput() {
+      clearGeo();
+      cityTypeaheadEl.value = '';
+      // Let the library close the list and updateUi() reset the hint
+      cityTypeaheadEl.dispatchEvent(new Event('input'));
+    }
+
+    // Registered after autocomplete(), so on Enter the library has already
+    // picked the highlighted suggestion (calling onSelect) by the time this runs
     let backspaceClearsEverything = false;
     cityTypeaheadEl.addEventListener('keydown', function(event) {
       if (!autoSubmit && !cityTypeaheadEl.value.length) {
@@ -175,52 +207,29 @@ const hebcalClient = {
       }
 
       // if we get a 5-digit zip, don't require user to select typeahead result
-      const val0 = cityTypeaheadEl.value;
-
-      const val = (typeof val0 === 'string') ? val0.trim() : '';
-      const firstCharCode = val.charCodeAt(0);
-      const numericRe = /^\d\d\d\d\d/;
-      if (firstCharCode >= 48 && firstCharCode <= 57 && numericRe.test(val)) {
-        const zip5 = val.substring(0, 5);
-        selectSuggestion({geo: 'zip', id: zip5});
+      const val = cityTypeaheadEl.value.trim();
+      if (/^\d{5}/.test(val)) {
+        selectSuggestion({geo: 'zip', id: val.substring(0, 5)});
       }
       if (event.key === 'Enter') {
-        const selection = autocomplete.getSelection();
-        if (!selection) {
-          autocomplete._moveSelection('next');
+        if (!readyToSubmit) {
+          event.preventDefault();
         }
-        if (readyToSubmit) {
-          return true; // allow form to submit
-        }
+      } else if (event.key === 'Backspace' && backspaceClearsEverything) {
         event.preventDefault();
-        return false;
-      } else if (event.key === 'Backspace') {
-        if (backspaceClearsEverything) {
-          clearGeo();
-          autocomplete.hideSuggestions();
-          autocomplete.clear();
-        }
+        clearInput();
       }
       backspaceClearsEverything = false;
-      return true;
     });
 
     cityTypeaheadEl.addEventListener('focus', function() {
       backspaceClearsEverything = true;
     });
 
-    const clearBtn = document.getElementById('clear-btn');
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
-        clearGeo();
-        cityTypeaheadEl.value = '';
+        clearInput();
         cityTypeaheadEl.focus();
-        // Trigger input event to update any listeners
-        cityTypeaheadEl.dispatchEvent(new Event('input'));
-      });
-      // Show/hide button based on input value
-      cityTypeaheadEl.addEventListener('input', () => {
-        clearBtn.style.display = cityTypeaheadEl.value ? 'block' : 'none';
       });
     }
   },

@@ -197,5 +197,5 @@ document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 <%- await include('partials/footer.ejs', {
   footerScripts: {clipboard: true, tooltip: true},
   xtra_html: typeaheadScript.replace('createCityTypeahead(false)',
-    'createCityTypeahead(true, true)') + hebcalFormScript,
+    'createCityTypeahead(true)') + hebcalFormScript,
 }) _%>
