@@ -4,7 +4,7 @@ import {checkFreshETag} from './etag.js';
 
 // Exclude sparsely-populated ZIP codes so we don't encourage crawlers to
 // index a location that might disappear from a future version of the database
-const MIN_POPULATION = 500;
+const MIN_POPULATION = 1000;
 
 const sql = `SELECT ZipCode FROM ZIPCodes_Primary
 WHERE NOT (Latitude = 0 AND Longitude = 0)
