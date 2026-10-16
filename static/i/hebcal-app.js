@@ -1,10 +1,19 @@
 import Autocomplete from 'bootstrap5-autocomplete';
 
+// Single-character queries are the slowest for the /complete backend and
+// rarely useful, so don't search until the user has typed this many.
+const MIN_QUERY_LENGTH = 2;
+const LOADING_CLASS = 'typeahead-loading';
+
 const hebcalClient = {
   createCityTypeahead: function(autoSubmit, fixedPosition) {
     // eslint-disable-next-line n/no-unsupported-features/node-builtins
     const doFlags = !navigator.userAgent.includes('Win');
     const cityTypeaheadEl = document.getElementById('city-typeahead');
+    // The library toggles its own is-loading class, but a superseded slow
+    // request's cleanup removes it while the newer request is still pending.
+    // Track in-flight requests ourselves; script-typeahead.ejs styles this.
+    let pendingFetches = 0;
     const autocomplete = new Autocomplete(cityTypeaheadEl, {
       noCache: false,
       liveServer: true,
@@ -19,16 +28,35 @@ const hebcalClient = {
       valueField: 'value',
       maximumItems: 10,
       showAllSuggestions: true,
+      suggestionsThreshold: MIN_QUERY_LENGTH,
       preventBrowserAutocomplete: true,
       fixed: Boolean(fixedPosition),
       onBeforeFetch: (inst) => {
+        pendingFetches++;
         inst._config.notFoundMessage = undefined;
         const query = cityTypeaheadEl.value;
+        if (query.length < MIN_QUERY_LENGTH) {
+          // The debounced search reads the input when it fires, so one
+          // scheduled while the input was longer (e.g. focusing a prefilled
+          // field, then typing over it) would send a too-short query.
+          // Aborting before fetch() sends no request; onServerError ignores it.
+          inst._abortController.abort();
+          return;
+        }
+        cityTypeaheadEl.classList.add(LOADING_CLASS);
         if (query.length) {
           const encodedStr = query.replaceAll(/[\u00A0-\u9999<>&]/gim, function(i) {
             return `&#${i.charCodeAt(0)};`;
           });
           inst._config.notFoundMessage = `Sorry, no city names match <b>${encodedStr}</b>.`;
+        }
+      },
+      onAfterFetch: (inst) => {
+        // Runs in a finally, so exactly once per onBeforeFetch, including
+        // for requests aborted because a newer one superseded them
+        pendingFetches--;
+        if (pendingFetches === 0) {
+          cityTypeaheadEl.classList.remove(LOADING_CLASS);
         }
       },
       onServerResponse: (response, inst) => {
@@ -76,6 +104,38 @@ const hebcalClient = {
         }
       },
     });
+
+    const hintEl = document.createElement('div');
+    hintEl.id = 'city-typeahead-hint';
+    hintEl.className = 'small text-body-secondary mt-1';
+    hintEl.setAttribute('aria-live', 'polite');
+    hintEl.textContent = `Type at least ${MIN_QUERY_LENGTH} characters`;
+    hintEl.hidden = true;
+    // Place the hint below the input-clear-wrapper (or plain div) holding the input
+    cityTypeaheadEl.parentElement.after(hintEl);
+    cityTypeaheadEl.setAttribute('aria-describedby', hintEl.id);
+    function updateHint() {
+      const len = cityTypeaheadEl.value.length;
+      hintEl.hidden = len === 0 || len >= MIN_QUERY_LENGTH;
+    }
+    cityTypeaheadEl.addEventListener('input', updateHint);
+    cityTypeaheadEl.addEventListener('blur', () => {
+      hintEl.hidden = true;
+    });
+
+    // ArrowDown deliberately bypasses suggestionsThreshold in the library
+    // ("show menu regardless of input length"), which would send a
+    // too-short query. Capture-phase listeners on the target run before the
+    // library's own keydown handler, so swallow the key here instead.
+    cityTypeaheadEl.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' &&
+          cityTypeaheadEl.value.length < MIN_QUERY_LENGTH &&
+          !autocomplete.isDropdownVisible()) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        updateHint();
+      }
+    }, true);
 
     function setElem(id, val) {
       const el = document.getElementById(id);
