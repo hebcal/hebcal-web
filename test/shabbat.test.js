@@ -1,6 +1,7 @@
 
 import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
+import {DatabaseSync} from 'node:sqlite';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
 import {expectConditionalEtag} from './conditionalEtag.js';
@@ -63,7 +64,15 @@ describe('Shabbat Routes', () => {
 
 describe('Shabbat robots meta for small cities', () => {
   it('adds noindex when population < 1000', async () => {
-    const response = await request(server).get('/shabbat?geonameid=2525725');
+    // The make-test-dbs and download-and-make-dbs databases disagree on which
+    // cities are small (e.g. Amato is 895 vs 1086), so pick one from the DB
+    // actually loaded rather than hard-coding a geonameid.
+    const db = new DatabaseSync('geonames.sqlite3', {readOnly: true});
+    const row = db.prepare(
+        'SELECT geonameid FROM geoname WHERE population > 0 AND population < 1000 LIMIT 1').get();
+    db.close();
+    expect(row).toBeDefined();
+    const response = await request(server).get(`/shabbat?geonameid=${row.geonameid}`);
     expect(response.status).toBe(200);
     expect(response.text).toContain('<meta name="robots" content="noindex">');
   });
