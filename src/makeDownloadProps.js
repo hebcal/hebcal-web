@@ -218,3 +218,30 @@ export function makeDownloadProps(ctx, q, options) {
     csv_eur: basename(url.csv_eur),
   };
 }
+
+/**
+ * The download URLs from `ctx.state.url` that `download-modal-script.ejs`
+ * fills in, with the download host stripped from each. Non-JS crawlers scrape
+ * absolute URLs out of the HTML and then hammer download.hebcal.com with .pdf
+ * and .ics fetches, so the links are rendered without an href and a bare
+ * `/v4/...` path gives them nothing to follow. The script rebuilds each
+ * absolute URL with `new URL(path, host)` (`pdfHost` for the PDF, which is a
+ * different server in dev). A URL on some other host (e.g. the static `/ical/`
+ * feeds, which point at production even in dev) is left absolute, which
+ * `new URL()` resolves unchanged.
+ * @param {Object.<string,string>} url
+ * @return {Object.<string,string>}
+ */
+export function makeDlUrlsForScript(url) {
+  const strip = (s, prefix) => s?.startsWith(prefix + '/') ? s.substring(prefix.length) : s;
+  return {
+    host: dlPrefix,
+    pdfHost: pdfPrefix,
+    subical: strip(url.subical, dlPrefix),
+    ics1year: strip(url.ics1year, dlPrefix),
+    csv_usa: strip(url.csv_usa, dlPrefix),
+    csv_eur: strip(url.csv_eur, dlPrefix),
+    pdf: strip(url.pdf, pdfPrefix),
+    title: url.title,
+  };
+}

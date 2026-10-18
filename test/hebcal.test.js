@@ -537,3 +537,26 @@ describe('/hebcal fast start and end time parameters', () => {
     ]);
   });
 });
+
+describe('download links are not exposed to non-JS clients', () => {
+  // Absolute download.hebcal.com URLs (or their dev equivalents) in the HTML
+  // invite crawlers to fetch every .pdf/.ics variant; the links are filled in
+  // client-side from the host-less #dlURLs JSON instead.
+  const absDlUrl = /(download\.hebcal\.com|127\.0\.0\.1:808[12])(\/|%2F)v[34](\/|%2F)/;
+  for (const url of [
+    '/hebcal?v=1&maj=on&min=on&nx=on&c=on&geonameid=5391811&year=now&month=x',
+    '/holidays/2026-2027',
+  ]) {
+    it(url, async () => {
+      const response = await request(server).get(url);
+      expect(response.status).toBe(200);
+      expect(response.text).not.toMatch(absDlUrl);
+      const json = response.text.match(/<script type="application\/json" id="dlURLs">([\s\S]*?)<\/script>/);
+      const dl = JSON.parse(json[1]);
+      expect(dl.subical).toMatch(/^\/v4\//);
+      expect(new URL(dl.subical, dl.host).hostname).toBe('127.0.0.1');
+      expect(response.text).toContain('id="dl-ios-alt"');
+      expect(response.text).toContain('data-hebcal-src="ics1year"');
+    });
+  }
+});

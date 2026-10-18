@@ -88,6 +88,15 @@ Each feature is typically one or a few files handling routing, business logic, a
   PDF rendering was removed from this app; `.pdf` download requests now return
   501 and PDFs are served exclusively by
   [hebcal-api-go](https://github.com/hebcal/hebcal-api-go).
+  **Download links carry no href in the HTML**, to keep non-JS crawlers off
+  download.hebcal.com: the modal's links and the results page's Print/PDF
+  links are rendered with only `data-hebcal-src`/`data-hebcal-attr`, and
+  `download-modal-script.ejs` fills them in on load from the `#dlURLs` JSON,
+  which `makeDlUrlsForScript()` builds as host-less `/v4/…`/`/v3/…` paths plus
+  `host`/`pdfHost`. Do not reintroduce `href="<%= locals.url.pdf %>"` and
+  friends; add `data-hebcal-src="<key>"` instead (and the key to
+  `makeDlUrlsForScript()`). `myPrint()` reads `#print-pdf`'s href, which is
+  set by that script.
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
 - **FullCalendar**: `fullcalendar.js` (`/hebcal?cfg=fc` server-side JSON);
   `client-fullcalendar.js` is the separate browser bundle

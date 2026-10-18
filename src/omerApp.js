@@ -72,7 +72,7 @@ export async function omerApp(rpath, ctx) {
       items,
       books: meta.books,
       q: q0,
-      emoiSwitchDisabled: true,
+      emojiSwitchDisabled: true,
     });
   }
   const hyear = Number.parseInt(yearStr, 10);

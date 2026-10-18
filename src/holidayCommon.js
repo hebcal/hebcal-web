@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {flags, HDate, getSedra} from '@hebcal/core';
-import {makeAnchor, getHolidayDescription, getEventCategories} from '@hebcal/rest-api';
+import {makeAnchor, getHolidayDescription, getEventCategories,
+  getCalendarTitle} from '@hebcal/rest-api';
 import {holidayMeta} from './holidayMeta.js';
 import {getNumYears} from './calendar.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
@@ -318,6 +319,9 @@ export function makeQueryAndDownloadProps(ctx, options) {
   const isHebYr = options.isHebrewYear;
   q.yt = isHebYr ? 'H' : 'G';
   makeDownloadProps(ctx, q, options);
+  // Same name the download server gives the subscribed feed (X-WR-CALNAME),
+  // e.g. "Hebcal Diaspora", for the Outlook.com and button labels
+  ctx.state.url.title = getCalendarTitle([], {il: q.i === 'on', subscribe: '1'});
   ctx.state.downloadAltTitle = `${year} only`;
   ctx.state.numYears = getNumYears(options);
   const today = isHebYr ? new HDate() : new Date();

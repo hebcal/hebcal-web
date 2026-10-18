@@ -26,7 +26,7 @@
 <div>
 <div class="mb-3">
 <%- await include('emoji-switch.ejs', {id: 'dl-ios'}) -%>
-<% if (locals.emoiSwitchDisabled === undefined) { %>
+<% if (locals.emojiSwitchDisabled === undefined) { %>
 <div class="row g-2 mb-2">
   <div class="col-auto">Color</div>
   <div class="col-2">
@@ -38,7 +38,7 @@
  <a class="btn btn-primary download mb-2" id="dl-ios"
   data-hebcal-attr="href" data-hebcal-src="webcal"
   title="Subscribe to <%= locals.url.title %>"
-  rel="nofollow" href="<%= locals.url.webcal %>">
+  rel="nofollow">
   <svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-appleinc"></use></svg>
   Subscribe on iPhone, iPad &amp; macOS</a>
 </div>
@@ -51,7 +51,7 @@ target="_blank" class="outbound"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </div>
 <div>
- <a class="btn btn-secondary btn-sm download mb-2" id="dl-ios-alt" title="<%= locals.filename.ics %>" rel="nofollow" href="<%= locals.url.ics1year %>" download="<%= locals.filename.ics %>">
+ <a class="btn btn-secondary btn-sm download mb-2" id="dl-ios-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
   <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= locals.downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
@@ -72,7 +72,7 @@ href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
   <a class="btn btn-primary download mb-2" id="dl-ol-ics"
   data-hebcal-attr="href" data-hebcal-src="webcal"
   title="Add <%= locals.url.title %> to Outlook for Windows"
-  rel="nofollow" href="<%= locals.url.webcal %>">
+  rel="nofollow">
   <svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg>
   Outlook Internet Calendar Subscription</a>
 </div>
@@ -83,7 +83,7 @@ target="_blank" class="outbound"
 href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 </div>
 <div>
-  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= locals.filename.ics %>" rel="nofollow" href="<%= locals.url.ics1year %>" download="<%= locals.filename.ics %>">
+  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
   <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= locals.downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
@@ -110,14 +110,14 @@ href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 title="Add <%= locals.url.title %> to Google Calendar"
 target="_blank"
 data-hebcal-attr="href" data-hebcal-src="gcal"
-href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(locals.url.gcal) %>">
+>
   <svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-google"></use></svg>
   Add to Google Calendar</a>
 </div>
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 <div>
-  <a class="btn btn-secondary btn-sm download mb-2" id="dl-gcal-alt" title="<%= locals.filename.ics %>" rel="nofollow" href="<%= locals.url.ics1year %>" download="<%= locals.filename.ics %>">
+  <a class="btn btn-secondary btn-sm download mb-2" id="dl-gcal-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
   <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
   Download <%= locals.downloadAltTitle %></a>
   <p class="small">Use this download alternative if you prefer to manually import
@@ -141,7 +141,7 @@ href="https://www.google.com/calendar/render?cid=<%= encodeURIComponent(locals.u
 <div class="input-group input-group-sm mb-2">
 <input type="text" class="form-control" size="60" id="grabLink"
 data-hebcal-attr="value" data-hebcal-src="subical"
-value="<%= locals.url.subical %>">
+value="">
 <button id="grabBtn" class="btn btn-secondary grabBtn" data-bs-animation="false" data-clipboard-target="#grabLink">
 <svg class="icon icon-md align-top"><use href="<%=locals.spriteHref%>#clippy"></use></svg>
 Copy
@@ -166,7 +166,7 @@ Copy
 title="Add <%= locals.url.title %> to Outlook.com"
 target="_blank"
 data-hebcal-attr="href" data-hebcal-src="olcom"
-href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(locals.url.gcal) %>&amp;name=<%=encodeURIComponent(locals.url.title)%>&amp;mkt=en-001">
+>
   <svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-microsoftoutlook"></use></svg>
   Add to Outlook.com</a>
 </div>
@@ -182,9 +182,9 @@ href="https://outlook.live.com/calendar/addfromweb?url=<%= encodeURIComponent(lo
 <p class="small">CSV is a legacy calendar file format for Outlook 97-2003.
   Select the file that matches your computer’s date format:</p>
 <ul class="list-unstyled">
-<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-usa" title="<%= locals.filename.csv_usa %>" rel="nofollow" href="<%= locals.url.csv_usa %>" download="<%= locals.filename.csv_usa %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
+<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-usa" title="<%= locals.filename.csv_usa %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="csv_usa" download="<%= locals.filename.csv_usa %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - USA</a>
   <small><code>mm/dd/yyyy</code></small></li>
-<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-eur" title="<%= locals.filename.csv_eur %>" rel="nofollow" href="<%= locals.url.csv_eur %>" download="<%= locals.filename.csv_eur %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
+<li><a class="btn btn-primary download me-1 mb-2" id="dl-csv-eur" title="<%= locals.filename.csv_eur %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="csv_eur" download="<%= locals.filename.csv_eur %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg> Download CSV - Europe</a>
   <small><code>dd/mm/yyyy</code></small></li>
 </ul>
 <p class="mb-0 small">Step-by-step: <a title="Outlook CSV - import Hebcal Jewish calendar to Outlook 97, 98, 2000, 2002, 2003"
@@ -199,7 +199,7 @@ href="/home/12/outlook-csv-jewish-holidays">CSV for Outlook for Windows</a></p>
   Print PDF (formatted for 8.5"x11" paper)
 </h6>
 <div>
-<p><a class="btn btn-primary download mb-1" id="dl-pdf" title="<%= locals.filename.pdf %>" rel="nofollow" href="<%= locals.url.pdf %>" download="<%= locals.filename.pdf %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
+<p><a class="btn btn-primary download mb-1" id="dl-pdf" title="<%= locals.filename.pdf %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="pdf" download="<%= locals.filename.pdf %>"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#icon-file-pdf"></use></svg> Download PDF Calendar</a></p>
 
 </div>
 </div><!-- #pdf-body -->
@@ -213,6 +213,7 @@ href="/home/12/outlook-csv-jewish-holidays">CSV for Outlook for Windows</a></p>
   </div><!-- .modal-content -->
 </div><!-- .modal-dialog -->
 </div><!-- .modal -->
+<%- await include('download-modal-script.ejs') -%>
 <script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
   const modalEl = document.getElementById('hcdl-modal');

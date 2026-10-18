@@ -83,7 +83,7 @@ export async function parshaYearApp(ctx) {
     q: q0,
     prev: `/sedrot/${hyear - 1}?i=${il?'on':'off'}`,
     next: `/sedrot/${hyear + 1}?i=${il?'on':'off'}`,
-    emoiSwitchDisabled: true,
+    emojiSwitchDisabled: true,
   });
 }
 

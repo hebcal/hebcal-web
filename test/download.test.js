@@ -6,7 +6,7 @@ import {IcalEvent} from '@hebcal/icalendar';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
-import {downloadHref2} from '../src/makeDownloadProps.js';
+import {downloadHref2, makeDlUrlsForScript} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
 import {makeETag} from '../src/etag.js';
@@ -563,5 +563,43 @@ describe('ICS DESCRIPTION contents', () => {
     expect(response.status).toBe(200);
     expect(findVevent(response.text, 'Candle lighting')).not.toContain('DESCRIPTION:C');
     expect(findVevent(response.text, 'Havdalah')).not.toContain('DESCRIPTION:H');
+  });
+});
+
+describe('makeDlUrlsForScript', () => {
+  const host = 'http://127.0.0.1:8081';
+
+  it('strips the download host and keeps only what the script reads', () => {
+    const subical = downloadHref2({v: '1', maj: 'on', year: 'now'}, 'hebcal_x', {subscribe: '1'}) + '.ics';
+    const url = {
+      subical,
+      ics1year: `${host}/v4/abc/hebcal_x.ics`,
+      webcal: subical.replace(/^http/, 'webcal'),
+      gcal: subical,
+      pdf: 'http://127.0.0.1:8082/v4/abc/hebcal_x.pdf',
+      title: 'Hebcal Test',
+    };
+    const result = makeDlUrlsForScript(url);
+    expect(result).toEqual({
+      host,
+      pdfHost: 'http://127.0.0.1:8082',
+      subical: subical.substring(host.length),
+      ics1year: '/v4/abc/hebcal_x.ics',
+      csv_usa: undefined,
+      csv_eur: undefined,
+      pdf: '/v4/abc/hebcal_x.pdf',
+      title: 'Hebcal Test',
+    });
+    expect(result.subical).toMatch(/^\/v4\//);
+    expect(JSON.stringify(result)).not.toMatch(/127\.0\.0\.1:808[12]\//);
+    expect(new URL(result.subical, result.host).href).toBe(subical);
+  });
+
+  it('leaves a URL on another host absolute', () => {
+    const subical = 'https://download.hebcal.com/ical/omer.ics';
+    const result = makeDlUrlsForScript({subical, ics1year: `${host}/v3/x/y.ics?dl=1`});
+    expect(result.subical).toBe(subical);
+    expect(result.ics1year).toBe('/v3/x/y.ics?dl=1');
+    expect(new URL(result.subical, result.host).href).toBe(subical);
   });
 });
