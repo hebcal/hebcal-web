@@ -95,6 +95,11 @@ const mcpServerCardBody = JSON.stringify({
     'Daf Yomi and Yahrzeit dates.',
   version: '0.9.9',
   websiteUrl: ORIGIN + '/home/5027/jewish-calendar-model-context-protocol-mcp',
+  icons: [
+    {src: ORIGIN + '/favicon.svg', mimeType: 'image/svg+xml', sizes: ['any']},
+    {src: ORIGIN + '/android-chrome-512x512.png', mimeType: 'image/png', sizes: ['512x512']},
+    {src: ORIGIN + '/android-chrome-192x192.png', mimeType: 'image/png', sizes: ['192x192']},
+  ],
   repository: {
     url: 'https://github.com/hebcal/hebcal-mcp',
     source: 'github',
