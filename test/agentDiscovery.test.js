@@ -163,6 +163,13 @@ describe('Agent discovery files', () => {
     expect(response.type).toBe('application/json');
     expect(response.headers['access-control-allow-origin']).toBe('*');
     expect(response.body.name).toBe('io.github.hebcal/hebcal');
+    expect(response.body.title).toBe('Hebcal Jewish Calendar');
+    expect(response.body.description).toBeTruthy();
+    expect(response.body.icons.length).toBeGreaterThan(0);
+    for (const icon of response.body.icons) {
+      expect(icon.src).toMatch(/^https:\/\/www\.hebcal\.com\/[\w-]+\.(svg|png)$/);
+      expect(icon.mimeType).toMatch(/^image\//);
+    }
     expect(response.body.remotes).toEqual([
       {type: 'streamable-http', url: 'https://www.hebcal.com/mcp'},
     ]);
