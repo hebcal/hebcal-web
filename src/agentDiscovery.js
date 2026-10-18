@@ -55,22 +55,29 @@ const API_DOCS = {
 };
 
 /**
- * RFC 9727 API catalog. Every REST endpoint is described by the one
- * OpenAPI document (service-desc), but each has its own service-doc page.
+ * RFC 9727 API catalog. The first linkset entry is anchored at the catalog
+ * itself and lists every API as an `item` (RFC 9264 §4.2.1.2). Every REST
+ * endpoint is described by the one OpenAPI document (service-desc), but each
+ * has its own service-doc page.
  */
 const apiCatalogBody = JSON.stringify({
-  linkset: Object.entries(API_DOCS)
-      .map(([p, doc]) => ({
-        'anchor': ORIGIN + p,
-        'service-desc': [{
-          href: ORIGIN + OPENAPI_PATH,
-          type: 'application/vnd.oai.openapi+json',
-        }],
-        'service-doc': [{
-          href: ORIGIN + doc,
-          type: 'text/html',
-        }],
-      })),
+  linkset: [
+    {
+      anchor: ORIGIN + '/.well-known/api-catalog',
+      item: Object.keys(API_DOCS).map((p) => ({href: ORIGIN + p})),
+    },
+    ...Object.entries(API_DOCS).map(([p, doc]) => ({
+      'anchor': ORIGIN + p,
+      'service-desc': [{
+        href: ORIGIN + OPENAPI_PATH,
+        type: 'application/vnd.oai.openapi+json',
+      }],
+      'service-doc': [{
+        href: ORIGIN + doc,
+        type: 'text/html',
+      }],
+    })),
+  ],
 }, null, 2);
 
 export function apiCatalog(ctx) {
