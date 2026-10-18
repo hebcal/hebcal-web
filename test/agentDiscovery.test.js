@@ -137,7 +137,11 @@ describe('Agent discovery files', () => {
     expect(response.headers.link).toContain('rel="api-catalog"');
     const body = JSON.parse(response.text);
     expect(body.linkset.length).toBeGreaterThan(0);
-    for (const link of body.linkset) {
+    const [catalog, ...apis] = body.linkset;
+    expect(catalog.anchor).toBe('https://www.hebcal.com/.well-known/api-catalog');
+    expect(catalog.item.length).toBe(apis.length);
+    expect(catalog.item.map((i) => i.href)).toContain('https://www.hebcal.com/hebcal');
+    for (const link of apis) {
       expect(link.anchor).toMatch(/^https:\/\/www\.hebcal\.com\//);
       expect(link['service-desc'][0].href).toBe('https://www.hebcal.com/api-docs/openapi.json');
       expect(link['service-doc'][0].href).toMatch(
