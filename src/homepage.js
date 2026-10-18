@@ -189,6 +189,8 @@ function mastheadParsha(ctx, hd, il) {
   }
 }
 
+const notBehab = (ev) => !ev.hasFlag('BEHAB');
+
 function mastheadHolidays(ctx, hd, il) {
   const items = ctx.state.items;
   const holidays = calendar({
@@ -201,6 +203,7 @@ function mastheadHolidays(ctx, hd, il) {
   });
   const lg = lgToLocale[ctx.state.lg] || ctx.state.lg;
   holidays
+      .filter(notBehab)
       .map((ev) => {
         const url = shortenUrl(ev.url());
         const desc = ev.chanukahDay ?
@@ -339,7 +342,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return [blurb, longText];
   }
 
-  const holidays = getHolidaysOnDate(hd, il) || [];
+  const holidays = (getHolidaysOnDate(hd, il) || []).filter(notBehab);
   for (const [desc, blurb, template] of descGreetings) {
     const ev = holidays.find((ev) => ev.getDesc() === desc);
     if (ev) {
@@ -385,7 +388,7 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     return getHolidayGreeting(ctx, chagToday, il, true, dateOverride);
   }
 
-  const tomorrow = getHolidaysOnDate(hd.next(), il) || [];
+  const tomorrow = (getHolidaysOnDate(hd.next(), il) || []).filter(notBehab);
   const chagTomorrow = tomorrow.find((ev) => !ev.hasFlag('EREV') && chagSameach[ev.basename()]);
   if (chagTomorrow) {
     return getHolidayGreeting(ctx, chagTomorrow, il, false);
@@ -477,7 +480,7 @@ function getHolidayGreeting(ctx, ev, il, today, dateOverride) {
     const d = dayjs.tz(new Date(), tzid);
     const dt = new Date(d.year(), d.month(), d.date());
     const hd = new HDate(dt);
-    const holidays = getHolidaysOnDate(hd, il) || [];
+    const holidays = (getHolidaysOnDate(hd, il) || []).filter(notBehab);
     const ev2 = holidays.find((ev) => ev.hasFlag('CHANUKAH_CANDLES'));
     if (ev2) {
       return getChanukahGreeting(d, ev2);
