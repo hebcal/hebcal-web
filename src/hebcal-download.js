@@ -7,9 +7,7 @@ import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
 import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
-import {byteOrderMark} from './lang.js';
 import {makeIcalOpts} from './urlArgs.js';
-import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
 import {murmur128HexSync} from '@hebcal/murmurhash3';
 
@@ -65,9 +63,12 @@ export async function hebcalDownload(ctx) {
     // PDF rendering now served exclusively by https://github.com/hebcal/hebcal-api-go
     ctx.throw(501, 'This service does not render PDFs');
   }
+  if (extension === '.csv') {
+    // Outlook CSV now served exclusively by https://github.com/hebcal/hebcal-api-go
+    ctx.throw(501, 'This service does not render CSV files');
+  }
   const ics = extension === '.ics';
-  const csv = extension === '.csv';
-  if (ics || csv) {
+  if (ics) {
     options.numYears = getNumYears(options);
   }
   // don't set a Last-Modified date; we'll rely on etag for cache consistency
@@ -120,11 +121,6 @@ export async function hebcalDownload(ctx) {
     }
     const icals = makeIcalEvents(events2, icalOpt);
     ctx.body = await icalEventsToString(icals, icalOpt);
-  } else if (csv) {
-    const csv = eventsWithParshaToCsv(events, options);
-    ctx.response.attachment(basename(path));
-    ctx.response.type = 'text/x-csv; charset=utf-8';
-    ctx.body = byteOrderMark(options.locale) + csv;
   } else {
     ctx.status = 404;
     ctx.remove('Cache-Control');

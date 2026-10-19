@@ -118,12 +118,10 @@ describe('v4 ICS downloads', () => {
 });
 
 describe('v4 CSV downloads', () => {
-  it('returns 200 CSV for /v4/.../hebcal_2026_berlin.csv', async () => {
+  it('returns 501 Not Implemented (CSV served by hebcal-api-go)', async () => {
     const response = await request(server)
         .get('/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
-    expect(response.status).toBe(200);
-    expect(response.type).toMatch(/csv/);
-    expect(response.text).toBeTruthy();
+    expect(response.status).toBe(501);
   });
 });
 
@@ -399,10 +397,6 @@ describe('304 Not Modified (ETag / If-None-Match)', () => {
   it('handles conditional requests for ICS', async () => {
     await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABOAFQAVjglBFqAXNwMngomAEBoAEB/hebcal_Jerusalem.ics');
   });
-
-  it('handles conditional requests for CSV', async () => {
-    await expectConditionalEtag(server, '/v4/CAEQARgBIAEoATABQAFQAViPiLQBYOoPagFziAEB2AEB/hebcal_2026_berlin.csv');
-  });
 });
 
 describe('download ETags', () => {
@@ -577,15 +571,16 @@ describe('makeDlUrlsForScript', () => {
       webcal: subical.replace(/^http/, 'webcal'),
       gcal: subical,
       pdf: 'http://127.0.0.1:8082/v4/abc/hebcal_x.pdf',
+      csv_usa: 'http://127.0.0.1:8082/v4/abc/hebcal_x_usa.csv',
       title: 'Hebcal Test',
     };
     const result = makeDlUrlsForScript(url);
     expect(result).toEqual({
       host,
-      pdfHost: 'http://127.0.0.1:8082',
+      apiHost: 'http://127.0.0.1:8082',
       subical: subical.substring(host.length),
       ics1year: '/v4/abc/hebcal_x.ics',
-      csv_usa: undefined,
+      csv_usa: '/v4/abc/hebcal_x_usa.csv',
       csv_eur: undefined,
       pdf: '/v4/abc/hebcal_x.pdf',
       title: 'Hebcal Test',

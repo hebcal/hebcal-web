@@ -85,9 +85,15 @@ Each feature is typically one or a few files handling routing, business logic, a
   `.ics`/`.csv` zmanim feeds from app-download.
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`
 - **Downloads/export**: `hebcal-download.js`, `makeDownloadProps.js`, `deserializeDownload.js`.
-  PDF rendering was removed from this app; `.pdf` download requests now return
-  501 and PDFs are served exclusively by
-  [hebcal-api-go](https://github.com/hebcal/hebcal-api-go).
+  PDF rendering and Outlook `.csv` export were removed from `hebcalDownload()`
+  (`/v4/…`); `.pdf` and `.csv` requests there now return 501 and both are served
+  exclusively by [hebcal-api-go](https://github.com/hebcal/hebcal-api-go), which
+  supports only `/v4/*/*` URLs. `yahrzeitDownload()` (`/v3/…`) still serves its
+  own `.csv`. The `dlURLs` object's `apiHost` (was `pdfHost`) is the host for
+  `pdf` and the hebcal `csv_usa`/`csv_eur`; `host` is for `.ics` and the
+  yahrzeit CSVs. `eventsWithParshaToCsv()` stays because
+  `staticCalendars.js` still builds the `/ical/` .csv feeds served by the node
+  dl hosts.
   **Download links carry no href in the HTML**, to keep non-JS crawlers off
   download.hebcal.com: the modal's links and the results page's Print/PDF
   links are rendered with only `data-hebcal-src`/`data-hebcal-attr`, and
