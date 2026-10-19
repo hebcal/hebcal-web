@@ -13,6 +13,8 @@ import {
 } from '@hebcal/core';
 import {DafYomiEvent} from '@hebcal/learning';
 import {createMemo, makeIcalEvents, makeIcalendar} from '../src/icalCommon.js';
+import '@hebcal/locales';
+import '../src/locale.js';
 import {getParshaSummary} from '../src/parshaCommon.js';
 
 describe('createMemo', () => {
@@ -186,6 +188,35 @@ describe('createMemo', () => {
     const events = calendar(options);
     expect(events.map((ev) => ev.getDesc())).toEqual(['Candle lighting', 'Havdalah']);
     expect(events.map((ev) => createMemo(ev, options))).toEqual(['', '']);
+  });
+
+  it('lists the four unadjusted Kiddush Levana times', () => {
+    const options = {
+      year: 5787,
+      isHebrewYear: true,
+      month: 'Tishrei',
+      location: Location.lookup('New York'),
+      kiddushLevanaMaharil: true,
+      noHolidays: true,
+    };
+    const events = calendar(options);
+    expect(events).toHaveLength(1);
+    const ev = events[0];
+    expect(ev.getFlags()).toBe(flags.KIDDUSH_LEVANA);
+    const memoBefore = ev.memo;
+    expect(createMemo(ev, options)).toBe(
+        'Earliest Kiddush Levana (3 days): Mon, Sep 14, 2026, 2:39pm\n' +
+        'Earliest Kiddush Levana (7 days): Fri, Sep 18, 2026, 2:39pm\n' +
+        'Latest Kiddush Levana (Maharil): Sat, Sep 26, 2026, 9:00am\n' +
+        'Latest Kiddush Levana (15 days): Sat, Sep 26, 2026, 2:38pm');
+    expect(ev.memo).toBe(memoBefore);
+    expect(createMemo(ev, {...options, locale: 'he-x-NoNikud', hour12: false})).toBe(
+        'תחילת זמן קידוש לבנה (3 ימים): יום ב׳, 14 בספט׳ 2026, 14:39\n' +
+        'תחילת זמן קידוש לבנה (7 ימים): יום ו׳, 18 בספט׳ 2026, 14:39\n' +
+        'סוף זמן קידוש לבנה (מהרי״ל): שבת, 26 בספט׳ 2026, 09:00\n' +
+        'סוף זמן קידוש לבנה (15 ימים): שבת, 26 בספט׳ 2026, 14:38');
+    expect(createMemo(ev, {...options, locale: 'ashkenazi'}).split('\n')[0]).toBe(
+        'Earliest Kiddush Levanah (3 days): Mon, Sep 14, 2026, 2:39pm');
   });
 
   it('honors utmCampaign', () => {

@@ -1,0 +1,22 @@
+#
+# Overrides for Hebrew without nikud, where removing the nikud from he.po
+# would leave a defective (ktiv haser) spelling
+msgid ""
+msgstr ""
+"Language: he-x-NoNikud\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+msgid "Earliest Kiddush Levana (3 days)"
+msgstr "תחילת זמן קידוש לבנה (3 ימים)"
+
+msgid "Earliest Kiddush Levana (7 days)"
+msgstr "תחילת זמן קידוש לבנה (7 ימים)"
+
+msgid "Latest Kiddush Levana (Maharil)"
+msgstr "סוף זמן קידוש לבנה (מהרי״ל)"
+
+msgid "Latest Kiddush Levana (15 days)"
+msgstr "סוף זמן קידוש לבנה (15 ימים)"

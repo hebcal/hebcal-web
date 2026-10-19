@@ -140,3 +140,15 @@ msgstr "בֵּין הַשְּׁמָשׁוֹת"
 
 msgid "occurs on"
 msgstr "חָל"
+
+msgid "Earliest Kiddush Levana (3 days)"
+msgstr "תְּחִלַּת זְמַן קִדּוּשׁ לְבָנָה (3 יָמִים)"
+
+msgid "Earliest Kiddush Levana (7 days)"
+msgstr "תְּחִלַּת זְמַן קִדּוּשׁ לְבָנָה (7 יָמִים)"
+
+msgid "Latest Kiddush Levana (Maharil)"
+msgstr "סוֹף זְמַן קִדּוּשׁ לְבָנָה (מהרי״ל)"
+
+msgid "Latest Kiddush Levana (15 days)"
+msgstr "סוֹף זְמַן קִדּוּשׁ לְבָנָה (15 יָמִים)"

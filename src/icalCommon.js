@@ -4,6 +4,7 @@ import {
   appendIsraelAndTracking,
   getCalendarTitle,
 } from '@hebcal/rest-api';
+import {makeKiddushLevanaMemo} from './kiddushLevanaMemo.js';
 import {getParshaSummary} from './parshaCommon.js';
 import {localizedHolidayDescription, makeTorahMemoText} from './torahMemo.js';
 
@@ -33,8 +34,8 @@ function appendTrackingToUrl(url, options) {
 
 /**
  * Builds the iCalendar `DESCRIPTION` text for an event: parsha summary or
- * holiday description, Omer count, Torah reading, and a link back to
- * hebcal.com.
+ * holiday description, Omer count, Kiddush Levana times, Torah reading, and a
+ * link back to hebcal.com.
  *
  * Newlines are ordinary `\n` characters; `@hebcal/icalendar` takes care of
  * escaping them for RFC 5545.
@@ -55,6 +56,9 @@ export function createMemo(ev, options) {
       ev.sefira('translit'),
     ].join('\n');
     return ev.getTodayIs('en') + '\n\n' + ev.getTodayIs('he') + '\n\n' + sefira;
+  }
+  if (ev.hasFlag('KIDDUSH_LEVANA')) {
+    return makeKiddushLevanaMemo(ev, options);
   }
   if (!memo) {
     memo = getParshaSummary(ev, options.locale) || '';
