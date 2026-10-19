@@ -6,6 +6,7 @@ import poFr from './fr.po.js';
 import poNl from './nl.po.js';
 import poPt from './pt.po.js';
 import poAshkenazi from './ashkenazi.po.js';
+import noNikudOverride from './he-x-NoNikud.po.js';
 
 Locale.addTranslations('en', poEn);
 Locale.addTranslations('es', poEs);
@@ -18,3 +19,4 @@ Locale.addTranslations('he', poHe);
 
 const poHeNoNikud = Locale.copyLocaleNoNikud(poHe);
 Locale.addTranslations('he-x-NoNikud', poHeNoNikud);
+Locale.addTranslations('he-x-NoNikud', noNikudOverride);
