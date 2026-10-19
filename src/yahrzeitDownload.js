@@ -1,5 +1,6 @@
 import {Event, HDate, Location, flags} from '@hebcal/core';
 import {IcalEvent, icalEventsToString} from '@hebcal/icalendar';
+import {eventsToCsv} from '@hebcal/rest-api';
 import {makeIcalEvents} from './icalCommon.js';
 import {basename} from 'node:path';
 import {murmur128HexSync} from '@hebcal/murmurhash3';
@@ -45,11 +46,8 @@ export async function yahrzeitDownload(ctx) {
     query.ulid = ctx.state.ulid;
   }
   const extension = rpath.substring(rpath.length - 4);
-  if (extension === '.csv') {
-    // Outlook CSV now served exclusively by https://github.com/hebcal/hebcal-api-go
-    ctx.throw(501, 'This service does not render CSV files');
-  }
   const ics = extension === '.ics';
+  const csv = extension === '.csv';
   const {today, startYear, endYear} = getDateRange(query);
   const sunday = today.onOrBefore(0).abs();
   const attrs = {startYear, endYear, extension};
@@ -64,7 +62,10 @@ export async function yahrzeitDownload(ctx) {
     return;
   }
 
-  const reminder = query.yrem !== '0' && query.yrem !== 'off';
+  let reminder = query.yrem !== '0' && query.yrem !== 'off';
+  if (csv) {
+    reminder = false;
+  }
   const maxId = getMaxYahrzeitId(query);
   const events0 = makeYahrzeitEvents(maxId, query, reminder);
   const startAbs = sunday - 12 * 7; // 12 weeks ago
@@ -115,6 +116,11 @@ export async function yahrzeitDownload(ctx) {
     }
     ctx.append('Vary', 'User-Agent');
     ctx.body = await icalEventsToString(icals, icalOpt);
+  } else if (csv) {
+    const euro = Boolean(query.euro);
+    const csv = eventsToCsv(events, {euro});
+    ctx.response.type = 'text/x-csv; charset=utf-8';
+    ctx.body = '\uFEFF' + csv;
   } else {
     ctx.status = 404;
     ctx.remove('ETag');

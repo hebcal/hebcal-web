@@ -216,10 +216,12 @@ describe('v3 yahrzeit subscription downloads', () => {
     expect(response.text).not.toContain('Yahrzeit reminder');
   });
 
-  it('returns 501 for CSV export (served by hebcal-api-go)', async () => {
+  it('omits day-before reminder events from CSV export when yrem=0', async () => {
     const response = await request(server)
         .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.csv?yrem=0');
-    expect(response.status).toBe(501);
+    expect(response.status).toBe(200);
+    expect(response.type).toMatch(/csv/);
+    expect(response.text).not.toContain('Yahrzeit reminder');
   });
 });
 
