@@ -22,6 +22,7 @@ import {getMaxYahrzeitId, isNumKey, summarizeAnniversaryTypes,
   getYahrzeitDetailsFromDb, getYahrzeitDetailForId} from './yahrzeitCommon.js';
 import {getYahrzeitSubscriptions} from './accountSubscriptions.js';
 import {makeYahrzeitEvents} from './yahrzeitEvents.js';
+import {apiPrefix} from './makeDownloadProps.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
 
@@ -305,6 +306,7 @@ async function makeDownloadProps(ctx) {
   }
   const id = ctx.state.ulid;
   const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
+  const apiHref = `${apiPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
   const usaCSV = '_usa.csv';
   const eurCSV = '_eur.csv';
@@ -319,8 +321,8 @@ async function makeDownloadProps(ctx) {
     subical: subical,
     webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
     gcal: subical.replace(/^https/, 'http'),
-    csv_usa: dlhref + usaCSV + '?dl=1',
-    csv_eur: dlhref + eurCSV + '?euro=1&dl=1',
+    csv_usa: apiHref + usaCSV + '?dl=1',
+    csv_eur: apiHref + eurCSV + '?euro=1&dl=1',
     title: makeCalendarTitle(q, 64),
     analyticsTitle: type,
   };

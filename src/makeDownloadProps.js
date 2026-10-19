@@ -20,10 +20,11 @@ const INT32_MIN = -2147483648;
 const dlPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 
-// PDFs are served by hebcal-api-go, not this app. In production Varnish routes
-// download.hebcal.com/*.pdf there, so the host is unchanged; in dev, point PDF
-// URLs at the local hebcal-api-go on port 8082 while .ics/.csv stay on 8081.
-const pdfPrefix = process.env.NODE_ENV === 'production' ?
+// PDFs and Outlook .csv files are served by hebcal-api-go, not this app. In
+// production Varnish routes download.hebcal.com/*.pdf and *.csv there, so the
+// host is unchanged; in dev, point those URLs at the local hebcal-api-go on
+// port 8082 while .ics stays on 8081.
+export const apiPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8082';
 
 /**
@@ -202,13 +203,13 @@ export function makeDownloadProps(ctx, q, options) {
   const emoji = typeof q.emoji === 'string' ? q.emoji : '1';
   const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji}) + '.ics';
   const url = ctx.state.url = {
-    pdf: pdfPrefix + dlhref.substring(dlPrefix.length) + '.pdf',
+    pdf: apiPrefix + dlhref.substring(dlPrefix.length) + '.pdf',
     ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji}) + '.ics',
     subical,
     webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
     gcal: subical.replace(/^https/, 'http'),
-    csv_usa: dlhref + '_usa.csv',
-    csv_eur: downloadHref2(q, dlFilename, {euro: '1'}) + '_eur.csv',
+    csv_usa: apiPrefix + dlhref.substring(dlPrefix.length) + '_usa.csv',
+    csv_eur: apiPrefix + downloadHref2(q, dlFilename, {euro: '1'}).substring(dlPrefix.length) + '_eur.csv',
     dlFilename,
   };
   ctx.state.filename = {
@@ -225,7 +226,7 @@ export function makeDownloadProps(ctx, q, options) {
  * absolute URLs out of the HTML and then hammer download.hebcal.com with .pdf
  * and .ics fetches, so the links are rendered without an href and a bare
  * `/v4/...` path gives them nothing to follow. The script rebuilds each
- * absolute URL with `new URL(path, host)` (`pdfHost` for the PDF, which is a
+ * absolute URL with `new URL(path, host)` (`apiHost` for the PDF and CSV, which are a
  * different server in dev). A URL on some other host (e.g. the static `/ical/`
  * feeds, which point at production even in dev) is left absolute, which
  * `new URL()` resolves unchanged.
@@ -236,12 +237,12 @@ export function makeDlUrlsForScript(url) {
   const strip = (s, prefix) => s?.startsWith(prefix + '/') ? s.substring(prefix.length) : s;
   return {
     host: dlPrefix,
-    pdfHost: pdfPrefix,
+    apiHost: apiPrefix,
     subical: strip(url.subical, dlPrefix),
     ics1year: strip(url.ics1year, dlPrefix),
-    csv_usa: strip(url.csv_usa, dlPrefix),
-    csv_eur: strip(url.csv_eur, dlPrefix),
-    pdf: strip(url.pdf, pdfPrefix),
+    csv_usa: strip(url.csv_usa, apiPrefix),
+    csv_eur: strip(url.csv_eur, apiPrefix),
+    pdf: strip(url.pdf, apiPrefix),
     title: url.title,
   };
 }
