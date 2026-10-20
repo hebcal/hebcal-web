@@ -355,7 +355,6 @@ function renderHtml(ctx) {
   makeDownloadProps(ctx, q, options);
   const url = ctx.state.url;
   url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
-  url.settings = '/hebcal?' + urlArgs(q, {v: 0});
   const prev = makePrevNextUrl(q, options, events, false);
   const next = makePrevNextUrl(q, options, events, true);
   url.prev = prev.href;
