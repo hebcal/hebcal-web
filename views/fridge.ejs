@@ -80,14 +80,14 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
   <input type="checkbox" style="width:1.25rem; height:1.25rem; vertical-align: middle" id="toggle-havdalah">
   <label for="toggle-havdalah" style="vertical-align: middle">Show Havdalah times</label>
 </form>
-<table style="width:524px">
+<table style="width:524px" id="fridge-nav" data-base-url="<%= locals.url %>">
 <tbody>
 <tr>
 <td class="nav"><% if (locals.gregYear1 > locals.today.year() - 50) { -%>
   <p><a class="nowrap" title="Previous Hebrew year"
-  href="<%= locals.url %>&amp;year=<%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %>">&larr; <%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %></a></p>
+  data-year="<%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %>">&larr; <%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %></a></p>
   <p><a class="nowrap" title="Previous Gregorian year"
-  href="<%= locals.url %>&amp;year=<%= locals.gregYear1 - 1 %>&amp;yt=G">&larr; <%= locals.gregYear1 - 1 %></a></p>
+  data-year="<%= locals.gregYear1 - 1 %>" data-yt="G">&larr; <%= locals.gregYear1 - 1 %></a></p>
 <% } %></td>
 <td class="text-center" style="padding: 0px 8px">
 <div><p>Candle-lighting times are <%= locals.q.b %> min before sunset</p></div>
@@ -101,9 +101,9 @@ for 3 stars (sun <%=locals.q.td||8.5%>° below the horizon)
 </td>
 <td class="nav"><% if (locals.gregYear1 < locals.today.year() + 50) { -%>
   <p><a class="nowrap" title="Next Hebrew year"
-  href="<%= locals.url %>&amp;year=<%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %>"><%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %> &rarr;</a></p>
+  data-year="<%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %>"><%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %> &rarr;</a></p>
   <p><a class="nowrap" title="Next Gregorian year"
-  href="<%= locals.url %>&amp;year=<%= locals.gregYear1 + 1 %>&amp;yt=G"><%= locals.gregYear1 + 1 %> &rarr;</a></p>
+  data-year="<%= locals.gregYear1 + 1 %>" data-yt="G"><%= locals.gregYear1 + 1 %> &rarr;</a></p>
 <% } %></td>
 </tr>
 </tbody>
@@ -112,6 +112,17 @@ for 3 stars (sun <%=locals.q.td||8.5%>° below the horizon)
 </div><!-- .container -->
 <script nonce="<%=locals.nonce%>">
 document.addEventListener('DOMContentLoaded', function() {
+  // Set prev/next year hrefs here rather than in the HTML to keep crawlers from following them
+  const navTable = document.getElementById('fridge-nav');
+  const baseUrl = navTable.getAttribute('data-base-url');
+  [].slice.call(navTable.querySelectorAll('a[data-year]')).forEach(function (a) {
+    let href = baseUrl + '&year=' + a.getAttribute('data-year');
+    const yt = a.getAttribute('data-yt');
+    if (yt) {
+      href += '&yt=' + yt;
+    }
+    a.setAttribute('href', href);
+  });
   const checked = false;
   const havdalahTd = [].slice.call(document.querySelectorAll('td.havdalah'));
   const havdalahCol = [].slice.call(document.querySelectorAll('col.havdalah'));
