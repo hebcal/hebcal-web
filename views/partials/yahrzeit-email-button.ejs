@@ -15,11 +15,11 @@
 </button>
 </form>
 <% } else { %>
-<a href="#email-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#email-modal">
 <% if (!locals.q.em) { -%>
 <svg class="icon"><use href="<%=locals.spriteHref%>#bi-floppy2-fill"></use></svg> Save
 <% } else { -%>
 <svg class="icon"><use href="<%=locals.spriteHref%>#bi-envelope-fill"></use></svg> Email reminders
 <% } -%>
-</a>
+</button>
 <% } %>

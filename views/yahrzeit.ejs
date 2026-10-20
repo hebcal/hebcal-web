@@ -40,7 +40,7 @@ and you will receive annual reminder emails.
   <%- await include('partials/yahrzeit-email-button.ejs') -%>
 </div>
 <div class="me-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button>
 </div>
 <% } -%>
 <div class="me-2 mb-2">
@@ -101,9 +101,9 @@ The date entered for <strong><%=locals.distantPastDate.name%></strong> is
 <%- await include('partials/yahrzeit-email-button.ejs') -%>
 </div>
 <div class="me-2 mb-2">
-<a href="#hcdl-modal" role="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal">
   <svg class="icon"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
-  Download</a>
+  Download</button>
 </div>
 </div><!-- .btn-toolbar -->
 <% } %>
