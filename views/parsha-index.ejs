@@ -133,7 +133,7 @@ English-language commentary from a range of Jewish traditions.</p>
 </button>
 <ul class="dropdown-menu" role="menu">
 <% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
-<li><a class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<li><a rel="alternate" type="application/rss+xml" class="dropdown-item" href="index<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
 <% } -%>
 </ul>
 </div><!-- .btn-group -->
@@ -144,7 +144,7 @@ English-language commentary from a range of Jewish traditions.</p>
 </button>
 <ul class="dropdown-menu" role="menu">
 <% for (const [langName, desc] of Object.entries(locals.langNames)) { -%>
-<li><a class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
+<li><a rel="alternate" type="application/rss+xml" class="dropdown-item" href="israel<%= langName === 'en' ? '' : '-' + langName %>.xml"><%= desc[1] ? desc[1] + ' - ' : '' %><%= desc[0] %></a></li>
 <% } -%>
 </ul>
 </div><!-- .btn-group -->
