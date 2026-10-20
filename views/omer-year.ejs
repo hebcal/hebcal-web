@@ -27,7 +27,7 @@
   <sup><a title="Counting of the Omer from Wikipedia"
     href="https://en.wikipedia.org/wiki/Counting_of_the_Omer">[2]</a></sup>
 </p>
-<div class="float-end ms-3 mt-1 mb-1 d-print-none"><a class="btn btn-sm btn-secondary" href="#hcdl-modal" role="button" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</a></div>
+<div class="float-end ms-3 mt-1 mb-1 d-print-none"><button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button></div>
 <p>We begin counting on the evening of the second night of Pesach:
   <time class="text-burgundy text-nowrap" datetime="<%=locals.items[1].d.subtract(1, 'd').format('YYYY-MM-DD')%>"><%=locals.items[1].d.subtract(1, 'd').format('dddd, D MMMM YYYY')%></time>,
   corresponding to the <span class="text-nowrap"><%=locals.items[1].hd.render('en')%></span>.
