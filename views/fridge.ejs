@@ -84,9 +84,9 @@ table {border-spacing: 0; border-collapse: collapse; margin-left: auto; margin-r
 <tbody>
 <tr>
 <td class="nav"><% if (locals.gregYear1 > locals.today.year() - 50) { -%>
-  <p><a class="nowrap" title="Previous Hebrew year"
+  <p><a class="nowrap" rel="nofollow" title="Previous Hebrew year"
   data-year="<%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %>">&larr; <%= locals.hyear ? locals.hyear - 1 : locals.gregYear1 + 3759 %></a></p>
-  <p><a class="nowrap" title="Previous Gregorian year"
+  <p><a class="nowrap" rel="nofollow" title="Previous Gregorian year"
   data-year="<%= locals.gregYear1 - 1 %>" data-yt="G">&larr; <%= locals.gregYear1 - 1 %></a></p>
 <% } %></td>
 <td class="text-center" style="padding: 0px 8px">
@@ -100,9 +100,9 @@ for 3 stars (sun <%=locals.q.td||8.5%>° below the horizon)
 </p></div>
 </td>
 <td class="nav"><% if (locals.gregYear1 < locals.today.year() + 50) { -%>
-  <p><a class="nowrap" title="Next Hebrew year"
+  <p><a class="nowrap" rel="nofollow" title="Next Hebrew year"
   data-year="<%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %>"><%= locals.hyear ? locals.hyear + 1 : locals.gregYear1 + 3761 %> &rarr;</a></p>
-  <p><a class="nowrap" title="Next Gregorian year"
+  <p><a class="nowrap" rel="nofollow" title="Next Gregorian year"
   data-year="<%= locals.gregYear1 + 1 %>" data-yt="G"><%= locals.gregYear1 + 1 %> &rarr;</a></p>
 <% } %></td>
 </tr>
