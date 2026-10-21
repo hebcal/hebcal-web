@@ -78,6 +78,33 @@ export function useBackendHostname(app) {
 }
 
 /**
+ * First path segments that get their own `route` label on the request-latency
+ * histogram. Anything else (static files, scanners probing random paths) is
+ * "other", which bounds the label's cardinality.
+ */
+const ROUTE_SEGMENTS = new Set([
+  'account', 'api-docs', 'complete', 'converter', 'email', 'etc', 'export',
+  'fridge', 'geo', 'h', 'hebcal', 'holidays', 'i', 'ical', 'learning',
+  'leyning', 'link', 'login', 'logout', 'ma', 'matomo', 'o', 'omer', 'ping',
+  's', 'sedrot', 'shabbat', 'sunrs', 'v3', 'yahrzeit', 'zmanim',
+]);
+
+/**
+ * Maps a request path to the bounded `route` label: "/" for the homepage, the
+ * first path segment when it is one of {@link ROUTE_SEGMENTS}, else "other".
+ * @param {string} path
+ * @return {string}
+ */
+export function routeLabel(path) {
+  if (path === '/') {
+    return '/';
+  }
+  const end = path.indexOf('/', 1);
+  const seg = path.substring(1, end === -1 ? undefined : end);
+  return ROUTE_SEGMENTS.has(seg) ? '/' + seg : 'other';
+}
+
+/**
  * Registers response-time tracking, access/error logging, and Prometheus
  * HTTP request metrics.
  * @param {Koa} app
@@ -93,8 +120,26 @@ export function useObservability(app) {
     help: 'Total number of HTTP requests',
     labelNames: ['method', 'status'],
   });
+  // Buckets are dense below 200ms, where nearly every response lands, with a
+  // coarse tail to 10s for the rare slow render or stalled event loop.
+  const httpRequestDuration = new promClient.Histogram({
+    name: 'http_request_duration_seconds',
+    help: 'HTTP request latency in seconds, by route',
+    labelNames: ['route'],
+    buckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15,
+      0.2, 0.3, 0.5, 1, 2.5, 5, 10],
+  });
   app.use(async function httpMetricMiddleware(ctx, next) {
-    await next();
+    const end = httpRequestDuration.startTimer();
+    try {
+      await next();
+    } finally {
+      // /metrics is answered by the next middleware; Prometheus scraping
+      // itself should not skew the latency of real routes.
+      if (ctx.path !== '/metrics') {
+        end({route: routeLabel(ctx.path)});
+      }
+    }
     httpRequestsTotal
         .labels(ctx.request.method, ctx.response.status)
         .inc();
