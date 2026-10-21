@@ -143,9 +143,9 @@ export function useObservability(app, {latencyBuckets = DEFAULT_LATENCY_BUCKETS}
     try {
       await next();
     } finally {
-      // /metrics is answered by the next middleware; Prometheus scraping
-      // itself should not skew the latency of real routes.
-      if (ctx.path !== '/metrics') {
+      // /metrics is answered by the next middleware, and Varnish probes /ping
+      // every few seconds; neither should skew the latency of real routes.
+      if (ctx.path !== '/metrics' && ctx.path !== '/ping') {
         end({route: routeLabel(ctx.path)});
       }
     }
