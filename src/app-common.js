@@ -78,24 +78,16 @@ export function useBackendHostname(app) {
 }
 
 /**
- * First path segments that get their own `route` label on the www request-latency
- * histogram: the top-level sections that draw the traffic. "/" is the homepage.
- * Anything else (static files, scanners probing random paths) is "other",
- * which bounds the label's cardinality.
- */
-export const WWW_ROUTE_SEGMENTS = new Set([
-  '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
-  'yahrzeit', 'ical', 'learning',
-]);
-
-/**
  * Maps a request path to the bounded `route` label: the first path segment
- * (or "/" for the homepage) when it is in `segments`, else "other".
+ * (or "/" for the homepage) when it is in `segments`, else "other". Limiting
+ * the labels bounds the histogram's cardinality: static files and scanners
+ * probing random paths all fold into "other".
  * @param {string} path
- * @param {Set<string>} [segments] allowed labels; see {@link WWW_ROUTE_SEGMENTS}
+ * @param {Set<string>} segments allowed labels, without the leading slash;
+ *    include "/" to label the homepage
  * @return {string}
  */
-export function routeLabel(path, segments = WWW_ROUTE_SEGMENTS) {
+export function routeLabel(path, segments) {
   if (path === '/') {
     return segments.has('/') ? '/' : 'other';
   }
@@ -105,28 +97,17 @@ export function routeLabel(path, segments = WWW_ROUTE_SEGMENTS) {
 }
 
 /**
- * Default latency buckets, in seconds: dense below 200ms, where nearly every
- * response lands, with a coarse tail to 10s to catch event-loop stalls. Each
- * server passes its own, trimmed to the range it actually uses, because every
- * bucket is a time series per route.
- */
-export const DEFAULT_LATENCY_BUCKETS = [0.001, 0.0025, 0.005, 0.01, 0.02,
-  0.03, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 1, 2.5, 5, 10];
-
-/**
  * Registers response-time tracking, access/error logging, and Prometheus
  * HTTP request metrics.
  * @param {Koa} app
- * @param {Object} [opts]
- * @param {number[]} [opts.latencyBuckets] upper bounds for the
- *    `http_request_duration_seconds` histogram, in seconds, ascending
- * @param {Set<string>} [opts.routeSegments] first path segments that get their
+ * @param {Object} opts
+ * @param {number[]} opts.latencyBuckets upper bounds for the
+ *    `http_request_duration_seconds` histogram, in seconds, ascending. Every
+ *    bucket is a time series per route, so each server trims to its own range.
+ * @param {Set<string>} opts.routeSegments first path segments that get their
  *    own `route` label; everything else is "other"
  */
-export function useObservability(app, {
-  latencyBuckets = DEFAULT_LATENCY_BUCKETS,
-  routeSegments = WWW_ROUTE_SEGMENTS,
-} = {}) {
+export function useObservability(app, {latencyBuckets, routeSegments}) {
   const logger = app.context.logger;
   app.use(xResponseTime());
   app.use(accessLogger(logger));

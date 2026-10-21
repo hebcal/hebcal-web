@@ -1,25 +1,30 @@
 import {describe, it, expect} from 'vitest';
 import {routeLabel} from '../src/app-common.js';
 
+const www = new Set([
+  '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
+  'yahrzeit', 'ical', 'learning',
+]);
+
 describe('routeLabel', () => {
   it('uses the first segment for known routes', () => {
-    expect(routeLabel('/')).toBe('/');
-    expect(routeLabel('/shabbat')).toBe('/shabbat');
-    expect(routeLabel('/shabbat/browse/US')).toBe('/shabbat');
-    expect(routeLabel('/ical/foo.ics')).toBe('/ical');
-    expect(routeLabel('/learning/x')).toBe('/learning');
-    expect(routeLabel('/converter')).toBe('/converter');
-    expect(routeLabel('/holidays/rosh-hashana-2026')).toBe('/holidays');
-    expect(routeLabel('/yahrzeit/edit/01abc')).toBe('/yahrzeit');
+    expect(routeLabel('/', www)).toBe('/');
+    expect(routeLabel('/shabbat', www)).toBe('/shabbat');
+    expect(routeLabel('/shabbat/browse/US', www)).toBe('/shabbat');
+    expect(routeLabel('/ical/foo.ics', www)).toBe('/ical');
+    expect(routeLabel('/learning/x', www)).toBe('/learning');
+    expect(routeLabel('/converter', www)).toBe('/converter');
+    expect(routeLabel('/holidays/rosh-hashana-2026', www)).toBe('/holidays');
+    expect(routeLabel('/yahrzeit/edit/01abc', www)).toBe('/yahrzeit');
   });
   it('buckets everything else as other', () => {
-    expect(routeLabel('/wp-login.php')).toBe('other');
-    expect(routeLabel('/robots.txt')).toBe('other');
-    expect(routeLabel('/export/export.ics')).toBe('other');
-    expect(routeLabel('/v3/01abc/yahrzeit.ics')).toBe('other');
-    expect(routeLabel('/v4/abc/hebcal.ics')).toBe('other');
-    expect(routeLabel('/shabbatx')).toBe('other');
-    expect(routeLabel('/random/scanner/path')).toBe('other');
+    expect(routeLabel('/wp-login.php', www)).toBe('other');
+    expect(routeLabel('/robots.txt', www)).toBe('other');
+    expect(routeLabel('/export/export.ics', www)).toBe('other');
+    expect(routeLabel('/v3/01abc/yahrzeit.ics', www)).toBe('other');
+    expect(routeLabel('/v4/abc/hebcal.ics', www)).toBe('other');
+    expect(routeLabel('/shabbatx', www)).toBe('other');
+    expect(routeLabel('/random/scanner/path', www)).toBe('other');
   });
 });
 

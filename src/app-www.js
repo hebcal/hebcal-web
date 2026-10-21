@@ -39,6 +39,10 @@ useBackendHostname(app);
 // 1s and 10s are kept so a stall still lands in a finite bucket and P99 stays
 // computable.
 useObservability(app, {
+  routeSegments: new Set([
+    '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
+    'yahrzeit', 'ical', 'learning',
+  ]),
   latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.015, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
 });
 
