@@ -153,19 +153,32 @@ export async function loadSession(ctx) {
   if (!sessionId || !/^[0-9a-f]{32}$/.test(sessionId)) {
     return;
   }
-  const sql = `SELECT s.user_id, s.expires, s.created,
-      u.email, u.display_name
-    FROM user_session s
-    JOIN user u ON u.id = s.user_id
-    WHERE s.id = ?`;
-  const rows = await ctx.mysql.query(sql, [sessionId]);
-  const row = rows?.[0];
+  // Fail open: if MySQL is unreachable, treat the request as anonymous rather
+  // than turning every page into a 503. Routes that require a user (/account,
+  // /login/*) hit the database themselves and still report the outage.
+  let row;
+  try {
+    const sql = `SELECT s.user_id, s.expires, s.created,
+        u.email, u.display_name
+      FROM user_session s
+      JOIN user u ON u.id = s.user_id
+      WHERE s.id = ?`;
+    const rows = await ctx.mysql.query(sql, [sessionId]);
+    row = rows?.[0];
+  } catch (err) {
+    ctx.logger.warn(err, 'session lookup failed; treating request as anonymous');
+    return;
+  }
   if (!row) {
     return;
   }
   if (new Date(row.expires).getTime() < Date.now()) {
     // Expired: drop the row and clear the cookie.
-    await destroySessionById(ctx, sessionId);
+    try {
+      await destroySessionById(ctx, sessionId);
+    } catch (err) {
+      ctx.logger.warn(err, 'failed to delete expired session');
+    }
     clearSessionCookie(ctx);
     return;
   }
@@ -175,7 +188,11 @@ export async function loadSession(ctx) {
     email: row.email,
     displayName: row.display_name,
   };
-  await touchIfStale(ctx, sessionId, row.expires);
+  try {
+    await touchIfStale(ctx, sessionId, row.expires);
+  } catch (err) {
+    ctx.logger.warn(err, 'failed to refresh session expiry');
+  }
 }
 
 /**
