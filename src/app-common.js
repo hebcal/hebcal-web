@@ -105,11 +105,23 @@ export function routeLabel(path) {
 }
 
 /**
+ * Default latency buckets, in seconds: dense below 200ms, where nearly every
+ * response lands, with a coarse tail to 10s to catch event-loop stalls. Each
+ * server passes its own, trimmed to the range it actually uses, because every
+ * bucket is a time series per route.
+ */
+export const DEFAULT_LATENCY_BUCKETS = [0.001, 0.0025, 0.005, 0.01, 0.02,
+  0.03, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 1, 2.5, 5, 10];
+
+/**
  * Registers response-time tracking, access/error logging, and Prometheus
  * HTTP request metrics.
  * @param {Koa} app
+ * @param {Object} [opts]
+ * @param {number[]} [opts.latencyBuckets] upper bounds for the
+ *    `http_request_duration_seconds` histogram, in seconds, ascending
  */
-export function useObservability(app) {
+export function useObservability(app, {latencyBuckets = DEFAULT_LATENCY_BUCKETS} = {}) {
   const logger = app.context.logger;
   app.use(xResponseTime());
   app.use(accessLogger(logger));
@@ -120,14 +132,11 @@ export function useObservability(app) {
     help: 'Total number of HTTP requests',
     labelNames: ['method', 'status'],
   });
-  // Buckets are dense below 200ms, where nearly every response lands, with a
-  // coarse tail to 10s for the rare slow render or stalled event loop.
   const httpRequestDuration = new promClient.Histogram({
     name: 'http_request_duration_seconds',
     help: 'HTTP request latency in seconds, by route',
     labelNames: ['route'],
-    buckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15,
-      0.2, 0.3, 0.5, 1, 2.5, 5, 10],
+    buckets: latencyBuckets,
   });
   app.use(async function httpMetricMiddleware(ctx, next) {
     const end = httpRequestDuration.startTimer();

@@ -22,7 +22,12 @@ const app = createBaseApp();
 
 useBackendHostname(app);
 
-useObservability(app);
+// Measured on production: download responses spread from 10ms to ~100ms and
+// almost none exceed 200ms. 1s and 10s are kept so a stall still lands in a
+// finite bucket and P99 stays computable.
+useObservability(app, {
+  latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
+});
 
 // The error handler below echoes err.message straight into the body, so keep
 // browsers from sniffing an error string as HTML.
