@@ -140,6 +140,17 @@ describe('DB-backed sessions', () => {
         .toBeGreaterThan(soon.getTime());
   });
 
+  it('treats the request as anonymous when MySQL is down', async () => {
+    const mysql = new MockMysqlDb();
+    mysql.query = async () => {
+      throw new Error('connect ECONNREFUSED 127.0.0.1:3306');
+    };
+    const ctx = fakeCtx(mysql);
+    ctx._jar.set(SESSION_COOKIE, signValue('d'.repeat(32), SECRET));
+    await expect(loadSession(ctx)).resolves.toBeUndefined();
+    expect(ctx.state.user).toBeUndefined();
+  });
+
   it('drops an expired session and logs nobody in', async () => {
     const mysql = new MockMysqlDb();
     const sid = 'a'.repeat(32);
