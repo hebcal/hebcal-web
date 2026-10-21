@@ -78,30 +78,30 @@ export function useBackendHostname(app) {
 }
 
 /**
- * First path segments that get their own `route` label on the request-latency
- * histogram: the top-level sections that draw the traffic, plus the download
- * host's /v3 and /v4 feeds. Anything else (static files, other download
- * paths, scanners probing random paths) is "other", which
- * bounds the label's cardinality.
+ * First path segments that get their own `route` label on the www request-latency
+ * histogram: the top-level sections that draw the traffic. "/" is the homepage.
+ * Anything else (static files, scanners probing random paths) is "other",
+ * which bounds the label's cardinality.
  */
-const ROUTE_SEGMENTS = new Set([
-  'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer', 'yahrzeit',
-  'ical', 'learning', 'v3', 'v4',
+export const WWW_ROUTE_SEGMENTS = new Set([
+  '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
+  'yahrzeit', 'ical', 'learning',
 ]);
 
 /**
- * Maps a request path to the bounded `route` label: "/" for the homepage, the
- * first path segment when it is one of {@link ROUTE_SEGMENTS}, else "other".
+ * Maps a request path to the bounded `route` label: the first path segment
+ * (or "/" for the homepage) when it is in `segments`, else "other".
  * @param {string} path
+ * @param {Set<string>} [segments] allowed labels; see {@link WWW_ROUTE_SEGMENTS}
  * @return {string}
  */
-export function routeLabel(path) {
+export function routeLabel(path, segments = WWW_ROUTE_SEGMENTS) {
   if (path === '/') {
-    return '/';
+    return segments.has('/') ? '/' : 'other';
   }
   const end = path.indexOf('/', 1);
   const seg = path.substring(1, end === -1 ? undefined : end);
-  return ROUTE_SEGMENTS.has(seg) ? '/' + seg : 'other';
+  return segments.has(seg) ? '/' + seg : 'other';
 }
 
 /**
@@ -120,8 +120,13 @@ export const DEFAULT_LATENCY_BUCKETS = [0.001, 0.0025, 0.005, 0.01, 0.02,
  * @param {Object} [opts]
  * @param {number[]} [opts.latencyBuckets] upper bounds for the
  *    `http_request_duration_seconds` histogram, in seconds, ascending
+ * @param {Set<string>} [opts.routeSegments] first path segments that get their
+ *    own `route` label; everything else is "other"
  */
-export function useObservability(app, {latencyBuckets = DEFAULT_LATENCY_BUCKETS} = {}) {
+export function useObservability(app, {
+  latencyBuckets = DEFAULT_LATENCY_BUCKETS,
+  routeSegments = WWW_ROUTE_SEGMENTS,
+} = {}) {
   const logger = app.context.logger;
   app.use(xResponseTime());
   app.use(accessLogger(logger));
@@ -146,7 +151,7 @@ export function useObservability(app, {latencyBuckets = DEFAULT_LATENCY_BUCKETS}
       // /metrics is answered by the next middleware, and Varnish probes /ping
       // every few seconds; neither should skew the latency of real routes.
       if (ctx.path !== '/metrics' && ctx.path !== '/ping') {
-        end({route: routeLabel(ctx.path)});
+        end({route: routeLabel(ctx.path, routeSegments)});
       }
     }
     httpRequestsTotal

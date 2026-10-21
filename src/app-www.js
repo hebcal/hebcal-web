@@ -33,10 +33,13 @@ setupGeoIp(app);
 useBackendHostname(app);
 
 // Measured on production: nearly every www response finishes under 50ms, so
-// the edges between 75ms and 500ms are omitted. 1s and 10s are kept so a stall
-// still lands in a finite bucket and P99 stays computable.
+// the edges between 250ms and 1s are omitted (<0.03% of requests). 15ms splits
+// the 10-20ms bucket, where /hebcal, /shabbat and /holidays all have their
+// mode; 75ms and 150ms cover the 50-250ms band that holds P99 for those routes.
+// 1s and 10s are kept so a stall still lands in a finite bucket and P99 stays
+// computable.
 useObservability(app, {
-  latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.1, 0.25, 1, 10],
+  latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.015, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
 });
 
 app.use(aiChatbotLogger);
