@@ -79,14 +79,13 @@ export function useBackendHostname(app) {
 
 /**
  * First path segments that get their own `route` label on the request-latency
- * histogram. Anything else (static files, scanners probing random paths) is
- * "other", which bounds the label's cardinality.
+ * histogram: the top-level sections that draw the traffic. Anything else
+ * (static files, downloads, scanners probing random paths) is "other", which
+ * bounds the label's cardinality.
  */
 const ROUTE_SEGMENTS = new Set([
-  'account', 'api-docs', 'complete', 'converter', 'email', 'etc', 'export',
-  'fridge', 'geo', 'h', 'hebcal', 'holidays', 'i', 'ical', 'learning',
-  'leyning', 'link', 'login', 'logout', 'ma', 'matomo', 'o', 'omer', 'ping',
-  's', 'sedrot', 'shabbat', 'sunrs', 'v3', 'yahrzeit', 'zmanim',
+  'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer', 'yahrzeit',
+  'ical', 'learning',
 ]);
 
 /**
