@@ -98,6 +98,7 @@
           {"name": "ahsy", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Arukh HaShulchan Yomi"},
           {"name": "dcc", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Sefer Chofetz Chaim"},
           {"name": "dshl", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Shemirat HaLashon"},
+          {"name": "dtn", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Tanya Yomi"},
           {"name": "dpa", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Pirkei Avot (on Shabbatot between Pesach and Rosh Hashanah)"},
 
           {"$ref": "#/components/parameters/Lg"},

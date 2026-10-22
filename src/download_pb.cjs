@@ -220,7 +220,8 @@ faststartmins: jspb.Message.getFieldWithDefault(msg, 71, 0),
 fastenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 72, 0.0),
 fastendmins: jspb.Message.getFieldWithDefault(msg, 73, 0),
 tishabavenddeg: jspb.Message.getFloatingPointFieldWithDefault(msg, 74, 0.0),
-tishabavendmins: jspb.Message.getFieldWithDefault(msg, 75, 0)
+tishabavendmins: jspb.Message.getFieldWithDefault(msg, 75, 0),
+tanyayomi: jspb.Message.getBooleanFieldWithDefault(msg, 76, false)
   };
 
   if (includeInstance) {
@@ -544,6 +545,10 @@ proto.Download.deserializeBinaryFromReader = function(msg, reader) {
     case 75:
       var value = /** @type {number} */ (reader.readUint32());
       msg.setTishabavendmins(value);
+      break;
+    case 76:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setTanyayomi(value);
       break;
     default:
       reader.skipField();
@@ -1075,6 +1080,13 @@ proto.Download.serializeBinaryToWriter = function(message, writer) {
   if (f !== 0) {
     writer.writeUint32(
       75,
+      f
+    );
+  }
+  f = message.getTanyayomi();
+  if (f) {
+    writer.writeBool(
+      76,
       f
     );
   }
@@ -2554,6 +2566,24 @@ proto.Download.prototype.getTishabavendmins = function() {
  */
 proto.Download.prototype.setTishabavendmins = function(value) {
   return jspb.Message.setProto3IntField(this, 75, value);
+};
+
+
+/**
+ * optional bool tanyaYomi = 76;
+ * @return {boolean}
+ */
+proto.Download.prototype.getTanyayomi = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 76, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.Download} returns this
+ */
+proto.Download.prototype.setTanyayomi = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 76, value);
 };
 
 

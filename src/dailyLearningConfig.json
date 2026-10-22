@@ -302,6 +302,21 @@
     "descMedium": "Dirshu’s daily Mishnah Berurah program"
   },
   {
+    "eventCategory": "tanyaYomi",
+    "queryParam": "dtn",
+    "dailyLearningOptName": "tanyaYomi",
+    "protocName": "tanyaYomi",
+    "downloadSlug": "tanya-yomi",
+    "relcalid": "d17b8a21-dc0e-4222-9556-625f64c1464b",
+    "feedLength": 365,
+    "years": 3,
+    "group": "Chasidut",
+    "settingsName": "Tanya Yomi",
+    "shortName": "Tanya Yomi",
+    "descLong": "Daily study of the Tanya by Rabbi Schneur Zalman of Liadi, completing all five parts each year. The cycle begins on 19 Kislev, “Rosh Hashanah of Chasidut”, and concludes on 18 Kislev, with separate divisions for leap and regular years.",
+    "descMedium": "Daily study of the Tanya by Rabbi Schneur Zalman of Liadi"
+  },
+  {
     "eventCategory": "parashat",
     "queryParam": "s",
     "dailyLearningOptName": null,

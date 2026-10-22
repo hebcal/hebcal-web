@@ -137,7 +137,9 @@ Each feature is typically one or a few files handling routing, business logic, a
   descriptions over time and now embeds Markdown in some of them; drash.json
   holds plain text, so re-scraping means flattening `[text](url)` and
   `*emphasis*` first.
-- **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.)
+- **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.). Every schedule is
+  driven by one entry in `src/dailyLearningConfig.json`; see "Adding a daily
+  learning calendar" below.
 - **Email subscriptions**: `email.js`, `emailCommon.js`
 - **Login / accounts** (`login.js`, `session.js`, `oauthGoogle.js`,
   `oauthApple.js`, `userAccount.js`): "Sign in with Google" and "Sign in with
@@ -285,6 +287,52 @@ Each feature is typically one or a few files handling routing, business logic, a
   standalone `/geo` JSON lookup route on app-www was removed (now 501 → served by
   hebcal-api-go); `getLocationFromQuery()` from `location.js` is still used
   in-process by other routes.
+
+### Adding a daily learning calendar
+
+The schedule itself lives in `@hebcal/learning`; bump that dependency first
+(see "Bumping `@hebcal/*` dependencies"). Everything here is config-driven —
+the `/hebcal` form, download modal, `/learning` page, settings names, static
+`/ical/` feeds and download-token (de)serialization all loop over
+`dailyLearningConfig.json` — so a new calendar touches only these files:
+
+1. **`src/dailyLearningConfig.json`** — add an entry (before `parashat`):
+   - `eventCategory`: must equal `ev.getCategories()[0]` of the library's
+     event (it keys `cat2cfg` in `dailyLearning.js`; a mismatch 500s
+     `/learning/<date>`).
+   - `queryParam`: a new, unused short URL flag. `git grep -n '"<flag>"'` and
+     check `static/api-docs/openapi.json` first; e.g. `dty` is Tanakh Yomi, so
+     Tanya Yomi took `dtn`.
+   - `dailyLearningOptName`: the name registered with `DailyLearning` in
+     `@hebcal/learning` (the `calendar({dailyLearning: {...}})` key).
+   - `protocName`: the `download.proto` field name (step 2).
+   - `downloadSlug`: file name for the static feed at
+     download.hebcal.com/ical/`<slug>`.ics, or `null` for none.
+   - `relcalid`: optional fresh `uuidgen | tr A-Z a-z`; never change it once
+     published (it identifies the subscribed calendar).
+   - `group`: must be one of the keys in the `groups` object in
+     `views/dailyLearning.ejs`, or the entry silently vanishes from
+     `/learning`. Add a new group (with emoji) there if needed.
+   - `feedLength`, `years`, `color`, `settingsName`, `shortName`, `descLong`,
+     `descMedium`: copy the shape of a similar entry.
+2. **`src/download.proto`** — append `bool <protocName> = <next number>;`.
+   Never renumber or reuse a field number: it would change the meaning of
+   every `/v4/` subscription URL already in the wild.
+3. **`src/download_pb.cjs`** — regenerate with `npm run protoc`. Use
+   **protoc-gen-js 4.0.3** (it emits `var global = globalThis;`); an older
+   plugin rewrites the whole file. If the local plugin is older, download
+   `protobuf-javascript-4.0.3-<os>.zip` from the protobuf-javascript GitHub
+   releases and run `protoc --plugin=protoc-gen-js=<path> --proto_path=src
+   --js_out=import_style=commonjs,binary:src src/download.proto && mv
+   src/download_pb.js src/download_pb.cjs`. The resulting diff should be ~30
+   lines for one bool field.
+4. **`static/api-docs/openapi.json`** — add the `queryParam` to the
+   `/hebcal` parameter list.
+5. **Tests** — add the slug to the expected list in
+   `test/staticCalendars.test.js`, and the flag to the `learning` query string
+   in `test/hebcal.test.js`. `test/download.test.js` round-trips every config
+   entry through the protobuf automatically, so a missing proto field fails
+   there.
 
 ### Data files (`src/`)
 JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`, `redirect.json`, `redirectDownload.json`

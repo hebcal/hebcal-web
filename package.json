@@ -78,7 +78,7 @@
     "@hebcal/geo-sqlite": "^5.13.0",
     "@hebcal/hdate": "^0.23.1",
     "@hebcal/icalendar": "^7.0.6",
-    "@hebcal/learning": "^6.12.2",
+    "@hebcal/learning": "^6.13.0",
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.5.3",
     "@hebcal/murmurhash3": "^1.0.0",

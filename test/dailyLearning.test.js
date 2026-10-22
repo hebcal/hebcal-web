@@ -42,6 +42,10 @@ describe('Daily Learning page', () => {
       url: '/learning/2026-03-07', text: 'Shabbat Torah reading'},
     {why: 'Israel mode (i=on)',
       url: '/learning/2026-03-01?i=on', text: 'Daf Yomi'},
+    {why: 'the Tanya Yomi daily portion',
+      url: '/learning/2026-03-01', text: 'Tanya Yomi'},
+    {why: 'the Chasidut group heading',
+      url: '/learning/2026-03-01', text: 'Chasidut'},
     // 2026-04-20 is during the Omer (between Pesach and Shavuot in 5786)
     {why: 'a date during the Omer',
       url: '/learning/2026-04-20', text: 'Omer'},

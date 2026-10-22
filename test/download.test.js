@@ -8,6 +8,7 @@ import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
 import {downloadHref2, makeDlUrlsForScript} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
+import {dailyLearningConfig} from '../src/urlArgs.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
 import {makeETag} from '../src/etag.js';
 import {makeHebcalOptions, getNumYears} from '../src/calendar.js';
@@ -267,6 +268,25 @@ describe('Dirshu Amud HaYomi protobuf round-trip', () => {
   });
 });
 
+describe('daily learning protobuf round-trip', () => {
+  const learningCfgs = dailyLearningConfig.filter((cfg) => cfg.dailyLearningOptName);
+  it.each(learningCfgs.map((cfg) => [cfg.queryParam, cfg.protocName]))(
+      'should serialize and deserialize %s=on (%s)', (queryParam) => {
+        const query = {v: '1', maj: 'on', year: '2026', geonameid: '281184', [queryParam]: 'on'};
+        const href = downloadHref2(query, 'test.ics');
+        const encoded = href.match(/\/v4\/([^/]+)\//)[1]
+            .replaceAll('-', '+')
+            .replaceAll('_', '/');
+        const result = deserializeDownload(encoded);
+        expect(result[queryParam]).toBe('on');
+        for (const other of learningCfgs) {
+          if (other.queryParam !== queryParam) {
+            expect(result[other.queryParam]).toBeUndefined();
+          }
+        }
+      });
+});
+
 // https://github.com/hebcal/hebcal/issues/308
 describe('td protobuf round-trip', () => {
   it('should serialize and deserialize td correctly', () => {
@@ -437,6 +457,7 @@ describe('limitIcsFeedLength truncation notice', () => {
         dirshuAmudYomi: true,
         arukhHaShulchanYomi: true,
         kitzurShulchanAruch: true,
+        tanyaYomi: true,
       },
     });
     expect(events.length).toBeGreaterThan(maxEventsIcsSub);

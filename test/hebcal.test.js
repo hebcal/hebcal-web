@@ -437,7 +437,7 @@ describe('/hebcal far-future years', () => {
   // learning calendars are dropped, since those cycles began in the 20th and
   // 21st centuries and mean nothing millennia out.
   const learning = '&F=on&myomi=on&dpy=on&nyomi=on&dty=on&dps=on&d929=on' +
-    '&dr1=on&dr3=on&yyomi=on&dcc=on&dshl=on&ayd=on&dw=on&dpa=on&ahsy=on&dksa=on';
+    '&dr1=on&dr3=on&yyomi=on&dcc=on&dshl=on&ayd=on&dw=on&dpa=on&ahsy=on&dksa=on&dtn=on';
   const cal = (year, extra = '') =>
     `/hebcal?v=1&year=${year}&yt=G&maj=on&min=on&nx=on&ss=on&s=on${extra}`;
 
