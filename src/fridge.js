@@ -86,12 +86,12 @@ function makeProperties(ctx) {
     query[k] = 'on';
   }
   cleanQuery(query);
+  const startEnd = getStartAndEnd(query); // throws 410 before any expensive work
   const options = makeHebcalOptions(ctx.db, query);
   const location = options.location;
   if (!location) {
     ctx.throw(400, 'Location required: geonameid, zip, city');
   }
-  const startEnd = getStartAndEnd(query);
   options.start = startEnd[0];
   options.end = startEnd[1];
   const hyear = startEnd[2];
