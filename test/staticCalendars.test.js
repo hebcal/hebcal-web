@@ -163,7 +163,7 @@ describe('Torah readings feed', () => {
   it('swaps the parsha memo for the special Shabbat name in the CSV', async () => {
     const {csv} = await renderCalendar(regular('torah-readings-diaspora'), DTSTAMP);
     const rows = csv.split('\r\n');
-    expect(rows[0]).toBe('"Subject","Start Date","Start Time","End Date","End Time",' +
+    expect(rows[0]).toBe('\uFEFF"Subject","Start Date","Start Time","End Date","End Time",' +
       '"All day event","Description","Show time as","Location"');
     // the .ics description (parsha summary) must not leak into the .csv
     expect(csv).not.toContain('Emor (“Say”) opens');
@@ -252,11 +252,11 @@ describe('Hebrew date feed', () => {
         'END:VEVENT');
   });
 
-  it('writes a UTF-8 BOM for non-English CSV', async () => {
+  it('writes a UTF-8 BOM for every CSV', async () => {
     const {csv} = await renderCalendar(regular('hdate-he'), DTSTAMP);
     expect(csv.startsWith('\uFEFF"Subject"')).toBe(true);
     const en = await renderCalendar(regular('hdate-en'), DTSTAMP);
-    expect(en.csv.startsWith('"Subject"')).toBe(true);
+    expect(en.csv.startsWith('\uFEFF"Subject"')).toBe(true);
   });
 });
 

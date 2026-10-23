@@ -2,7 +2,7 @@ import {greg2abs} from '@hebcal/hdate';
 import {HDate, calendar, flags, Event, DailyLearning} from '@hebcal/core';
 import {icalEventsToString, IcalEvent} from '@hebcal/icalendar';
 import {getEventCategories, appendIsraelAndTracking} from '@hebcal/rest-api';
-import {byteOrderMark} from './lang.js';
+import {BYTE_ORDER_MARK} from './lang.js';
 import {dailyLearningConfig, makeIcalOpts} from './urlArgs.js';
 import {eventsWithParshaToCsv} from './parshaCommon.js';
 import {makeIcalEvents} from './icalCommon.js';
@@ -206,6 +206,6 @@ export async function renderCalendar({file, events, icalOpt}, dtstamp) {
   icalOpt.publishedTTL = 'P7D';
   const ics = await icalEventsToString(makeIcalEvents(events, icalOpt), icalOpt);
 
-  const csv = byteOrderMark(icalOpt.locale) + eventsWithParshaToCsv(events, icalOpt);
+  const csv = BYTE_ORDER_MARK + eventsWithParshaToCsv(events, icalOpt);
   return {ics, csv};
 }

@@ -6,6 +6,7 @@ import {basename} from 'node:path';
 import {murmur128HexSync} from '@hebcal/murmurhash3';
 import {checkFreshETag} from './etag.js';
 import {makeIcalOpts} from './urlArgs.js';
+import {BYTE_ORDER_MARK} from './lang.js';
 import {getMaxYahrzeitId,
   getAnniversaryTypes,
   YAHRZEIT,
@@ -120,7 +121,7 @@ export async function yahrzeitDownload(ctx) {
     const euro = Boolean(query.euro);
     const csv = eventsToCsv(events, {euro});
     ctx.response.type = 'text/x-csv; charset=utf-8';
-    ctx.body = '\uFEFF' + csv;
+    ctx.body = BYTE_ORDER_MARK + csv;
   } else {
     ctx.status = 404;
     ctx.remove('ETag');
