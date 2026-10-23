@@ -23,14 +23,14 @@ export async function fridgeShabbat(ctx) {
     return await fridgeIndex(ctx);
   }
   const q = ctx.request.query;
+  if (!empty(q.year)) {
+    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
+  }
   if (empty(q.year)) {
     const today = new HDate();
     const hyear = getDefaultHebrewYear(today);
     q.year = '' + hyear;
     delete q.yt;
-  }
-  if (!empty(q.year)) {
-    ctx.set('Cache-Control', CACHE_CONTROL_3DAYS);
   }
   if (checkFreshETag(ctx, q, {})) {
     return;
