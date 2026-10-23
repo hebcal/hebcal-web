@@ -120,10 +120,47 @@ function formatForHtml(ctx, p) {
   p.htmlDir = p.lang === 'he' ? 'rtl' : 'ltr';
   p.candleLightingStr = Locale.gettext('Candle lighting', p.locale);
   p.q.b = p.q.b || queryDefaultCandleMins(ctx, p.q);
-  p.today = dayjs();
+  const prevHebYear = p.hyear ? p.hyear - 1 : p.gregYear1 + 3759;
+  const nextHebYear = p.hyear ? p.hyear + 1 : p.gregYear1 + 3761;
+  p.nav = {
+    prevHebYear: yearIfInRange(prevHebYear, true),
+    prevGregYear: yearIfInRange(p.gregYear1 - 1, false),
+    nextHebYear: yearIfInRange(nextHebYear, true),
+    nextGregYear: yearIfInRange(p.gregYear1 + 1, false),
+  };
 }
 
-const YEAR_RANGE = 50;
+const YEARS_BEFORE = 4;
+const YEARS_AFTER = 20;
+
+/**
+ * Throws 410 if `year` is outside the allowed window around the current year
+ * @param {number} year
+ * @param {boolean} isHebrew
+ */
+function checkYearInRange(year, isHebrew) {
+  const thisYear = isHebrew ? new HDate().getFullYear() : new Date().getFullYear();
+  const calName = isHebrew ? 'Hebrew' : 'Gregorian';
+  if (year < thisYear - YEARS_BEFORE) {
+    throw createError(410, `${calName} year ${year} too early`);
+  } else if (year > thisYear + YEARS_AFTER) {
+    throw createError(410, `${calName} year ${year} too late`);
+  }
+}
+
+/**
+ * @param {number} year
+ * @param {boolean} isHebrew
+ * @return {number|null} `year` if it is within the allowed window, otherwise null
+ */
+function yearIfInRange(year, isHebrew) {
+  try {
+    checkYearInRange(year, isHebrew);
+    return year;
+  } catch {
+    return null;
+  }
+}
 
 /**
  * @param {Object.<string,string>} query
@@ -131,24 +168,14 @@ const YEAR_RANGE = 50;
  */
 function getStartAndEnd(query) {
   if (query.yt === 'G') {
-    const thisYear = new Date().getFullYear();
-    const year = Number.parseInt(query.year, 10) || thisYear;
-    if (year < thisYear - YEAR_RANGE) {
-      throw createError(410, `Gregorian year ${year} too early`);
-    } else if (year > thisYear + YEAR_RANGE) {
-      throw createError(410, `Gregorian year ${year} too late`);
-    }
+    const year = Number.parseInt(query.year, 10) || new Date().getFullYear();
+    checkYearInRange(year, false);
     const start = greg.greg2abs(new Date(year, 0, 1));
     const end = greg.greg2abs(new Date(year, 11, 31));
     return [start, end];
   }
-  const thisYear = new HDate().getFullYear();
-  const hyear = Number.parseInt(query.year, 10) || thisYear;
-  if (hyear < thisYear - YEAR_RANGE) {
-    throw createError(410, `Hebrew year ${hyear} too early`);
-  } else if (hyear > thisYear + YEAR_RANGE) {
-    throw createError(410, `Hebrew year ${hyear} too late`);
-  }
+  const hyear = Number.parseInt(query.year, 10) || new HDate().getFullYear();
+  checkYearInRange(hyear, true);
   const start = new HDate(1, months.TISHREI, hyear).abs() - 1;
   const end = new HDate(1, months.TISHREI, hyear + 1).abs() - 1;
   return [start, end, hyear];
