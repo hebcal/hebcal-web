@@ -352,7 +352,7 @@ not copy the file. (Add a colour icon's own per-path `fill=` colours; don't put
 a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 
 ### Client-side JS
-`rollup.config.cjs` bundles 8 separate entry points from `src/client-*.js` files → `static/i/`.
+`rollup.config.cjs` bundles the `src/client-*.js` entry points (plus a few others) into `views/partials/*.min.js`, which templates inline as `<script nonce>` blocks, and into `static/i/` for the one large external bundle (FullCalendar). Hand-written inline scripts with no per-request values belong there too; pass any per-include config through a `<script type="application/json">` block, as `email-modal-signin.ejs` and `download-modal-script.ejs` do.
 
 ### Localization
 Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashkenazi) are compiled to JSON via `npm run po2json` and loaded at runtime.

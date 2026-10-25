@@ -128,6 +128,33 @@ module.exports = [
     plugins: [terser()],
   },
   {
+    input: 'src/client-email-signin.js',
+    output: {
+      file: 'views/partials/client-email-signin.min.js',
+      format: 'iife',
+      banner: '/*! client-email-signin ' + pkg.version + ' */',
+    },
+    plugins: [terser()],
+  },
+  {
+    input: 'src/client-download-modal.js',
+    output: {
+      file: 'views/partials/client-download-modal.min.js',
+      format: 'iife',
+      banner: '/*! client-download-modal ' + pkg.version + ' */',
+    },
+    plugins: [terser()],
+  },
+  {
+    input: 'src/client-form-range-validation.js',
+    output: {
+      file: 'views/partials/client-form-range-validation.min.js',
+      format: 'iife',
+      banner: '/*! client-form-range-validation ' + pkg.version + ' */',
+    },
+    plugins: [terser()],
+  },
+  {
     input: 'src/client-fullcalendar.js',
     output: [
       {
