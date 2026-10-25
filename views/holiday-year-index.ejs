@@ -177,18 +177,19 @@ precedence over what would be a minor holiday.</p>
 </div><!-- .form-switch -->
 </div>
 <% } -%>
+<% if (locals.greg1 > 1752 && locals.greg1 <= 2499) { -%>
 <div class="mb-4">
 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button>
 <p class="small">Perpetual calendar feed for Apple, Google, Microsoft Outlook,
   or to any desktop program that supports iCalendar (.ics) files</p>
 </div>
+<% } -%>
 <div class="mb-4">
 <a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal?v=0&amp;year=<%=locals.isHebrewYear?locals.calendarYear:locals.year%>&amp;yt=<%=locals.isHebrewYear?'H':'G'%><%=locals.il?'&i=on':''%>"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 <p class="small">Create and download a custom calendar with event titles in different languages,
 candle-lighting times for Shabbat and holidays, daily learning schedules, etc</p>
 </div>
-<% if ((locals.isHebrewYear && locals.calendarYear >= 5000 && locals.calendarYear <= 6759) ||
-       (!locals.isHebrewYear && locals.year >= 1900 && locals.year < 3000)) { -%>
+<% if (locals.greg1 > 1752 && locals.greg1 <= 2499) { -%>
 <div class="mb-4">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="print-pdf" rel="nofollow" href="hebcal-<%=locals.isHebrewYear?locals.calendarYear:locals.year%><%=locals.il?'-il':''%>.pdf"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 <p class="small">Printable PDF, one page per month, in landscape</p>

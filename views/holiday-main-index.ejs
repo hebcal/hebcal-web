@@ -50,12 +50,14 @@ data-ad-slot="1140358973"></ins>
 </div><!-- .row -->
 <div class="row mt-2 d-print-none">
 <div class="col-auto">
+<% if (locals.hyear >= 5513 && locals.hyear <= 6260) { -%>
 <div class="btn-group me-1 mb-1" role="group">
 <a class="btn btn-secondary btn-sm download" title="PDF one page per month, in landscape" id="pdf-<%=locals.hyear%>" href="hebcal-<%=locals.hyear%><%=locals.il?'-il':''%>.pdf"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg> Print</a>
 </div>
 <div class="btn-group me-1 mb-1" role="group">
 <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button>
 </div>
+<% } -%>
 <div class="btn-group me-1 mb-1" role="group">
 <a class="btn btn-secondary btn-sm" title="Candle-lighting times for Shabbat and holidays, Ashkenazi transliterations, Israeli holiday schedule, etc." href="/hebcal<%=locals.il?'?i=on':''%>"><svg class="icon"><use href="<%=locals.spriteHref%>#bi-pencil-square"></use></svg> Customize</a>
 </div>
