@@ -13,8 +13,7 @@
     "node": true
   },
   "ignorePatterns": [
-    "unused/*.js",
-    "static/i/hebcal-app-*.min.js"
+    "unused/*.js"
   ],
   "rules": {
     "no-cond-assign": "off",

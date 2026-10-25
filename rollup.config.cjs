@@ -13,13 +13,13 @@ const stripHebcalBanner = {
 
 module.exports = [
   {
-    input: 'static/i/hebcal-app.js',
+    input: 'src/client-autocomplete.js',
     output: [
       {
-        file: 'static/i/' + pkg.config.clientapp,
+        file: 'views/partials/client-autocomplete.min.js',
         format: 'iife',
         name: 'hebcalClient',
-        banner: '/*! ' + pkg.config.clientapp + ' */',
+        banner: '/*! client-autocomplete ' + pkg.version + ' */',
       },
     ],
     plugins: [

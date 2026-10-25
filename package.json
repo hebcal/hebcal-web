@@ -14,8 +14,7 @@
     "sprite": "sprite15.svg",
     "csprite": "color-icons5.svg",
     "mainCss": "style-5.3.8n.css",
-    "holidayFcApp": "fc-6.1.21a.min.js",
-    "clientapp": "hebcal-app-5.3.0.min.js"
+    "holidayFcApp": "fc-6.1.21a.min.js"
   },
   "type": "module",
   "engines": {

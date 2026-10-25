@@ -53,7 +53,6 @@ useTimeout(app);
 const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;
 const cspriteHref = '/i/' + pkg.config.csprite;
-const clientAppHref = '/i/' + pkg.config.clientapp;
 const holidayFcAppHref = '/i/' + pkg.config.holidayFcApp;
 const mainCssHref = '/i/' + pkg.config.mainCss;
 // Attributes that ask third-party password managers to ignore a field so
@@ -75,7 +74,6 @@ app.use(async function fixup0(ctx, next) {
   Object.assign(ctx.state, {
     spriteHref,
     cspriteHref,
-    clientAppHref,
     holidayFcAppHref,
     mainCssHref,
     pmIgnore,
@@ -302,9 +300,6 @@ app.use(async function handleStatic404(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath.startsWith('/i/style-') && rpath.endsWith('.css')) {
       httpRedirect(ctx, mainCssHref);
-    }
-    if (rpath.startsWith('/i/hebcal-app-5') && rpath.endsWith('.js')) {
-      httpRedirect(ctx, clientAppHref);
     }
     if (rpath.startsWith('/i/fc-6') && rpath.endsWith('.js')) {
       httpRedirect(ctx, holidayFcAppHref);

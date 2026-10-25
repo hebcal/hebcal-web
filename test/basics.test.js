@@ -73,7 +73,7 @@ describe('Static File Serving', () => {
 
   it('should serve minified JavaScript file with correct content type', async () => {
     const response = await request(server)
-        .get('/i/' + pkg.config.clientapp);
+        .get('/i/' + pkg.config.holidayFcApp);
     expect(response.status).toBe(200);
     expect(response.type).toContain('javascript');
     // Verify immutable cache header

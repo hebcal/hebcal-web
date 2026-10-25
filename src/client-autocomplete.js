@@ -74,7 +74,7 @@ const hebcalClient = {
       }
       const ctl = controller = new AbortController();
       cityTypeaheadEl.classList.add(LOADING_CLASS);
-      const url = '/complete.php?q=' + encodeURIComponent(text);
+      const url = '/complete?q=' + encodeURIComponent(text);
       fetch(url, {credentials: 'omit', mode: 'cors', signal: ctl.signal})
           .then((response) => {
             if (response.ok) {

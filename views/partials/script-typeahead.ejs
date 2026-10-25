@@ -42,5 +42,5 @@
   background: none;
 }
 </style>
-<script defer nonce="<%=locals.nonce%>" src="<%=locals.clientAppHref%>"></script>
-<script nonce="<%=locals.nonce%>">document.addEventListener('DOMContentLoaded', function() { hebcalClient.createCityTypeahead(false); });</script>
+<script nonce="<%=locals.nonce%>"><%- await include('client-autocomplete.min.js') %>
+document.addEventListener('DOMContentLoaded', function() { hebcalClient.createCityTypeahead(false); });</script>
