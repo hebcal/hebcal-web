@@ -251,7 +251,7 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
   await next();
   const status = ctx.status;
   if ((status === 200 || status === 404 || status === 400) && ctx.type === 'text/html') {
-    const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline';` +
+    const csp = `script-src 'nonce-${nonce}' 'strict-dynamic' 'report-sample' https: 'unsafe-inline';` +
       ` style-src 'self' https: data: 'unsafe-inline';` +
       ` frame-ancestors https: data:;` +
       ` frame-src https: data: blob:;` +
