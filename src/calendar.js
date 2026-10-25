@@ -419,6 +419,16 @@ export function makeHebrewCalendar(ctx, options) {
     events = newEvents;
   }
 
+  // Suppress links for distant past or far-future
+  if (events.length) {
+    const hy1 = events[0].getDate().getFullYear();
+    const hy2 = events.at(-1).getDate().getFullYear();
+    if (yearIsOutsideNarrowHebRange(hy1) || yearIsOutsideNarrowHebRange(hy2)) {
+      for (const ev of events) {
+        ev.url = () => undefined;
+      }
+    }
+  }
   return events;
 }
 

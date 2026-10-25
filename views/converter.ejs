@@ -189,7 +189,7 @@ Hebrew Birthdays and Anniversaries for 20+ years.
 Free annual email reminders &amp; calendar downloads.
 <br><a href="/yahrzeit">Get started &raquo;</a></p>
 </div><!-- .col -->
-<% if (locals.gy >= 1752 && locals.gy <= 2999) { -%>
+<% if (locals.gy >= 1752 && locals.gy <= 2499) { -%>
 <div class="col-sm-6 mb-3">
 <h5><svg class="icon mb-1 me-1 text-body-secondary" fill="currentColor"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
  Jewish Holidays</h5>
@@ -218,7 +218,7 @@ Hebrew date conversion and does not follow the more complicated rules for Yahrze
 <div class="col-md-6" id="future-heb">
 <div class="row">
  <div class="col-auto"><h4><%= locals.hdate.render(locals.locale, false) %></h4></div>
-<% if (locals.gy >= 1752 && locals.gy <= 2999) { -%>
+<% if (locals.gy >= 1752 && locals.gy <= 2499) { -%>
  <div class="col-auto"><a
   class="btn btn-xs btn-outline-secondary" title="Download CSV" download rel="nofollow" href="<%=locals.h2gURL(locals.hdate, false).url.replace('/converter', '/converter/csv')%>">
   <svg class="icon" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg>

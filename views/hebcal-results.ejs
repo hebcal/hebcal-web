@@ -111,7 +111,7 @@ accurate.
       <svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-list-ul"></use></svg> List
    </label>
   </div><!-- .btn-group -->
-<% if (locals.gy >= 1900 && locals.gy <= 2999) { -%>
+<% if (locals.gy >= 1900 && locals.gy <= 2499) { -%>
 <div class="btn-group me-1 mb-1" role="group"><button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#hcdl-modal"><svg class="icon align-top"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button></div>
 <% if (locals.q.c === 'on') { -%>
 <div class="btn-group me-1" role="group">
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', hebcalResults.renderResultsPage);
 <%- await include('partials/hebcal-form.ejs') -%>
 </div>
 </div>
-<% if (locals.gy >= 1900 && locals.gy <= 2999) { -%>
+<% if (locals.gy >= 1900 && locals.gy <= 2499) { -%>
 <%- await include('partials/download-modal.ejs') -%>
 <% if (locals.q.c === 'on') { %><%- await include('partials/email-candles-modal.ejs') _%><% } %>
 <%- await include('partials/print-iframe.ejs') -%>

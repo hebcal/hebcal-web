@@ -51,7 +51,9 @@
     <nav>
       <ul class="pagination pagination-sm">
       <% for (let i = locals.greg1-1; i <= locals.greg1+2; i++) { %>
+      <%   if (i >= 1752 && i <= 2999) { -%>
       <li class="page-item<%= i === locals.greg1 ? ' active' : '' %>"><a class="page-link" href="<%=i%><%=locals.iSuffix%>"<%- (i > locals.today.year()+100) ? ' rel="nofollow"' : '' %>><%=i%></a></li>
+      <%   } -%>
       <% } %>
       </ul>
     </nav>
