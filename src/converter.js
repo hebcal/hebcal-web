@@ -8,6 +8,7 @@ import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {makeGregDate, getBeforeAfterSunsetForLocation,
   simchatTorahDate,
+  yearIsOutsideNarrowHebRange,
   makeHebDate, isoDateStringToDate} from './dateUtil.js';
 import {empty} from './empty.js';
 import {getLeyningOnDate} from '@hebcal/leyning';
@@ -123,7 +124,7 @@ function makePrevNext(p) {
 }
 
 function makeFutureYears(ctx, p) {
-  if (p.gy < 1 || p.gy > p.currentYear + 2000) {
+  if (yearIsOutsideNarrowHebRange(p.hy)) {
     p.futureYearsHeb = [];
     p.futureYearsGreg = [];
     return;
@@ -292,7 +293,8 @@ function eventToItem(ctx, ev) {
   const lg = ctx.state.lg;
   const desc = renameChanukah(lg)(ev);
   const emoji = ev.chanukahDay ? '🕎' : ev.omer ? '' : ev.getEmoji() || '';
-  const url = ev.url();
+  const hyear = ev.getDate().getFullYear();
+  const url = yearIsOutsideNarrowHebRange(hyear) ? undefined : ev.url();
   return {desc, emoji, url};
 }
 
