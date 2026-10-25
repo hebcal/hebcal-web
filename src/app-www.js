@@ -1,5 +1,6 @@
 import {randomBytes} from 'node:crypto';
 import bodyParser from 'koa-bodyparser';
+import {rejectMethodsOnGetOnlyPaths} from './postRoutes.js';
 import error from 'koa-error';
 import render from '@koa/ejs';
 import serve from 'koa-static';
@@ -200,6 +201,9 @@ app.use(async function checkHttpMethod(ctx, next) {
   await next();
 });
 
+// Cheap 405 for POST to GET-only paths, before the body is read or inflated.
+app.use(rejectMethodsOnGetOnlyPaths('POST'));
+
 app.use(bodyParser({
   formLimit: '256kb',
   qs: {
@@ -244,6 +248,9 @@ app.use(async function setCorsHeader(ctx, next) {
   }
   await next();
 });
+
+// OPTIONS on a GET-only path: `cfg=` preflights were answered above.
+app.use(rejectMethodsOnGetOnlyPaths('OPTIONS'));
 
 app.use(async function strictContentSecurityPolicy(ctx, next) {
   const buf = randomBytes(9);

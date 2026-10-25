@@ -100,21 +100,12 @@ function checkSlash(rpath, position) {
   }
 }
 
-function onlyGetAndHead(ctx) {
-  const method = ctx.method;
-  if (method !== 'GET' && method !== 'HEAD') {
-    ctx.set('Allow', 'GET');
-    throw createError(405, `${method} not allowed; use GET instead`);
-  }
-}
-
 const CACHE_CONTROL_2DAYS = cacheControl(2);
 
 export function wwwRouter() {
   return async function router(ctx, next) {
     const rpath = ctx.request.path;
     if (rpath === '/robots.txt') {
-      onlyGetAndHead(ctx);
       ctx.set('Cache-Control', CACHE_CONTROL_2DAYS);
       ctx.body = `User-agent: *
 Disallow: /shabbat/fridge.cgi
@@ -130,33 +121,25 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
 `;
       return;
     } else if (rpath === '/llms.txt') {
-      onlyGetAndHead(ctx);
       return llmsTxt(ctx);
     } else if (rpath === '/openapi.json') {
-      onlyGetAndHead(ctx);
       httpRedirect(ctx, OPENAPI_PATH);
       return;
     } else if (rpath === '/developers' || rpath === '/docs') {
-      onlyGetAndHead(ctx);
       httpRedirect(ctx, '/home/developer-apis');
       return;
     } else if (rpath === '/.well-known/api-catalog') {
-      onlyGetAndHead(ctx);
       return apiCatalog(ctx);
     } else if (rpath === '/.well-known/mcp/server-card.json' || rpath === '/server.json') {
-      onlyGetAndHead(ctx);
       return mcpServerCard(ctx);
     } else if (rpath === '/sitemap.xml') {
-      onlyGetAndHead(ctx);
       return sitemapIndex(ctx);
     } else if (rpath === '/sitemap-pages.xml') {
-      onlyGetAndHead(ctx);
       return sitemapPages(ctx);
     } else if (rpath === '/ping') {
       ctx.type = 'text/plain';
       return send(ctx, rpath, {root: DOCUMENT_ROOT});
     } else if (rpath === '/') {
-      onlyGetAndHead(ctx);
       return homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
       return ctx.render('dir-hidden');
@@ -177,15 +160,12 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
       ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
       // let serve() handle this file
     } else if (rpath === '/api-docs/') {
-      onlyGetAndHead(ctx);
       return apiDocs(ctx);
     } else if (rpath.startsWith('/complete')) {
       return geoAutoComplete(ctx);
     } else if (rpath.startsWith('/leyning')) {
-      onlyGetAndHead(ctx);
       return getLeyning(ctx);
     } else if (rpath.startsWith('/learning')) {
-      onlyGetAndHead(ctx);
       return dailyLearningApp(ctx);
     } else if (rpath.startsWith('/geo') || rpath.startsWith('/zmanim')) {
       // These routes now served exclusively by hebcal-api-go
@@ -193,24 +173,18 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
     } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
       return fridgeShabbat(ctx);
     } else if (rpath.startsWith('/converter/csv')) {
-      onlyGetAndHead(ctx);
       return dateConverterCsv(ctx);
     } else if (rpath.startsWith('/converter')) {
       return hebrewDateConverter(ctx);
     } else if (rpath.startsWith('/shabbat/browse')) {
-      onlyGetAndHead(ctx);
       return shabbatBrowse(ctx);
     } else if (rpath.startsWith('/shabbat')) {
-      onlyGetAndHead(ctx);
       return shabbatApp(ctx);
     } else if (rpath.startsWith('/hebcal/del_cookie')) {
-      onlyGetAndHead(ctx);
       return delCookie(ctx);
     } else if (rpath.startsWith('/hebcal')) {
-      onlyGetAndHead(ctx);
       return hebcalApp(ctx);
     } else if (rpath === '/yahrzeit/email-status') {
-      onlyGetAndHead(ctx);
       return yahrzeitEmailStatus(ctx);
     } else if (rpath === '/yahrzeit/email') {
       return yahrzeitEmailSub(ctx);
@@ -222,43 +196,35 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
       return yahrzeitApp(ctx);
     } else if (rpath.startsWith('/holidays/')) {
       checkSlash(rpath, 10);
-      onlyGetAndHead(ctx);
       return holidayApp(ctx);
     } else if (rpath.startsWith('/h/') || rpath.startsWith('/s/') || rpath.startsWith('/o/')) {
       shortUrlRedir(ctx);
       return;
     } else if (rpath.startsWith('/email')) {
       if (rpath === '/email/open') {
-        onlyGetAndHead(ctx);
         return emailOpen(ctx);
       } else if (rpath.startsWith('/email/verify')) {
         return emailVerify(ctx);
       } else if (rpath === '/email/subscription-status') {
-        onlyGetAndHead(ctx);
         return emailSubscriptionStatus(ctx);
       }
       return emailForm(ctx);
     } else if (rpath === '/login/google/callback') {
-      onlyGetAndHead(ctx);
       return loginGoogleCallback(ctx);
     } else if (rpath === '/login/google') {
-      onlyGetAndHead(ctx);
       return loginGoogleStart(ctx);
     } else if (rpath === '/login/apple/callback') {
-      // Not onlyGetAndHead(): Apple form-POSTs the authorization response,
+      // Accepts POST (see postRoutes.js): Apple form-POSTs the authorization response,
       // because it requires response_mode=form_post whenever a scope is
       // requested. See loginAppleCallback() in login.js.
       return loginAppleCallback(ctx);
     } else if (rpath === '/login/apple') {
-      onlyGetAndHead(ctx);
       return loginAppleStart(ctx);
     } else if (rpath === '/login') {
-      onlyGetAndHead(ctx);
       return loginPage(ctx);
     } else if (rpath === '/logout') {
       return logout(ctx);
     } else if (rpath === '/account') {
-      onlyGetAndHead(ctx);
       return accountPage(ctx);
     } else if (rpath.startsWith('/link')) {
       return shabbatJsLink(ctx);
@@ -274,13 +240,10 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
         holidayCalendars,
       });
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.js')) {
-      onlyGetAndHead(ctx);
       return hdateJavascript(ctx);
     } else if (rpath.startsWith('/etc/hdate-') && rpath.endsWith('.xml')) {
-      onlyGetAndHead(ctx);
       return hdateXml(ctx);
     } else if ((rpath.startsWith('/etc/dafyomi-') || rpath.startsWith('/etc/myomi-')) && rpath.endsWith('.xml')) {
-      onlyGetAndHead(ctx);
       return dafYomiRss(ctx);
     } else if (rpath.startsWith('/sedrot/')) {
       checkSlash(rpath, 8);
@@ -299,10 +262,8 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
         return parshaDetail(ctx);
       }
     } else if (rpath.startsWith('/omer')) {
-      onlyGetAndHead(ctx);
       return omerApp(rpath, ctx);
     } else if (rpath === '/sitemap_zips.txt') {
-      onlyGetAndHead(ctx);
       return sitemapZips(ctx);
     } else if (rpath.startsWith('/ma/') || rpath.startsWith('/matomo/')) {
       const bn = basename(rpath);
