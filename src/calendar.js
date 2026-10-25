@@ -3,8 +3,8 @@ import '@hebcal/learning';
 import {getEventCategories} from '@hebcal/rest-api';
 import createError from 'http-errors';
 import {GregorianDateEvent} from './GregorianDateEvent.js';
-import {isoDateStringToDate, yearIsOutsideGregRange,
-  yearIsOutsideHebRange} from './dateUtil.js';
+import {isoDateStringToDate, yearIsOutsideNarrowGregRange,
+  yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {empty, off} from './empty.js';
 import {getLocationFromQuery} from './location.js';
 import {lgToLocale} from './lang.js';
@@ -78,8 +78,8 @@ function dropDailyLearningOutsideRange(options) {
     return;
   }
   const outOfRange = options.isHebrewYear ?
-    yearIsOutsideHebRange(year) :
-    yearIsOutsideGregRange(year);
+    yearIsOutsideNarrowHebRange(year) :
+    yearIsOutsideNarrowGregRange(year);
   if (outOfRange) {
     delete options.dailyLearning;
   }

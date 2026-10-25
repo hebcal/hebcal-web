@@ -2,7 +2,7 @@ import {HDate, ParshaEvent, parshiot} from '@hebcal/core';
 import {parshaYear} from '@hebcal/core/dist/esm/parshaYear';
 import {getLeyningForParshaHaShavua} from '@hebcal/leyning';
 import {parshaByBook, torahBookNames, VEZOT_HABERAKHAH} from './parshaCommon.js';
-import {getDefaultHebrewYear, simchatTorahDate, yearIsOutsideHebRange} from './dateUtil.js';
+import {getDefaultHebrewYear, simchatTorahDate, yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import dayjs from 'dayjs';
@@ -14,10 +14,8 @@ export async function parshaMultiYearIndex(ctx) {
   const q = ctx.request.query;
   const hyear0 = Number.parseInt(q?.year, 10);
   const hyear = hyear0 || getDefaultHebrewYear(hd);
-  if (hyear < 2 || hyear > 32000) {
-    ctx.throw(400, 'Hebrew year must be in range 2-32000');
-  } else if (yearIsOutsideHebRange(hyear)) {
-    ctx.throw(410, 'Gone');
+  if (yearIsOutsideNarrowHebRange(hyear)) {
+    ctx.throw(410, 'Hebrew year must be in range 5513-6060');
   }
   ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
   if (checkFreshETag(ctx, q, {hyear})) {

@@ -366,6 +366,49 @@ Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashken
   Unix domain socket (see `src/geoipClient.js` / `src/geoip.js`). If the service
   is unreachable, `getLocationFromGeoIp()` falls back to `{geo:'none'}`.
 
+### Year ranges that return 410 Gone
+
+Out-of-range years are answered `410 Gone` so crawlers drop them. The year
+helpers live in `src/dateUtil.js`:
+
+| Helper | Gone outside |
+|---|---|
+| `yearIsOutsideGregRange` | Gregorian 100-2999 |
+| `yearIsOutsideHebRange` | Hebrew 3860-6759 |
+| `yearIsOutsideNarrowGregRange` | Gregorian 1752-2499 |
+| `yearIsOutsideNarrowHebRange` | Hebrew 5513-6260 |
+
+hebcal-api-go's `model.YearIsSupported` is the same check as the two narrow
+helpers.
+
+| Route | Year read from | 410 outside | Where |
+|---|---|---|---|
+| `/hebcal?cfg=ics\|rss\|e\|e2` | `year` (Hebrew if `yt=H`) | narrow: Greg 1752-2499 / Heb 5513-6060 | `hebcal.js` `checkYearRange` |
+| `/hebcal` (HTML, `cfg=json`, `cfg=csv`, `cfg=fc`) | -- | no 410. Gregorian `year` > 9999 or Hebrew > 13760 is 400 | `hebcal.js` |
+| download.hebcal.com `/export`, `/v2`, `/v3`, `/v4` | `year` / `yt` | narrow: Greg 1752-2499 / Heb 5513-6060 | `hebcal-download.js` |
+| `/holidays/<name>-<year>` and `-<YYYYMMDD>` | suffix (first 4 digits of an 8-digit date) | Greg 100-2999 | `holidayDetail.js` |
+| `/holidays/<name>?gy=` | `gy` | Greg 100-2999 | `holidayDetail.js` |
+| `/holidays/<year>`, `/holidays/<gy>-<gy+1>` | path; >= 3761 or a span is Hebrew (span = first + 3761) | Greg 100-2999 / Heb 3860-6759; 400 outside 1-9999 | `holidayYearIndex.js` |
+| `/holidays/hebcal-<year>[-il].pdf` | same rules as the year index | Greg 100-2999 / Heb 3860-6759; 400 outside 1-32000 | **hebcal-api-go** `internal/service/holidaypdf` (www answers 501) |
+| `/holidays/?year=` | `year` (Hebrew) | no 410. Redirects to `/holidays/?redir=year` outside 3860-6759 | `holidayIndex.js` |
+| `/sedrot/<name>-<YYYYMMDD>` | date's year | narrow: Greg 1752-2499 | `sedrot.js` |
+| `/sedrot/<name>?gy=` | `gy` | narrow: Greg 1752-2499 | `sedrot.js` |
+| `/sedrot/<hyear>` | path | narrow: Heb 5513-6060 (0 or non-numeric means this year) | `parshaYear.js` |
+| `/sedrot/grid?year=` | `year` | Heb 3860-6759; 400 outside 2-32000 (0 means this year) | `parshaMultiIndex.js` |
+| `/omer/<hyear>`, `/omer/<hyear>/<day>` | path | no 410. Redirects to the current year outside narrow Heb 5513-6060 | `omerApp.js` |
+| `/shabbat/fridge.cgi?year=` | `year` (Gregorian if `yt=G`) | outside this year -4..+20 | `fridge.js` `checkYearInRange` |
+| `/s/<hyear>[i]/<num>[d]` | path | Heb 3860-6759; 400 for year 0 | **hebcal-api-go** `internal/handler/shorturl.go` (`shortUrlRedir.js` is the same check) |
+| `/h/...`, `/o/...` | -- | no 410. Redirect to the same `/holidays/` or `/omer/` path | hebcal-api-go `shorturl.go` |
+| `/converter/csv?hy=` | -- | no 410. 400 outside Hebrew 1-32000 | hebcal-api-go `converter.go` |
+| `redirectMap` entries set to `null` | -- | always 410 | `router.js` |
+
+hebcal-devops `etc/varnish/default.vcl` duplicates most of these as up-front
+`synth(410)` guards so the backend never sees the traffic. Its
+`/converter/csv` guard (`hy` 5512-6760; only `views/converter.ejs` links
+there, always with `hy`, never `gy`) and its `/omer` and `/o/` guards
+(410 rather than a redirect) are stricter than the backend, and are Varnish-only
+policy. **If you change a range here, update the VCL guard and this table.**
+
 ## Testing Notes
 
 Before first test run, create test SQLite databases:

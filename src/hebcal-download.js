@@ -5,7 +5,7 @@ import '@hebcal/locales';
 import {basename} from 'node:path';
 import {makeETag, checkFreshETag} from './etag.js';
 import {makeHebcalOptions, makeHebrewCalendar, getNumYears} from './calendar.js';
-import {yearIsOutsideGregRange, yearIsOutsideHebRange} from './dateUtil.js';
+import {yearIsOutsideNarrowGregRange, yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {cleanQuery} from './cleanQuery.js';
 import {makeIcalOpts} from './urlArgs.js';
 import {makeIcalEvents} from './icalCommon.js';
@@ -53,8 +53,8 @@ export async function hebcalDownload(ctx) {
   cleanQuery(query);
   const options = makeHebcalOptions(ctx.db, query);
   if (typeof options.year === 'number' &&
-      ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
-      (!options.isHebrewYear && yearIsOutsideGregRange(options.year)))) {
+      ((options.isHebrewYear && yearIsOutsideNarrowHebRange(options.year)) ||
+      (!options.isHebrewYear && yearIsOutsideNarrowGregRange(options.year)))) {
     ctx.throw(410, `No calendar for year ${options.year}`);
   }
   const path = ctx.request.path;

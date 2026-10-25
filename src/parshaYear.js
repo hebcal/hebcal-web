@@ -5,7 +5,7 @@ import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
 import {checkFreshETag} from './etag.js';
-import {yearIsOutsideHebRange} from './dateUtil.js';
+import {yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {getNumYears} from './calendar.js';
 import {shortenUrl} from './common.js';
 import {lgToLocale, localeMap} from './lang.js';
@@ -17,10 +17,8 @@ export async function parshaYearApp(ctx) {
   const base = basename(rpath);
   const todayHebYear = new HDate().getFullYear();
   const hyear = Number.parseInt(base, 10) || todayHebYear;
-  if (hyear < 2 || hyear > 32000) {
-    ctx.throw(400, 'Hebrew year must be in range 2-32000');
-  } else if (yearIsOutsideHebRange(hyear)) {
-    ctx.throw(410, 'Gone');
+  if (yearIsOutsideNarrowHebRange(hyear)) {
+    ctx.throw(410, 'Hebrew year must be in range 5513-6060');
   }
   const q = ctx.request.query;
   ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);

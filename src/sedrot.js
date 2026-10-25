@@ -7,7 +7,7 @@ import {empty} from './empty.js';
 import {checkFreshETag} from './etag.js';
 import {httpRedirect, getBaseFromPath} from './common.js';
 import {langNames} from './lang.js';
-import {makeGregDate, simchatTorahDate, yearIsOutsideGregRange} from './dateUtil.js';
+import {makeGregDate, simchatTorahDate, yearIsOutsideNarrowGregRange} from './dateUtil.js';
 import {sedrot, doubled, addLinksToLeyning, makeLeyningHtmlFromParts,
   drash,
   VEZOT_HABERAKHAH,
@@ -48,7 +48,7 @@ export async function parshaDetail(ctx) {
     const year = Number.parseInt(q.gy, 10);
     if (Number.isNaN(year)) {
       ctx.throw(400, `invalid year: ${q.gy}`);
-    } else if (yearIsOutsideGregRange(year)) {
+    } else if (yearIsOutsideNarrowGregRange(year)) {
       ctx.throw(410, 'Gone');
     }
     const events = calendar({year, il, sedrot: true, noHolidays: true});
@@ -65,7 +65,7 @@ export async function parshaDetail(ctx) {
   if (date) {
     const dt = parse8digitDateStr(date);
     const year = dt.getFullYear();
-    if (year < 1000 || yearIsOutsideGregRange(year)) {
+    if (yearIsOutsideNarrowGregRange(year)) {
       ctx.throw(410, 'Gone');
       return;
     }

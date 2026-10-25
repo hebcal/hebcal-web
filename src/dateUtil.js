@@ -282,6 +282,10 @@ export function yearIsOutsideGregRange(year) {
   return Number.isNaN(year) || year < 100 || year > 2999;
 }
 
+export function yearIsOutsideNarrowGregRange(year) {
+  return Number.isNaN(year) || year < 1752 || year > 2499;
+}
+
 /**
  * True if the Hebrew year is NaN or outside the supported range (3860-6759).
  * @param {number} year
@@ -289,4 +293,8 @@ export function yearIsOutsideGregRange(year) {
  */
 export function yearIsOutsideHebRange(year) {
   return Number.isNaN(year) || year < 3860 || year > 6759;
+}
+
+export function yearIsOutsideNarrowHebRange(year) {
+  return Number.isNaN(year) || year < 5513 || year > 6260;
 }

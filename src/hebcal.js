@@ -22,8 +22,8 @@ import {possiblySetCookie} from './cookie.js';
 import {
   getDefaultYear,
   getDefaultHebrewYear,
-  yearIsOutsideGregRange,
-  yearIsOutsideHebRange,
+  yearIsOutsideNarrowGregRange,
+  yearIsOutsideNarrowHebRange,
 } from './dateUtil.js';
 import {makeDownloadProps} from './makeDownloadProps.js';
 import {flags, HDate, Locale, DailyLearning} from '@hebcal/core';
@@ -141,8 +141,8 @@ export function hebcalApp(ctx) {
 function checkYearRange(ctx) {
   const options = ctx.state.options;
   if (typeof options.year === 'number' &&
-      ((options.isHebrewYear && yearIsOutsideHebRange(options.year)) ||
-      (!options.isHebrewYear && yearIsOutsideGregRange(options.year)))) {
+      ((options.isHebrewYear && yearIsOutsideNarrowHebRange(options.year)) ||
+      (!options.isHebrewYear && yearIsOutsideNarrowGregRange(options.year)))) {
     ctx.throw(410, `No calendar for year ${options.year}`);
   }
 }

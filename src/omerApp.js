@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
 import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
-import {getDefaultHebrewYear, yearIsOutsideHebRange} from './dateUtil.js';
+import {getDefaultHebrewYear, yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {basename, dirname} from 'node:path';
 import {HDate, months, OmerEvent, Locale, getHolidaysOnDate} from '@hebcal/core';
 import {makeDownloadProps} from './makeDownloadProps.js';
@@ -36,7 +36,7 @@ export async function omerApp(rpath, ctx) {
     return redirCurrentYear(ctx);
   } else if (yearStr === 'omer') {
     const hyear = Number.parseInt(basename(rpath), 10);
-    if (yearIsOutsideHebRange(hyear)) {
+    if (yearIsOutsideNarrowHebRange(hyear)) {
       return redirCurrentYear(ctx);
     }
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
@@ -76,7 +76,7 @@ export async function omerApp(rpath, ctx) {
     });
   }
   const hyear = Number.parseInt(yearStr, 10);
-  if (yearIsOutsideHebRange(hyear)) {
+  if (yearIsOutsideNarrowHebRange(hyear)) {
     return redirCurrentYear(ctx);
   }
   const omerDay = Number.parseInt(basename(rpath), 10);

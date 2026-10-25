@@ -18,7 +18,7 @@ describe('Zmanim Routes', () => {
 describe('Omer Routes', () => {
   it('should return 200 for /omer with date', async () => {
     const response = await request(server)
-        .get('/omer/6473/32');
+        .get('/omer/6003/32');
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });

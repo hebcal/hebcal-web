@@ -55,7 +55,7 @@
     "bootstrap": "^5.3.8",
     "critical": "^9.0.0",
     "csv-parse": "^7.0.3",
-    "gettext-parser": "^9.1.1",
+    "gettext-parser": "^10.0.0",
     "oxlint": "^1.89.0",
     "papaparse": "^5.7.0",
     "postcss": "^8.5.31",
