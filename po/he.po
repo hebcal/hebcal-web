@@ -152,3 +152,6 @@ msgstr "סוֹף זְמַן קִדּוּשׁ לְבָנָה (מהרי״ל)"
 
 msgid "Latest Kiddush Levana (15 days)"
 msgstr "סוֹף זְמַן קִדּוּשׁ לְבָנָה (15 יָמִים)"
+
+msgid "adjusted to"
+msgstr "הוּקְדַּם ל־"

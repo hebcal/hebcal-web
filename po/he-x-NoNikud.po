@@ -20,3 +20,6 @@ msgstr "סוף זמן קידוש לבנה (מהרי״ל)"
 
 msgid "Latest Kiddush Levana (15 days)"
 msgstr "סוף זמן קידוש לבנה (15 ימים)"
+
+msgid "adjusted to"
+msgstr "הוקדם ל־"

@@ -207,16 +207,31 @@ describe('createMemo', () => {
     expect(createMemo(ev, options)).toBe(
         'Earliest Kiddush Levana (3 days): Mon, Sep 14, 2026, 2:39pm\n' +
         'Earliest Kiddush Levana (7 days): Fri, Sep 18, 2026, 2:39pm\n' +
-        'Latest Kiddush Levana (Maharil): Sat, Sep 26, 2026, 9:00am\n' +
+        'Latest Kiddush Levana (Maharil): Sat, Sep 26, 2026, 9:00am (adjusted to 6:30pm Candle lighting)\n' +
         'Latest Kiddush Levana (15 days): Sat, Sep 26, 2026, 2:38pm');
     expect(ev.memo).toBe(memoBefore);
     expect(createMemo(ev, {...options, locale: 'he-x-NoNikud', hour12: false})).toBe(
         'תחילת זמן קידוש לבנה (3 ימים): יום ב׳, 14 בספט׳ 2026, 14:39\n' +
         'תחילת זמן קידוש לבנה (7 ימים): יום ו׳, 18 בספט׳ 2026, 14:39\n' +
-        'סוף זמן קידוש לבנה (מהרי״ל): שבת, 26 בספט׳ 2026, 09:00\n' +
+        'סוף זמן קידוש לבנה (מהרי״ל): שבת, 26 בספט׳ 2026, 09:00 (הוקדם ל־ 18:30 הדלקת נרות)\n' +
         'סוף זמן קידוש לבנה (15 ימים): שבת, 26 בספט׳ 2026, 14:38');
     expect(createMemo(ev, {...options, locale: 'ashkenazi'}).split('\n')[0]).toBe(
         'Earliest Kiddush Levanah (3 days): Mon, Sep 14, 2026, 2:39pm');
+  });
+
+  it('notes when the latest Kiddush Levana time was moved earlier', () => {
+    const options = {
+      year: 5787,
+      isHebrewYear: true,
+      month: 'Kislev',
+      location: Location.lookup('San Francisco'),
+      kiddushLevanaMaharil: true,
+      noHolidays: true,
+    };
+    const ev = calendar(options)[0];
+    expect(createMemo(ev, options).split('\n')[2]).toBe(
+        'Latest Kiddush Levana (Maharil): Tue, Nov 24, 2026, 6:28am ' +
+        '(adjusted to 5:37am Alot haShachar)');
   });
 
   it('honors utmCampaign', () => {
