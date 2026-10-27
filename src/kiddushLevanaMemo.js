@@ -26,6 +26,11 @@ function intlLocale(locale) {
   }
 }
 
+const ADJUSTED_TO = {
+  alot: 'Alot haShachar',
+  candleLighting: 'Candle lighting',
+};
+
 /**
  * Lists the unadjusted earliest (3 and 7 days after the molad) and latest
  * (Maharil and 15 days after the molad) times for a `KiddushLevanaEvent`,
@@ -53,10 +58,17 @@ export function makeKiddushLevanaMemo(ev, options) {
   });
   const timeFormat = location.getTimeFormatter();
   const opts = {...options, location};
+  const evTime = ev.eventTime;
   return LABELS.map(([label, method, roundingMode]) => {
     const zdt = molad[method]().round({smallestUnit: 'minute', roundingMode});
     const dt = new Date(zdt.epochMilliseconds);
     const timeStr = reformatTimeStr(Zmanim.formatTime(dt, timeFormat), 'pm', opts);
-    return `${Locale.gettext(label, locale)}: ${dateFormat.format(dt)}, ${timeStr}`;
+    let line = `${Locale.gettext(label, locale)}: ${dateFormat.format(dt)}, ${timeStr}`;
+    if (ev.adjustedTo && method === 'getSofZmanKidushLevanaBetweenMoldos') {
+      const evStr = reformatTimeStr(Zmanim.formatTime(evTime, timeFormat), 'pm', opts);
+      const zman = Locale.gettext(ADJUSTED_TO[ev.adjustedTo], locale);
+      line += ` (${Locale.gettext('adjusted to', locale)} ${evStr} ${zman})`;
+    }
+    return line;
   }).join('\n');
 }
