@@ -356,6 +356,9 @@ a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 
 ### Localization
 Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashkenazi) are compiled to JSON via `npm run po2json` and loaded at runtime.
+`he-x-NoNikud` is derived from `he` at runtime by a locale function that strips
+nikud, so add new Hebrew strings (with nikud) to `po/he.po` only. Do not add a
+matching entry to `po/he-x-NoNikud.po`.
 
 ### Databases
 - **MySQL**: user accounts, yahrzeit subscriptions, email lists — requires `hebcal-dot-com.ini` config
