@@ -56,7 +56,6 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      commonjs(),
       stripHebcalBanner,
     ],
   },
@@ -72,7 +71,6 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      commonjs(),
       stripHebcalBanner,
     ],
   },
@@ -88,7 +86,6 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      commonjs(),
       stripHebcalBanner,
     ],
   },
