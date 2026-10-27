@@ -40,7 +40,6 @@ module.exports = [
     plugins: [
       terser(),
       nodeResolve(),
-      commonjs(),
       stripHebcalBanner,
     ],
   },
