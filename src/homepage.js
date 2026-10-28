@@ -5,6 +5,7 @@ import {getDefaultYear, getSunsetAwareDate} from './dateUtil.js';
 import {setDefautLangTz} from './defaultLangTz.js';
 import {shortenUrl, lightCandlesWhen} from './common.js';
 import {cleanQuery} from './cleanQuery.js';
+import {empty} from './empty.js';
 import {lgToLocale, localeMap} from './lang.js';
 import {processCookieAndQuery,
   urlArgs,
@@ -59,10 +60,10 @@ const homepageJsonLD = {
 export async function homepage(ctx) {
   // The date override is for testing only, and the homepage has no API mode;
   // stray requests like /?cfg=json&gy=10 meant /converter.
-  if (ctx.query.cfg) {
+  if (!empty(ctx.query.cfg)) {
     ctx.throw(400, 'The homepage does not support the cfg parameter');
   }
-  if (ctx.query.gy && Number.parseInt(ctx.query.gy, 10) < 2000) {
+  if (!empty(ctx.query.gy) && Number.parseInt(ctx.query.gy, 10) < 2000) {
     ctx.throw(400, 'Gregorian year must be 2000 or later');
   }
   const q0 = await setDefautLangTz(ctx);
