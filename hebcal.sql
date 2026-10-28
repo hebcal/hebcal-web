@@ -30,7 +30,7 @@ CREATE TABLE hebcal_shabbat_email (
 CREATE TABLE hebcal_shabbat_bounce (
   id int NOT NULL AUTO_INCREMENT,
   email_address varchar(254) NOT NULL,
-  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   std_reason enum('Transient','over_quota','spam','unknown',
     'user_disabled','user_unknown','amzn_abuse','domain_error') DEFAULT NULL,
   full_reason text,
