@@ -57,6 +57,14 @@ const homepageJsonLD = {
 };
 
 export async function homepage(ctx) {
+  // The date override is for testing only, and the homepage has no API mode;
+  // stray requests like /?cfg=json&gy=10 meant /converter.
+  if (ctx.query.cfg) {
+    ctx.throw(400, 'The homepage does not support the cfg parameter');
+  }
+  if (ctx.query.gy && Number.parseInt(ctx.query.gy, 10) < 2000) {
+    ctx.throw(400, 'Gregorian year must be 2000 or later');
+  }
   const q0 = await setDefautLangTz(ctx);
   const cookie = ctx.cookies.get('C');
   const il = ctx.state.il;

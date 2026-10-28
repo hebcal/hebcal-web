@@ -15,6 +15,12 @@ describe('Homepage and Basic Routes', () => {
     expect(response.type).toContain('html');
   });
 
+  it('should return 400 for homepage with cfg or gy before 2000', async () => {
+    expect((await request(server).get('/?cfg=json&g2h=1&gd=28&gm=10&gy=10')).status).toBe(400);
+    expect((await request(server).get('/?cfg=json')).status).toBe(400);
+    expect((await request(server).get('/?gy=10&gm=10&gd=28')).status).toBe(400);
+  });
+
   it('should return robots.txt', async () => {
     const response = await request(server).get('/robots.txt');
     expect(response.status).toBe(200);
