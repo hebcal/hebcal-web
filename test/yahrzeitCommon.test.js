@@ -10,6 +10,7 @@ import {
   makeCalendarTitle,
   getYahrzeitDetailForId,
   compactJsonToSave,
+  includeAnniversaryNumber,
   YAHRZEIT,
   BIRTHDAY,
   ANNIVERSARY,
@@ -401,5 +402,36 @@ describe('compactJsonToSave', () => {
     expect(obj.t1).toBe('y');
     expect(obj.t2).toBe('b');
     expect(obj.years).toBe(10);
+  });
+});
+
+describe('includeAnniversaryNumber', () => {
+  it('is on when an is missing (legacy DB rows and /v2 URLs)', () => {
+    expect(includeAnniversaryNumber({})).toBe(true);
+    expect(includeAnniversaryNumber({an: ''})).toBe(true);
+    expect(includeAnniversaryNumber({an: 'on'})).toBe(true);
+    expect(includeAnniversaryNumber({an: '1'})).toBe(true);
+  });
+
+  it('is off only when explicitly off', () => {
+    expect(includeAnniversaryNumber({an: 'off'})).toBe(false);
+    expect(includeAnniversaryNumber({an: '0'})).toBe(false);
+    expect(includeAnniversaryNumber({an: 0})).toBe(false);
+  });
+});
+
+describe('compactJsonToSave an normalization', () => {
+  it('drops an=on so re-saved legacy rows compare equal', () => {
+    const legacy = {x1: '1990-05-15', t1: 'y', years: 20};
+    const resaved = {y1: '1990', m1: '5', d1: '15', t1: 'Yahrzeit', years: '20', an: 'on', anf: '1'};
+    compactJsonToSave(legacy);
+    compactJsonToSave(resaved);
+    expect(resaved).toEqual(legacy);
+  });
+
+  it('stores an=off as the string "off"', () => {
+    const obj = {y1: '1990', m1: '5', d1: '15', t1: 'y', an: '0'};
+    compactJsonToSave(obj);
+    expect(obj.an).toBe('off');
   });
 });

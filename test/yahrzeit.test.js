@@ -243,3 +243,91 @@ describe('Yahrzeit Hebrew name handling', () => {
     expect(title).toContain('גולדה');
   });
 });
+
+describe('Yahrzeit anniversary numbers (an)', () => {
+  const body = 'cfg=json&v=yahrzeit&n1=Golda+Meir&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&start=5785&years=2';
+
+  it('API POST without an keeps the numbers', async () => {
+    const response = await request(server).post('/yahrzeit').type('form').send(body);
+    expect(response.status).toBe(200);
+    expect(response.body.items[0].title).toMatch(/^Golda Meir’s \d+(st|nd|rd|th) Yahrzeit$/);
+  });
+
+  it('API POST with an=off omits the numbers', async () => {
+    const response = await request(server).post('/yahrzeit').type('form').send(body + '&an=off');
+    expect(response.body.items[0].title).toBe('Golda Meir’s Yahrzeit');
+    expect(response.body.items[0].anniversary).toBeGreaterThan(0);
+  });
+
+  it('form POST with anf=1 and the box unchecked omits the numbers', async () => {
+    const response = await request(server).post('/yahrzeit').type('form').send(body + '&anf=1');
+    expect(response.body.items[0].title).toBe('Golda Meir’s Yahrzeit');
+  });
+
+  it('form POST with anf=1 and an=on keeps the numbers', async () => {
+    const response = await request(server).post('/yahrzeit').type('form').send(body + '&anf=1&an=on');
+    expect(response.body.items[0].title).toMatch(/^Golda Meir’s \d+(st|nd|rd|th) Yahrzeit$/);
+  });
+
+  /**
+   * Submits the HTML form (no cfg=json) and returns the JSON it saved.
+   * @param {string} extra
+   * @return {Promise<Object<string,any>>}
+   */
+  async function saveForm(extra) {
+    const db = app.context.mysql;
+    const saved = [];
+    const orig = db.execute2;
+    db.execute2 = async (ctx, options) => {
+      if (/^(REPLACE INTO|UPDATE) yahrzeit /.test(options.sql)) {
+        saved.push(JSON.parse(options.values.find((v) => typeof v === 'string' && v[0] === '{')));
+      }
+      return orig.call(db, ctx, options);
+    };
+    try {
+      const response = await request(server).post('/yahrzeit').type('form')
+          .send('v=yahrzeit&seq=1&n1=Golda+Meir&t1=Yahrzeit&d1=8&m1=12&y1=1978&s1=off&years=20' + extra);
+      expect(response.status).toBe(200);
+    } finally {
+      db.execute2 = orig;
+    }
+    expect(saved).toHaveLength(1);
+    return saved[0];
+  }
+
+  it('form POST with the box unchecked saves an=off', async () => {
+    const saved = await saveForm('&anf=1');
+    expect(saved.an).toBe('off');
+    expect(saved.anf).toBeUndefined();
+  });
+
+  it('form POST with the box checked saves no an key', async () => {
+    const saved = await saveForm('&anf=1&an=on');
+    expect(saved).not.toHaveProperty('an');
+    expect(saved).not.toHaveProperty('anf');
+  });
+
+  it('empty form has the checkbox checked', async () => {
+    const response = await request(server).get('/yahrzeit/new');
+    expect(response.text).toMatch(/name="an" value="on"\s+checked/);
+    expect(response.text).toContain('<input type="hidden" name="anf" value="1">');
+  });
+
+  it('legacy calendar edit page has the checkbox checked', async () => {
+    const response = await request(server).get('/yahrzeit/edit/01jthv2t5k88yermamssn96pzf');
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/name="an" value="on"\s+checked/);
+  });
+
+  it('edit page for a calendar saved with an=off has the checkbox unchecked', async () => {
+    const id = '01jthv2t5k88yermamssn9an0f';
+    app.context.mysql.mockData.yahrzeitCalendars[id] = {
+      contents: {x1: '1978-12-08', n1: 'Golda Meir', t1: 'y', years: 20, an: 'off'},
+      updated: new Date('2025-01-01'),
+      downloaded: 1,
+    };
+    const response = await request(server).get(`/yahrzeit/edit/${id}`);
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/name="an" value="on"\s+id="an"/);
+  });
+});

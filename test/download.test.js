@@ -226,6 +226,43 @@ describe('v3 yahrzeit subscription downloads', () => {
   });
 });
 
+describe('yahrzeit anniversary numbers (an)', () => {
+  const offId = '01jthv2t5k88yermamssn9an0f';
+  beforeAll(() => {
+    app.context.mysql.mockData.yahrzeitCalendars[offId] = {
+      contents: {x1: '1978-12-08', n1: 'Golda Meir', t1: 'y', years: 20, an: 'off'},
+      updated: new Date('2025-01-01'),
+      downloaded: 1,
+    };
+  });
+
+  it('legacy /v3 calendar with no an key keeps the numbers', async () => {
+    const response = await request(server)
+        .get('/v3/01jthv2t5k88yermamssn96pzf/golda_meir.ics?dl=1');
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/SUMMARY:🕯️ Golda Meir’s \d+(st|nd|rd|th) Yahrzeit/);
+  });
+
+  it('/v3 calendar saved with an=off omits the numbers', async () => {
+    const response = await request(server)
+        .get(`/v3/${offId}/golda_meir.ics?dl=1`);
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('SUMMARY:🕯️ Golda Meir’s Yahrzeit');
+    expect(response.text).not.toMatch(/Golda Meir’s \d+(st|nd|rd|th) Yahrzeit/);
+    const unfolded = response.text.replaceAll('\r\n ', '');
+    expect(unfolded).toContain('whose Yahrzeit occurs on');
+  });
+
+  it('legacy /v2/y/ URL (no an, no DB row) keeps the numbers', async () => {
+    const qs = 'd1=27&hebdate=on&m1=4&n1=Person1&s1=off&t1=Yahrzeit&v=yahrzeit&y1=2020&years=20&yizkor=on';
+    const data = Buffer.from(qs).toString('base64').replaceAll('=', '');
+    const response = await request(server)
+        .get(`/v2/y/${data}/yahrzeit_20200429194651.ics`);
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/SUMMARY:🕯️ Person1’s \d+(st|nd|rd|th) Yahrzeit/);
+  });
+});
+
 describe('Dirshu Amud HaYomi protobuf round-trip', () => {
   it('should serialize and deserialize ayd=on correctly', () => {
     const query = {

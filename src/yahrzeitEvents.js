@@ -8,6 +8,7 @@ import {
   OTHER,
   YAHRZEIT,
   getNumYears,
+  includeAnniversaryNumber,
   getYahrzeitDetailForId
 } from './yahrzeitCommon.js';
 
@@ -23,6 +24,8 @@ import {
  * @property {string} [calendarId] ULID of the saved calendar, if any
  * @property {boolean} includeUrl append a link to the edit page to the memo
  * @property {boolean} appendHebDate append the Hebrew date to the event title
+ * @property {boolean} includeNumber include the anniversary number
+ *   (e.g. "3rd") in the event title and memo
  */
 
 const hebrewRe = /[א-ת]/;
@@ -141,6 +144,7 @@ function getEventsForId(query, id, startYear, numYears) {
     calendarId,
     includeUrl: Boolean(calendarId && query.dl !== '1'),
     appendHebDate: (query.hebdate === 'on' || query.hebdate === '1'),
+    includeNumber: includeAnniversaryNumber(query),
   };
   for (let hyear = startYear; events.length < numYears; hyear++) {
     const ev = makeYahrzeitEvent(id, info, hyear, options);
@@ -152,18 +156,23 @@ function getEventsForId(query, id, startYear, numYears) {
 }
 
 /**
+ * Hebrew date without the year, in Hebrew, e.g. "כ׳ חשון"
  * @param {HDate} hd
- * @param {boolean} isHebrewName
  * @return {string}
  */
-function hebdateNoYear(hd, isHebrewName) {
-  if (isHebrewName) {
-    const dd = hd.getDate();
-    const mm = Locale.gettext(hd.getMonthName(), 'he-x-NoNikud');
-    return gematriya(dd) + ' ' + mm;
-  } else {
-    return hd.render('en', false).replaceAll('\'', '’');
-  }
+function hebdateNoYearHe(hd) {
+  const dd = hd.getDate();
+  const mm = Locale.gettext(hd.getMonthName(), 'he-x-NoNikud');
+  return gematriya(dd) + ' ' + mm;
+}
+
+/**
+ * Hebrew date without the year, in English, e.g. "20th of Cheshvan"
+ * @param {HDate} hd
+ * @return {string}
+ */
+function hebdateNoYearEn(hd) {
+  return hd.render('en', false).replaceAll('\'', '’');
 }
 
 /**
@@ -171,9 +180,10 @@ function hebdateNoYear(hd, isHebrewName) {
  * @param {HDate} hd date of observance
  * @param {number} yearNumber
  * @param {boolean} appendHebDate
+ * @param {boolean} includeNumber
  * @return {string}
  */
-function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
+function makeSubject(info, hd, yearNumber, appendHebDate, includeNumber) {
   const name = info.name;
   let subj = name;
   const isHebrewName = hebrewRe.test(name) && !/[A-Za-z]/.test(name);
@@ -182,17 +192,24 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
     const isYahrzeit = type === YAHRZEIT;
     if (isHebrewName) {
       const prefix = en2he[type];
-      subj = isYahrzeit ?
-        `${prefix} ה-${yearNumber} של ${name}` :
-        `${prefix} ${yearNumber} ל${name}`;
+      if (isYahrzeit) {
+        subj = includeNumber ?
+          `${prefix} ה-${yearNumber} של ${name}` :
+          `${prefix} של ${name}`;
+      } else {
+        subj = includeNumber ?
+          `${prefix} ${yearNumber} ל${name}` :
+          `${prefix} ל${name}`;
+      }
     } else {
-      const nth = Locale.ordinal(yearNumber, 'en');
       const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-      subj = `${name}’s ${nth} ${typeStr}`;
+      subj = includeNumber ?
+        `${name}’s ${Locale.ordinal(yearNumber, 'en')} ${typeStr}` :
+        `${name}’s ${typeStr}`;
     }
   }
   if (appendHebDate) {
-    const hebdate = hebdateNoYear(hd, isHebrewName);
+    const hebdate = isHebrewName ? hebdateNoYearHe(hd) : hebdateNoYearEn(hd);
     subj += ' (' + hebdate + ')';
   }
   return subj;
@@ -206,7 +223,7 @@ function makeYahrzeitSubject(info, hd, yearNumber, appendHebDate) {
  * @return {Event|null} `null` if there is no observance in `hyear`
  */
 function makeYahrzeitEvent(id, info, hyear, options) {
-  const {calendarId, includeUrl, appendHebDate} = options;
+  const {calendarId, includeUrl, appendHebDate, includeNumber} = options;
   const type = info.type;
   const isYahrzeit = type === YAHRZEIT;
   const isBirthday = type === BIRTHDAY;
@@ -221,7 +238,7 @@ function makeYahrzeitEvent(id, info, hyear, options) {
   const origHyear = origHd.getFullYear();
   const yearNumber = hyear - origHyear;
   const name = info.name;
-  const subj = makeYahrzeitSubject(info, hd, yearNumber, appendHebDate);
+  const subj = makeSubject(info, hd, yearNumber, appendHebDate, includeNumber);
   const ev = new Event(hd, subj, flags.USER_EVENT);
   if (isYahrzeit) {
     ev.emoji = '🕯️';
@@ -231,7 +248,7 @@ function makeYahrzeitEvent(id, info, hyear, options) {
   const editUrl = includeUrl ?
     `https://www.hebcal.com/yahrzeit/edit/${calendarId}#row${id}` :
     undefined;
-  ev.memo = makeMemo(info, hd, yearNumber, editUrl);
+  ev.memo = makeMemo(info, hd, includeNumber ? yearNumber : 0, editUrl);
   const hash = calendarId || murmur32HexSync(name);
   ev.uid = type.toLowerCase() + '-' + hyear + '-' + hash + '-' + id;
   ev.name = name;
@@ -250,7 +267,8 @@ const NL = String.raw`\n`;
 /**
  * @param {YahrzeitDetail} info
  * @param {HDate} hd date of observance
- * @param {number} yearNumber how many years since the original date
+ * @param {number} yearNumber how many years since the original date,
+ *   or 0 to omit the anniversary number
  * @param {string} [editUrl] link to the edit page, appended to the memo
  * @return {string}
  */
@@ -261,13 +279,13 @@ function makeMemo(info, hd, yearNumber, editUrl) {
   const isOther = (type === OTHER);
   const name = info.name;
   const typeStr = isYahrzeit ? type : `Hebrew ${type}`;
-  const nth = Locale.ordinal(yearNumber, 'en');
+  const nth = yearNumber ? Locale.ordinal(yearNumber, 'en') + ' ' : '';
   const hebdate = hd.render('en').replaceAll('\'', '’');
   const observed = dayjs(hd.greg());
   const nameAndType = isOther ? name : `${name}’s ${typeStr}`;
   const erev = observed.subtract(1, 'day');
   const verb = isYahrzeit ? 'remembering' : 'honoring';
-  const prefix = isOther ? name : `Hebcal joins you in ${verb} ${name}, whose ${nth} ${typeStr}`;
+  const prefix = isOther ? name : `Hebcal joins you in ${verb} ${name}, whose ${nth}${typeStr}`;
   let memo = `${prefix} occurs on ` +
     `${observed.format('dddd, MMMM D')}, corresponding to the ${hebdate}.${NL}${NL}` +
     `${nameAndType} begins at sundown on ${erev.format('dddd, MMMM D')} and continues until ` +

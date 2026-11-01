@@ -41,6 +41,15 @@ async function makeQuery(ctx) {
   const query = {...defaults, ...reqBody, ...ctx.request.query};
   cleanQuery(query);
   if (isPost) {
+    // An unchecked checkbox submits nothing, so the HTML form also sends
+    // the hidden field anf=1 to say "the an checkbox was on this form".
+    // Only then does a missing `an` mean the user turned anniversary
+    // numbers off. Everywhere else (legacy DB rows, /v2/y/ URLs, and
+    // POST /yahrzeit API clients) a missing `an` means on.
+    if (query.anf === '1' && query.an !== 'on') {
+      query.an = 'off';
+    }
+    delete query.anf;
     const id = query.ulid;
     if (isValidUlid(id)) {
       ctx.state.ulid = id;

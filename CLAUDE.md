@@ -83,7 +83,16 @@ Each feature is typically one or a few files handling routing, business logic, a
   `router.js`) and are served by hebcal-api-go. Zmanim on **download.hebcal.com**
   is unchanged: `zmanimDownload.js` (+ shared `zmanimCommon.js`) still serves the
   `.ics`/`.csv` zmanim feeds from app-download.
-- **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`
+- **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`.
+  The "Include anniversary numbers" option (`an`) is **on unless explicitly
+  `off`** — always test it via `includeAnniversaryNumber()`, never
+  `an === 'on'`. ~13k saved calendars predate it and have no `an` key, legacy
+  `/v2/y/` URLs have no DB row at all, and `POST /yahrzeit` API clients never
+  send it. Only the HTML form can turn it off: an unchecked box submits
+  nothing, so the form also sends a hidden `anf=1`, and `makeQuery()` reads
+  "`anf=1` without `an=on`" as off. `compactJsonToSave()` stores only
+  `an: 'off'` (drops `on`) so re-saved legacy rows compare equal.
+  hebcal-shabbat-email's `src/anniversary.ts` mirrors the same rule.
 - **Downloads/export**: `hebcal-download.js`, `makeDownloadProps.js`, `deserializeDownload.js`.
   PDF rendering and Outlook `.csv` export were removed from `hebcalDownload()`
   (`/v4/…`); `.pdf` and `.csv` requests there now return 501 and both are served

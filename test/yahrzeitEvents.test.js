@@ -159,3 +159,52 @@ describe('makeYahrzeitEvents memos', () => {
     }
   });
 });
+
+describe('makeYahrzeitEvents anniversary numbers (an)', () => {
+  it('includes numbers when an is missing (legacy calendars)', () => {
+    const events = makeYahrzeitEvents(5, makeQuery({ulid: ULID}), false);
+    expect(findByUid(events, `yahrzeit-5785-${ULID}-1`).getDesc()).toBe('Jane Doe’s 5th Yahrzeit');
+  });
+
+  it('includes numbers when an=on', () => {
+    const events = makeYahrzeitEvents(5, makeQuery({ulid: ULID, an: 'on'}), false);
+    expect(findByUid(events, `yahrzeit-5785-${ULID}-1`).getDesc()).toBe('Jane Doe’s 5th Yahrzeit');
+  });
+
+  for (const an of ['off', '0', 0]) {
+    it(`omits numbers from titles and memos when an=${JSON.stringify(an)}`, () => {
+      const events = makeYahrzeitEvents(5, makeQuery({ulid: ULID, an, hebdate: 'on'}), false);
+      const jane = findByUid(events, `yahrzeit-5785-${ULID}-1`);
+      expect(jane.getDesc()).toBe('Jane Doe’s Yahrzeit (19th of Adar)');
+      expect(jane.memo).toMatch(/^Hebcal joins you in remembering Jane Doe, whose Yahrzeit occurs on Wednesday, March 19,/);
+      expect(jane.anniversary).toBe(5);
+      const bob = findByUid(events, `birthday-5785-${ULID}-2`);
+      expect(bob.getDesc()).toBe('Bob’s Hebrew Birthday (4th of Iyyar)');
+      expect(bob.memo).toMatch(/^Hebcal joins you in honoring Bob, whose Hebrew Birthday occurs on/);
+      const sam = findByUid(events, `anniversary-5786-${ULID}-3`);
+      expect(sam.getDesc()).toBe('Sam & Pat’s Hebrew Anniversary (8th of Tamuz)');
+      expect(sam.memo).toMatch(/^Hebcal joins you in honoring Sam & Pat, whose Hebrew Anniversary occurs on/);
+      const other = findByUid(events, `other-5785-${ULID}-4`);
+      expect(other.getDesc()).toBe('My Event (24th of Tevet)');
+      const sarah = findByUid(events, `yahrzeit-5785-${ULID}-5`);
+      expect(sarah.getDesc()).toBe('יארצייט של שרה בת אברהם (כ׳ חשון)');
+    });
+  }
+
+  it('omits the number from Hebrew-name birthdays and anniversaries', () => {
+    const query = {
+      start: '5785', years: '1', an: 'off',
+      n1: 'דוד', t1: 'Birthday', x1: '1981-05-08',
+      n2: 'דוד ושרה', t2: 'Anniversary', x2: '2010-06-20',
+    };
+    const events = makeYahrzeitEvents(2, query, false);
+    const titles = new Set(events.map((ev) => ev.getDesc()));
+    expect(titles).toEqual(new Set(['יום הולדת לדוד', 'יום נישואין לדוד ושרה']));
+  });
+
+  it('does not change event UIDs', () => {
+    const on = makeYahrzeitEvents(5, makeQuery({ulid: ULID}), false).map((ev) => ev.uid);
+    const off = makeYahrzeitEvents(5, makeQuery({ulid: ULID, an: 'off'}), false).map((ev) => ev.uid);
+    expect(off).toEqual(on);
+  });
+});

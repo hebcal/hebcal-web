@@ -25,7 +25,25 @@ export function getNumYears(str) {
   }
 }
 
-const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'lastModified'];
+const noSaveFields = ['ulid', 'v', 'ref_url', 'ref_text', 'lastModified', 'anf'];
+
+/**
+ * Whether event titles and memos should include the anniversary number
+ * (e.g. "Person1’s 3rd Yahrzeit").
+ *
+ * On unless explicitly turned off. A missing `an` must mean "on": every
+ * calendar saved before this option existed has no `an` key in its DB
+ * JSON, and legacy /v2/y/ download URLs (which have no DB row at all)
+ * never carry one either, nor do POST /yahrzeit API clients. Only the
+ * yahrzeit HTML form produces `an=off`, via its hidden `anf` marker
+ * (see `makeQuery()` in yahrzeit.js).
+ * @param {Object<string,any>} query
+ * @return {boolean}
+ */
+export function includeAnniversaryNumber(query) {
+  const an = query.an;
+  return an !== 'off' && an !== '0' && an !== 0;
+}
 
 function compactJsonItem(obj, num) {
   const yk = 'y' + num;
@@ -66,6 +84,13 @@ export function compactJsonToSave(obj) {
   noSaveFields.forEach((key) => delete obj[key]);
   if (empty(obj.em)) {
     delete obj.em;
+  }
+  // Store only the non-default value, so a re-saved legacy calendar
+  // (which has no `an` key) compares equal to its stored row.
+  if (includeAnniversaryNumber(obj)) {
+    delete obj.an;
+  } else {
+    obj.an = 'off';
   }
 }
 

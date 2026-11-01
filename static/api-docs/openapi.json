@@ -563,6 +563,7 @@
           "start": {"type": "integer", "example": 5786, "description": "Starting Hebrew year (defaults to the current Hebrew year, e.g. 5786)."},
           "end": {"type": "integer", "description": "Ending Hebrew year (inclusive). Defaults to `start + years`."},
           "hebdate": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Append Hebrew date to event titles."},
+          "an": {"type": "string", "enum": ["on", "off"], "default": "on", "description": "Include the anniversary number in event titles and memos (e.g. `Sarah Cohen’s 3rd Yahrzeit`). `off` omits it (`Sarah Cohen’s Yahrzeit`). No effect on `Other` records. The numeric `anniversary` field is returned either way."},
           "yizkor": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Include Yizkor dates."},
           "i": {"type": "string", "enum": ["on", "off"], "description": "Yizkor schedule: `off` for Diaspora, `on` for Israel."},
           "hdp": {"type": "integer", "enum": [0, 1], "description": "If `1`, include `heDateParts` field on all-day items."},
