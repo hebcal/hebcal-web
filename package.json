@@ -14,8 +14,8 @@
     "sprite": "sprite15.svg",
     "csprite": "color-icons5.svg",
     "mainCss": "style-5.3.8n.css",
-    "holidayFcApp": "fc-6.1.21a.min.js",
-    "dailyLearningApp": "dl-1.0.min.js"
+    "holidayFcApp": "fc-6.1.21b.min.js",
+    "dailyLearningApp": "dl-1.1.min.js"
   },
   "type": "module",
   "engines": {

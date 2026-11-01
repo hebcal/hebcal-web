@@ -32,7 +32,11 @@
 <div class="container">
 <div class="row mt-2">
 <div class="col">
-<h1><%= locals.cfg.shortName %></h1>
+<h2><%= locals.cfg.shortName %></h2>
+<button type="button" class="float-end btn btn-sm btn-secondary ms-3 mt-1 mb-1 d-print-none"
+data-bs-toggle="modal" data-bs-target="#hcdl-modal"
+title="Download or subscribe to this calendar"><svg class="icon icon-sm"><use
+href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg> Download</button>
 <% if (locals.desc) { %><p class="lead"><%= locals.desc %></p><% } %>
 <div id="calendar" data-schedule="<%=locals.schedule%>" data-color="<%=locals.cfg.color%>"></div>
 </div><!-- .col -->

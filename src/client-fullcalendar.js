@@ -2,7 +2,7 @@ import {Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {isoDateString} from '@hebcal/hdate/dist/esm/dateFormat';
 import {getHolidaysOnDate} from '@hebcal/core/dist/esm/holidays';
-import {addArrowKeyNavigation, addHebMonthSubtitle, dayCellContent} from './clientFullCalendarCommon.js';
+import {addArrowKeyNavigation, addHebMonthSubtitle, addTitle, dayCellContent} from './clientFullCalendarCommon.js';
 
 /**
  * @param {import('@hebcal/core/dist/esm/event').Event} ev
@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const initialDate = calendarEl.dataset.initialDate;
       makeFullCalendar(il, year, initialDate);
       calendar.render();
+      addTitle(calendar);
       addHebMonthSubtitle(calendar);
     }
     toggleMonth.blur();
@@ -78,9 +79,9 @@ document.addEventListener('DOMContentLoaded', function() {
       ],
       initialView: 'dayGridMonth',
       headerToolbar: {
-        left: 'prev next',
-        center: 'title',
-        right: '',
+        left: 'prev',
+        center: '', // addTitle() renders the title as an <h3>
+        right: 'next',
       },
       initialDate,
       timeZone: 'local',

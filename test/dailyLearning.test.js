@@ -175,7 +175,7 @@ describe('Daily Learning calendar pages', () => {
     expect(response.status).toBe(200);
     expect(response.type).toBe('text/html');
     const html = response.text;
-    expect(html).toContain('<h1>' + cfg.shortName.replaceAll('\'', '&#39;') + '</h1>');
+    expect(html).toContain('<h2>' + cfg.shortName.replaceAll('\'', '&#39;') + '</h2>');
     const desc = cfg.descLong || cfg.descMedium;
     if (desc) {
       const escaped = desc.replaceAll('&', '&amp;').replaceAll('\'', '&#39;').replaceAll('"', '&#34;');

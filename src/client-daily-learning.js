@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import {HDate} from '@hebcal/hdate/dist/esm/hdate';
 import {isoDateString} from '@hebcal/hdate/dist/esm/dateFormat';
 import {DailyLearning} from '@hebcal/core/dist/esm/DailyLearning';
-import {addArrowKeyNavigation, addHebMonthSubtitle, dayCellContent} from './clientFullCalendarCommon.js';
+import {addArrowKeyNavigation, addHebMonthSubtitle, addTitle, dayCellContent} from './clientFullCalendarCommon.js';
 import '@hebcal/learning';
 
 /**
@@ -28,7 +28,6 @@ const u = new URL(window.location.href);
 const il = u.searchParams.get('i') === 'on';
 const calendarEl = document.getElementById('calendar');
 const schedule = calendarEl.dataset.schedule;
-const downloadModalEl = document.getElementById('hcdl-modal');
 
 const opts = {
   plugins: [
@@ -36,16 +35,9 @@ const opts = {
   ],
   initialView: 'dayGridMonth',
   headerToolbar: {
-    left: 'prev next',
-    center: 'title',
-    right: downloadModalEl ? 'download' : '',
-  },
-  customButtons: {
-    download: {
-      text: 'Download',
-      hint: 'Download or subscribe to this calendar',
-      click: () => bootstrap.Modal.getOrCreateInstance(downloadModalEl).show(),
-    },
+    left: 'prev',
+    center: '', // addTitle() renders the title as an <h3>
+    right: 'next',
   },
   timeZone: 'local',
   eventDisplay: 'block',
@@ -66,5 +58,6 @@ const opts = {
 
 const calendar = new Calendar(calendarEl, opts);
 calendar.render();
+addTitle(calendar);
 addHebMonthSubtitle(calendar);
 addArrowKeyNavigation(calendar);
