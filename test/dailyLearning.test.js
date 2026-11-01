@@ -3,6 +3,8 @@ import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {makeServer} from './testServer.js';
+import {learningPageSlug} from '../src/dailyLearning.js';
+import {dailyLearningConfig} from '../src/urlArgs.js';
 
 const server = makeServer(app);
 
@@ -27,6 +29,34 @@ describe('Daily Learning sitemap', () => {
     expect(response.type).toContain('text');
     expect(response.text).toContain('https://www.hebcal.com/learning/');
     expect(response.text).toMatch(/\/learning\/\d{4}-\d{2}-\d{2}/);
+  });
+});
+
+describe('Daily Learning sitemap calendar pages', () => {
+  it('lists dated pages from 2 weeks before this Sunday through 78 weeks after it', async () => {
+    const response = await request(server).get('/learning/sitemap.txt');
+    const dates = response.text.trim().split('\n')
+        .map((line) => line.match(/\/learning\/(\d{4}-\d{2}-\d{2})$/)?.[1])
+        .filter(Boolean);
+    const sundayOffset = -new Date().getDay();
+    const fmt = (offset) => {
+      const d = new Date();
+      d.setDate(d.getDate() + sundayOffset + offset);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${d.getFullYear()}-${mm}-${dd}`;
+    };
+    expect(dates.length).toBe(14 + (78 * 7) + 1);
+    expect(dates[0]).toBe(fmt(-2 * 7));
+    expect(dates.at(-1)).toBe(fmt(78 * 7));
+  });
+
+  it('lists every calendar page before the dated pages', async () => {
+    const response = await request(server).get('/learning/sitemap.txt');
+    const lines = response.text.trim().split('\n');
+    const slugs = dailyLearningConfig.filter((cfg) => cfg.dailyLearningOptName).map(learningPageSlug);
+    expect(lines.slice(0, slugs.length)).toEqual(slugs.map((slug) => `https://www.hebcal.com/learning/${slug}`));
+    expect(lines[slugs.length]).toMatch(/\/learning\/\d{4}-\d{2}-\d{2}$/);
   });
 });
 
@@ -83,7 +113,8 @@ describe('Daily Learning page', () => {
   });
 
   // The Amud HaYomi (Dirshu) program started 2023-10-16 (1 Cheshvan 5784)
-  const DIRSHU = 'Amud HaYomi (Dirshu)';
+  // dailyLearning.ejs wraps the parenthetical in <small>
+  const DIRSHU = 'Amud HaYomi <small>(Dirshu)</small>';
   it.each([
     {why: 'a date after program start', url: '/learning/2026-03-01',
       has: [DIRSHU]},
@@ -123,5 +154,52 @@ describe('Daily Learning page', () => {
     for (const text of hasNot) {
       expect(response.text).not.toContain(text);
     }
+  });
+});
+
+describe('Daily Learning calendar pages', () => {
+  const configs = dailyLearningConfig.filter((cfg) => cfg.dailyLearningOptName);
+
+  it('has one page per DailyLearning schedule', () => {
+    const slugs = configs.map(learningPageSlug);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    expect(slugs).toContain('daf-yomi');
+    expect(slugs).toContain('yerushalmi-vilna');
+    expect(slugs).toContain('shemirat-halashon');
+    expect(slugs).not.toContain('torah-readings-diaspora');
+  });
+
+  it.each(configs.map((cfg) => [learningPageSlug(cfg), cfg]))('renders /learning/%s', async (slug, cfg) => {
+    const response = await request(server).get(`/learning/${slug}`);
+    expect(response.status).toBe(200);
+    expect(response.type).toBe('text/html');
+    const html = response.text;
+    expect(html).toContain('<h1>' + cfg.shortName.replaceAll('\'', '&#39;') + '</h1>');
+    const desc = cfg.descLong || cfg.descMedium;
+    if (desc) {
+      const escaped = desc.replaceAll('&', '&amp;').replaceAll('\'', '&#39;').replaceAll('"', '&#34;');
+      expect(html).toContain(`<p class="lead">${escaped}</p>`);
+    } else {
+      expect(html).not.toContain('<p class="lead">');
+    }
+    expect(html).toContain(`<div id="calendar" data-schedule="${cfg.dailyLearningOptName}"`);
+    expect(html).toContain('id="hcdl-modal"');
+    expect(html).toContain('client-daily-learning');
+    if (cfg.downloadSlug) {
+      expect(html).toContain(`/ical/${cfg.downloadSlug}.ics`);
+    }
+  });
+
+  it('links each schedule on the date page to its calendar page', async () => {
+    const response = await request(server).get('/learning/2025-01-15');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('<a class="text-body" href="/learning/daf-yomi">Daf Yomi <small>(Babylonian Talmud)</small>');
+    expect(response.text).not.toContain('/hebcal?v=1&amp;F=on');
+    expect(response.text).not.toContain('#bi-calendar3');
+  });
+
+  it('carries i=on through to the calendar page links', async () => {
+    const response = await request(server).get('/learning/2025-01-15?i=on');
+    expect(response.text).toContain('<a class="text-body" href="/learning/daf-yomi?i=on">');
   });
 });

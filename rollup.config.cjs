@@ -185,4 +185,20 @@ module.exports = [
       commonjs(),
     ],
   },
+  {
+    input: 'src/client-daily-learning.js',
+    output: {
+      file: 'views/partials/client-daily-learning.min.js',
+      format: 'iife',
+      banner: '/*! client-daily-learning ' + pkg.version + ' */',
+    },
+    plugins: [
+      terser(),
+      nodeResolve({
+        browser: true,
+        preferBuiltins: false,
+      }),
+      stripHebcalBanner,
+    ],
+  },
 ];

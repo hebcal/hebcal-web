@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import {checkFreshETag} from './etag.js';
 import {httpRedirect} from './common.js';
-import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
+import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {localeMap} from './lang.js';
 import {queryLongDescr, dailyLearningConfig} from './urlArgs.js';
 import {isoDateStringToDate} from './dateUtil.js';
@@ -10,7 +10,27 @@ import {HDate, calendar, months, OmerEvent, Locale, getHolidaysOnDate} from '@he
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {makeAnchor} from '@hebcal/rest-api';
+import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/learning';
+
+/**
+ * URL slug for a daily learning calendar page, `/learning/<slug>`.
+ * Uses the static feed name where there is one so the page and the
+ * download.hebcal.com/ical/ feed share a name.
+ * @param {any} cfg entry from dailyLearningConfig.json
+ * @return {string}
+ */
+export function learningPageSlug(cfg) {
+  return cfg.downloadSlug || makeAnchor(cfg.settingsName);
+}
+
+/** Every config entry backed by a `DailyLearning` schedule, by page slug */
+const slugToCfg = new Map();
+for (const cfg of dailyLearningConfig) {
+  if (cfg.dailyLearningOptName) {
+    slugToCfg.set(learningPageSlug(cfg), cfg);
+  }
+}
 
 export function dailyLearningApp(ctx) {
   const rpath = ctx.request.path;
@@ -26,6 +46,10 @@ export function dailyLearningApp(ctx) {
   if (rpath === '/learning/sitemap.txt') {
     dailyLearningSitemap(ctx);
     return;
+  }
+  const slugCfg = slugToCfg.get(basename(rpath));
+  if (slugCfg) {
+    return dailyLearningCalendar(ctx, slugCfg);
   }
   // let this 400 if URL contains invalid date
   const dt = isoDateStringToDate(basename(rpath));
@@ -114,6 +138,7 @@ export function dailyLearningApp(ctx) {
     const desc = queryLongDescr[flag];
     return {
       id: categoryName,
+      calUrl: cfg.dailyLearningOptName ? '/learning/' + learningPageSlug(cfg) : undefined,
       category: cfg.shortName,
       basename: cfg.downloadSlug,
       group: cfg.group,
@@ -141,21 +166,73 @@ export function dailyLearningApp(ctx) {
   });
 }
 
+/**
+ * Month-view FullCalendar page for one daily learning schedule. The events
+ * are computed in the browser by client-daily-learning.js; the server only
+ * renders the page chrome and the download modal.
+ * @param {import('koa').ParameterizedContext} ctx
+ * @param {any} cfg entry from dailyLearningConfig.json
+ */
+async function dailyLearningCalendar(ctx, cfg) {
+  const q = ctx.request.query;
+  const il = q.i === 'on';
+  const slug = learningPageSlug(cfg);
+  const year = new Date().getFullYear();
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+  if (checkFreshETag(ctx, {il}, {slug, year})) {
+    return;
+  }
+  const q0 = {
+    v: '1',
+    [cfg.queryParam]: 'on',
+    i: il ? 'on' : 'off',
+    year: String(year),
+    yt: 'G',
+    ny: cfg.years,
+    emoji: '0',
+  };
+  makeDownloadProps(ctx, q0, {year});
+  if (cfg.downloadSlug) {
+    const feedUrl = `://download.hebcal.com/ical/${cfg.downloadSlug}.ics`;
+    ctx.state.url.subical = 'https' + feedUrl;
+    ctx.state.url.webcal = 'webcal' + feedUrl;
+    ctx.state.url.gcal = 'http' + feedUrl;
+  }
+  ctx.state.url.title = cfg.shortName;
+  ctx.state.downloadAltTitle = `${year} only`;
+  ctx.state.numYears = cfg.years;
+  ctx.state.currentYear = year;
+  delete ctx.state.filename.pdf;
+  await ctx.render('dailyLearningCalendar', {
+    cfg,
+    slug,
+    il,
+    schedule: cfg.dailyLearningOptName,
+    // Not every config entry has a descLong (e.g. Perek Yomi)
+    desc: cfg.descLong || cfg.descMedium,
+    emojiSwitchDisabled: true,
+  });
+}
+
 function dailyLearningSitemap(ctx) {
-  const currentYear = new Date().getFullYear();
-  ctx.set('Cache-Control', CACHE_CONTROL_1_YEAR);
-  if (checkFreshETag(ctx, {}, {currentYear})) {
+  const sunday = dayjs().day(0);
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+  const slugs = Array.from(slugToCfg.keys());
+  if (checkFreshETag(ctx, {}, {
+    sunday: sunday.format('YYYY-MM-DD'),
+    slugs: slugs.join(),
+  })) {
     return;
   }
   const prefix = 'https://www.hebcal.com/learning';
   let body = '';
-  const endYear = currentYear + 4;
-  for (let year = currentYear - 1; year < endYear; year++) {
-    const startD = dayjs(new Date(year, 0, 1));
-    const endD = dayjs(new Date(year + 1, 0, 1));
-    for (let d = startD; d.isBefore(endD); d = d.add(1, 'day')) {
-      body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
-    }
+  for (const slug of slugs) {
+    body += prefix + '/' + slug + '\n';
+  }
+  const startD = sunday.subtract(2, 'week');
+  const endD = sunday.add(78, 'week');
+  for (let d = startD; !d.isAfter(endD); d = d.add(1, 'day')) {
+    body += prefix + '/' + d.format('YYYY-MM-DD') + '\n';
   }
   ctx.type = 'text/plain';
   ctx.body = body;

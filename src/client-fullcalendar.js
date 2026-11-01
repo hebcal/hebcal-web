@@ -1,22 +1,8 @@
 import {Calendar} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import {HDate} from '@hebcal/hdate/dist/esm/hdate';
 import {isoDateString} from '@hebcal/hdate/dist/esm/dateFormat';
 import {getHolidaysOnDate} from '@hebcal/core/dist/esm/holidays';
-
-function makeHebMonthRangeStr(startDt, endDt) {
-  const start = new HDate(startDt);
-  const end = new HDate(endDt);
-  let str = start.getMonthName();
-  if (end.getFullYear() !== start.getFullYear()) {
-    str += ' ' + start.getFullYear();
-  }
-  if (end.getMonth() !== start.getMonth()) {
-    str += ' – ' + end.getMonthName();
-  }
-  str += ' ' + end.getFullYear();
-  return str.replaceAll('\'', '’');
-}
+import {addArrowKeyNavigation, addHebMonthSubtitle, dayCellContent} from './clientFullCalendarCommon.js';
 
 /**
  * @param {import('@hebcal/core/dist/esm/event').Event} ev
@@ -62,15 +48,6 @@ function makeFullCalendarHolidaysForDate(dt, il) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  let hebmonthEl = null;
-  function monthSubtitle(view) {
-    const end = new Date(view.currentEnd);
-    end.setDate(end.getDate() - 1);
-    const s = makeHebMonthRangeStr(view.currentStart, end);
-    if (hebmonthEl) {
-      hebmonthEl.innerText = s;
-    }
-  }
   let calendar = null;
   const calendarEl = document.getElementById('calendar');
   calendarEl.style.display = 'none';
@@ -87,14 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const initialDate = calendarEl.dataset.initialDate;
       makeFullCalendar(il, year, initialDate);
       calendar.render();
-      const toolbarEl = document.querySelector('.fc-header-toolbar .fc-toolbar-chunk:nth-child(2)');
-      if (toolbarEl && !hebmonthEl) {
-        hebmonthEl = document.createElement('h5');
-        hebmonthEl.id = 'hebmonth';
-        hebmonthEl.className = 'text-burgundy ms-0 mt-1';
-        toolbarEl.appendChild(hebmonthEl);
-        monthSubtitle(calendar.view);
-      }
+      addHebMonthSubtitle(calendar);
     }
     toggleMonth.blur();
   });
@@ -115,17 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
       initialDate,
       timeZone: 'local',
       eventDisplay: 'block',
-      dayCellContent: function(info, create) {
-        const hd = new HDate(info.date);
-        const day = hd.getDate();
-        const month = hd.getMonthName().replaceAll('\'', '’');
-        let dayNumberText = `${day} ${month}`;
-        if (day === 1) {
-          dayNumberText += ` ${hd.getFullYear()}`;
-        }
-        const el0 = create('span', {class: 'fc-hdate d-none d-md-inline'}, dayNumberText);
-        return create('span', null, el0, info.dayNumberText);
-      },
+      dayCellContent: dayCellContent,
       events: function(info, successCallback, failureCallback) {
         const result = [];
         for (const dt = info.start; dt < info.end; dt.setDate(dt.getDate() + 1)) {
@@ -136,16 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
     };
     calendar = new Calendar(calendarEl, opts);
-    calendar.on('datesSet', function(dateInfo) {
-      monthSubtitle(dateInfo.view);
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'ArrowLeft' && !e.metaKey) {
-        calendar.prev();
-      } else if (e.key === 'ArrowRight' && !e.metaKey) {
-        calendar.next();
-      }
-    });
+    addArrowKeyNavigation(calendar);
     const _paq = window._paq = window._paq || [];
     _paq.push(['trackEvent', 'Interaction', 'fullcalendar', year]);
     return calendar;
