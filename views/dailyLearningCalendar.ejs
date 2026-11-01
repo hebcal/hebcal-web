@@ -38,9 +38,5 @@
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/download-modal.ejs') -%>
-<script nonce="<%=locals.nonce%>">
-document.addEventListener('DOMContentLoaded', function() {
-<%- await include('partials/client-daily-learning.min.js') %>
-});
-</script>
+<script defer nonce="<%=locals.nonce%>" src="<%=locals.dailyLearningAppHref%>"></script>
 <%- await include('partials/footer.ejs', {footerScripts: {clipboard: true}}) _%>

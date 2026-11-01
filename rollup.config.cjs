@@ -188,9 +188,9 @@ module.exports = [
   {
     input: 'src/client-daily-learning.js',
     output: {
-      file: 'views/partials/client-daily-learning.min.js',
+      file: 'static/i/' + pkg.config.dailyLearningApp,
       format: 'iife',
-      banner: '/*! client-daily-learning ' + pkg.version + ' */',
+      banner: '/*! ' + pkg.config.dailyLearningApp + ' */',
     },
     plugins: [
       terser(),

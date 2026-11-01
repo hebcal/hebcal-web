@@ -55,6 +55,7 @@ const HOSTNAME = os.hostname();
 const spriteHref = '/i/' + pkg.config.sprite;
 const cspriteHref = '/i/' + pkg.config.csprite;
 const holidayFcAppHref = '/i/' + pkg.config.holidayFcApp;
+const dailyLearningAppHref = '/i/' + pkg.config.dailyLearningApp;
 const mainCssHref = '/i/' + pkg.config.mainCss;
 // Attributes that ask third-party password managers to ignore a field so
 // they don't offer an autofill widget on inputs like names, dates or years.
@@ -76,6 +77,7 @@ app.use(async function fixup0(ctx, next) {
     spriteHref,
     cspriteHref,
     holidayFcAppHref,
+    dailyLearningAppHref,
     mainCssHref,
     pmIgnore,
     footerDateFmt,
@@ -310,6 +312,9 @@ app.use(async function handleStatic404(ctx, next) {
     }
     if (rpath.startsWith('/i/fc-6') && rpath.endsWith('.js')) {
       httpRedirect(ctx, holidayFcAppHref);
+    }
+    if (rpath.startsWith('/i/dl-') && rpath.endsWith('.js')) {
+      httpRedirect(ctx, dailyLearningAppHref);
     }
     if (rpath.startsWith('/i/sprite') && rpath.endsWith('.svg')) {
       httpRedirect(ctx, spriteHref);

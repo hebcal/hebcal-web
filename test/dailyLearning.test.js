@@ -5,6 +5,7 @@ import {app} from '../src/app-www.js';
 import {makeServer} from './testServer.js';
 import {learningPageSlug} from '../src/dailyLearning.js';
 import {dailyLearningConfig} from '../src/urlArgs.js';
+import {pkg} from '../src/pkg.js';
 
 const server = makeServer(app);
 
@@ -184,7 +185,8 @@ describe('Daily Learning calendar pages', () => {
     }
     expect(html).toContain(`<div id="calendar" data-schedule="${cfg.dailyLearningOptName}"`);
     expect(html).toContain('id="hcdl-modal"');
-    expect(html).toContain('client-daily-learning');
+    expect(html).toContain('<script defer nonce="');
+    expect(html).toContain(`src="/i/${pkg.config.dailyLearningApp}"></script>`);
     if (cfg.downloadSlug) {
       expect(html).toContain(`/ical/${cfg.downloadSlug}.ics`);
     }
@@ -201,5 +203,13 @@ describe('Daily Learning calendar pages', () => {
   it('carries i=on through to the calendar page links', async () => {
     const response = await request(server).get('/learning/2025-01-15?i=on');
     expect(response.text).toContain('<a class="text-body" href="/learning/daf-yomi?i=on">');
+  });
+});
+
+describe('Daily Learning bundle', () => {
+  it('redirects a stale /i/dl-*.js to the current version', async () => {
+    const response = await request(server).get('/i/dl-0.9.min.js');
+    expect(response.status).toBe(302);
+    expect(new URL(response.headers.location).pathname).toBe(`/i/${pkg.config.dailyLearningApp}`);
   });
 });
