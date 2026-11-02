@@ -5,6 +5,9 @@
 <% if (locals.d.year() < locals.currentYear-10 || locals.d.year() > locals.currentYear+10) { %><meta name="robots" content="noindex, nofollow"><% } %>
 <% if (locals.d.year() > locals.currentYear-10) { %><link rel="prev" href="<%=locals.prev.format('YYYY-MM-DD')%><%=locals.il?'?i=on':''%>"><% } %>
 <% if (locals.d.year() < locals.currentYear+10) { %><link rel="next" href="<%=locals.next.format('YYYY-MM-DD')%><%=locals.il?'?i=on':''%>"><% } %>
+<style>
+a.learning-hdr{text-decoration-color:rgba(var(--bs-body-color-rgb),.35)}
+</style>
 </head>
 <body>
 <%- await include('partials/navbar.ejs') -%>
@@ -40,7 +43,7 @@ for (const [group, emoji] of Object.entries(groups)) { -%>
 <hr>
 <% for (const item of locals.items.filter((item) => item.group === group)) { %>
 <div class="mt-2 mb-4" id="<%= item.id %>">
-<div class="fs-4"><% if (item.calUrl) { %><a class="text-body" href="<%= item.calUrl %><%= locals.il ? '?i=on' : '' %>"><% } %><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
+<div class="fs-4"><% if (item.calUrl) { %><a class="text-body learning-hdr" href="<%= item.calUrl %><%= locals.il ? '?i=on' : '' %>"><% } %><%- item.category.replace(/(\(.+\))$/, '<small>$&</small>') %>
 <% if (item.calUrl) { %></a><% } -%>
 </div>
 <% if (item.desc) { %><div><%=item.desc%></div><% } %>
