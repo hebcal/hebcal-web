@@ -41,5 +41,6 @@ describe('POST gate before bodyParser', () => {
   it('still answers a cfg= preflight with 204', async () => {
     const response = await request(server).options('/shabbat?cfg=json');
     expect(response.status).toBe(204);
+    expect(response.headers['access-control-max-age']).toBe('7200');
   });
 });

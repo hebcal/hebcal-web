@@ -244,6 +244,9 @@ app.use(async function setCorsHeader(ctx, next) {
         rpath.startsWith('/converter') ? 'GET, POST' :
         'GET';
       ctx.set('Access-Control-Allow-Methods', methods);
+      // OPTIONS is not HTTP-cacheable; this lets browsers reuse the preflight
+      // (Chromium caps it at 7200, the default is only 5 seconds).
+      ctx.set('Access-Control-Max-Age', '7200');
       ctx.status = 204;
       return;
     }
