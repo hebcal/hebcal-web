@@ -179,9 +179,9 @@ describe('Daily Learning calendar pages', () => {
     const desc = cfg.descLong || cfg.descMedium;
     if (desc) {
       const escaped = desc.replaceAll('&', '&amp;').replaceAll('\'', '&#39;').replaceAll('"', '&#34;');
-      expect(html).toContain(`<p class="lead">${escaped}</p>`);
+      expect(html).toContain(`<p>${escaped}</p>`);
     } else {
-      expect(html).not.toContain('<p class="lead">');
+      expect(html).not.toMatch(/<\/button>\n<p>/);
     }
     expect(html).toContain(`<div id="calendar" data-schedule="${cfg.dailyLearningOptName}"`);
     expect(html).toContain('id="hcdl-modal"');
