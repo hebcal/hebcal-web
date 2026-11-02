@@ -27,6 +27,9 @@ the most likely problem is that you made a typo in your email
 address. If so, please return to the subscription page and try again,
 taking care to avoid typos.</p>
 <% } %>
+<% if (locals.alreadyVerified || locals.updated) { -%>
+<%- await include('partials/email-privacy-policy.ejs') -%>
+<% } -%>
 </div><!-- .col -->
 </div><!-- .row -->
 <%- await include('partials/footer.ejs') -%>
