@@ -195,14 +195,14 @@ describe('Daily Learning calendar pages', () => {
   it('links each schedule on the date page to its calendar page', async () => {
     const response = await request(server).get('/learning/2025-01-15');
     expect(response.status).toBe(200);
-    expect(response.text).toContain('<a class="text-body" href="/learning/daf-yomi">Daf Yomi <small>(Babylonian Talmud)</small>');
+    expect(response.text).toContain('<a class="text-body learning-hdr" href="/learning/daf-yomi">Daf Yomi <small>(Babylonian Talmud)</small>');
     expect(response.text).not.toContain('/hebcal?v=1&amp;F=on');
     expect(response.text).not.toContain('#bi-calendar3');
   });
 
   it('carries i=on through to the calendar page links', async () => {
     const response = await request(server).get('/learning/2025-01-15?i=on');
-    expect(response.text).toContain('<a class="text-body" href="/learning/daf-yomi?i=on">');
+    expect(response.text).toContain('<a class="text-body learning-hdr" href="/learning/daf-yomi?i=on">');
   });
 });
 
