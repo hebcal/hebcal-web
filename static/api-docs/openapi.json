@@ -38,17 +38,17 @@
             {
               "lang": "shell",
               "label": "cURL",
-              "source": "curl 'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&ss=on&mf=on&s=on&c=on&M=on&geonameid=281184&year=now&month=x'"
+              "source": "curl 'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=x'"
             },
             {
               "lang": "javascript",
               "label": "JavaScript (fetch)",
-              "source": "const params = new URLSearchParams({\n  v: '1',\n  cfg: 'json',\n  maj: 'on',\n  min: 'on',\n  mod: 'on',\n  nx: 'on',\n  ss: 'on',\n  mf: 'on',\n  s: 'on',\n  c: 'on',\n  M: 'on',\n  geonameid: '281184',\n  year: 'now',\n  month: 'x'\n});\nconst res = await fetch('https://www.hebcal.com/hebcal?' + params);\nconst data = await res.json();\nconsole.log(data);"
+              "source": "const params = new URLSearchParams({\n  v: '1',\n  cfg: 'json',\n  maj: 'on',\n  min: 'on',\n  mod: 'on',\n  nx: 'on',\n  year: 'now',\n  month: 'x'\n});\nconst res = await fetch('https://www.hebcal.com/hebcal?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
               "label": "Python (requests)",
-              "source": "import requests\n\nparams = {\n    'v': '1',\n    'cfg': 'json',\n    'maj': 'on',\n    'min': 'on',\n    'mod': 'on',\n    'nx': 'on',\n    'ss': 'on',\n    'mf': 'on',\n    's': 'on',\n    'c': 'on',\n    'M': 'on',\n    'geonameid': '281184',\n    'year': 'now',\n    'month': 'x',\n}\nresp = requests.get('https://www.hebcal.com/hebcal', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+              "source": "import requests\n\nparams = {\n    'v': '1',\n    'cfg': 'json',\n    'maj': 'on',\n    'min': 'on',\n    'mod': 'on',\n    'nx': 'on',\n    'year': 'now',\n    'month': 'x',\n}\nresp = requests.get('https://www.hebcal.com/hebcal', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             }
           ],
         "parameters": [
@@ -151,17 +151,22 @@
             {
               "lang": "shell",
               "label": "cURL",
-              "source": "curl 'https://www.hebcal.com/converter?cfg=json&g2h=1&date=2026-11-03'"
+              "source": "curl 'https://www.hebcal.com/converter?cfg=json&date=2011-06-02&g2h=1&strict=1'"
             },
             {
               "lang": "javascript",
               "label": "JavaScript (fetch)",
-              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  g2h: '1',\n  date: '2026-11-03'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  date: '2011-06-02',\n  g2h: '1',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
               "label": "Python (requests)",
-              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'g2h': '1',\n    'date': '2026-11-03',\n}\nresp = requests.get('https://www.hebcal.com/converter', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'date': '2011-06-02',\n    'g2h': '1',\n    'strict': '1',\n}\nresp = requests.get('https://www.hebcal.com/converter', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "cURL (Hebrew to Gregorian)",
+              "source": "curl 'https://www.hebcal.com/converter?cfg=json&hy=5749&hm=Kislev&hd=25&h2g=1&strict=1'"
             }
           ],
         "parameters": [
@@ -215,22 +220,22 @@
             {
               "lang": "shell",
               "label": "cURL",
-              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=281184&date=2026-11-03'"
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=3448439&date=2021-03-23'"
             },
             {
               "lang": "javascript",
               "label": "JavaScript (fetch)",
-              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  geonameid: '281184',\n  date: '2026-11-03'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  geonameid: '3448439',\n  date: '2021-03-23'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
               "label": "Python (requests)",
-              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'geonameid': '281184',\n    'date': '2026-11-03',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'geonameid': '3448439',\n    'date': '2021-03-23',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             },
             {
               "lang": "shell",
               "label": "cURL (Assur Melacha)",
-              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=281184&im=1&dt=2026-11-06T18:30:00'"
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z'"
             }
           ],
         "parameters": [
@@ -280,17 +285,17 @@
             {
               "lang": "shell",
               "label": "cURL",
-              "source": "curl 'https://www.hebcal.com/leyning?cfg=json&date=2026-11-07'"
+              "source": "curl 'https://www.hebcal.com/leyning?cfg=json&start=2022-09-21&end=2022-09-26'"
             },
             {
               "lang": "javascript",
               "label": "JavaScript (fetch)",
-              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  date: '2026-11-07'\n});\nconst res = await fetch('https://www.hebcal.com/leyning?' + params);\nconst data = await res.json();\nconsole.log(data);"
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  start: '2022-09-21',\n  end: '2022-09-26'\n});\nconst res = await fetch('https://www.hebcal.com/leyning?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
               "label": "Python (requests)",
-              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'date': '2026-11-07',\n}\nresp = requests.get('https://www.hebcal.com/leyning', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'start': '2022-09-21',\n    'end': '2022-09-26',\n}\nresp = requests.get('https://www.hebcal.com/leyning', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             }
           ],
         "parameters": [
@@ -326,17 +331,17 @@
             {
               "lang": "shell",
               "label": "cURL",
-              "source": "curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-raw 'cfg=json&v=yahrzeit&years=3&n1=Sarah%20Cohen&t1=Yahrzeit&y1=1948&m1=4&d1=15&s1=on' \\\n  https://www.hebcal.com/yahrzeit"
+              "source": "curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --compressed \\\n  --data-raw 'cfg=json&v=yahrzeit&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on&n2=Person2&t2=Yahrzeit&d2=13&m2=11&y2=2008&s2=off&hebdate=on&years=3' \\\n  https://www.hebcal.com/yahrzeit"
             },
             {
               "lang": "javascript",
               "label": "JavaScript (fetch)",
-              "source": "const body = new URLSearchParams({\n  cfg: 'json',\n  v: 'yahrzeit',\n  years: '3',\n  n1: 'Sarah Cohen',\n  t1: 'Yahrzeit',\n  y1: '1948',\n  m1: '4',\n  d1: '15',\n  s1: 'on'\n});\nconst res = await fetch('https://www.hebcal.com/yahrzeit', {method: 'POST', body});\nconst data = await res.json();\nconsole.log(data);"
+              "source": "const body = new URLSearchParams({\n  cfg: 'json',\n  v: 'yahrzeit',\n  n1: 'Person1',\n  t1: 'Birthday',\n  d1: '15',\n  m1: '4',\n  y1: '1983',\n  s1: 'on',\n  n2: 'Person2',\n  t2: 'Yahrzeit',\n  d2: '13',\n  m2: '11',\n  y2: '2008',\n  s2: 'off',\n  hebdate: 'on',\n  years: '3'\n});\nconst res = await fetch('https://www.hebcal.com/yahrzeit', {method: 'POST', body});\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
               "label": "Python (requests)",
-              "source": "import requests\n\ndata = {\n    'cfg': 'json',\n    'v': 'yahrzeit',\n    'years': '3',\n    'n1': 'Sarah Cohen',\n    't1': 'Yahrzeit',\n    'y1': '1948',\n    'm1': '4',\n    'd1': '15',\n    's1': 'on',\n}\nresp = requests.post('https://www.hebcal.com/yahrzeit', data=data)\nresp.raise_for_status()\nprint(resp.json())"
+              "source": "import requests\n\ndata = {\n    'cfg': 'json',\n    'v': 'yahrzeit',\n    'n1': 'Person1',\n    't1': 'Birthday',\n    'd1': '15',\n    'm1': '4',\n    'y1': '1983',\n    's1': 'on',\n    'n2': 'Person2',\n    't2': 'Yahrzeit',\n    'd2': '13',\n    'm2': '11',\n    'y2': '2008',\n    's2': 'off',\n    'hebdate': 'on',\n    'years': '3',\n}\nresp = requests.post('https://www.hebcal.com/yahrzeit', data=data)\nresp.raise_for_status()\nprint(resp.json())"
             }
           ],
         "requestBody": {
