@@ -188,6 +188,17 @@ describe('Yahrzeit GET /yahrzeit/new', () => {
     expect(response.status).toBe(200);
     expect(response.type).toContain('html');
   });
+
+  it('wires a calendar popup button to each row, inlining only the loader', async () => {
+    const response = await request(server)
+        .get('/yahrzeit/new');
+    expect(response.text).toContain('data-hebcal-datepicker="d1 m1 y1"');
+    // the <template> row used by "Add another" carries one too
+    expect(response.text).toContain('data-hebcal-datepicker="d__IDX__ m__IDX__ y__IDX__"');
+    expect(response.text).toContain('{"src":"/i/datepicker-');
+    // the ~110 KB picker itself must never be inlined into the page
+    expect(response.text).not.toContain('vanilla-calendar-pro');
+  });
 });
 
 describe('Yahrzeit edit page (DB-dependent)', () => {

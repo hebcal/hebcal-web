@@ -28,21 +28,40 @@ describe('Converter Routes', () => {
   });
 });
 
-describe('Converter Gregorian datepicker', () => {
-  it('inlines only the loader and keeps the gd/gm/gy fields', async () => {
+describe('Converter Gregorian date input', () => {
+  it('renders a native date input, with the legacy fields disabled', async () => {
     const response = await request(server)
         .get('/converter?gd=14&gm=5&gy=1948&g2h=1');
     expect(response.status).toBe(200);
-    expect(response.text).toContain('data-hebcal-datepicker="gd gm gy"');
-    expect(response.text).toContain(
-        '{"src":"/i/' + pkg.config.datepickerApp + '"}');
-    // the ~110 KB picker itself must never be inlined into the page
-    expect(response.text).not.toContain('vanilla-calendar-pro');
-    expect(response.text).toContain('name="gd"');
-    expect(response.text).toContain('name="gm"');
-    expect(response.text).toContain('name="gy"');
+    expect(response.text).toMatch(/<input type="date" class="form-control" required name="date" id="gdate" value="1948-05-14"/);
+    expect(response.text).toMatch(/required disabled name="gd"/);
+    expect(response.text).toMatch(/required disabled name="gy"/);
   });
 
+  it('pads years below 1000 to four digits', async () => {
+    const response = await request(server)
+        .get('/converter?gd=1&gm=2&gy=70&g2h=1');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('id="gdate" value="0070-02-01"');
+  });
+
+  it('falls back to the Day/Month/Year fields for a BCE year', async () => {
+    const response = await request(server)
+        .get('/converter?gd=1&gm=3&gy=-500&g2h=1');
+    expect(response.status).toBe(200);
+    expect(response.text).toMatch(/required disabled name="date" id="gdate" value=""/);
+    expect(response.text).toMatch(/required name="gy" placeholder="year" value="-500"/);
+  });
+
+  it('accepts ?date= as submitted by the date input without JS', async () => {
+    const response = await request(server)
+        .get('/converter?date=1948-05-14&g2h=1');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('href="https://www.hebcal.com/converter?gd=14&amp;gm=5&amp;gy=1948&amp;g2h=1"');
+  });
+});
+
+describe('Gregorian datepicker bundle', () => {
   it('redirects a stale /i/datepicker-*.js to the current version', async () => {
     const response = await request(server).get('/i/datepicker-0.0.min.js');
     expect(response.status).toBe(302);

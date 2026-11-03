@@ -73,7 +73,14 @@ Each feature is typically one or a few files handling routing, business logic, a
   hebcal-api-go, so `converter.js` returns 501 for those inputs — the
   `convertDateRange()` function and `dateUtil.js`'s `getStartAndEnd()` (with its
   `isoToDayjs`/`MAX_DAYS` helpers) were deleted. `/converter` still renders the
-  HTML single-date page here. `/converter/csv` (`dateConverterCsv`) is also kept:
+  HTML single-date page here. Its Gregorian form field is a native
+  `<input type="date" name="date">`; an inline `formdata` handler rewrites the
+  submission to `gd`/`gm`/`gy` so URLs keep the `?gd=&gm=&gy=&g2h=1` form that
+  search engines index (without JS it submits `?date=YYYY-MM-DD`, which
+  `parseConverterQuery()` also accepts). The date input holds years 0001-9999
+  only, so the legacy Day/Month/Year fields remain, hidden and disabled behind
+  a "BCE date?" toggle, and are shown by default on a BCE/out-of-range page.
+  `/converter/csv` (`dateConverterCsv`) is also kept:
   in production Varnish routes those requests to the hebcal-api-go backend, not
   to this one, but the handler stays here so the CSV export can be exercised in
   local testing.
@@ -362,6 +369,19 @@ a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 
 ### Client-side JS
 `rollup.config.cjs` bundles the `src/client-*.js` entry points (plus a few others) into `views/partials/*.min.js`, which templates inline as `<script nonce>` blocks, and into `static/i/` for the one large external bundle (FullCalendar). Hand-written inline scripts with no per-request values belong there too; pass any per-include config through a `<script type="application/json">` block, as `email-modal-signin.ejs` and `download-modal-script.ejs` do.
+
+**Gregorian calendar popup** (`[data-hebcal-datepicker="<dayId> <monthId> <yearId>"]`
+buttons, used on each Yahrzeit row): `views/partials/datepicker-loader.ejs`
+inlines only `client-datepicker-loader.js` (~1 KB); the picker itself
+(`client-datepicker.js` = vanilla-calendar-pro + its CSS, ~23 KB gzipped) is the
+immutable static file `static/i/<pkg.config.datepickerApp>`, fetched on first
+hover/focus/click. Bump `datepickerApp` when it changes. Library gotchas the code
+works around: its default `dateMin` is 1970-01-01 (set explicitly); it accepts
+4-digit years only (no BCE); never call `show()` (before first display it
+re-clicks the button and double-registers its outside-click handler) -- the
+loader runs in the capture phase and lets the library's own button listener
+show the popup; and its outside-click test compares `event.target` to the
+button itself, so the button's `<svg>` needs `pointer-events: none`.
 
 ### Localization
 Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashkenazi) are compiled to JSON via `npm run po2json` and loaded at runtime.

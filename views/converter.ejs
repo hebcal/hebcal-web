@@ -90,12 +90,24 @@ const isPast = locals.hy < todayHebYear;
 <div class="col-md">
 <form class="row gy-1 gx-2 mb-3 align-items-center" method="get" autocomplete="off" action="/converter" target="_top" data-range-validate>
 <h5>Convert from Gregorian to Hebrew</h5>
-<div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="gd" placeholder="day" value="<%= locals.gd %>" size="2" maxlength="2" min="1" max="31" id="gd" pattern="\d*" title="Enter a day of the month between 1 and 31" autocomplete="off">
+<%
+// <input type="date"> holds years 0001-9999 only. A BCE (or year > 9999)
+// page shows the legacy Day/Month/Year fields instead; the "BCE date?" toggle
+// below switches between the two. Either way the URL is ?gd=&gm=&gy=&g2h=1.
+const nativeDate = locals.gy >= 1 && locals.gy <= 9999;
+const isoValue = nativeDate ?
+  String(locals.gy).padStart(4, '0') + '-' + String(locals.gm).padStart(2, '0') + '-' + String(locals.gd).padStart(2, '0') : '';
+-%>
+<div class="form-floating col-auto mb-2 g-native"<%= nativeDate ? '' : ' hidden' %>>
+<input type="date" class="form-control" required<%= nativeDate ? '' : ' disabled' %> name="date" id="gdate" value="<%= isoValue %>" min="0001-01-01" max="9999-12-31" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<label for="gdate">Gregorian date</label>
+</div><!-- .col -->
+<div class="form-floating col-auto mb-2 g-legacy"<%= nativeDate ? ' hidden' : '' %>>
+<input type="text" inputmode="numeric" class="form-control" required<%= nativeDate ? ' disabled' : '' %> name="gd" placeholder="day" value="<%= locals.gd %>" size="2" maxlength="2" min="1" max="31" id="gd" pattern="\d*" title="Enter a day of the month between 1 and 31" autocomplete="off">
 <label for="gd">Day</label>
 </div><!-- .col -->
-<div class="form-floating col-auto mb-2">
-<select name="gm" id="gm" class="form-select">
+<div class="form-floating col-auto mb-2 g-legacy"<%= nativeDate ? ' hidden' : '' %>>
+<select name="gm" id="gm" class="form-select"<%= nativeDate ? ' disabled' : '' %>>
  <option <%= locals.gm === 1 ? 'selected' : '' %> value="1">01-Jan</option>
  <option <%= locals.gm === 2 ? 'selected' : '' %> value="2">02-Feb</option>
  <option <%= locals.gm === 3 ? 'selected' : '' %> value="3">03-Mar</option>
@@ -111,14 +123,9 @@ const isPast = locals.hy < todayHebYear;
 </select>
 <label for="gm">Month</label>
 </div><!-- .col -->
-<div class="form-floating col-auto mb-2">
-<input type="text" inputmode="numeric" class="form-control" required name="gy" placeholder="year" value="<%= locals.gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*" title="Enter a year; use a leading minus sign for years BCE" autocomplete="off" <%- locals.pmIgnore || '' %>>
+<div class="form-floating col-auto mb-2 g-legacy"<%= nativeDate ? ' hidden' : '' %>>
+<input type="text" inputmode="numeric" class="form-control" required<%= nativeDate ? ' disabled' : '' %> name="gy" placeholder="year" value="<%= locals.gy %>" size="5" maxlength="5" id="gy" pattern="-?\d*" title="Enter a year; use a leading minus sign for years BCE" autocomplete="off" <%- locals.pmIgnore || '' %>>
 <label for="gy">Year</label>
-</div><!-- .col -->
-<div class="col-auto mb-2">
-<button type="button" class="btn btn-outline-secondary py-3" data-hebcal-datepicker="gd gm gy" data-hebcal-datepicker-submit title="Choose from a calendar" aria-label="Choose a Gregorian date from a calendar" aria-haspopup="dialog">
-  <svg width="1.25em" height="1.25em" class="icon" fill="currentColor" aria-hidden="true"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
-</button>
 </div><!-- .col -->
 <div class="col-auto mb-2">
 <div class="form-check">
@@ -132,6 +139,9 @@ const isPast = locals.hy < todayHebYear;
   <svg width="1em" height="1em" class="icon align-top"><use href="<%=locals.spriteHref%>#gi-refresh"></use></svg>
   Convert to Hebrew
 </button>
+</div><!-- .col -->
+<div class="col-auto mb-3">
+<button type="button" class="btn btn-link btn-sm p-0" id="g-mode" aria-controls="gdate gd gm gy"><%= nativeDate ? 'BCE date?' : 'Use date picker' %></button>
 </div><!-- .col -->
 </form>
 </div><!-- .col-md -->
@@ -158,7 +168,63 @@ const isPast = locals.hy < todayHebYear;
 </div><!-- .row -->
 </div><!-- #converter-form -->
 <%- await include('partials/form-range-validation.ejs') -%>
-<%- await include('partials/datepicker-loader.ejs') -%>
+<script nonce="<%=locals.nonce%>">
+(function() {
+  const d = document;
+  const dateEl = d.getElementById('gdate');
+  const form = dateEl.form;
+  // Submit <input type="date" name="date"> as gd/gm/gy, in that order, so the
+  // URL matches the links search engines already know. Without JS the form
+  // submits ?date=YYYY-MM-DD, which converter.js also accepts.
+  form.addEventListener('formdata', function(e) {
+    const fd = e.formData;
+    const v = fd.get('date');
+    if (!v) return;
+    const ymd = v.split('-').map(Number);
+    const rest = [];
+    fd.forEach(function(val, key) {
+      if (key !== 'date') rest.push([key, val]);
+    });
+    Array.from(fd.keys()).forEach(function(key) {
+      fd.delete(key);
+    });
+    fd.append('gd', ymd[2]);
+    fd.append('gm', ymd[1]);
+    fd.append('gy', ymd[0]);
+    rest.forEach(function(kv) {
+      fd.append(kv[0], kv[1]);
+    });
+  });
+  const modeBtn = d.getElementById('g-mode');
+  modeBtn.addEventListener('click', function() {
+    const toLegacy = !dateEl.disabled;
+    form.querySelectorAll('.g-native').forEach(function(el) {
+      el.hidden = toLegacy;
+    });
+    form.querySelectorAll('.g-legacy').forEach(function(el) {
+      el.hidden = !toLegacy;
+    });
+    dateEl.disabled = toLegacy;
+    ['gd', 'gm', 'gy'].forEach(function(id) {
+      d.getElementById(id).disabled = !toLegacy;
+    });
+    if (toLegacy) {
+      const gy = d.getElementById('gy');
+      if (dateEl.value) {
+        const ymd = dateEl.value.split('-').map(Number);
+        d.getElementById('gd').value = ymd[2];
+        d.getElementById('gm').value = ymd[1];
+        gy.value = ymd[0];
+      }
+      gy.focus();
+      gy.select();
+    } else {
+      dateEl.focus();
+    }
+    modeBtn.textContent = toLegacy ? 'Use date picker' : 'BCE date?';
+  });
+})();
+</script>
 
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>
