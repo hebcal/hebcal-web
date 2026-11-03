@@ -40,6 +40,22 @@ export function makeLogger(logDir) {
 }
 
 /**
+ * Milliseconds since the request started, rounded to the microsecond
+ * (e.g. 0.321) rather than truncated to an integer, so sub-millisecond
+ * responses do not all log as 0.
+ * @param {import('koa').Context} ctx
+ * @return {number}
+ */
+function elapsedMillis(ctx) {
+  const startHr = ctx.state.startHrTime;
+  if (typeof startHr === 'bigint') {
+    const micros = (process.hrtime.bigint() - startHr) / 1000n;
+    return Number(micros) / 1000;
+  }
+  return Date.now() - ctx.state.startTime;
+}
+
+/**
  * @param {import('koa').Context} ctx
  * @return {Object}
  */
@@ -48,7 +64,7 @@ export function makeLogInfo(ctx) {
   const info = {
     status: status,
     length: ctx.length || ctx.state.responseLength,
-    duration: Date.now() - ctx.state.startTime,
+    duration: elapsedMillis(ctx),
     ip: getIpAddress(ctx),
     method: ctx.request.method,
     url: ctx.request.originalUrl,
@@ -121,6 +137,7 @@ export function makeLogInfo(ctx) {
 export function accessLogger(logger) {
   return async function accessLog(ctx, next) {
     ctx.state.startTime = Date.now();
+    ctx.state.startHrTime = process.hrtime.bigint();
     await next();
     logger.info(makeLogInfo(ctx));
   };
