@@ -149,22 +149,37 @@
           "x-codeSamples": [
             {
               "lang": "javascript",
-              "label": "JavaScript (fetch)",
+              "label": "Gregorian → Hebrew (single): JavaScript (fetch)",
               "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  date: '2011-06-02',\n  g2h: '1',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
+              "lang": "javascript",
+              "label": "Gregorian → Hebrew (range): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  start: '2021-12-29',\n  end: '2022-01-04',\n  g2h: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "javascript",
+              "label": "Hebrew → Gregorian (single): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  hy: '5749',\n  hm: 'Kislev',\n  hd: '25',\n  h2g: '1',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "javascript",
+              "label": "Hebrew → Gregorian (range): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  hy: '5749',\n  hm: 'Kislev',\n  hd: '25',\n  h2g: '1',\n  ndays: '90',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
               "lang": "python",
-              "label": "Python (requests)",
+              "label": "Gregorian → Hebrew (single): Python (requests)",
               "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'date': '2011-06-02',\n    'g2h': '1',\n    'strict': '1',\n}\nresp = requests.get('https://www.hebcal.com/converter', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             },
             {
               "lang": "shell",
-              "label": "cURL",
+              "label": "Gregorian → Hebrew (single): cURL",
               "source": "curl 'https://www.hebcal.com/converter?cfg=json&date=2011-06-02&g2h=1&strict=1'"
             },
             {
               "lang": "shell",
-              "label": "cURL (Hebrew to Gregorian)",
+              "label": "Hebrew → Gregorian (single): cURL",
               "source": "curl 'https://www.hebcal.com/converter?cfg=json&hy=5749&hm=Kislev&hd=25&h2g=1&strict=1'"
             }
           ],
