@@ -16,7 +16,7 @@
 <script nonce="<%=locals.nonce%>">
 // withDefaultFonts:false keeps Scalar from loading fonts.scalar.com, which the
 // site's font-src CSP does not allow; it falls back to the system font stack.
-window.addEventListener('load', function() {
+document.addEventListener('DOMContentLoaded', function() {
   Scalar.createApiReference('#app', {
     url: '/api-docs/openapi.json',
     withDefaultFonts: false,
