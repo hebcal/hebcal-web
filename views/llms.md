@@ -38,7 +38,7 @@ Locations can be given as `geonameid` (GeoNames ID), `zip` (US ZIP code), or `la
 ## Developer documentation
 
 - [OpenAPI 3 specification](https://www.hebcal.com/api-docs/openapi.json)
-- [Interactive API reference (Swagger UI)](https://www.hebcal.com/api-docs/)
+- [Interactive API reference (Scalar)](https://www.hebcal.com/api-docs/)
 - [RFC 9727 API catalog](https://www.hebcal.com/.well-known/api-catalog)
 - [Developer APIs overview](https://www.hebcal.com/home/developer-apis)
 - [Jewish Calendar REST API](https://www.hebcal.com/home/195/jewish-calendar-rest-api)

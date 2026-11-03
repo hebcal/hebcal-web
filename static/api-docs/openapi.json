@@ -22,10 +22,9 @@
   "tags": [
     {"name": "Jewish Calendar", "description": "Jewish holidays, Parashat ha-Shavua, candle lighting times, daily learning, Hebrew dates and more.", "externalDocs": {"url": "https://www.hebcal.com/home/195/jewish-calendar-rest-api"}},
     {"name": "Hebrew Date Converter", "description": "Convert between Gregorian and Hebrew dates (single date or range).", "externalDocs": {"url": "https://www.hebcal.com/home/219/hebrew-date-converter-rest-api"}},
-    {"name": "Zmanim", "description": "Halachic (sun-based) times for any city or coordinates.", "externalDocs": {"url": "https://www.hebcal.com/home/1663/zmanim-halachic-times-api"}},
+    {"name": "Zmanim", "description": "Halachic (sun-based) times for any city or coordinates, and whether a given moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov (Assur Melacha).", "externalDocs": {"url": "https://www.hebcal.com/home/1663/zmanim-halachic-times-api"}},
     {"name": "Leyning", "description": "Torah Reading details: full kriyah aliyot, haftarah, and triennial cycle.", "externalDocs": {"url": "https://www.hebcal.com/home/4277/leyning-torah-reading-api"}},
-    {"name": "Yahrzeit", "description": "Personal calendar of yahrzeit (memorial) dates, Hebrew birthdays, and Hebrew anniversaries.", "externalDocs": {"url": "https://www.hebcal.com/home/1705/yahrzeit-anniversary-api"}},
-    {"name": "Assur Melacha", "description": "Determine whether a given moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov.", "externalDocs": {"url": "https://www.hebcal.com/home/4984/assur-melacha-work-forbidden-api"}}
+    {"name": "Yahrzeit", "description": "Personal calendar of yahrzeit (memorial) dates, Hebrew birthdays, and Hebrew anniversaries.", "externalDocs": {"url": "https://www.hebcal.com/home/1705/yahrzeit-anniversary-api"}}
   ],
   "paths": {
     "/hebcal": {
@@ -34,6 +33,23 @@
         "summary": "Jewish Calendar",
         "description": "Returns Jewish holidays, candle lighting times, Parashat ha-Shavua, daily learning schedules and more.\n\nDate range may be specified by `year` (with optional `month`, `ny`, `yt`) **or** by both `start` and `end`.",
         "operationId": "getJewishCalendar",
+          "x-codeSamples": [
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  v: '1',\n  cfg: 'json',\n  maj: 'on',\n  min: 'on',\n  mod: 'on',\n  nx: 'on',\n  year: 'now',\n  month: 'x',\n  geonameid: '3448439'\n});\nconst res = await fetch('https://www.hebcal.com/hebcal?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'v': '1',\n    'cfg': 'json',\n    'maj': 'on',\n    'min': 'on',\n    'mod': 'on',\n    'nx': 'on',\n    'year': 'now',\n    'month': 'x',\n    'geonameid': '3448439',\n}\nresp = requests.get('https://www.hebcal.com/hebcal', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=x&geonameid=3448439'"
+            }
+          ],
         "parameters": [
           {"name": "v", "in": "query", "required": true, "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "API version. Must be `1`."},
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "fc", "rss", "ics", "csv"], "default": "json"}, "description": "Output format: `json` (default REST), `fc` (FullCalendar.io JSON), `rss`, `ics` (iCalendar), or `csv`."},
@@ -45,9 +61,9 @@
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Gregorian end date (YYYY-MM-DD)."},
 
           {"name": "maj", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "example": "on", "description": "Major holidays (Rosh Hashana, Yom Kippur, Pesach, etc.)."},
-          {"name": "min", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Minor holidays (Tu BiShvat, Lag B'Omer, etc.)."},
-          {"name": "mod", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Modern holidays (Yom HaAtzmaut, Yom HaShoah, etc.)."},
-          {"name": "nx", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Rosh Chodesh."},
+          {"name": "min", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "example": "on", "description": "Minor holidays (Tu BiShvat, Lag B'Omer, etc.)."},
+          {"name": "mod", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "example": "on", "description": "Modern holidays (Yom HaAtzmaut, Yom HaShoah, etc.)."},
+          {"name": "nx", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "example": "on", "description": "Rosh Chodesh."},
           {"name": "mf", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Minor fasts."},
           {"name": "ss", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Special Shabbatot."},
           {"name": "yto", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "Yom Tov only. Suppresses all other event options."},
@@ -130,23 +146,60 @@
         "summary": "Convert between Gregorian and Hebrew dates",
         "description": "Four modes are supported:\n\n1. **Gregorian → Hebrew (single date):** pass `g2h=1` with `date=YYYY-MM-DD` (or `gy`/`gm`/`gd`).\n2. **Gregorian → Hebrew (range):** pass `g2h=1` with `start` and `end` (max 180 days; `cfg=json` only).\n3. **Hebrew → Gregorian (single date):** pass `h2g=1` with `hy`, `hm`, `hd`.\n4. **Hebrew → Gregorian (range):** pass `h2g=1` with `hy`, `hm`, `hd`, `ndays` (2–180; `cfg=json` only).\n\nMonth name (`hm`) accepts: `Nisan`, `Iyyar`/`Iyar`, `Sivan`, `Tamuz`/`Tammuz`, `Av`, `Elul`, `Tishrei`, `Cheshvan`, `Kislev`, `Tevet`/`Teves`, `Sh'vat`/`Shvat`, `Adar`/`Adar1`/`Adar I`/`Adar2`/`Adar II`. Hebrew UTF-8 names are also accepted. In a leap year `Adar` is `Adar2`; in a non-leap year all three Adars are equivalent.",
         "operationId": "convertHebrewDate",
+          "x-codeSamples": [
+            {
+              "lang": "javascript",
+              "label": "Gregorian → Hebrew (single): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  date: '2011-06-02',\n  g2h: '1',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "javascript",
+              "label": "Gregorian → Hebrew (range): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  start: '2021-12-29',\n  end: '2022-01-04',\n  g2h: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "javascript",
+              "label": "Hebrew → Gregorian (single): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  hy: '5749',\n  hm: 'Kislev',\n  hd: '25',\n  h2g: '1',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "javascript",
+              "label": "Hebrew → Gregorian (range): JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  hy: '5749',\n  hm: 'Kislev',\n  hd: '25',\n  h2g: '1',\n  ndays: '90',\n  strict: '1'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Gregorian → Hebrew (single): Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'date': '2011-06-02',\n    'g2h': '1',\n    'strict': '1',\n}\nresp = requests.get('https://www.hebcal.com/converter', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "Gregorian → Hebrew (single): cURL",
+              "source": "curl 'https://www.hebcal.com/converter?cfg=json&date=2011-06-02&g2h=1&strict=1'"
+            },
+            {
+              "lang": "shell",
+              "label": "Hebrew → Gregorian (single): cURL",
+              "source": "curl 'https://www.hebcal.com/converter?cfg=json&hy=5749&hm=Kislev&hd=25&h2g=1&strict=1'"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "xml"], "default": "json"}, "description": "Output format. Range queries require `json`."},
           {"name": "g2h", "in": "query", "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "Set to `1` for Gregorian→Hebrew conversion. Mutually exclusive with `h2g`."},
           {"name": "h2g", "in": "query", "schema": {"type": "string", "enum": ["1"]}, "description": "Set to `1` for Hebrew→Gregorian conversion. Mutually exclusive with `g2h`."},
-          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Gregorian date (YYYY-MM-DD). Used in single-date g2h mode as an alternative to `gy`/`gm`/`gd`."},
-          {"name": "gy", "in": "query", "schema": {"type": "integer", "example": 2026}, "description": "Gregorian year (g2h)."},
-          {"name": "gm", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 12, "example": 6}, "description": "Gregorian month 1–12 (g2h). Leading zero optional."},
-          {"name": "gd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 31, "example": 17}, "description": "Gregorian day 1–31 (g2h). Leading zero optional."},
+          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "example": "2011-06-02", "description": "Gregorian date (YYYY-MM-DD). Used in single-date g2h mode as an alternative to `gy`/`gm`/`gd`."},
+          {"name": "gy", "in": "query", "schema": {"type": "integer"}, "description": "Gregorian year (g2h)."},
+          {"name": "gm", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 12}, "description": "Gregorian month 1–12 (g2h). Leading zero optional."},
+          {"name": "gd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 31}, "description": "Gregorian day 1–31 (g2h). Leading zero optional."},
           {"name": "gs", "in": "query", "schema": {"$ref": "#/components/schemas/OnOff"}, "description": "After-sunset designation. When `on`, returns the Hebrew date of the next day (sunset starts the new Hebrew day)."},
-          {"name": "hy", "in": "query", "schema": {"type": "integer", "example": 5786}, "description": "Hebrew year (h2g)."},
-          {"name": "hm", "in": "query", "schema": {"type": "string", "example": "Kislev"}, "description": "Hebrew month name (h2g)."},
-          {"name": "hd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 30, "example": 25}, "description": "Hebrew day 1–30 (h2g)."},
+          {"name": "hy", "in": "query", "schema": {"type": "integer"}, "description": "Hebrew year (h2g)."},
+          {"name": "hm", "in": "query", "schema": {"type": "string"}, "description": "Hebrew month name (h2g)."},
+          {"name": "hd", "in": "query", "schema": {"type": "integer", "minimum": 1, "maximum": 30}, "description": "Hebrew day 1–30 (h2g)."},
           {"name": "ndays", "in": "query", "schema": {"type": "integer", "minimum": 2, "maximum": 180}, "description": "Number of days to convert in h2g range mode (2–180)."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD (g2h range mode)."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD (g2h range mode). Truncated to 180 days from `start`."},
           {"name": "i", "in": "query", "schema": {"type": "string", "enum": ["on", "off"]}, "description": "When `on`, use Israel holiday schedule when listing events for a date."},
-          {"name": "strict", "in": "query", "schema": {"type": "string", "enum": ["1"]}, "description": "Return HTTP 400 for invalid input dates instead of redirecting to a fallback."},
+          {"name": "strict", "in": "query", "schema": {"type": "string", "enum": ["1"]}, "example": "1", "description": "Return HTTP 400 for invalid input dates instead of redirecting to a fallback."},
           {"$ref": "#/components/parameters/Lg"},
           {"name": "callback", "in": "query", "schema": {"type": "string", "pattern": "^[A-Za-z0-9_.]+$"}, "description": "JSONP callback name."}
         ],
@@ -173,13 +226,45 @@
 
     "/zmanim": {
       "get": {
-        "tags": ["Zmanim", "Assur Melacha"],
+        "tags": ["Zmanim"],
         "summary": "Halachic times for a date or range; or check whether a moment is assur bemelacha",
-        "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°.\n\nA location is required (see location parameters).",
+        "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°. See the [Assur Melacha API documentation](https://www.hebcal.com/home/4984/assur-melacha-work-forbidden-api).\n\nA location is required (see location parameters).",
         "operationId": "getZmanim",
+          "x-codeSamples": [
+            {
+              "lang": "javascript",
+              "label": "Zmanim: JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  geonameid: '3448439',\n  date: '2021-03-23'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Zmanim: Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'geonameid': '3448439',\n    'date': '2021-03-23',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "Zmanim: cURL",
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=3448439&date=2021-03-23'"
+            },
+            {
+              "lang": "javascript",
+              "label": "Assur Melacha: JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  im: '1',\n  geonameid: '3448439',\n  dt: '2025-06-21T20:08:10Z'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Assur Melacha: Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'im': '1',\n    'geonameid': '3448439',\n    'dt': '2025-06-21T20:08:10Z',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "Assur Melacha: cURL",
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z'"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
-          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Single Gregorian date YYYY-MM-DD. If neither `date` nor `start/end` are specified, defaults to today at the location."},
+          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "example": "2021-03-23", "description": "Single Gregorian date YYYY-MM-DD. If neither `date` nor `start/end` are specified, defaults to today at the location."},
           {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD."},
           {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD. Capped at 180 days from `start`."},
           {"name": "sec", "in": "query", "schema": {"type": "integer", "enum": [0, 1], "default": 0}, "description": "If `1`, output time-of-day with seconds precision (otherwise rounded to the nearest minute)."},
@@ -220,11 +305,28 @@
         "summary": "Torah readings for a date or range",
         "description": "Returns full kriyah aliyot, haftarah, and (optionally) triennial cycle readings. Use either a single `date` or both `start` and `end` (capped at 180 days).",
         "operationId": "getLeyning",
+          "x-codeSamples": [
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  start: '2022-09-21',\n  end: '2022-09-26'\n});\nconst res = await fetch('https://www.hebcal.com/leyning?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'start': '2022-09-21',\n    'end': '2022-09-26',\n}\nresp = requests.get('https://www.hebcal.com/leyning', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/leyning?cfg=json&start=2022-09-21&end=2022-09-26'"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
-          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date", "example": "2026-06-20"}, "description": "Single Gregorian date YYYY-MM-DD. Equivalent to `start=date&end=date`."},
-          {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range start date YYYY-MM-DD."},
-          {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Range end date YYYY-MM-DD. Capped at 180 days from `start`."},
+          {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Single Gregorian date YYYY-MM-DD. Equivalent to `start=date&end=date`."},
+          {"name": "start", "in": "query", "schema": {"type": "string", "format": "date"}, "example": "2022-09-21", "description": "Range start date YYYY-MM-DD."},
+          {"name": "end", "in": "query", "schema": {"type": "string", "format": "date"}, "example": "2022-09-26", "description": "Range end date YYYY-MM-DD. Capped at 180 days from `start`."},
           {"name": "i", "in": "query", "schema": {"type": "string", "enum": ["on", "off"], "default": "off"}, "description": "Diaspora (`off`, default) or Israel (`on`) Torah reading schedule."},
           {"name": "triennial", "in": "query", "schema": {"type": "string", "enum": ["on", "off"], "default": "on"}, "description": "Include triennial cycle aliyot. Defaults to `on`. (Triennial only available for Hebrew year 5745 and later.)"}
         ],
@@ -249,6 +351,23 @@
         "summary": "Yahrzeit, Hebrew birthday and Hebrew anniversary calendar",
         "description": "Calculates the Hebrew anniversary of an event (death, birth, marriage, etc.) for a number of years.\n\n**HTTPS is required.** The body must be `application/x-www-form-urlencoded`.\n\nProvide one or more event records using a numeric suffix `1`, `2`, `3`… for each person/event. For each record, supply either Gregorian date fields (`yX`, `mX`, `dX`, optional `sX`) **or** Hebrew date fields (`hyX`, `hmX`, `hdX`).\n\nExample (curl):\n```\ncurl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\\\n  --data-raw 'cfg=json&v=yahrzeit&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on&years=3' \\\\\n  https://www.hebcal.com/yahrzeit\n```",
         "operationId": "getYahrzeit",
+          "x-codeSamples": [
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const body = new URLSearchParams({\n  cfg: 'json',\n  v: 'yahrzeit',\n  years: '3',\n  n1: 'Person1',\n  t1: 'Birthday',\n  d1: '15',\n  m1: '4',\n  y1: '1983',\n  s1: 'on'\n});\nconst res = await fetch('https://www.hebcal.com/yahrzeit', {method: 'POST', body});\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\ndata = {\n    'cfg': 'json',\n    'v': 'yahrzeit',\n    'years': '3',\n    'n1': 'Person1',\n    't1': 'Birthday',\n    'd1': '15',\n    'm1': '4',\n    'y1': '1983',\n    's1': 'on',\n}\nresp = requests.post('https://www.hebcal.com/yahrzeit', data=data)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --compressed \\\n  --data-raw 'cfg=json&v=yahrzeit&years=3&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on' \\\n  https://www.hebcal.com/yahrzeit"
+            }
+          ],
         "requestBody": {
           "required": true,
           "content": {
@@ -276,7 +395,7 @@
       "Geonameid": {
         "name": "geonameid",
         "in": "query",
-        "schema": {"type": "integer", "example": 5128581},
+        "schema": {"type": "integer", "example": 3448439},
         "description": "GeoNames.org numeric city identifier. The Hebcal database supports approximately 150,000 world cities with population ≥ 1,000 (refreshed annually from the [`cities1000.zip`](https://download.geonames.org/export/dump/) feed).\n\n**Examples:**\n- `3448439` — São Paulo, BR\n- `5128581` — New York, US\n- `5368361` — Los Angeles, US\n- `281184` — Jerusalem, IL"
       },
       "Zip": {
@@ -559,20 +678,20 @@
         "properties": {
           "cfg": {"type": "string", "enum": ["json"]},
           "v": {"type": "string", "enum": ["yahrzeit"]},
-          "years": {"type": "integer", "default": 20, "example": 20, "description": "Number of Hebrew years to compute (default 20). Use `years=1` for a single year."},
-          "start": {"type": "integer", "example": 5786, "description": "Starting Hebrew year (defaults to the current Hebrew year, e.g. 5786)."},
+          "years": {"type": "integer", "default": 20, "example": 3, "description": "Number of Hebrew years to compute (default 20). Use `years=1` for a single year."},
+          "start": {"type": "integer", "description": "Starting Hebrew year (defaults to the current Hebrew year, e.g. 5786)."},
           "end": {"type": "integer", "description": "Ending Hebrew year (inclusive). Defaults to `start + years`."},
           "hebdate": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Append Hebrew date to event titles."},
           "an": {"type": "string", "enum": ["on", "off"], "default": "on", "description": "Include the anniversary number in event titles and memos (e.g. `Sarah Cohen’s 3rd Yahrzeit`). `off` omits it (`Sarah Cohen’s Yahrzeit`). No effect on `Other` records. The numeric `anniversary` field is returned either way."},
           "yizkor": {"type": "string", "enum": ["on", "off"], "default": "off", "description": "Include Yizkor dates."},
           "i": {"type": "string", "enum": ["on", "off"], "description": "Yizkor schedule: `off` for Diaspora, `on` for Israel."},
           "hdp": {"type": "integer", "enum": [0, 1], "description": "If `1`, include `heDateParts` field on all-day items."},
-          "y1": {"type": "integer", "example": 1948, "description": "Gregorian year for record #1 (4-digit)."},
+          "y1": {"type": "integer", "example": 1983, "description": "Gregorian year for record #1 (4-digit)."},
           "m1": {"type": "integer", "minimum": 1, "maximum": 12, "example": 4, "description": "Gregorian month 1–12 for record #1."},
           "d1": {"type": "integer", "minimum": 1, "maximum": 31, "example": 15, "description": "Gregorian day-of-month for record #1."},
           "s1": {"type": "string", "enum": ["on", "off"], "example": "on", "description": "Whether record #1 occurred after sunset."},
-          "t1": {"type": "string", "enum": ["Yahrzeit", "Birthday", "Anniversary", "Other"], "example": "Yahrzeit", "description": "Type of anniversary for record #1 (case-sensitive)."},
-          "n1": {"type": "string", "example": "Sarah Cohen", "description": "Person/event name for record #1."},
+          "t1": {"type": "string", "enum": ["Yahrzeit", "Birthday", "Anniversary", "Other"], "example": "Birthday", "description": "Type of anniversary for record #1 (case-sensitive)."},
+          "n1": {"type": "string", "example": "Person1", "description": "Person/event name for record #1."},
           "hy1": {"type": "integer", "description": "Hebrew year for record #1 (alternative to Gregorian)."},
           "hm1": {"type": "string", "description": "Hebrew month for record #1 (Hebrew UTF-8 or transliterated)."},
           "hd1": {"type": "integer", "minimum": 1, "maximum": 30, "description": "Hebrew day-of-month for record #1."}
