@@ -219,23 +219,33 @@
           "x-codeSamples": [
             {
               "lang": "shell",
-              "label": "cURL",
+              "label": "Zmanim: cURL",
               "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=3448439&date=2021-03-23'"
             },
             {
               "lang": "javascript",
-              "label": "JavaScript (fetch)",
+              "label": "Zmanim: JavaScript (fetch)",
               "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  geonameid: '3448439',\n  date: '2021-03-23'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
             },
             {
               "lang": "python",
-              "label": "Python (requests)",
+              "label": "Zmanim: Python (requests)",
               "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'geonameid': '3448439',\n    'date': '2021-03-23',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             },
             {
               "lang": "shell",
-              "label": "cURL (Assur Melacha)",
+              "label": "Assur Melacha: cURL",
               "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&im=1&geonameid=3448439&dt=2025-06-21T20:08:10Z'"
+            },
+            {
+              "lang": "javascript",
+              "label": "Assur Melacha: JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  im: '1',\n  geonameid: '3448439',\n  dt: '2025-06-21T20:08:10Z'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Assur Melacha: Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'im': '1',\n    'geonameid': '3448439',\n    'dt': '2025-06-21T20:08:10Z',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
             }
           ],
         "parameters": [
