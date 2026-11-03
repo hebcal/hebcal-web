@@ -336,6 +336,7 @@ instructions</a>.</p>
 <% } %>
 <% } -%>
 <script nonce="<%=locals.nonce%>"><%- await include('partials/client-yahrzeit.min.js') %></script>
+<%- await include('partials/datepicker-loader.ejs') -%>
 <%- await include('partials/footer.ejs', {
   footerScripts: {tooltip: true, clipboard: locals.tables !== null && locals.showDownload},
 }) _%>

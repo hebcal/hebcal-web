@@ -32,6 +32,11 @@
 <label class="form-label" for="y<%=locals.num%>">Year</label>
 <div class="invalid-feedback">Please enter a valid Gregorian year.</div>
 </div>
+<div class="col-auto">
+<button type="button" class="btn btn-outline-secondary py-3" data-hebcal-datepicker="d<%=locals.num%> m<%=locals.num%> y<%=locals.num%>" title="Choose from a calendar" aria-label="Choose a Gregorian date from a calendar" aria-haspopup="dialog">
+<svg width="1.25em" height="1.25em" class="icon" fill="currentColor" aria-hidden="true"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
+</button>
+</div>
 <div class="col-auto m-2">
  <div class="form-check">
  <input class="form-check-input" type="radio" name="s<%=locals.num%>" id="s<%=locals.num%>-0" <%= locals.q['s'+locals.num] !== 'on' ? ' checked' : '' %> value="off">
