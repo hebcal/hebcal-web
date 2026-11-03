@@ -34,6 +34,23 @@
         "summary": "Jewish Calendar",
         "description": "Returns Jewish holidays, candle lighting times, Parashat ha-Shavua, daily learning schedules and more.\n\nDate range may be specified by `year` (with optional `month`, `ny`, `yt`) **or** by both `start` and `end`.",
         "operationId": "getJewishCalendar",
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&ss=on&mf=on&s=on&c=on&M=on&geonameid=281184&year=now&month=x'"
+            },
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  v: '1',\n  cfg: 'json',\n  maj: 'on',\n  min: 'on',\n  mod: 'on',\n  nx: 'on',\n  ss: 'on',\n  mf: 'on',\n  s: 'on',\n  c: 'on',\n  M: 'on',\n  geonameid: '281184',\n  year: 'now',\n  month: 'x'\n});\nconst res = await fetch('https://www.hebcal.com/hebcal?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'v': '1',\n    'cfg': 'json',\n    'maj': 'on',\n    'min': 'on',\n    'mod': 'on',\n    'nx': 'on',\n    'ss': 'on',\n    'mf': 'on',\n    's': 'on',\n    'c': 'on',\n    'M': 'on',\n    'geonameid': '281184',\n    'year': 'now',\n    'month': 'x',\n}\nresp = requests.get('https://www.hebcal.com/hebcal', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            }
+          ],
         "parameters": [
           {"name": "v", "in": "query", "required": true, "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "API version. Must be `1`."},
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "fc", "rss", "ics", "csv"], "default": "json"}, "description": "Output format: `json` (default REST), `fc` (FullCalendar.io JSON), `rss`, `ics` (iCalendar), or `csv`."},
@@ -130,6 +147,23 @@
         "summary": "Convert between Gregorian and Hebrew dates",
         "description": "Four modes are supported:\n\n1. **Gregorian → Hebrew (single date):** pass `g2h=1` with `date=YYYY-MM-DD` (or `gy`/`gm`/`gd`).\n2. **Gregorian → Hebrew (range):** pass `g2h=1` with `start` and `end` (max 180 days; `cfg=json` only).\n3. **Hebrew → Gregorian (single date):** pass `h2g=1` with `hy`, `hm`, `hd`.\n4. **Hebrew → Gregorian (range):** pass `h2g=1` with `hy`, `hm`, `hd`, `ndays` (2–180; `cfg=json` only).\n\nMonth name (`hm`) accepts: `Nisan`, `Iyyar`/`Iyar`, `Sivan`, `Tamuz`/`Tammuz`, `Av`, `Elul`, `Tishrei`, `Cheshvan`, `Kislev`, `Tevet`/`Teves`, `Sh'vat`/`Shvat`, `Adar`/`Adar1`/`Adar I`/`Adar2`/`Adar II`. Hebrew UTF-8 names are also accepted. In a leap year `Adar` is `Adar2`; in a non-leap year all three Adars are equivalent.",
         "operationId": "convertHebrewDate",
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/converter?cfg=json&g2h=1&date=2026-11-03'"
+            },
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  g2h: '1',\n  date: '2026-11-03'\n});\nconst res = await fetch('https://www.hebcal.com/converter?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'g2h': '1',\n    'date': '2026-11-03',\n}\nresp = requests.get('https://www.hebcal.com/converter', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json", "xml"], "default": "json"}, "description": "Output format. Range queries require `json`."},
           {"name": "g2h", "in": "query", "schema": {"type": "string", "enum": ["1"], "default": "1"}, "description": "Set to `1` for Gregorian→Hebrew conversion. Mutually exclusive with `h2g`."},
@@ -177,6 +211,28 @@
         "summary": "Halachic times for a date or range; or check whether a moment is assur bemelacha",
         "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°.\n\nA location is required (see location parameters).",
         "operationId": "getZmanim",
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=281184&date=2026-11-03'"
+            },
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  geonameid: '281184',\n  date: '2026-11-03'\n});\nconst res = await fetch('https://www.hebcal.com/zmanim?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'geonameid': '281184',\n    'date': '2026-11-03',\n}\nresp = requests.get('https://www.hebcal.com/zmanim', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            },
+            {
+              "lang": "shell",
+              "label": "cURL (Assur Melacha)",
+              "source": "curl 'https://www.hebcal.com/zmanim?cfg=json&geonameid=281184&im=1&dt=2026-11-06T18:30:00'"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
           {"name": "date", "in": "query", "schema": {"type": "string", "format": "date"}, "description": "Single Gregorian date YYYY-MM-DD. If neither `date` nor `start/end` are specified, defaults to today at the location."},
@@ -220,6 +276,23 @@
         "summary": "Torah readings for a date or range",
         "description": "Returns full kriyah aliyot, haftarah, and (optionally) triennial cycle readings. Use either a single `date` or both `start` and `end` (capped at 180 days).",
         "operationId": "getLeyning",
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl 'https://www.hebcal.com/leyning?cfg=json&date=2026-11-07'"
+            },
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const params = new URLSearchParams({\n  cfg: 'json',\n  date: '2026-11-07'\n});\nconst res = await fetch('https://www.hebcal.com/leyning?' + params);\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\nparams = {\n    'cfg': 'json',\n    'date': '2026-11-07',\n}\nresp = requests.get('https://www.hebcal.com/leyning', params=params)\nresp.raise_for_status()\nprint(resp.json())"
+            }
+          ],
         "parameters": [
           {"name": "cfg", "in": "query", "required": true, "schema": {"type": "string", "enum": ["json"], "default": "json"}, "description": "Output format. Must be `json`."},
           {"name": "date", "in": "query", "schema": {"type": "string", "format": "date", "example": "2026-06-20"}, "description": "Single Gregorian date YYYY-MM-DD. Equivalent to `start=date&end=date`."},
@@ -249,6 +322,23 @@
         "summary": "Yahrzeit, Hebrew birthday and Hebrew anniversary calendar",
         "description": "Calculates the Hebrew anniversary of an event (death, birth, marriage, etc.) for a number of years.\n\n**HTTPS is required.** The body must be `application/x-www-form-urlencoded`.\n\nProvide one or more event records using a numeric suffix `1`, `2`, `3`… for each person/event. For each record, supply either Gregorian date fields (`yX`, `mX`, `dX`, optional `sX`) **or** Hebrew date fields (`hyX`, `hmX`, `hdX`).\n\nExample (curl):\n```\ncurl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\\\n  --data-raw 'cfg=json&v=yahrzeit&n1=Person1&t1=Birthday&d1=15&m1=4&y1=1983&s1=on&years=3' \\\\\n  https://www.hebcal.com/yahrzeit\n```",
         "operationId": "getYahrzeit",
+          "x-codeSamples": [
+            {
+              "lang": "shell",
+              "label": "cURL",
+              "source": "curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \\\n  --data-raw 'cfg=json&v=yahrzeit&years=3&n1=Sarah%20Cohen&t1=Yahrzeit&y1=1948&m1=4&d1=15&s1=on' \\\n  https://www.hebcal.com/yahrzeit"
+            },
+            {
+              "lang": "javascript",
+              "label": "JavaScript (fetch)",
+              "source": "const body = new URLSearchParams({\n  cfg: 'json',\n  v: 'yahrzeit',\n  years: '3',\n  n1: 'Sarah Cohen',\n  t1: 'Yahrzeit',\n  y1: '1948',\n  m1: '4',\n  d1: '15',\n  s1: 'on'\n});\nconst res = await fetch('https://www.hebcal.com/yahrzeit', {method: 'POST', body});\nconst data = await res.json();\nconsole.log(data);"
+            },
+            {
+              "lang": "python",
+              "label": "Python (requests)",
+              "source": "import requests\n\ndata = {\n    'cfg': 'json',\n    'v': 'yahrzeit',\n    'years': '3',\n    'n1': 'Sarah Cohen',\n    't1': 'Yahrzeit',\n    'y1': '1948',\n    'm1': '4',\n    'd1': '15',\n    's1': 'on',\n}\nresp = requests.post('https://www.hebcal.com/yahrzeit', data=data)\nresp.raise_for_status()\nprint(resp.json())"
+            }
+          ],
         "requestBody": {
           "required": true,
           "content": {
