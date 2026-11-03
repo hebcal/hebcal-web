@@ -2,6 +2,7 @@ import {describe, it, expect} from 'vitest';
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {makeServer} from './testServer.js';
+import pkg from '../package.json' with {type: 'json'};
 
 const server = makeServer(app);
 
@@ -24,6 +25,28 @@ describe('Converter Routes', () => {
     const response = await request(server)
         .get('/converter/?cfg=xml&gy=2025&gm=12&gd=24&g2h=1');
     expect(response.status).toBe(501);
+  });
+});
+
+describe('Converter Gregorian datepicker', () => {
+  it('inlines only the loader and keeps the gd/gm/gy fields', async () => {
+    const response = await request(server)
+        .get('/converter?gd=14&gm=5&gy=1948&g2h=1');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('data-hebcal-datepicker="gd gm gy"');
+    expect(response.text).toContain(
+        '{"src":"/i/' + pkg.config.datepickerApp + '"}');
+    // the ~110 KB picker itself must never be inlined into the page
+    expect(response.text).not.toContain('vanilla-calendar-pro');
+    expect(response.text).toContain('name="gd"');
+    expect(response.text).toContain('name="gm"');
+    expect(response.text).toContain('name="gy"');
+  });
+
+  it('redirects a stale /i/datepicker-*.js to the current version', async () => {
+    const response = await request(server).get('/i/datepicker-0.0.min.js');
+    expect(response.status).toBe(302);
+    expect(new URL(response.headers.location).pathname).toBe(`/i/${pkg.config.datepickerApp}`);
   });
 });
 

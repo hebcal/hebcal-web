@@ -11,6 +11,16 @@ const stripHebcalBanner = {
   },
 };
 
+// Imports a .css file as a JS string (vanilla-calendar-pro ships its
+// styles pre-minified; client-datepicker.js injects them on first use).
+const cssAsString = {
+  name: 'css-as-string',
+  transform(code, id) {
+    if (!id.endsWith('.css')) return null;
+    return {code: 'export default ' + JSON.stringify(code.replace(/^\/\*!.*?\*\//, '')) + ';', map: null};
+  },
+};
+
 module.exports = [
   {
     input: 'src/client-autocomplete.js',
@@ -199,6 +209,35 @@ module.exports = [
         preferBuiltins: false,
       }),
       stripHebcalBanner,
+    ],
+  },
+  {
+    input: 'src/client-datepicker.js',
+    onwarn(warning, warn) {
+      // vanilla-calendar-pro ships pre-minified code with misplaced
+      // /* @__PURE__ */ annotations; harmless, and it dumps the whole file.
+      if (warning.code === 'INVALID_ANNOTATION') return;
+      warn(warning);
+    },
+    output: {
+      file: 'static/i/' + pkg.config.datepickerApp,
+      format: 'iife',
+      banner: '/*! ' + pkg.config.datepickerApp + ' vanilla-calendar-pro (MIT) */',
+    },
+    plugins: [
+      cssAsString,
+      nodeResolve({browser: true}),
+      terser(),
+    ],
+  },
+  {
+    input: 'src/client-datepicker-loader.js',
+    output: {
+      file: 'views/partials/client-datepicker-loader.min.js',
+      format: 'iife',
+    },
+    plugins: [
+      terser(),
     ],
   },
 ];

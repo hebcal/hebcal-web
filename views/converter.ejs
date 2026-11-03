@@ -116,6 +116,11 @@ const isPast = locals.hy < todayHebYear;
 <label for="gy">Year</label>
 </div><!-- .col -->
 <div class="col-auto mb-2">
+<button type="button" class="btn btn-outline-secondary py-3" data-hebcal-datepicker="gd gm gy" data-hebcal-datepicker-submit title="Choose from a calendar" aria-label="Choose a Gregorian date from a calendar" aria-haspopup="dialog">
+  <svg width="1.25em" height="1.25em" class="icon" fill="currentColor" aria-hidden="true"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
+</button>
+</div><!-- .col -->
+<div class="col-auto mb-2">
 <div class="form-check">
   <input class="form-check-input" type="checkbox" name="gs" value="on" <%= locals.gs ? ' checked' : '' %> id="gs">
   <label class="form-check-label" for="gs">After sunset</label>
@@ -153,6 +158,7 @@ const isPast = locals.hy < todayHebYear;
 </div><!-- .row -->
 </div><!-- #converter-form -->
 <%- await include('partials/form-range-validation.ejs') -%>
+<%- await include('partials/datepicker-loader.ejs') -%>
 
 <div class="d-flex justify-content-center d-print-none">
 <h6 class="text-body-secondary mt-2 mb-1">Advertisement</h6>

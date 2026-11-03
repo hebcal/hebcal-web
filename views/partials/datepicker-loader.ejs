@@ -1,0 +1,5 @@
+<%# Gregorian calendar popup for [data-hebcal-datepicker] buttons.
+    Only this ~1 KB loader is inlined; the picker itself is a separate,
+    long-cacheable static file fetched on first hover/focus/click. -%>
+<script type="application/json" id="hebcal-datepicker-cfg"><%- locals.jsonForScript({src: locals.datepickerAppHref}) %></script>
+<script nonce="<%=locals.nonce%>"><%- await include('client-datepicker-loader.min.js') %></script>
