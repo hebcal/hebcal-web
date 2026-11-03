@@ -22,10 +22,9 @@
   "tags": [
     {"name": "Jewish Calendar", "description": "Jewish holidays, Parashat ha-Shavua, candle lighting times, daily learning, Hebrew dates and more.", "externalDocs": {"url": "https://www.hebcal.com/home/195/jewish-calendar-rest-api"}},
     {"name": "Hebrew Date Converter", "description": "Convert between Gregorian and Hebrew dates (single date or range).", "externalDocs": {"url": "https://www.hebcal.com/home/219/hebrew-date-converter-rest-api"}},
-    {"name": "Zmanim", "description": "Halachic (sun-based) times for any city or coordinates.", "externalDocs": {"url": "https://www.hebcal.com/home/1663/zmanim-halachic-times-api"}},
+    {"name": "Zmanim", "description": "Halachic (sun-based) times for any city or coordinates, and whether a given moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov (Assur Melacha).", "externalDocs": {"url": "https://www.hebcal.com/home/1663/zmanim-halachic-times-api"}},
     {"name": "Leyning", "description": "Torah Reading details: full kriyah aliyot, haftarah, and triennial cycle.", "externalDocs": {"url": "https://www.hebcal.com/home/4277/leyning-torah-reading-api"}},
-    {"name": "Yahrzeit", "description": "Personal calendar of yahrzeit (memorial) dates, Hebrew birthdays, and Hebrew anniversaries.", "externalDocs": {"url": "https://www.hebcal.com/home/1705/yahrzeit-anniversary-api"}},
-    {"name": "Assur Melacha", "description": "Determine whether a given moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov.", "externalDocs": {"url": "https://www.hebcal.com/home/4984/assur-melacha-work-forbidden-api"}}
+    {"name": "Yahrzeit", "description": "Personal calendar of yahrzeit (memorial) dates, Hebrew birthdays, and Hebrew anniversaries.", "externalDocs": {"url": "https://www.hebcal.com/home/1705/yahrzeit-anniversary-api"}}
   ],
   "paths": {
     "/hebcal": {
@@ -212,9 +211,9 @@
 
     "/zmanim": {
       "get": {
-        "tags": ["Zmanim", "Assur Melacha"],
+        "tags": ["Zmanim"],
         "summary": "Halachic times for a date or range; or check whether a moment is assur bemelacha",
-        "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°.\n\nA location is required (see location parameters).",
+        "description": "Two modes:\n\n1. **Zmanim mode (default):** Returns sun-based halachic times for a single `date` or a `start`/`end` range.\n2. **Assur Melacha mode:** Pass `im=1` and (optionally) `dt=<ISO 8601 datetime>` to determine whether that moment falls within a melacha (work-forbidden) period such as Shabbat or a Yom Tov. The check uses solar depression of 8.5°. See the [Assur Melacha API documentation](https://www.hebcal.com/home/4984/assur-melacha-work-forbidden-api).\n\nA location is required (see location parameters).",
         "operationId": "getZmanim",
           "x-codeSamples": [
             {
