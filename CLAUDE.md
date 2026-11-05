@@ -267,6 +267,17 @@ Each feature is typically one or a few files handling routing, business logic, a
   are keyed by email address, and re-subscribing while signed in reuses the same
   email-keyed row -- so nothing is duplicated, and old subscriptions surface by an
   email join once an account page lists them.
+- **PayPal IPN** (`paypalIpn.js`, `POST /paypal/ipn`): PayPal's
+  form-urlencoded donation notifications. The body is echoed back to PayPal
+  **byte-for-byte** from `ctx.request.rawBody` (prefixed `cmd=_notify-validate&`)
+  for a `VERIFIED`/`INVALID` answer -- never re-serialize the parsed object, and
+  decode values with the message's own `charset` field (often windows-1252),
+  not as UTF-8. Verify and insert *before* answering: a 503 makes PayPal retry,
+  an empty 200 stops it. Only VERIFIED messages are stored, into `paypal_ipn`
+  (see `hebcal.sql`; whole message in `payload` JSON, de-duplicated on
+  `ipn_track_id`, datetimes UTC). Sandbox (`test_ipn=1`) is ignored unless
+  `hebcal.paypal.ipn.sandbox` is on; `hebcal.paypal.ipn.receiver_email`
+  optionally pins the receiving account.
 - **Agent discovery** (`agentDiscovery.js`): `/llms.txt` (content in
   `views/llms.md`, which is also the body of the Markdown homepage),
   `/openapi.json` (302 → `/api-docs/openapi.json`), `/developers` and `/docs`

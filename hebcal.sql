@@ -151,3 +151,43 @@ CREATE TABLE user_session (
   KEY user_session_user (user_id),
   KEY user_session_expires (expires)
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
+
+-- PayPal Instant Payment Notification messages, verified with PayPal and
+-- stored by src/paypalIpn.js (POST /paypal/ipn). One row per IPN message, not
+-- per donation: a donation that is later refunded has two rows (the refund
+-- carries parent_txn_id), and a pending payment that clears has two rows with
+-- the same txn_id. Retries of one message share ipn_track_id and are
+-- de-duplicated on it. All datetimes are UTC.
+--
+-- Donations still owed a thank-you:
+--   SELECT * FROM paypal_ipn
+--   WHERE payment_status = 'Completed' AND test_ipn = 0 AND thanked IS NULL
+--   AND txn_type IN ('web_accept', 'subscr_payment', 'recurring_payment',
+--                    'express_checkout', 'send_money', 'cart');
+CREATE TABLE paypal_ipn (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  received datetime NOT NULL,
+  ipn_track_id varchar(64) DEFAULT NULL,
+  txn_id varchar(64) DEFAULT NULL,
+  parent_txn_id varchar(64) DEFAULT NULL,
+  txn_type varchar(64) DEFAULT NULL,
+  payment_status varchar(32) DEFAULT NULL,
+  payment_date datetime DEFAULT NULL,
+  mc_gross decimal(12,2) DEFAULT NULL,
+  mc_fee decimal(12,2) DEFAULT NULL,
+  mc_currency char(3) DEFAULT NULL,
+  first_name varchar(128) DEFAULT NULL,
+  last_name varchar(128) DEFAULT NULL,
+  payer_email varchar(254) DEFAULT NULL,
+  payer_id varchar(32) DEFAULT NULL,
+  item_name varchar(255) DEFAULT NULL,
+  memo varchar(1024) DEFAULT NULL,
+  test_ipn tinyint(1) NOT NULL DEFAULT '0',
+  thanked datetime DEFAULT NULL,
+  payload JSON NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY paypal_ipn_track (ipn_track_id),
+  KEY paypal_ipn_txn (txn_id),
+  KEY paypal_ipn_payer_email (payer_email),
+  KEY paypal_ipn_payment_date (payment_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
