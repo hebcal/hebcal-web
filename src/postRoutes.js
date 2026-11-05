@@ -15,7 +15,7 @@ const POST_EXACT = new Set([
   '/link',
   '/logout',
   '/login/apple/callback', // Apple form_post, see loginAppleCallback()
-  '/paypal/ipn', // PayPal Instant Payment Notification, see paypalIpn.js
+  '/paypal/ipn', // PayPal Instant Payment Notification, see paypal-ipn.js
 ]);
 
 /**

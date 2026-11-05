@@ -153,7 +153,7 @@ CREATE TABLE user_session (
 ) ENGINE=InnoDB DEFAULT CHARSET=ascii;
 
 -- PayPal Instant Payment Notification messages, verified with PayPal and
--- stored by src/paypalIpn.js (POST /paypal/ipn). One row per IPN message, not
+-- stored by src/paypal-ipn.js (POST /paypal/ipn). One row per IPN message, not
 -- per donation: a donation that is later refunded has two rows (the refund
 -- carries parent_txn_id), and a pending payment that clears has two rows with
 -- the same txn_id. Retries of one message share ipn_track_id and are

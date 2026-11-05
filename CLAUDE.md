@@ -267,7 +267,7 @@ Each feature is typically one or a few files handling routing, business logic, a
   are keyed by email address, and re-subscribing while signed in reuses the same
   email-keyed row -- so nothing is duplicated, and old subscriptions surface by an
   email join once an account page lists them.
-- **PayPal IPN** (`paypalIpn.js`, `POST /paypal/ipn`): PayPal's
+- **PayPal IPN** (`paypal-ipn.js`, `POST /paypal/ipn`): PayPal's
   form-urlencoded donation notifications. The body is echoed back to PayPal
   **byte-for-byte** from `ctx.request.rawBody` (prefixed `cmd=_notify-validate&`)
   for a `VERIFIED`/`INVALID` answer -- never re-serialize the parsed object, and

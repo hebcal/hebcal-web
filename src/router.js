@@ -53,7 +53,7 @@ import {
 } from './login.js';
 import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch, yahrzeitEmailStatus} from './yahrzeit-email.js';
 import {omerApp} from './omerApp.js';
-import {paypalIpn} from './paypalIpn.js';
+import {paypalIpn} from './paypal-ipn.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
 import {sendGif, sendMatomoJs} from './sendGif.js';

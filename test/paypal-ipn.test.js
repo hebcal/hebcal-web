@@ -2,7 +2,7 @@ import {describe, it, expect, beforeAll, beforeEach, afterEach, vi} from 'vitest
 import request from 'supertest';
 import {app} from '../src/app-www.js';
 import {makeServer} from './testServer.js';
-import {parseIpnBody, parsePaymentDate, ipnToRow} from '../src/paypalIpn.js';
+import {parseIpnBody, parsePaymentDate, ipnToRow} from '../src/paypal-ipn.js';
 
 const server = makeServer(app);
 
