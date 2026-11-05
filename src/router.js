@@ -53,6 +53,7 @@ import {
 } from './login.js';
 import {yahrzeitEmailSub, yahrzeitEmailVerify, yahrzeitEmailSearch, yahrzeitEmailStatus} from './yahrzeit-email.js';
 import {omerApp} from './omerApp.js';
+import {paypalIpn} from './paypal-ipn.js';
 import {sitemapZips} from './sitemapZips.js';
 import {getLeyning} from './leyning.js';
 import {sendGif, sendMatomoJs} from './sendGif.js';
@@ -226,6 +227,9 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
       return logout(ctx);
     } else if (rpath === '/account') {
       return accountPage(ctx);
+    } else if (rpath === '/paypal/ipn') {
+      // Accepts POST (see postRoutes.js): PayPal's server-to-server IPN.
+      return paypalIpn(ctx);
     } else if (rpath.startsWith('/link')) {
       return shabbatJsLink(ctx);
     } else if (rpath === '/ical/') {
