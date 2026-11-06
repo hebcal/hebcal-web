@@ -353,7 +353,7 @@ function renderHtml(ctx) {
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
   const numYears = getNumYears(options);
-  makeDownloadProps(ctx, q, options, {numYears});
+  makeDownloadProps(ctx, q, options, numYears);
   const url = ctx.state.url;
   url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
   const prev = makePrevNextUrl(q, options, events, false);

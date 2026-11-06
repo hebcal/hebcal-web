@@ -216,19 +216,17 @@ export function getMultiYearFilename(options, year, endYear) {
 /**
  * Populates `ctx.state.url` and `ctx.state.filename` with download URLs.
  *
- * When `multiYear.numYears` is greater than 1 and the calendar is for a
- * whole year (not a month or a start/end range), also adds an `icsMultiYear`
- * URL (a one-time .ics download covering `numYears` years starting from
- * `year`), its filename, and `ctx.state.downloadMultiYearTitle`
+ * When `numYears` is greater than 1 and the calendar is for a whole year
+ * (not a month or a start/end range), also adds an `icsMultiYear` URL (a
+ * one-time .ics download covering `numYears` years starting from
+ * `options.year`), its filename, and `ctx.state.downloadMultiYearTitle`
  * (e.g. `2019-2025`).
  * @param {import('koa').Context} ctx
  * @param {any} q
  * @param {import('@hebcal/core').CalOptions} options
- * @param {Object} [multiYear]
- * @param {number} [multiYear.numYears] number of years in the multi-year download
- * @param {number} [multiYear.year] first year; defaults to `options.year`
+ * @param {number} numYears number of years in the multi-year download
  */
-export function makeDownloadProps(ctx, q, options, multiYear={}) {
+export function makeDownloadProps(ctx, q, options, numYears) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref2(q, dlFilename);
   const subFilename = getSubFilename(options.location);
@@ -250,9 +248,8 @@ export function makeDownloadProps(ctx, q, options, multiYear={}) {
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
-  const numYears = multiYear.numYears;
-  const year = multiYear.year ?? options.year;
-  if (typeof numYears === 'number' && numYears > 1 &&
+  const year = options.year;
+  if (numYears > 1 &&
       typeof year === 'number' && !options.month &&
       !options.start && !options.end) {
     const endYear = year + numYears - 1;

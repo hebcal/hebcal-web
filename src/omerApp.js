@@ -56,7 +56,7 @@ export async function omerApp(rpath, ctx) {
     const options = {year: hyear, isHebrewYear: true};
     const q0 = {v: '1', o: 'on', year: String(hyear), yt: 'H', emoji: '0'};
     const numYears = 3;
-    makeDownloadProps(ctx, q0, options, {numYears});
+    makeDownloadProps(ctx, q0, options, numYears);
     const feedUrl = '://download.hebcal.com/ical/omer.ics';
     ctx.state.url.subical = 'https' + feedUrl;
     ctx.state.url.webcal = 'webcal' + feedUrl;

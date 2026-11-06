@@ -56,7 +56,7 @@ export async function parshaYearApp(ctx) {
 
   const options = {year: hyear, isHebrewYear: true, noHolidays: true, sedrot: true};
   const numYears = getNumYears(options);
-  makeDownloadProps(ctx, q0, options, {numYears});
+  makeDownloadProps(ctx, q0, options, numYears);
   const feedLoc = il ? 'israel' : 'diaspora';
   const feedUrl = `://download.hebcal.com/ical/torah-readings-${feedLoc}.ics`;
   ctx.state.url.subical = 'https' + feedUrl;

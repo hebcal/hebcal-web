@@ -319,7 +319,7 @@ export function makeQueryAndDownloadProps(ctx, options) {
   const isHebYr = options.isHebrewYear;
   q.yt = isHebYr ? 'H' : 'G';
   const numYears = getNumYears(options);
-  makeDownloadProps(ctx, q, options, {numYears});
+  makeDownloadProps(ctx, q, options, numYears);
   // Same name the download server gives the subscribed feed (X-WR-CALNAME),
   // e.g. "Hebcal Diaspora", for the Outlook.com and button labels
   ctx.state.url.title = getCalendarTitle([], {il: q.i === 'on', subscribe: '1'});
