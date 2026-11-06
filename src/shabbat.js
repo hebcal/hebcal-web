@@ -20,7 +20,6 @@ import {
 import {possiblySetCookie} from './cookie.js';
 import {getTodayDate, getDefaultYear, getDefaultHebrewYear,
   expiresSaturdayNight, shabbatWeekRange} from './dateUtil.js';
-import {makeDownloadProps} from './makeDownloadProps.js';
 import '@hebcal/locales';
 import dayjs from 'dayjs';
 import {countryNames, getEventCategories, shouldRenderBrief, makeAnchor,
@@ -99,11 +98,6 @@ export async function shabbatApp(ctx) {
     if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
-    const numYears = ctx.state.numYears = 4;
-    const year = ctx.state.currentYear = new Date().getFullYear();
-    makeDownloadProps(ctx, q, options, {numYears, year});
-    ctx.state.downloadAltTitle = `${year} only`;
-    delete ctx.state.filename.pdf;
     p.Locale = Locale;
     return ctx.render('shabbat', p);
   }

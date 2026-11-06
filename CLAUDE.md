@@ -119,7 +119,7 @@ Each feature is typically one or a few files handling routing, business logic, a
   `hebcal_5787h_5793h.ics`). Both come from the shared
   `views/partials/download-modal-alt.ejs`. Callers pass the same numYears they
   show in the subscription blurb as `makeDownloadProps(ctx, q, options,
-  {numYears, year})`; it skips the multi-year link for numYears 1, a
+  {numYears})` (`year` defaults to `options.year`); it skips the multi-year link for numYears 1, a
   single month, or a start/end range.
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
 - **FullCalendar**: `fullcalendar.js` (`/hebcal?cfg=fc` server-side JSON);
