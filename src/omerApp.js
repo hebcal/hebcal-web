@@ -55,14 +55,15 @@ export async function omerApp(rpath, ctx) {
 
     const options = {year: hyear, isHebrewYear: true};
     const q0 = {v: '1', o: 'on', year: String(hyear), yt: 'H', emoji: '0'};
-    makeDownloadProps(ctx, q0, options);
+    const numYears = 3;
+    makeDownloadProps(ctx, q0, options, {numYears});
     const feedUrl = '://download.hebcal.com/ical/omer.ics';
     ctx.state.url.subical = 'https' + feedUrl;
     ctx.state.url.webcal = 'webcal' + feedUrl;
     ctx.state.url.gcal = 'http' + feedUrl;
     ctx.state.url.title = 'Days of the Omer';
     ctx.state.downloadAltTitle = `${hyear} only`;
-    ctx.state.numYears = 3;
+    ctx.state.numYears = numYears;
     ctx.state.currentYear = new HDate().getFullYear();
     delete ctx.state.filename.pdf;
 

@@ -352,7 +352,8 @@ function renderHtml(ctx) {
   });
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
-  makeDownloadProps(ctx, q, options);
+  const numYears = getNumYears(options);
+  makeDownloadProps(ctx, q, options, {numYears});
   const url = ctx.state.url;
   url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
   const prev = makePrevNextUrl(q, options, events, false);
@@ -415,7 +416,7 @@ function renderHtml(ctx) {
     locationName,
     currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
     downloadAltTitle: shortTitle + ' only',
-    numYears: getNumYears(options),
+    numYears,
     langNames,
     defaultYear,
     defaultYearHeb,

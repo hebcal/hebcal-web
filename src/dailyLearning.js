@@ -191,7 +191,7 @@ async function dailyLearningCalendar(ctx, cfg) {
     ny: cfg.years,
     emoji: '0',
   };
-  makeDownloadProps(ctx, q0, {year});
+  makeDownloadProps(ctx, q0, {year}, {numYears: cfg.years});
   if (cfg.downloadSlug) {
     const feedUrl = `://download.hebcal.com/ical/${cfg.downloadSlug}.ics`;
     ctx.state.url.subical = 'https' + feedUrl;

@@ -6,7 +6,7 @@ import {IcalEvent} from '@hebcal/icalendar';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
-import {downloadHref2, makeDlUrlsForScript} from '../src/makeDownloadProps.js';
+import {downloadHref2, makeDlUrlsForScript, makeDownloadProps} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {dailyLearningConfig} from '../src/urlArgs.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
@@ -638,6 +638,7 @@ describe('makeDlUrlsForScript', () => {
       apiHost: 'http://127.0.0.1:8082',
       subical: subical.substring(host.length),
       ics1year: '/v4/abc/hebcal_x.ics',
+      icsMultiYear: undefined,
       csv_usa: '/v4/abc/hebcal_x_usa.csv',
       csv_eur: undefined,
       pdf: '/v4/abc/hebcal_x.pdf',
@@ -654,6 +655,84 @@ describe('makeDlUrlsForScript', () => {
     expect(result.subical).toBe(subical);
     expect(result.ics1year).toBe('/v3/x/y.ics?dl=1');
     expect(new URL(result.subical, result.host).href).toBe(subical);
+  });
+});
+
+describe('makeDownloadProps multi-year download', () => {
+  const host = 'http://127.0.0.1:8081';
+  /**
+   * @param {string} url
+   * @return {Object}
+   */
+  function decode(url) {
+    const path = url.substring(host.length);
+    const encoded = path.split('/')[2];
+    return deserializeDownload(encoded);
+  }
+
+  it('adds a Gregorian multi-year .ics', () => {
+    const ctx = {state: {}};
+    const q = {v: '1', maj: 'on', min: 'on', year: '2019', yt: 'G'};
+    makeDownloadProps(ctx, q, {year: 2019}, {numYears: 7});
+    expect(ctx.state.filename.icsMultiYear).toBe('hebcal_2019_2025.ics');
+    expect(ctx.state.downloadMultiYearTitle).toBe('2019-2025');
+    expect(ctx.state.url.icsMultiYear).toMatch(/^http:\/\/127\.0\.0\.1:8081\/v4\/.+\/hebcal_2019_2025\.ics$/);
+    const q2 = decode(ctx.state.url.icsMultiYear);
+    expect(q2.year).toBe(2019);
+    expect(q2.ny).toBe(7);
+    expect(q2.yt).toBe('G');
+    expect(q2.maj).toBe('on');
+    // the single-year download is unchanged
+    expect(ctx.state.filename.ics).toBe('hebcal_2019.ics');
+    expect(decode(ctx.state.url.ics1year).ny).toBe(1);
+    expect(makeDlUrlsForScript(ctx.state.url).icsMultiYear).toMatch(/^\/v4\/.+\/hebcal_2019_2025\.ics$/);
+  });
+
+  it('adds a Hebrew multi-year .ics', () => {
+    const ctx = {state: {}};
+    const q = {v: '1', o: 'on', year: '5787', yt: 'H'};
+    makeDownloadProps(ctx, q, {year: 5787, isHebrewYear: true}, {numYears: 3});
+    expect(ctx.state.filename.icsMultiYear).toBe('hebcal_5787h_5789h.ics');
+    expect(ctx.state.downloadMultiYearTitle).toBe('5787-5789');
+    const q2 = decode(ctx.state.url.icsMultiYear);
+    expect(q2.year).toBe(5787);
+    expect(q2.ny).toBe(3);
+    expect(q2.yt).toBe('H');
+  });
+
+  it('uses an explicit year when the options have none', () => {
+    const ctx = {state: {}};
+    makeDownloadProps(ctx, {v: '1', maj: 'on'}, {}, {numYears: 4, year: 2026});
+    expect(ctx.state.filename.icsMultiYear).toBe('hebcal_2026_2029.ics');
+    expect(decode(ctx.state.url.icsMultiYear).year).toBe(2026);
+  });
+
+  for (const [name, options, numYears] of [
+    ['numYears is 1', {year: 2019}, 1],
+    ['numYears is omitted', {year: 2019}, undefined],
+    ['the calendar is a single month', {year: 2019, month: 3}, 7],
+    ['there is no year', {}, 7],
+  ]) {
+    it(`omits the multi-year .ics when ${name}`, () => {
+      const ctx = {state: {}};
+      makeDownloadProps(ctx, {v: '1', maj: 'on', year: '2019'}, options, {numYears});
+      expect(ctx.state.url.icsMultiYear).toBeUndefined();
+      expect(ctx.state.filename.icsMultiYear).toBeUndefined();
+      expect(ctx.state.downloadMultiYearTitle).toBeUndefined();
+    });
+  }
+
+  it('serves the multi-year .ics with every year', async () => {
+    const ctx = {state: {}};
+    const q = {v: '1', maj: 'on', year: '2019', yt: 'G'};
+    makeDownloadProps(ctx, q, {year: 2019}, {numYears: 3});
+    const response = await request(server).get(ctx.state.url.icsMultiYear.substring(host.length));
+    expect(response.status).toBe(200);
+    expect(response.headers['content-disposition']).toContain('hebcal_2019_2021.ics');
+    for (const yr of ['2019', '2020', '2021']) {
+      expect(response.text).toContain(`DTSTART;VALUE=DATE:${yr}`);
+    }
+    expect(response.text).not.toContain('DTSTART;VALUE=DATE:2022');
   });
 });
 

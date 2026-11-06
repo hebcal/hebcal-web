@@ -192,11 +192,43 @@ function getSubFilename(location) {
 }
 
 /**
+ * Filename (without extension) for a multi-year download, e.g.
+ * `hebcal_2019_2025` or `hebcal_5787h_5793h`, plus the location suffix
+ * that `getDownloadFilename()` adds.
+ * @param {import('@hebcal/core').CalOptions} options
+ * @param {number} year first year
+ * @param {number} endYear last year (inclusive)
+ * @return {string}
+ */
+export function getMultiYearFilename(options, year, endYear) {
+  const isHebrewYear = Boolean(options.isHebrewYear);
+  const h = isHebrewYear ? 'h' : '';
+  return getDownloadFilename({
+    ...options,
+    year: `${year}${h}_${endYear}`,
+    isHebrewYear,
+    month: undefined,
+    start: undefined,
+    end: undefined,
+  });
+}
+
+/**
+ * Populates `ctx.state.url` and `ctx.state.filename` with download URLs.
+ *
+ * When `multiYear.numYears` is greater than 1 and the calendar is for a
+ * whole year (not a month or a start/end range), also adds an `icsMultiYear`
+ * URL (a one-time .ics download covering `numYears` years starting from
+ * `year`), its filename, and `ctx.state.downloadMultiYearTitle`
+ * (e.g. `2019-2025`).
  * @param {import('koa').Context} ctx
  * @param {any} q
  * @param {import('@hebcal/core').CalOptions} options
+ * @param {Object} [multiYear]
+ * @param {number} [multiYear.numYears] number of years in the multi-year download
+ * @param {number} [multiYear.year] first year; defaults to `options.year`
  */
-export function makeDownloadProps(ctx, q, options) {
+export function makeDownloadProps(ctx, q, options, multiYear={}) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref2(q, dlFilename);
   const subFilename = getSubFilename(options.location);
@@ -218,6 +250,22 @@ export function makeDownloadProps(ctx, q, options) {
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
+  const numYears = multiYear.numYears;
+  const year = multiYear.year ?? options.year;
+  if (typeof numYears === 'number' && numYears > 1 &&
+      typeof year === 'number' && !options.month &&
+      !options.start && !options.end) {
+    const endYear = year + numYears - 1;
+    const filename = getMultiYearFilename(options, year, endYear);
+    url.icsMultiYear = downloadHref2(q, filename, {
+      year: String(year),
+      yt: options.isHebrewYear ? 'H' : 'G',
+      ny: String(numYears),
+      emoji,
+    }) + '.ics';
+    ctx.state.filename.icsMultiYear = filename + '.ics';
+    ctx.state.downloadMultiYearTitle = `${year}-${endYear}`;
+  }
 }
 
 /**
@@ -240,6 +288,7 @@ export function makeDlUrlsForScript(url) {
     apiHost: apiPrefix,
     subical: strip(url.subical, dlPrefix),
     ics1year: strip(url.ics1year, dlPrefix),
+    icsMultiYear: strip(url.icsMultiYear, dlPrefix),
     csv_usa: strip(url.csv_usa, apiPrefix),
     csv_eur: strip(url.csv_eur, apiPrefix),
     pdf: strip(url.pdf, apiPrefix),

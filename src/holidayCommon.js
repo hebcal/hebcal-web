@@ -318,12 +318,13 @@ export function makeQueryAndDownloadProps(ctx, options) {
   q.year = String(year);
   const isHebYr = options.isHebrewYear;
   q.yt = isHebYr ? 'H' : 'G';
-  makeDownloadProps(ctx, q, options);
+  const numYears = getNumYears(options);
+  makeDownloadProps(ctx, q, options, {numYears});
   // Same name the download server gives the subscribed feed (X-WR-CALNAME),
   // e.g. "Hebcal Diaspora", for the Outlook.com and button labels
   ctx.state.url.title = getCalendarTitle([], {il: q.i === 'on', subscribe: '1'});
   ctx.state.downloadAltTitle = `${year} only`;
-  ctx.state.numYears = getNumYears(options);
+  ctx.state.numYears = numYears;
   const today = isHebYr ? new HDate() : new Date();
   ctx.state.currentYear = today.getFullYear();
   delete ctx.state.filename.pdf;

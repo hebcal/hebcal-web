@@ -99,9 +99,9 @@ export async function shabbatApp(ctx) {
     if (q.set !== 'off') {
       possiblySetCookie(ctx, q);
     }
-    makeDownloadProps(ctx, q, options);
-    ctx.state.numYears = 4;
+    const numYears = ctx.state.numYears = 4;
     const year = ctx.state.currentYear = new Date().getFullYear();
+    makeDownloadProps(ctx, q, options, {numYears, year});
     ctx.state.downloadAltTitle = `${year} only`;
     delete ctx.state.filename.pdf;
     p.Locale = Locale;
