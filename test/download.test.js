@@ -6,7 +6,7 @@ import {IcalEvent} from '@hebcal/icalendar';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
-import {downloadHref2, makeDlUrlsForScript, makeDownloadProps} from '../src/makeDownloadProps.js';
+import {downloadHref2, makeDlUrlsForScript, makeDownloadProps, useStaticIcalFeed} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {dailyLearningConfig} from '../src/urlArgs.js';
 import {limitIcsFeedLength, maxEventsIcsSub} from '../src/hebcal-download.js';
@@ -686,6 +686,37 @@ describe('makeDownloadProps multi-year download', () => {
     expect(ctx.state.filename.ics).toBe('hebcal_2019.ics');
     expect(decode(ctx.state.url.ics1year).ny).toBe(1);
     expect(makeDlUrlsForScript(ctx.state.url).icsMultiYear).toMatch(/^\/v4\/.+\/hebcal_2019_2025\.ics$/);
+  });
+
+  it('sets the download modal state', () => {
+    const ctx = {state: {}};
+    makeDownloadProps(ctx, {v: '1', maj: 'on', year: '2019'}, {year: 2019}, 7);
+    expect(ctx.state.numYears).toBe(7);
+    expect(ctx.state.currentYear).toBe(new Date().getFullYear());
+    expect(ctx.state.downloadAltTitle).toBe('2019 only');
+    // the PDF tab is opt-in (only /hebcal adds it)
+    expect(ctx.state.filename.pdf).toBeUndefined();
+    expect(ctx.state.url.pdf).toMatch(/\/hebcal_2019\.pdf$/);
+
+    const ctx2 = {state: {}};
+    makeDownloadProps(ctx2, {v: '1', o: 'on', year: '5787', yt: 'H'}, {year: 5787, isHebrewYear: true}, 3);
+    expect(ctx2.state.currentYear).toBe(new HDate().getFullYear());
+    expect(ctx2.state.downloadAltTitle).toBe('5787 only');
+
+    const ctx3 = {state: {}};
+    makeDownloadProps(ctx3, {v: '1', maj: 'on'}, {}, 4);
+    expect(ctx3.state.downloadAltTitle).toBeUndefined();
+  });
+
+  it('useStaticIcalFeed points the subscribe links at /ical/', () => {
+    const ctx = {state: {}};
+    makeDownloadProps(ctx, {v: '1', o: 'on', year: '5787', yt: 'H'}, {year: 5787, isHebrewYear: true}, 3);
+    const ics1year = ctx.state.url.ics1year;
+    useStaticIcalFeed(ctx, 'omer');
+    expect(ctx.state.url.subical).toBe('https://download.hebcal.com/ical/omer.ics');
+    expect(ctx.state.url.webcal).toBe('webcal://download.hebcal.com/ical/omer.ics');
+    expect(ctx.state.url.gcal).toBe('http://download.hebcal.com/ical/omer.ics');
+    expect(ctx.state.url.ics1year).toBe(ics1year);
   });
 
   it('adds a Hebrew multi-year .ics', () => {

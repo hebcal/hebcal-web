@@ -5,7 +5,7 @@ import {CACHE_CONTROL_1_YEAR, CACHE_CONTROL_30DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear, yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {basename, dirname} from 'node:path';
 import {HDate, months, OmerEvent, Locale, getHolidaysOnDate} from '@hebcal/core';
-import {makeDownloadProps} from './makeDownloadProps.js';
+import {makeDownloadProps, useStaticIcalFeed} from './makeDownloadProps.js';
 import {getHolidayMeta} from './getHolidayMeta.js';
 
 function omerSitemap(ctx) {
@@ -55,17 +55,9 @@ export async function omerApp(rpath, ctx) {
 
     const options = {year: hyear, isHebrewYear: true};
     const q0 = {v: '1', o: 'on', year: String(hyear), yt: 'H', emoji: '0'};
-    const numYears = 3;
-    makeDownloadProps(ctx, q0, options, numYears);
-    const feedUrl = '://download.hebcal.com/ical/omer.ics';
-    ctx.state.url.subical = 'https' + feedUrl;
-    ctx.state.url.webcal = 'webcal' + feedUrl;
-    ctx.state.url.gcal = 'http' + feedUrl;
+    makeDownloadProps(ctx, q0, options, 3);
+    useStaticIcalFeed(ctx, 'omer');
     ctx.state.url.title = 'Days of the Omer';
-    ctx.state.downloadAltTitle = `${hyear} only`;
-    ctx.state.numYears = numYears;
-    ctx.state.currentYear = new HDate().getFullYear();
-    delete ctx.state.filename.pdf;
 
     const meta = await getHolidayMeta('Days of the Omer');
     return ctx.render('omer-year', {

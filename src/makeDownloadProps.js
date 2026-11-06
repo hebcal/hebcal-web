@@ -1,3 +1,4 @@
+import {HDate} from '@hebcal/core';
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import createError from 'http-errors';
@@ -214,7 +215,15 @@ export function getMultiYearFilename(options, year, endYear) {
 }
 
 /**
- * Populates `ctx.state.url` and `ctx.state.filename` with download URLs.
+ * Sets everything `views/partials/download-modal.ejs` reads:
+ * `ctx.state.url` (download URLs), `ctx.state.filename`, `numYears` and
+ * `currentYear` (for the subscription blurb), and, for a whole-year
+ * calendar, `downloadAltTitle` (e.g. `2019 only`). Callers still set
+ * `url.title`, and may override `downloadAltTitle` or point the subscribe
+ * links at a static feed with `useStaticIcalFeed()`.
+ *
+ * The PDF tab is shown only if the caller adds `ctx.state.filename.pdf`;
+ * `url.pdf` is always set.
  *
  * When `numYears` is greater than 1 and the calendar is for a whole year
  * (not a month or a start/end range), also adds an `icsMultiYear` URL (a
@@ -244,11 +253,16 @@ export function makeDownloadProps(ctx, q, options, numYears) {
   };
   ctx.state.filename = {
     ics: dlFilename + '.ics',
-    pdf: dlFilename + '.pdf',
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
+  ctx.state.numYears = numYears;
+  const today = options.isHebrewYear ? new HDate() : new Date();
+  ctx.state.currentYear = today.getFullYear();
   const year = options.year;
+  if (typeof year === 'number') {
+    ctx.state.downloadAltTitle = `${year} only`;
+  }
   if (numYears > 1 &&
       typeof year === 'number' && !options.month &&
       !options.start && !options.end) {
@@ -263,6 +277,22 @@ export function makeDownloadProps(ctx, q, options, numYears) {
     ctx.state.filename.icsMultiYear = filename + '.ics';
     ctx.state.downloadMultiYearTitle = `${year}-${endYear}`;
   }
+}
+
+/**
+ * Points the download modal's subscribe links (Apple/Outlook webcal, Google,
+ * the copyable iCalendar URL) at one of the static multi-year feeds that
+ * `makeStaticCalendars.js` publishes at download.hebcal.com/ical/.
+ * Call after `makeDownloadProps()`.
+ * @param {import('koa').Context} ctx
+ * @param {string} slug feed file name without `.ics`, e.g. `omer`
+ */
+export function useStaticIcalFeed(ctx, slug) {
+  const feedUrl = `://download.hebcal.com/ical/${slug}.ics`;
+  const url = ctx.state.url;
+  url.subical = 'https' + feedUrl;
+  url.webcal = 'webcal' + feedUrl;
+  url.gcal = 'http' + feedUrl;
 }
 
 /**

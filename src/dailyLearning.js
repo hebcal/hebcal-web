@@ -10,7 +10,7 @@ import {HDate, calendar, months, OmerEvent, Locale, getHolidaysOnDate} from '@he
 import {getLeyningOnDate, makeLeyningParts} from '@hebcal/leyning';
 import {makeLeyningHtmlFromParts} from './parshaCommon.js';
 import {makeAnchor} from '@hebcal/rest-api';
-import {makeDownloadProps} from './makeDownloadProps.js';
+import {makeDownloadProps, useStaticIcalFeed} from './makeDownloadProps.js';
 import '@hebcal/learning';
 
 /**
@@ -193,16 +193,9 @@ async function dailyLearningCalendar(ctx, cfg) {
   };
   makeDownloadProps(ctx, q0, {year}, cfg.years);
   if (cfg.downloadSlug) {
-    const feedUrl = `://download.hebcal.com/ical/${cfg.downloadSlug}.ics`;
-    ctx.state.url.subical = 'https' + feedUrl;
-    ctx.state.url.webcal = 'webcal' + feedUrl;
-    ctx.state.url.gcal = 'http' + feedUrl;
+    useStaticIcalFeed(ctx, cfg.downloadSlug);
   }
   ctx.state.url.title = cfg.shortName;
-  ctx.state.downloadAltTitle = `${year} only`;
-  ctx.state.numYears = cfg.years;
-  ctx.state.currentYear = year;
-  delete ctx.state.filename.pdf;
   await ctx.render('dailyLearningCalendar', {
     cfg,
     slug,
