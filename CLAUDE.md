@@ -112,6 +112,18 @@ Each feature is typically one or a few files handling routing, business logic, a
   friends; add `data-hebcal-src="<key>"` instead (and the key to
   `makeDlUrlsForScript()`). `myPrint()` reads `#print-pdf`'s href, which is
   set by that script.
+  **Alternate .ics downloads**: next to the subscribe button each of the
+  Apple / Outlook PC / Google tabs offers a one-time "Download <year> only"
+  (`ics1year`) and, when the page's numYears is > 1, a "Download
+  <year>-<year+n-1>" (`icsMultiYear`, e.g. `hebcal_2019_2025.ics` or
+  `hebcal_5787h_5793h.ics`). Both come from the shared
+  `views/partials/download-modal-alt.ejs`. `makeDownloadProps(ctx, q,
+  options, numYears)` sets everything the modal reads -- `url`, `filename`,
+  `numYears`/`currentYear` for the subscription blurb, `downloadAltTitle` --
+  and skips the multi-year link for numYears 1, a single month, or a
+  start/end range. Callers set only `url.title`, call `useStaticIcalFeed()`
+  to point the subscribe links at a `/ical/` feed, and (only `/hebcal`) add
+  `filename.pdf` to show the PDF tab.
 - **RSS**: `rss.js` (RSS 2.0 generation), `parshaRss.js`, `dafYomiRss.js`, `rssCommon.js`
 - **FullCalendar**: `fullcalendar.js` (`/hebcal?cfg=fc` server-side JSON);
   `client-fullcalendar.js` is the separate browser bundle

@@ -1,0 +1,8 @@
+<a class="btn btn-secondary btn-sm download mb-2" id="<%= locals.id %>-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
+  <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
+  Download <%= locals.downloadAltTitle %></a>
+<% if (typeof locals.filename.icsMultiYear === 'string') { -%>
+<a class="btn btn-secondary btn-sm download mb-2 ms-2" id="<%= locals.id %>-multi" title="<%= locals.filename.icsMultiYear %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="icsMultiYear" download="<%= locals.filename.icsMultiYear %>">
+  <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
+  Download <%= locals.downloadMultiYearTitle %></a>
+<% } -%>

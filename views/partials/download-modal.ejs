@@ -51,9 +51,7 @@ target="_blank" class="outbound"
 href="/home/79/apple-ical-import-hebcal-jewish-calendar">macOS</a></p>
 </div>
 <div>
- <a class="btn btn-secondary btn-sm download mb-2" id="dl-ios-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
-  <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
-  Download <%= locals.downloadAltTitle %></a>
+<%- await include('download-modal-alt.ejs', {id: 'dl-ios'}) -%>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events and merge with your own calendar.</p>
 </div>
@@ -83,9 +81,7 @@ target="_blank" class="outbound"
 href="/home/8/outlook-ics-jewish-holidays">Outlook for Windows</a></p>
 </div>
 <div>
-  <a class="btn btn-secondary btn-sm download mb-2" id="dl-ol-ics-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
-  <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
-  Download <%= locals.downloadAltTitle %></a>
+<%- await include('download-modal-alt.ejs', {id: 'dl-ol-ics'}) -%>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events into Outlook and merge with your own calendar.</p>
 </div>
@@ -117,9 +113,7 @@ data-hebcal-attr="href" data-hebcal-src="gcal"
 <%- await include('download-modal-numyears.ejs') -%>
 </div>
 <div>
-  <a class="btn btn-secondary btn-sm download mb-2" id="dl-gcal-alt" title="<%= locals.filename.ics %>" rel="nofollow" data-hebcal-attr="href" data-hebcal-src="ics1year" download="<%= locals.filename.ics %>">
-  <svg class="icon icon-sm"><use href="<%=locals.spriteHref%>#bi-cloud-download"></use></svg>
-  Download <%= locals.downloadAltTitle %></a>
+<%- await include('download-modal-alt.ejs', {id: 'dl-gcal'}) -%>
   <p class="small">Use this download alternative if you prefer to manually import
   the calendar events into Google Calendar and merge with your own calendar
   (see <a title="Google Calendar alternative instructions - import Hebcal Jewish calendar"

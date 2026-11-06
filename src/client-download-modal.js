@@ -54,9 +54,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function changeButtonTarget(id) {
     const btn = document.getElementById(id);
     setTarget(btn, applyOptions(dlUrl(btn.dataset.hebcalSrc), id));
-    const btn2 = document.getElementById(id + '-alt');
-    if (btn2) {
-      setTarget(btn2, applyOptions(dlUrl('ics1year'), id + '-alt'));
+    for (const suffix of ['-alt', '-multi']) {
+      const btn2 = document.getElementById(id + suffix);
+      if (btn2) {
+        setTarget(btn2, applyOptions(dlUrl(btn2.dataset.hebcalSrc), id + suffix));
+      }
     }
   }
   const ccEl = document.getElementById('cal-color');

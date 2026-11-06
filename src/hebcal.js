@@ -352,8 +352,10 @@ function renderHtml(ctx) {
   });
   const today = dayjs();
   const localeData = today.locale(locale).localeData();
-  makeDownloadProps(ctx, q, options);
+  makeDownloadProps(ctx, q, options, getNumYears(options));
   const url = ctx.state.url;
+  // /hebcal is the only page whose download modal offers a PDF
+  ctx.state.filename.pdf = url.dlFilename + '.pdf';
   url.canonical = 'https://www.hebcal.com/hebcal?' + urlArgs(q);
   const prev = makePrevNextUrl(q, options, events, false);
   const next = makePrevNextUrl(q, options, events, true);
@@ -413,9 +415,8 @@ function renderHtml(ctx) {
     nextTitle: next.title,
     shortTitle: 'Jewish Calendar ' + shortTitle,
     locationName,
-    currentYear: options.isHebrewYear ? new HDate().getFullYear() : today.year(),
+    // also covers a single month or a start/end range, e.g. "March 2019 only"
     downloadAltTitle: shortTitle + ' only',
-    numYears: getNumYears(options),
     langNames,
     defaultYear,
     defaultYearHeb,

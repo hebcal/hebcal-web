@@ -560,3 +560,36 @@ describe('download links are not exposed to non-JS clients', () => {
     });
   }
 });
+
+describe('multi-year .ics download button', () => {
+  for (const [url, filename, title] of [
+    ['/hebcal?v=1&year=2019&yt=G&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&mm=0&lg=s&c=off&geo=none', 'hebcal_2019_2025.ics', '2019-2025'],
+    ['/hebcal?v=1&year=5787&yt=H&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&lg=s&c=off&geo=none', 'hebcal_5787h_5793h.ics', '5787-5793'],
+    ['/sedrot/5787?i=off', 'hebcal_5787h_5791h.ics', '5787-5791'],
+    ['/omer/5787', 'hebcal_5787h_5789h.ics', '5787-5789'],
+  ]) {
+    it(url, async () => {
+      const response = await request(server).get(url);
+      expect(response.status).toBe(200);
+      for (const id of ['dl-ios', 'dl-ol-ics', 'dl-gcal']) {
+        expect(response.text).toContain(`id="${id}-multi"`);
+      }
+      expect(response.text).toContain(`download="${filename}"`);
+      expect(response.text).toContain(`Download ${title}</a>`);
+      expect(response.text).toContain('data-hebcal-src="icsMultiYear"');
+      const json = response.text.match(/<script type="application\/json" id="dlURLs">([\s\S]*?)<\/script>/);
+      const dl = JSON.parse(json[1]);
+      expect(dl.icsMultiYear).toMatch(new RegExp(`^/v4/.+/${filename.replace('.', '\\.')}$`));
+    });
+  }
+
+  it('is omitted when the inferred numYears is 1', async () => {
+    // two daily learning options reduce numYears to 1
+    const response = await request(server).get('/hebcal?v=1&year=2019&yt=G&maj=on&F=on&myomi=on&geo=none');
+    expect(response.status).toBe(200);
+    expect(response.text).toContain('id="dl-ios-alt"');
+    expect(response.text).not.toContain('id="dl-ios-multi"');
+    expect(response.text).not.toContain('data-hebcal-src="icsMultiYear"');
+    expect(response.text).not.toContain('"icsMultiYear":');
+  });
+});

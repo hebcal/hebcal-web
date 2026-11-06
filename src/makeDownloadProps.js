@@ -1,3 +1,4 @@
+import {HDate} from '@hebcal/core';
 import {getDownloadFilename, makeAnchor} from '@hebcal/rest-api';
 import {basename} from 'node:path';
 import createError from 'http-errors';
@@ -192,11 +193,49 @@ function getSubFilename(location) {
 }
 
 /**
+ * Filename (without extension) for a multi-year download, e.g.
+ * `hebcal_2019_2025` or `hebcal_5787h_5793h`, plus the location suffix
+ * that `getDownloadFilename()` adds.
+ * @param {import('@hebcal/core').CalOptions} options
+ * @param {number} year first year
+ * @param {number} endYear last year (inclusive)
+ * @return {string}
+ */
+export function getMultiYearFilename(options, year, endYear) {
+  const isHebrewYear = Boolean(options.isHebrewYear);
+  const h = isHebrewYear ? 'h' : '';
+  return getDownloadFilename({
+    ...options,
+    year: `${year}${h}_${endYear}`,
+    isHebrewYear,
+    month: undefined,
+    start: undefined,
+    end: undefined,
+  });
+}
+
+/**
+ * Sets everything `views/partials/download-modal.ejs` reads:
+ * `ctx.state.url` (download URLs), `ctx.state.filename`, `numYears` and
+ * `currentYear` (for the subscription blurb), and, for a whole-year
+ * calendar, `downloadAltTitle` (e.g. `2019 only`). Callers still set
+ * `url.title`, and may override `downloadAltTitle` or point the subscribe
+ * links at a static feed with `useStaticIcalFeed()`.
+ *
+ * The PDF tab is shown only if the caller adds `ctx.state.filename.pdf`;
+ * `url.pdf` is always set.
+ *
+ * When `numYears` is greater than 1 and the calendar is for a whole year
+ * (not a month or a start/end range), also adds an `icsMultiYear` URL (a
+ * one-time .ics download covering `numYears` years starting from
+ * `options.year`), its filename, and `ctx.state.downloadMultiYearTitle`
+ * (e.g. `2019-2025`).
  * @param {import('koa').Context} ctx
  * @param {any} q
  * @param {import('@hebcal/core').CalOptions} options
+ * @param {number} numYears number of years in the multi-year download
  */
-export function makeDownloadProps(ctx, q, options) {
+export function makeDownloadProps(ctx, q, options, numYears) {
   const dlFilename = getDownloadFilename(options);
   const dlhref = downloadHref2(q, dlFilename);
   const subFilename = getSubFilename(options.location);
@@ -214,10 +253,46 @@ export function makeDownloadProps(ctx, q, options) {
   };
   ctx.state.filename = {
     ics: dlFilename + '.ics',
-    pdf: dlFilename + '.pdf',
     csv_usa: basename(url.csv_usa),
     csv_eur: basename(url.csv_eur),
   };
+  ctx.state.numYears = numYears;
+  const today = options.isHebrewYear ? new HDate() : new Date();
+  ctx.state.currentYear = today.getFullYear();
+  const year = options.year;
+  if (typeof year === 'number') {
+    ctx.state.downloadAltTitle = `${year} only`;
+  }
+  if (numYears > 1 &&
+      typeof year === 'number' && !options.month &&
+      !options.start && !options.end) {
+    const endYear = year + numYears - 1;
+    const filename = getMultiYearFilename(options, year, endYear);
+    url.icsMultiYear = downloadHref2(q, filename, {
+      year: String(year),
+      yt: options.isHebrewYear ? 'H' : 'G',
+      ny: String(numYears),
+      emoji,
+    }) + '.ics';
+    ctx.state.filename.icsMultiYear = filename + '.ics';
+    ctx.state.downloadMultiYearTitle = `${year}-${endYear}`;
+  }
+}
+
+/**
+ * Points the download modal's subscribe links (Apple/Outlook webcal, Google,
+ * the copyable iCalendar URL) at one of the static multi-year feeds that
+ * `makeStaticCalendars.js` publishes at download.hebcal.com/ical/.
+ * Call after `makeDownloadProps()`.
+ * @param {import('koa').Context} ctx
+ * @param {string} slug feed file name without `.ics`, e.g. `omer`
+ */
+export function useStaticIcalFeed(ctx, slug) {
+  const feedUrl = `://download.hebcal.com/ical/${slug}.ics`;
+  const url = ctx.state.url;
+  url.subical = 'https' + feedUrl;
+  url.webcal = 'webcal' + feedUrl;
+  url.gcal = 'http' + feedUrl;
 }
 
 /**
@@ -240,6 +315,7 @@ export function makeDlUrlsForScript(url) {
     apiHost: apiPrefix,
     subical: strip(url.subical, dlPrefix),
     ics1year: strip(url.ics1year, dlPrefix),
+    icsMultiYear: strip(url.icsMultiYear, dlPrefix),
     csv_usa: strip(url.csv_usa, apiPrefix),
     csv_eur: strip(url.csv_eur, apiPrefix),
     pdf: strip(url.pdf, apiPrefix),

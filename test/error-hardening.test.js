@@ -13,9 +13,13 @@ const server = makeServer(wwwApp);
 // metrics.)
 
 describe('www server: bad-parameter hardening', () => {
+  it('ignores a year beyond int32 range on /shabbat', async () => {
+    // /shabbat always shows the current week and never reads `year`
+    const res = await request(server).get('/shabbat?year=999999999999999999999');
+    expect(res.status).toBe(200);
+  });
+
   it.each([
-    ['download-link year beyond int32 range (shabbat)',
-      '/shabbat?year=999999999999999999999'],
     ['download-link geonameid beyond int32 range (holidays)',
       '/holidays/?geo=geoname&geonameid=999999999999'],
     ['Daf Yomi RSS before the cycle began',

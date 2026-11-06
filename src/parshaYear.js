@@ -9,7 +9,7 @@ import {yearIsOutsideNarrowHebRange} from './dateUtil.js';
 import {getNumYears} from './calendar.js';
 import {shortenUrl} from './common.js';
 import {lgToLocale, localeMap} from './lang.js';
-import {makeDownloadProps} from './makeDownloadProps.js';
+import {makeDownloadProps, useStaticIcalFeed} from './makeDownloadProps.js';
 import {CACHE_CONTROL_30DAYS} from './cacheControl.js';
 
 export async function parshaYearApp(ctx) {
@@ -55,17 +55,9 @@ export async function parshaYearApp(ctx) {
   };
 
   const options = {year: hyear, isHebrewYear: true, noHolidays: true, sedrot: true};
-  makeDownloadProps(ctx, q0, options);
-  const feedLoc = il ? 'israel' : 'diaspora';
-  const feedUrl = `://download.hebcal.com/ical/torah-readings-${feedLoc}.ics`;
-  ctx.state.url.subical = 'https' + feedUrl;
-  ctx.state.url.webcal = 'webcal' + feedUrl;
-  ctx.state.url.gcal = 'http' + feedUrl;
+  makeDownloadProps(ctx, q0, options, getNumYears(options));
+  useStaticIcalFeed(ctx, `torah-readings-${il ? 'israel' : 'diaspora'}`);
   ctx.state.url.title = 'Shabbat Torah Readings';
-  ctx.state.downloadAltTitle = `${hyear} only`;
-  ctx.state.numYears = getNumYears(options);
-  ctx.state.currentYear = todayHebYear;
-  delete ctx.state.filename.pdf;
 
   const noIndex = hyear < todayHebYear - 20 || hyear > todayHebYear + 100;
 
