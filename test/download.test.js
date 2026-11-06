@@ -757,6 +757,19 @@ describe('makeDownloadProps multi-year download', () => {
     }
     expect(response.text).not.toContain('DTSTART;VALUE=DATE:2022');
   });
+
+  it('titles the multi-year .ics with its year range', async () => {
+    const ctx = {state: {}};
+    const q = {v: '1', maj: 'on', year: '5787', yt: 'H'};
+    makeDownloadProps(ctx, q, {year: 5787, isHebrewYear: true}, 4);
+    const response = await request(server).get(ctx.state.url.icsMultiYear.substring(host.length));
+    expect(response.status).toBe(200);
+    expect(response.headers['content-disposition']).toContain('hebcal_5787h_5790h.ics');
+    expect(response.text).toContain('X-WR-CALNAME:Hebcal Diaspora 5787-5790\r\n');
+    // the single-year download keeps a single-year title
+    const res1 = await request(server).get(ctx.state.url.ics1year.substring(host.length));
+    expect(res1.text).toContain('X-WR-CALNAME:Hebcal Diaspora 5787\r\n');
+  });
 });
 
 describe('5xx responses are not cacheable', () => {
