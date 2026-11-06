@@ -656,3 +656,13 @@ describe('makeDlUrlsForScript', () => {
     expect(new URL(result.subical, result.host).href).toBe(subical);
   });
 });
+
+describe('5xx responses are not cacheable', () => {
+  it('drops the 14-day /export Cache-Control from a 501', async () => {
+    const res = await request(server).get('/export/hebcal_2026.pdf?v=1&year=2026&maj=on');
+    expect(res.status).toBe(501);
+    expect(res.headers['cache-control']).toBe('no-store');
+    expect(res.headers['expires']).toBeUndefined();
+    expect(res.headers['etag']).toBeUndefined();
+  });
+});

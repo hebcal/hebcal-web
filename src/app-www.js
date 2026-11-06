@@ -20,6 +20,7 @@ import {aiChatbotLogger} from './logger.js';
 import {loadSession} from './session.js';
 import {markdownErrors} from './agentDiscovery.js';
 import {rateLimitHeaders} from './rateLimit.js';
+import {noCacheOnServerError} from './cacheControl.js';
 import {isGoogleLoginConfigured} from './oauthGoogle.js';
 import {isAppleLoginConfigured} from './oauthApple.js';
 import './locale.js';
@@ -172,6 +173,7 @@ app.use(async function errorCsp(ctx, next) {
       ctx.response.remove('Cache-Control');
     }
   }
+  noCacheOnServerError(ctx);
 });
 
 // Outside koa-error, which discards headers set on error responses.

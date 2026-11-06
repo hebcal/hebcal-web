@@ -5,7 +5,8 @@ import {downloadHref2} from './makeDownloadProps.js';
 import {httpRedirect} from './common.js';
 import {cacheControl,
   CACHE_CONTROL_7DAYS,
-  CACHE_CONTROL_IMMUTABLE} from './cacheControl.js';
+  CACHE_CONTROL_IMMUTABLE,
+  noCacheOnServerError} from './cacheControl.js';
 import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeitDownload.js';
 import {zmanimIcalendar} from './zmanimDownload.js';
@@ -51,11 +52,12 @@ app.use(async function onlyGetAndHead(ctx, next) {
         {headers: {'Allow': 'GET, HEAD'}});
   }
   await next();
-  // Semi-unrelated cleanup. If the handler en
-  // Cache-Control set before a throw survives onto error responses in the download app
+  // Cache-Control set before a throw survives onto error responses in the
+  // download app, because fixup0() only replaces the status and body.
   if (ctx.status === 404) {
     ctx.remove('Cache-Control');
   }
+  noCacheOnServerError(ctx);
 });
 
 useTimeout(app);
