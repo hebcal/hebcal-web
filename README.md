@@ -48,3 +48,22 @@ npm run dev
 ```bash
 npm run dev:download
 ```
+
+## Regenerating critical CSS (rare)
+
+Four pages (converter, holiday year index, holiday detail, `/hebcal` results)
+inline above-the-fold CSS from `views/partials/critical-*.css`. Those files are
+checked in and are **not** rebuilt by `npm run build`. Regenerate them only
+after changing the SCSS or the above-the-fold markup of those pages.
+
+The tooling (`critical` + Playwright/Chromium) is intentionally not in
+`package.json`. `extract-critical.sh` installs it on demand without saving
+(Chromium is a one-time download of a few hundred MB), starts a dev server on
+:8080 unless one is already running, and runs `extract-critical.js`:
+
+```bash
+./extract-critical.sh
+```
+
+Review the diff of `views/partials/critical-*.css` before committing. The next
+plain `npm install` prunes `critical` and `playwright` again.
