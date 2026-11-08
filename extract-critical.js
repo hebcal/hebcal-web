@@ -1,4 +1,4 @@
-import { generate } from 'critical';
+import { critical } from 'critical';
 import { writeFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
@@ -38,6 +38,15 @@ async function fetchHTML(url) {
   return res.text();
 }
 
+// Drop the page's own stylesheets (the previously generated critical <style>
+// and the deferred main.css <link>) so the main CSS passed via `css` below is
+// the only input -- otherwise last run's output feeds back into this run.
+function stripStyles(html) {
+  return html
+    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<link\b[^>]*rel="stylesheet"[^>]*>/gi, '');
+}
+
 function injectDarkMode(html) {
   // Set data-bs-theme=dark on the <html> element
   return html.replace(
@@ -53,16 +62,19 @@ async function extractCritical({ src, out }) {
   console.log(`Extracting critical CSS for ${src} ...`);
   try {
     const html = await fetchHTML(src);
-    const darkHtml = injectDarkMode(html);
+    const darkHtml = injectDarkMode(stripStyles(html));
 
-    const result = await generate({
+    // critical v9: the render engine (Playwright) measures what is actually
+    // painted above the fold at each viewport; the static engine would keep
+    // every rule that matches anywhere in the document.
+    const result = await critical({
       html: darkHtml,
+      engine: 'render',
       dimensions: DIMENSIONS,
       css: ['static/i/' + pkg.config.mainCss],
-      penthouse: { renderWaitTime: 500 },
-      rebase: false,
       base: '.',
     });
+    for (const w of result.report.warnings) console.warn(`  ! ${w}`);
 
     mkdirSync(dirname(out), { recursive: true });
     writeFileSync(out, result.css, 'utf-8');
