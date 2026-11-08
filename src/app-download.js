@@ -120,7 +120,11 @@ app.use(async function fixup2(ctx, next) {
       ctx.throw(status, `Invalid download URL: ${data}`);
     }
   } else if (path.startsWith('/v2')) {
-    const {filename, qs} = parseV2Path(path);
+    // Download path of the form /v2/[hy]/<base64-querystring>/<filename>
+    const slash = path.indexOf('/', 6);
+    const qs64 = (slash === -1) ? path.substring(6) : path.substring(6, slash);
+    const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
+    const qs = Buffer.from(qs64, 'base64').toString('ascii');
     ctx.request.url = '/export/' + filename + '?' + qs;
   }
   await next();
@@ -194,14 +198,4 @@ export {app};
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
   startServer(app, 8080);
-}
-
-// Parse a /v2 download path of the form /v2/<base64-querystring>/<filename>,
-// returning the filename and the base64-decoded query string.
-function parseV2Path(path) {
-  const slash = path.indexOf('/', 6);
-  const data = (slash === -1) ? path.substring(6) : path.substring(6, slash);
-  const filename = (slash === -1) ? 'hebcal.ics' : path.substring(slash + 1);
-  const qs = Buffer.from(data, 'base64').toString('ascii');
-  return {filename, qs};
 }
