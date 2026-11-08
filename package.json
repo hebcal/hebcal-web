@@ -13,7 +13,7 @@
   "config": {
     "sprite": "sprite15.svg",
     "csprite": "color-icons5.svg",
-    "mainCss": "style-5.3.8n.css",
+    "mainCss": "style-5.3.8p.css",
     "holidayFcApp": "fc-6.1.21b.min.js",
     "dailyLearningApp": "dl-1.1.min.js"
   },

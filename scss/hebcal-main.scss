@@ -93,10 +93,9 @@ a.outbound::after {
     width: 132px;
   }
 }
-.text-burgundy{color:#941003 !important}
-[data-bs-theme=dark] .text-burgundy{
-  color:#da8f93 !important;
-}
+:root{--hebcal-burgundy:#941003}
+[data-bs-theme=dark]{--hebcal-burgundy:#da8f93}
+.text-burgundy{color:var(--hebcal-burgundy) !important}
 [data-bs-theme=dark] .btn-outline-primary{
   --bs-btn-color: var(--bs-link-color);
   --bs-btn-border-color: var(--bs-link-color);
