@@ -131,8 +131,14 @@ export function useObservability(app, {latencyBuckets, routeSegments}) {
     } finally {
       // /metrics is answered by the next middleware, and Varnish probes /ping
       // every few seconds; neither should skew the latency of real routes.
-      if (ctx.path !== '/metrics' && ctx.path !== '/ping') {
-        end({route: routeLabel(ctx.path, routeSegments)});
+      // Use originalUrl, not ctx.path: handlers (e.g. download's fixup2)
+      // rewrite ctx.path, which would mislabel the route. originalUrl keeps
+      // the query string, so strip it.
+      const url = ctx.request.originalUrl;
+      const q = url.indexOf('?');
+      const origPath = q === -1 ? url : url.substring(0, q);
+      if (origPath !== '/metrics' && origPath !== '/ping') {
+        end({route: routeLabel(origPath, routeSegments)});
       }
     }
     httpRequestsTotal
