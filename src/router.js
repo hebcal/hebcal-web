@@ -63,7 +63,6 @@ import {readJSON} from './readJSON.js';
 import {securityTxt} from './securityTxt.js';
 import {isDigit} from './isDigit.js';
 
-const redirectMap = readJSON('./redirect.json');
 const staticCalendars = readJSON('./staticCalendars.json');
 
 const needsTrailingSlash = {
@@ -144,16 +143,6 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
       return homepage(ctx);
     } else if (rpath === '/i' || rpath === '/i/' || rpath === '/etc' || rpath === '/etc/') {
       return ctx.render('dir-hidden');
-    } else if (redirectMap[rpath] !== undefined) {
-      const destination = redirectMap[rpath];
-      if (typeof destination === 'number') {
-        throw createError(destination);
-      } else if (destination === null) {
-        ctx.throw(410, 'Gone');
-      }
-      ctx.status = 301;
-      ctx.redirect(destination);
-      return;
     } else if (needsTrailingSlash[rpath]) {
       httpRedirect(ctx, `${rpath}/`, 301);
       return;

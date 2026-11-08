@@ -367,7 +367,7 @@ the `/hebcal` form, download modal, `/learning` page, settings names, static
    there.
 
 ### Data files (`src/`)
-JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`, `redirect.json`, `redirectDownload.json`
+JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`
 
 ### Templates
 EJS server-side templates live in `views/` (main pages) and `views/partials/` (reusable components).

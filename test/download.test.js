@@ -86,20 +86,6 @@ describe('Static ICS files', () => {
   });
 });
 
-describe('v2 redirects', () => {
-  it('redirects /v2/h/ URL with v=1 and year=now to v4 with 301', async () => {
-    const v2path = '/v2/h/dj0xJm1haj1vbiZtaW49b24mbng9b24mbWY9b24mc3M9b24' +
-        'mbW9kPW9uJm89b24mcz1vbiZpPW9mZiZ5ZWFyPW5vdyZ5dD1HJmxnPWZyJmQ9b24m' +
-        'Yz1vbiZnZW89Z2VvbmFtZSZnZW9uYW1laWQ9Mjk4ODUwNyZiPTE4Jk09b2ZmJm09ND' +
-        'Umc3Vic2NyaWJlPTE/hebcal_2020_Paris.ics';
-    const response = await request(server)
-        .get(v2path)
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toMatch(/\/v4\//);
-  });
-});
-
 describe('v4 ICS downloads', () => {
   it('returns 200 ICS for /v4/.../hebcal_Jerusalem.ics', async () => {
     const response = await request(server)

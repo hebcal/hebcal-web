@@ -1,7 +1,6 @@
 import conditional from 'koa-conditional-get';
 import {send} from '@koa/send';
 import serve from 'koa-static';
-import {downloadHref2} from './makeDownloadProps.js';
 import {httpRedirect} from './common.js';
 import {cacheControl,
   CACHE_CONTROL_7DAYS,
@@ -11,13 +10,10 @@ import {hebcalDownload} from './hebcal-download.js';
 import {yahrzeitDownload} from './yahrzeitDownload.js';
 import {zmanimIcalendar} from './zmanimDownload.js';
 import {deserializeDownload} from './deserializeDownload.js';
-import {readJSON} from './readJSON.js';
 import {createBaseApp, useBackendHostname, useObservability, useTimeout,
   useCompression, useResponseLength,
   startServer} from './app-common.js';
 import './locale.js';
-
-const redirectMap = readJSON('./redirectDownload.json');
 
 const app = createBaseApp();
 
@@ -77,25 +73,6 @@ app.use(async function fixup0(ctx, next) {
   }
 });
 
-// Redirect /v2/h/ to /v4/
-app.use(function redirV2(ctx, next) {
-  const rpath = ctx.request.path;
-  if (rpath.startsWith('/v2/h/')) {
-    const {filename, qs} = parseV2Path(rpath);
-    const sp = new URLSearchParams(qs);
-    const query = Object.fromEntries(sp.entries());
-    // Only do the redirect if this looks like a valid v2 download URL
-    if (query.v === '1') {
-      const f2 = query.year === 'now' ? filename.replace(/^hebcal_\d\d\d\d[Hh]?/, 'hebcal') : filename;
-      const url = downloadHref2(query, f2);
-      ctx.status = 301;
-      ctx.redirect(url);
-      return;
-    }
-  }
-  return next();
-});
-
 app.use(conditional());
 useCompression(app, {brotliQuality: 3, zstdLevel: 6});
 
@@ -134,20 +111,6 @@ app.use(function fixup1(ctx, next) {
     const path = rpath.substring(16);
     httpRedirect(ctx, `/ical/${path}`, 301);
     return;
-  }
-  return next();
-});
-
-app.use(function redirLegacy(ctx, next) {
-  if (ctx.request.querystring.length === 0) {
-    const rpath = ctx.request.path;
-    const rpath0 = rpath.substring(0, rpath.length - 1);
-    const destination = redirectMap[rpath] || redirectMap[rpath0];
-    if (destination !== undefined) {
-      ctx.status = 301;
-      ctx.redirect(destination);
-      return;
-    }
   }
   return next();
 });

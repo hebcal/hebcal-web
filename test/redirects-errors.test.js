@@ -7,18 +7,6 @@ const server = makeServer(app);
 
 describe('301 Redirects', () => {
   it.each([
-    ['/privacy', 'https://www.hebcal.com/home/about/privacy-policy'],
-    ['/help', 'https://www.hebcal.com/home/help'],
-    ['/converter/converter.cgi', 'https://www.hebcal.com/converter'],
-  ])('should redirect %s with 301', async (path, location) => {
-    const response = await request(server)
-        .get(path)
-        .redirects(0);
-    expect(response.status).toBe(301);
-    expect(response.headers.location).toBe(location);
-  });
-
-  it.each([
     '/shabbat/browse',
     '/holidays',
     '/sedrot',
@@ -33,9 +21,6 @@ describe('301 Redirects', () => {
 
 describe('410 Gone Responses', () => {
   it.each([
-    ['/dist/', 'retired Perl distribution index'],
-    ['/dist/hebcal.pl', 'retired Perl script'],
-    ['/dist/calc_triennial.pl', 'retired Perl script'],
     ['/holidays/yom-haatzmaut-4493', 'holiday after year 2999'],
     ['/sedrot/tazria-metzora-82230517', 'parsha after year 2999'],
     ['/holidays/chanukah-10069', 'holiday after year 2999'],
