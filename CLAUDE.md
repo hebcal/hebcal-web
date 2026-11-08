@@ -506,6 +506,20 @@ Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock
   `.gitignore` has a `!test/fixtures/*.ini` negation under its blanket `*.ini` --
   drop it and the fixture never reaches CI, where the missing file takes down
   every test in `createBaseApp()`'s `readFileSync`.
+- **Location tests must pass against `make-test-dbs`, not the full
+  databases.** CI builds `geonames.sqlite3`/`zips.sqlite3` with
+  `@hebcal/geo-sqlite`'s `make-test-dbs`: ~65 classic Hebcal cities
+  (`node_modules/@hebcal/geo-sqlite/test/fixtures/cities5000.txt`) and a dummy
+  zips db with no usable zip codes. A dev box that ran
+  `download-and-make-dbs` has the full production data, so a test using an
+  arbitrary zip (e.g. Atlanta 30308) passes locally and fails in CI. For zips,
+  use **90210 (Beverly Hills)** via `injectZipsMock(app.context.db)` from
+  `test/zipsMock.js` (teardown in `afterAll`), as `hebcal.test.js` does. For
+  cities, use one from that fixture list, and don't assert the display name
+  exactly: the two databases can differ (`city=PA-Panama+City` is
+  "Panama City" in the test db and "Panamá" in the full one), so assert on the
+  time zone instead. To check, move the real `*.sqlite3` aside, run
+  `make-test-dbs`, run the suite, then restore them.
 - **A test asserting a feature is OFF must silence every provider**, not just
   the one it names. `disableAllProviders()` in `navbar.test.js` is that pattern.
 

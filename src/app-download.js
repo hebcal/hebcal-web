@@ -1,7 +1,6 @@
 import conditional from 'koa-conditional-get';
 import {send} from '@koa/send';
 import serve from 'koa-static';
-import {httpRedirect} from './common.js';
 import {cacheControl,
   CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_IMMUTABLE,
@@ -87,23 +86,19 @@ app.use(async function fixup2(ctx, next) {
   }
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
-      path.startsWith('/yahrzeit/index.cgi/') ||
       path.startsWith('/hebcal/index.cgi/')) {
+    // Old links double-URL-encoded the query string, either after a
+    // real "?" (?subscribe=1%3B...) or in place of it (.ics%3Fsubscribe%3D1...).
+    // Decode and rewrite the URL in place so the router serves it directly.
     // note we use unescape() instead of decodeURIComponent() due to ancient latin-1 encoding
-    if (ctx.request.querystring.startsWith('subscribe=1%3B') || ctx.request.querystring.startsWith('dl=1%3B')) {
-      const qs = unescape(ctx.request.querystring).replaceAll(';', '&');
-      httpRedirect(ctx, `${path}?redir=1&${qs}`, 301);
-      return;
+    const qs0 = ctx.request.querystring;
+    if (qs0.startsWith('subscribe=1%3B') || qs0.startsWith('dl=1%3B')) {
+      ctx.request.url = `${path}?${unescape(qs0)}`;
     } else {
-      const encQuery = path.indexOf('.ics%3Fsubscribe%3D1');
+      const encQuery = path.search(/\.ics%3F(subscribe|dl)%3D1/);
       if (encQuery !== -1) {
-        redirEncQuery(path, encQuery, ctx);
-        return;
-      }
-      const encQueryDL = path.indexOf('.ics%3Fdl%3D1');
-      if (encQueryDL !== -1) {
-        redirEncQuery(path, encQueryDL, ctx);
-        return;
+        const qs = unescape(path.substring(encQuery + 7));
+        ctx.request.url = `/export/export.ics?${qs}`;
       }
     }
     const semi = ctx.request.querystring.includes(';');
@@ -199,11 +194,6 @@ export {app};
 // Only start server if this file is run directly (not imported)
 if (import.meta.url === `file://${process.argv[1]}`) {
   startServer(app, 8080);
-}
-
-function redirEncQuery(path, encQuery, ctx) {
-  const qs = unescape(path.substring(encQuery + 7)).replaceAll(';', '&');
-  httpRedirect(ctx, `/export/export.ics?redir=1&${qs}`, 301);
 }
 
 // Parse a /v2 download path of the form /v2/<base64-querystring>/<filename>,

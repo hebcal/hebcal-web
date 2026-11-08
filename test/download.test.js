@@ -1,4 +1,4 @@
-import {describe, it, expect, beforeAll} from 'vitest';
+import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
 import os from 'node:os';
 import {HDate, calendar} from '@hebcal/core';
@@ -6,6 +6,7 @@ import {IcalEvent} from '@hebcal/icalendar';
 import '@hebcal/learning';
 import {app} from '../src/app-download.js';
 import {MockMysqlDb} from './mock-mysql.js';
+import {injectZipsMock} from './zipsMock.js';
 import {downloadHref2, makeDlUrlsForScript, makeDownloadProps, useStaticIcalFeed} from '../src/makeDownloadProps.js';
 import {deserializeDownload} from '../src/deserializeDownload.js';
 import {dailyLearningConfig} from '../src/urlArgs.js';
@@ -166,6 +167,122 @@ describe('export URLs with semicolon-separated parameters', () => {
     expect(response.type).toMatch(/calendar/);
     expect(response.text).toContain('BEGIN:VCALENDAR');
     expect(response.text).toContain('Ploni Almoni');
+  });
+});
+
+// Legacy subscription URLs seen in production logs (Nov 2026), with personal
+// names replaced. Calendar clients still poll these from 10+ year old
+// subscriptions; fixup2 in app-download.js must serve them in place (200),
+// not redirect, including when the query string is double-URL-encoded.
+describe('legacy export URLs from production', () => {
+  // CI's zips.sqlite3 (geo-sqlite make-test-dbs) is a dummy; the only zip
+  // tests can rely on is 90210 from the in-memory mock.
+  let teardown;
+  beforeAll(() => {
+    teardown = injectZipsMock(app.context.db);
+  });
+  afterAll(() => teardown());
+
+  async function getIcs(url) {
+    const response = await request(server).get(url);
+    expect(response.status).toBe(200);
+    expect(response.headers.location).toBeUndefined();
+    expect(response.type).toMatch(/calendar/);
+    expect(response.text).toContain('BEGIN:VCALENDAR');
+    return response.text;
+  }
+
+  it('serves /yahrzeit/yahrzeit.cgi/ with redir=1 and & separators', async () => {
+    const text = await getIcs('/yahrzeit/yahrzeit.cgi/anniversary_20150924153350.ics' +
+        '?redir=1&dl=1' +
+        '&t1=Birthday&n1=Ploni%20Almoni&d1=22&m1=12&y1=1983&s1=off' +
+        '&t2=Birthday&n2=Plonit%20Almonit&d2=1&m2=10&y2=1984&s2=on' +
+        '&t3=Birthday&n3=Moshe%20Cohen&d3=6&m3=3&y3=1989&s3=on&v=yahrzeit');
+    expect(text).toContain('Ploni Almoni');
+    expect(text).toContain('Plonit Almonit');
+    expect(text).toContain('Moshe Cohen');
+  });
+
+  it('serves /yahrzeit/yahrzeit.cgi/ with ; separators', async () => {
+    const text = await getIcs('/yahrzeit/yahrzeit.cgi/yahrzeit_20160110183144.ics' +
+        '?dl=1;t1=Yahrzeit;n1=Ploni%20Almoni;d1=23;m1=12;y1=2015;s1=off' +
+        ';t2=Yahrzeit;n2=Plonit%20Almonit;d2=13;m2=9;y2=2013;s2=off' +
+        ';t3=Yahrzeit;n3=Moshe%20Cohen;d3=31;m3=10;y3=1997;s3=off;v=yahrzeit');
+    expect(text).toContain('Ploni Almoni');
+    expect(text).toContain('Plonit Almonit');
+    expect(text).toContain('Moshe Cohen');
+  });
+
+  it('decodes a fully double-encoded ?dl=1%3B query (with + for space)', async () => {
+    const text = await getIcs('/export/90/dae75a10d5d9490ea6f4729a3f9352.ics' +
+        '?dl=1%3Bv%3D1%3Bgeo%3Dcity%3Bcity%3DPA-Panama+City%3Bm%3D43%3Bvis%3D' +
+        '%3Bmonth%3D11%3Byear%3D2012%3Bnh%3Don%3Bnx%3Don%3Bs%3Don%3Bc%3Don%3Bmf%3Don%3Bss%3Don');
+    // test geonames (make-test-dbs) says "Panama City", the full db "Panamá"
+    expect(text).toMatch(/^X-WR-CALNAME:Hebcal Panam.* November 2012\r$/m);
+    expect(text).toContain('X-WR-TIMEZONE;VALUE=TEXT:America/Panama');
+    expect(text).toContain('SUMMARY:Havdalah (43 min)');
+  });
+
+  it('decodes a ?subscribe=1%3B query with only the semicolons encoded', async () => {
+    const text = await getIcs('/export/87/7362a124eaf9b8d72adc3c3dc9cbea.ics' +
+        '?subscribe=1%3Byear=2012%3Bmonth=x%3Byt=G%3Bv=1%3Bnh=on%3Bnx=on%3Bmf=on' +
+        '%3Bss=on%3Bi=off%3Blg=sh%3Bvis=on%3Bc=on%3Bgeo=zip%3Bzip=90210%3Bm=72' +
+        '%3Btz=-8%3Bdst=usa');
+    expect(text).toContain('X-WR-CALNAME:Hebcal Beverly Hills');
+    expect(text).toContain('LOCATION:Beverly Hills');
+  });
+
+  it('decodes a ?subscribe=1%3B query with geo=zip but no zip', async () => {
+    const text = await getIcs('/export/5c/3e7407eb67ec47590f759095635051.ics' +
+        '?subscribe=1%3Byear=2013%3Bmonth=x%3Byt=G%3Bv=1%3Bnh=on%3Bnx=on%3Bi=on' +
+        '%3Blg=h%3Bvis=on%3Bc=off%3Bgeo=zip');
+    expect(text).toContain('X-WR-CALNAME:Hebcal Israel');
+    expect(text).toContain('SUMMARY:ט״וּ בִּשְׁבָט');
+  });
+
+  it('decodes a query encoded into the path (.ics%3Fdl%3D1)', async () => {
+    const text = await getIcs('/export/01/46728befce2ba040391d6b65d4a214.ics' +
+        '%3Fdl%3D1%3Bv%3D1%3Bgeo%3Dcity%3Bcity%3DGB-London%3Bm%3D43' +
+        '%3Bmonth%3D7%3Byear%3D2013%3Bc%3Don');
+    expect(text).toContain('X-WR-CALNAME:Hebcal London July 2013');
+    expect(text).toContain('LOCATION:London');
+  });
+
+  it('decodes a query encoded into the path (.ics%3Fsubscribe%3D1)', async () => {
+    const text = await getIcs('/hebcal/index.cgi/export.ics' +
+        '%3Fsubscribe%3D1%3Bv%3D1%3Bgeo%3Dcity%3Bcity%3DGB-London%3Bm%3D43' +
+        '%3Bmonth%3D7%3Byear%3D2013%3Bc%3Don');
+    // subscribe=1 serves the whole year, ignoring month
+    expect(text).toContain('X-WR-CALNAME:Hebcal London\r\n');
+    expect(text).toContain('LOCATION:London');
+  });
+
+  it('serves /hebcal/index.cgi/ with redir=1&dl=1 (geo=zip but no zip)', async () => {
+    const text = await getIcs('/hebcal/index.cgi/hebcal_2005.ics' +
+        '?redir=1&dl=1&year=2005&v=1&month=x&yt=G&nh=on&i=off&vis=on&c=off&geo=zip');
+    expect(text).toContain('X-WR-CALNAME:Hebcal Diaspora 2005-2011\r\n');
+    expect(text).toContain('DTSTART;VALUE=DATE:20050122');
+    expect(text).toContain('SUMMARY:Shabbat Shirah');
+  });
+
+  it('serves /hebcal/index.cgi/ with redir=1&subscribe=1 and a=on', async () => {
+    const text = await getIcs('/hebcal/index.cgi/hebcal_2007.ics' +
+        '?redir=1&subscribe=1&year=2007&v=1&month=x&yt=G&nh=on&i=off&vis=on&a=on&c=off&geo=zip');
+    expect(text).toContain('X-WR-CALNAME:Hebcal Diaspora\r\n');
+    expect(text).toContain('SUMMARY:Shabbos Shirah');
+    expect(text).toContain('SUMMARY:Ta’anis Esther');
+  });
+
+  it('serves /hebcal/index.cgi/ with ; separators and a Hebrew year', async () => {
+    const text = await getIcs('/hebcal/index.cgi/hebcal_5766H_montreal.ics' +
+        '?subscribe=1;year=5767;v=1;month=x;yt=H;nh=on;nx=on;s=on;i=off;vis=on' +
+        ';D=on;d=on;heb=on;c=on;geo=city;city=Montreal;m=72');
+    // test geonames (make-test-dbs) says "Montreal", the full db "Montréal"
+    expect(text).toMatch(/^X-WR-CALNAME:Hebcal Montr.al\r$/m);
+    expect(text).toContain('X-WR-TIMEZONE;VALUE=TEXT:America/Toronto');
+    expect(text).toContain('SUMMARY:Rosh Hashana 5767');
+    expect(text).toContain('SUMMARY:1st of Tishrei\\, 5767');
+    expect(text).toContain('SUMMARY:Candle lighting');
   });
 });
 
