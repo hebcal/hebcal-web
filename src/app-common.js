@@ -78,18 +78,47 @@ export function useBackendHostname(app) {
 }
 
 /**
- * Maps a request path to the bounded `route` label: the first two path
+ * Maps a request URL to the bounded `route` label: the first two path
  * segments (e.g. "v2/h") when they are in `segments`, else the first path
  * segment (or "/" for the homepage) when it is, else "other". Limiting the
  * labels bounds the histogram's cardinality: static files and scanners
  * probing random paths all fold into "other".
- * @param {string} path
+ *
+ * An entry of the form "hebcal?cfg=json" splits requests carrying exactly
+ * that `cfg` value out of the base route, for an API variant whose latency
+ * looks nothing like the HTML page's. Any other `cfg` value keeps the base
+ * label, so only listed pairs ever become label values.
+ * @param {string} url request path, optionally followed by a query string
  * @param {Set<string>} segments allowed labels, without the leading slash;
- *    include "/" to label the homepage, and a two-segment entry such as
- *    "v2/h" to split one first segment into finer labels
+ *    include "/" to label the homepage, a two-segment entry such as
+ *    "v2/h" to split one first segment into finer labels, and an entry such
+ *    as "hebcal?cfg=json" to split out one `cfg` value
  * @return {string}
  */
-export function routeLabel(path, segments) {
+export function routeLabel(url, segments) {
+  const q = url.indexOf('?');
+  const path = q === -1 ? url : url.substring(0, q);
+  const base = routeLabelForPath(path, segments);
+  if (q === -1 || base === 'other') {
+    return base;
+  }
+  const m = /(?:^|&)cfg=([^&]*)/.exec(url.substring(q + 1));
+  if (m) {
+    const key = base.substring(1) + '?cfg=' + m[1];
+    if (segments.has(key)) {
+      return '/' + key;
+    }
+  }
+  return base;
+}
+
+/**
+ * The path-only half of {@link routeLabel}.
+ * @param {string} path request path, without a query string
+ * @param {Set<string>} segments
+ * @return {string}
+ */
+function routeLabelForPath(path, segments) {
   if (path === '/') {
     return segments.has('/') ? '/' : 'other';
   }
@@ -142,12 +171,12 @@ export function useObservability(app, {latencyBuckets, routeSegments}) {
       // every few seconds; neither should skew the latency of real routes.
       // Use originalUrl, not ctx.path: handlers (e.g. download's fixup2)
       // rewrite ctx.path, which would mislabel the route. originalUrl keeps
-      // the query string, so strip it.
+      // the query string, which routeLabel reads for "?cfg=" entries.
       const url = ctx.request.originalUrl;
       const q = url.indexOf('?');
       const origPath = q === -1 ? url : url.substring(0, q);
       if (origPath !== '/metrics' && origPath !== '/ping') {
-        end({route: routeLabel(origPath, routeSegments)});
+        end({route: routeLabel(url, routeSegments)});
       }
     }
     httpRequestsTotal

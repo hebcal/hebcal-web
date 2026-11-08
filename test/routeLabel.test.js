@@ -2,15 +2,15 @@ import {describe, it, expect} from 'vitest';
 import {routeLabel} from '../src/app-common.js';
 
 const www = new Set([
-  '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
-  'yahrzeit', 'ical', 'learning',
+  '/', 'converter', 'shabbat', 'shabbat/browse', 'hebcal', 'holidays',
+  'sedrot', 'omer', 'yahrzeit', 'ical', 'learning',
 ]);
 
 describe('routeLabel', () => {
   it('uses the first segment for known routes', () => {
     expect(routeLabel('/', www)).toBe('/');
     expect(routeLabel('/shabbat', www)).toBe('/shabbat');
-    expect(routeLabel('/shabbat/browse/US', www)).toBe('/shabbat');
+    expect(routeLabel('/shabbat/fridge.cgi', www)).toBe('/shabbat');
     expect(routeLabel('/ical/foo.ics', www)).toBe('/ical');
     expect(routeLabel('/learning/x', www)).toBe('/learning');
     expect(routeLabel('/converter', www)).toBe('/converter');
@@ -25,6 +25,15 @@ describe('routeLabel', () => {
     expect(routeLabel('/v4/abc/hebcal.ics', www)).toBe('other');
     expect(routeLabel('/shabbatx', www)).toBe('other');
     expect(routeLabel('/random/scanner/path', www)).toBe('other');
+  });
+  it('splits /shabbat/browse out of /shabbat', () => {
+    expect(routeLabel('/shabbat/browse', www)).toBe('/shabbat/browse');
+    expect(routeLabel('/shabbat/browse/', www)).toBe('/shabbat/browse');
+    expect(routeLabel('/shabbat/browse/united-states', www))
+        .toBe('/shabbat/browse');
+    expect(routeLabel('/shabbat/browse/united-states.xml', www))
+        .toBe('/shabbat/browse');
+    expect(routeLabel('/shabbat/browsex', www)).toBe('/shabbat');
   });
 });
 
@@ -59,5 +68,28 @@ describe('routeLabel with two-segment entries', () => {
     const only = new Set(['v2/h']);
     expect(routeLabel('/v2/y/abc.ics', only)).toBe('other');
     expect(routeLabel('/v2', only)).toBe('other');
+  });
+});
+
+describe('routeLabel with cfg entries', () => {
+  const www = new Set(['/', 'hebcal', 'shabbat', 'hebcal?cfg=json']);
+  it('splits out a listed cfg value', () => {
+    expect(routeLabel('/hebcal?cfg=json', www)).toBe('/hebcal?cfg=json');
+    expect(routeLabel('/hebcal?cfg=json&v=1', www)).toBe('/hebcal?cfg=json');
+    expect(routeLabel('/hebcal?v=1&cfg=json', www)).toBe('/hebcal?cfg=json');
+  });
+  it('keeps the base label for anything else', () => {
+    expect(routeLabel('/hebcal', www)).toBe('/hebcal');
+    expect(routeLabel('/hebcal?v=1', www)).toBe('/hebcal');
+    expect(routeLabel('/hebcal?cfg=ics', www)).toBe('/hebcal');
+    expect(routeLabel('/hebcal?cfg=jsonx', www)).toBe('/hebcal');
+    expect(routeLabel('/hebcal?xcfg=json', www)).toBe('/hebcal');
+    expect(routeLabel('/shabbat?cfg=json', www)).toBe('/shabbat');
+    expect(routeLabel('/?cfg=json', www)).toBe('/');
+  });
+  it('strips the query before matching the path', () => {
+    expect(routeLabel('/?a=b', www)).toBe('/');
+    expect(routeLabel('/hebcalx?cfg=json', www)).toBe('other');
+    expect(routeLabel('/random?cfg=json', www)).toBe('other');
   });
 });

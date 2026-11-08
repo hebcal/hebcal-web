@@ -34,18 +34,23 @@ setupGeoIp(app);
 
 useBackendHostname(app);
 
-// Measured on production: nearly every www response finishes under 50ms, so
-// the edges between 250ms and 1s are omitted (<0.03% of requests). 15ms splits
-// the 10-20ms bucket, where /hebcal, /shabbat and /holidays all have their
-// mode; 75ms and 150ms cover the 50-250ms band that holds P99 for those routes.
-// 1s and 10s are kept so a stall still lands in a finite bucket and P99 stays
-// computable.
+// Measured on production (w45, Nov 2026): nearly every www response finishes
+// under 50ms. 15ms splits the 10-20ms bucket, where /holidays has its mode;
+// 25ms splits 20-30ms, which holds 40% of the HTML /hebcal results. 75ms and
+// 150ms cover the 50-250ms band that holds P99 for the main routes. 500ms is
+// for /shabbat/browse and /login, whose P99 lands between 250ms and 1s even
+// though under 0.03% of all requests do. 1s and 10s are kept so a stall still
+// lands in a finite bucket and P99 stays computable.
+// /hebcal?cfg=json gets its own label: its median is ~3ms against ~21ms for
+// the HTML results, and blending the two hid each one's latency.
 useObservability(app, {
   routeSegments: new Set([
-    '/', 'converter', 'shabbat', 'hebcal', 'holidays', 'sedrot', 'omer',
-    'yahrzeit', 'ical', 'learning',
+    '/', 'converter', 'shabbat', 'shabbat/browse', 'hebcal', 'holidays',
+    'sedrot', 'omer', 'yahrzeit', 'ical', 'learning', 'login',
+    'hebcal?cfg=json',
   ]),
-  latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.015, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
+  latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.015, 0.02, 0.025,
+    0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 0.5, 1, 10],
 });
 
 app.use(aiChatbotLogger);
