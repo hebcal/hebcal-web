@@ -43,6 +43,7 @@ export function limitIcsFeedLength(events, isSubscription, today) {
 }
 
 /**
+ * This handler serves only iCalendar files
  * @param {import('koa').Context} ctx
  */
 export async function hebcalDownload(ctx) {
@@ -59,75 +60,59 @@ export async function hebcalDownload(ctx) {
   }
   const path = ctx.request.path;
   const extension = path.substring(path.length - 4);
-  if (extension === '.pdf') {
-    // PDF rendering now served exclusively by https://github.com/hebcal/hebcal-api-go
-    ctx.throw(501, 'This service does not render PDFs');
+  if (extension === '.pdf' || extension === '.csv') {
+    // PDF and Outlook CSV now served exclusively by https://github.com/hebcal/hebcal-api-go
+    ctx.throw(501, `This service does not render ${extension} files`);
+  } else if (extension !== '.ics') {
+    ctx.throw(404, `Invalid download format: ${extension}`);
   }
-  if (extension === '.csv') {
-    // Outlook CSV now served exclusively by https://github.com/hebcal/hebcal-api-go
-    ctx.throw(501, 'This service does not render CSV files');
-  }
-  const ics = extension === '.ics';
-  if (ics) {
-    options.numYears = getNumYears(options);
-  }
+  options.numYears = getNumYears(options);
   // don't set a Last-Modified date; we'll rely on etag for cache consistency
   // etag includes actual year because options.year is never 'now'
   const opts = {...query, ...options};
-  const attrs = {extension};
-  if (ics) {
-    attrs.icalv = IcalEvent.version();
-  }
+  const attrs = {extension, icalv: IcalEvent.version()};
   if (checkFreshETag(ctx, opts, attrs)) {
     return;
   }
   const events = makeHebrewCalendar(ctx, options);
-  if (ics) {
-    const icalOpt = makeIcalOpts(options, query);
-    if (!icalOpt.title) {
-      icalOpt.title = getCalendarTitle(events, icalOpt);
-    }
-    if (!icalOpt.calendarColor) {
-      icalOpt.calendarColor = '#800002';
-    }
-    icalOpt.utmSource = query.utm_source;
-    icalOpt.utmMedium = query.utm_medium;
-    icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
-    const isAttachment = !query.subscribe;
-    if (isAttachment) {
-      ctx.response.attachment(basename(path));
-    }
-    if (options.omer && options.location) {
-      addLocationOmerAlarms(options, events);
-    }
-    ctx.response.type = 'text/calendar; charset=utf-8';
-    const now = new Date();
-    icalOpt.dtstamp = IcalEvent.makeDtstamp(now);
-    const zeroEvents = events.length === 0;
-    const today = new HDate(now);
-    const events1 = limitIcsFeedLength(events, !isAttachment, today);
-    if (events1.length !== events.length) {
-      const sunday = today.onOrBefore(0).abs();
-      attrs.sunday = sunday;
-      ctx.response.etag = makeETag(ctx, opts, attrs);
-      if (ctx.fresh) {
-        ctx.status = 304;
-        return;
-      }
-    }
-    const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
-    if (zeroEvents) {
-      icalOpt.publishedTTL = false;
-    }
-    const icals = makeIcalEvents(events2, icalOpt);
-    ctx.body = await icalEventsToString(icals, icalOpt);
-  } else {
-    ctx.status = 404;
-    ctx.remove('Cache-Control');
-    ctx.remove('ETag');
-    ctx.response.type = 'text/plain';
-    ctx.body = 'Invalid download format: ' + extension + '\n';
+  const icalOpt = makeIcalOpts(options, query);
+  if (!icalOpt.title) {
+    icalOpt.title = getCalendarTitle(events, icalOpt);
   }
+  if (!icalOpt.calendarColor) {
+    icalOpt.calendarColor = '#800002';
+  }
+  icalOpt.utmSource = query.utm_source;
+  icalOpt.utmMedium = query.utm_medium;
+  icalOpt.utmCampaign = query.utm_campaign || 'ical-' + campaignName(events, icalOpt);
+  const isAttachment = !query.subscribe;
+  if (isAttachment) {
+    ctx.response.attachment(basename(path));
+  }
+  if (options.omer && options.location) {
+    addLocationOmerAlarms(options, events);
+  }
+  ctx.response.type = 'text/calendar; charset=utf-8';
+  const now = new Date();
+  icalOpt.dtstamp = IcalEvent.makeDtstamp(now);
+  const zeroEvents = events.length === 0;
+  const today = new HDate(now);
+  const events1 = limitIcsFeedLength(events, !isAttachment, today);
+  if (events1.length !== events.length) {
+    const sunday = today.onOrBefore(0).abs();
+    attrs.sunday = sunday;
+    ctx.response.etag = makeETag(ctx, opts, attrs);
+    if (ctx.fresh) {
+      ctx.status = 304;
+      return;
+    }
+  }
+  const events2 = zeroEvents ? makeDummyEvent(ctx) : events1;
+  if (zeroEvents) {
+    icalOpt.publishedTTL = false;
+  }
+  const icals = makeIcalEvents(events2, icalOpt);
+  ctx.body = await icalEventsToString(icals, icalOpt);
 }
 
 function makeDummyEvent(ctx) {
