@@ -30,14 +30,7 @@ useObservability(app, {
   latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
 });
 
-// The error handler below echoes err.message straight into the body, so keep
-// browsers from sniffing an error string as HTML.
-app.use(async function noSniff(ctx, next) {
-  await next();
-  ctx.set('X-Content-Type-Options', 'nosniff');
-});
-
-app.use(async function onlyGetAndHead(ctx, next) {
+app.use(async function limitMethodsAndSetCache(ctx, next) {
   const method = ctx.method;
   if (method !== 'GET' && method !== 'HEAD') {
     // Pass Allow as an error header rather than ctx.set(): this throws above
@@ -54,6 +47,9 @@ app.use(async function onlyGetAndHead(ctx, next) {
     ctx.remove('Cache-Control');
   }
   noCacheOnServerError(ctx);
+  // The error handler below echoes err.message straight into the body,
+  // so keep browsers from sniffing an error string as HTML.
+  ctx.set('X-Content-Type-Options', 'nosniff');
 });
 
 useTimeout(app);
@@ -80,46 +76,15 @@ useResponseLength(app);
 
 const DOCUMENT_ROOT = '/var/www/html';
 
-// Send static files before regular request dispatch
-app.use(function fixup1(ctx, next) {
-  const rpath = ctx.request.path;
-  if (rpath === '/') {
-    ctx.redirect('https://www.hebcal.com/');
-    return;
-  }
-  if (rpath === '/robots.txt') {
-    ctx.body = 'User-agent: *\nAllow: /\n';
-    return;
-  }
-  if (rpath === '/ical' || rpath === '/ical/') {
-    ctx.set('Cache-Control', CACHE_CONTROL_IMMUTABLE);
-    ctx.status = 301;
-    ctx.redirect('https://www.hebcal.com/ical/');
-    return;
-  }
-  if (rpath.startsWith('/ical/') && rpath.endsWith('.ics/')) {
-    const path = rpath.substring(0, rpath.length - 1);
-    httpRedirect(ctx, path, 301);
-    return;
-  }
-  if (rpath.startsWith('/cal/')) {
-    const path = rpath.substring(5);
-    httpRedirect(ctx, `/ical/${path}`, 301);
-    return;
-  }
-  if (rpath.startsWith('/index.php/ical/')) {
-    const path = rpath.substring(16);
-    httpRedirect(ctx, `/ical/${path}`, 301);
-    return;
-  }
-  return next();
-});
-
 const bingUA = 'compatible; bingbot/2.';
 
 // Fix up querystring so we can later use ctx.request.query
 app.use(async function fixup2(ctx, next) {
   const path = ctx.request.path;
+  if (path === '/robots.txt') {
+    ctx.body = 'User-agent: *\nAllow: /\n';
+    return;
+  }
   if (path.startsWith('/export') ||
       path.startsWith('/yahrzeit/yahrzeit.cgi/') ||
       path.startsWith('/yahrzeit/index.cgi/') ||

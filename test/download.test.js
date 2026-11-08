@@ -41,7 +41,6 @@ beforeAll(() => {
 describe('X-Backend header', () => {
   it.each([
     ['robots.txt', '/robots.txt', 200],
-    ['redirect to www', '/', 302],
     ['not found', '/ical/bogus.ics', 404],
   ])('exposes the server hostname on %s', async (why, url, status) => {
     const response = await request(server).get(url);
@@ -56,7 +55,7 @@ describe('X-Backend header', () => {
   });
 
   it('exposes the server hostname on an uncaught error response', async () => {
-    // Rejected by onlyGetAndHead(), which throws above the catch-all in
+    // Rejected by limitMethodsAndSetCache(), which throws above the catch-all in
     // fixup0(), so Koa's default error handler writes this response.
     const response = await request(server).put('/robots.txt');
     expect(response.status).toBe(405);
