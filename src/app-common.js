@@ -78,13 +78,15 @@ export function useBackendHostname(app) {
 }
 
 /**
- * Maps a request path to the bounded `route` label: the first path segment
- * (or "/" for the homepage) when it is in `segments`, else "other". Limiting
- * the labels bounds the histogram's cardinality: static files and scanners
+ * Maps a request path to the bounded `route` label: the first two path
+ * segments (e.g. "v2/h") when they are in `segments`, else the first path
+ * segment (or "/" for the homepage) when it is, else "other". Limiting the
+ * labels bounds the histogram's cardinality: static files and scanners
  * probing random paths all fold into "other".
  * @param {string} path
  * @param {Set<string>} segments allowed labels, without the leading slash;
- *    include "/" to label the homepage
+ *    include "/" to label the homepage, and a two-segment entry such as
+ *    "v2/h" to split one first segment into finer labels
  * @return {string}
  */
 export function routeLabel(path, segments) {
@@ -92,6 +94,13 @@ export function routeLabel(path, segments) {
     return segments.has('/') ? '/' : 'other';
   }
   const end = path.indexOf('/', 1);
+  if (end !== -1) {
+    const end2 = path.indexOf('/', end + 1);
+    const seg2 = path.substring(1, end2 === -1 ? undefined : end2);
+    if (segments.has(seg2)) {
+      return '/' + seg2;
+    }
+  }
   const seg = path.substring(1, end === -1 ? undefined : end);
   return segments.has(seg) ? '/' + seg : 'other';
 }

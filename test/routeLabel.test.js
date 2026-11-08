@@ -41,3 +41,23 @@ describe('routeLabel with a custom segment set', () => {
     expect(routeLabel('/hebcal', dl)).toBe('other');
   });
 });
+
+describe('routeLabel with two-segment entries', () => {
+  const dl = new Set(['v2/h', 'v2/y', 'v2', 'v3']);
+  it('prefers a two-segment match', () => {
+    expect(routeLabel('/v2/h/abc/hebcal.ics', dl)).toBe('/v2/h');
+    expect(routeLabel('/v2/y/abc/yahrzeit.ics', dl)).toBe('/v2/y');
+    expect(routeLabel('/v2/h', dl)).toBe('/v2/h');
+  });
+  it('falls back to the first segment', () => {
+    expect(routeLabel('/v2/x/abc.ics', dl)).toBe('/v2');
+    expect(routeLabel('/v2/hh/abc.ics', dl)).toBe('/v2');
+    expect(routeLabel('/v2', dl)).toBe('/v2');
+    expect(routeLabel('/v3/01abc/yahrzeit.ics', dl)).toBe('/v3');
+  });
+  it('does not match a two-segment entry without its first segment', () => {
+    const only = new Set(['v2/h']);
+    expect(routeLabel('/v2/y/abc.ics', only)).toBe('other');
+    expect(routeLabel('/v2', only)).toBe('other');
+  });
+});

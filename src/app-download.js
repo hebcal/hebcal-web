@@ -25,7 +25,7 @@ useBackendHostname(app);
 // almost none exceed 200ms. 1s and 10s are kept so a stall still lands in a
 // finite bucket and P99 stays computable.
 useObservability(app, {
-  routeSegments: new Set(['v2', 'v3', 'v4', 'ical', 'export']),
+  routeSegments: new Set(['v2/h', 'v2/y', 'v3', 'v4', 'ical', 'export', 'yahrzeit']),
   latencyBuckets: [0.001, 0.0025, 0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.25, 1, 10],
 });
 
