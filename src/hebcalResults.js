@@ -650,7 +650,7 @@ function makeMonthTableBody(month) {
     if (altDateEvt) {
       html += `<div class="d-flex justify-content-between mb-3 ms-1 me-1">`;
       let strs = [
-        `<small class="text-body-secondary me-1">${altDateEvt.t0}</small>`,
+        `<small class="text-burgundy me-1">${altDateEvt.t0}</small>`,
         `<b>${dayNumStr}</b>`,
       ];
       if (window.hebcal.locale === 'he') {
