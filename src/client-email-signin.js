@@ -22,7 +22,7 @@ function main() {
   const modal = d.getElementById('email-modal');
   const signin = byId('signin');
   const subscribeMe = byId('subscribe-me');
-  const subscribeMeBtn = subscribeMe && subscribeMe.querySelector('button');
+  const subscribeMeBtn = subscribeMe?.querySelector('button');
   const meLabel = byId('me-label');
   const activeBox = byId('active');
   const activeEmail = byId('active-email');
@@ -49,7 +49,7 @@ function main() {
     if (signin) signin.hidden = true;
     if (hasActiveSub) {
       if (updateLink) {
-        const args = updateLink.getAttribute('data-args') || '';
+        const args = updateLink.dataset.args || '';
         updateLink.href = '/email?e=' + encodeURIComponent(btoa(userEmail)) +
           (args ? '&' + args : '');
       }
@@ -101,7 +101,7 @@ function main() {
   const qs = new URLSearchParams();
   (cfg.statusParams || []).forEach(function(k) {
     const el = form.querySelector('[name="' + k + '"]');
-    if (el && el.value) {
+    if (el?.value) {
       qs.append(k, el.value);
     }
   });
@@ -149,7 +149,7 @@ function main() {
             return r.ok ? r.json() : null;
           })
           .then(function(data) {
-            if (data && data.ok) {
+            if (data?.ok) {
               // Reopening the modal should now show the active state.
               hasActiveSub = true;
               if (entry) entry.style.display = 'none';

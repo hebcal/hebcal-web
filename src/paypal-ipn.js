@@ -73,15 +73,15 @@ function iniFlag(value) {
  * @return {string}
  */
 function decodeComponent(str, decoder) {
-  const s = str.replace(/\+/g, ' ');
+  const s = str.replaceAll('+', ' ');
   if (!s.includes('%')) {
     return s;
   }
   const bytes = [];
   for (let i = 0; i < s.length; i++) {
-    const ch = s.charCodeAt(i);
+    const ch = s.codePointAt(i);
     if (ch === 0x25 && /^[0-9A-Fa-f]{2}$/.test(s.substring(i + 1, i + 3))) {
-      bytes.push(parseInt(s.substring(i + 1, i + 3), 16));
+      bytes.push(Number.parseInt(s.substring(i + 1, i + 3), 16));
       i += 2;
     } else if (ch < 0x80) {
       bytes.push(ch);

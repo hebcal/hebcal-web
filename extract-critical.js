@@ -107,7 +107,7 @@ function dropInteractionRules(css) {
   });
   // Remove @media/@supports blocks left empty.
   root.walkAtRules((at) => {
-    if (at.nodes && at.nodes.length === 0) at.remove();
+    if (at.nodes?.length === 0) at.remove();
   });
   return { root, dropped };
 }
