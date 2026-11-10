@@ -23,7 +23,7 @@ import {rateLimitHeaders} from './rateLimit.js';
 import {noCacheOnServerError} from './cacheControl.js';
 import {isGoogleLoginConfigured} from './oauthGoogle.js';
 import {isAppleLoginConfigured} from './oauthApple.js';
-import './locale.js';
+import '@hebcal/locales';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

@@ -14,7 +14,6 @@ import {
 import {DafYomiEvent} from '@hebcal/learning';
 import {createMemo, makeIcalEvents, makeIcalendar} from '../src/icalCommon.js';
 import '@hebcal/locales';
-import '../src/locale.js';
 import {getParshaSummary} from '../src/parshaCommon.js';
 
 describe('createMemo', () => {

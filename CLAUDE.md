@@ -40,9 +40,8 @@ npm run test:watch         # watch mode
 npm run dev                # start www.hebcal.com server
 npm run dev:download       # start download.hebcal.com server (port 8081)
 
-npm run build              # full build: po2json + css-compile + css-rename + rollup
+npm run build              # full build: css-compile + css-rename + rollup
 npm run css-compile        # compile SCSS → CSS (Sass + PostCSS + PurgeCSS)
-npm run po2json            # convert gettext .po translation files → JSON
 ```
 
 ## Running a single test file
@@ -408,16 +407,26 @@ a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 `rollup.config.cjs` bundles the `src/client-*.js` entry points (plus a few others) into `views/partials/*.min.js`, which templates inline as `<script nonce>` blocks, and into `static/i/` for the one large external bundle (FullCalendar). Hand-written inline scripts with no per-request values belong there too; pass any per-include config through a `<script type="application/json">` block, as `email-modal-signin.ejs` and `download-modal-script.ejs` do.
 
 ### Localization
-Gettext `.po` files in `po/` (Hebrew, Portuguese, Spanish, French, Dutch, Ashkenazi) are compiled to JSON via `npm run po2json` and loaded at runtime.
-`he-x-NoNikud` is built in `src/locale.ts` in two layers: `Locale.copyLocaleNoNikud`
-first derives it from `he` by stripping nikud, then `po/he-x-NoNikud.po` is applied
-on top as an override. Add every new Hebrew string (with nikud) to `po/he.po`; that
-alone is enough for most strings.
+This repo has no `.po` files of its own. Every UI string translation (Shabbat
+page headings, zmanim `TITLE:`/`MEMO:` strings, Kiddush Levana, etc.) lives in
+[hebcal-locales](https://github.com/hebcal/hebcal-locales)' `po/*.po` and
+ships in `@hebcal/locales`, which `app-www.js` and `app-download.js` import for
+its side effect of registering them with `Locale`. To add or change a string,
+edit hebcal-locales, publish a new `@hebcal/locales`, and bump the dependency
+here. (`po/`, `po2json.js` and `src/locale.js` used to do this locally.)
 
-Add an entry to `po/he-x-NoNikud.po` only when stripping nikud would leave the word
-ambiguous. Without vowel marks, a cholam or chirik can imply a letter (a vav or yud)
-that has to be written out as a _mater lectionis_ to distinguish the word from other
-Hebrew words. That is the reason the override file exists.
+In hebcal-locales, `en.po`, `he.po` and `ashkenazi.po` are *merged* into the
+locales `@hebcal/hdate`/`@hebcal/core` already register, and `he-x-NoNikud` is
+built in two layers: `Locale.copyLocaleNoNikud` derives it from `he` by
+stripping nikud, then `he-x-NoNikud.po` is applied on top as an override, used
+only when stripping nikud would leave a word ambiguous (a cholam or chirik that
+must be written out as a vav or yud _mater lectionis_).
+
+Some zmanim strings in hebcal-locales' `he.po` deliberately differ from
+`@hebcal/core`'s (e.g. `Sunset` is `שְׁקִיעָה`, `Sunrise` is `הַנֵץ הַחַמָּה`). Ours
+win only because `@hebcal/core` is evaluated before `@hebcal/locales` in the
+module graph; keep `import '@hebcal/locales'` after the first `@hebcal/core`
+import.
 
 ### Databases
 - **MySQL**: user accounts, yahrzeit subscriptions, email lists — requires `hebcal-dot-com.ini` config
@@ -478,13 +487,12 @@ Before first test run, create test SQLite databases:
 node_modules/@hebcal/geo-sqlite/bin/make-test-dbs
 ```
 
-You must also run the **full** build before the tests will pass — not just
-`po2json`. Many tests boot the Koa app and render EJS templates, which require
-the compiled translations (`src/*.po.js`), the SASS/CSS output, and the rollup
-client bundles (`views/partials/*.min.js`, `static/i/*`). Without these, route
+You must also run the **full** build before the tests will pass. Many tests
+boot the Koa app and render EJS templates, which require the SASS/CSS output
+and the rollup client bundles (`views/partials/*.min.js`, `static/i/*`). Without these, route
 tests fail with HTTP 500s that look unrelated to your change:
 ```bash
-npm run build   # po2json + css-compile + css-rename + rollup
+npm run build   # css-compile + css-rename + rollup
 ```
 
 Tests use Vitest + Supertest. Mock helpers: `test/mock-mysql.js`, `test/zipsMock.js`. All tests must pass before committing or pushing.

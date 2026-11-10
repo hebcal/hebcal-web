@@ -12,7 +12,7 @@ import {deserializeDownload} from './deserializeDownload.js';
 import {createBaseApp, useBackendHostname, useObservability, useTimeout,
   useCompression, useResponseLength,
   startServer} from './app-common.js';
-import './locale.js';
+import '@hebcal/locales';
 
 const app = createBaseApp();
 
