@@ -79,9 +79,15 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Holidays**: `holidayApp.js`, `getHolidayMeta.js`
 - **Shabbat/Zmanim**: `shabbat.js`. Zmanim (`src/zmanim.js`) was removed from
   www.hebcal.com — `/zmanim` and `/geo` on **app-www** now return 501 (see
-  `router.js`) and are served by hebcal-api-go. Zmanim on **download.hebcal.com**
-  is unchanged: `zmanimDownload.js` (+ shared `zmanimCommon.js`) still serves the
-  `.ics`/`.csv` zmanim feeds from app-download.
+  `router.js`) and are served by hebcal-api-go. The zmanim iCalendar feeds on
+  **download.hebcal.com** (`/zmanim`, `/zmanim2`, `/sunrs`) are now routed by
+  Varnish to hebcal-api-go too; `zmanimDownload.js` (+ shared
+  `zmanimCommon.js`) stays in app-download as the fallback and as the reference
+  the Go port is compared against. Its `TITLE:`/`MEMO:` strings and their
+  Hebrew translations live in hebcal-locales' `po/` (see "Localization"), and
+  reach hebcal-api-go through the Go module github.com/hebcal/locales
+  (v1.1.4+), so an edit needs a new release of that module as well as of
+  `@hebcal/locales` to show up in both.
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`.
   The "Include anniversary numbers" option (`an`) is **on unless explicitly
   `off`** — always test it via `includeAnniversaryNumber()`, never
