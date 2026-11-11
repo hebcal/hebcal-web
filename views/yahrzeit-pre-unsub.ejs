@@ -30,7 +30,7 @@ name="num" value="<%=locals.q.num%>">
 </button>
 <% } %>
 <% if (locals.q.num === 'all' || locals.info.numIds > 1) { %>
-<div><button type="submit" class="btn btn-primary mb-3 me-3"
+<div class="mb-3"><button type="submit" class="btn btn-primary me-3"
 name="num" value="all">Unsubscribe all (<%=locals.info.numIds%>) <%=locals.info.anniversaryType%> Reminders</button>
 <div><small><%= locals.info.calendarTitle %></small></div></div>
 <% } %>
