@@ -155,14 +155,23 @@ Each feature is typically one or a few files handling routing, business logic, a
   `makeStaticCalendars.js` is the weekly cron wrapper that writes and compresses
   them.
 - **Torah/Parsha**: `sedrot.js`, `parshaYear.js`, `parshaCommon.js`.
-  Each parsha's Sefaria prose summary lives in `drash.json` under
-  `sefaria.summaryEn` and `sefaria.summaryHe`, both scraped from sefaria.org.il.
-  `getParshaSummary(ev, locale)` picks between them, so the Hebrew RSS feeds
-  (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and the Hebrew
-  iCalendar downloads carry Hebrew prose instead of English. Sefaria edits these
-  descriptions over time and now embeds Markdown in some of them; drash.json
-  holds plain text, so re-scraping means flattening `[text](url)` and
-  `*emphasis*` first.
+  Each parsha's Sefaria prose summary lives in hebcal-locales' `en.po` and
+  `he.po` as the translation of `MEMO:<parsha>` (the `@hebcal/core` parsha
+  name, e.g. `MEMO:Lech-Lecha`), scraped from sefaria.org / sefaria.org.il;
+  `drash.json` keeps only `sefaria.target` for the topic link. `makeSummaryHtml()`
+  reads them with `Locale.lookupTranslation()` (joining the halves of a doubled
+  parsha), and `getParshaSummary(ev, locale)` picks Hebrew or English, so the
+  Hebrew RSS feeds (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and
+  the Hebrew iCalendar downloads carry Hebrew prose instead of English.
+  `parshaCommon.js` imports `@hebcal/locales` itself so callers outside the two
+  apps (`staticCalendars.js`) still see them. `MEMO:` is also
+  `@hebcal/rest-api`'s holiday-description namespace, and its
+  `getHolidayDescription()` falls back to `MEMO:` + `ev.basename()` -- the bare
+  parsha name for a parsha event. rest-api 7.3.3+ returns `''` for
+  `PARSHA_HASHAVUA` events, which keeps the summary out of `.csv` rows and the
+  classic JSON `memo`; don't drop below that version. Sefaria edits these descriptions over time
+  and embeds Markdown in some of them; the `.po` holds plain text, so
+  re-scraping means flattening `[text](url)` and `*emphasis*` first.
 - **Daily learning**: `dailyLearning.js` (Daf Yomi, etc.). Every schedule is
   driven by one entry in `src/dailyLearningConfig.json`; see "Adding a daily
   learning calendar" below.

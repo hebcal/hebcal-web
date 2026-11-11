@@ -1,4 +1,5 @@
 import {Locale, parshiot, getHolidaysOnDate} from '@hebcal/core';
+import '@hebcal/locales'; // registers the MEMO:<parsha> Sefaria summaries
 import {formatAliyahShort, lookupParsha, makeSummaryFromParts} from '@hebcal/leyning';
 import {makeAnchor, eventToCsv, CSV_HEADER} from '@hebcal/rest-api';
 import {langNames} from './lang.js';
@@ -193,8 +194,9 @@ function parshaVerses(parshaMeta) {
 }
 
 /**
- * Sefaria publishes each parasha topic in both English and Hebrew; `drash.json`
- * carries the prose in `summaryEn` and `summaryHe`.
+ * Sefaria publishes each parasha topic in both English and Hebrew. The prose
+ * lives in `@hebcal/locales` as the `en`/`he` translation of `MEMO:<parsha>`;
+ * `drash.json` keeps only the Sefaria topic `target` for the link.
  * @private
  * @param {any} parsha
  * @param {string} lang `en` or `he`
@@ -202,13 +204,13 @@ function parshaVerses(parshaMeta) {
  */
 function makeSummaryHtml(parsha, lang) {
   const hebrew = lang === 'he';
-  const key = hebrew ? 'summaryHe' : 'summaryEn';
+  const lookup = (name) => Locale.lookupTranslation('MEMO:' + name, lang);
   let summary;
   let target;
   if (parsha.combined) {
     const [p1, p2] = parsha.name.split('-');
-    const s1 = drash[p1]?.sefaria?.[key];
-    const s2 = drash[p2]?.sefaria?.[key];
+    const s1 = lookup(p1);
+    const s2 = lookup(p2);
     if (s1 && s2) {
       summary = s1 + '\n ' + s2;
       target = drash[p1].sefaria.target;
@@ -216,10 +218,9 @@ function makeSummaryHtml(parsha, lang) {
       return null;
     }
   } else {
-    const sefaria = drash[parsha.name].sefaria;
-    if (sefaria?.[key]) {
-      summary = sefaria[key];
-      target = sefaria.target;
+    summary = lookup(parsha.name);
+    if (summary) {
+      target = drash[parsha.name].sefaria.target;
     } else {
       return null;
     }
