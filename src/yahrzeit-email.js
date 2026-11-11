@@ -75,19 +75,6 @@ export async function yahrzeitEmailVerify(ctx) {
   });
 }
 
-async function lookupSubscription(ctx, subscriptionId) {
-  const sql = `SELECT email_addr, calendar_id FROM yahrzeit_email WHERE id = ?`;
-  const results = await dbQuery(ctx, sql, [subscriptionId]);
-  const row = results?.[0];
-  if (!row) {
-    ctx.throw(404, `Anniversary subscription key '${subscriptionId}' not found`);
-  }
-  return {
-    emailAddress: row.email_addr,
-    calendarId: row.calendar_id,
-  };
-}
-
 async function existingSubByEmailAndCalendar(ctx, emailAddress, calendarId) {
   const sql = `SELECT id, sub_status FROM yahrzeit_email WHERE email_addr = ? AND calendar_id = ?`;
   const results = await dbQuery(ctx, sql, [emailAddress, calendarId]);
@@ -343,6 +330,7 @@ AND e.calendar_id = y.id`;
   contents.typeStr = type === YAHRZEIT ? type : `Hebrew ${type}`;
   contents.lastModified = row.updated;
   contents.downloaded = row.downloaded;
+  contents.calendarTitle = makeCalendarTitle(contents, 250);
   return contents;
 }
 
@@ -362,6 +350,7 @@ async function lookupSubNum(ctx, q) {
   info.maxId = contents.maxId;
   info.numIds = contents.numIds;
   info.anniversaryType = contents.anniversaryType;
+  info.calendarTitle = contents.calendarTitle;
   return {info, emailAddress: contents.emailAddress};
 }
 
@@ -382,8 +371,8 @@ async function unsub(ctx, q) {
     return;
   }
   if (q.num === 'all') {
-    const {calendarId, emailAddress} = await lookupSubscription(ctx, q.id);
-    const info = {calendarId};
+    const {calendarId, emailAddress, calendarTitle} = await lookupSubContents(ctx, q.id);
+    const info = {calendarId, calendarTitle};
     return ctx.render('yahrzeit-optout', {
       title: `Anniversary Email Unsubscribe - Hebcal`,
       emailAddress,

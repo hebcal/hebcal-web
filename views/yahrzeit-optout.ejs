@@ -7,6 +7,8 @@
 Annual reminders
 <% if (typeof locals.info?.name === 'string') { -%>
 of <strong><%= locals.info.name %>’s <%= locals.info.typeStr %></strong>
+<% } else if (typeof locals.info?.calendarTitle === 'string') { -%>
+for the calendar <strong><%= locals.info.calendarTitle %></strong>
 <% } -%>
 will no longer be sent to <strong><%= locals.emailAddress %></strong>.
 </div><!-- .alert -->
