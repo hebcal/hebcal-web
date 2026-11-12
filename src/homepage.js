@@ -381,15 +381,19 @@ function getMastheadGreeting(ctx, hd, il, dateOverride) {
     const blurb = `${emoji}&nbsp;<span lang="he" dir="rtl">מוֹעֲדִים לְשִׂמְחָה</span>&nbsp;${emoji}`;
     return [blurb, `<strong>Moadim L'Simcha!</strong> We wish you a very happy
  <a class="text-green1" href="/holidays/${holiday.toLowerCase()}-${gy}${suffix}">${holiday}</a>`];
-  } else if (mm === months.KISLEV && dd <= 24 && dd >= 2) {
+  } else if (mm === months.KISLEV && dd <= 24 && dd >= 6) {
     // immediately after Rosh Chodesh Kislev, show Chanukah greeting
+    // Chanukah is weeks away, so name the date rather than just "Friday evening"
     const erevHd = new HDate(24, months.KISLEV, yy);
     const erevEv = new ChanukahEvent(erevHd,
         hdesc.CHANUKAH_1_CANDLE, flags.CHANUKAH_CANDLES, undefined);
     const d = dayjs(erevHd.greg()).locale(locale);
-    const [, longText] = getChanukahGreeting(d, erevEv);
+    const when = lightCandlesWhen(d.day());
+    const url = shortenUrl(erevEv.url());
     return ['🕎&nbsp;<span lang="he" dir="rtl">חֲנוּכָּה שָׂמֵחַ</span>&nbsp;🕎',
-      longText];
+      `<strong>Happy Chanukah!</strong> Light the first
+<a class="text-green1 text-nowrap" href="${url}#chanukah-candles">Chanukah candle</a>
+${when} on ${myDateFormat(d)}`];
   }
 
   const chagToday = holidays.find((ev) => chagSameach[ev.basename()]);
