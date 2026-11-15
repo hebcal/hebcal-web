@@ -77,6 +77,7 @@
     "@hebcal/learning": "^6.13.2",
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.7.0",
+    "@hebcal/murmurhash3": "^1.0.0",
     "@hebcal/rest-api": "^7.3.3",
     "@hebcal/triennial": "^6.4.1",
     "@koa/ejs": "^5.1.0",
