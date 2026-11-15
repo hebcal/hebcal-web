@@ -18,14 +18,9 @@ import DownloadProtoBuf from './download_pb.cjs';
 const INT32_MAX = 2147483647;
 const INT32_MIN = -2147483648;
 
-const dlPrefix = process.env.NODE_ENV === 'production' ?
-  'https://download.hebcal.com' : 'http://127.0.0.1:8081';
-
-// PDFs and Outlook .csv files are served by hebcal-api-go, not this app. In
-// production Varnish routes download.hebcal.com/*.pdf and *.csv there, so the
-// host is unchanged; in dev, point those URLs at the local hebcal-api-go on
-// port 8082 while .ics stays on 8081.
-export const apiPrefix = process.env.NODE_ENV === 'production' ?
+// Every download.hebcal.com URL (.ics, .csv, .pdf, /v3/ and /v4/) is served by
+// hebcal-api-go. In dev, point them at a local hebcal-api-go on port 8082.
+export const downloadPrefix = process.env.NODE_ENV === 'production' ?
   'https://download.hebcal.com' : 'http://127.0.0.1:8082';
 
 /**
@@ -176,7 +171,7 @@ export function downloadHref2(query, filename, override={}) {
       .replaceAll('+', '-')
       .replaceAll('/', '_')
       .replaceAll('=', '');
-  return `${dlPrefix}/v4/${encoded}/${filename}`;
+  return `${downloadPrefix}/v4/${encoded}/${filename}`;
 }
 
 /**
@@ -242,13 +237,13 @@ export function makeDownloadProps(ctx, q, options, numYears) {
   const emoji = typeof q.emoji === 'string' ? q.emoji : '1';
   const subical = downloadHref2(q, subFilename, {year: 'now', subscribe: '1', emoji}) + '.ics';
   const url = ctx.state.url = {
-    pdf: apiPrefix + dlhref.substring(dlPrefix.length) + '.pdf',
+    pdf: dlhref + '.pdf',
     ics1year: downloadHref2(q, dlFilename, {ny: '1', emoji}) + '.ics',
     subical,
     webcal: subical.replace(/^https/, 'webcal').replace(/^http/, 'webcal'),
     gcal: subical.replace(/^https/, 'http'),
-    csv_usa: apiPrefix + dlhref.substring(dlPrefix.length) + '_usa.csv',
-    csv_eur: apiPrefix + downloadHref2(q, dlFilename, {euro: '1'}).substring(dlPrefix.length) + '_eur.csv',
+    csv_usa: dlhref + '_usa.csv',
+    csv_eur: downloadHref2(q, dlFilename, {euro: '1'}) + '_eur.csv',
     dlFilename,
   };
   ctx.state.filename = {
@@ -282,7 +277,7 @@ export function makeDownloadProps(ctx, q, options, numYears) {
 /**
  * Points the download modal's subscribe links (Apple/Outlook webcal, Google,
  * the copyable iCalendar URL) at one of the static multi-year feeds that
- * `makeStaticCalendars.js` publishes at download.hebcal.com/ical/.
+ * hebcal-api-go publishes at download.hebcal.com/ical/.
  * Call after `makeDownloadProps()`.
  * @param {import('koa').Context} ctx
  * @param {string} slug feed file name without `.ics`, e.g. `omer`
@@ -301,24 +296,23 @@ export function useStaticIcalFeed(ctx, slug) {
  * absolute URLs out of the HTML and then hammer download.hebcal.com with .pdf
  * and .ics fetches, so the links are rendered without an href and a bare
  * `/v4/...` path gives them nothing to follow. The script rebuilds each
- * absolute URL with `new URL(path, host)` (`apiHost` for the PDF and CSV, which are a
- * different server in dev). A URL on some other host (e.g. the static `/ical/`
+ * absolute URL with `new URL(path, host)`. A URL on some other host (e.g. the static `/ical/`
  * feeds, which point at production even in dev) is left absolute, which
  * `new URL()` resolves unchanged.
  * @param {Object.<string,string>} url
  * @return {Object.<string,string>}
  */
 export function makeDlUrlsForScript(url) {
-  const strip = (s, prefix) => s?.startsWith(prefix + '/') ? s.substring(prefix.length) : s;
+  const prefix = downloadPrefix;
+  const strip = (s) => s?.startsWith(prefix + '/') ? s.substring(prefix.length) : s;
   return {
-    host: dlPrefix,
-    apiHost: apiPrefix,
-    subical: strip(url.subical, dlPrefix),
-    ics1year: strip(url.ics1year, dlPrefix),
-    icsMultiYear: strip(url.icsMultiYear, dlPrefix),
-    csv_usa: strip(url.csv_usa, apiPrefix),
-    csv_eur: strip(url.csv_eur, apiPrefix),
-    pdf: strip(url.pdf, apiPrefix),
+    host: prefix,
+    subical: strip(url.subical),
+    ics1year: strip(url.ics1year),
+    icsMultiYear: strip(url.icsMultiYear),
+    csv_usa: strip(url.csv_usa),
+    csv_eur: strip(url.csv_eur),
+    pdf: strip(url.pdf),
     title: url.title,
   };
 }

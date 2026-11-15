@@ -104,9 +104,9 @@ Each feature is typically one or a few files handling routing, business logic, a
   hebcal-shabbat-email's `src/anniversary.ts` mirrors the same rule.
 - **Download links**: `makeDownloadProps.js` builds the download.hebcal.com
   URLs (`/v4/<protobuf token>/…`, `/v3/…` for Yahrzeit) that every page's
-  download modal shows; hebcal-api-go serves them. The `dlURLs` object's
-  `apiHost` (was `pdfHost`) is the host for `pdf` and the hebcal
-  `csv_usa`/`csv_eur`; `host` is for `.ics` and the yahrzeit CSVs.
+  download modal shows; hebcal-api-go serves them. One host,
+  `downloadPrefix`, covers all of them: `https://download.hebcal.com` in
+  production and a local hebcal-api-go at `http://127.0.0.1:8082` in dev.
   `test/makeDownloadProps.test.js` decodes the tokens with a test-only copy
   of the old server-side decoder (`test/deserializeDownload.js`).
   **Download links carry no href in the HTML**, to keep non-JS crawlers off
@@ -114,7 +114,7 @@ Each feature is typically one or a few files handling routing, business logic, a
   links are rendered with only `data-hebcal-src`/`data-hebcal-attr`, and
   `download-modal-script.ejs` fills them in on load from the `#dlURLs` JSON,
   which `makeDlUrlsForScript()` builds as host-less `/v4/…`/`/v3/…` paths plus
-  `host`/`pdfHost`. Do not reintroduce `href="<%= locals.url.pdf %>"` and
+  `host`. Do not reintroduce `href="<%= locals.url.pdf %>"` and
   friends; add `data-hebcal-src="<key>"` instead (and the key to
   `makeDlUrlsForScript()`). `myPrint()` reads `#print-pdf`'s href, which is
   set by that script.

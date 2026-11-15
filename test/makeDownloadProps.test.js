@@ -177,7 +177,7 @@ describe('fast start/end protobuf round-trip', () => {
 });
 
 describe('makeDlUrlsForScript', () => {
-  const host = 'http://127.0.0.1:8081';
+  const host = 'http://127.0.0.1:8082';
 
   it('strips the download host and keeps only what the script reads', () => {
     const subical = downloadHref2({v: '1', maj: 'on', year: 'now'}, 'hebcal_x', {subscribe: '1'}) + '.ics';
@@ -186,14 +186,13 @@ describe('makeDlUrlsForScript', () => {
       ics1year: `${host}/v4/abc/hebcal_x.ics`,
       webcal: subical.replace(/^http/, 'webcal'),
       gcal: subical,
-      pdf: 'http://127.0.0.1:8082/v4/abc/hebcal_x.pdf',
-      csv_usa: 'http://127.0.0.1:8082/v4/abc/hebcal_x_usa.csv',
+      pdf: `${host}/v4/abc/hebcal_x.pdf`,
+      csv_usa: `${host}/v4/abc/hebcal_x_usa.csv`,
       title: 'Hebcal Test',
     };
     const result = makeDlUrlsForScript(url);
     expect(result).toEqual({
       host,
-      apiHost: 'http://127.0.0.1:8082',
       subical: subical.substring(host.length),
       ics1year: '/v4/abc/hebcal_x.ics',
       icsMultiYear: undefined,
@@ -203,7 +202,7 @@ describe('makeDlUrlsForScript', () => {
       title: 'Hebcal Test',
     });
     expect(result.subical).toMatch(/^\/v4\//);
-    expect(JSON.stringify(result)).not.toMatch(/127\.0\.0\.1:808[12]\//);
+    expect(JSON.stringify(result)).not.toMatch(/127\.0\.0\.1:8082\//);
     expect(new URL(result.subical, result.host).href).toBe(subical);
   });
 
@@ -217,7 +216,7 @@ describe('makeDlUrlsForScript', () => {
 });
 
 describe('makeDownloadProps multi-year download', () => {
-  const host = 'http://127.0.0.1:8081';
+  const host = 'http://127.0.0.1:8082';
   /**
    * @param {string} url
    * @return {Object}
@@ -234,7 +233,7 @@ describe('makeDownloadProps multi-year download', () => {
     makeDownloadProps(ctx, q, {year: 2019}, 7);
     expect(ctx.state.filename.icsMultiYear).toBe('hebcal_2019_2025.ics');
     expect(ctx.state.downloadMultiYearTitle).toBe('2019-2025');
-    expect(ctx.state.url.icsMultiYear).toMatch(/^http:\/\/127\.0\.0\.1:8081\/v4\/.+\/hebcal_2019_2025\.ics$/);
+    expect(ctx.state.url.icsMultiYear).toMatch(/^http:\/\/127\.0\.0\.1:8082\/v4\/.+\/hebcal_2019_2025\.ics$/);
     const q2 = decode(ctx.state.url.icsMultiYear);
     expect(q2.year).toBe(2019);
     expect(q2.ny).toBe(7);

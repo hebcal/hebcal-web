@@ -24,8 +24,8 @@ import {getYahrzeitSubscriptions} from './accountSubscriptions.js';
 import {makeYahrzeitEvents} from './yahrzeitEvents.js';
 import {makeLogInfo} from './logger.js';
 import {isDeepStrictEqual} from 'node:util';
+import {downloadPrefix} from './makeDownloadProps.js';
 
-const urlPrefix = process.env.NODE_ENV === 'production' ? 'https://download.hebcal.com' : 'http://127.0.0.1:8081';
 const TIMEOUT = 7000;
 
 /**
@@ -313,7 +313,7 @@ async function makeDownloadProps(ctx) {
     ctx.state.showDownload = true;
   }
   const id = ctx.state.ulid;
-  const dlhref = `${urlPrefix}/v3/${id}/${filename}`;
+  const dlhref = `${downloadPrefix}/v3/${id}/${filename}`;
   const subical = dlhref + '.ics';
   const usaCSV = '_usa.csv';
   const eurCSV = '_eur.csv';
