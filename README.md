@@ -1,8 +1,8 @@
 # hebcal-web
-Web server for Hebcal.com
-* www.hebcal.com (Hebrew Date Converter, Yahrzeit, Shabbat, etc)
-* download.hebcal.com to export iCalendar and CSV
-  (PDF export has moved to [hebcal-api-go](https://github.com/hebcal/hebcal-api-go))
+Web server for www.hebcal.com (Hebrew Date Converter, Yahrzeit, Shabbat, etc).
+
+download.hebcal.com (iCalendar, CSV and PDF export) is served by
+[hebcal-api-go](https://github.com/hebcal/hebcal-api-go).
 
 ## Running dev server
 
@@ -41,12 +41,6 @@ npm run build
 
 ```bash
 npm run dev
-```
-
-6. (Optional) If you want to test `download.hebcal.com` equivalent pages, run:
-
-```bash
-npm run dev:download
 ```
 
 ## Regenerating critical CSS (rare)

@@ -2,7 +2,7 @@
 // compress-bench.js can measure compression against real payloads rather than
 // synthetic text.
 //
-//   node tools/perf/server.js download &
+//   node tools/perf/server.js &
 //   node tools/perf/capture-bodies.js /path/to/out/v4-ics.txt 200 /tmp/corpus/ics
 //
 // Requests go out with `Accept-Encoding: identity`, so what lands on disk is

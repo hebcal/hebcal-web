@@ -22,7 +22,7 @@ function murmur128SyncBase64(str) {
  * @return {string}
  */
 
-export function makeETag(ctx, options, attrs) {
+function makeETag(ctx, options, attrs) {
   const vers = {core: coreVersion, web: pkg.version};
   if (typeof options.dailyLearning === 'object') {
     vers.learning = learningVersion;

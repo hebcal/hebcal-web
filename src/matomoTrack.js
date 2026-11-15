@@ -32,8 +32,7 @@ export function matomoTrack(ctx, category, action, name=null, includeRobots=fals
   const args = new URLSearchParams(params);
   args.set('rec', '1');
   args.set('apiv', '1');
-  const idsite = ctx.request.hostname === 'download.hebcal.com' ? '3' : '1';
-  args.set('idsite', idsite);
+  args.set('idsite', '1');
   args.set('send_image', '0'); // prefer HTTP 204 instead of a GIF image
   if (category && action) {
     args.set('e_c', category);

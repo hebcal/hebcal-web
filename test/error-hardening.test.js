@@ -8,9 +8,6 @@ const server = makeServer(wwwApp);
 // Regression tests: each of these inputs previously triggered an uncaught
 // exception that surfaced as a 500 Internal Server Error. They should all
 // now return a client error (4xx) instead.
-// (The download server's zmanim hardening is covered in download.test.js,
-// since importing both Koa apps in one file double-registers Prometheus
-// metrics.)
 
 describe('www server: bad-parameter hardening', () => {
   it('ignores a year beyond int32 range on /shabbat', async () => {

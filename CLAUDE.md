@@ -4,9 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**hebcal-web** is a Node.js web server for Hebcal.com — a Hebrew calendar and Jewish holiday service. It runs two separate Koa HTTP servers:
-- `www.hebcal.com`: Hebrew date converter, Yahrzeit (memorial dates), Shabbat times, holiday info, Torah portions, daily learning, etc.
-- `download.hebcal.com`: Calendar export in iCalendar and CSV formats
+**hebcal-web** is a Node.js web server for Hebcal.com — a Hebrew calendar and Jewish holiday service. It runs one Koa HTTP server for `www.hebcal.com`: Hebrew date converter, Yahrzeit (memorial dates), Shabbat times, holiday info, Torah portions, daily learning, etc.
+
+`download.hebcal.com` (iCalendar/CSV/PDF export, the zmanim feeds, and the
+static `/ical/` feeds) used to be a second Koa app in this repo
+(`app-download.js`). It is now served entirely by
+[hebcal-api-go](https://github.com/hebcal/hebcal-api-go), and that app and every
+module only it reached (`hebcal-download.js`, `yahrzeitDownload.js`,
+`zmanimDownload.js`, `zmanimCommon.js`, `deserializeDownload.js`,
+`staticCalendars.js`, `makeStaticCalendars.js`, `kindness.js`,
+`gen-static-ical.sh`) were deleted. www still *links* to download.hebcal.com,
+so `makeDownloadProps.js` (which encodes the `/v4/` protobuf tokens),
+`download.proto`/`download_pb.cjs`, `dailyLearningConfig.json` and
+`staticCalendars.json` all stay.
 
 All source files use ES modules (`"type": "module"` in package.json). Requires Node.js >= 24.
 
@@ -38,7 +48,6 @@ npm run test:coverage      # with v8 coverage report
 npm run test:watch         # watch mode
 
 npm run dev                # start www.hebcal.com server
-npm run dev:download       # start download.hebcal.com server (port 8081)
 
 npm run build              # full build: css-compile + css-rename + rollup
 npm run css-compile        # compile SCSS → CSS (Sass + PostCSS + PurgeCSS)
@@ -52,9 +61,8 @@ npx vitest run test/converter.test.js
 
 ## Architecture
 
-### Dual-server structure
+### Server
 - `src/app-www.js` — Koa app for www.hebcal.com, mounts all routes via `src/router.js`
-- `src/app-download.js` — separate Koa app for download.hebcal.com
 
 ### Key shared modules
 - `src/db.js` — MySQL connection pool (credentials from `hebcal-dot-com.ini`)
@@ -79,15 +87,11 @@ Each feature is typically one or a few files handling routing, business logic, a
 - **Holidays**: `holidayApp.js`, `getHolidayMeta.js`
 - **Shabbat/Zmanim**: `shabbat.js`. Zmanim (`src/zmanim.js`) was removed from
   www.hebcal.com — `/zmanim` and `/geo` on **app-www** now return 501 (see
-  `router.js`) and are served by hebcal-api-go. The zmanim iCalendar feeds on
-  **download.hebcal.com** (`/zmanim`, `/zmanim2`, `/sunrs`) are now routed by
-  Varnish to hebcal-api-go too; `zmanimDownload.js` (+ shared
-  `zmanimCommon.js`) stays in app-download as the fallback and as the reference
-  the Go port is compared against. Its `TITLE:`/`MEMO:` strings and their
-  Hebrew translations live in hebcal-locales' `po/` (see "Localization"), and
-  reach hebcal-api-go through the Go module github.com/hebcal/locales
-  (v1.1.4+), so an edit needs a new release of that module as well as of
-  `@hebcal/locales` to show up in both.
+  `router.js`) and are served by hebcal-api-go, as are the zmanim iCalendar
+  feeds on download.hebcal.com (`/zmanim`, `/zmanim2`, `/sunrs`). Their
+  `TITLE:`/`MEMO:` strings and Hebrew translations live in hebcal-locales'
+  `po/` (see "Localization") and reach hebcal-api-go through the Go module
+  github.com/hebcal/locales (v1.1.4+).
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`.
   The "Include anniversary numbers" option (`an`) is **on unless explicitly
   `off`** — always test it via `includeAnniversaryNumber()`, never
@@ -98,22 +102,19 @@ Each feature is typically one or a few files handling routing, business logic, a
   "`anf=1` without `an=on`" as off. `compactJsonToSave()` stores only
   `an: 'off'` (drops `on`) so re-saved legacy rows compare equal.
   hebcal-shabbat-email's `src/anniversary.ts` mirrors the same rule.
-- **Downloads/export**: `hebcal-download.js`, `makeDownloadProps.js`, `deserializeDownload.js`.
-  PDF rendering and Outlook `.csv` export were removed from `hebcalDownload()`
-  (`/v4/…`); `.pdf` and `.csv` requests there now return 501 and both are served
-  exclusively by [hebcal-api-go](https://github.com/hebcal/hebcal-api-go), which
-  supports only `/v4/*/*` URLs. `yahrzeitDownload()` (`/v3/…`) still serves its
-  own `.csv`. The `dlURLs` object's `apiHost` (was `pdfHost`) is the host for
-  `pdf` and the hebcal `csv_usa`/`csv_eur`; `host` is for `.ics` and the
-  yahrzeit CSVs. `eventsWithParshaToCsv()` stays because
-  `staticCalendars.js` still builds the `/ical/` .csv feeds served by the node
-  dl hosts.
+- **Download links**: `makeDownloadProps.js` builds the download.hebcal.com
+  URLs (`/v4/<protobuf token>/…`, `/v3/…` for Yahrzeit) that every page's
+  download modal shows; hebcal-api-go serves them. One host,
+  `downloadPrefix`, covers all of them: `https://download.hebcal.com` in
+  production and a local hebcal-api-go at `http://127.0.0.1:8082` in dev.
+  `test/makeDownloadProps.test.js` decodes the tokens with a test-only copy
+  of the old server-side decoder (`test/deserializeDownload.js`).
   **Download links carry no href in the HTML**, to keep non-JS crawlers off
   download.hebcal.com: the modal's links and the results page's Print/PDF
   links are rendered with only `data-hebcal-src`/`data-hebcal-attr`, and
   `download-modal-script.ejs` fills them in on load from the `#dlURLs` JSON,
   which `makeDlUrlsForScript()` builds as host-less `/v4/…`/`/v3/…` paths plus
-  `host`/`pdfHost`. Do not reintroduce `href="<%= locals.url.pdf %>"` and
+  `host`. Do not reintroduce `href="<%= locals.url.pdf %>"` and
   friends; add `data-hebcal-src="<key>"` instead (and the key to
   `makeDlUrlsForScript()`). `myPrint()` reads `#print-pdf`'s href, which is
   set by that script.
@@ -147,13 +148,11 @@ Each feature is typically one or a few files handling routing, business logic, a
   follows the same rule: `eventsWithParshaToCsv()` (in `parshaCommon.js`) passes
   the special-Shabbat name to `eventToCsv()` via its per-call `memo` option, so
   every CSV route uses it in place of `eventsToCsv()` and rendering a calendar
-  twice yields identical bytes. `kindness.js` and `yahrzeitDownload.js` are the
-  exceptions — they never see `flags.PARSHA_HASHAVUA`.
-- **Static feeds**: `staticCalendars.js` builds the multi-year .ics/.csv feeds
-  served from download.hebcal.com/ical/ as a pure function of `today`, so they
-  can be regression-tested (`test/staticCalendars.test.js`);
-  `makeStaticCalendars.js` is the weekly cron wrapper that writes and compresses
-  them.
+  twice yields identical bytes.
+- **Static feeds**: the multi-year .ics/.csv feeds at
+  download.hebcal.com/ical/ are generated by hebcal-api-go from its copy of
+  `staticCalendars.json` and `dailyLearningConfig.json`. www still reads both
+  files (the `/ical` page, `/hebcal` form, `/learning`, download modal).
 - **Torah/Parsha**: `sedrot.js`, `parshaYear.js`, `parshaCommon.js`.
   Each parsha's Sefaria prose summary lives in hebcal-locales' `en.po` and
   `he.po` as the translation of `MEMO:<parsha>` (the `@hebcal/core` parsha
@@ -163,8 +162,8 @@ Each feature is typically one or a few files handling routing, business logic, a
   parsha), and `getParshaSummary(ev, locale)` picks Hebrew or English, so the
   Hebrew RSS feeds (`/sedrot/index-he.xml`, `…-he-x-NoNikud.xml`, `lg=h`) and
   the Hebrew iCalendar downloads carry Hebrew prose instead of English.
-  `parshaCommon.js` imports `@hebcal/locales` itself so callers outside the two
-  apps (`staticCalendars.js`) still see them. `MEMO:` is also
+  `parshaCommon.js` imports `@hebcal/locales` itself so callers outside the
+  app still see them. `MEMO:` is also
   `@hebcal/rest-api`'s holiday-description namespace, and its
   `getHolidayDescription()` falls back to `MEMO:` + `ev.basename()` -- the bare
   parsha name for a parsha event. rest-api 7.3.3+ returns `''` for
@@ -338,8 +337,8 @@ Each feature is typically one or a few files handling routing, business logic, a
 
 The schedule itself lives in `@hebcal/learning`; bump that dependency first
 (see "Bumping `@hebcal/*` dependencies"). Everything here is config-driven —
-the `/hebcal` form, download modal, `/learning` page, settings names, static
-`/ical/` feeds and download-token (de)serialization all loop over
+the `/hebcal` form, download modal, `/learning` page, settings names and
+download-token serialization all loop over
 `dailyLearningConfig.json` — so a new calendar touches only these files.
 [hebcal-api-go](https://github.com/hebcal/hebcal-api-go) embeds a verbatim
 copy of this file (and of `staticCalendars.json`) and derives everything from
@@ -383,22 +382,21 @@ it too, so after changing either here run `make sync-webconfig` there (step 6).
    lines for one bool field.
 4. **`static/api-docs/openapi.json`** — add the `queryParam` to the
    `/hebcal` parameter list.
-5. **Tests** — add the slug to the expected list in
-   `test/staticCalendars.test.js`, and the flag to the `learning` query string
-   in `test/hebcal.test.js`. `test/download.test.js` round-trips every config
-   entry through the protobuf automatically, so a missing proto field fails
-   there.
+5. **Tests** — add the flag to the `learning` query string in
+   `test/hebcal.test.js`. `test/makeDownloadProps.test.js` round-trips every
+   config entry through the protobuf automatically, so a missing proto field
+   fails there.
 6. **hebcal-api-go** — copy the new `download.proto` into `pkg/downloadpb`
-   and regenerate, `make sync-webconfig`, `make test`. A series with a Go
+   and regenerate, `make sync-webconfig`, `make test` (this is also where the
+   static `/ical/` feed is built). A series with a Go
    schedule in github.com/hebcal/learning is generated in-process; any other is
    fetched from readings-svc by its `queryParam`, which readings-svc's
    `learning.js` must know first.
 
-`staticCalendars.json` entries are passed to `calendar()` as options. A new
-key must either be a `calendar()` option or be added to `ignoreOpts` in
-`staticCalendars.js`; hebcal-api-go refuses an option it does not implement,
-and keeps its own copy of the website-only list (`staticWebsiteOnly` in
-`internal/webconfig`), so a new website-only key needs adding there too.
+`staticCalendars.json` entries are passed to `calendar()` as options by
+hebcal-api-go, which refuses an option it does not implement. A new
+website-only key needs adding to its `staticWebsiteOnly` list in
+`internal/webconfig`.
 
 ### Data files (`src/`)
 JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`
@@ -445,7 +443,7 @@ a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 This repo has no `.po` files of its own. Every UI string translation (Shabbat
 page headings, zmanim `TITLE:`/`MEMO:` strings, Kiddush Levana, etc.) lives in
 [hebcal-locales](https://github.com/hebcal/hebcal-locales)' `po/*.po` and
-ships in `@hebcal/locales`, which `app-www.js` and `app-download.js` import for
+ships in `@hebcal/locales`, which `app-www.js` imports for
 its side effect of registering them with `Locale`. To add or change a string,
 edit hebcal-locales, publish a new `@hebcal/locales`, and bump the dependency
 here. (`po/`, `po2json.js` and `src/locale.js` used to do this locally.)
@@ -491,7 +489,7 @@ helpers.
 |---|---|---|---|
 | `/hebcal?cfg=ics\|rss\|e\|e2` | `year` (Hebrew if `yt=H`) | narrow: Greg 1752-2499 / Heb 5513-6060 | `hebcal.js` `checkYearRange` |
 | `/hebcal` (HTML, `cfg=json`, `cfg=csv`, `cfg=fc`) | -- | no 410. Gregorian `year` > 9999 or Hebrew > 13760 is 400 | `hebcal.js` |
-| download.hebcal.com `/export`, `/v2`, `/v3`, `/v4` | `year` / `yt` | narrow: Greg 1752-2499 / Heb 5513-6060 | `hebcal-download.js` |
+| download.hebcal.com `/export`, `/v2`, `/v3`, `/v4` | `year` / `yt` | narrow: Greg 1752-2499 / Heb 5513-6060 | **hebcal-api-go** |
 | `/holidays/<name>-<year>` and `-<YYYYMMDD>` | suffix (first 4 digits of an 8-digit date) | Greg 100-2999 | `holidayDetail.js` |
 | `/holidays/<name>?gy=` | `gy` | Greg 100-2999 | `holidayDetail.js` |
 | `/holidays/<year>`, `/holidays/<gy>-<gy+1>` | path; >= 3761 or a span is Hebrew (span = first + 3761) | Greg 100-2999 / Heb 3860-6759; 400 outside 1-9999 | `holidayYearIndex.js` |
@@ -594,7 +592,7 @@ Always run unit tests to confirm everything works without breakage before commit
 ## Performance Profiling
 
 The harness lives in `tools/perf/` — see `tools/perf/README.md` for the
-commands. It drives either app (`node tools/perf/server.js www|download`).
+commands. It drives `app-www.js` (`node tools/perf/server.js`).
 What follows is why it works the way it does.
 
 ### Method
@@ -608,7 +606,7 @@ synthetic URLs badly misrepresent the work mix. The approach that worked:
    are dominated by 304s and `/ping`.
 2. Sample URLs per family into flat lists (`.ics` and `.csv` behave nothing
    alike, so profile them separately as well as mixed).
-3. Boot the app via a wrapper that imports `{app}` from `src/app-download.js`
+3. Boot the app via a wrapper that imports `{app}` from `src/app-www.js`
    (it only self-starts when run directly) and drives
    `inspector` `Profiler.start`/`stop` from a second admin port, so the profile
    covers just the replay window and not module loading. **Run the wrapper with
@@ -624,29 +622,11 @@ synthetic URLs badly misrepresent the work mix. The approach that worked:
 Varnish sits in front, so the log's distinct-URL ratio is ~1.0. There is no
 app-level response-caching win available; only per-render cost matters.
 
-### Where the time goes on download.hebcal.com (Aug 2026 baseline)
-
-At the time of this baseline `.pdf` was ~51% of total server time, `.ics` ~30%,
-`.csv` ~10%. **PDF rendering has since been removed from this app** (it is now
-served by [hebcal-api-go](https://github.com/hebcal/hebcal-api-go)), so the
-pdfkit/fontkit costs that dominated this profile no longer apply here; `.ics`
-and `.csv` are now the work that matters.
-
-- **iCalendar — `foldLine` was ~29% of `.ics` CPU** and ~57% of `/v3` yahrzeit
-  CPU, essentially all of it `Intl.Segmenter`. Fixed upstream in
-  `@hebcal/icalendar` by folding on code-point boundaries and consulting the
-  Segmenter only at candidate break offsets via `Segments.containing()`.
-- **`@hebcal/noaa` `getDateFromTime`** is ~11% of `.csv` CPU: a
-  `PlainTime`→`toZonedDateTime`→`withTimeZone` round-trip whose result
-  `@hebcal/core`'s `zdtToDate` immediately reduces to `epochMilliseconds`.
-  `withTimeZone` does not change the instant, so that leg is dead weight.
-  Node 26 has **native** Temporal, so this cost shows as self time in the
-  calling frame rather than in `temporal-polyfill`.
-
 ### Response compression (Aug 2026)
 
-`useCompression()` in `app-common.js` offers gzip, brotli and zstd on both
-servers. koa-compress negotiates in the fixed order
+`useCompression()` in `app-common.js` offers gzip, brotli and zstd. (The
+download.hebcal.com findings below were measured when that app still lived
+here; they now apply to hebcal-api-go.) koa-compress negotiates in the fixed order
 `['zstd', 'br', 'gzip', 'deflate', 'identity']`, so **zstd wins whenever the
 client offers it** and disabling it falls through to brotli. Measure with
 `tools/perf/encstats.js` and `tools/perf/compress-bench.js`.
@@ -678,7 +658,7 @@ client offers it** and disabling it falls through to brotli. Measure with
   | `.csv` | 0.15 ms / 14.08% | 1.44 ms / 11.06% | 3.62 ms / 10.60% |
   | www HTML | 0.09 ms / 26.50% | 0.62 ms / 24.30% | 1.23 ms / 24.23% |
 
-  Both servers now run `zstdLevel: 6`, down from 12 on www and 10 on download.
+  www now runs `zstdLevel: 6`, down from 12 (download went from 10 to 6 before it moved to hebcal-api-go).
   Level 12 cost 2x the CPU of level 10 for 0.07 percentage points of size.
   Charging every logged 200 at the level actually used, compression was 26.9%
   of total request time on www and 12.3% on download; the retune cuts 14.4% of

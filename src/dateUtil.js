@@ -221,16 +221,6 @@ export function getDefaultYear(dt, hdate) {
 }
 
 /**
- * Returns today's date (midnight) in the given IANA timezone as a dayjs.
- * @param {string} tzid
- * @return {dayjs.Dayjs}
- */
-export function nowInTimezone(tzid) {
-  const isoDate = Zmanim.formatISOWithTimeZone(tzid, new Date());
-  return dayjs(isoDate.substring(0, 10));
-}
-
-/**
  * Given a day, returns the Shabbat week window `[start, endOfWeek]` used for
  * weekly Shabbat/parsha listings. If the day is Saturday, backs up to Friday
  * so last night's candle-lighting times are included; the end is the later of

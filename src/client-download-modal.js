@@ -14,8 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof path !== 'string') {
       return null;
     }
-    const isApi = key === 'pdf' || key === 'csv_usa' || key === 'csv_eur';
-    return new URL(path, isApi ? dlURLs.apiHost : dlURLs.host);
+    return new URL(path, dlURLs.host);
   }
   function makeHref(srcType, url) {
     const href = url.href;
