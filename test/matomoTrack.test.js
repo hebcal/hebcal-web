@@ -93,14 +93,6 @@ describe('matomoTrack', () => {
     expect(args.get('e_n')).toBe('Name');
   });
 
-  it('uses idsite=3 for download.hebcal.com', () => {
-    const spy = vi.spyOn(http, 'request').mockImplementation(makeFakeReq);
-    const ctx = makeCtx({hostname: 'download.hebcal.com'});
-    matomoTrack(ctx, 'Category', 'Action');
-    const args = parseArgs(spy.mock.calls[0][0]);
-    expect(args.get('idsite')).toBe('3');
-  });
-
   it('sets http_status and pf_srv when includeRobots is true', () => {
     const spy = vi.spyOn(http, 'request').mockImplementation(makeFakeReq);
     const ctx = makeCtx();

@@ -38,7 +38,7 @@ const en2he = {
   Anniversary: 'יום נישואין',
 };
 
-export function makeEditMemo(calendarId) {
+function makeEditMemo(calendarId) {
   return 'To edit this Hebcal Yahrzeit + Anniversary Calendar, visit https://www.hebcal.com/yahrzeit/edit/' +
     calendarId;
 }
@@ -53,7 +53,7 @@ function getDefaultStartYear(today) {
   return isFirst3months ? hyear - 1 : hyear;
 }
 
-export function getDateRange(query) {
+function getDateRange(query) {
   const today = new HDate();
   const years = getNumYears(query.years);
   const startYear = Number.parseInt(query.start, 10) || getDefaultStartYear(today);

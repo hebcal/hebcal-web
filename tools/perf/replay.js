@@ -1,4 +1,4 @@
-// Replay a list of URLs against the local download server, sequentially
+// Replay a list of URLs against the local www server, sequentially
 // (concurrency 1 by default) so wall-clock per request is meaningful.
 import fs from 'node:fs';
 import http from 'node:http';

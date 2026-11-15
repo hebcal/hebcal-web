@@ -10,7 +10,6 @@ import {
   getSunsetAwareDate,
   getDefaultHebrewYear,
   getDefaultYear,
-  nowInTimezone,
   shabbatWeekRange,
   expiresSaturdayNight,
   simchatTorahDate,
@@ -261,14 +260,6 @@ describe('getDefaultYear', () => {
     expect(r.gregRange).toBe('2026-2027');
     expect(r.gregRangeShort).toBe('2026-27');
     expect(r.yearArgs).toBe('&yt=H&year=5787');
-  });
-});
-
-describe('nowInTimezone', () => {
-  it('returns a valid dayjs for a given timezone', () => {
-    const d = nowInTimezone('America/New_York');
-    expect(dayjs.isDayjs(d)).toBe(true);
-    expect(d.isValid()).toBe(true);
   });
 });
 

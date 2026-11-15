@@ -1,8 +1,8 @@
-# Download-server profiling harness
+# Profiling harness
 
-Replays real production traffic against a local server and profiles it. Written
-for `download.hebcal.com`, where PDF and iCalendar rendering dominate; also
-drives `app-www.js` via `server.js www`.
+Replays real production traffic against a local `app-www.js` server and
+profiles it. (It was originally written for `download.hebcal.com`, which is now
+served by hebcal-api-go.)
 
 Synthetic URLs badly misrepresent the work mix, so everything here starts from a
 production Pino logfile (one JSON object per request, with `duration`, `status`
@@ -17,21 +17,21 @@ directory dies, every request returns nothing, and a before/after comparison
 silently "passes".
 
 ```bash
-# 1. sample URLs out of a production log, weighted by real traffic
-node tools/perf/sample.js /path/to/out /path/to/dl19.log
+# 1. pull a list of URLs out of a production log, weighted by real traffic
+#    (one path per line, e.g. the `url` field of a w45.log sample)
 
 # 2. boot the app with profiling control on port 9099
-node tools/perf/server.js download &
+node tools/perf/server.js &
 
 # 3. warm up, then profile a replay
-node tools/perf/replay.js /path/to/out/v4-pdf.txt 1 150 > /dev/null
+node tools/perf/replay.js /path/to/urls.txt 1 150 > /dev/null
 curl -s localhost:9099/start
-node tools/perf/replay.js /path/to/out/v4-pdf.txt 1
-curl -s "localhost:9099/stop?out=/tmp/pdf.cpuprofile"
+node tools/perf/replay.js /path/to/urls.txt 1
+curl -s "localhost:9099/stop?out=/tmp/www.cpuprofile"
 
 # 4. analyze
-node tools/perf/analyze.js /tmp/pdf.cpuprofile          # self time
-node tools/perf/incl.js /tmp/pdf.cpuprofile renderPdf foldLine   # inclusive
+node tools/perf/analyze.js /tmp/www.cpuprofile          # self time
+node tools/perf/incl.js /tmp/www.cpuprofile calendar abs2greg   # inclusive
 ```
 
 `replay.js <file> [concurrency] [limit]` defaults to concurrency 1 so per-request
@@ -42,21 +42,15 @@ over the first few hundred requests.
 
 `analyze.js` gives self time by package, file and function — good for finding
 hot leaves. `incl.js` gives inclusive time for named frames — good for
-attributing cost to a phase. Use both: the PDF font-parsing cost, for instance,
-shows up under `layout` rather than under `open`, because fontkit decodes
-GSUB/GPOS lazily.
+attributing cost to a phase. Use both.
 
 ## Checking that an optimization changed nothing
 
 These routes are ETag-cached, so byte-identical output is the bar.
 
-- `capture.js` hashes text responses with `DTSTAMP`/`LAST-MODIFIED` normalized.
-- `capture-pdf.js` hashes the **inflated content streams** of a PDF, with
-  timestamps normalized. Never compare whole PDF files: pdfkit writes a random
-  `/ID` in the trailer and stamps the XMP metadata stream with the current time,
-  so two runs of unmodified code never match.
-
-Both take `<urls-file> <limit> <out.json> [port]`. Capture before and after,
+`capture.js` hashes text responses (e.g. `/hebcal?cfg=ics`) with
+`DTSTAMP`/`LAST-MODIFIED` normalized. It takes `<urls-file> <limit> <out.json>`.
+Capture before and after,
 then diff the JSON. Sanity-check the method first by capturing twice against
 unchanged code — that must come out 100% identical, otherwise the normalization
 is incomplete and any comparison built on it is meaningless.
@@ -95,8 +89,8 @@ node tools/perf/encstats.js dl19.log dl19-new.log dl16.log
 node tools/perf/encstats.js --by=ua w45.log w46.log
 
 # CPU vs ratio, over real bodies rather than synthetic text
-node tools/perf/server.js download &
-node tools/perf/capture-bodies.js /path/to/out/v4-ics.txt 250 /tmp/corpus/ics
+node tools/perf/server.js &
+node tools/perf/capture-bodies.js /path/to/ics-urls.txt 250 /tmp/corpus/ics
 node tools/perf/compress-bench.js /tmp/corpus/ics
 node tools/perf/compress-bench.js /tmp/corpus/ics --levels=zstd:3,zstd:10 --reps=5
 ```

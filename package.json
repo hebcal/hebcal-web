@@ -1,7 +1,7 @@
 {
   "name": "hebcal-web",
   "version": "4.2.3",
-  "description": "Hebcal server-side Node.js for www.hebcal.com and download.hebcal.com",
+  "description": "Hebcal server-side Node.js for www.hebcal.com",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hebcal/hebcal-web.git"
@@ -24,7 +24,6 @@
   "files": [],
   "scripts": {
     "dev": "node src/app-www.js",
-    "dev:download": "NODE_PORT=8081 node src/app-download.js",
     "build": "npm run css-compile && npm run css-rename && npx rollup -c",
     "deploy": "./deploy.sh",
     "start": "node src/app-www.js",
@@ -78,7 +77,6 @@
     "@hebcal/learning": "^6.13.2",
     "@hebcal/leyning": "^10.1.0",
     "@hebcal/locales": "^6.7.0",
-    "@hebcal/murmurhash3": "^1.0.0",
     "@hebcal/rest-api": "^7.3.3",
     "@hebcal/triennial": "^6.4.1",
     "@koa/ejs": "^5.1.0",
@@ -95,7 +93,6 @@
     "koa-better-response-time": "^1.3.0",
     "koa-bodyparser": "^4.4.1",
     "koa-compress": "^5.3.0",
-    "koa-conditional-get": "^3.0.0",
     "koa-error": "^3.2.0",
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",

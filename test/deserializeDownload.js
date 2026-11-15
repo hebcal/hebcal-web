@@ -1,5 +1,5 @@
-import DownloadProtoBuf from './download_pb.cjs';
-import {dailyLearningConfig, protocNameToMethodSuffix} from './urlArgs.js';
+import DownloadProtoBuf from '../src/download_pb.cjs';
+import {dailyLearningConfig, protocNameToMethodSuffix} from '../src/urlArgs.js';
 
 /**
  * Protobuf `float` fields are 32-bit, so 19.8 decodes as 19.799999237060547.

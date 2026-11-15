@@ -15,7 +15,7 @@ export function cacheControl(days) {
 /**
  * A 5xx must not advertise freshness. Handlers often set Cache-Control,
  * Expires or validators before doing the work that then throws, and neither
- * koa-error (www) nor the download app's catch-all clears response headers,
+ * koa-error clears response headers,
  * so without this a 500/503 can go out with e.g. a 14-day public max-age.
  * 501 is included even though RFC 9110 makes it heuristically cacheable: our
  * 501s mean "use hebcal-api-go", which Varnish routes around anyway.
