@@ -7,6 +7,7 @@ import dayjs from 'dayjs';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {browseSitemapSlugsForIso} from './shabbat-browse.js';
+import {TOP_COUNTRIES} from './topCountries.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -139,19 +140,6 @@ const MAIN_PAGES = [
   '/yahrzeit',
   '/ical/',
   '/api-docs/',
-];
-
-/**
- * Top countries by visits (Matomo, Jan-Sep 2026), ISO 3166 codes in rank order.
- * Excludes countries with no meaningful Jewish population whose traffic is
- * essentially bots (China, Singapore, Hong Kong, Japan, South Korea, Vietnam,
- * Indonesia, Bangladesh, Nigeria, Malaysia).
- */
-const TOP_COUNTRIES = [
-  'US', 'IL', 'CA', 'GB', 'BR', 'AU', 'MX', 'DE', 'FR', 'ZA',
-  'AR', 'CO', 'NL', 'IN', 'ES', 'PH', 'PL', 'SE', 'IT', 'RO',
-  'CH', 'BE', 'CL', 'VE', 'BM', 'TR', 'PA', 'DK', 'IE', 'HU',
-  'NZ', 'EC', 'AT', 'FI', 'CZ',
 ];
 
 /**

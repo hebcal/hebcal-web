@@ -15,6 +15,7 @@ import {CACHE_CONTROL_7DAYS,
 } from './cacheControl.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import {flag} from './emoji-flag.js';
+import {TOP_COUNTRIES} from './topCountries.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -176,12 +177,15 @@ function addHref(ctx, r, countryCode) {
 
 /**
  * Country slugs that have a per-country browse sitemap
- * (`/shabbat/browse/<slug>.xml`)
+ * (`/shabbat/browse/<slug>.xml`), with the TOP_COUNTRIES first in rank
+ * order and the remaining countries after them.
  * @return {string[]}
  */
 export function browseSitemapCountries() {
   init();
-  return Object.keys(countryIdToIso);
+  const top = browseSitemapSlugsForIso(TOP_COUNTRIES);
+  const topSet = new Set(top);
+  return [...top, ...Object.keys(countryIdToIso).filter((id) => !topSet.has(id))];
 }
 
 /**
