@@ -235,7 +235,7 @@ function setYahrzeitCookie(ctx) {
 
 function renderJson(maxId, q) {
   delete q.ulid;
-  const events = makeYahrzeitEvents(maxId, q, false);
+  const events = makeYahrzeitEvents(maxId, q);
   const options = {includeEvent: true};
   if (q.hdp === '1') {
     options.heDateParts = true;
@@ -247,9 +247,6 @@ function renderJson(maxId, q) {
   for (const item of results.items) {
     delete item.hebrew;
     delete item.category;
-    if (typeof item.memo === 'string') {
-      item.memo = item.memo.replaceAll(String.raw`\n`, '\n');
-    }
     const ev = item.ev;
     delete item.ev;
     if (ev.name) item.name = ev.name;
@@ -267,7 +264,7 @@ function renderJson(maxId, q) {
 
 function makeFormResults(ctx) {
   const q = ctx.state.q;
-  const events = makeYahrzeitEvents(ctx.state.maxId, q, false);
+  const events = makeYahrzeitEvents(ctx.state.maxId, q);
   if (events.length === 0) {
     return null;
   }
