@@ -340,12 +340,18 @@ The schedule itself lives in `@hebcal/learning`; bump that dependency first
 (see "Bumping `@hebcal/*` dependencies"). Everything here is config-driven —
 the `/hebcal` form, download modal, `/learning` page, settings names, static
 `/ical/` feeds and download-token (de)serialization all loop over
-`dailyLearningConfig.json` — so a new calendar touches only these files:
+`dailyLearningConfig.json` — so a new calendar touches only these files.
+[hebcal-api-go](https://github.com/hebcal/hebcal-api-go) embeds a verbatim
+copy of this file (and of `staticCalendars.json`) and derives everything from
+it too, so after changing either here run `make sync-webconfig` there (step 6).
 
 1. **`src/dailyLearningConfig.json`** — add an entry (before `parashat`):
    - `eventCategory`: must equal `ev.getCategories()[0]` of the library's
-     event (it keys `cat2cfg` in `dailyLearning.js`; a mismatch 500s
-     `/learning/<date>`).
+     event, or the first two categories joined with `-` for Yerushalmi
+     (`yerushalmi-vilna`). It keys `cat2cfg` in `dailyLearning.js` (a
+     mismatch 500s `/learning/<date>`), and hebcal-api-go orders a day's
+     learning rows by it, so the Go port of the schedule in
+     github.com/hebcal/learning must report the same categories.
    - `queryParam`: a new, unused short URL flag. `git grep -n '"<flag>"'` and
      check `static/api-docs/openapi.json` first; e.g. `dty` is Tanakh Yomi, so
      Tanya Yomi took `dtn`.
@@ -361,6 +367,9 @@ the `/hebcal` form, download modal, `/learning` page, settings names, static
      `/learning`. Add a new group (with emoji) there if needed.
    - `feedLength`, `years`, `color`, `settingsName`, `shortName`, `descLong`,
      `descMedium`: copy the shape of a similar entry.
+   - `caldesc`: optional; the static feed's `X-WR-CALDESC` when it should
+     say more than `descMedium` (only Chofetz Chaim, whose feed pairs it
+     with Shemirat HaLashon, sets it).
 2. **`src/download.proto`** — append `bool <protocName> = <next number>;`.
    Never renumber or reuse a field number: it would change the meaning of
    every `/v4/` subscription URL already in the wild.
@@ -379,6 +388,17 @@ the `/hebcal` form, download modal, `/learning` page, settings names, static
    in `test/hebcal.test.js`. `test/download.test.js` round-trips every config
    entry through the protobuf automatically, so a missing proto field fails
    there.
+6. **hebcal-api-go** — copy the new `download.proto` into `pkg/downloadpb`
+   and regenerate, `make sync-webconfig`, `make test`. A series with a Go
+   schedule in github.com/hebcal/learning is generated in-process; any other is
+   fetched from readings-svc by its `queryParam`, which readings-svc's
+   `learning.js` must know first.
+
+`staticCalendars.json` entries are passed to `calendar()` as options. A new
+key must either be a `calendar()` option or be added to `ignoreOpts` in
+`staticCalendars.js`; hebcal-api-go refuses an option it does not implement,
+and keeps its own copy of the website-only list (`staticWebsiteOnly` in
+`internal/webconfig`), so a new website-only key needs adding there too.
 
 ### Data files (`src/`)
 JSON files used at runtime: `holidays.json`, `drash.json`, `dailyLearningConfig.json`, `staticCalendars.json`

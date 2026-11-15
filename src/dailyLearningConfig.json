@@ -196,6 +196,7 @@
     "group": "Ethics",
     "settingsName": "Sefer Chofetz Chaim",
     "shortName": "Daily Chofetz Chaim",
+    "caldesc": "Daily study of the Sefer Chofetz Chaim and Shemirat HaLashon, which deal with the Jewish ethics and laws of speech",
     "descLong": "Daily study of the Sefer Chofetz Chaim, which deals with the Jewish ethics and laws of speech. The book is divided into 119 parts in a regular year and 129 parts in a leap year.",
     "descMedium": "Jewish ethics and laws of speech"
   },
