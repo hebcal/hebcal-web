@@ -28,29 +28,53 @@ const geonamesFilename = 'geonames.sqlite3';
  */
 const MIN_POPULATION = 1600;
 
+/**
+ * Higher thresholds for countries with so many cities that the browse
+ * sitemap and pages become huge and slow to render. Keyed by ISO 3166 code.
+ */
+const MIN_POPULATION_BY_COUNTRY = {
+  US: 10000,
+  CN: 50000,
+  IN: 50000,
+  BR: 50000,
+  PH: 10000,
+};
+
+/**
+ * SQL boolean expression: is `col` populous enough for its country?
+ * @param {string} popCol population column
+ * @param {string} ccCol country (ISO 3166) column
+ * @return {string}
+ */
+function populousSql(popCol, ccCol) {
+  const whens = Object.entries(MIN_POPULATION_BY_COUNTRY)
+      .map(([cc, min]) => `WHEN '${cc}' THEN ${min}`).join(' ');
+  return `${popCol} >= CASE ${ccCol} ${whens} ELSE ${MIN_POPULATION} END`;
+}
+
 const CONTINENT_SQL = `SELECT Continent, ISO, Country FROM country
 WHERE Continent <> 'AN'
 AND ISO NOT IN ('', 'AN', 'AQ', 'BV', 'CS', 'HM', 'IO', 'PS', 'UM')
 ORDER BY Continent, Country`;
 
 const POPULOUS_COUNTRY_SQL = `SELECT DISTINCT country FROM geoname
-WHERE population >= ${MIN_POPULATION}`;
+WHERE ${populousSql('population', 'country')}`;
 
 const POPULOUS_ADMIN1_SQL = `SELECT DISTINCT country, admin1 FROM geoname
-WHERE population >= ${MIN_POPULATION}`;
+WHERE ${populousSql('population', 'country')}`;
 
 const COUNTRY_SQL = `SELECT g.geonameid, g.name, g.asciiname,
 a.name as admin1, a.asciiname as admin1ascii,
 g.latitude, g.longitude, g.gtopo30 as elevation, g.timezone
 FROM geoname g
 LEFT JOIN admin1 a on g.country||'.'||g.admin1 = a.key
-WHERE g.country = ? AND g.population >= ${MIN_POPULATION}
+WHERE g.country = ? AND ${populousSql('g.population', 'g.country')}
 ORDER BY g.name`;
 
 const COUNTRY_ADMIN_SQL = `SELECT g.geonameid, g.name, g.asciiname, g.latitude, g.longitude,
 g.gtopo30 as elevation, g.timezone
 FROM geoname g
-WHERE g.country = ? AND g.admin1 = ? AND g.population >= ${MIN_POPULATION}
+WHERE g.country = ? AND g.admin1 = ? AND ${populousSql('g.population', 'g.country')}
 ORDER BY g.name`;
 
 const CONTINENTS = {
