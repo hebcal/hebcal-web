@@ -96,8 +96,7 @@ export function buildChofetzChaimCalendar(cfg, today) {
   const icalOpt = {
     ...cfg,
     title: cfg.shortName,
-    // eslint-disable-next-line max-len
-    caldesc: 'Daily study of the Sefer Chofetz Chaim and Shemirat HaLashon, which deal with the Jewish ethics and laws of speech',
+    caldesc: cfg.caldesc,
     locale: 'en',
   };
   return {file: cfg.downloadSlug, events, icalOpt};
@@ -153,7 +152,7 @@ export function buildLearningCalendar(cfg, today) {
   const events = calendar(options);
   const query = {
     title: cfg.shortName,
-    caldesc: cfg.descMedium,
+    caldesc: cfg.caldesc || cfg.descMedium,
   };
   const color = cfg.color;
   if (color) {
