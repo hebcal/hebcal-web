@@ -171,6 +171,19 @@ describe('ZIP code lookup with mock database', () => {
     const candles = body.items.filter((item) => item.category === 'candles');
     expect(candles.length).toBeGreaterThan(0);
   });
+
+  it('clamps a long start/end range by expected event count', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&o=on&d=on&c=on&M=on' +
+          '&geo=zip&zip=90210&b=18&start=2026-11-16&end=2194-10-31');
+    expect(response.status).toBe(200);
+    const {items, range} = response.body;
+    expect(range.start).toBe('2026-11-16');
+    // ~5 years rather than 10
+    expect(range.end > '2032-01-01' && range.end < '2032-05-01').toBe(true);
+    expect(items.length).toBeGreaterThan(3000);
+    expect(items.length).toBeLessThan(4200);
+  });
 });
 
 describe('Hebcal output formats', () => {

@@ -1,5 +1,6 @@
 import {describe, it, expect} from 'vitest';
-import {makeHebcalOptions} from '../src/calendar.js';
+import {makeHebcalOptions, getMaxRangeDays, estimateEventsPerYear,
+  MAX_RANGE_EVENTS} from '../src/calendar.js';
 
 // https://github.com/hebcal/hebcal/issues/308
 describe('makeHebcalOptions td (tzeit degrees) parameter', () => {
@@ -104,5 +105,74 @@ describe('makeHebcalOptions fast start/end parameters', () => {
     const options = makeHebcalOptions(null, {year: '2026', fsd: 'abc', fsm: '90'});
     expect(options.fastStartDeg).toBeUndefined();
     expect(options.fastStartMins).toBe(90);
+  });
+});
+
+describe('start/end date range clamp', () => {
+  const daysBetween = (a, b) => Math.round((b - a) / 86400000);
+  const allHolidays = {maj: 'on', min: 'on', mod: 'on', nx: 'on', mf: 'on', ss: 'on'};
+
+  it('allows 10 years for holidays only', () => {
+    const options = makeHebcalOptions(null,
+        {...allHolidays, start: '2026-11-16', end: '2194-10-31'});
+    expect(daysBetween(options.start, options.end)).toBe(3652);
+  });
+
+  it('does not extend a short range', () => {
+    const options = makeHebcalOptions(null,
+        {...allHolidays, d: 'on', s: 'on', start: '2026-11-16', end: '2027-01-31'});
+    expect(options.end).toEqual(new Date(2027, 0, 31));
+  });
+
+  it('allows 10 years for holidays + candles + sedrot', () => {
+    const options = {candlelighting: true, sedrot: true};
+    expect(estimateEventsPerYear(options)).toBe(270);
+    expect(getMaxRangeDays(options)).toBe(3652);
+  });
+
+  it('narrows d=on plus holidays to ~8 years', () => {
+    const options = makeHebcalOptions(null,
+        {...allHolidays, d: 'on', start: '2026-11-16', end: '2194-10-31'});
+    expect(daysBetween(options.start, options.end)).toBe(Math.floor(MAX_RANGE_EVENTS / 455 * 365.25));
+  });
+
+  it('counts D=on as one Hebrew date per day with events', () => {
+    expect(estimateEventsPerYear({addAlternateDatesForEvents: true})).toBe(280);
+  });
+
+  it('narrows holidays + candles + sedrot + omer + d=on to ~5 years', () => {
+    const options = {candlelighting: true, sedrot: true, omer: true, addAlternateDates: true};
+    expect(estimateEventsPerYear(options)).toBe(684);
+    const days = getMaxRangeDays(options);
+    expect(days).toBe(Math.floor(MAX_RANGE_EVENTS / 684 * 365.25));
+    expect(days).toBeGreaterThan(365 * 5.2);
+    expect(days).toBeLessThan(365 * 5.3);
+  });
+
+  it('never goes below 1 year', () => {
+    const dailyLearning = {};
+    for (let i = 0; i < 15; i++) {
+      dailyLearning['cal' + i] = true;
+    }
+    const options = {candlelighting: true, addAlternateDates: true, dailyLearning};
+    expect(getMaxRangeDays(options)).toBe(365);
+  });
+
+  it('narrows 8 daily learning calendars to about a year', () => {
+    const options = makeHebcalOptions(null, {
+      ...allHolidays, d: 'on', s: 'on', o: 'on',
+      F: 'on', myomi: 'on', dpy: 'on', nyomi: 'on', dty: 'on', dps: 'on',
+      d929: 'on', dr1: 'on',
+      start: '2026-11-16', end: '2194-10-31',
+    });
+    expect(Object.keys(options.dailyLearning)).toHaveLength(8);
+    expect(daysBetween(options.start, options.end)).toBe(Math.floor(MAX_RANGE_EVENTS / 3474 * 365.25));
+  });
+
+  it('counts no holidays when all are turned off', () => {
+    const options = makeHebcalOptions(null, {
+      maj: 'off', min: 'off', mod: 'off', nx: 'off', mf: 'off', ss: 'off', s: 'on',
+    });
+    expect(estimateEventsPerYear(options)).toBe(50);
   });
 });

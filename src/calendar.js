@@ -208,12 +208,7 @@ export function makeHebcalOptions(db, query) {
     throw createError(400, `If one of 'start' or 'end' is specified, both are required`);
   }
   if (options.start && options.end) {
-    // Clamp end to max 10 years after start
-    const maxEnd = new Date(options.start);
-    maxEnd.setFullYear(maxEnd.getFullYear() + 10);
-    if (options.end > maxEnd) {
-      options.end = maxEnd;
-    }
+    // end is clamped by clampDateRange() once all options are known
     delete query.year;
     delete query.month;
     delete query.yt;
@@ -296,7 +291,74 @@ export function makeHebcalOptions(db, query) {
   const mm = query.mm || '0';
   options.hebrewMonths = (mm === '1' || mm === '2');
   options.gematriyaNumerals = (mm === '2');
+  clampDateRange(options);
   return options;
+}
+
+/**
+ * Upper bound on the number of events a `start`/`end` date-range request
+ * (cfg=json, csv, rss, fc) should produce, which keeps the JSON body around
+ * 1 MB uncompressed. Holidays, candle lighting and sedrot still fit a full
+ * 10 years; a daily option such as `d=on` (365/year) plus holidays gets ~8.
+ */
+export const MAX_RANGE_EVENTS = 3600;
+const MAX_RANGE_YEARS = 10;
+const MIN_RANGE_DAYS = 365;
+/** Hard backstop in case the estimate below is badly off */
+const MAX_RANGE_EVENTS_HARD = Math.round(MAX_RANGE_EVENTS * 1.5);
+
+/**
+ * Rough events-per-year estimate for a set of options, calibrated by
+ * running `calendar()` for one year with each option enabled on its own.
+ * @param {import('@hebcal/core').CalOptions} options
+ * @return {number}
+ */
+export function estimateEventsPerYear(options) {
+  const noHolidays = Object.values(negativeOpts).every((key) => options[key]);
+  let n = noHolidays ? 0 : 90;
+  if (options.candlelighting) n += 130;
+  if (options.sedrot) n += 50;
+  if (options.omer) n += 49;
+  if (options.molad) n += 12;
+  if (options.yomKippurKatan) n += 10;
+  if (options.yizkor) n += 10;
+  if (options.addAlternateDates) {
+    n += 365;
+  } else if (options.addAlternateDatesForEvents) {
+    // one Hebrew date per day that has any event
+    n += 190;
+  }
+  n += 365 * Object.keys(options.dailyLearning || {}).length;
+  return Math.max(n, 1);
+}
+
+/**
+ * Maximum span in days allowed for a `start`/`end` request, so that the
+ * expected number of events stays under {@link MAX_RANGE_EVENTS}.
+ * Always at least 1 year and at most 10 years.
+ * @param {import('@hebcal/core').CalOptions} options
+ * @return {number}
+ */
+export function getMaxRangeDays(options) {
+  const years = Math.min(MAX_RANGE_YEARS, MAX_RANGE_EVENTS / estimateEventsPerYear(options));
+  return Math.max(MIN_RANGE_DAYS, Math.floor(years * 365.25));
+}
+
+/**
+ * Narrow `options.end` for a `start`/`end` request if the range would
+ * produce too many events
+ * @private
+ * @param {import('@hebcal/core').CalOptions} options
+ */
+function clampDateRange(options) {
+  if (!options.start || !options.end) {
+    return;
+  }
+  const maxEnd = new Date(options.start);
+  maxEnd.setDate(maxEnd.getDate() + getMaxRangeDays(options));
+  if (options.end > maxEnd) {
+    options.end = maxEnd;
+  }
 }
 
 const webOnlyOpts = {
@@ -418,6 +480,10 @@ export function makeHebrewCalendar(ctx, options) {
     }
 
     events = newEvents;
+  }
+
+  if (options.start && options.end && events.length > MAX_RANGE_EVENTS_HARD) {
+    events = events.slice(0, MAX_RANGE_EVENTS_HARD);
   }
 
   // Suppress links for distant past or far-future
