@@ -31,7 +31,7 @@ Then, make sure to have the geonames.sqlite3 and zips.sqlite3 in path.
 touch hebcal-dot-com.ini
 ```
 
-4. Generate PO files:
+4. Build the CSS and client JavaScript bundles:
 
 ```bash
 npm run build
