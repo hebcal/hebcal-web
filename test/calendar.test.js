@@ -175,4 +175,32 @@ describe('start/end date range clamp', () => {
     });
     expect(estimateEventsPerYear(options)).toBe(50);
   });
+
+  it('caps ny= by the same event budget', () => {
+    const query = {
+      ...allHolidays, s: 'on', o: 'on', d: 'on', c: 'on', year: '2026', ny: '10',
+    };
+    const options = makeHebcalOptions(null, query);
+    // no location in this unit test, so candles are off: 90+50+49+365 = 554/year
+    expect(options.numYears).toBe(Math.floor(MAX_RANGE_EVENTS / 554));
+    expect(query.ny).toBe(String(options.numYears));
+  });
+
+  it('leaves a small ny= alone', () => {
+    const query = {...allHolidays, d: 'on', s: 'on', o: 'on', year: '2026', ny: '2'};
+    expect(makeHebcalOptions(null, query).numYears).toBe(2);
+    expect(query.ny).toBe('2');
+  });
+
+  it('allows ny=10 for holidays only', () => {
+    expect(makeHebcalOptions(null, {...allHolidays, year: '2026', ny: '10'}).numYears).toBe(10);
+  });
+
+  it('caps ny= to no less than 1', () => {
+    const query = {
+      ...allHolidays, d: 'on', F: 'on', myomi: 'on', dpy: 'on', nyomi: 'on', dty: 'on',
+      dps: 'on', d929: 'on', dr1: 'on', year: '2026', ny: '10',
+    };
+    expect(makeHebcalOptions(null, query).numYears).toBe(1);
+  });
 });

@@ -291,7 +291,7 @@ export function makeHebcalOptions(db, query) {
   const mm = query.mm || '0';
   options.hebrewMonths = (mm === '1' || mm === '2');
   options.gematriyaNumerals = (mm === '2');
-  clampDateRange(options);
+  clampDateRange(options, query);
   return options;
 }
 
@@ -340,18 +340,36 @@ export function estimateEventsPerYear(options) {
  * @return {number}
  */
 export function getMaxRangeDays(options) {
-  const years = Math.min(MAX_RANGE_YEARS, MAX_RANGE_EVENTS / estimateEventsPerYear(options));
-  return Math.max(MIN_RANGE_DAYS, Math.floor(years * 365.25));
+  return Math.max(MIN_RANGE_DAYS, Math.floor(maxRangeYears(options) * 365.25));
 }
 
 /**
- * Narrow `options.end` for a `start`/`end` request if the range would
- * produce too many events
  * @private
  * @param {import('@hebcal/core').CalOptions} options
+ * @return {number} fractional years, at most 10
  */
-function clampDateRange(options) {
+function maxRangeYears(options) {
+  return Math.min(MAX_RANGE_YEARS, MAX_RANGE_EVENTS / estimateEventsPerYear(options));
+}
+
+/**
+ * Narrow `options.end` for a `start`/`end` request, or an explicit
+ * `options.numYears` (`ny=`) for a `year=` request, if the range would
+ * produce too many events. Only ever narrows, never widens.
+ * @private
+ * @param {import('@hebcal/core').CalOptions} options
+ * @param {Object.<string,string>} query
+ */
+function clampDateRange(options, query) {
   if (!options.start || !options.end) {
+    // @hebcal/core ignores numYears when start/end are given
+    if (typeof options.numYears === 'number') {
+      const maxYears = Math.max(1, Math.floor(maxRangeYears(options)));
+      if (options.numYears > maxYears) {
+        options.numYears = maxYears;
+        query.ny = String(maxYears);
+      }
+    }
     return;
   }
   const maxEnd = new Date(options.start);

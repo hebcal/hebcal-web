@@ -184,6 +184,18 @@ describe('ZIP code lookup with mock database', () => {
     expect(items.length).toBeGreaterThan(3000);
     expect(items.length).toBeLessThan(4200);
   });
+
+  it('caps ny= by expected event count', async () => {
+    const response = await request(server)
+        .get('/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&mf=on&ss=on&s=on&o=on&d=on&c=on&M=on' +
+          '&geo=zip&zip=90210&b=18&year=2026&ny=10');
+    expect(response.status).toBe(200);
+    const {items, range} = response.body;
+    expect(range.start).toBe('2026-01-01');
+    // ny=5 rather than 10
+    expect(range.end).toBe('2030-12-31');
+    expect(items.length).toBeLessThan(4200);
+  });
 });
 
 describe('Hebcal output formats', () => {
