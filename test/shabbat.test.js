@@ -1,7 +1,6 @@
 
 import {describe, it, expect, beforeAll, afterAll} from 'vitest';
 import request from 'supertest';
-import {HDate} from '@hebcal/core';
 import {DatabaseSync} from 'node:sqlite';
 import {app} from '../src/app-www.js';
 import {injectZipsMock} from './zipsMock.js';
@@ -99,40 +98,10 @@ describe('Fridge Routes', () => {
     expect(response.type).toContain('html');
   });
 
-  it('should handle /shabbat/fridge.cgi route', async () => {
+  it('returns 501 for /shabbat/fridge.cgi (moved to hebcal-api-go)', async () => {
     const response = await request(server)
-        .get('/shabbat/fridge.cgi?geonameid=293397');
-    expect(response.status).toBe(200);
-    expect(response.type).toContain('html');
-  });
-
-  it('allows Gregorian years from 4 before to 20 after this year', async () => {
-    const thisYear = new Date().getFullYear();
-    const url = '/shabbat/fridge.cgi?geonameid=293397&yt=G&year=';
-    expect((await request(server).get(url + (thisYear - 4))).status).toBe(200);
-    expect((await request(server).get(url + (thisYear - 5))).status).toBe(410);
-    expect((await request(server).get(url + (thisYear + 20))).status).toBe(200);
-    expect((await request(server).get(url + (thisYear + 21))).status).toBe(410);
-  });
-
-  it('allows Hebrew years from 4 before to 20 after this year', async () => {
-    const thisYear = new HDate().getFullYear();
-    const url = '/shabbat/fridge.cgi?geonameid=293397&year=';
-    expect((await request(server).get(url + (thisYear - 4))).status).toBe(200);
-    expect((await request(server).get(url + (thisYear - 5))).status).toBe(410);
-    expect((await request(server).get(url + (thisYear + 20))).status).toBe(200);
-    expect((await request(server).get(url + (thisYear + 21))).status).toBe(410);
-  });
-
-  it('omits nav links that would fall outside the allowed window', async () => {
-    const thisYear = new Date().getFullYear();
-    const url = '/shabbat/fridge.cgi?geonameid=293397&yt=G&year=';
-    const first = await request(server).get(url + (thisYear - 4));
-    expect(first.text).not.toContain('title="Previous Gregorian year"');
-    expect(first.text).toContain('title="Next Gregorian year"');
-    const last = await request(server).get(url + (thisYear + 20));
-    expect(last.text).toContain('title="Previous Gregorian year"');
-    expect(last.text).not.toContain('title="Next Gregorian year"');
+        .get('/shabbat/fridge.cgi?geonameid=293397&yt=G&year=2026');
+    expect(response.status).toBe(501);
   });
 });
 

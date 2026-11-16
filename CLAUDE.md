@@ -500,7 +500,7 @@ helpers.
 | `/sedrot/<hyear>` | path | narrow: Heb 5513-6060 (0 or non-numeric means this year) | `parshaYear.js` |
 | `/sedrot/grid?year=` | `year` | Heb 3860-6759; 400 outside 2-32000 (0 means this year) | `parshaMultiIndex.js` |
 | `/omer/<hyear>`, `/omer/<hyear>/<day>` | path | no 410. Redirects to the current year outside narrow Heb 5513-6060 | `omerApp.js` |
-| `/shabbat/fridge.cgi?year=` | `year` (Gregorian if `yt=G`) | outside this year -4..+20 | `fridge.js` `checkYearInRange` |
+| `/shabbat/fridge.cgi?year=` | `year` (Gregorian if `yt=G`) | outside this year -4..+20 | **hebcal-api-go** (www answers 501) |
 | `/s/<hyear>[i]/<num>[d]` | path | Heb 3860-6759; 400 for year 0 | **hebcal-api-go** `internal/handler/shorturl.go` (`shortUrlRedir.js` is the same check) |
 | `/h/...`, `/o/...` | -- | no 410. Redirect to the same `/holidays/` or `/omer/` path | hebcal-api-go `shorturl.go` |
 | `/converter/csv?hy=` | -- | no 410. 400 outside Hebrew 1-32000 | hebcal-api-go `converter.go` |

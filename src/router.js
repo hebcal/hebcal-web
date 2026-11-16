@@ -25,7 +25,7 @@ import {
 } from './agentDiscovery.js';
 import {emailForm, emailVerify, emailSubscriptionStatus} from './email.js';
 import {emailOpen} from './emailOpen.js';
-import {fridgeShabbat} from './fridge.js';
+import {fridgeIndex} from './fridge.js';
 import {hdateJavascript, hdateXml} from './hdate.js';
 import {dafYomiRss} from './dafYomiRss.js';
 import {parshaRss} from './parshaRss.js';
@@ -157,11 +157,12 @@ Sitemap: https://www.hebcal.com/home/sitemap.xml
       return getLeyning(ctx);
     } else if (rpath.startsWith('/learning')) {
       return dailyLearningApp(ctx);
-    } else if (rpath.startsWith('/geo') || rpath.startsWith('/zmanim')) {
+    } else if (rpath.startsWith('/geo') || rpath.startsWith('/zmanim') ||
+      rpath.startsWith('/shabbat/fridge.cgi')) {
       // These routes now served exclusively by hebcal-api-go
       ctx.throw(501, `Please use hebcal-api-go for ${rpath}`);
-    } else if (rpath.startsWith('/fridge') || rpath.startsWith('/shabbat/fridge.cgi')) {
-      return fridgeShabbat(ctx);
+    } else if (rpath.startsWith('/fridge')) {
+      return fridgeIndex(ctx);
     } else if (rpath.startsWith('/converter/csv')) {
       return dateConverterCsv(ctx);
     } else if (rpath.startsWith('/converter')) {
