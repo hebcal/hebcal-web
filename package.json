@@ -30,7 +30,7 @@
     "protoc": "protoc --proto_path=src --js_out=import_style=commonjs,binary:src src/download.proto && mv src/download_pb.js src/download_pb.cjs",
     "css-compile": "sass --style compressed --no-source-map --no-error-css --load-path=node_modules --load-path=views/partials scss/:css/ && postcss css/*.css --dir css/ --no-map",
     "css-rename": "mv css/style.css static/i/$npm_package_config_mainCss",
-    "pretest": "touch hebcal-dot-com.ini",
+    "pretest": "touch hebcal-dot-com.ini && { [ -f geonames.sqlite3 ] || ./node_modules/.bin/make-test-dbs; }",
     "lint": "oxlint",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
