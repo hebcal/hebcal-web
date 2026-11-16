@@ -15,6 +15,7 @@ import {localeMap} from './lang.js';
 import {
   queryDefaultCandleMins,
   processCookieAndQuery,
+  fridgeGeoUrlArgs,
   makeGeoUrlArgs,
 } from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
@@ -287,7 +288,7 @@ function makePropsForFullHtml(ctx) {
   const geoUrlArgs = ctx.state.geoUrlArgs;
   const dt = ctx.state.fridayDate.greg();
   const yearInfo = getDefaultYear(dt, new HDate(dt));
-  const fridgeURL = `/shabbat/fridge.cgi?${geoUrlArgs}${yearInfo.yearArgs}`;
+  const fridgeURL = `/shabbat/fridge.cgi?${fridgeGeoUrlArgs(geoUrlArgs)}${yearInfo.yearArgs}`;
   return {
     summary: briefText.join('. '),
     jsonLD,

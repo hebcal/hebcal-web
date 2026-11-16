@@ -16,6 +16,7 @@ import {
   makeIcalOpts,
   processCookieAndQuery,
   urlArgs,
+  fridgeGeoUrlArgs,
   makeGeoUrlArgs,
 } from './urlArgs.js';
 import {possiblySetCookie} from './cookie.js';
@@ -371,7 +372,7 @@ function renderHtml(ctx) {
     ctx.state.geoUrlArgs = geoUrlArgs;
     const idx = Math.floor(events.length / 2);
     const hyear = options.isHebrewYear ? options.year : events[idx].getDate().getFullYear();
-    url.fridge = `/shabbat/fridge.cgi?${geoUrlArgs}&year=${hyear}`;
+    url.fridge = `/shabbat/fridge.cgi?${fridgeGeoUrlArgs(geoUrlArgs)}&year=${hyear}`;
   }
   const localeConfig = {
     weekdaysShort: localeData.weekdaysShort(),

@@ -442,6 +442,16 @@ export function makeGeoUrlArgs(q, location, options) {
 }
 
 /**
+ * The fridge page doesn't support appendHebrewToSubject, so convert
+ * lg=ah / lg=sh to lg=a / lg=s in a geo URL query string.
+ * @param {string} geoUrlArgs
+ * @return {string}
+ */
+export function fridgeGeoUrlArgs(geoUrlArgs) {
+  return geoUrlArgs.replace(/(^|&)lg=([as])h(?=&|$)/, '$1lg=$2');
+}
+
+/**
  * @param {Object.<string,string>} q
  * @param {Location} location
  * @return {string}
