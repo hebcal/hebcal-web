@@ -34,6 +34,7 @@ const optsToMask = {
   min: flags.MINOR_HOLIDAY,
   yzkr: flags.YIZKOR,
   mvch: flags.SHABBAT_MEVARCHIM,
+  bhb: flags.BEHAB,
 };
 
 /**
