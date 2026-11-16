@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof path !== 'string') {
       return null;
     }
-    return new URL(path, dlURLs.host);
+    // fridge.cgi is served from www, not download.hebcal.com
+    return new URL(path, key === 'fridge' ? window.location.href : dlURLs.host);
   }
   function makeHref(srcType, url) {
     const href = url.href;

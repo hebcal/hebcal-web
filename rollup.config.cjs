@@ -142,6 +142,15 @@ module.exports = [
     plugins: [terser()],
   },
   {
+    input: 'src/client-shabbat.js',
+    output: {
+      file: 'views/partials/client-shabbat.min.js',
+      format: 'iife',
+      banner: '/*! client-shabbat ' + pkg.version + ' */',
+    },
+    plugins: [terser()],
+  },
+  {
     input: 'src/client-form-range-validation.js',
     output: {
       file: 'views/partials/client-form-range-validation.min.js',

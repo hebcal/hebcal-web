@@ -313,6 +313,9 @@ export function makeDlUrlsForScript(url) {
     csv_usa: strip(url.csv_usa),
     csv_eur: strip(url.csv_eur),
     pdf: strip(url.pdf),
+    // www path (/shabbat/fridge.cgi?...), resolved against the page's own
+    // origin by client-download-modal.js rather than `host`.
+    fridge: url.fridge,
     title: url.title,
   };
 }

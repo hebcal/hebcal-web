@@ -561,6 +561,16 @@ describe('download links are not exposed to non-JS clients', () => {
   }
 });
 
+it('fridge.cgi link has no href in the HTML', async () => {
+  const response = await request(server).get('/hebcal?v=1&maj=on&min=on&nx=on&c=on&geonameid=5391811&year=now&month=x');
+  expect(response.status).toBe(200);
+  expect(response.text).not.toMatch(/href="\/shabbat\/fridge\.cgi/);
+  expect(response.text).toContain('data-hebcal-src="fridge"');
+  const json = response.text.match(/<script type="application\/json" id="dlURLs">([\s\S]*?)<\/script>/);
+  const dl = JSON.parse(json[1]);
+  expect(dl.fridge).toMatch(/^\/shabbat\/fridge\.cgi\?geonameid=5391811&/);
+});
+
 describe('multi-year .ics download button', () => {
   for (const [url, filename, title] of [
     ['/hebcal?v=1&year=2019&yt=G&i=off&maj=on&min=on&nx=on&mf=on&ss=on&mod=on&mm=0&lg=s&c=off&geo=none', 'hebcal_2019_2025.ics', '2019-2025'],

@@ -43,10 +43,10 @@ ul.hebcal-results li {
 <a class="btn btn-outline-primary btn-sm mb-2 me-1" href="/hebcal?v=1&amp;geo=<%= locals.q.geo %>&amp;<%= locals.geoUrlArgs %><%= locals.yearArgs %>&amp;c=on&amp;s=on&amp;maj=on&amp;min=on&amp;mod=on&amp;mf=on&amp;ss=on&amp;nx=on">
   <svg class="icon"><use href="<%=locals.spriteHref%>#bi-calendar3"></use></svg>
   <%= locals.isHebrewYear ? locals.hy : locals.gregRangeShort %> calendar</a>
-<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= locals.gregRangeShort %>" rel="nofollow" href="<%= locals.fridgeURL %>">
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Compact candle-lighting times for <%= locals.gregRangeShort %>" rel="nofollow" data-shabbat-href="fridge">
   <svg class="icon"><use href="<%=locals.spriteHref%>#bi-printer-fill"></use></svg>
   Print <%= locals.gregRangeShort %></a>
-<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Download <%= locals.gregRangeShort %> CSV" download rel="nofollow" href="<%= locals.fridgeURL %>&amp;cfg=csv">
+<a class="btn btn-outline-primary btn-sm mb-2 me-1" title="Download <%= locals.gregRangeShort %> CSV" download rel="nofollow" data-shabbat-href="fridgeCsv">
   <svg class="icon" fill="currentColor"><use href="<%=locals.spriteHref%>#noun_CSV_1658749"></use></svg>
   Download CSV</a>
 <a rel="alternate" type="application/rss+xml" class="btn btn-outline-primary btn-sm mb-2 me-1" title="RSS feed of candle-lighting times" href="<%= locals.rssUrl %>">
@@ -130,21 +130,10 @@ for (const [geonameid, city, min] of worldCities) { -%>
 </div><!-- .col-md-4 -->
 </div><!-- .row -->
 <%- await include('partials/email-candles-modal.ejs') _%>
-<script nonce="<%=locals.nonce%>">
-document.addEventListener("DOMContentLoaded", function() {
-const d=document;
-d.getElementById("m").addEventListener("focus",function(){
-  d.getElementById("M1").checked = false;
-  d.getElementById("M0").checked = true;
-  d.getElementById("td").value = "";
-});
-d.getElementById("td").addEventListener("focus",function(){
-  d.getElementById("M0").checked = false;
-  d.getElementById("M1").checked = true;
-  d.getElementById("m").value = "";
-});
-});
+<script type="application/json" id="shabbatLinks">
+<%- locals.jsonForScript(locals.fridgeURL ? {fridge: locals.fridgeURL, fridgeCsv: locals.fridgeURL + '&cfg=csv'} : {}) %>
 </script>
+<script nonce="<%=locals.nonce%>"><%- await include('partials/client-shabbat.min.js') %></script>
 <% if (locals.jsonLD) { -%>
 <script type="application/ld+json"><%- locals.jsonForScript(locals.jsonLD) %></script>
 <% } -%>

@@ -36,6 +36,18 @@ describe('Shabbat Routes', () => {
     expect(response.type).toContain(type);
   });
 
+  it('renders the fridge.cgi links without an href', async () => {
+    const response = await request(server).get('/shabbat?geonameid=5128581&gy=2026&gm=11&gd=20');
+    expect(response.status).toBe(200);
+    expect(response.text).not.toMatch(/href="[^"]*fridge\.cgi/);
+    expect(response.text).toContain('data-shabbat-href="fridge"');
+    expect(response.text).toContain('data-shabbat-href="fridgeCsv"');
+    const json = response.text.match(/<script type="application\/json" id="shabbatLinks">([\s\S]*?)<\/script>/);
+    const links = JSON.parse(json[1]);
+    expect(links.fridge).toMatch(/^\/shabbat\/fridge\.cgi\?geonameid=5128581&.*&year=\d+$/);
+    expect(links.fridgeCsv).toBe(links.fridge + '&cfg=csv');
+  });
+
   it('should return 404 for /shabbat/browse/bogus.xml', async () => {
     const response = await request(server)
         .get('/shabbat/browse/bogus.xml');
