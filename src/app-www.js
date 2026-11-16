@@ -277,12 +277,9 @@ app.use(async function strictContentSecurityPolicy(ctx, next) {
       ` img-src 'self' https: data: blob:;` +
       ` font-src 'self' data: https://fonts.gstatic.com/;` +
       ` object-src 'none';` +
-      ` base-uri 'none';` +
-      ` report-uri https://y61ectdg.uriports.com/reports/report;` +
-      ` report-to default`;
+      ` base-uri 'none'`;
     ctx.set(CSP_HEADER_NAME, csp);
     ctx.set('X-XSS-Protection', '0');
-    ctx.set('Reporting-Endpoints', 'default="https://y61ectdg.uriports.com/reports"');
   }
 });
 
