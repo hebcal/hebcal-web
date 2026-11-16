@@ -59,6 +59,7 @@ export const booleanOpts = {
   ue: 'useElevation',
   yzkr: 'yizkor',
   mvch: 'shabbatMevarchim',
+  bhb: 'behab',
 };
 
 export const numberOpts = {
