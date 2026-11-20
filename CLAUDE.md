@@ -92,6 +92,15 @@ Each feature is typically one or a few files handling routing, business logic, a
   `TITLE:`/`MEMO:` strings and Hebrew translations live in hebcal-locales'
   `po/` (see "Localization") and reach hebcal-api-go through the Go module
   github.com/hebcal/locales (v1.1.4+).
+- **Shabbat browse** (`shabbat-browse.js`, `/shabbat/browse/<country>[.xml]`):
+  `init()` runs one `GROUP BY country, admin1` count at startup, which
+  decides which countries/admin1s get pages and prebuilds the admin1 link
+  list for countries over `MAX_CITIES_ON_COUNTRY_PAGE` (299), so those HTML
+  pages run no city query. Per-city hrefs use `geonameIdDefaultCandleMins()`,
+  never `queryDefaultCandleMins()`: the latter calls `ctx.db.lookupGeoname()`,
+  and thousands of those per request cost ~80 ms on MX/FR/US and flush
+  GeoDb's 750-entry LRU for every other route. The city queries rely on
+  geo-sqlite 5.14.2+'s `geoname(country, admin1)` index.
 - **Yahrzeit**: `yahrzeit.js`, `yahrzeit-email.js`, `yahrzeitCommon.js`.
   The "Include anniversary numbers" option (`an`) is **on unless explicitly
   `off`** — always test it via `includeAnniversaryNumber()`, never

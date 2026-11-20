@@ -8,7 +8,7 @@ import {basename} from 'node:path';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults} from './lang.js';
-import {queryDefaultCandleMins} from './urlArgs.js';
+import {geonameIdDefaultCandleMins} from './urlArgs.js';
 import {checkFreshETag} from './etag.js';
 import {CACHE_CONTROL_7DAYS,
   CACHE_CONTROL_30DAYS,
@@ -58,11 +58,15 @@ WHERE Continent <> 'AN'
 AND ISO NOT IN ('', 'AN', 'AQ', 'BV', 'CS', 'HM', 'IO', 'PS', 'UM')
 ORDER BY Continent, Country`;
 
-const POPULOUS_COUNTRY_SQL = `SELECT DISTINCT country FROM geoname
-WHERE ${populousSql('population', 'country')}`;
-
-const POPULOUS_ADMIN1_SQL = `SELECT DISTINCT country, admin1 FROM geoname
-WHERE ${populousSql('population', 'country')}`;
+/**
+ * City counts per (country, admin1), using the same filter as COUNTRY_SQL.
+ * One scan at startup tells us which countries and admin1s get a browse
+ * page, and lets a large country's admin1 index render with no city query.
+ */
+const POPULOUS_ADMIN1_SQL = `SELECT country, admin1, count(*) AS numCities
+FROM geoname
+WHERE ${populousSql('population', 'country')}
+GROUP BY country, admin1`;
 
 const COUNTRY_SQL = `SELECT g.geonameid, g.name, g.asciiname,
 a.name as admin1, a.asciiname as admin1ascii,
@@ -92,15 +96,27 @@ const continents = {};
 const countryIdToIso = {};
 const isoToCountry = {};
 const countryAdmin1 = {};
+/** ISO 3166 code => number of cities COUNTRY_SQL returns */
+const countryNumCities = {};
+/** ISO 3166 code => [{name, id}], the admin1 index of a large country */
+const countryAdmin1List = {};
 let numCountries = 0;
+
+/**
+ * Countries with more cities than this show only a list of admin1 links.
+ */
+const MAX_CITIES_ON_COUNTRY_PAGE = 299;
 
 function init() {
   if (didInit) {
     return;
   }
   const geonamesDb = new DatabaseSync(geonamesFilename, {readOnly: true});
-  const populous = new Set(geonamesDb.prepare(POPULOUS_COUNTRY_SQL)
-      .all().map((r) => r.country));
+  const populousA1 = new Map();
+  for (const r of geonamesDb.prepare(POPULOUS_ADMIN1_SQL).all()) {
+    populousA1.set(r.country + '.' + r.admin1, r.numCities);
+    countryNumCities[r.country] = (countryNumCities[r.country] || 0) + r.numCities;
+  }
   const geonamesStmt = geonamesDb.prepare(CONTINENT_SQL);
   const results = geonamesStmt.all();
   for (const [iso, name] of Object.entries(CONTINENTS)) {
@@ -109,7 +125,7 @@ function init() {
   for (const result of results) {
     const country = result.Country;
     const continent = result.Continent;
-    if (!country || !continents[continent] || !populous.has(result.ISO)) {
+    if (!country || !continents[continent] || !countryNumCities[result.ISO]) {
       continue;
     }
     const id = makeAnchor(country);
@@ -119,8 +135,7 @@ function init() {
     isoToCountry[iso] = result.Country;
   }
   numCountries = Object.keys(countryIdToIso).length;
-  const populousA1 = new Set(geonamesDb.prepare(POPULOUS_ADMIN1_SQL)
-      .all().map((r) => r.country + '.' + r.admin1));
+  const admin1ByCountry = {};
   const stmt2 = geonamesDb.prepare('SELECT key,name,asciiname FROM admin1');
   const results2 = stmt2.all();
   for (const result of results2) {
@@ -139,6 +154,17 @@ function init() {
       name: result.name,
       asciiname: result.asciiname,
     };
+    // same shape as countryPage() builds from a country's cities
+    const a1 = admin1ByCountry[cc] ??= new Map();
+    a1.set(result.asciiname, result.name);
+  }
+  for (const [cc, a1] of Object.entries(admin1ByCountry)) {
+    if (countryNumCities[cc] > MAX_CITIES_ON_COUNTRY_PAGE) {
+      const listItems = makeAdmin1(a1);
+      const countryUrlToken = makeAnchor(isoToCountry[cc]);
+      listItems.forEach((item) => item.href = countryUrlToken + '-' + item.id);
+      countryAdmin1List[cc] = listItems;
+    }
   }
   geonamesDb.close();
   didInit = true;
@@ -168,8 +194,8 @@ async function renderBrowseCountryXml(props, ctx) {
   ctx.body = await ctx.render('shabbat-browse-country-xml', props);
 }
 
-function addHref(ctx, r, countryCode) {
-  const b = queryDefaultCandleMins(ctx, r, countryCode);
+function addHref(r, countryCode) {
+  const b = geonameIdDefaultCandleMins(r.geonameid, countryCode);
   const ccDefaults = langTzDefaults[countryCode] || langTzDefaults['US'];
   const lg = ccDefaults[0] || 's';
   r.href = `/shabbat?geonameid=${r.geonameid}&ue=off&b=${b}&M=on&lg=${lg}&set=off`;
@@ -261,7 +287,7 @@ function countryAdmin1Page(ctx, countryA1) {
   if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
     return;
   }
-  results.forEach((r) => addHref(ctx, r, countryCode));
+  results.forEach((r) => addHref(r, countryCode));
   const {friday, parsha} = makeCandleLighting(ctx, results, countryCode);
   const countryName = `${countryA1.name}, ${isoToCountry[countryCode]}`;
   const props = {
@@ -277,13 +303,46 @@ function countryAdmin1Page(ctx, countryA1) {
   return render(ctx, 'shabbat-browse-country-small', props);
 };
 
+/**
+ * A large country's HTML page lists only its admin1 sub-pages, which
+ * init() has already computed, so it needs no city query.
+ * @param {any} ctx
+ * @param {string} countryCode
+ * @return {Promise<any>|undefined}
+ */
+function countryAdmin1IndexPage(ctx, countryCode) {
+  const countryName = isoToCountry[countryCode];
+  const admin1 = countryAdmin1List[countryCode];
+  // cache if the list of cities and admin1s is stable
+  ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
+  const eTagAttrs = {
+    countryCode,
+    numCities: countryNumCities[countryCode],
+    numAdmin1: admin1.length,
+  };
+  if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
+    return;
+  }
+  return render(ctx, 'shabbat-browse-admin1', {
+    title: `${countryName} Shabbat Times - Hebcal`,
+    countryCode,
+    flag: flag(countryCode),
+    countryName,
+    admin1,
+  });
+}
+
 function countryPage(ctx, countryCode) {
+  if (countryAdmin1List[countryCode] !== undefined &&
+      !basename(ctx.request.path).endsWith('.xml')) {
+    return countryAdmin1IndexPage(ctx, countryCode);
+  }
   const countryName = isoToCountry[countryCode];
   const db = new DatabaseSync(geonamesFilename, {readOnly: true});
   const stmt = db.prepare(COUNTRY_SQL);
   const results = stmt.all(countryCode);
   db.close();
-  results.forEach((r) => addHref(ctx, r, countryCode));
+  results.forEach((r) => addHref(r, countryCode));
   const admin1 = results.reduce((map, val) => {
     if (val.admin1ascii !== null) {
       map.set(val.admin1ascii, val.admin1);
@@ -298,7 +357,9 @@ function countryPage(ctx, countryCode) {
     numCities: results.length,
   };
 
-  if (results.length > 299) {
+  if (results.length > MAX_CITIES_ON_COUNTRY_PAGE) {
+    // normally only the .xml sitemap gets here; countryAdmin1IndexPage()
+    // serves the HTML unless none of the country's admin1 codes resolved
     // cache if the list of cities and timezone is stable
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
     if (checkFreshETag(ctx, ctx.request.query, eTagAttrs)) {
