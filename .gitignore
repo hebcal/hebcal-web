@@ -128,3 +128,6 @@ static/i/*.min.js
 static/*.br
 static/*.gz
 ical/
+
+# built WordPress theme upload
+wordpress/*.zip

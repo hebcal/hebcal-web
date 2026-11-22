@@ -445,6 +445,13 @@ new versioned name and create that name as a **symlink** to the real file — do
 not copy the file. (Add a colour icon's own per-path `fill=` colours; don't put
 a colour icon inside `class="icon"`, whose CSS forces `fill: currentColor`.)
 
+### WordPress theme (`wordpress/hebcal-bootstrap/`)
+The theme for www.hebcal.com/home/ copies `navbar.ejs`/`footer.ejs` into PHP
+and loads the same main CSS and sprite by hard-coded name. **When you bump
+`config.mainCss` or `config.sprite`, also update `HEBCAL_MAIN_CSS` /
+`HEBCAL_SPRITE` in its `functions.php`**, and mirror navbar/footer link changes
+in it. It is uploaded by hand as a zip; see `wordpress/README.md`.
+
 ### Client-side JS
 `rollup.config.cjs` bundles the `src/client-*.js` entry points (plus a few others) into `views/partials/*.min.js`, which templates inline as `<script nonce>` blocks, and into `static/i/` for the one large external bundle (FullCalendar). Hand-written inline scripts with no per-request values belong there too; pass any per-include config through a `<script type="application/json">` block, as `email-modal-signin.ejs` and `download-modal-script.ejs` do.
 

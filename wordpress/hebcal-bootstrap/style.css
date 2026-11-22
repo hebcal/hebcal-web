@@ -1,0 +1,73 @@
+/*
+Theme Name: Hebcal Bootstrap
+Theme URI: https://www.hebcal.com/
+Description: Classic theme that reuses the www.hebcal.com Bootstrap 5.3.9 stylesheet (/i/style-5.3.9a.css), navbar and footer.
+Version: 1.1.2
+Requires at least: 6.5
+Requires PHP: 8.0
+License: GPL-2.0-or-later
+Text Domain: hebcal-bootstrap
+*/
+
+/*
+ * The main stylesheet is /i/style-5.3.9a.css from hebcal-web. It is run through
+ * PurgeCSS against hebcal-web's own templates, so Bootstrap classes that
+ * hebcal-web never uses are NOT in it. This file supplies those, plus the
+ * WordPress core classes that post content relies on.
+ */
+
+/* Bootstrap bits purged from the main CSS */
+.blockquote, .entry-content blockquote, .wp-block-quote {
+  margin: 0 0 1rem;
+  padding-left: 1rem;
+  border-left: .25rem solid var(--bs-border-color);
+  font-size: 1.125rem;
+}
+.figure-caption, .wp-caption-text, .wp-element-caption, figcaption {
+  font-size: .875em;
+  color: var(--bs-secondary-color);
+}
+.list-inline { padding-left: 0; list-style: none; }
+.list-inline-item { display: inline-block; }
+.list-inline-item:not(:last-child) { margin-right: .5rem; }
+
+/* WordPress core content classes */
+.alignleft { float: left; margin: .25rem 1.5rem 1rem 0; }
+.alignright { float: right; margin: .25rem 0 1rem 1.5rem; }
+.aligncenter { display: block; margin-left: auto; margin-right: auto; }
+.alignwide, .alignfull { max-width: 100%; }
+.entry-content::after { content: ""; display: table; clear: both; }
+.entry-content img, .entry-content video, .wp-caption { max-width: 100%; height: auto; }
+.wp-caption { margin-bottom: 1rem; }
+.screen-reader-text {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+.screen-reader-text:focus {
+  position: static !important; width: auto; height: auto; margin: 0; clip: auto; overflow: visible;
+}
+.gallery { display: flex; flex-wrap: wrap; gap: 1rem; }
+.gallery-item { margin: 0; }
+.sticky .entry-title::before { content: "\1F4CC\00a0"; }
+.entry-content table:not([class]) { width: 100%; margin-bottom: 1rem; }
+.entry-content table:not([class]) td, .entry-content table:not([class]) th {
+  padding: .5rem; border-bottom: 1px solid var(--bs-border-color);
+}
+.entry-content pre { background: var(--bs-tertiary-bg); padding: 1rem; border-radius: var(--bs-border-radius); }
+.entry-meta { margin-bottom: 1rem; }
+.widget ul { padding-left: 2rem; }
+.widget ul ul { padding-left: 1.25rem; }
+
+/* Comments */
+.comment-list { list-style: none; padding-left: 0; }
+.comment-list .children { list-style: none; padding-left: 1.5rem; }
+.comment-body { margin-bottom: 1.5rem; }
+.comment-meta { font-size: .875em; color: var(--bs-secondary-color); }
+.comment-author .avatar { border-radius: 50%; margin-right: .5rem; vertical-align: middle; }
+.comment-form label { display: block; margin-bottom: .25rem; }
+.comment-form input[type=text], .comment-form input[type=email],
+.comment-form input[type=url], .comment-form textarea {
+  display: block; width: 100%; padding: .375rem .75rem; color: var(--bs-body-color);
+  background-color: var(--bs-body-bg); border: var(--bs-border-width) solid var(--bs-border-color);
+  border-radius: var(--bs-border-radius);
+}
