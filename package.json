@@ -19,7 +19,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">= 22.5"
+    "node": ">= 24"
   },
   "files": [],
   "scripts": {
@@ -48,18 +48,18 @@
     "@rollup/plugin-commonjs": "^29.0.3",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-terser": "^1.0.2",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "^5.1.1",
     "autocompleter": "^10.1.0",
     "bootstrap": "^5.3.9",
     "csv-parse": "^7.0.3",
-    "oxlint": "^1.93.0",
+    "oxlint": "^1.94.0",
     "papaparse": "^5.7.1",
     "postcss": "^8.5.33",
     "postcss-cli": "^12.0.0",
-    "rollup": "^4.68.3",
+    "rollup": "^4.68.8",
     "sass": "^1.108.2",
     "supertest": "^7.3.2",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.1"
   },
   "allowScripts": {
     "puppeteer": true,
@@ -71,12 +71,12 @@
   },
   "dependencies": {
     "@hebcal/core": "^6.16.1",
-    "@hebcal/geo-sqlite": "^5.14.1",
+    "@hebcal/geo-sqlite": "^6.0.0",
     "@hebcal/hdate": "^0.23.1",
     "@hebcal/icalendar": "^7.0.6",
     "@hebcal/learning": "^6.13.2",
     "@hebcal/leyning": "^10.1.0",
-    "@hebcal/locales": "^6.7.0",
+    "@hebcal/locales": "^7.0.0",
     "@hebcal/murmurhash3": "^1.0.0",
     "@hebcal/rest-api": "^7.3.3",
     "@hebcal/triennial": "^6.4.1",
@@ -98,9 +98,9 @@
     "koa-static": "^5.0.0",
     "koa-timeout-v2": "^1.0.0",
     "mysql2": "^3.24.6",
-    "nodemailer": "^10.5.0",
+    "nodemailer": "^10.6.1",
     "nodemailer-html-to-text": "^3.2.0",
-    "openid-client": "^6.9.0",
+    "openid-client": "^6.9.1",
     "pino": "^10.4.0",
     "probe-image-size": "^7.5.0",
     "prom-client": "^15.1.3",

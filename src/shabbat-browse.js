@@ -5,6 +5,7 @@ import {makeAnchor} from '@hebcal/rest-api';
 import {DatabaseSync} from 'node:sqlite';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
+import {pathToFileURL} from 'node:url';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults} from './lang.js';
@@ -107,11 +108,44 @@ let numCountries = 0;
  */
 const MAX_CITIES_ON_COUNTRY_PAGE = 299;
 
+/**
+ * Prepared statements keyed by the GeoDb's geonames connection. GeoDb swaps
+ * in a new connection when geonames.sqlite3 changes on disk, so a WeakMap
+ * re-prepares against the new one and lets the old one be collected.
+ * @type {WeakMap<DatabaseSync, Map<string, import('node:sqlite').StatementSync>>}
+ */
+const stmtCache = new WeakMap();
+
+/**
+ * @param {any} ctx
+ * @param {string} sql
+ * @return {import('node:sqlite').StatementSync}
+ */
+function prepareGeonames(ctx, sql) {
+  const db = ctx.db.geonamesDb;
+  let stmts = stmtCache.get(db);
+  if (stmts === undefined) {
+    stmts = new Map();
+    stmtCache.set(db, stmts);
+  }
+  let stmt = stmts.get(sql);
+  if (stmt === undefined) {
+    stmt = db.prepare(sql);
+    stmts.set(sql, stmt);
+  }
+  return stmt;
+}
+
 function init() {
   if (didInit) {
     return;
   }
-  const geonamesDb = new DatabaseSync(geonamesFilename, {readOnly: true});
+  // Runs once, possibly before any request (browseSitemapSlugsForIso), so
+  // it opens its own short-lived connection rather than ctx.db.geonamesDb.
+  // immutable=1 skips SQLite's file locking; geonames.sqlite3 is replaced
+  // by rename, never rewritten in place.
+  const geonamesUri = pathToFileURL(geonamesFilename).href + '?mode=ro&immutable=1';
+  const geonamesDb = new DatabaseSync(geonamesUri, {readOnly: true});
   const populousA1 = new Map();
   for (const r of geonamesDb.prepare(POPULOUS_ADMIN1_SQL).all()) {
     populousA1.set(r.country + '.' + r.admin1, r.numCities);
@@ -266,11 +300,8 @@ export async function shabbatBrowse(ctx) {
 }
 
 function countryAdmin1Page(ctx, countryA1) {
-  const db = new DatabaseSync(geonamesFilename, {readOnly: true});
-  const stmt = db.prepare(COUNTRY_ADMIN_SQL);
   const countryCode = countryA1.cc;
-  const results = stmt.all(countryCode, countryA1.admin1);
-  db.close();
+  const results = prepareGeonames(ctx, COUNTRY_ADMIN_SQL).all(countryCode, countryA1.admin1);
   const tzid = results?.[0]?.timezone || 'America/New_York';
   const now = new Date();
   const saturday = dayjs.tz(now, tzid).day(6);
@@ -338,10 +369,7 @@ function countryPage(ctx, countryCode) {
     return countryAdmin1IndexPage(ctx, countryCode);
   }
   const countryName = isoToCountry[countryCode];
-  const db = new DatabaseSync(geonamesFilename, {readOnly: true});
-  const stmt = db.prepare(COUNTRY_SQL);
-  const results = stmt.all(countryCode);
-  db.close();
+  const results = prepareGeonames(ctx, COUNTRY_SQL).all(countryCode);
   results.forEach((r) => addHref(r, countryCode));
   const admin1 = results.reduce((map, val) => {
     if (val.admin1ascii !== null) {
