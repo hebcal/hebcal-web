@@ -2,6 +2,11 @@ import createError from 'http-errors';
 import {empty, off} from './empty.js';
 import {readJSON} from './readJSON.js';
 import {GeoDb} from '@hebcal/geo-sqlite';
+import {
+  DEFAULT_CANDLE_MINS,
+  geonameIdCandleOffset,
+  geonameIdDefaultCandleMins,
+} from './candleMins.js';
 
 export const dailyLearningConfig = readJSON('./dailyLearningConfig.json');
 
@@ -17,7 +22,7 @@ export function protocNameToMethodSuffix(protocName) {
   return lower.charAt(0).toUpperCase() + lower.slice(1);
 }
 
-export const DEFAULT_CANDLE_MINS = 18;
+export {DEFAULT_CANDLE_MINS, geonameIdDefaultCandleMins};
 
 export const hebcalFormDefaults = {
   maj: 'on',
@@ -183,12 +188,6 @@ export function getGeoKeysToRemove(geo) {
   }
 }
 
-const geonameIdCandleOffset = {
-  '281184': 40, // Jerusalem
-  '294801': 30, // Haifa
-  '293067': 30, // Zikhron Yaakov
-};
-
 /**
  * @param {import('koa').Context} ctx
  * @param {Object.<string,string>} query
@@ -213,22 +212,6 @@ export function queryDefaultCandleMins(ctx, query, countryCode) {
     }
   }
   return DEFAULT_CANDLE_MINS;
-}
-
-/**
- * Like `queryDefaultCandleMins()` for a geonameid whose country is already
- * known, without a database lookup (GeoDb's `getIsrael()` is just
- * `cc === 'IL'`). For pages that list thousands of cities at once.
- * @param {number|string} geonameid
- * @param {string} countryCode ISO 3166 code
- * @return {number}
- */
-export function geonameIdDefaultCandleMins(geonameid, countryCode) {
-  const offset = geonameIdCandleOffset[geonameid];
-  if (typeof offset === 'number') {
-    return offset;
-  }
-  return countryCode === 'IL' ? 20 : DEFAULT_CANDLE_MINS;
 }
 
 /**

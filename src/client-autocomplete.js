@@ -1,4 +1,5 @@
 import autocomplete, {PreventSubmit} from 'autocompleter';
+import {DEFAULT_CANDLE_MINS, geonameIdDefaultCandleMins} from './candleMins.js';
 
 // Single-character queries are the slowest for the /complete backend and
 // rarely useful, so don't search until the user has typed this many.
@@ -181,6 +182,9 @@ const hebcalClient = {
         setElem('geonameid', id);
         setElem('zip', '');
       }
+      // Reset candle-lighting minutes to the new location's default
+      setElem('b1', geo === 'zip' ? DEFAULT_CANDLE_MINS :
+        geonameIdDefaultCandleMins(id, item.cc));
       setElem('geo', geo);
       setElem('c', 'on');
       readyToSubmit = true;
