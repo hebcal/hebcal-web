@@ -185,6 +185,12 @@ const hebcalClient = {
       // Reset candle-lighting minutes to the new location's default
       setElem('b1', geo === 'zip' ? DEFAULT_CANDLE_MINS :
         geonameIdDefaultCandleMins(id, item.cc));
+      // Holiday schedule radios: i0 = Diaspora, i1 = Israel
+      const il = geo !== 'zip' && item.cc === 'IL';
+      const radio = document.getElementById(il ? 'i1' : 'i0');
+      if (radio) {
+        radio.checked = true;
+      }
       setElem('geo', geo);
       setElem('c', 'on');
       readyToSubmit = true;
