@@ -1,11 +1,8 @@
 import {HDate, reformatTimeStr, Location, Zmanim, calendar, getHolidaysOnDate,
   getSedra} from '@hebcal/core';
 import {makeAnchor} from '@hebcal/rest-api';
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
-import {DatabaseSync} from 'node:sqlite';
 import dayjs from 'dayjs';
 import {basename} from 'node:path';
-import {pathToFileURL} from 'node:url';
 import utc from 'dayjs/plugin/utc.js';
 import timezone from 'dayjs/plugin/timezone.js';
 import {langTzDefaults} from './lang.js';
@@ -16,12 +13,55 @@ import {CACHE_CONTROL_7DAYS,
 } from './cacheControl.js';
 import {expiresSaturdayNight} from './dateUtil.js';
 import {flag} from './emoji-flag.js';
-import {TOP_COUNTRIES} from './topCountries.js';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const geonamesFilename = 'geonames.sqlite3';
+/**
+ * @typedef {import('koa').Context} Context
+ * @typedef {import('node:sqlite').StatementSync} StatementSync
+ * @typedef {import('dayjs').Dayjs} Dayjs
+ */
+
+/**
+ * A geonames row from COUNTRY_SQL or COUNTRY_ADMIN_SQL. The `admin1*`
+ * columns come only from COUNTRY_SQL; `href`, `countryCode` and the
+ * candle-lighting fields are added by addHref() and makeCandleLighting().
+ * @typedef {Object} CityRow
+ * @property {number} geonameid
+ * @property {string} name
+ * @property {string} asciiname
+ * @property {string|null} [admin1]
+ * @property {string|null} [admin1ascii]
+ * @property {number} latitude
+ * @property {number} longitude
+ * @property {number|null} elevation
+ * @property {string} timezone
+ * @property {string} [href]
+ * @property {string} [countryCode]
+ * @property {string} [isoDate]
+ * @property {string} [fmtTime]
+ * @property {string} [isoDateTime]
+ */
+
+/**
+ * An admin1 (state/province) browse page, keyed in countryAdmin1 by
+ * `<country anchor>-<admin1 anchor>`.
+ * @typedef {Object} CountryAdmin1
+ * @property {string} cc ISO 3166 country code
+ * @property {string} country country name
+ * @property {string} countryAnchor country URL slug
+ * @property {string} admin1 geonames admin1 code
+ * @property {string} name admin1 name
+ * @property {string} asciiname admin1 ASCII name
+ */
+
+/**
+ * @typedef {Object} Admin1ListItem
+ * @property {string} name display name
+ * @property {string} id URL anchor
+ * @property {string} [href] browse page slug
+ */
 
 /**
  * Cities smaller than this are excluded from the browse pages and sitemaps.
@@ -93,13 +133,17 @@ const CONTINENTS = {
 };
 
 let didInit = false;
+/** @type {Object<string, {name: string, countries: {name: string, href: string}[]}>} */
 const continents = {};
+/** @type {Object<string, string>} country URL slug => ISO 3166 code */
 const countryIdToIso = {};
+/** @type {Object<string, string>} ISO 3166 code => country name */
 const isoToCountry = {};
+/** @type {Object<string, CountryAdmin1>} */
 const countryAdmin1 = {};
-/** ISO 3166 code => number of cities COUNTRY_SQL returns */
+/** @type {Object<string, number>} ISO 3166 code => number of cities COUNTRY_SQL returns */
 const countryNumCities = {};
-/** ISO 3166 code => [{name, id}], the admin1 index of a large country */
+/** @type {Object<string, Admin1ListItem[]>} ISO 3166 code => the admin1 index of a large country */
 const countryAdmin1List = {};
 let numCountries = 0;
 
@@ -112,14 +156,15 @@ const MAX_CITIES_ON_COUNTRY_PAGE = 299;
  * Prepared statements keyed by the GeoDb's geonames connection. GeoDb swaps
  * in a new connection when geonames.sqlite3 changes on disk, so a WeakMap
  * re-prepares against the new one and lets the old one be collected.
- * @type {WeakMap<DatabaseSync, Map<string, import('node:sqlite').StatementSync>>}
+ * @type {WeakMap<import('node:sqlite').DatabaseSync, Map<string, StatementSync>>}
  */
 const stmtCache = new WeakMap();
 
 /**
- * @param {any} ctx
+ * Returns a cached prepared statement on `ctx.db.geonamesDb`.
+ * @param {Context} ctx
  * @param {string} sql
- * @return {import('node:sqlite').StatementSync}
+ * @return {StatementSync}
  */
 function prepareGeonames(ctx, sql) {
   const db = ctx.db.geonamesDb;
@@ -136,16 +181,16 @@ function prepareGeonames(ctx, sql) {
   return stmt;
 }
 
-function init() {
+/**
+ * Builds the country/admin1 indexes from geonames, once per process.
+ * Uses the shared `ctx.db.geonamesDb` connection, which it must not close.
+ * @param {Context} ctx
+ */
+function init(ctx) {
   if (didInit) {
     return;
   }
-  // Runs once, possibly before any request (browseSitemapSlugsForIso), so
-  // it opens its own short-lived connection rather than ctx.db.geonamesDb.
-  // immutable=1 skips SQLite's file locking; geonames.sqlite3 is replaced
-  // by rename, never rewritten in place.
-  const geonamesUri = pathToFileURL(geonamesFilename).href + '?mode=ro&immutable=1';
-  const geonamesDb = new DatabaseSync(geonamesUri, {readOnly: true});
+  const geonamesDb = ctx.db.geonamesDb;
   const populousA1 = new Map();
   for (const r of geonamesDb.prepare(POPULOUS_ADMIN1_SQL).all()) {
     populousA1.set(r.country + '.' + r.admin1, r.numCities);
@@ -200,10 +245,17 @@ function init() {
       countryAdmin1List[cc] = listItems;
     }
   }
-  geonamesDb.close();
   didInit = true;
 }
 
+/**
+ * Renders `view`, or the country sitemap XML when the request path ends
+ * in `.xml`. Sets `props.lg` and `props.cc` from the country code.
+ * @param {Context} ctx
+ * @param {string} view EJS template name
+ * @param {Object<string, any>} props template locals
+ * @return {Promise<any>}
+ */
 function render(ctx, view, props) {
   const cc = props.countryCode || 'US';
   const ccDefaults = langTzDefaults[cc] || langTzDefaults['US'];
@@ -215,6 +267,13 @@ function render(ctx, view, props) {
   return ctx.render(view, props);
 }
 
+/**
+ * Renders the `shabbat-browse-country-xml` sitemap into `ctx.body`,
+ * expiring Saturday night in the first city's time zone.
+ * @param {Object<string, any>} props template locals
+ * @param {Context} ctx
+ * @return {Promise<void>}
+ */
 async function renderBrowseCountryXml(props, ctx) {
   const tzid = props?.results?.[0]?.timezone || 'America/New_York';
   ctx.response.remove('Cache-Control');
@@ -228,6 +287,11 @@ async function renderBrowseCountryXml(props, ctx) {
   ctx.body = await ctx.render('shabbat-browse-country-xml', props);
 }
 
+/**
+ * Sets `r.href` to the city's `/shabbat` URL with country defaults.
+ * @param {CityRow} r
+ * @param {string} countryCode ISO 3166 code
+ */
 function addHref(r, countryCode) {
   const b = geonameIdDefaultCandleMins(r.geonameid, countryCode);
   const ccDefaults = langTzDefaults[countryCode] || langTzDefaults['US'];
@@ -236,14 +300,27 @@ function addHref(r, countryCode) {
 }
 
 /**
+ * Top countries by visits (Matomo, Jan-Sep 2026), ISO 3166 codes in rank order.
+ * Excludes countries with no meaningful Jewish population whose traffic is
+ * essentially bots (China, Singapore, Hong Kong, Japan, South Korea, Vietnam,
+ * Indonesia, Bangladesh, Nigeria, Malaysia).
+ */
+const TOP_COUNTRIES = [
+  'US', 'IL', 'CA', 'GB', 'BR', 'AU', 'MX', 'DE', 'FR', 'ZA',
+  'AR', 'CO', 'NL', 'IN', 'ES', 'PH', 'PL', 'SE', 'IT', 'RO',
+  'CH', 'BE', 'CL', 'VE', 'BM', 'TR', 'PA', 'DK', 'IE', 'HU',
+  'NZ', 'EC', 'AT', 'FI', 'CZ',
+];
+
+/**
  * Country slugs that have a per-country browse sitemap
  * (`/shabbat/browse/<slug>.xml`), with the TOP_COUNTRIES first in rank
  * order and the remaining countries after them.
+ * @param {Context} ctx
  * @return {string[]}
  */
-export function browseSitemapCountries() {
-  init();
-  const top = browseSitemapSlugsForIso(TOP_COUNTRIES);
+function browseSitemapCountries(ctx) {
+  const top = browseSitemapSlugsForIso(ctx, TOP_COUNTRIES);
   const topSet = new Set(top);
   return [...top, ...Object.keys(countryIdToIso).filter((id) => !topSet.has(id))];
 }
@@ -251,17 +328,24 @@ export function browseSitemapCountries() {
 /**
  * Per-country browse sitemap slugs for the given ISO 3166 codes, in the
  * order given. Countries with no populous city (no sitemap) are skipped.
- * @param {string[]} isoCodes
+ * @param {Context} ctx
+ * @param {string[]} isoCodes ISO 3166 codes
  * @return {string[]}
  */
-export function browseSitemapSlugsForIso(isoCodes) {
-  init();
+export function browseSitemapSlugsForIso(ctx, isoCodes) {
+  init(ctx);
   const isoToId = new Map(Object.entries(countryIdToIso).map(([id, iso]) => [iso, id]));
   return isoCodes.map((iso) => isoToId.get(iso)).filter(Boolean);
 }
 
+/**
+ * Handles `/shabbat/browse/`, its sitemap index, and the per-country and
+ * per-admin1 pages (`/shabbat/browse/<slug>[.xml]`).
+ * @param {Context} ctx
+ * @return {Promise<any>}
+ */
 export async function shabbatBrowse(ctx) {
-  init();
+  init(ctx);
   const rpath = ctx.request.path;
   if (rpath === '/shabbat/browse/') {
     ctx.set('Cache-Control', CACHE_CONTROL_30DAYS);
@@ -281,7 +365,7 @@ export async function shabbatBrowse(ctx) {
     }
     ctx.body = await ctx.render('shabbat-browse-sitemap', {
       writeResp: false,
-      countries: browseSitemapCountries(),
+      countries: browseSitemapCountries(ctx),
       lastmod: dayjs().day(0).format('YYYY-MM-DD'),
     });
     return;
@@ -299,6 +383,12 @@ export async function shabbatBrowse(ctx) {
   ctx.throw(404, `Browse page not found: ${base}`);
 }
 
+/**
+ * Lists every populous city in one admin1 with this week's candle-lighting.
+ * @param {Context} ctx
+ * @param {CountryAdmin1} countryA1
+ * @return {Promise<any>|undefined}
+ */
 function countryAdmin1Page(ctx, countryA1) {
   const countryCode = countryA1.cc;
   const results = prepareGeonames(ctx, COUNTRY_ADMIN_SQL).all(countryCode, countryA1.admin1);
@@ -337,8 +427,8 @@ function countryAdmin1Page(ctx, countryA1) {
 /**
  * A large country's HTML page lists only its admin1 sub-pages, which
  * init() has already computed, so it needs no city query.
- * @param {any} ctx
- * @param {string} countryCode
+ * @param {Context} ctx
+ * @param {string} countryCode ISO 3166 code
  * @return {Promise<any>|undefined}
  */
 function countryAdmin1IndexPage(ctx, countryCode) {
@@ -363,6 +453,13 @@ function countryAdmin1IndexPage(ctx, countryCode) {
   });
 }
 
+/**
+ * A country's browse page (or `.xml` sitemap): its cities with this week's
+ * candle-lighting, or an admin1 index for a large country.
+ * @param {Context} ctx
+ * @param {string} countryCode ISO 3166 code
+ * @return {Promise<any>|undefined}
+ */
 function countryPage(ctx, countryCode) {
   if (countryAdmin1List[countryCode] !== undefined &&
       !basename(ctx.request.path).endsWith('.xml')) {
@@ -444,6 +541,13 @@ function countryPage(ctx, countryCode) {
   }
 }
 
+/**
+ * Adds `countryCode` and this Friday's candle-lighting time to each city.
+ * @param {Context} ctx
+ * @param {CityRow[]} results
+ * @param {string} countryCode ISO 3166 code
+ * @return {{friday: Dayjs, parsha: string|null}}
+ */
 function makeCandleLighting(ctx, results, countryCode) {
   const tzid = results?.[0]?.timezone || 'America/New_York';
   const now = new Date();
@@ -455,6 +559,12 @@ function makeCandleLighting(ctx, results, countryCode) {
   return {friday, parsha};
 }
 
+/**
+ * Name of the parsha read on `saturday`, or of the holiday that displaces it.
+ * @param {Dayjs} saturday
+ * @param {boolean} il Israel schedule
+ * @return {string|null}
+ */
 function getParsha(saturday, il) {
   const hd = new HDate(saturday.toDate());
   const hyear = hd.getFullYear();
@@ -472,6 +582,11 @@ function getParsha(saturday, il) {
   return parsha;
 }
 
+/**
+ * Converts an admin1 map into list items sorted by display name.
+ * @param {Map<string, string>} admin1 ASCII name => display name
+ * @return {Admin1ListItem[]}
+ */
 function makeAdmin1(admin1) {
   const listItems = Array.from(admin1.entries()).map((a1) => {
     const asciiname = a1[0];
@@ -482,6 +597,12 @@ function makeAdmin1(admin1) {
   return listItems;
 }
 
+/**
+ * Sets the city's `isoDate`, `fmtTime` and `isoDateTime` for candle-lighting
+ * on `friday`. Cities without a time zone are logged and skipped.
+ * @param {Dayjs} friday
+ * @param {CityRow} city
+ */
 function addCandleTime(friday, city) {
   const elevation = (city.elevation && city.elevation > 0) ? city.elevation : 0;
   if (!city.timezone) {

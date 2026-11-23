@@ -7,7 +7,6 @@ import dayjs from 'dayjs';
 import {CACHE_CONTROL_7DAYS} from './cacheControl.js';
 import {getDefaultHebrewYear} from './dateUtil.js';
 import {browseSitemapSlugsForIso} from './shabbat-browse.js';
-import {TOP_COUNTRIES} from './topCountries.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +14,16 @@ const __dirname = path.dirname(__filename);
 const ORIGIN = 'https://www.hebcal.com';
 export const OPENAPI_PATH = '/api-docs/openapi.json';
 const MARKDOWN_TYPE = 'text/markdown; charset=utf-8';
+
+/**
+ * Top 20 countries by core Jewish population, ISO 3166 codes in rank order,
+ * from the "Core, connected and enlarged population" table (DellaPergola,
+ * 2020) at https://en.wikipedia.org/wiki/Jewish_population_by_country
+ */
+const TOP_TWENTY = [
+  'IL', 'US', 'FR', 'CA', 'GB', 'AR', 'RU', 'AU', 'DE', 'BR',
+  'MX', 'ZA', 'HU', 'UA', 'NL', 'BE', 'IT', 'CH', 'UY', 'CL',
+];
 
 /**
  * llms.txt (https://llmstxt.org/), also the body of the Markdown homepage
@@ -152,12 +161,14 @@ const MAIN_PAGES = [
  */
 export function sitemapIndex(ctx) {
   const lastmod = dayjs().day(0).format('YYYY-MM-DD');
+  const countries = browseSitemapSlugsForIso(ctx, TOP_TWENTY)
+    .map((c) => `/shabbat/browse/${c}.xml`);
   const locs = [
     '/sitemap-pages.xml',
     '/learning/sitemap.txt',
     '/omer/sitemap.txt',
     '/sitemap_zips.txt',
-    ...browseSitemapSlugsForIso(TOP_COUNTRIES).map((c) => `/shabbat/browse/${c}.xml`),
+    ...countries,
   ];
   const entries = locs.map((loc) =>
     `<sitemap>\n<loc>${ORIGIN}${loc}</loc>\n<lastmod>${lastmod}</lastmod>\n</sitemap>\n`);

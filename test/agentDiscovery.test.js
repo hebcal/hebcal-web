@@ -198,8 +198,8 @@ describe('Agent discovery files', () => {
     expect(locs).not.toContain('https://www.hebcal.com/shabbat/browse/sitemap.xml');
     const browse = locs.filter((loc) => /\/shabbat\/browse\/[a-z-]+\.xml$/.test(loc));
     expect(browse.length).toBeGreaterThan(0);
-    expect(browse.length).toBeLessThanOrEqual(40);
-    expect(browse[0]).toBe('https://www.hebcal.com/shabbat/browse/united-states.xml');
+    expect(browse.length).toBeLessThanOrEqual(20);
+    expect(browse[0]).toBe('https://www.hebcal.com/shabbat/browse/israel.xml');
     expect(xml.match(/<lastmod>/g).length).toBe(locs.length);
   });
 
