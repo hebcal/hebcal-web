@@ -52,7 +52,7 @@
     "autocompleter": "^10.1.0",
     "bootstrap": "^5.3.9",
     "csv-parse": "^7.0.3",
-    "oxlint": "^1.94.0",
+    "oxlint": "^1.95.0",
     "papaparse": "^5.7.1",
     "postcss": "^8.5.33",
     "postcss-cli": "^12.0.0",
@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "@hebcal/core": "^6.16.1",
-    "@hebcal/geo-sqlite": "^6.0.0",
+    "@hebcal/geo-sqlite": "^7.0.0",
     "@hebcal/hdate": "^0.23.1",
     "@hebcal/icalendar": "^7.0.6",
     "@hebcal/learning": "^6.13.2",
